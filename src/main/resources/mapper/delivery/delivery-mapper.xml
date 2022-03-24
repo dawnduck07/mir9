@@ -11,4 +11,8 @@
   	<insert id="insertDeliveryCompanyByParam">
   		insert into delivery_company values(seq_deli_com_no.nextval, #{company_name}, #{url}, #{is_show}, sysdate)
   	</insert>
+  	
+  	<delete id="deleteDeliveryCompanyByComNo">
+  		delete delivery_company where deli_com_no = #{comNo}
+  	</delete>
 </mapper>
