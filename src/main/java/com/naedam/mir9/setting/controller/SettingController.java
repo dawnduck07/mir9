@@ -62,6 +62,8 @@ public class SettingController {
 		
 		List<DeliveryCompany> deliveryCompanyList = settingService.selectDeliveryCompanyList();
 		model.addAttribute("deliveryCompanyList",deliveryCompanyList);
+		model.addAttribute("companyListCnt",deliveryCompanyList.size());
+		
 		
 		return "setting/deliveryCompany";
 	}

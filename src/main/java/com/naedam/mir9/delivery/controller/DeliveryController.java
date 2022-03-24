@@ -12,12 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.common.Mir9Utils;
 import com.naedam.mir9.delivery.model.service.DeliveryService;
+import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +37,7 @@ public class DeliveryController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/insertCompany")
+	@PostMapping("/insertCompany")
 	public int insertCompany(String jsonStr){
 		Map<String,Object> param = Mir9Utils.parseJsonStr(jsonStr);
 		
@@ -55,8 +55,41 @@ public class DeliveryController {
 			int result = deliveryService.deleteDeliveryCompanyByComNo(comNo);
 		}
 		
-		redirectAttr.addAttribute("msg", "삭제되었습니다.");
+		
+		redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
 		
 		return "redirect:/setting/delivery_company";
 	}
+	
+	@PostMapping("/companyDetail")
+	@ResponseBody
+	public DeliveryCompany companyDetail(String comNo) {
+		log.debug("comNo = {}",comNo);
+		DeliveryCompany deliCom = deliveryService.selectOneDeliveryCompanyByComNo(comNo);
+		return deliCom;
+	}
+	
+	@ResponseBody
+	@GetMapping("/updateCompany")
+	public int updateCompany(String jsonStr){
+		Map<String,Object> param = Mir9Utils.parseJsonStr(jsonStr);
+		
+		
+		int result = deliveryService.updateDeliveryCompanyByParam(param);
+		
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@GetMapping("/companySearch")
+	public List<DeliveryCompany> companySearch(String jsonStr) {
+		Map<String, Object> param = Mir9Utils.parseJsonStr(jsonStr);
+		
+		List<DeliveryCompany> companyList = deliveryService.selectDeliveryCompanyListByParam(param);
+		
+		return companyList;
+	}
+	
+	
 }
