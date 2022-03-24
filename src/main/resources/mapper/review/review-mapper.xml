@@ -7,7 +7,7 @@
 	<!-- 리뷰 목록 + 나중에 페이지 추가 -->
 	<select id="reviewList" resultType="review">
 		SELECT DISTINCT R.*
-			 , CONCAT(M.LAST_NAME, M.FIRST_NAME) AS MEMBERNAME
+			 , CONCAT(M.LAST_NAME, M.FIRST_NAME) AS WRITER
 			 , P.PRODUCT_NAME AS PRODUCTNAME
 			 , C.REVIEW_CATEGORY_NAME AS REVIEWCATEGORYNAME
 		  FROM TB_REVIEW R
@@ -17,11 +17,32 @@
 		  JOIN REVIEW_CATEGORY C ON R.REVIEW_CATEGORY_NO = C.REVIEW_CATEGORY_NO
 		 ORDER BY R.REVIEW_NO ASC
 	</select>
+	
+	<!-- 리뷰 검색 조회 -->
+	<select id="reviewSearch" parameterType="map" resultType="review">
+		SELECT A.* 
+		FROM (
+				SELECT DISTINCT R.*
+					 , CONCAT(M.LAST_NAME, M.FIRST_NAME) AS WRITER
+					 , P.PRODUCT_NAME AS PRODUCTNAME
+					 , C.REVIEW_CATEGORY_NAME AS REVIEWCATEGORYNAME
+				  FROM TB_REVIEW R
+				  JOIN TB_ORDER O ON R.ORDER_NO = O.ORDER_NO
+				  JOIN MEMBER M ON R.MEMBER_NO = M.MEMBER_NO
+				  JOIN PRODUCT P ON R.PRODUCT_NO = P.PRODUCT_NO
+				  JOIN REVIEW_CATEGORY C ON R.REVIEW_CATEGORY_NO = C.REVIEW_CATEGORY_NO
+				 ORDER BY R.REVIEW_NO ASC) A
+		<where>
+			<if test="keyword != '' and keyword != null">
+				${field} LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
   	
   	<!-- 리뷰 모달 정보 불러오기 : 작성자, 한 줄 후기, 구매 후기 -->
   	<select id="reviewModal" parameterType="int" resultType="review">
   		SELECT R.*
-  			 , CONCAT(M.LAST_NAME, M.FIRST_NAME) AS MEMBERNAME
+  			 , CONCAT(M.LAST_NAME, M.FIRST_NAME) AS WRITER
   		  FROM TB_REVIEW R
   		  JOIN MEMBER M ON R.MEMBER_NO = M.MEMBER_NO
   		 WHERE REVIEW_NO = #{reviewNo}

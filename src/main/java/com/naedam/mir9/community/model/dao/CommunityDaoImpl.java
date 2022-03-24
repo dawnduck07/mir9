@@ -1,6 +1,7 @@
 package com.naedam.mir9.community.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,12 @@ public class CommunityDaoImpl implements CommunityDao {
 	public List<Review> reviewList() {
 		return session.selectList("review.reviewList");
 	}
+	
+	// 검색 조회
+	@Override
+	public List<Review> reviewSearch(Map<Object, String> param) {
+		return session.selectList("review.reviewSearch", param);
+	}
 
 	// 모달 정보
 	@Override
@@ -30,5 +37,7 @@ public class CommunityDaoImpl implements CommunityDao {
 	public List<ReviewImg> reviewImgModal(int reviewNo) {
 		return session.selectList("review.reviewImgModal", reviewNo);
 	}
+
+
 	
 }

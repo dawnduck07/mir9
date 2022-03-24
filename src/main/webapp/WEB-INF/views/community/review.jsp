@@ -42,7 +42,7 @@
                         <div class="has-feedback">
                             <select name="field" class="form-control input-sm" style="float:left; width:130px;">
       							<option value="writer">작성자</option>      
-      							<option value="product_name">제품명</option>                            
+      							<option value="productName">제품명</option>                            
       						</select>
                         </div>
                         </form>
@@ -77,7 +77,7 @@
                                         	<tr>
 	                                            <td><input type="checkbox" name="select_review" /></td> <!-- common.js에 name 값이 list[] 로 되어있음 -->
 	                                            <td>${ review.reviewNo }</td>
-	                                            <td>${ review.memberName }</td> 
+	                                            <td>${ review.writer }</td> 
 	                                            <td>${ review.productName }</td> 
 	                                            <td>${ review.reviewContent }</td> 
 	                                            <td>${ review.reviewCategoryName }</td>
@@ -165,7 +165,7 @@
 				// console.log(result.reviewImg.length);
 				
 				// 작성자, 한줄 후기, 구매 후기
-				$("#name").val(result.review[0].memberName);
+				$("#name").val(result.review[0].writer);
 				$("#title").val(result.review[0].reviewTitle);
 				$("#content").val(result.review[0].reviewContent);
 				
