@@ -217,14 +217,6 @@
 		if($("input:checkbox[name=checkedNo]:checked").length == 0){
 			alert('항목을 선택하여야 합니다.');			
 		}else{
-			var array = new Array();
-			$("input:checkbox[name=checkedNo]:checked").each(function(){
-				array.push(this.value);
-			});
-			
-			$("#companyNoList").val(array);
-			console.log($("#companyNoList").val())
-			
 			$(document["form_list"]).submit();
 		}
 	}

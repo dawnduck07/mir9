@@ -7,6 +7,8 @@ public interface DeliveryDao {
 	int selectDoseosanganFeeByZipcode(int zipcode);
 
 	int insertDeliveryCompanyByParam(Map<String, Object> param);
+
+	int deleteDeliveryCompanyByComNo(String comNo);
 	
 
 }

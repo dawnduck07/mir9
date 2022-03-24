@@ -22,6 +22,12 @@ public class DeliveryDaoImpl implements DeliveryDao {
 		// TODO Auto-generated method stub
 		return session.insert("delivery.insertDeliveryCompanyByParam", param);
 	}
+
+	@Override
+	public int deleteDeliveryCompanyByComNo(String comNo) {
+		// TODO Auto-generated method stub
+		return session.delete("delivery.deleteDeliveryCompanyByComNo", comNo);
+	}
 	
 	
 	
