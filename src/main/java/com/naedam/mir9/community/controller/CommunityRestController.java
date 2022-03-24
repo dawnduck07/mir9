@@ -33,14 +33,4 @@ public class CommunityRestController {
 		return result;
 	}
 	
-	/*
-	@GetMapping("/review_modal")
-	public List<Review> commReviewModal(int reviewNo) {
-		
-		List<Review> result = communityService.reviewModal(reviewNo);
-		
-		return result;
-	}
-	*/
-	
 }
