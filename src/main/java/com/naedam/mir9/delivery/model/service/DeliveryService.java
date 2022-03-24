@@ -8,4 +8,6 @@ public interface DeliveryService {
 
 	int insertDeliveryCompanyByParam(Map<String, Object> param);
 
+	int deleteDeliveryCompanyByComNo(String comNo);
+
 }

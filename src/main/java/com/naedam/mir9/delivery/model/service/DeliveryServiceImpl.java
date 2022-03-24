@@ -23,6 +23,14 @@ public class DeliveryServiceImpl implements DeliveryService {
 		// TODO Auto-generated method stub
 		return deliveryDao.insertDeliveryCompanyByParam(param);
 	}
+
+	@Override
+	public int deleteDeliveryCompanyByComNo(String comNo) {
+		// TODO Auto-generated method stub
+		return deliveryDao.deleteDeliveryCompanyByComNo(comNo);
+	}
+	
+	
 	
 	
 }

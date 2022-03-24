@@ -1,5 +1,7 @@
 package com.naedam.mir9.delivery.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.common.Mir9Utils;
 import com.naedam.mir9.delivery.model.service.DeliveryService;
@@ -45,14 +48,15 @@ public class DeliveryController {
 	}
 	
 	@PostMapping("/deleteCompany")
-	public String deleteCompany(HttpServletRequest request) {
-		String[] companyNoList = request.getParameterValues("companyNoList");
+	public String deleteCompany(HttpServletRequest request, RedirectAttributes redirectAttr) {
+		ArrayList<String> ComNoList = new ArrayList<String>(Arrays.asList(request.getParameterValues("checkedNo")));
 		
-		log.debug("companyNoList = {}", companyNoList);
+		for(String comNo : ComNoList) {
+			int result = deliveryService.deleteDeliveryCompanyByComNo(comNo);
+		}
 		
+		redirectAttr.addAttribute("msg", "삭제되었습니다.");
 		
-		
-				
 		return "redirect:/setting/delivery_company";
 	}
 }
