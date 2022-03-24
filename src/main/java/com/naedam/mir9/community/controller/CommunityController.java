@@ -1,11 +1,15 @@
 package com.naedam.mir9.community.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.community.model.service.CommunityService;
+import com.naedam.mir9.community.model.vo.Review;
 
 @Controller
 @RequestMapping("/comm")
@@ -36,9 +40,14 @@ public class CommunityController {
 		return "community/smsList";
 	}
 	
+	// 리뷰 조회
 	@GetMapping("/review")
-	public String commReview() {
+	public String commReview(Model model) {
+		
+		List<Review> reviewList = communityService.reviewList();
+		model.addAttribute("reviewList", reviewList);
 		
 		return "community/review";
 	}
+	
 }
