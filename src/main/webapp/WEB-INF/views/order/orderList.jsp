@@ -330,6 +330,7 @@
 						</div>
 
 					</div>
+					<input type="hidden" id="doseosangan"  />
 				</form>
 			</div>
 		</div>
@@ -341,82 +342,111 @@
 	<!-- 모달창 제어 -->
 	function onclick_update(orderNo){
 		
+		getDoseosangan(orderNo);
+		if($(doseosangan).val() != ''){
+			console.log($(doseosangan).val())
+			var doseoFee = $(doseosangan).val() * 1;
+			
+			$.ajax({
+				//url: `\${restServerUrl}/menus`,
+				url:`${pageContext.request.contextPath}/order/orderDetail`,
+				data:{
+					orderNo : orderNo
+				},
+				method: "GET",
+				success(data){
+					// 구매내역 append? 값 채우기?
+						
+						$("#p_img").attr('src', data.orderDetail.imgUrl);
+					
+						var salePrice = data.orderDetail.salePrice * 1;
+						var orderAmt = data.orderDetail.orderAmt * 1;
+
+						var deliFee = ${basicDeliveryFee} + doseoFee;
+						var optionCost = 0;
+						// 상품명
+						$("#p_name").text(data.orderDetail.productName);
+						// 판매가
+						$("#p_sPrice").text(salePrice);
+						
+						// 옵션 (존재하는 경우에만 입력 되도록)
+						$.each(data.orderOptionList, (k,v)=>{
+							$("#td_option_target").append(`<br />" - \${v.optionName} : \${v.optionValue} (+ \${v.optionValueCost})"`);
+							optionCost += v.optionValueCost;
+							
+						});
+						//console.log(optionCost);
+						// 상품 수량
+						$("#p_amt").text(orderAmt);
+						
+						// tr에서의 합계 금액 : (판매가 + 옵션) * 수량
+						var trTotalPrice = ((salePrice + optionCost) * orderAmt);
+						$("#p_ltPrice").text(trTotalPrice);
+						
+						// 상품합계 (배송비 제외) : 모든 tr 합계 금액의 합 
+						$("#p_priceNoDeli").text(trTotalPrice);
+						
+						// 배송비
+						if(trTotalPrice >= ${freeShippingSetting}){
+							$("#deli_fee").text(0);					
+							$("#p_totalPrice").text(trTotalPrice);
+						}else{
+							$("#deli_fee").text(deliFee);
+							$("#p_totalPrice").text(trTotalPrice + deliFee);
+						}
+						
+						// 총 결제 금액
+						
+						
+					// 결제 정보
+					$("#order_name").text(data.orderDetail.name);
+					$("#order_mobile").text(data.orderDetail.phone);
+					$("#order_number").text(data.orderDetail.orderNo);
+					$("#total_price").text(data.orderDetail.payAmt);
+					$("#payment_type").text(data.orderDetail.payType);
+					$("#bank_account").text(data.orderDetail.account);
+					$("#bank_name").text(data.orderDetail.bankName);
+					$("#bank_depositor").text(data.orderDetail.owner);
+					$("#pay_name").text(data.orderDetail.payDepositor);
+					
+					
+					
+					// 수취인 정보
+					$("#receiver_name").text(data.orderDetail.receiver);
+					$("#receiver_mobile").text(data.orderDetail.receiverPhone);
+					$("#receiver_addr").text(data.orderDetail.shippingAddress);
+					$("#request_message").text(data.orderDetail.memo);
+					$("#receiver_memo").val(data.orderDetail.adminMemo);
+					$('#payment_status').val(data.orderDetail.orderStatusNo).prop("selected",true);
+					
+					
+					// 업데이트 온클릭 속성 추가
+					$("#update_order_status").attr('onclick', 'updateOrderStatus(' + data.orderDetail.orderNo +')')
+					$("#update_admin_memo").attr('onclick', 'updateAdminMemo(' + data.orderDetail.orderInfoNo + ')')
+				},
+				error: console.log
+			});  	
+			
+			$("#modalContent").modal('show');			
+		}
+
+		
+	}
+	
+	function getDoseosangan(orderNo){
 		$.ajax({
-			//url: `\${restServerUrl}/menus`,
-			url:`${pageContext.request.contextPath}/order/orderDetail`,
-			data:{
+			url : "${pageContext.request.contextPath}/order/getDoseosangan",
+			data : {
 				orderNo : orderNo
 			},
-			method: "GET",
+			type : "get",
 			success(data){
-				console.log(data)
-				console.log(data.orderDetail)
-				
-				// 구매내역 append? 값 채우기?
-				
-					$("#p_img").attr('src', data.orderDetail.imgUrl);
-				
-					var salePrice = data.orderDetail.salePrice * 1;
-					var orderAmt = data.orderDetail.orderAmt * 1;
-					var deliFee = data.orderDetail.deliFee;
-					var optionCost = 0;
-					// 상품명
-					$("#p_name").text(data.orderDetail.productName);
-					// 판매가
-					$("#p_sPrice").text(salePrice);
-					
-					// 옵션 (존재하는 경우에만 입력 되도록)
-					$.each(data.orderOptionList, (k,v)=>{
-						$("#td_option_target").append(`<br />" - \${v.optionName} : \${v.optionValue} (+ \${v.optionValueCost})"`);
-						optionCost += v.optionValueCost;
-						
-					});
-					console.log(optionCost);
-					// 상품 수량
-					$("#p_amt").text(orderAmt);
-					
-					// tr에서의 합계 금액 : (판매가 + 옵션) * 수량
-					var trTotalPrice = ((salePrice + optionCost) * orderAmt);
-					$("#p_ltPrice").text(trTotalPrice);
-					
-					// 상품합계 (배송비 제외) : 모든 tr 합계 금액의 합 
-					$("#p_priceNoDeli").text(trTotalPrice);
-					
-					// 배송비
-					$("#deli_fee").text(deliFee);
-					
-					// 총 결제 금액
-					$("#p_totalPrice").text(trTotalPrice + deliFee);
-					
-				// 결제 정보
-				$("#order_name").text(data.orderDetail.name);
-				$("#order_mobile").text(data.orderDetail.phone);
-				$("#order_number").text(data.orderDetail.orderNo);
-				$("#total_price").text(data.orderDetail.payAmt);
-				$("#payment_type").text(data.orderDetail.payType);
-				$("#bank_account").text(data.orderDetail.account);
-				$("#bank_name").text(data.orderDetail.bankName);
-				$("#bank_depositor").text(data.orderDetail.owner);
-				$("#pay_name").text(data.orderDetail.payDepositor);
-				
-				
-				
-				// 수취인 정보
-				$("#receiver_name").text(data.orderDetail.receiver);
-				$("#receiver_mobile").text(data.orderDetail.receiverPhone);
-				$("#receiver_addr").text(data.orderDetail.shippingAddress);
-				$("#receiver_message").text(data.orderDetail.memo);
-				$("#receiver_memo").val(data.orderDetail.adminMemo);
-				$('#payment_status').val(data.orderDetail.orderStatusNo).prop("selected",true);
-				
-				
-				// 업데이트 온클릭 속성 추가
-				$("#update_order_status").attr('onclick', 'updateOrderStatus(' + data.orderDetail.orderNo +')')
-				$("#update_admin_memo").attr('onclick', 'updateAdminMemo(' + data.orderDetail.orderInfoNo + ')')
+				$(doseosangan).val(data);
 			},
-			error: console.log
-		});  	
-		$("#modalContent").modal('show');
+			error : console.log
+			
+		});
+		
 	}
 	
 	<!-- 모달창 -> 상태 업데이트 -->
@@ -490,6 +520,8 @@
 			var dateString = year + '-' + month  + '-' + day;	
 		return dateString;
 	}
+	
+
 
 </script>
 
