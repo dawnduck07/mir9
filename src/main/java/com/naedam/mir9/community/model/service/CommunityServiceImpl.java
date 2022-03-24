@@ -15,15 +15,10 @@ public class CommunityServiceImpl implements CommunityService {
 	@Autowired
 	private CommunityDao communityDao;
 
+	// 리뷰 조회 + 검색
 	@Override
-	public List<Review> reviewList() {
-		return communityDao.reviewList();
-	}
-	
-	// 검색 조회
-	@Override
-	public List<Review> reviewSearch(Map<Object, String> param) {
-		return communityDao.reviewSearch(param);
+	public List<Review> reviewList(Map<Object, String> param) {
+		return communityDao.reviewList(param);
 	}
 
 	// 모달 정보
@@ -37,6 +32,5 @@ public class CommunityServiceImpl implements CommunityService {
 	public List<ReviewImg> reviewImgModal(int reviewNo) {
 		return communityDao.reviewImgModal(reviewNo);
 	}
-
 
 }

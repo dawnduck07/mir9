@@ -27,7 +27,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <label style="margin-top:5px;">총 0건</label>
+                    <label style="margin-top:5px;">총 ${ reviewList.size() }건</label>
                     <div class="box-tools pull-right" style="margin-bottom:5px;">
                         <form name="form_search" method="post" action="?tpf=admin/community/review">
                         <div class="has-feedback">

@@ -15,17 +15,12 @@ public class CommunityDaoImpl implements CommunityDao {
 	@Autowired
 	private SqlSession session;
 
+	// 리뷰 조회 + 검색
 	@Override
-	public List<Review> reviewList() {
-		return session.selectList("review.reviewList");
+	public List<Review> reviewList(Map<Object, String> param) {
+		return session.selectList("review.reviewList", param);
 	}
 	
-	// 검색 조회
-	@Override
-	public List<Review> reviewSearch(Map<Object, String> param) {
-		return session.selectList("review.reviewSearch", param);
-	}
-
 	// 모달 정보
 	@Override
 	public List<Review> reviewModal(int reviewNo) {
@@ -37,7 +32,5 @@ public class CommunityDaoImpl implements CommunityDao {
 	public List<ReviewImg> reviewImgModal(int reviewNo) {
 		return session.selectList("review.reviewImgModal", reviewNo);
 	}
-
-
 	
 }
