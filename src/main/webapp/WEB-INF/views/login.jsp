@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>	
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -12,19 +14,19 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
 <!-- admin -->
-<link href="/resources/css/admin.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css" />
 <!-- Theme style -->
-<link rel="stylesheet" href="/resources/css/AdminLTE.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
 <!-- Bootstrap 3.3.7 -->
-<link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 <!-- Font Awesome -->
-<link rel="stylesheet" href="/resources/css/font-awesome.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css">
 <!-- Ionicons -->
-<link rel="stylesheet" href="/resources/css/ionicons.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ionicons.min.css">
 <!-- jquery.vector-map -->
-<link rel="stylesheet" href="/resources/css/jquery.vector-map.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery.vector-map.css">
 <!-- _all-skins.min -->
-<link rel="stylesheet" href="/resources/css/_all-skins.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
 <!--  -->
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,7 +37,12 @@
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-	
+
+<c:if test="${not empty msg}">
+<script>
+	alert("${msg}");
+</script>
+</c:if>
 </head>
 
 <body class="hold-transition login-page">
@@ -55,7 +62,7 @@
 					<p class="text-muted text-center" style="padding: 10px;">아이디와
 						비밀번호 입력후 로그인해 주시기 바랍니다.</p>
 
-					<form name="form" action="${pageContext.request.contextPath }/test" method="post"
+					<form name="form" action="${pageContext.request.contextPath }/member/memberLogin.do" method="post"
 						style="padding: 20px;">
 						<input type="hidden" name="return_url"
 							value="%2Findex.php%3Ftpf%3Dadmin%2Fdashboard%2Flist"> <input
@@ -72,7 +79,7 @@
 								class="form-control" placeholder="PASSWORD" /> <span
 								class="glyphicon glyphicon-lock form-control-feedback"></span>
 						</div>
-						<a href="#none" onclick="location.href='${pageContext.request.contextPath}/member/memberLogin.do';"
+						<a href="#none" id="loginBtn" onclick="loginSubmit()"
 							class="btn btn-primary btn-block"><b>로그인</b></a>
 						&nbsp;
 						<a href="#none" onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do';"
@@ -94,7 +101,8 @@
 	<script src="/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
 	<script>
-		function register() {
+		function loginSubmit() {
+			console.log("loginSubmit 도착했나요?");
 			if (form.id.value == '') {
 				alert('아이디가 입력되지 않았습니다.');
 				form.id.focus();
@@ -112,6 +120,7 @@
 			form.id.focus();
 		}
 		onload = onLoad;
+	
 	</script>
 </body>
 </html>

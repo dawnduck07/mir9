@@ -12,7 +12,8 @@
 		<param-name>contextConfigLocation</param-name>
 		<!-- #8.2 security-context.xml 설정파일 등록 -->
 		<param-value>
-					/WEB-INF/spring/application-context.xml 
+					/WEB-INF/spring/application-context.xml
+					/WEB-INF/spring/security-context.xml 
 		</param-value>
 	</context-param>
 	
