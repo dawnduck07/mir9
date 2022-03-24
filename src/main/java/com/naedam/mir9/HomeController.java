@@ -14,18 +14,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 public class HomeController {
-	
+	// 로그정보를 처리하는 객체 생성
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/mir9", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.debug("HomeController ---- forward ----> index.jsp");
 		
 		// welcompage
-		return "forward:/index.jsp";
+		//return "forward:/index.jsp";
+		return "login";
 	}
 	
 }

@@ -14,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/member")
 @Slf4j
 public class MemberController {
+	
 	@Autowired
 	private MemberService memberService;
+	
 	@RequestMapping("/list")
 	public String memberList() {
 		
@@ -44,5 +46,11 @@ public class MemberController {
 	public String memberPointList() {
 		
 		return "member/memberPointList";
+	}
+	
+	// 회원가입
+	@GetMapping("/memberEnroll.do")
+	public String memberEnroll() {
+		return "member/memberEnroll";
 	}
 }

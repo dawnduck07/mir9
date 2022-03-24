@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+	
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -11,17 +11,21 @@
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
+<!-- admin -->
+<link href="/resources/css/admin.css" rel="stylesheet" type="text/css" />
+<!-- Theme style -->
+<link rel="stylesheet" href="/resources/css/AdminLTE.min.css">
 <!-- Bootstrap 3.3.7 -->
 <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="/resources/css/font-awesome.min.css">
 <!-- Ionicons -->
-<link rel="stylesheet"
-	href="/resources/css/ionicons.min.css">
-<!-- Theme style -->
-<link rel="stylesheet"
-	href="/resources/css/AdminLTE.min.css">
-<link href="/resources/css/admin.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/resources/css/ionicons.min.css">
+<!-- jquery.vector-map -->
+<link rel="stylesheet" href="/resources/css/jquery.vector-map.css">
+<!-- _all-skins.min -->
+<link rel="stylesheet" href="/resources/css/_all-skins.min.css">
+<!--  -->
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -31,6 +35,7 @@
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	
 </head>
 
 <body class="hold-transition login-page">
@@ -67,8 +72,11 @@
 								class="form-control" placeholder="PASSWORD" /> <span
 								class="glyphicon glyphicon-lock form-control-feedback"></span>
 						</div>
-						<a href="#none" onclick="register();"
+						<a href="#none" onclick="location.href='${pageContext.request.contextPath}/member/memberLogin.do';"
 							class="btn btn-primary btn-block"><b>로그인</b></a>
+						&nbsp;
+						<a href="#none" onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do';"
+							class="btn btn-primary btn-block"><b>회원가입</b></a>
 					</form>
 				</div>
 
