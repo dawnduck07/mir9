@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<<<<<<< HEAD
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+=======
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -53,6 +61,53 @@
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<script type="text/javascript">
+	
+	$(function(){
+		
+		$("a[name='board']").on("click", function(){
+
+			$.ajax({
+				url : "/mir9/board/json/listBoard",
+				method : "GET" ,
+				dataType : "json" ,
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success : function(Data, status){
+					var display = '';
+					if(Data.length > 0){
+						for(var i = 0; i < Data.length; i++){
+							display = "<li>"
+									+ "<a href=/mir9/board/postList?boardNo="+Data[i].boardNo+">"
+									+ "<i class='fa fa-circle-o'></i> "+Data[i].boardTitle
+									+ "</a>"
+									+ "</li>"
+							$('#boardMenu').append(display);
+						}
+					}
+					
+				}
+			})
+				
+		})		
+
+		
+	})
+
+	
+
+</script>
+<!-- redirect Msg 처리 : deliveryController 참조 -->
+<c:if test="${not empty msg}">
+	<script>
+		alert("${msg}");
+	</script>
+</c:if>
+
+	
 </head>
 <body class="hold-transition skin-red sidebar-mini">
 	<iframe name="iframe_process" width="0" height="0" frameborder="0"
@@ -135,20 +190,14 @@
 									class="fa fa-circle-o"></i> 메타 관리</a></li>
 						</ul></li>
 
-					<li class="treeview"><a href="#"> <i
-							class="fa fa-list-alt"></i> <span>게시판 관리</span> <i
-							class="fa fa-angle-left pull-right"></i>
+					<li class="treeview"><a href="#" name="board"> <i class="fa fa-list-alt"></i> 
+					<span>게시판 관리</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
-						<ul class="treeview-menu">
-							<li><a href="index.php?tpf=admin/board/manage"><i
+						<ul class="treeview-menu" id="boardMenu" >
+							<li><a href="/mir9/board/listBoard"><i
 									class="fa fa-circle-o"></i> 리스트</a></li>
-							<li><a href="index.php?tpf=admin/board/list&board_code=1"><i
-									class="fa fa-circle-o"></i> 공지사항</a></li>
-							<li><a href="index.php?tpf=admin/board/list&board_code=2"><i
-									class="fa fa-circle-o"></i> 자주하는 질문</a></li>
-							<li><a href="index.php?tpf=admin/board/list&board_code=3"><i
-									class="fa fa-circle-o"></i> 1:1 문의</a></li>
-						</ul></li>
+						</ul>
+					</li>
 					<li class="treeview"><a href="#"> <i class="fa fa-gift"></i>
 							<span>제품</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>

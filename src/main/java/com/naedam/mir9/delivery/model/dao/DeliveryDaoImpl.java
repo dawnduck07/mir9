@@ -1,10 +1,13 @@
 package com.naedam.mir9.delivery.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 
 @Repository
 public class DeliveryDaoImpl implements DeliveryDao {
@@ -21,6 +24,30 @@ public class DeliveryDaoImpl implements DeliveryDao {
 	public int insertDeliveryCompanyByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return session.insert("delivery.insertDeliveryCompanyByParam", param);
+	}
+
+	@Override
+	public int deleteDeliveryCompanyByComNo(String comNo) {
+		// TODO Auto-generated method stub
+		return session.delete("delivery.deleteDeliveryCompanyByComNo", comNo);
+	}
+
+	@Override
+	public DeliveryCompany selectOneDeliveryCompanyByComNo(String comNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("delivery.selectOneDeliveryCompanyByComNo", comNo);
+	}
+
+	@Override
+	public int updateDeliveryCompanyByParam(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("delivery.updateDeliveryCompanyByParam", param);
+	}
+
+	@Override
+	public List<DeliveryCompany> selectDeliveryCompanyListByParam(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.selectList("delivery.selectDeliveryCompanyListByParam", param);
 	}
 	
 	
