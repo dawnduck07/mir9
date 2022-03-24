@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="delivery">
+	<select id="selectDoseosanganFeeByZipcode" resultType="_int">
+		select extra_fee from doseosangan where start_zipcode <![CDATA[<=]]> #{zipcode} and end_zipcode <![CDATA[>=]]> #{zipcode}
+	</select>
+  	
+  	
+  	<insert id="insertDeliveryCompanyByParam">
+  		insert into delivery_company values(seq_deli_com_no.nextval, #{company_name}, #{url}, #{is_show}, sysdate)
+  	</insert>
+</mapper>

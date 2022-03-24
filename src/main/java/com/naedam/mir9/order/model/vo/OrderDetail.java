@@ -22,7 +22,7 @@ public class OrderDetail implements Serializable {
 	private String productName;
 	private int salePrice;
 	private int orderAmt;
-	private int deliFee;
+	private int zipCode;
 	private String name;
 	private String phone;
 	private long orderNo;

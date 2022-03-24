@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.naedam.mir9.delivery.model.service.DeliveryService;
 import com.naedam.mir9.option.model.vo.OrderOption;
 import com.naedam.mir9.order.model.service.OrderService;
 import com.naedam.mir9.order.model.vo.Order;
@@ -29,10 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private DeliveryService deliveryService;
 	
 	@GetMapping("/list")
 	public String orderList(Model model) {
 		Map<String, String> param = new HashMap<String, String>();
+		
 		orderListSetting(model, param);
 		return "order/orderList";
 	}
@@ -92,6 +96,17 @@ public class OrderController {
 		return result;
 	}
 	
+	@ResponseBody
+	@GetMapping("/getDoseosangan")
+	public int getDoseosangan(String orderNo) {
+		int zipcode = orderService.getZipcodeByOrderNo(Long.parseLong(orderNo));
+		int doseosangan = deliveryService.selectDoseosanganFeeByZipcode(zipcode);
+		
+		
+		return doseosangan;
+		
+	}
+	
 	@GetMapping("/logList")
 	public String paymentLogList() {
 		
@@ -103,10 +118,13 @@ public class OrderController {
 		List<Order> orderList = orderService.selectOrderList(param);
 		List<OrderStatus> orderStatusList = orderService.selectOrderStatusList();
 		int orderCnt = orderService.selectOrderCnt(param);
-		
+		int freeShippingSetting = orderService.selectFreeShippingSetting();
+		int basicDeliveryFee = orderService.selectBasicDeliveryFee();
 		
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("orderCnt", orderCnt);
 		model.addAttribute("orderStatusList", orderStatusList);
+		model.addAttribute("freeShippingSetting", freeShippingSetting);
+		model.addAttribute("basicDeliveryFee", basicDeliveryFee);
 	}
 }

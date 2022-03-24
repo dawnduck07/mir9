@@ -80,6 +80,19 @@
     	join order_option b on(a.order_no = b.order_no)
     	join option_value c on (b.option_value_no = c.option_value_no)
     	join product_option d on (d.option_no = c.option_no)
+    where a.order_no = #{orderNo}
+  </select>
+  
+  <select id="selectFreeShippingSetting" resultType="_int">
+  	select free_shipping_settings from delivery_setting
+  </select>
+  
+  <select id="selectBasicDeliveryFee" resultType="_int">
+  	select basic_delivery_fee from delivery_setting
+  </select>
+  
+  <select id="getZipcodeByOrderNo" resultType="_int">
+  	select zip_code from order_info where order_no = #{orderNo}
   </select>
   
   <update id="updateOrderStaus">

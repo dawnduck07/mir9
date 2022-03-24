@@ -1,10 +1,14 @@
 package com.naedam.mir9.setting.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.setting.model.service.SettingService;
 
 @Controller
@@ -54,7 +58,10 @@ public class SettingController {
 	}
 	
 	@GetMapping("/delivery_company")
-	public String deliveryCompany() {
+	public String deliveryCompany(Model model) {
+		
+		List<DeliveryCompany> deliveryCompanyList = settingService.selectDeliveryCompanyList();
+		model.addAttribute("deliveryCompanyList",deliveryCompanyList);
 		
 		return "setting/deliveryCompany";
 	}
