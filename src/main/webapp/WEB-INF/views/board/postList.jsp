@@ -32,6 +32,33 @@
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <style>.cke{visibility:hidden;}</style><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/config.js?t=H7HD"></script><style type="text/css">.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;box-sizing: content-box;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style><link rel="stylesheet" type="text/css" href="http://mir9.co.kr/resource/js/ckeditor4.7.2/skins/office2013/editor.css?t=H7HD"><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/lang/ko.js?t=H7HD"></script><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/styles.js?t=H7HD"></script><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/plugins/tableresize/plugin.js?t=H7HD"></script><link rel="stylesheet" type="text/css" href="http://mir9.co.kr/resource/js/ckeditor4.7.2/plugins/scayt/dialogs/dialog.css"><link rel="stylesheet" type="text/css" href="http://mir9.co.kr/resource/js/ckeditor4.7.2/plugins/tableselection/styles/tableselection.css">
+
+<script type="text/javascript">
+
+	function fncPost(){
+		
+		$.ajax({
+			
+			url : "/mir9/board/json/getMemberData",
+			method : "GET",
+			dataType : "JSON",
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"	 						
+			} ,
+			success : function(JSONData, status){
+				
+				$("#name").val(JSONData.firstName+JSONData.lastName);
+				$("#phone").val(JSONData.phone);
+				$("#email").val(JSONData.email);
+				
+			}
+		})
+		
+	}
+
+</script>
+
 </head>
 
 
@@ -44,7 +71,7 @@
 
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">1:1 문의 관리</li>
+        <li class="active">${board2.boardTitle} 관리</li>
     </ol>
 </section>
 
@@ -90,25 +117,27 @@
                     </tr>
                     </thead>
                     <tbody>
-                    	
-	                    	<c:set var="i" value="0"/>
+                    		<c:set var="i" value="0"/>
 	                    	 <c:forEach var="post" items="${list}">
 	                    	   <c:set var="i" value="${ i+1 }" />
+	                    	   <c:if test="${empty post.postNo}">
+	                    	   	<tr>
+	                    	   		<td colspan="10"><br>등록된 자료가 없습니다.<br><br></td>
+	                    	   	</tr>	
+	                    	   </c:if>
+	                    	   <c:if test="${!empty post.postNo}">
 	                    		<tr>
 	                    			<td><input type="checkbox" name="list[]" value="69"></td>
 	                    			<td>${ i }</td>
 	                    			<td align="left">${post.postTitle}</td>
-	                    			<td>${post.memberNo.firstName}</td>
+	                    			<td>${member.lastName}${member.firstName}</td>
 	                    			<td>${post.postDate}</td>
 	                    			<td>${post.postViewCount}</td>
-	                    			<td></td>
+	                    			<td>${post.postNo }</td>
 	                    			<td><button type="button" onclick="onclick_update(69);" class="btn btn-primary btn-xs">상세보기</button></td>
 	                    		</tr>
-	                    	 </c:forEach>
-                    	
-                    	<c:if test="${!empty post.postNo}">
-      						<tr><td colspan="10"><br>등록된 자료가 없습니다.<br><br></td></tr>
-      					</c:if>                    
+	                    		</c:if>
+	                    	 </c:forEach>                    	                   
       				</tbody>
       				
       				</form>
@@ -116,7 +145,7 @@
                     <br>
 
                     <button type="button" onclick="selectDelete()" class="btn btn-danger btn-sm"><i class="fa fa-minus-square"></i> 선택삭제</button>
-                    <button type="button" onclick="onclickInsert()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalContent"><i class="fa fa-plus-square"></i> 글 등록</button>
+                    <button type="button" onclick="fncPost()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalContent"><i class="fa fa-plus-square"></i> 글 등록</button>
                     <button type="button" onclick="onclickCopyData('copyData')" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalContent2"><i class="fa fa-random"></i> 게시물 복사</button>
                     <button type="button" onclick="onclickCopyData('moveData')" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalContent3"><i class="fa fa-random"></i> 게시물 이전</button>
 
@@ -135,7 +164,7 @@
 <div id="list_file_tag" class="sr-only">
     <input type="file" name="file[]" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;">
 </div>
-<jsp:include page="/WEB-INF/views/board/boardKind.jsp"/>
+<jsp:include page="/WEB-INF/views/board/addPost.jsp"/>
 <jsp:include page="/WEB-INF/views/board/boardCopy.jsp"/>
 <jsp:include page="/WEB-INF/views/board/boardChange.jsp"/>
 <script src="//mir9.co.kr/resource/js/ckeditor4.7.2/ckeditor.js"></script>

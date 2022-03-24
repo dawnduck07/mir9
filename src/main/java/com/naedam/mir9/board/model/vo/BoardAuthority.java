@@ -20,7 +20,7 @@ public class BoardAuthority implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
 	private int authorityNo;		//권한 번호
-	private Board boardNo; 			//board의 데이터
+	private Board authorityBoard; //board의 데이터
 	private String authorityList;	//리스트 권한 설정
 	private String authorityView;	//보기 권한 설정
 	private String authorityWrite;	//쓰기 권한 설정

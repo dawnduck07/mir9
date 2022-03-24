@@ -14,7 +14,7 @@
 			var	boardEmail = $("input[name='boardEmail']").val();
 			
 			
-			$("form[name='addBoard']").attr("method", "POST").attr("action", "/board/addBoard").submit();
+			$("form[name='addBoard']").attr("method", "POST").attr("action", "/mir9/board/addBoard").submit();
 			
 		}
 		

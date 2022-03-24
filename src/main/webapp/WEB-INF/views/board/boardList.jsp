@@ -50,7 +50,7 @@
 			});
 			
 	  		$.ajax({
-  			 	 url : "/board/deleteChoiceBoard",
+  			 	 url : "/mir9/board/deleteChoiceBoard",
 	  		  	 type : "POST",
   		  	 	 data : { boardNo : boardArr },
     		 	 success : function(result){
@@ -59,7 +59,7 @@
   		  	 	 
 	  		});		
 	  		alert("삭제가 완료되었습니다.")
-	  		location.href = "/board/listBoard";
+	  		location.href = "mir9/board/listBoard";
 		})	
 		//board 선택삭제 종료
 		
@@ -71,7 +71,7 @@
 			
 			
 			$.ajax({
-				url : "/board/json/getBoardAllData/"+boardNo,
+				url : "/mir9/board/json/getBoardAllData/"+boardNo,
 				method : "GET",
 				dataType : "JSON",
 				headers : {
@@ -79,8 +79,9 @@
 					"Content-Type" : "application/json"	 						
 				} ,
 				success : function(JSONData, status){
+					var a = JSONData.boardNo * 1
 					
-					$("#boardNo2").val(JSONData.boardNo);
+					$("#boardNo2").val(a);
 					$("#boardTitle2").val(JSONData.boardTitle);
 					$("#boardType2").val(JSONData.boardType);
 					$("#boardCategory2").val(JSONData.boardCategory);
@@ -130,7 +131,7 @@
 		
 		var boardNo2 = $("#boardNo2").val()
 		
-		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/board/updateBoard").submit();
+		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/mir9/board/updateBoard").submit();
 	}
 	
 
@@ -165,7 +166,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <label style="margin-top:5px;">총 3 건</label>
+                    <label style="margin-top:5px;">총 ${resultPage.totalCount} 건</label>
 
                     <table class="table table-bordered table-hover">
                     <form name="form_list" method="post" action="?tpf=admin/board/manage_process">

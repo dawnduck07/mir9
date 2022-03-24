@@ -4,6 +4,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<<<<<<< HEAD
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+=======
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -65,7 +69,7 @@
 		$("a[name='board']").on("click", function(){
 
 			$.ajax({
-				url : "/board/json/listBoard/",
+				url : "/mir9/board/json/listBoard",
 				method : "GET" ,
 				dataType : "json" ,
 				headers : {
@@ -77,7 +81,7 @@
 					if(Data.length > 0){
 						for(var i = 0; i < Data.length; i++){
 							display = "<li>"
-									+ "<a href=/board/postList?boardNo="+Data[i].boardNo+">"
+									+ "<a href=/mir9/board/postList?boardNo="+Data[i].boardNo+">"
 									+ "<i class='fa fa-circle-o'></i> "+Data[i].boardTitle
 									+ "</a>"
 									+ "</li>"
@@ -91,10 +95,10 @@
 		})		
 
 		
-		
 	})
 
 	
+
 </script>
 <!-- redirect Msg 처리 : deliveryController 참조 -->
 <c:if test="${not empty msg}">
@@ -190,7 +194,7 @@
 					<span>게시판 관리</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu" id="boardMenu" >
-							<li><a href="/board/listBoard"><i
+							<li><a href="/mir9/board/listBoard"><i
 									class="fa fa-circle-o"></i> 리스트</a></li>
 						</ul>
 					</li>

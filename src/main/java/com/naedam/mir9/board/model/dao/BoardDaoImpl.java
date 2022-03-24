@@ -12,6 +12,7 @@ import com.naedam.mir9.board.model.vo.BoardAuthority;
 import com.naedam.mir9.board.model.vo.BoardOption;
 import com.naedam.mir9.board.model.vo.BoardTranslate;
 import com.naedam.mir9.board.model.vo.Post;
+import com.naedam.mir9.board.model.vo.Search;
 import com.naedam.mir9.member.model.vo.Member;
 
 @Repository
@@ -50,14 +51,24 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public List<Board> getBoardList(Board board) throws Exception {
-		return sqlSession.selectList("board.getBoardList", board);
+	public List<Board> getBoardList(Search search) throws Exception {
+		return sqlSession.selectList("board.getBoardList", search);
+	}
+
+	@Override
+	public int getTotalCount(Search search) throws Exception {
+		return sqlSession.selectOne("board.getTotalCount", search);
 	}
 	
 	@Override
 	public List<Post> getPostList(int boardNo) throws Exception {
 		return sqlSession.selectList("board.getPostList", boardNo);
 	}	
+	
+	@Override
+	public int getTotalCount2(int boardNo) throws Exception {
+		return sqlSession.selectOne("board.getTotalCount2",boardNo);
+	}
 	
 	@Override
 	public List<Board> getBoardTitle() {
@@ -99,6 +110,9 @@ public class BoardDaoImpl implements BoardDao {
 	public int updateOption(BoardOption boardOption) throws Exception {
 		return sqlSession.update("board.updateOption", boardOption);
 	}
+
+
+
 
 	
 

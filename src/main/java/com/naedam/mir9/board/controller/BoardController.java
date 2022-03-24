@@ -16,7 +16,10 @@ import com.naedam.mir9.board.model.service.BoardService;
 import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.board.model.vo.BoardAuthority;
 import com.naedam.mir9.board.model.vo.BoardOption;
+import com.naedam.mir9.board.model.vo.Page;
 import com.naedam.mir9.board.model.vo.Post;
+import com.naedam.mir9.board.model.vo.Search;
+import com.naedam.mir9.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/board/*")
@@ -25,6 +28,9 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+	int pageUnit = 5;
+	int pageSize = 5;
+	
 	@PostMapping("addBoard")
 	public String addBoard(@ModelAttribute("board") Board board,
 						   @ModelAttribute("boardAuthority") BoardAuthority boardAuthority,
@@ -32,9 +38,9 @@ public class BoardController {
 		
 		System.out.println("board/addBoard 시작");
 		boardService.addBoard(board);
-		boardAuthority.setBoardNo(board);
+		boardAuthority.setAuthorityBoard(board);
 		boardService.addAuthority(boardAuthority);
-		boardOption.setBoardNo(board);
+		boardOption.setOptionBoard(board);
 		boardService.addOption(boardOption);
 		
 		
@@ -42,7 +48,8 @@ public class BoardController {
 	}
 	
 	@PostMapping("updateBoard")
-	public String updateBoard(@ModelAttribute("board") Board board,
+	public String updateBoard(@RequestParam("boardNo") int boardNo,
+			   @ModelAttribute("board") Board board,
 			   @ModelAttribute("boardAuthority") BoardAuthority boardAuthority,
 			   @ModelAttribute("boardOption") BoardOption boardOption) throws Exception{
 		
@@ -52,9 +59,9 @@ public class BoardController {
 		System.out.println("boardOption 확인 :: "+boardOption);		
 		
 		boardService.updateBoard(board);
-		boardAuthority.setBoardNo(board);
+		boardAuthority.setAuthorityBoard(board);
 		boardService.updateAuthority(boardAuthority);
-		boardOption.setBoardNo(board);
+		boardOption.setOptionBoard(board);
 		boardService.updateOption(boardOption);
 		
 		
@@ -65,15 +72,21 @@ public class BoardController {
 	
 	
 	@GetMapping("listBoard")
-	public String listBoard(Board board, Model model) throws Exception {
+	public String listBoard(@ModelAttribute("search") Search search, Board board, Model model) throws Exception {
 		
 		System.out.println("listBoard 시작");
 		
-		Map<String, Object> map = boardService.getBoardList(board);
+		//페이지 처리
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
 		
-		System.out.println("확인 ::: "+map);
+		Map<String, Object> map = boardService.getBoardList(search);
+		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		model.addAttribute("list", map.get("list"));
+		model.addAttribute("resultPage", resultPage);
+		model.addAttribute("search", search);
 		
 		return "board/boardList";
 	}
@@ -82,17 +95,22 @@ public class BoardController {
 	public String listPost(Board board, Model model) throws Exception {
 		
 		System.out.println("/listPost 시작");
-		System.out.println("확인 ::: "+board);
 		
 		Post post = new Post();
+		Member member = new Member();
 		
 		Board board2 = boardService.getBoardData(board.getBoardNo());
+		int postCount = boardService.getTotalCount2(board.getBoardNo());
 		Map<String, Object> map = boardService.getPostList(board.getBoardNo());
+		member = boardService.getMemberData(board2.getBoardMemberNo().getMemberNo());
+		map.put("member", member);
+		map.put("postCount", postCount);
 		
-		System.out.println("map 확인 :: "+map);
+		
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("board", board);
 		model.addAttribute("board2", board2);
+		model.addAttribute("member", member);
 		
 		return "board/postList";
 	}
