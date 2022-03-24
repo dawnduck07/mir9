@@ -8,6 +8,7 @@ import com.naedam.mir9.board.model.vo.BoardAuthority;
 import com.naedam.mir9.board.model.vo.BoardOption;
 import com.naedam.mir9.board.model.vo.BoardTranslate;
 import com.naedam.mir9.board.model.vo.Post;
+import com.naedam.mir9.board.model.vo.Search;
 import com.naedam.mir9.member.model.vo.Member;
 
 public interface BoardService {
@@ -22,11 +23,13 @@ public interface BoardService {
 	
 	public int addTranslate(BoardTranslate boardTranslate) throws Exception;
 	
-	public Map<String, Object> getBoardList(Board board) throws Exception;
+	public Map<String, Object> getBoardList(Search search) throws Exception;
 	
 	public List<Board> getBoardTitle() throws Exception;
 	
 	public Map<String, Object> getPostList(int boardNo) throws Exception;
+	
+	public int getTotalCount2(int boardNo) throws Exception;
 	
 	public Board getBoardData(int boardNo) throws Exception;
 	

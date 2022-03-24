@@ -13,6 +13,7 @@ import com.naedam.mir9.board.model.vo.BoardAuthority;
 import com.naedam.mir9.board.model.vo.BoardOption;
 import com.naedam.mir9.board.model.vo.BoardTranslate;
 import com.naedam.mir9.board.model.vo.Post;
+import com.naedam.mir9.board.model.vo.Search;
 import com.naedam.mir9.member.model.vo.Member;
 
 @Service
@@ -47,12 +48,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Map<String, Object> getBoardList(Board board) throws Exception {
+	public Map<String, Object> getBoardList(Search search) throws Exception {
 		
-		List<Board> list = boardDao.getBoardList(board);
-		
+		List<Board> list = boardDao.getBoardList(search);
+		int totalCount = boardDao.getTotalCount(search);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
+		map.put("totalCount", new Integer(totalCount));
 		
 		return map;
 	}
@@ -106,6 +108,13 @@ public class BoardServiceImpl implements BoardService {
 	public int updateOption(BoardOption boardOption) throws Exception {
 		return boardDao.updateOption(boardOption);
 	}
+
+	@Override
+	public int getTotalCount2(int boardNo) throws Exception {
+		return boardDao.getTotalCount2(boardNo);
+	}
+
+
 
 	
 
