@@ -29,6 +29,7 @@ public class Board implements Serializable {
 	private Member boardMemberNo;	//회원 데이터
 	private BoardAuthority authority;
 	private BoardOption option;
+	private int count;
 	
 	
 	

@@ -7,6 +7,7 @@ import com.naedam.mir9.board.model.vo.BoardAuthority;
 import com.naedam.mir9.board.model.vo.BoardOption;
 import com.naedam.mir9.board.model.vo.BoardTranslate;
 import com.naedam.mir9.board.model.vo.Post;
+import com.naedam.mir9.board.model.vo.Search;
 import com.naedam.mir9.member.model.vo.Member;
 
 public interface BoardDao {
@@ -21,9 +22,13 @@ public interface BoardDao {
 	
 	public int addTranslate(BoardTranslate boardTranslate) throws Exception;
 	
-	public List<Board> getBoardList(Board board) throws Exception;
+	public List<Board> getBoardList(Search search) throws Exception;
+	
+	public int getTotalCount(Search search) throws Exception;
 	
 	public List<Post> getPostList(int boardNo) throws Exception;
+	
+	public int getTotalCount2(int boardNo) throws Exception;
 	
 	public List<Board> getBoardTitle();
 	

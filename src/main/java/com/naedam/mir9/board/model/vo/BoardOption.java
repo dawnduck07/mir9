@@ -20,7 +20,7 @@ public class BoardOption implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int optionNo;			//기타옵션 번호
-	private Board boardNo;			//board의 데이터 FK
+	private Board optionBoard;			//board의 데이터 FK
 	private String optionNotice;	//공지기능
 	private String optionComment;	//댓글
 	private String optionSecret;	//비밀글
