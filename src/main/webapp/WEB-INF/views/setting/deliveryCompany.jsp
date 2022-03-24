@@ -39,12 +39,12 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-body">
-						<label style="margin-top: 5px;">총 1 건</label>
-						<form name="form_search" method="post" action="?tpf=admin/setting/delivery_company"> 
+						<label id="companyListCnt" style="margin-top: 5px;">총 ${companyListCnt } 건</label>
+						<form name="form_search" method="post" action="" onsubmit="return false"> 
 							<div class="box-tools pull-right" style="margin-bottom: 5px;">
 								<div class="has-feedback">
 									<span> 
-										<input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> 
+										<input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" onkeyup="if(window.event.keyCode==13){search()}"/> 
 										<span class="glyphicon glyphicon-search form-control-feedback"></span>
 									</span>
 								</div>
@@ -52,8 +52,8 @@
 							<div class="box-tools pull-right" style="margin-bottom: 5px;">
 								<div class="has-feedback">
 									<select name="field" class="form-control input-sm">
-										<option value="company_name">택배사명</option>
-										<option value="url">배송조회 url</option>
+										<option value="deli_com_name">택배사명</option>
+										<option value="trace_url">배송조회 url</option>
 									</select>
 								</div>
 							</div>
@@ -72,29 +72,30 @@
 										<td style="width: 60px;">명령</td>
 									</tr>
 								</thead>
-								
-								<c:forEach var="company" items="${deliveryCompanyList }">
-									<tr>
-										<td><input type="checkbox" name="checkedNo" value="${company.deliComNo }" /></td>
-										<td>${company.deliComName }</td>
-										<td>${company.traceUrl }</td>
-										<td><fmt:formatDate value="${company.regDate}"
-												pattern="yyyy-MM-dd HH:mm:ss" /></td>
-										<td>
-											<c:choose>
-												<c:when test="${company.showYn == 'Y' }">
-													<span class="label label-success" style="font-size: 12px;">보임</span>
-												</c:when>
-												<c:otherwise>
-													<span class="label label-default" style="font-size: 12px;">숨김</span>
-												</c:otherwise>
-											</c:choose>
-										</td>
-										<td>
-											<button type="button" onclick="onclickUpdate(${company.deliComNo});" class="btn btn-primary btn-xs">상세보기</button>
-										</td>
-									</tr>
-								</c:forEach>
+								<tbody id="delivery_company_list_tbody">
+									<c:forEach var="company" items="${deliveryCompanyList }">
+										<tr>
+											<td><input type="checkbox" name="checkedNo" value="${company.deliComNo }" /></td>
+											<td>${company.deliComName }</td>
+											<td>${company.traceUrl }</td>
+											<td><fmt:formatDate value="${company.regDate}"
+													pattern="yyyy-MM-dd HH:mm:ss" /></td>
+											<td>
+												<c:choose>
+													<c:when test="${company.showYn == 'Y' }">
+														<span class="label label-success" style="font-size: 12px;">보임</span>
+													</c:when>
+													<c:otherwise>
+														<span class="label label-default" style="font-size: 12px;">숨김</span>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<td>
+												<button type="button" onclick="onclickUpdate(${company.deliComNo});" class="btn btn-primary btn-xs">상세보기</button>
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
 							</table>
 							<input type="hidden" id="companyNoList" name="companyNoList"/>
 						</form>
@@ -126,7 +127,9 @@
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
 				<form name="form" method="post" onsubmit="return false;" action="?tpf=admin/setting/delivery_company_process">
-					<input type="hidden" name="mode"> <input type="hidden" name="code">
+					<input type="hidden" name="mode"> 
+					<input type="hidden" name="code">
+					<input type="hidden" name="comNo" />
 					<div class="modal-header"> 
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">택배사 등록</h4>
@@ -170,7 +173,7 @@
 
 		</div>
 		<div class="modal-footer">
-			<button type="button" onclick="register();" class="btn btn-primary">저장</button>
+			<button id="in_del_btn" type="button" onclick="register();" class="btn btn-primary">저장</button>
 			<!--<button type="button" onclick="deleteCompany();" class="btn btn-danger">삭제</button>-->
 		</div>
 	</div>
@@ -181,35 +184,64 @@
 <script>
 	/* 택배사 등록 모달 제어 */
 	function onclickInsert(){
+		$(document["form"])[0].reset();
 		$(modalRegister).modal('show');
 	}
 	
 	/* 택배사 등록 */
-	function register(){
-		const formData = new FormData(document["form"]);
-		var obj = {};
-		for(const [k, v] of formData){
-			obj[k] = v;
-		};
-		const jsonStr = JSON.stringify(obj);
-		
-		$.ajax({
-			url:"${pageContext.request.contextPath}/delivery/insertCompany",
-			method:"get",
-			data: {
-				jsonStr : jsonStr
-			},
-			contentType: "application/json; charset=utf-8",
-			success(data){
-				if(data > 0){
-					alert("택배사가 등록되었습니다.");
-					location.reload();
-				}
-
-			},
-			error:console.log
-		});	
-
+	function register(type){
+		if(type == null){
+			const formData = new FormData(document["form"]);
+			var obj = {};
+			for(const [k, v] of formData){
+				obj[k] = v;
+			};
+			const jsonStr = JSON.stringify(obj);
+			
+			$.ajax({
+				url:"${pageContext.request.contextPath}/delivery/insertCompany",
+				method:"get",
+				data: {
+					jsonStr : jsonStr
+				},
+				contentType: "application/json; charset=utf-8",
+				success(data){
+					if(data > 0){
+						alert("택배사가 등록되었습니다.");
+						location.reload();
+					}
+	
+				},
+				error:console.log
+			});	
+		}else{
+			const formData = new FormData(document["form"]);
+			var obj = {};
+			for(const [k, v] of formData){
+				obj[k] = v;
+			};
+			const jsonStr = JSON.stringify(obj);
+			
+			$.ajax({
+				
+				url:"${pageContext.request.contextPath}/delivery/updateCompany",
+				method:"get",
+				data: {
+					jsonStr : jsonStr
+				},
+				contentType: "application/json; charset=utf-8",
+				success(data){
+					if(data > 0){
+						alert("택배사 접보가 변경되었습니다.");
+						location.reload();
+					}
+	
+				},
+				error:console.log
+				
+				
+			});
+		}
 	}
 	
 	/* 택배사 삭제  --> common.js에 기술되어있으나 별도도 구현함. (selectDelete)*/
@@ -220,6 +252,95 @@
 			$(document["form_list"]).submit();
 		}
 	}
+	
+	/* 택배사 상세보기 */
+	function onclickUpdate(deliveryCompanyNo){
+		$.ajax({
+			url : "${pageContext.request.contextPath}/delivery/companyDetail",
+			data : {
+				comNo : deliveryCompanyNo
+			},
+			type : "post",
+			success(data){
+				var date = new Date(data.regDate);
 
+				const formatDate = (current_datetime)=>{
+				    let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+				    return formatted_date;
+				}
+
+				$("input[name=company_name]").val(data.deliComName);
+				$("input[name=url]").val(data.traceUrl);
+				$("#is_show").val(data.showYn);
+				$("#reg_date").text(formatDate(date));
+				$("input[name=comNo]").val(data.deliComNo);
+				$("#in_del_btn").attr('onclick', "register('update');");
+			},
+			error : console.log
+		});
+		$(modalRegister).modal('show');
+	}
+	
+	/* 택배사 검색 */
+	function search(){
+		const formData = new FormData(document["form_search"]);
+		var obj = {};
+		for(const [k, v] of formData){
+			obj[k] = v;
+		};
+		const jsonStr = JSON.stringify(obj);
+		
+		var cnt = 0;
+		$.ajax({
+			
+			url:"${pageContext.request.contextPath}/delivery/companySearch",
+			method:"get",
+			data: {
+				jsonStr : jsonStr
+			},
+			contentType: "application/json; charset=utf-8",
+			success(data){
+				$("#delivery_company_list_tbody").html('');
+				$.each(data, (k,v)=>{
+					var date = new Date(v.regDate);
+
+					var formatDate = (current_datetime)=>{
+					    let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+					    return formatted_date;
+					}
+					var ynStr = "";
+					if(v.showYn == 'Y'){
+						ynStr = `<span class="label label-success" style="font-size: 12px;">보임</span>`;
+					}else{
+						ynStr = `<span class="label label-default" style="font-size: 12px;">숨김</span>`;
+					}
+					
+					$("#delivery_company_list_tbody").append(`
+							<tr>
+							<td><input type="checkbox" name="checkedNo" value="\${v.deliComNo }" /></td>
+							<td>\${v.deliComName }</td>
+							<td>\${v.traceUrl }</td>
+							<td>\${formatDate(date)}</td>
+							<td>
+								\${ynStr}
+							</td>
+							<td>
+								<button type="button" onclick="onclickUpdate(\${v.deliComNo});" class="btn btn-primary btn-xs">상세보기</button>
+							</td>
+						</tr>
+							
+							
+							
+							`);
+					cnt += 1;
+				});
+				$("#companyListCnt").text("총 " + cnt + " 건" );
+			},
+			error:console.log
+			
+			
+		});
+	}
+	
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
