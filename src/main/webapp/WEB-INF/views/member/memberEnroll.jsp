@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,17 +31,12 @@
 <!-- IE 지원용 : babel-standalone bael-polyfill -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/member.css" />
-
 </head>
-<style>
-body{
-	width:100%;
-	height:100%;
- }
-</style>
 
-<body style="width:100%; hwight:100%;">
+
+<body style="margin-top:200px;">
 <div id="enroll-container" class="mx-auto text-center">
 	<form 
 		name="memberEnrollFrm" 
@@ -56,7 +52,7 @@ body{
 							   placeholder="4글자이상"
 							   name="id" 
 							   id="id"
-							   value="honggd"
+							   value=""
 							   required>
 						<span class="guide ok">이 아이디는 사용가능합니다.</span>
 						<span class="guide error">이 아이디는 이미 사용중입니다.</span>
@@ -67,66 +63,43 @@ body{
 			<tr>
 				<th>패스워드</th>
 				<td>
-					<input type="password" class="form-control" name="password" id="password" value="1234" required>
+					<input type="password" class="form-control" name="password" id="password" value="" required>
 				</td>
 			</tr>
 			<tr>
 				<th>패스워드확인</th>
 				<td>	
-					<input type="password" class="form-control" id="passwordCheck" value="1234" required>
+					<input type="password" class="form-control" id="passwordCheck" value="" required>
 				</td>
 			</tr>  
 			<tr>
-				<th>이름</th>
+				<th>성</th>
 				<td>	
-					<input type="text" class="form-control" name="name" id="name" value="홍길동" required>
+					<input type="text" class="form-control" name="lastName" id="lastName" value="" required>
 				</td>
 			</tr>
 			<tr>
-				<th>생년월일</th>
-				<td>		
-					<input type="date" class="form-control" name="birthday" id="birthday" value="1999-09-09"/>
+				<th>이름</th>
+				<td>	
+					<input type="text" class="form-control" name="firstName" id="firstName" value="" required>
 				</td>
-			</tr> 
+			</tr>
 			<tr>
 				<th>이메일</th>
 				<td>	
-					<input type="email" class="form-control" placeholder="abc@xyz.com" name="email" id="email" value="honggd@naver.com">
+					<input type="email" class="form-control" placeholder="abc@xyz.com" name="email" id="email" value="">
 				</td>
 			</tr>
 			<tr>
-				<th>휴대폰</th>
+				<th>전화번호</th>
 				<td>	
-					<input type="tel" class="form-control" placeholder="(-없이)01012345678" name="phone" id="phone" maxlength="11" value="01012341234" required>
+					<input type="tel" class="form-control" placeholder="(-없이)01012345678" name="phone" id="phone" maxlength="11" value="" required>
 				</td>
 			</tr>
 			<tr>
 				<th>주소</th>
 				<td>	
-					<input type="text" class="form-control" placeholder="" name="address" id="address" value="서울시 관악구 신림동">
-				</td>
-			</tr>
-			<tr>
-				<th>성별 </th>
-				<td>
-					<div class="form-check form-check-inline">
-						<input type="radio" class="form-check-input" name="gender" id="gender0" value="M" checked>
-						<label  class="form-check-label" for="gender0">남</label>&nbsp;
-						<input type="radio" class="form-check-input" name="gender" id="gender1" value="F">
-						<label  class="form-check-label" for="gender1">여</label>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th>취미 </th>
-				<td>
-					<div class="form-check form-check-inline">
-						<input type="checkbox" class="form-check-input" name="hobby" id="hobby0" value="운동" checked><label class="form-check-label" for="hobby0">운동</label>&nbsp;
-						<input type="checkbox" class="form-check-input" name="hobby" id="hobby1" value="등산"><label class="form-check-label" for="hobby1">등산</label>&nbsp;
-						<input type="checkbox" class="form-check-input" name="hobby" id="hobby2" value="독서" checked><label class="form-check-label" for="hobby2">독서</label>&nbsp;
-						<input type="checkbox" class="form-check-input" name="hobby" id="hobby3" value="게임"><label class="form-check-label" for="hobby3">게임</label>&nbsp;
-						<input type="checkbox" class="form-check-input" name="hobby" id="hobby4" value="여행"><label class="form-check-label" for="hobby4">여행</label>&nbsp;
-					 </div>
+					<input type="text" class="form-control" placeholder="" name="address" id="address" value="">
 				</td>
 			</tr>
 		</table>
@@ -168,9 +141,6 @@ $(id).keyup((e) => {
 				$error.show();
 				$idValid.val(0);
 			}
-			
-			
-			
 		},
 		error: console.log
 	});

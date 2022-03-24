@@ -3,5 +3,40 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
+<insert id="insertMember">
+	INSERT INTO
+		member
+		(member_no,
+		 member_grade_no,
+		 first_name,
+		 last_name,
+		 email,
+		 phone,
+		 reg_date,
+		 status,
+		 id,
+		 password,
+		 profile_img) 
+	VALUES
+		(seq_member_no.nextval,
+		#{memberGradeNo},
+		#{firstName},
+		#{lastName},
+		#{email},
+		#{phone},
+		default,
+		default,
+		#{id},
+		#{password},
+		null)
+</insert>
 
+<select id="selectOneMember" resultType="member">
+	SELECT
+		*
+	FROM
+		member
+	WHERE
+		id = #{id}
+</select>
 </mapper>
