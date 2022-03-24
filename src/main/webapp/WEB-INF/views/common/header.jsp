@@ -4,7 +4,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<<<<<<< HEAD
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+=======
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -93,8 +96,9 @@
 
 		
 	})
+
 	
-	
+
 </script>
 <!-- redirect Msg 처리 : deliveryController 참조 -->
 <c:if test="${not empty msg}">
@@ -102,7 +106,7 @@
 		alert("${msg}");
 	</script>
 </c:if>
-	
+
 	
 </head>
 <body class="hold-transition skin-red sidebar-mini">

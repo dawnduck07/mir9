@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
+import com.naedam.mir9.delivery.model.vo.DeliverySetting;
+import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.setting.model.service.SettingService;
 
 @Controller
@@ -52,7 +54,12 @@ public class SettingController {
 	public void contract() {}
 	
 	@GetMapping("/delivery_setting")
-	public String deliverySertting() {
+	public String deliverySertting(Model model) {
+		DeliverySetting deliverySetting = settingService.selectOneDeliverySetting();
+		List<Doseosangan> doseosanganList = settingService.selectDoseosanganList();
+		
+		model.addAttribute("deliverySetting",deliverySetting);
+		model.addAttribute("doseosanganList",doseosanganList);
 		
 		return "setting/deliverySetting";
 	}
@@ -62,6 +69,8 @@ public class SettingController {
 		
 		List<DeliveryCompany> deliveryCompanyList = settingService.selectDeliveryCompanyList();
 		model.addAttribute("deliveryCompanyList",deliveryCompanyList);
+		model.addAttribute("companyListCnt",deliveryCompanyList.size());
+		
 		
 		return "setting/deliveryCompany";
 	}

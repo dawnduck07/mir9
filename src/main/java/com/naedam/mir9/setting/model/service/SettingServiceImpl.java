@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
+import com.naedam.mir9.delivery.model.vo.DeliverySetting;
+import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.setting.model.dao.SettingDao;
 
 @Service
@@ -18,6 +20,19 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.selectDeliveryCompanyList();
 	}
+
+	@Override
+	public DeliverySetting selectOneDeliverySetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectOneDeliverySetting();
+	}
+
+	@Override
+	public List<Doseosangan> selectDoseosanganList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectDoseosanganList();
+	}
+	
 	
 	
 }
