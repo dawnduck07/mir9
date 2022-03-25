@@ -8,7 +8,14 @@
   	<select id="reviewList" parameterType="map" resultType="review">
 		SELECT A.*
 		FROM (
-				SELECT DISTINCT R.*
+				SELECT DISTINCT R.REVIEW_NO
+					 , R.ORDER_NO
+					 , R.MEMBER_NO 
+					 , R.PRODUCT_NO
+					 , R.REVIEW_CATEGORY_NO
+					 , REVIEW_TITLE
+					 , REVIEW_CONTENT
+					 , REVIEW_DATE
 					 , CONCAT(M.LAST_NAME, M.FIRST_NAME) AS WRITER
 					 , P.PRODUCT_NAME AS PRODUCTNAME
 					 , C.REVIEW_CATEGORY_NAME AS REVIEWCATEGORYNAME
@@ -28,16 +35,27 @@
   	<!-- 리뷰 모달 정보 불러오기 -->
   	<!-- 작성자, 한 줄 후기, 구매 후기 -->
   	<select id="reviewModal" parameterType="int" resultType="review">
-  		SELECT R.*
+  		SELECT R.REVIEW_NO
+			 , R.ORDER_NO
+			 , R.MEMBER_NO 
+			 , R.PRODUCT_NO
+			 , R.REVIEW_CATEGORY_NO
+			 , REVIEW_TITLE
+			 , REVIEW_CONTENT
+			 , REVIEW_DATE
   			 , CONCAT(M.LAST_NAME, M.FIRST_NAME) AS WRITER
   		  FROM TB_REVIEW R
   		  JOIN MEMBER M ON R.MEMBER_NO = M.MEMBER_NO
-  		 WHERE REVIEW_NO = #{reviewNo}
+  		 WHERE R.REVIEW_NO = #{reviewNo}
   	</select>
   	
   	<!-- 이미지 -->
   	<select id="reviewImgModal" parameterType="int" resultType="reviewImg">
-  		SELECT DISTINCT I.*
+  		SELECT DISTINCT I.REVIEW_IMG_NO
+  			 , I.REVIEW_NO
+  			 , ORIGIN_NAME
+  			 , CHANGE_NAME
+  			 , REVIEW_IMG_URL
   		  FROM REVIEW_IMG I
   		  JOIN TB_REVIEW R ON I.REVIEW_NO = R.REVIEW_NO
   		 WHERE I.REVIEW_NO = #{reviewNo}
