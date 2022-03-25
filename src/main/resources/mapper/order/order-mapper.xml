@@ -67,7 +67,7 @@
   </select>
   
   <select id="selectOrderStatusList" resultType="orderStatus">
-  	select * from order_status order by order_status_no
+  	select * from order_status_list order by order_status_no
   </select>
  
   <select id="selectOneOrderDetailByOrderNo" resultType="orderDetail">

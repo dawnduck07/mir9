@@ -289,7 +289,17 @@
 <script>
 	<!-- 모달창 제어 -->
 	function onclick_update(orderNo){
-			getDoseosangan(orderNo).then(fillForm(orderNo))
+			getDoseosangan(orderNo)
+				.catch(function(orderNo){console.log('')})
+				.then(function(){return fillForm(orderNo)})
+				.then(function (orderDetail) {
+						// 성공시
+						delivery_check(orderDetail);
+					}, function (error) {
+						// 실패시 
+						console.error(error);
+					});
+				
 			$("#modalContent").modal('show');			
 	}
 	
@@ -303,20 +313,21 @@
 				},
 				type : "get",
 				success(data){
-					console.log(data)
 					$(doseosangan).val(data);
 				}
 			});
 			if($(doseosangan).val() != 'null') resolve();
+			else reject(orderNo);
 		});
 
 	}
 	
 	function fillForm(orderNo){
-		setTimeout(()=>{
+		return new Promise(function(resolve, reject){
 			
+		setTimeout(()=>{
 			var doseoFee = $(doseosangan).val() * 1;
-			console.log(doseoFee)
+			$(document["form_register"])[0].reset();
 				$.ajax({
 					//url: `\${restServerUrl}/menus`,
 					url:`${pageContext.request.contextPath}/order/orderDetail`,
@@ -325,6 +336,7 @@
 					},
 					method: "GET",
 					success(data){
+						
 						// 구매내역 append? 값 채우기?
 							
 							$("#p_img").attr('src', data.orderDetail.imgUrl);
@@ -392,18 +404,23 @@
 						$("#receiver_addr").text(data.orderDetail.shippingAddress);
 						$("#request_message").text(data.orderDetail.memo);
 						$("#receiver_memo").val(data.orderDetail.adminMemo);
-						$('#payment_status').val(data.orderDetail.orderStatusNo).prop("selected",true);
 						
+						// 주문 상태 변경
 						
 						// 업데이트 온클릭 속성 추가
 						$("#update_order_status").attr('onclick', 'updateOrderStatus(' + data.orderDetail.orderNo +')')
 						$("#update_admin_memo").attr('onclick', 'updateAdminMemo(' + data.orderDetail.orderInfoNo + ')')
 						$(doseosangan).val('null');
+						
+						
+						resolve(data.orderDetail);
+						
 					},
 					error: console.log
 				});
-		},100);
+			},600);
 				
+		});
 
 	}
 	
@@ -420,6 +437,7 @@
 			success(data){
 				if(data > 0){
 					alert('주문 상태가 변경되었습니다.');
+					location.reload();
 				}
 			},
 			error: console.log
@@ -479,6 +497,59 @@
 		return dateString;
 	}
 	
+	/* 택배 api */
+	function delivery_check(orderDetail){
+		if(orderDetail.trackingNo == 0) return false;
+		setTimeout(()=>{
+			
+			if(orderDetail.orderStatusUpdate != null){
+				$('#payment_status').val(orderDetail.orderStatusNo).prop("selected",true);
+			}else{
+					
+				const myKey = "FV9kkSwcgfdK76xfE8qHIA";
+				
+				if(orderDetail.deliComNo < 10){
+					var t_code = "0" + orderDetail.deliComNo;				
+				}else{
+					var t_code = orderDetail.deliComNo;
+	 			}
+				
+		         var t_invoice = orderDetail.trackingNo;
+		         var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
+		         console.log(url);
+		         
+		         
+		        $.ajax({
+		            type:"GET",
+		            dataType : "json",
+		            url: url,
+		            success(data){
+		                var trackingDetails = data.trackingDetails;
+		                
+		                var latestStatus = trackingDetails[trackingDetails.length-1];
+		                
+		                console.log(latestStatus.level)
+		                // 배송준비중 상태
+		                if(latestStatus.level < 2){
+		                	$('#payment_status').val(3).prop("selected",true);
+		                // 배송완료 상태
+		                }else if(latestStatus.level == 6){
+		                	$('#payment_status').val(5).prop("selected",true);
+		               	// 배송중 상태
+		                }else{
+		                	$('#payment_status').val(4).prop("selected",true);
+		                }
+		                
+	/* 	                $.each(trackingDetails,function(key,value) {
+		                    console.log(key, value)
+		                }); */
+		            },
+		            error : console.log
+		        });
+		        console.log("=============")
+			}
+		}, 500)
+	}
 
 
 </script>
