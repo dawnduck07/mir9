@@ -62,5 +62,6 @@ public class CommunityController {
 		return "community/review";
 	}
 	
+	// 리뷰 삭제
 	
 }

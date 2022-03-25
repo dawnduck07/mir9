@@ -26,11 +26,14 @@ public class CommunityRestController {
 		List<Review> review = communityService.reviewModal(reviewNo);
 		List<ReviewImg> reviewImg  = communityService.reviewImgModal(reviewNo);
 		
+		System.out.println(reviewImg);
+		
 		Map<Object, Object> result = new HashMap<>();
 		result.put("review", review);
 		result.put("reviewImg", reviewImg);
 		
 		return result;
 	}
+
 	
 }

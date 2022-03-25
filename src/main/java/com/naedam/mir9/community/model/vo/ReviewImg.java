@@ -21,7 +21,9 @@ public class ReviewImg implements Serializable {
 	
 	private int reviewImgNo;
 	private int reviewNo;
-	private int reviewImgLevel;
+	// private int reviewImgLevel;
+	private String originName;
+	private String changeName;
 	private String reviewImgUrl;
 	
 }
