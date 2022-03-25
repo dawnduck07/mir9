@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
+import com.naedam.mir9.delivery.model.vo.DeliverySetting;
+import com.naedam.mir9.delivery.model.vo.Doseosangan;
 
 @Repository
 public class DeliveryDaoImpl implements DeliveryDao {
@@ -48,6 +50,18 @@ public class DeliveryDaoImpl implements DeliveryDao {
 	public List<DeliveryCompany> selectDeliveryCompanyListByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return session.selectList("delivery.selectDeliveryCompanyListByParam", param);
+	}
+
+	@Override
+	public int updateDeliverySettingByVo(DeliverySetting deliSet) {
+		// TODO Auto-generated method stub
+		return session.update("delivery.updateDeliverySettingByVo", deliSet);
+	}
+
+	@Override
+	public int updateDoseosanganByVo(Doseosangan doseo) {
+		// TODO Auto-generated method stub
+		return session.update("delivery.updateDoseosanganByVo", doseo);
 	}
 	
 	
