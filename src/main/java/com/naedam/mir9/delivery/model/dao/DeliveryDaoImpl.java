@@ -19,7 +19,12 @@ public class DeliveryDaoImpl implements DeliveryDao {
 	@Override
 	public int selectDoseosanganFeeByZipcode(int zipcode) {
 		// TODO Auto-generated method stub
-		return session.selectOne("delivery.selectDoseosanganFeeByZipcode",zipcode);
+		int result = 0;
+		if(session.selectOne("delivery.selectDoseosanganFeeByZipcode",zipcode) != null) {
+			result = session.selectOne("delivery.selectDoseosanganFeeByZipcode",zipcode);
+		}
+		
+		return result;
 	}
 
 	@Override

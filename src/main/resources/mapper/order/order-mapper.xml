@@ -83,14 +83,6 @@
     where a.order_no = #{orderNo}
   </select>
   
-  <select id="selectFreeShippingSetting" resultType="_int">
-  	select free_shipping_settings from delivery_setting
-  </select>
-  
-  <select id="selectBasicDeliveryFee" resultType="_int">
-  	select basic_delivery_fee from delivery_setting
-  </select>
-  
   <select id="getZipcodeByOrderNo" resultType="_int">
   	select zip_code from order_info where order_no = #{orderNo}
   </select>
