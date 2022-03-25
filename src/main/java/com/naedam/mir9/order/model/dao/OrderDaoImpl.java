@@ -60,18 +60,6 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	@Override
-	public int selectFreeShippingSetting() {
-		// TODO Auto-generated method stub
-		return session.selectOne("order.selectFreeShippingSetting");
-	}
-
-	@Override
-	public int selectBasicDeliveryFee() {
-		// TODO Auto-generated method stub
-		return session.selectOne("order.selectBasicDeliveryFee");
-	}
-
-	@Override
 	public int getZipcodeByOrderNo(long orderNo) {
 		// TODO Auto-generated method stub
 		return session.selectOne("order.getZipcodeByOrderNo", orderNo);

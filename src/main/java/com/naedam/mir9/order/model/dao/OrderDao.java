@@ -24,10 +24,6 @@ public interface OrderDao {
 
 	List<OrderOption> selectOrderOptionListByOrderNo(long orderNo);
 
-	int selectFreeShippingSetting();
-
-	int selectBasicDeliveryFee();
-
 	int getZipcodeByOrderNo(long orderNo);
 
 
