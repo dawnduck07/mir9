@@ -27,6 +27,14 @@
   			where deli_com_no = #{comNo} 
   	</update>
   	
+  	<update id="updateDeliverySettingByVo">
+  		update delivery_setting set basic_delivery_fee = #{basicDeliveryFee}, free_shipping_settings = #{freeShippingSettings}, extra_deli_fee_yn = #{extraDeliFeeYn} 
+  	</update>
+  	
+  	<update id="updateDoseosanganByVo">
+  		update doseosangan set extra_fee = #{extraFee} where doseo_no = #{doseoNo}
+  	</update>
+  	
   	<delete id="deleteDeliveryCompanyByComNo">
   		delete delivery_company where deli_com_no = #{comNo}
   	</delete>
