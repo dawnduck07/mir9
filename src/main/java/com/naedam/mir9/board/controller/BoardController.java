@@ -1,5 +1,6 @@
 package com.naedam.mir9.board.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.naedam.mir9.board.model.dao.BoardDao;
 import com.naedam.mir9.board.model.service.BoardService;
 import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.board.model.vo.BoardAuthority;
@@ -92,7 +94,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("postList")
-	public String listPost(Board board, Model model) throws Exception {
+	public String listPost(Board board, Model model, @ModelAttribute("search") Search search) throws Exception {
 		
 		System.out.println("/listPost 시작");
 		
@@ -100,16 +102,22 @@ public class BoardController {
 		Member member = new Member();
 		
 		Board board2 = boardService.getBoardData(board.getBoardNo());
-		int postCount = boardService.getTotalCount2(board.getBoardNo());
-		Map<String, Object> map = boardService.getPostList(board.getBoardNo());
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("board", board);
+		
+		Map<String, Object> resultMap = boardService.getPostList(map);
+		
+		Page resultPage = new Page( search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
+		
 		member = boardService.getMemberData(board2.getBoardMemberNo().getMemberNo());
-		map.put("member", member);
-		map.put("postCount", postCount);
+		resultMap.put("member", member);
 		
-		
-		model.addAttribute("list", map.get("list"));
+		model.addAttribute("list", resultMap.get("list")); 
 		model.addAttribute("board", board);
 		model.addAttribute("board2", board2);
+		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("member", member);
 		
 		return "board/postList";
@@ -131,6 +139,11 @@ public class BoardController {
 		}
 		result = 1;
 		
+	}
+	
+	@GetMapping("test")
+	public String test() {
+		return "board/test";
 	}
 }
 

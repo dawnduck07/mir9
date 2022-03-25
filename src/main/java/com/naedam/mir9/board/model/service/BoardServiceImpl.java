@@ -60,13 +60,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Map<String, Object> getPostList(int boardNo) throws Exception {
+	public Map<String, Object> getPostList(Map<String, Object> map) throws Exception {
 		
-		List<Post> list = boardDao.getPostList(boardNo);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", boardDao.getPostList(map));
+		resultMap.put("totalCount", boardDao.getTotalCount2(map));
 		
-		return map;
+		return resultMap;
 	}
 	
 	@Override
@@ -109,10 +109,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.updateOption(boardOption);
 	}
 
-	@Override
-	public int getTotalCount2(int boardNo) throws Exception {
-		return boardDao.getTotalCount2(boardNo);
-	}
 
 
 

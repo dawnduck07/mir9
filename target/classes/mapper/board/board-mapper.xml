@@ -234,6 +234,22 @@
 				ORDER BY board_no ASC) countTable
 	</select>
 	
+	<select id="getTotalCount2" parameterType="hashmap" resultType="int" >
+	  	SELECT COUNT(*)
+	  	FROM(			SELECT
+								p.post_no,
+								p.post_title,
+								p.post_contents,
+								p.post_date,
+								p.post_thombnail,
+								p.post_file,
+								p.board_no,
+								p.member_no
+						FROM	board b, post p
+						WHERE	b.board_no = p.board_no
+						AND		b.board_no = #{board.boardNo}) countTable
+	</select>	
+	
 	<select id="getBoardTitle" resultType="board">
 		
 		SELECT
@@ -289,7 +305,7 @@
 		AND     b.board_no = o.board_no
 	</select>
 	
-	<select id="getPostList" parameterType="int" resultMap="PostSelectMap" >	
+	<select id="getPostList" parameterType="hashmap" resultMap="PostSelectMap" >	
 		SELECT
 				p.post_no,
 				p.post_title,
@@ -301,25 +317,10 @@
 				p.member_no
 		FROM	board b, post p
 		WHERE	b.board_no = p.board_no
-		AND		b.board_no = #{value}
+		AND		b.board_no = #{board.boardNo}
 		ORDER BY p.post_no ASC	
 	</select>
-	
-	<select id="getTotalCount2" parameterType="int" >
-	  	SELECT COUNT(*)
-	  	FROM(			SELECT
-								p.post_no,
-								p.post_title,
-								p.post_contents,
-								p.post_date,
-								p.post_thombnail,
-								p.post_file,
-								p.board_no,
-								p.member_no
-						FROM	board b, post p
-						WHERE	b.board_no = p.board_no
-						AND		b.board_no = #{value}) countTable
-	</select>	
+		
 	
 	<select id="getMemberData" parameterType="int" resultMap="memberSelectMap">
 		SELECT
