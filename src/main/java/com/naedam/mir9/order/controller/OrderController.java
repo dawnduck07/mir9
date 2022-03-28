@@ -25,6 +25,7 @@ import com.naedam.mir9.order.model.vo.OrderStatus;
 import com.naedam.mir9.setting.model.service.SettingService;
 
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/order")
@@ -109,6 +110,25 @@ public class OrderController {
 		
 		return doseosangan;
 		
+	}
+	
+	@GetMapping(value= "/statusAutoUpdate", produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String statusAutoUpdate(String orderNo, String statusNo) {
+		Map<String, String> param = new HashMap<String, String>();
+		log.debug("statusNo = {}",statusNo);
+		param.put("orderNo", orderNo);
+		param.put("statusNo", statusNo);
+		if(!statusNo.equals('0')) {
+			int result = orderService.updateOrderStausAuto(param);			
+		}
+		
+		String orderStatusName = orderService.selectOrderStatusNameByOrderNo(orderNo);
+		JSONObject jsonObject = new JSONObject();
+		
+		jsonObject.put("orderStatusName", orderStatusName);
+
+		return jsonObject.toString();
 	}
 	
 	@GetMapping("/logList")

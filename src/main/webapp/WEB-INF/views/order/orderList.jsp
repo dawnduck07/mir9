@@ -103,7 +103,7 @@
 										<td align="right" style="color: #ff0505; font-weight: bold"><fmt:formatNumber value="${order.payAmt }" pattern="#,###" /></td>
 										<td>${order.payType }</td>
 										<td><fmt:formatDate value="${order.payDate}" pattern="yyyy-MM-dd" /> ${order.payDate == null ? ' - ':'' }</td>
-										<td style="font-weight: bold">${order.statusName}</td>
+										<td style="font-weight: bold"><span id="order_status_name_${order.orderNo }">${order.statusName}</span></td>
 										<td><button type="button" onclick="onclick_update(${order.orderNo});" class="btn btn-primary btn-xs">보기</button></td>
 									</tr>
 								</c:forEach>
@@ -292,12 +292,12 @@
 			getDoseosangan(orderNo)
 				.catch(function(orderNo){console.log('')})
 				.then(function(){return fillForm(orderNo)})
-				.then(function (orderDetail) {
-						// 성공시
-						delivery_check(orderDetail);
-					}, function (error) {
-						// 실패시 
-						console.error(error);
+				.then(function(orderDetail){return delivery_check(orderDetail)})
+				.then(function(statusNo){
+						console.log(statusNo);
+						//updateStaus(orderNo, statusNo);
+					}, function(err){
+						console.log(err)
 					});
 				
 			$("#modalContent").modal('show');			
@@ -322,6 +322,7 @@
 
 	}
 	
+	/* 모달창 내용 기입 */
 	function fillForm(orderNo){
 		return new Promise(function(resolve, reject){
 			
@@ -403,7 +404,8 @@
 						$("#receiver_mobile").text(data.orderDetail.receiverPhone);
 						$("#receiver_addr").text(data.orderDetail.shippingAddress);
 						$("#request_message").text(data.orderDetail.memo);
-						$("#receiver_memo").val(data.orderDetail.adminMemo);
+						$("#memo").val(data.orderDetail.adminMemo);
+						
 						
 						// 주문 상태 변경
 						
@@ -481,7 +483,7 @@
 
 		
 	}
-	
+	/* 날짜 포맷팅 */
 	function dateStr(type){
 		var date = new Date();
 		i = type.slice(1,3) * 1;
@@ -497,59 +499,86 @@
 		return dateString;
 	}
 	
-	/* 택배 api */
+	/* 택배 api활용, order_status 동적 업데이트 */
 	function delivery_check(orderDetail){
-		if(orderDetail.trackingNo == 0) return false;
-		setTimeout(()=>{
+		new Promise(function(resolve, reject){
 			
-			if(orderDetail.orderStatusUpdate != null){
-				$('#payment_status').val(orderDetail.orderStatusNo).prop("selected",true);
-			}else{
-					
-				const myKey = "FV9kkSwcgfdK76xfE8qHIA";
-				
-				if(orderDetail.deliComNo < 10){
-					var t_code = "0" + orderDetail.deliComNo;				
+			if(orderDetail.trackingNo == 0) return false;
+			var statusNo = 0;
+			setTimeout(()=>{
+				// 관리자가 삳태 직접 업데이트한 경우 --> 관리자 결정을 따름
+				if(orderDetail.orderStatusUpdate != null){
+					$('#payment_status').val(orderDetail.orderStatusNo).prop("selected",true);
 				}else{
-					var t_code = orderDetail.deliComNo;
-	 			}
-				
-		         var t_invoice = orderDetail.trackingNo;
-		         var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
-		         console.log(url);
-		         
-		         
-		        $.ajax({
-		            type:"GET",
-		            dataType : "json",
-		            url: url,
-		            success(data){
-		                var trackingDetails = data.trackingDetails;
-		                
-		                var latestStatus = trackingDetails[trackingDetails.length-1];
-		                
-		                console.log(latestStatus.level)
-		                // 배송준비중 상태
-		                if(latestStatus.level < 2){
-		                	$('#payment_status').val(3).prop("selected",true);
-		                // 배송완료 상태
-		                }else if(latestStatus.level == 6){
-		                	$('#payment_status').val(5).prop("selected",true);
-		               	// 배송중 상태
-		                }else{
-		                	$('#payment_status').val(4).prop("selected",true);
-		                }
-		                
-	/* 	                $.each(trackingDetails,function(key,value) {
-		                    console.log(key, value)
-		                }); */
-		            },
-		            error : console.log
-		        });
-		        console.log("=============")
-			}
-		}, 500)
+						
+					const myKey = "FV9kkSwcgfdK76xfE8qHIA";
+					
+					if(orderDetail.deliComNo < 10){
+						var t_code = "0" + orderDetail.deliComNo;				
+					}else{
+						var t_code = orderDetail.deliComNo;
+		 			}
+					
+			         var t_invoice = orderDetail.trackingNo;
+			         // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
+			         var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
+			         //var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
+			         console.log(url);
+			         
+			        $.ajax({
+			            type:"GET",
+			            dataType : "json",
+			            url: url,
+			            success(data){
+			                var trackingDetails = data.trackingDetails;
+			                
+			                var latestStatus = trackingDetails[trackingDetails.length-1];
+			               
+			                // 배송준비중 상태
+			                if(latestStatus.level < 2){
+			                	$('#payment_status').val(3).prop("selected",true);
+			                	statusNo = 3;
+			                // 배송완료 상태
+			                }else if(latestStatus.level >= 6){
+			                	$('#payment_status').val(5).prop("selected",true);
+			                	statusNo = 5;
+			               	// 배송중 상태
+			                }else{
+			                	$('#payment_status').val(4).prop("selected",true);
+			                	statusNo = 4;
+			                }
+			                console.log(statusNo);
+			            },
+			            error : console.log
+			        });
+				}
+			}, 800)
+		
+		
+			setTimeout(()=>{
+				$.ajax({
+					url : "${pageContext.request.contextPath}/order/statusAutoUpdate",
+					data : {
+						orderNo : orderDetail.orderNo,
+						statusNo : statusNo
+					},
+					contentType : "application/json; charset:UTF-8",
+					dataType : "json",
+					type : "get",
+					success(data){
+						var target = "order_status_name_" + orderDetail.orderNo
+						console.log(data)
+						$("#"+target).text(data.orderStatusName);
+					},
+					error:console.log
+					
+					
+					
+				});
+			},1500);
+		});
 	}
+	
 
 
 </script>
