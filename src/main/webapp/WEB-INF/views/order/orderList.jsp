@@ -103,7 +103,7 @@
 										<td align="right" style="color: #ff0505; font-weight: bold"><fmt:formatNumber value="${order.payAmt }" pattern="#,###" /></td>
 										<td>${order.payType }</td>
 										<td><fmt:formatDate value="${order.payDate}" pattern="yyyy-MM-dd" /> ${order.payDate == null ? ' - ':'' }</td>
-										<td style="font-weight: bold">${order.statusName}</td>
+										<td style="font-weight: bold"><span id="order_status_name_${order.orderNo }">${order.statusName}</span></td>
 										<td><button type="button" onclick="onclick_update(${order.orderNo});" class="btn btn-primary btn-xs">보기</button></td>
 									</tr>
 								</c:forEach>
@@ -294,7 +294,8 @@
 				.then(function(){return fillForm(orderNo)})
 				.then(function(orderDetail){return delivery_check(orderDetail)})
 				.then(function(statusNo){
-						console.log(statusNo); updateStaus(orderNo, statusNo)
+						console.log(statusNo);
+						//updateStaus(orderNo, statusNo);
 					}, function(err){
 						console.log(err)
 					});
@@ -321,6 +322,7 @@
 
 	}
 	
+	/* 모달창 내용 기입 */
 	function fillForm(orderNo){
 		return new Promise(function(resolve, reject){
 			
@@ -402,7 +404,8 @@
 						$("#receiver_mobile").text(data.orderDetail.receiverPhone);
 						$("#receiver_addr").text(data.orderDetail.shippingAddress);
 						$("#request_message").text(data.orderDetail.memo);
-						$("#receiver_memo").val(data.orderDetail.adminMemo);
+						$("#memo").val(data.orderDetail.adminMemo);
+						
 						
 						// 주문 상태 변경
 						
@@ -499,10 +502,11 @@
 	/* 택배 api활용, order_status 동적 업데이트 */
 	function delivery_check(orderDetail){
 		new Promise(function(resolve, reject){
-			if(orderDetail.trackingNo == 0) return false;
 			
+			if(orderDetail.trackingNo == 0) return false;
+			var statusNo = 0;
 			setTimeout(()=>{
-				
+				// 관리자가 삳태 직접 업데이트한 경우 --> 관리자 결정을 따름
 				if(orderDetail.orderStatusUpdate != null){
 					$('#payment_status').val(orderDetail.orderStatusNo).prop("selected",true);
 				}else{
@@ -517,8 +521,8 @@
 					
 			         var t_invoice = orderDetail.trackingNo;
 			         // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
-			         //var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
-			         var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
+			         var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
+			         //var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
 			         console.log(url);
 			         
 			        $.ajax({
@@ -529,7 +533,7 @@
 			                var trackingDetails = data.trackingDetails;
 			                
 			                var latestStatus = trackingDetails[trackingDetails.length-1];
-			                var statusNo = 0;
+			               
 			                // 배송준비중 상태
 			                if(latestStatus.level < 2){
 			                	$('#payment_status').val(3).prop("selected",true);
@@ -543,26 +547,38 @@
 			                	$('#payment_status').val(4).prop("selected",true);
 			                	statusNo = 4;
 			                }
-			                //console.log(statusNo); ok
-							resolve(statusNo);
-			                reject('err');
-			                
+			                console.log(statusNo);
 			            },
 			            error : console.log
 			        });
 				}
 			}, 800)
+		
+		
+			setTimeout(()=>{
+				$.ajax({
+					url : "${pageContext.request.contextPath}/order/statusAutoUpdate",
+					data : {
+						orderNo : orderDetail.orderNo,
+						statusNo : statusNo
+					},
+					contentType : "application/json; charset:UTF-8",
+					dataType : "json",
+					type : "get",
+					success(data){
+						var target = "order_status_name_" + orderDetail.orderNo
+						console.log(data)
+						$("#"+target).text(data.orderStatusName);
+					},
+					error:console.log
+					
+					
+					
+				});
+			},1500);
 		});
 	}
 	
-	/* api 활용 동적 변경된 상태 db에 업데이트 */
-	function updateStaus(orderNo, statusNo){
-		setTimeout(()=>{
-			
-			console.log(orderNo);
-			console.log(statusNo);
-		}, 1000);
-	}
 
 
 </script>

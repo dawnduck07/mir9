@@ -26,6 +26,10 @@ public interface OrderService {
 
 	int getZipcodeByOrderNo(long orderNo);
 
+	int updateOrderStausAuto(Map<String, String> param);
+
+	String selectOrderStatusNameByOrderNo(String orderNo);
+
 
 	
 

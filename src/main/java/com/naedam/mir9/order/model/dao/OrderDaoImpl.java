@@ -64,6 +64,18 @@ public class OrderDaoImpl implements OrderDao {
 		// TODO Auto-generated method stub
 		return session.selectOne("order.getZipcodeByOrderNo", orderNo);
 	}
+
+	@Override
+	public int updateOrderStausAuto(Map<String, String> param) {
+		// TODO Auto-generated method stub
+		return session.update("order.updateOrderStausAuto", param);
+	}
+
+	@Override
+	public String selectOrderStatusNameByOrderNo(String orderNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("order.selectOrderStatusNameByOrderNo", orderNo);
+	}
 	
 
 	
