@@ -67,7 +67,7 @@
   </select>
   
   <select id="selectOrderStatusList" resultType="orderStatus">
-  	select * from order_status order by order_status_no
+  	select * from order_status_list order by order_status_no
   </select>
  
   <select id="selectOneOrderDetailByOrderNo" resultType="orderDetail">
@@ -83,20 +83,22 @@
     where a.order_no = #{orderNo}
   </select>
   
-  <select id="selectFreeShippingSetting" resultType="_int">
-  	select free_shipping_settings from delivery_setting
-  </select>
-  
-  <select id="selectBasicDeliveryFee" resultType="_int">
-  	select basic_delivery_fee from delivery_setting
-  </select>
-  
   <select id="getZipcodeByOrderNo" resultType="_int">
   	select zip_code from order_info where order_no = #{orderNo}
   </select>
   
+  <select id="selectOrderStatusNameByOrderNo" resultType="string">
+  	select status_name 
+	from tb_order a
+    	join order_status_list b on(a.order_status_no = b.order_status_no)
+    where a.order_no = #{orderNo}
+  </select>
+  
   <update id="updateOrderStaus">
   	update tb_order set order_status_no = #{statusNo}, order_status_update = sysdate  where order_no = #{orderNo}
+  </update>
+  <update id="updateOrderStausAuto">
+  	update tb_order set order_status_no = #{statusNo} where order_no = #{orderNo}
   </update>
   <update id="updateAdminMemo">
   	update order_info set admin_memo = #{memo} where order_info_no = #{orderInfoNo}

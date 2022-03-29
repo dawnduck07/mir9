@@ -41,5 +41,8 @@ public class OrderDetail implements Serializable {
 	private String statusName;
 	private Date payDate;
 	private int OrderInfoNo;
+	private Date orderStatusUpdate;
+	private int deliComNo;
+	private long trackingNo;
 	
 }

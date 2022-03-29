@@ -21,8 +21,6 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> selectOrderList(Map<String, String> param) {
 		// TODO Auto-generated method stub
 		return orderDao.selectOrderList(param);
-		
-		
 	}
 
 	@Override
@@ -63,21 +61,21 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public int selectFreeShippingSetting() {
-		// TODO Auto-generated method stub
-		return orderDao.selectFreeShippingSetting();
-	}
-
-	@Override
-	public int selectBasicDeliveryFee() {
-		// TODO Auto-generated method stub
-		return orderDao.selectBasicDeliveryFee();
-	}
-
-	@Override
 	public int getZipcodeByOrderNo(long orderNo) {
 		// TODO Auto-generated method stub
 		return orderDao.getZipcodeByOrderNo(orderNo);
+	}
+
+	@Override
+	public int updateOrderStausAuto(Map<String, String> param) {
+		// TODO Auto-generated method stub
+		return orderDao.updateOrderStausAuto(param);
+	}
+
+	@Override
+	public String selectOrderStatusNameByOrderNo(String orderNo) {
+		// TODO Auto-generated method stub
+		return orderDao.selectOrderStatusNameByOrderNo(orderNo);
 	}
 	
 	

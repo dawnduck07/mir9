@@ -169,20 +169,24 @@
 				$("#title").val(result.review[0].reviewTitle);
 				$("#content").val(result.review[0].reviewContent);
 				
-				/* 이미지
+				// 이미지
+				var origin = '';
+				var change = '';
+				var imgUrl = '';
 				var imgList = '';
+				
 				if(result.reviewImg.length > 0) { // 이미지가 있는 경우
-					var imgSrc = '';
 					for(var i = 0; i < result.reviewImg.length; i++) {
-						imgSrc = result.reviewImg[i].reviewImgUrl;
-						imgList += "<a download=''><img src='" + imgSrc + "' style='width:80px; cursor:pointer;'></a>";
+						origin = result.reviewImg[i].originName;
+						change = result.reviewImg[i].changeName;
+						imgUrl = result.reviewImg[i].reviewImgUrl;
+						imgList += "<a download='" + origin + "' href='${pageContext.request.contextPath}" + imgUrl + change + "'><img src='${pageContext.request.contextPath}" + imgUrl + change + "' style='width:80px; cursor:pointer;'></a>";
 					}
 					$('#file_list').html(imgList);
 				}
 				else { // 이미지가 없는 경우
 					$('#file_list').html('');
 				}
-				*/
 				
 			},
 			error: function(textStatus, errorThrown){

@@ -63,6 +63,8 @@
 		})	
 		//board 선택삭제 종료
 		
+		
+		
 		// board 상세보기 시작
 		$("button[name='updateBoard']").on("click", function(){
 			
@@ -245,7 +247,7 @@
 		                        <button type="button" onclick="_onclickView('board',1);" class="btn btn-success btn-xs">바로가기</button>
 		                        <button type="button" onclick="onclickCopy(1);" class="btn btn-warning btn-xs">링크복사</button>
 		                        <button type="button" class="btn btn-primary btn-xs" name="updateBoard" data-toggle="modal" data-target="#updateBoardModal">
-		                        	<input type="hidden" value="${board.boardNo}" />
+		                        	<input type="hidden" name="hiddenBoardNo" value="${board.boardNo}" />
 		                        	상세보기
 		                        </button>							  
 							  </td>

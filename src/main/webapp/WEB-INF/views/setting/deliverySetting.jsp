@@ -39,13 +39,13 @@
 				<tr>
                     <td class="menu">기본 배송비</td>
                     <td align="left">
-                    <span style="float:left;"><input type="text" name="delivery_price" value="${deliverySetting.basicDeliveryFee }" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="width:100px; text-align:right;" maxlength="7" /></span>
+                    <span style="float:left;"><input type="text" name="delivery_price" value="<fmt:formatNumber value="${deliverySetting.basicDeliveryFee }" pattern="#,###" />" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="width:100px; text-align:right;" maxlength="7" /></span>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">무료배송 설정</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="delivery_limit" value="${deliverySetting.freeShippingSettings }" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="text-align:right; width:100px;"></span>&nbsp;
+                        <span style="float:left;"><input type="text" name="delivery_limit" value="<fmt:formatNumber value="${deliverySetting.freeShippingSettings }" pattern="#,###" />" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="text-align:right; width:100px;"></span>&nbsp;
                         <span style="line-height:2.0;"> <small class="text-red">총 상품금액이 설정된 금액 이상이면 무료배송됨.</small></span>
                     </td>
                 </tr>
@@ -94,7 +94,7 @@
 								<td>${doseo.region }</td>
 								<td>
 									<input type="hidden" name="doseo_no" value="${doseo.doseoNo }" />
-									<input type="text" name="extra_fee" value="${doseo.extraFee }" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="text-align:right; width:150px;" maxlength="7" />
+									<input type="text" name="extra_fee" value="<fmt:formatNumber value="${doseo.extraFee }" pattern="#,###" />" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="text-align:right; width:150px;" maxlength="7" />
 								</td>
 							</tr>
 						</c:forEach>
@@ -112,6 +112,41 @@
 </section>
 </div><!-- /.content-wrapper -->
 
+<script>
+function register(){
+	const formData = new FormData(document["form_register"]);
+	var obj = {};
+	for(const [k, v] of formData){
+		obj[k] = v;
+	};
+	
+	obj.doseo_no = [];
+	obj.extra_fee = [];
+	$.each($("input[name=doseo_no]"), (idex, value)=>{
+		 obj.doseo_no.push($(value).val());
+	});
+	$.each($("input[name=extra_fee]"), (idex, value)=>{
+		 obj.extra_fee.push($(value).val());
+	});
+	
+	const jsonStr = JSON.stringify(obj);
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/delivery/updateDeliSet_Doseo",
+		method:"get",
+		data: {
+			jsonStr : jsonStr
+		},
+		contentType: "application/json; charset=utf-8",
+		success(data){
+			if(data > 0){
+				alert("배송 설정이 변경되었습니다.");
+			}
 
+		},
+		error:console.log
+	});	
+}
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

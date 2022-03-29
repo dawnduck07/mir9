@@ -24,11 +24,11 @@ public interface OrderService {
 
 	List<OrderOption> selectOrderOptionListByOrderNo(long orderNo);
 
-	int selectFreeShippingSetting();
-
-	int selectBasicDeliveryFee();
-
 	int getZipcodeByOrderNo(long orderNo);
+
+	int updateOrderStausAuto(Map<String, String> param);
+
+	String selectOrderStatusNameByOrderNo(String orderNo);
 
 
 	

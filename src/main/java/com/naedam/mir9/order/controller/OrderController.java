@@ -16,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.naedam.mir9.delivery.model.service.DeliveryService;
+import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.option.model.vo.OrderOption;
 import com.naedam.mir9.order.model.service.OrderService;
 import com.naedam.mir9.order.model.vo.Order;
 import com.naedam.mir9.order.model.vo.OrderDetail;
 import com.naedam.mir9.order.model.vo.OrderStatus;
+import com.naedam.mir9.setting.model.service.SettingService;
 
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/order")
@@ -32,6 +35,8 @@ public class OrderController {
 	private OrderService orderService;
 	@Autowired
 	private DeliveryService deliveryService;
+	@Autowired
+	private SettingService settingService;
 	
 	@GetMapping("/list")
 	public String orderList(Model model) {
@@ -107,6 +112,25 @@ public class OrderController {
 		
 	}
 	
+	@GetMapping(value= "/statusAutoUpdate", produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String statusAutoUpdate(String orderNo, String statusNo) {
+		Map<String, String> param = new HashMap<String, String>();
+		log.debug("statusNo = {}",statusNo);
+		param.put("orderNo", orderNo);
+		param.put("statusNo", statusNo);
+		if(!statusNo.equals('0')) {
+			int result = orderService.updateOrderStausAuto(param);			
+		}
+		
+		String orderStatusName = orderService.selectOrderStatusNameByOrderNo(orderNo);
+		JSONObject jsonObject = new JSONObject();
+		
+		jsonObject.put("orderStatusName", orderStatusName);
+
+		return jsonObject.toString();
+	}
+	
 	@GetMapping("/logList")
 	public String paymentLogList() {
 		
@@ -118,13 +142,12 @@ public class OrderController {
 		List<Order> orderList = orderService.selectOrderList(param);
 		List<OrderStatus> orderStatusList = orderService.selectOrderStatusList();
 		int orderCnt = orderService.selectOrderCnt(param);
-		int freeShippingSetting = orderService.selectFreeShippingSetting();
-		int basicDeliveryFee = orderService.selectBasicDeliveryFee();
+		DeliverySetting deliSet = settingService.selectOneDeliverySetting();
 		
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("orderCnt", orderCnt);
 		model.addAttribute("orderStatusList", orderStatusList);
-		model.addAttribute("freeShippingSetting", freeShippingSetting);
-		model.addAttribute("basicDeliveryFee", basicDeliveryFee);
+		model.addAttribute("deliSet",deliSet);
+		
 	}
 }

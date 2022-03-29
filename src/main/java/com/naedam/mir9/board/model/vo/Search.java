@@ -16,6 +16,7 @@ public class Search {
 	private int pageSize;
 	private int endRowNum;
 	private int startRowNum;
+	private int searchBoardNo;
 	
 	
 	public int getEndRowNum() {

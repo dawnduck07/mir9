@@ -48,7 +48,7 @@
 			} ,
 			success : function(JSONData, status){
 				
-				$("#name").val(JSONData.firstName+JSONData.lastName);
+				$("#name").val(JSONData.lastName+JSONData.firstName);
 				$("#phone").val(JSONData.phone);
 				$("#email").val(JSONData.email);
 				
@@ -80,7 +80,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <label style="margin-top:5px;">총 0 건</label>
+                    <label style="margin-top:5px;">총 ${resultPage.totalCount} 건</label>
                     <div class="box-tools pull-right" style="margin-bottom:5px;">
                     <form name="form_search" method="post" action="?tpf=admin/board/list">
                     <input type="hidden" name="board_code" value="3">

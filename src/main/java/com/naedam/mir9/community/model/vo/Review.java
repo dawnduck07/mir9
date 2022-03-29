@@ -23,7 +23,7 @@ public class Review implements Serializable {
 	private long orderNo;
 	private int memberNo;
 	private int productNo; 
-	private int reviewCategory; 
+	private int reviewCategoryNo; 
 	private String reviewTitle;
 	private String reviewContent;
 	private Date reviewDate; 

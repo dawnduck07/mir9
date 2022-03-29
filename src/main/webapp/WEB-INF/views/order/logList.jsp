@@ -230,4 +230,48 @@
 </section>
 </div><!-- /.content-wrapper -->
 
+<script>
+$(document).ready(function(){
+    var myKey = "FV9kkSwcgfdK76xfE8qHIA"; // sweet tracker에서 발급받은 자신의 키 넣는다.
+        // 택배사 목록 조회 company-api
+        $.ajax({
+            type:"GET",
+            dataType : "json",
+            url:"http://info.sweettracker.co.kr/api/v1/companylist?t_key="+myKey,
+            success:function(data){
+                    // 방법 1. JSON.parse 이용하기
+                    var parseData = JSON.parse(JSON.stringify(data));
+                    // console.log(parseData.Company); // 그중 Json Array에 접근하기 위해 Array명 Company 입력
+                    // 방법 2. Json으로 가져온 데이터에 Array로 바로 접근하기
+                    var CompanyArray = data.Company; // Json Array에 접근하기 위해 Array명 Company 입력
+                    //console.log(CompanyArray); 
+                    var myData="";
+                    $.each(CompanyArray,function(key,value) {
+                            myData += ('<option value='+value.Code+'>' +'key:'+key+', Code:'+value.Code+',Name:'+value.Name + '</option>');        
+                    });
+                    $("#tekbeCompnayList").html(myData);
+            }
+        });
+        // 배송정보와 배송추적 tracking-api
+        $(document).ready(function() {
+        	
+            var t_code = $('#tekbeCompnayList option:selected').attr('value');
+            var t_invoice = $('#invoiceNumberText').val();
+            $.ajax({
+                type:"GET",
+                dataType : "json",
+                url:"http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code=04&t_invoice=560040659205",
+                success:function(data){
+                    //console.log(data);
+                    var trackingDetails = data.trackingDetails;    
+                    $.each(trackingDetails,function(key,value) {
+                        console.log(key, value)      
+                    });
+                },
+                error : console.log
+            });
+        });    
+});
+</script>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

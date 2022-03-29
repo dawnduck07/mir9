@@ -27,13 +27,13 @@ public class Mir9Utils {
 	public static String getPagebar(int cPage, int numPerPage, int totalContents, String url) {
 		StringBuilder pagebar = new StringBuilder();
 		
-		// ? „ì²´í˜?´ì§??ˆ˜ 
+		// ?ï¿½ï¿½ì²´í˜?ï¿½ï¿½ï¿½??ï¿½ï¿½ 
 		int totalPage = (int) Math.ceil((double) totalContents / numPerPage);
 		
-		// ?˜?´ì§?ë²ˆí˜¸ë¥? ?´ë¦??–ˆ?„?•Œ ë§í¬
+		// ?ï¿½ï¿½?ï¿½ï¿½ï¿½?ë²ˆí˜¸ï¿½? ?ï¿½ï¿½ï¿½??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ë§í¬
 		String delimeter = url.contains("?") ? "&" : "?";
 		url = url + delimeter + "cPage="; // /spring/board/boardList.do?cPage=
-		// ?˜?´ì§?ë°”í¬ê¸? 
+		// ?ï¿½ï¿½?ï¿½ï¿½ï¿½?ë°”í¬ï¿½? 
 		int pagebarSize = 5;
 		
 		/* 
@@ -43,8 +43,8 @@ public class Mir9Utils {
 		 	
 		 	<< 11 12
 		 	
-		 	pageStart : ?‹œ?‘?•˜?Š” pageNo
-		 		- cPage?? pagebarSize?— ?˜?•´ ê²°ì •
+		 	pageStart : ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ pageNo
+		 		- cPage?? pagebarSize?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½ ê²°ì •
 		 */
 		int pageStart = (cPage - 1) / pagebarSize * pagebarSize + 1;
 		int pageEnd = pageStart + pagebarSize - 1;
@@ -84,7 +84,7 @@ public class Mir9Utils {
 		pagebar.append("<nav aria-label=\"Page navigation example\">\n"
 				+ "		  <ul class=\"pagination justify-content-center\">\n");
 		
-		// 1.?´? „
+		// 1.?ï¿½ï¿½?ï¿½ï¿½
 		if(pageNo == 1) {
 			pagebar.append("<li class=\"page-item disabled\">\r\n"
 					+ "		      <a class=\"page-link\" href=\"#\" aria-label=\"Previous\" tabindex=\"-1\">\r\n"
@@ -105,18 +105,18 @@ public class Mir9Utils {
 		// 2.pageNo
 		while(pageNo <= pageEnd && pageNo <= totalPage) {
 			if(pageNo == cPage) {
-				// ?˜„?¬?˜?´ì§??¸ ê²½ìš° ë§í¬ ? œê³µì•ˆ?•¨.
+				// ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½??ï¿½ï¿½ ê²½ìš° ë§í¬ ?ï¿½ï¿½ê³µì•ˆ?ï¿½ï¿½.
 				pagebar.append("<li class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + pageNo + "<span class=\"sr-only\">(current)</span></a></li>\n");
 			}
 			else {
-				// ?˜„?¬?˜?´ì§?ê°? ?•„?‹Œ ê²½ìš° ë§í¬ë¥? ? œê³?.
+				// ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½?ï¿½? ?ï¿½ï¿½?ï¿½ï¿½ ê²½ìš° ë§í¬ï¿½? ?ï¿½ï¿½ï¿½?.
 				pagebar.append("<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:paging(" + pageNo + ")\">" + pageNo + "</a></li>\n");
 			}
 			
 			pageNo++;
 		}
 		
-		// 3.?‹¤?Œ
+		// 3.?ï¿½ï¿½?ï¿½ï¿½
 		if(pageNo > totalPage) {
 			pagebar.append("<li class=\"page-item disabled\">\r\n"
 					+ "		      <a class=\"page-link\" href=\"#\" tabindex=\"-1\" aria-label=\"Next\">\r\n"
@@ -146,18 +146,18 @@ public class Mir9Utils {
 	}
 
 	public static String getRenamedFilename(String originalFilename) {
-		// ?™•?¥? ê°?? ¸?˜¤ê¸?
+		// ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ï¿½??ï¿½ï¿½?ï¿½ï¿½ï¿½?
 		String ext = "";
 
 		int dot = originalFilename.lastIndexOf(".");
 		if(dot > -1)
 			ext = originalFilename.substring(dot); // .txt
 		
-		// ?˜•?‹ì§?? •
+		// ?ï¿½ï¿½?ï¿½ï¿½ï¿½??ï¿½ï¿½
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_");
 		DecimalFormat df = new DecimalFormat("000"); // 30 -> 030
 		
-		// ?ƒˆ?ŒŒ?¼ëª?
+		// ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½?
 		
 		return sdf.format(new Date()) + df.format(Math.random() * 999) + ext;
 	}
