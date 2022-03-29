@@ -117,8 +117,10 @@
 						<button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm">
 							<i class="fa" aria-hidden="true"></i> Excel 다운로드
 						</button>
-						<form name="form_download" method="post" action="?tpf=admin/order/process">
-							<input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data">
+						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do">
+							<input type="hidden" name="mode" value="downloadExcel"> 
+							<input type="hidden" name="search_data">
+							<input type="hidden" name="download_type" value="order"/>
 						</form>
 
 						<div style="text-align: right;">
@@ -578,7 +580,14 @@
 			},1500);
 		});
 	}
-	
+
+/* downloadExcel() --> 구현 후 common.js로 이동 */
+ 
+        function downloadExcel() {
+            form_download.target = 'iframe_process';
+            form_download.search_data.value = $('#form_search').serialize();
+            form_download.submit();
+        }
 
 
 </script>

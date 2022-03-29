@@ -404,5 +404,11 @@
 </div>
 </div><!-- /.content-wrapper -->
 
-
+<script>
+function downloadExcel() {  // Excel 다운로드
+    form_download.target = 'iframe_process';
+    form_download.search_data.value = $('#form_search :input').serialize();
+    form_download.submit();
+}
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
