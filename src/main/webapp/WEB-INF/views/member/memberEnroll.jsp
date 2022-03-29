@@ -85,6 +85,19 @@
 				</td>
 			</tr>
 			<tr>
+				<th>등급</th>
+				<td>
+					<div class="form-check form-check-inline">
+						<input type="radio" class="form-check-input" name="memberGradeNo" id="memberGradeMember" value="1" checked>
+						<label  class="form-check-label" for="gender0">일반회원</label>&nbsp;
+						<input type="radio" class="form-check-input" name="memberGradeNo" id="memberGradeSeller" value="2">
+						<label  class="form-check-label" for="gender1">판매회원</label>&nbsp;
+						<input type="radio" class="form-check-input" name="memberGradeNo" id="memberGradeAdmin" value="3">
+						<label  class="form-check-label" for="gender1">관리자</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<th>이메일</th>
 				<td>	
 					<input type="email" class="form-control" placeholder="abc@xyz.com" name="email" id="email" value="">

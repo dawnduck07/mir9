@@ -4,10 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<<<<<<< HEAD
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
-=======
->>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -29,19 +26,19 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/76afde4c0b.js"
 	crossorigin="anonymous"></script>
 <!-- Ionicons -->
 <script src="https://unpkg.com/ionicons@4.4.1/dist/ionicons.js"></script>
 <!-- jvectormap -->
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/jquery.vector-map.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery.vector-map.css">
 <!-- Theme style -->
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/AdminLTE.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/_all-skins.min.css">
-<link href="${pageContext.request.contextPath }/resources/css/admin.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
+<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css" />
 
 <!-- fullcalendar -->
 <link href="//mir9.co.kr/resource/css/bootstrap-colorselector.css"
@@ -133,18 +130,18 @@
 						<li class="dropdown user user-menu"><a href="#"
 							class="dropdown-toggle" data-toggle="dropdown"> <img
 								src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/img/avatar5.png"
-								class="user-image" alt="User Image" /> <span class="hidden-xs">길동이</span>
+								class="user-image" alt="User Image" /> <span class="hidden-xs">${loginMember.lastName}${loginMember.firstName}님</span>
 						</a>
 							<ul class="dropdown-menu">
 								<li class="user-header"><img
 									src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/img/avatar5.png"
 									class="img-circle" alt="User Image" />
 									<p>
-										길동이 - Web Administrator <small>MIR9 SHOP 관리자</small>
+										${loginMember.lastName}${loginMember.firstName}님 - Web Administrator <small>MIR9 SHOP 관리자</small>
 									</p></li>
 								<li class="user-footer">
 									<div class="pull-right">
-										<a href="?tpf=member/logout" class="btn btn-danger btn-flat">Sign
+										<a onclick="location.href='${pageContext.request.contextPath}/member/memberLogout.do'" class="btn btn-danger btn-flat">Sign
 											out</a>
 									</div>
 								</li>

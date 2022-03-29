@@ -25,8 +25,14 @@ public class HomeController {
 		logger.debug("HomeController ---- forward ----> index.jsp");
 		
 		// welcompage
-		//return "forward:/index.jsp";
-		return "login";
+		return "forward:/index.jsp";
+	}
+	
+	@RequestMapping(value = "/dashBoard", method = RequestMethod.GET)
+	public String home2(Locale locale, Model model) {
+		logger.debug("HomeController ---- forward ----> dashBoard");
+		
+		return "forward:/dashBoard.jsp";
 	}
 	
 }

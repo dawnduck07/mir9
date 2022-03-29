@@ -2,7 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>	
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -62,11 +65,16 @@
 					<p class="text-muted text-center" style="padding: 10px;">아이디와
 						비밀번호 입력후 로그인해 주시기 바랍니다.</p>
 
-					<form name="form" action="${pageContext.request.contextPath }/member/memberLogin.do" method="post"
+					<form:form 
+						name="form" 
+						action="${pageContext.request.contextPath }/member/memberLogin.do" 
+						method="POST"
 						style="padding: 20px;">
+						<!-- 
 						<input type="hidden" name="return_url"
 							value="%2Findex.php%3Ftpf%3Dadmin%2Fdashboard%2Flist"> <input
 							type="hidden" name="is_admin" value="y">
+						 -->
 						<div class="form-group has-feedback">
 							<input type="text" name="id" class="form-control"
 								placeholder="ID" /> <span
@@ -75,16 +83,15 @@
 
 						<div class="form-group has-feedback">
 							<input type="password" name="password"
-								onkeyup="if(event.keyCode == 13) register()"
 								class="form-control" placeholder="PASSWORD" /> <span
 								class="glyphicon glyphicon-lock form-control-feedback"></span>
 						</div>
-						<a href="#none" id="loginBtn" onclick="loginSubmit()"
+						<a id="loginBtn" onclick="loginSubmit()"
 							class="btn btn-primary btn-block"><b>로그인</b></a>
 						&nbsp;
-						<a href="#none" onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do';"
+						<a onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do';"
 							class="btn btn-primary btn-block"><b>회원가입</b></a>
-					</form>
+					</form:form>
 				</div>
 
 				<p class="text-muted text-center" style="padding: 10px;">Copyright

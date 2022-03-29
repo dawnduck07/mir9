@@ -1,12 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+<beans:beans 
+	xmlns="http://www.springframework.org/schema/security"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.0.xsd">
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- #8.1 암호화 처리 bean 등록  -->
-	<bean 
+	<beans:bean 
 		id="bcryptPasswordEncoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
-</beans>
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
+	<!-- 로그인 성공 상황 커스텀을 위한 빈 생성 -->
+	<beans:bean id="sucessHandler" class="com.naedam.mir9.member.LoginSuccessHandler"/>
+	
+	<!-- #8.3 인증/권한 검사 설정 -->
+	<!-- security에 의한 인증/권한 검사에서 제외 -->
+	<!-- img, css를 인증/권한 검사에서 제외 -->
+	<http security="none" pattern="/resources/**"/>
+	
+	<http auto-config="true">
+		<!-- 관리자 권한만 조회할 수 있도록 권한을 준다. -->
+		<intercept-url pattern="/dashBoard.jsp" access="hasRole('ADMIN')"/>
+		
+		<!-- 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
+		<intercept-url pattern="/" access="permitAll"/>
+		<!-- 포워딩되는 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
+		<intercept-url pattern="/index.jsp" access="permitAll"/>
+		<!-- 회원가입 페이지에 대한 접근권한을 모두에게 준다. -->
+		<intercept-url pattern="/member/memberEnroll.do" access="permitAll"/>
+		<!-- 모든 페이지에서 로그인한 사람만 권한을 부여받는다. -->
+		<intercept-url pattern="/**" access="isAuthenticated()"/>
+		
+		<!-- 커스텀로그인 설정 -->
+		<!-- 직접 만든 로그인 폼 사용 -->
+		<!-- login-page : 커스텀 로그인폼페이지. 핸들러작성 필요. -->
+		<!-- login-processing-url : security가 인증을 처리할 주소. loginForm이 제출(POST)될 주소. 핸들러 작성 불필요. -->
+		<form-login
+			login-page="/member/memberLogin.do" 
+			login-processing-url="/member/memberLogin.do"
+			username-parameter="id"
+			password-parameter="password"
+			authentication-success-handler-ref="successHandler"
+			/>
+		
+		
+		<!-- csrf 공격대비 기능 -->
+		<!-- 
+			Cross-site Request Forgery 
+			특정 권한이 있는 사용자로 하여금 해커가 유도한 행동을 함으로써 보안을 취약하게 하거나,
+			개인정보를 탈취하는 기법-->
+		<!-- <csrf disabled="false"/> : 기본값이라 쓰지 않아도 된다. -->
+	</http>
+		
+	<authentication-manager>
+		<authentication-provider>
+			<password-encoder ref="bcryptPasswordEncoder"/>
+			<user-service>
+				<user 
+					name="coffee" 
+					password="$2a$10$Nuj969a5xOPdA1JP6AxGX.sJ8GshYuVj4SgnRjAJMK3kT3msCmgfC" 
+					authorities="ROLE_USER"/>
+				<user 
+					name="admin" 
+					password="$2a$10$OUk1xhG6SsNHz6TiSbECWOKlrrjOq/ton6he.MRjAtT43endYsXH6" 
+					authorities="ROLE_USER,ROLE_ADMIN"/>	
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+</beans:beans>

@@ -3,10 +3,13 @@ package com.naedam.mir9.member.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.member.model.service.MemberService;
@@ -25,31 +28,36 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
+	// 회원 리스트
 	@RequestMapping("/list")
 	public String memberList() {
 		
 		return "member/memberList";
 	}
 	
-	@GetMapping("/wdw")
+	// 탈퇴회원 리스트
+	@GetMapping("/withdraw_list")
 	public String withdarawalMemberList() {
 		
 		return "member/withdrawalMemberList";
 	}
 	
-	@GetMapping("/accesshistory")
+	// 회원 접속이력 관리
+	@GetMapping("/log")
 	public String memberAccessHistory() {
 		
 		return "member/memberAccessHistory";
 	}
 	
-	@GetMapping("/grade")
+	// 등급 관리
+	@GetMapping("/level")
 	public String memberGrade() {
 		
 		return "member/memberGrade";
 	}
 	
-	@GetMapping("/pointList")
+	// 회원 적립금 관리
+	@GetMapping("/point")
 	public String memberPointList() {
 		
 		return "member/memberPointList";
@@ -88,19 +96,14 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	// 로그인
-	@PostMapping("/memberLogin.do")
-	public String memberLogin(@RequestParam String id, @RequestParam String password) {
-		
-		// 1. 업무로직 - 사용자 데이터 가져오기
-		Member member = memberService.selectOneMember(id);
-		log.debug("member = {}", member);
-		
-		// 2. DB정보 비교하기(로그인 성공여부 판단)
-		
-		
+	@GetMapping("/memberLogin.do")
+	public String memberLoginPage() {
 		return "redirect:/";
 	}
 	
-	
+	@PostMapping("/memberLogin.do")
+	public String memberLogin() {
+		return "redirect:/dashBoard";
+	}
+
 }
