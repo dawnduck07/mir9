@@ -27,7 +27,7 @@
 				 ORDER BY R.REVIEW_NO ASC) A
 		<where>
 			<if test="keyword != '' and keyword != null">
-				${field} LIKE '%' || #{keyword} || '%'
+				${field} LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 	</select> 
