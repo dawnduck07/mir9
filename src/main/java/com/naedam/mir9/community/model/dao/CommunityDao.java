@@ -10,9 +10,9 @@ public interface CommunityDao {
 
 	List<Review> reviewList(Map<Object, String> param);
 
-	List<Review> reviewModal(int reviewNo);
+	List<Review> reviewModal(int reviewCode);
 
-	List<ReviewImg> reviewImgModal(int reviewNo);
+	List<ReviewImg> reviewImgModal(int reviewCode);
 
 	
 }

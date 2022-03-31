@@ -23,14 +23,14 @@ public class CommunityDaoImpl implements CommunityDao {
 	
 	// 모달 정보
 	@Override
-	public List<Review> reviewModal(int reviewNo) {
-		return session.selectList("review.reviewModal", reviewNo);
+	public List<Review> reviewModal(int reviewCode) {
+		return session.selectList("review.reviewModal", reviewCode);
 	}
 
 	// 모달 이미지
 	@Override
-	public List<ReviewImg> reviewImgModal(int reviewNo) {
-		return session.selectList("review.reviewImgModal", reviewNo);
+	public List<ReviewImg> reviewImgModal(int reviewCode) {
+		return session.selectList("review.reviewImgModal", reviewCode);
 	}
 	
 }
