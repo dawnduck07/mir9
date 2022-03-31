@@ -23,14 +23,14 @@ public class CommunityServiceImpl implements CommunityService {
 
 	// 모달 정보
 	@Override
-	public List<Review> reviewModal(int reviewNo) {
-		return communityDao.reviewModal(reviewNo);
+	public List<Review> reviewModal(int reviewCode) {
+		return communityDao.reviewModal(reviewCode);
 	}
 
 	// 모달 이미지
 	@Override
-	public List<ReviewImg> reviewImgModal(int reviewNo) {
-		return communityDao.reviewImgModal(reviewNo);
+	public List<ReviewImg> reviewImgModal(int reviewCode) {
+		return communityDao.reviewImgModal(reviewCode);
 	}
 
 }

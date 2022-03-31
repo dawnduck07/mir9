@@ -75,14 +75,14 @@
                                     <c:otherwise>
                                         <c:forEach var="review" items="${ reviewList }"> 
                                         	<tr>
-	                                            <td><input type="checkbox" name="select_review" /></td> <!-- common.js에 name 값이 list[] 로 되어있음 -->
-	                                            <td>${ review.reviewNo }</td>
+	                                            <td><input type="checkbox" name="list[]" /></td> <!-- select_review / common.js에 name 값이 list[] 로 되어있음 -->
+	                                            <td>${ review.reviewCode }</td>
 	                                            <td>${ review.writer }</td> 
 	                                            <td>${ review.productName }</td> 
 	                                            <td>${ review.reviewContent }</td> 
 	                                            <td>${ review.reviewCategoryName }</td>
 	                                            <td><fmt:formatDate value="${ review.reviewDate }" pattern="yyyy-MM-dd"/></td> 
-	                                            <td><button type="button" class="btn btn-primary btn-xs" onclick="review_detail(${ review.reviewNo })">상세보기</button></td>
+	                                            <td><button type="button" class="btn btn-primary btn-xs" onclick="review_detail(${ review.reviewCode })">상세보기</button></td>
                                             </tr>
                                         </c:forEach>
                                     </c:otherwise>
@@ -147,18 +147,18 @@
 <script>
 
 	// 모달 띄우기
-	function review_detail(reviewNo){
+	function review_detail(reviewCode){
 		$("#modalContent").modal({backdrop:"static", show:true}); // backdrop : 모달 영역 밖 클릭 시 닫힘 방지 
-		// console.log(reviewNo); 리뷰 번호 찍힘
-		setData(reviewNo);
+		// console.log(reviewCode); 리뷰 번호 찍힘
+		setData(reviewCode);
 	}
 	
 	// 비동기로 모달에 값 불러오기
-	function setData(reviewNo){
+	function setData(reviewCode){
 		$.ajax({
 			url: "${pageContext.request.contextPath}/comm/review_modal",
 			type: 'get',
-			data: { reviewNo : reviewNo },
+			data: { reviewCode : reviewCode },
 			success: function(result){
 				// 해당 회원의 리뷰 정보 조회하기
 				// console.log(result.review);
@@ -197,7 +197,7 @@
 		});
 		
 	}
-	
+		
 </script>
 
 

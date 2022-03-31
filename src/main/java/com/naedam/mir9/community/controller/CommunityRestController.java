@@ -21,10 +21,10 @@ public class CommunityRestController {
 	
 	// 리뷰 모달창 조회
 	@GetMapping("/review_modal")
-	public Map<Object, Object> commReviewModal(int reviewNo) {
+	public Map<Object, Object> commReviewModal(int reviewCode) {
 		
-		List<Review> review = communityService.reviewModal(reviewNo);
-		List<ReviewImg> reviewImg  = communityService.reviewImgModal(reviewNo);
+		List<Review> review = communityService.reviewModal(reviewCode);
+		List<ReviewImg> reviewImg  = communityService.reviewImgModal(reviewCode);
 		
 		System.out.println(reviewImg);
 		
