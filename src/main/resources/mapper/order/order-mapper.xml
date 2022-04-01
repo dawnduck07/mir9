@@ -70,6 +70,10 @@
   	select * from order_status_list order by order_status_no
   </select>
  
+  <select id="selectOrderExcelForm" resultType="orderExcelForm">
+  	select * from v_order_excel_form
+  </select>
+ 
   <select id="selectOneOrderDetailByOrderNo" resultType="orderDetail">
   	select * from v_order_detail where order_no = #{orderNo}
   </select>
