@@ -288,6 +288,82 @@
 </div>
 <!-- /.content-wrapper -->
 
+<!-- jsp 실행 즉시, 택배 실시간 조회하여 update한다. -->
+<c:forEach var="order" items="${orderList }">
+	<script>
+		(function(){
+			
+			if(${order.trackingNo} != 0){				
+				const myKey = "FV9kkSwcgfdK76xfE8qHIA";
+				var deliComNo = ${order.deliComNo}
+				if(deliComNo < 10){
+					var t_code = "0" + deliComNo;				
+				}else{
+					var t_code = deliComNo;
+	 			}
+				
+		         var t_invoice = ${order.trackingNo};
+		         // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
+		         //var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
+		         var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
+			    var statusNo = 0;
+			    
+			    console.log(url)
+		        $.ajax({
+		            type:"GET",
+		            dataType : "json",
+		            url: url,
+		            success(data){
+		            	console.log(data)
+		            	var trackingDetails = data.trackingDetails;
+		            	var latestStatus = trackingDetails[trackingDetails.length-1];
+			               console.log(latestStatus);
+			                // 배송준비중 상태
+			                if(latestStatus.level < 2){
+			                	statusNo = 3;
+			                // 배송완료 상태
+			                }else if(latestStatus.level >= 6){
+			                	statusNo = 5;
+			               	// 배송중 상태
+			                }else{
+			                	statusNo = 4;
+			                }
+			               
+			                
+		            },
+		            error : console.log
+		        });
+		        	
+			        setTimeout(()=>{
+			        	console.log(statusNo)
+				        if(statusNo != 0){
+			        		
+				        	$.ajax({
+								url : "${pageContext.request.contextPath}/order/statusAutoUpdate",
+								data : {
+									orderNo : ${order.orderNo},
+									statusNo : statusNo
+								},
+								contentType : "application/json; charset:UTF-8",
+								dataType : "json",
+								type : "get",
+								success(data){
+									console.log(data)
+									var target = "#order_status_name_" + "${order.orderNo}";
+									$(target).text(data.orderStatusName);
+								},
+								error:console.log
+								
+							});
+				        }
+				   },1000);
+				
+			}
+
+		})();
+	</script>
+</c:forEach>
+
 <script>
 	<!-- 모달창 제어 -->
 	function onclick_update(orderNo){
