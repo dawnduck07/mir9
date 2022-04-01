@@ -163,11 +163,11 @@
 							class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li class="active"><a href="/order/list"><i
+							<li class="active"><a href="${pageContext.request.contextPath }/order/list"><i
 									class="fa fa-circle-o"></i> 주문 리스트</a></li>
 							<li><a href="https://iniweb.inicis.com/security/login.do"
 								target="_new"><i class="fa fa-circle-o"></i> 이니시스 상점관리자</a></li>
-							<li><a href="/order/log_list"><i
+							<li><a href="${pageContext.request.contextPath}/order/log_list"><i
 									class="fa fa-circle-o"></i>카드결제로그 리스트</a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i

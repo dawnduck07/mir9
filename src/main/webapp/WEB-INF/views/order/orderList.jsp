@@ -543,8 +543,6 @@
 	}
 
 	function setSearchDate(type){
-		console.log(type)
-		console.log(type.slice(1,3));
 		$("input[name=start_date]").val(dateStr(type));
 		$("input[name=end_date]").val(dateStr('D0'));
 
