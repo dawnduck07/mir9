@@ -19,7 +19,7 @@ public class Review implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;	
 	
-	private int reviewNo; 
+	private int reviewCode; 
 	private long orderNo;
 	private int memberNo;
 	private int productNo; 

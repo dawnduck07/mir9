@@ -62,6 +62,14 @@ public class CommunityController {
 		return "community/review";
 	}
 	
+	/* imgur 테스트
+	@GetMapping("/imgur") 
+	public String imgurTest(){
+		return "community/urlTest";
+	}
+	*/
+	
 	// 리뷰 삭제
+
 	
 }
