@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="col-xs-9" style="padding:0 5px 0 0;">
-                <iframe name="list" id="iframe_list" src="?tpf=admin/product/list_sub" width="100%" scrolling="auto" frameborder="1"></iframe>
+                <iframe name="list" id="iframe_list" src="${pageContext.request.contextPath }/product/list_sub" width="100%" scrolling="auto" frameborder="1"></iframe>
                 </div>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->

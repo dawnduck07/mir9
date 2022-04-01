@@ -41,4 +41,7 @@ public class ProductController {
 		
 		return "product/option";
 	}
+	
+	@GetMapping("/list_sub")
+	public void list_sub() {}
 }
