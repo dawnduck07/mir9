@@ -292,7 +292,6 @@
 <c:forEach var="order" items="${orderList }">
 	<script>
 		(function(){
-			
 			if(${order.trackingNo} != 0){				
 				const myKey = "FV9kkSwcgfdK76xfE8qHIA";
 				var deliComNo = ${order.deliComNo}
@@ -302,22 +301,19 @@
 					var t_code = deliComNo;
 	 			}
 				
-		         var t_invoice = ${order.trackingNo};
-		         // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
-		         //var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
-		         var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
+		        var t_invoice = ${order.trackingNo};
+		        // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
+		        //var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
+		        var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
 			    var statusNo = 0;
-			    
-			    console.log(url)
+
 		        $.ajax({
 		            type:"GET",
 		            dataType : "json",
 		            url: url,
 		            success(data){
-		            	console.log(data)
 		            	var trackingDetails = data.trackingDetails;
 		            	var latestStatus = trackingDetails[trackingDetails.length-1];
-			               console.log(latestStatus);
 			                // 배송준비중 상태
 			                if(latestStatus.level < 2){
 			                	statusNo = 3;
@@ -327,15 +323,12 @@
 			               	// 배송중 상태
 			                }else{
 			                	statusNo = 4;
-			                }
-			               
-			                
+			                }			                
 		            },
 		            error : console.log
 		        });
 		        	
 			        setTimeout(()=>{
-			        	console.log(statusNo)
 				        if(statusNo != 0){
 			        		
 				        	$.ajax({
@@ -348,7 +341,6 @@
 								dataType : "json",
 								type : "get",
 								success(data){
-									console.log(data)
 									var target = "#order_status_name_" + "${order.orderNo}";
 									$(target).text(data.orderStatusName);
 								},
@@ -370,14 +362,7 @@
 		console.log(orderNo)
 			getDoseosangan(orderNo)
 				.catch(function(orderNo){})
-				.then(function(){return fillForm(orderNo)})
-				.then(function(orderDetail){return delivery_check(orderDetail)})
-				.then(function(statusNo){
-						console.log(statusNo);
-						//updateStaus(orderNo, statusNo);
-					}, function(err){
-						
-					});
+				.then(fillForm(orderNo))
 				
 			$("#modalContent").modal('show');			
 	}
@@ -385,6 +370,7 @@
 	/* 비동기 순서를 정하기 위해 promise 객체 선언 */
 	function getDoseosangan(orderNo){
 		return new Promise(function(resolve, reject){
+			$(document["form_register"])[0].reset();
 			$.ajax({
 				url : "${pageContext.request.contextPath}/order/getDoseosangan",
 				data : {
@@ -403,11 +389,17 @@
 	
 	/* 모달창 내용 기입 */
 	function fillForm(orderNo){
-		return new Promise(function(resolve, reject){
+		setTimeout(() =>{
 			
-		setTimeout(()=>{
-			var doseoFee = $(doseosangan).val() * 1;
-			$(document["form_register"])[0].reset();
+			var doseoFee = 0;
+			console.log($(doseosangan).val())
+			console.log($(doseosangan).val() != 'null')
+			
+			if($(doseosangan).val() != 'null'){
+				doseoFee = $(doseosangan).val() * 1;
+			}	
+			
+			console.log(doseoFee)
 				$.ajax({
 					//url: `\${restServerUrl}/menus`,
 					url:`${pageContext.request.contextPath}/order/orderDetail`,
@@ -416,7 +408,6 @@
 					},
 					method: "GET",
 					success(data){
-						
 						// 구매내역 append? 값 채우기?
 							
 							$("#p_img").attr('src', data.orderDetail.imgUrl);
@@ -453,17 +444,17 @@
 							// 상품합계 (배송비 제외) : 모든 tr 합계 금액의 합 
 							$("#p_priceNoDeli").text(trTotalPrice);
 							
-							// 배송비
+							// 배송비 & 총 결제 금액
 							if(trTotalPrice >= ${deliSet.freeShippingSettings}){
-								$("#deli_fee").text(deliFee);					
+								$("#deli_fee").text("무료배송");					
 								$("#p_totalPrice").text(trTotalPrice);
 							}else{
 								$("#deli_fee").text(deliFee);
 								$("#p_totalPrice").text(trTotalPrice + deliFee);
 							}
 							
-						// 총 결제 금액
-
+						
+						
 						
 						// 결제 정보
 						$("#order_name").text(data.orderDetail.name);
@@ -484,7 +475,8 @@
 						$("#receiver_addr").text(data.orderDetail.shippingAddress);
 						$("#request_message").text(data.orderDetail.memo);
 						$("#memo").val(data.orderDetail.adminMemo);
-						$("#delivery_code").val(data.orderDetail.trackingNo);
+						$("#delivery_code").val(data.orderDetail.trackingNo == 0 ? '' : data.orderDetail.trackingNo);
+						$('#payment_status').val(data.orderDetail.orderStatusNo).prop("selected",true);
 						
 						// 주문 상태 변경
 						
@@ -492,16 +484,12 @@
 						$("#update_order_status").attr('onclick', 'updateOrderStatus(' + data.orderDetail.orderNo +')')
 						$("#update_admin_memo").attr('onclick', 'updateAdminMemo(' + data.orderDetail.orderInfoNo + ')')
 						$(doseosangan).val('null');
-						
-						
-						resolve(data.orderDetail);
+
 						
 					},
 					error: console.log
 				});
-			},600);
-				
-		});
+		}, 500);
 
 	}
 	
@@ -578,86 +566,7 @@
 		return dateString;
 	}
 	
-	/* 택배 api활용, order_status 동적 업데이트 */
-	function delivery_check(orderDetail){
-		new Promise(function(resolve, reject){
-			if(orderDetail.trackingNo == 0) return false;
-			var statusNo = 0;
-			setTimeout(()=>{
-				// 관리자가 삳태 직접 업데이트한 경우 --> 관리자 결정을 따름
-				if(orderDetail.orderStatusUpdate != null){
-					$('#payment_status').val(orderDetail.orderStatusNo).prop("selected",true);
-				}else{
-						
-					const myKey = "FV9kkSwcgfdK76xfE8qHIA";
-					
-					if(orderDetail.deliComNo < 10){
-						var t_code = "0" + orderDetail.deliComNo;				
-					}else{
-						var t_code = orderDetail.deliComNo;
-		 			}
-					
-			         var t_invoice = orderDetail.trackingNo;
-			         // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
-			         var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
-			         //var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
 
-			         
-			        $.ajax({
-			            type:"GET",
-			            dataType : "json",
-			            url: url,
-			            success(data){
-			            	
-			                var trackingDetails = data.trackingDetails;
-			                
-			                var latestStatus = trackingDetails[trackingDetails.length-1];
-			               console.log(latestStatus);
-			                // 배송준비중 상태
-			                if(latestStatus.level < 2){
-			                	$('#payment_status').val(3).prop("selected",true);
-			                	statusNo = 3;
-			                // 배송완료 상태
-			                }else if(latestStatus.level >= 6){
-			                	$('#payment_status').val(5).prop("selected",true);
-			                	statusNo = 5;
-			               	// 배송중 상태
-			                }else{
-			                	$('#payment_status').val(4).prop("selected",true);
-			                	statusNo = 4;
-			                }
-			                var target = "#order_status_name_" + orderDetail.orderNo;
-							$(target).text(data.orderStatusName);
-			            },
-			            error : console.log
-			        });
-				}
-			}, 800)
-			
-			if(statusNo != 0){
-				setTimeout(()=>{
-					console.log("test")
-					$.ajax({
-						url : "${pageContext.request.contextPath}/order/statusAutoUpdate",
-						data : {
-							orderNo : orderDetail.orderNo,
-							statusNo : statusNo
-						},
-						contentType : "application/json; charset:UTF-8",
-						dataType : "json",
-						type : "get",
-						success(data){
-							
-						},
-						error:console.log
-						
-						
-						
-					});
-				},2000);
-			}
-		});
-	}
 
 /* downloadExcel() --> 구현 후 common.js로 이동 */
  
