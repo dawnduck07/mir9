@@ -19,7 +19,7 @@
   	
   	<select id="selectDeliveryCompanyListByParam" resultType="deliveryCompany">
   		select * from delivery_company
-		where ${field} like '%'||#{keyword}||'%'
+		where ${field} like ('%', #{keyword}, '%')
   	</select>
   	
   	<update id="updateDeliveryCompanyByParam">

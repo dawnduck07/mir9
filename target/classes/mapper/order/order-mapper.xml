@@ -14,21 +14,21 @@
 			and 
 			 <choose>
 				<when test="start_date != '' and end_date == ''">
-					order_date <![CDATA[>=]]> to_date(#{start_date}, 'yyyy-MM-dd')
+					order_date <![CDATA[>=]]>  str_to_date(#{start_date}, '%Y-%m-%d')
 				</when>
 				<when test="start_date == '' and end_date != ''">
-					order_date <![CDATA[<=]]> to_date(#{end_date}, 'yyyy-MM-dd')
+					order_date <![CDATA[<=]]> str_to_date(#{end_date}, '%Y-%m-%d')
 				</when>
 				<otherwise>
-					order_date <![CDATA[>]]> to_date(#{start_date}, 'yyyy-MM-dd')
+					order_date <![CDATA[>]]>  str_to_date(#{start_date}, '%Y-%m-%d')
 					and 
-					order_date <![CDATA[<=]]> to_date(#{end_date}, 'yyyy-MM-dd') + 1
+					order_date <![CDATA[<=]]> str_to_date(#{end_date}, '%Y-%m-%d') + 1
 				</otherwise>
 			</choose>
 		</if>
 		<if test="field != null and field != '' and keyword != null and keyword != ''">
 			and
-			${field} like '%'||#{keyword}||'%'
+			${field} like  CONCAT('%', #{keyword}, '%')
 
 		</if>
 	</where>
@@ -46,21 +46,21 @@
 			and 
 			 <choose>
 				<when test="start_date != '' and end_date == ''">
-					order_date <![CDATA[>=]]> to_date(#{start_date}, 'yyyy-MM-dd')
+					order_date <![CDATA[>=]]> str_to_date(#{start_date}, '%Y-%m-%d')
 				</when>
 				<when test="start_date == '' and end_date != ''">
-					order_date <![CDATA[<=]]> to_date(#{end_date}, 'yyyy-MM-dd')
+					order_date <![CDATA[<=]]> str_to_date(#{end_date}, '%Y-%m-%d')
 				</when>
 				<otherwise>
-					order_date <![CDATA[>]]> to_date(#{start_date}, 'yyyy-MM-dd')
+					order_date <![CDATA[>]]>  str_to_date(#{start_date}, '%Y-%m-%d')
 					and 
-					order_date <![CDATA[<=]]> to_date(#{end_date}, 'yyyy-MM-dd') + 1
+					order_date <![CDATA[<=]]> str_to_date(#{end_date}, '%Y-%m-%d') + 1
 				</otherwise>
 			</choose>
 		</if>
 		<if test="field != null and field != '' and keyword != null and keyword != ''">
 			and
-			${field} like '%'||#{keyword}||'%'
+			${field} like CONCAT('%', #{keyword}, '%')
 
 		</if>
 	</where>
@@ -95,7 +95,7 @@
   </select>
   
   <update id="updateOrderStaus">
-  	update tb_order set order_status_no = #{statusNo}, order_status_update = sysdate  where order_no = #{orderNo}
+  	update tb_order set order_status_no = #{statusNo}, order_status_update = sysdate()  where order_no = #{orderNo}
   </update>
   <update id="updateOrderStausAuto">
   	update tb_order set order_status_no = #{statusNo} where order_no = #{orderNo}
