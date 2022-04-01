@@ -6,6 +6,7 @@ import java.util.Map;
 import com.naedam.mir9.option.model.vo.OrderOption;
 import com.naedam.mir9.order.model.vo.Order;
 import com.naedam.mir9.order.model.vo.OrderDetail;
+import com.naedam.mir9.order.model.vo.OrderExcelForm;
 import com.naedam.mir9.order.model.vo.OrderStatus;
 
 public interface OrderDao {
@@ -29,6 +30,9 @@ public interface OrderDao {
 	int updateOrderStausAuto(Map<String, String> param);
 
 	String selectOrderStatusNameByOrderNo(String orderNo);
+
+	List<OrderExcelForm> selectOrderExcelForm();
+
 
 
 }

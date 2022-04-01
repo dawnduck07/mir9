@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.naedam.mir9.option.model.vo.OrderOption;
 import com.naedam.mir9.order.model.vo.Order;
 import com.naedam.mir9.order.model.vo.OrderDetail;
+import com.naedam.mir9.order.model.vo.OrderExcelForm;
 import com.naedam.mir9.order.model.vo.OrderStatus;
 
 @Repository
@@ -76,6 +77,14 @@ public class OrderDaoImpl implements OrderDao {
 		// TODO Auto-generated method stub
 		return session.selectOne("order.selectOrderStatusNameByOrderNo", orderNo);
 	}
+
+	@Override
+	public List<OrderExcelForm> selectOrderExcelForm() {
+		// TODO Auto-generated method stub
+		return session.selectList("order.selectOrderExcelForm");
+	}
+
+
 	
 
 	
