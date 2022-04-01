@@ -19,11 +19,11 @@
   	
   	<select id="selectDeliveryCompanyListByParam" resultType="deliveryCompany">
   		select * from delivery_company
-		where ${field} like '%'||#{keyword}||'%'
+		where ${field} like ('%', #{keyword}, '%')
   	</select>
   	
   	<update id="updateDeliveryCompanyByParam">
-  		update delivery_company set deli_com_name = #{company_name}, trace_url = #{url}, show_yn = #{is_show}, reg_date = sysdate 
+  		update delivery_company set deli_com_name = #{company_name}, trace_url = #{url}, show_yn = #{is_show}, reg_date = sysdate()
   			where deli_com_no = #{comNo} 
   	</update>
   	

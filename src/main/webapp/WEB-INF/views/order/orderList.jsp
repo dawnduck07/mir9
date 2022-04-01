@@ -291,15 +291,16 @@
 <script>
 	<!-- 모달창 제어 -->
 	function onclick_update(orderNo){
+		console.log(orderNo)
 			getDoseosangan(orderNo)
-				.catch(function(orderNo){console.log('')})
+				.catch(function(orderNo){})
 				.then(function(){return fillForm(orderNo)})
 				.then(function(orderDetail){return delivery_check(orderDetail)})
 				.then(function(statusNo){
 						console.log(statusNo);
 						//updateStaus(orderNo, statusNo);
 					}, function(err){
-						console.log(err)
+						
 					});
 				
 			$("#modalContent").modal('show');			
@@ -407,7 +408,7 @@
 						$("#receiver_addr").text(data.orderDetail.shippingAddress);
 						$("#request_message").text(data.orderDetail.memo);
 						$("#memo").val(data.orderDetail.adminMemo);
-						
+						$("#delivery_code").val(data.orderDetail.trackingNo);
 						
 						// 주문 상태 변경
 						
@@ -504,7 +505,6 @@
 	/* 택배 api활용, order_status 동적 업데이트 */
 	function delivery_check(orderDetail){
 		new Promise(function(resolve, reject){
-			
 			if(orderDetail.trackingNo == 0) return false;
 			var statusNo = 0;
 			setTimeout(()=>{
@@ -525,17 +525,18 @@
 			         // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
 			         var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
 			         //var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
-			         console.log(url);
+
 			         
 			        $.ajax({
 			            type:"GET",
 			            dataType : "json",
 			            url: url,
 			            success(data){
+			            	
 			                var trackingDetails = data.trackingDetails;
 			                
 			                var latestStatus = trackingDetails[trackingDetails.length-1];
-			               
+			               console.log(latestStatus);
 			                // 배송준비중 상태
 			                if(latestStatus.level < 2){
 			                	$('#payment_status').val(3).prop("selected",true);
@@ -549,35 +550,36 @@
 			                	$('#payment_status').val(4).prop("selected",true);
 			                	statusNo = 4;
 			                }
-			                console.log(statusNo);
+			                var target = "#order_status_name_" + orderDetail.orderNo;
+							$(target).text(data.orderStatusName);
 			            },
 			            error : console.log
 			        });
 				}
 			}, 800)
-		
-		
-			setTimeout(()=>{
-				$.ajax({
-					url : "${pageContext.request.contextPath}/order/statusAutoUpdate",
-					data : {
-						orderNo : orderDetail.orderNo,
-						statusNo : statusNo
-					},
-					contentType : "application/json; charset:UTF-8",
-					dataType : "json",
-					type : "get",
-					success(data){
-						var target = "order_status_name_" + orderDetail.orderNo
-						console.log(data)
-						$("#"+target).text(data.orderStatusName);
-					},
-					error:console.log
-					
-					
-					
-				});
-			},1500);
+			
+			if(statusNo != 0){
+				setTimeout(()=>{
+					console.log("test")
+					$.ajax({
+						url : "${pageContext.request.contextPath}/order/statusAutoUpdate",
+						data : {
+							orderNo : orderDetail.orderNo,
+							statusNo : statusNo
+						},
+						contentType : "application/json; charset:UTF-8",
+						dataType : "json",
+						type : "get",
+						success(data){
+							
+						},
+						error:console.log
+						
+						
+						
+					});
+				},2000);
+			}
 		});
 	}
 

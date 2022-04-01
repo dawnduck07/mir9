@@ -232,7 +232,7 @@
 				contentType: "application/json; charset=utf-8",
 				success(data){
 					if(data > 0){
-						alert("택배사 접보가 변경되었습니다.");
+						alert("택배사 정보가 변경되었습니다.");
 						location.reload();
 					}
 	
