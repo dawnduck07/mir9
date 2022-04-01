@@ -27,9 +27,11 @@ public class OrderWithNames extends Order {
 	private String firstName;
 	private int payAmt;
 	private String statusName;
+	private long trackingNo;
+	private int deliComNo;
 	public OrderWithNames(long orderNo, int memberNo, int productNo, int orderStatusNo, Date orderDate,
 			String productName, String phone, String payType, Date payDate, String status, String lastName,
-			String firstName, int payAmt, String statusName) {
+			String firstName, int payAmt, String statusName, Long trackingNo, int deliComNo) {
 		super(orderNo, memberNo, productNo, orderStatusNo, orderDate);
 		this.productName = productName;
 		this.phone = phone;
@@ -40,6 +42,8 @@ public class OrderWithNames extends Order {
 		this.firstName = firstName;
 		this.payAmt = payAmt;
 		this.statusName = statusName;
+		this.trackingNo = trackingNo;
+		this.deliComNo = deliComNo;
 	}
 	
 
