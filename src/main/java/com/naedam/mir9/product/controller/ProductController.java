@@ -44,4 +44,10 @@ public class ProductController {
 	
 	@GetMapping("/list_sub")
 	public void list_sub() {}
+	
+	@GetMapping("/tree_model")
+	public void tree_model(Model model) {
+		
+		
+	}
 }
