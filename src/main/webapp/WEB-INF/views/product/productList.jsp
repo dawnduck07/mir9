@@ -25,7 +25,7 @@
             <div class="box">
                 <div class="box-body">
                 <div class="col-xs-3" style="padding:0 5px 0 0;">
-                <iframe name="tree" id="iframe_tree" src="?tpf=admin/product/tree&menu=list" width="100%" scrolling="auto" frameborder="1"></iframe>
+                <iframe name="tree" id="iframe_tree" src="${pageContext.request.contextPath }/product/tree_model" width="100%" scrolling="auto" frameborder="1"></iframe>
                 </div>
 
                 <div class="col-xs-9" style="padding:0 5px 0 0;">
