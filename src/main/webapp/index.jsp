@@ -43,12 +43,13 @@
 <!-- fullcalendar -->
 <link href="//mir9.co.kr/resource/css/bootstrap-colorselector.css"
 	rel="stylesheet" />
-<link
-	href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.min.css"
+
+<link href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.min.css"
 	rel="stylesheet" type="text/css" />
 <link
 	href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.print.css"
 	rel="stylesheet" type="text/css" media='print' />
+
 <!--  -->
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -86,7 +87,7 @@
 
 					<form:form 
 						name="form" 
-						action="${pageContext.request.contextPath}/member/memberLogin.do" 
+						action="${pageContext.request.contextPath}/member/memberLogin.do?${_csrf.parameterName}=${_csrf.token}" 
 						method="POST"
 						style="padding: 20px;">
 						
