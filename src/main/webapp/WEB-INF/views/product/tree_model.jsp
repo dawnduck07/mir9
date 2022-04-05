@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
 <head>
@@ -18,7 +23,7 @@
     <script type="text/javascript" src="/html/js/html5shiv.js"></script>
     <script type="text/javascript" src="/html/js/IE9.js"></script>
     <![endif]-->
-    <script src="${pageContext.request.contextPath }/js/common.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/js/common.js"></script>
     <script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -28,7 +33,11 @@ function gtag(){
 }
 	gtag('js', new Date());
 	gtag('config', 'UA-142394166-1');
+
 </script>
+
+
+
 </head>
 
 <style>
@@ -84,19 +93,24 @@ var tree_tpl = {
 };
 
 var TREE_ITEMS = [
-    ['Home', '?tpf=admin/product/list_sub',
-        ['Dental Treats', '?tpf=admin/product/list_sub&category_code=10&locale=ko',
-['Dental Treats sub', '?tpf=admin/product/list_sub&category_code=1010&locale=ko',
-['Dental Treats sub - sub', '?tpf=admin/product/list_sub&category_code=101010&locale=ko'],
-],
-['Dental Treats sub2', '?tpf=admin/product/list_sub&category_code=1011&locale=ko',
-['', '?tpf=admin/product/list_sub&category_code=101110&locale=ko'],
-],
-],
-['Healthy Treats', '?tpf=admin/product/list_sub&category_code=12&locale=ko'],
-['Grooming', '?tpf=admin/product/list_sub&category_code=11&locale=ko'],
-    ]
+//    ['Home', '?tpf=admin/product/list_sub',
+//        ['Dental Treats', ' ',
+//			['Dental Treats sub', ' ',
+//				['Dental Treats sub - sub', ' '],
+//			],
+//			['Dental Treats sub2', ' ',
+//				['', ' '],
+//			],
+//		],
+//		
+//		['Healthy Treats', ' '],
+//		
+//		['Grooming', ' '],
+//   ]
+
+${result}
 ];
+
 </script>
 
 <script language="JavaScript">
