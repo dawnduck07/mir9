@@ -19,5 +19,5 @@ public class Category implements Serializable {
 	private int categoryNo;
 	private String categoryName;
 	private int parentNo;
-	private int pcno;
+	private int level;
 }
