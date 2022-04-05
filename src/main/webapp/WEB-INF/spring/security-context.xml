@@ -31,6 +31,10 @@
 		<intercept-url pattern="/" access="permitAll"/>
 		<!-- 포워딩되는 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
 		<intercept-url pattern="/index.jsp" access="permitAll"/>
+		<!-- 유광현 작업영역 -->
+        <intercept-url pattern="/product/**" access="permitAll"/>
+        <intercept-url pattern="/excel/**" access="permitAll"/>
+        <intercept-url pattern="/order/**" access="permitAll"/>
 		
 		<intercept-url pattern="/member/memberEnroll.do" access="permitAll"/>
 
@@ -43,6 +47,7 @@
 		<intercept-url pattern="/member/memberLogin.do" access="permitAll"/>
 		<!-- 모든 페이지에서 로그인한 사람만 권한을 부여받는다. -->
 		<intercept-url pattern="/**" access="isAuthenticated()"/>
+		
 		
 		<!-- 커스텀로그인 설정 -->
 		<!-- 직접 만든 로그인 폼 사용 -->
