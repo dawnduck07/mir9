@@ -65,6 +65,11 @@
 	<logger name="com.naedam.mir9" additivity="true">
 		<level value="debug" />
 	</logger>
+	
+	<logger name="com.naedam.security" additivity="true">
+		<level value="debug" />
+	</logger>
+	
 <!-- 	<logger name="com.naedam.spring.log4j">
 		<level value="debug" />
 	</logger> -->

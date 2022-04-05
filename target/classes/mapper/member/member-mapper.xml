@@ -3,8 +3,34 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
+<!-- 회원가입 -->
 <insert id="insertMember">
-	INSERT INTO
+	INSERT INTO member
+		(member_no,
+		 member_grade_no,
+		 first_name,
+		 last_name,
+		 email,
+		 phone,
+		 reg_date,
+		 status,
+		 id,
+		 password,
+		 profile_img) 
+	VALUES
+		(NEXTVAL(seq_member_no),
+		#{memberGradeNo},
+		#{firstName},
+		#{lastName},
+		#{email},
+		#{phone},
+		NOW(),
+		default,
+		#{id},
+		#{password},
+		NULL)
+		
+<!-- 	INSERT INTO
 		member
 		(member_no,
 		 member_grade_no,
@@ -24,13 +50,14 @@
 		#{lastName},
 		#{email},
 		#{phone},
-		default,
+		sysdate,
 		default,
 		#{id},
 		#{password},
-		null)
+		null) -->
 </insert>
 
+<!-- 로그인 - 해당 id정보 가져오기 -->
 <select id="selectOneMember" resultType="member">
 	SELECT
 		*
@@ -38,5 +65,36 @@
 		member
 	WHERE
 		id = #{id}
+</select>
+
+<!-- 회원 리스트 전체 게시물 목록 -->
+<select id="selectMemberList" resultType="memberEntity">
+	SELECT
+		m.member_no,
+	    m.id,
+	    m.last_name, 
+	    m.first_name,
+	    m.phone,
+	    a.address_main, 
+	    a.address_sub,
+	    p.point_amt,
+	    m.reg_date
+	FROM
+	    member m left join member_point mp
+	        on m.member_no = mp.member_no
+	            left join point p
+	                on mp.point_no = p.point_no
+	                    left join address_book ab
+	                        on m.member_no = ab.member_no
+	                            left join address a
+	                                on ab.address_no = a.address_no
+</select>
+
+<!-- 회원 리스트 전체 게시물 수 -->
+<select id="selectMemberListCount" resultType="_int">
+	SELECT
+		COUNT(*)
+	FROM
+		member
 </select>
 </mapper>

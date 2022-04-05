@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -38,7 +40,7 @@
 
 <body style="margin-top:200px;">
 <div id="enroll-container" class="mx-auto text-center">
-	<form 
+	<form:form
 		name="memberEnrollFrm" 
 		action="${pageContext.request.contextPath}/member/memberEnroll.do" 
 		method="post">
@@ -54,9 +56,9 @@
 							   id="id"
 							   value=""
 							   required>
-						<span class="guide ok">이 아이디는 사용가능합니다.</span>
+						<!-- <span class="guide ok">이 아이디는 사용가능합니다.</span>
 						<span class="guide error">이 아이디는 이미 사용중입니다.</span>
-						<input type="hidden" id="idValid" value="0" />					
+						<input type="hidden" id="idValid" value="0" />	 -->				
 					</div>
 				</td>
 			</tr>
@@ -85,6 +87,19 @@
 				</td>
 			</tr>
 			<tr>
+				<th>등급</th>
+				<td>
+					<div class="form-check form-check-inline">
+						<input type="radio" class="form-check-input" name="memberGradeNo" id="memberGradeMember" value="1" checked>
+						<label  class="form-check-label" for="gender0">일반회원</label>&nbsp;
+						<input type="radio" class="form-check-input" name="memberGradeNo" id="memberGradeSeller" value="2">
+						<label  class="form-check-label" for="gender1">판매회원</label>&nbsp;
+						<input type="radio" class="form-check-input" name="memberGradeNo" id="memberGradeAdmin" value="3">
+						<label  class="form-check-label" for="gender1">관리자</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<th>이메일</th>
 				<td>	
 					<input type="email" class="form-control" placeholder="abc@xyz.com" name="email" id="email" value="">
@@ -105,7 +120,7 @@
 		</table>
 		<input type="submit" value="가입" >
 		<input type="reset" value="취소">
-	</form>
+	</form:form>
 </div>
 </body>
 
