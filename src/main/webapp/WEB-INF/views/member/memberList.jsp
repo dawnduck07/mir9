@@ -149,6 +149,7 @@
 					<i class="fa fa-minus-square"></i> 선택삭제
 				</button>
 				
+				<!-- 등록 -->
 				<button type="button" onclick="onclickInsert();"
 					class="btn btn-primary">
 					<i class="fa fa-plus-square"></i> 등록
@@ -310,6 +311,7 @@
 										<option value="3">ㅈㅇㅇㅈ</option>
 								</select></td>
 							</tr>
+							<!-- 
 							<tr id="display_status">
 								<td class="menu">상태 <span class="text-light-blue"><i
 										class="fa fa-check"></i></span></td>
@@ -331,6 +333,7 @@
 								<td class="menu">등록일자</td>
 								<td align="left"><span id="reg_date"></span></td>
 							</tr>
+							 -->
 						</table>
 				</form>
 			</div>
@@ -507,5 +510,15 @@ function downloadExcel() {  // Excel 다운로드
 $('#findList').each(function(){
 	console.log("들어오냐");
 });
+
+function onclickInsert(){
+	console.log("등록(onclickInsert())");
+	$("#modalRegister").modal();
+}
+
+// 아이디 중복 확인
+function onclickCheckId(){
+	console.log("아이디 중복 확인");
+}
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
