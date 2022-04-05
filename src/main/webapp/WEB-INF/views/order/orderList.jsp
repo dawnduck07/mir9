@@ -92,9 +92,9 @@
 										<td style="width: 60px;">명령</td>
 									</tr>
 								</thead>
-								<c:forEach var="order" items="${orderList }">
+								<c:forEach var="order" items="${orderList }" varStatus="vs">
 									<tr>
-										<td><input type="checkbox" name="list[]" value="20" /></td>
+										<td><input type="checkbox" name="list[]" value="${vs.count }" /></td>
 										<td>${fn:substring(order.orderNo,0,6) }-${fn:substring(order.orderNo,7,15) }</td>
 										<td><fmt:formatDate value="${order.orderDate}" pattern="yyyy-MM-dd" /></td>
 										<td align="left">${order.productName }</td>

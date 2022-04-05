@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -76,9 +79,10 @@
 						<p class="text-light-blue">
 							<i class="fa fa-fw fa-list-ul"></i> <a href="?tpf=admin/product/list_sub&locale=ko">ROOT</a>
 						</p>
-						<label>총 7 건</label>
-						<table class="table table-bordered table-hover">
-							<form name="form_list" method="post" action="?tpf=admin/product/process">
+						<label>총 ${productListCnt } 건</label>
+						
+						<form name="form_list" method="post" action="?tpf=admin/product/process">
+							<table class="table table-bordered table-hover">
 								<input type="hidden" name="mode" id="mode">
 								<thead>
 									<tr>
@@ -95,22 +99,24 @@
 										<td style="width: 60px;">명령</td>
 									</tr>
 								</thead>
-								<tr>
-									<td><input type="checkbox" name="list[]" value="292" /></td>
-									<td>292</td>
-									<td><img src="http://demoshop.mir9.kr/user/product/292_1.jpg" style="width: 90px;"></td>
-									<td>Dental Treats sub - sub</td>
-									<td>상품명23 (BEST,NEW - 보임)</td>
-									<td>리스트 문구</td>
-									<td>40,000</td>
-									<td>2021-12-10</td>
-									<td><button type="button" class="btn btn-success btn-xs">보임</button></td>
-									<td><input type="radio" name="order_code" value="10" /></td>
-									<td><button type="button" onclick="onclickUpdate(292);" class="btn btn-primary btn-xs">수정하기</button></td>
-								</tr>
+								<c:forEach var="product" items="${productList }">
+									<tr>
+										<td><input type="checkbox" name="list[]" value="292" /></td>
+										<td>${product.productNo }</td>
+										<td><img src="${product.imgUrl }" style="width: 90px;"></td>
+										<td>${product.categoryName }</td>
+										<td>${product.productName }</td>
+										<td>${product.listTitle }</td>
+										<td><fmt:formatNumber value="${product.salePrice }" pattern="#,###" /></td>
+										<td><fmt:formatDate value="${product.regDate}" pattern="yyyy-MM-dd" /></td>
+										<td><button type="button" class="btn btn-success btn-xs">보임</button></td>
+										<td><input type="radio" name="order_code" value="10" /></td>
+										<td><button type="button" onclick="onclickUpdate(292);" class="btn btn-primary btn-xs">수정하기</button></td>
+									</tr>
+								</c:forEach>
 
-							</form>
-						</table>
+							</table>
+						</form>
 						<br>
 
 						<button type="button" onclick="selectDelete('deleteProduct');" class="btn btn-danger btn-sm">
@@ -122,8 +128,10 @@
 						<button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm" style="margin-left: 20px;">
 							<i class="fa fa-file-excel-o"></i> Excel 다운로드
 						</button>
-						<form name="form_download" method="post" action="?tpf=admin/product/process">
-							<input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data">
+						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do">
+							<input type="hidden" name="download_type" value="product"/>
+							<input type="hidden" name="mode" value="downloadExcel"> 
+							<input type="hidden" name="search_data">
 						</form>
 
 						<div style="text-align: right;">
@@ -152,6 +160,7 @@
             form_download.search_data.value = $('#form_search :input').serialize();
             form_download.submit();
         }
+        
         function setData(code) {
             $.ajax({
 				url:'http://demoshop.mir9.kr/api/process.php',
