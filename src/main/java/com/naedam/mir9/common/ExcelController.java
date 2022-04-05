@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.order.model.service.OrderService;
 import com.naedam.mir9.order.model.vo.OrderExcelForm;
+import com.naedam.mir9.product.model.service.ProductService;
+import com.naedam.mir9.product.model.vo.ProductExcelForm;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,11 +35,13 @@ public class ExcelController {
 	
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private ProductService productService;
 	
 	private static final int WIDTH = 2800;
 	
     private final String[] orderHeader = {"순번", "주문번호", "상품명", "주문자", "연락처", "결제금액", "결제방법", "입금은행명", "예금주명", "수취인 성명", "수취인 연락처", "배송지 주소", "고객요청 사항", "상태"};
-
+    private final String[] productHeader = {"카테고리", "모델명", "상품명", "소제목", "요약", "소비자 가격", "가격", "상품옵션", "상세설명", "new아이템", "best아이템", "event아이템", "언어", "품절여부", "표출상태", "등록일자"};
 	
 	
 	
@@ -61,6 +65,14 @@ public class ExcelController {
 				excelContentList.add(o);
 			}
 			
+		}else if(type.equals("product")) {
+			excelHeader = Arrays.asList(productHeader);
+			sheet = wb.createSheet("product_list");
+			fileName += "product_list_" + dateCode();
+			List<ProductExcelForm> productExcelFormList = productService.selectProductExcelForm();
+			for(ProductExcelForm p : productExcelFormList) {
+				excelContentList.add(p);
+			}
 		}
 
 		Row row = null;
@@ -89,8 +101,14 @@ public class ExcelController {
 		        for (Field field : obj.getClass().getDeclaredFields()){
 		            field.setAccessible(true);
 		            Object value = field.get(obj);
-
+		            
 		            if(!field.getName().equals("serialVersionUID")) {
+		            	
+		            	// Date타입 ==> String으로 캐스팅
+		            	if(value instanceof Date) {
+		            		value = castDate((Date) value);
+		            		log.debug("value = {}", value);
+		            	}
 		            	// 셀 너비 자동 조절
 		    			sheet.autoSizeColumn(cnt);
 		    		    sheet.setColumnWidth(cnt, (sheet.getColumnWidth(cnt))+(short)1024);
@@ -122,5 +140,11 @@ public class ExcelController {
 		Date now = new Date();
 		
 		return sdf.format(now);
+	}
+	private String castDate(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+		return sdf.format(date);
 	}
 }

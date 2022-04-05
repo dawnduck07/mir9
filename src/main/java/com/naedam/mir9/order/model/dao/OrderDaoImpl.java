@@ -84,6 +84,12 @@ public class OrderDaoImpl implements OrderDao {
 		return session.selectList("order.selectOrderExcelForm");
 	}
 
+	@Override
+	public int deleteOrderByOrderNo(String orderNo) {
+		// TODO Auto-generated method stub
+		return session.delete("order.deleteOrderByOrderNo", orderNo);
+	}
+
 
 	
 

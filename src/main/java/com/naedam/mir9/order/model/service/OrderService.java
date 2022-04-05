@@ -33,6 +33,8 @@ public interface OrderService {
 
 	List<OrderExcelForm> selectOrderExcelForm();
 
+	int deleteOrderByOrderNo(String orderNo);
+
 
 
 	
