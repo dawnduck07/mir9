@@ -1,6 +1,7 @@
 package com.naedam.mir9.member.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,17 @@ public class MemberDaoImpl implements MemberDao {
 	public int selectMemberListCount() {
 		return session.selectOne("member.selectMemberListCount");
 	}
+
+	// id 중복 검사
+	@Override
+	public Member selectOneMemberByMap(Map<String, Object> param) {
+		return session.selectOne("member.selectOneMemberByMap", param);
+	}
+
+
+
+	
+	
 
 
 	

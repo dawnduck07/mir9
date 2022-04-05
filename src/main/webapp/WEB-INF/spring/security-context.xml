@@ -31,6 +31,7 @@
 		<intercept-url pattern="/" access="permitAll"/>
 		<!-- 포워딩되는 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
 		<intercept-url pattern="/index.jsp" access="permitAll"/>
+		
 		<!-- 유광현 작업영역 -->
         <intercept-url pattern="/product/**" access="permitAll"/>
         <intercept-url pattern="/excel/**" access="permitAll"/>
@@ -41,6 +42,7 @@
 		<!-- 관리자 권한만 조회할 수 있도록 권한을 준다. -->
 		<intercept-url pattern="/dashBoard" access="hasRole('ROLE_ADMIN')"/>
 		<intercept-url pattern="/dashBoard.jsp" access="hasRole('ROLE_ADMIN')"/>
+		<!-- <intercept-url pattern="/member/**" access="permitAll"/> -->
 		
 		<!-- 회원가입 페이지에 대한 접근권한을 모두에게 준다. -->
 		<intercept-url pattern="/common/**" access="permitAll"/>
