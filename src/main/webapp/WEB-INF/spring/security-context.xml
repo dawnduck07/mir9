@@ -23,14 +23,12 @@
 	<http security="none" pattern="/resources/**"/>
 	
 	<!-- 위에서부터 아래로 처리하기때문에 특수한 설정 -> 일반적 설정 순으로 정리해야한다. -->
-	<http auto-config="true">
+	<http auto-config="true" use-expressions="true">
+		<headers>
+			<frame-options policy="SAMEORIGIN"/>
+		</headers>
 		<!-- 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
 		<intercept-url pattern="/" access="permitAll"/>
-		<!-- 유광현 작업영역 -->
-		<intercept-url pattern="/product/**" access="permitAll"/>
-		<intercept-url pattern="/excel/**" access="permitAll"/>
-		<intercept-url pattern="/order/**" access="permitAll"/>
-		
 		<!-- 포워딩되는 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
 		<intercept-url pattern="/index.jsp" access="permitAll"/>
 		
