@@ -24,7 +24,7 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-body">
-						<form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/order/list">
+						<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/order/list">
 							<table class="table table-bordered" style="margin-bottom: 0;">
 								<tbody>
 									<tr>
@@ -61,22 +61,23 @@
 										</select> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="주문검색" style="width: 50%; padding-left: 5px;" /></td>
 									</tr>
 								</tbody>
-								<tfooter>
-								<tr>
-									<td colspan="4" style="text-align: center;">
-										<button type="button" onclick="selectAction();" class="btn btn-danger btn-sm">
-											<i class="fa "></i>검색
-										</button>
-									</td>
-								</tr>
-								</tfooter>
+								<tfoot>
+									<tr>
+										<td colspan="4" style="text-align: center;">
+											<button type="button" onclick="selectAction();" class="btn btn-danger btn-sm">
+												<i class="fa "></i>검색
+											</button>
+										</td>
+									</tr>
+								</tfoot>
 							</table>
-						</form>
+						</form:form>
 
 						<label style="margin-top: 5px;">총 ${orderCnt } 건</label>
-						<table class="table table-bordered table-hover">
-							<form name="form_list" method="post" action="?tpf=admin/order/process">
-								<input type="hidden" name="mode" id="mode"> <input type="hidden" name="search_data">
+						<form:form name="form_list" method="post" action="${pageContext.request.contextPath }/order/delete">
+							<input type="hidden" name="mode" id="mode"> 
+							<input type="hidden" name="search_data">
+							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
 										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
@@ -92,9 +93,9 @@
 										<td style="width: 60px;">명령</td>
 									</tr>
 								</thead>
-								<c:forEach var="order" items="${orderList }" varStatus="vs">
+								<c:forEach var="order" items="${orderList }">
 									<tr>
-										<td><input type="checkbox" name="list[]" value="${vs.count }" /></td>
+										<td><input type="checkbox" name="list[]" value="${order.orderNo }" /></td>
 										<td>${fn:substring(order.orderNo,0,6) }-${fn:substring(order.orderNo,7,15) }</td>
 										<td><fmt:formatDate value="${order.orderDate}" pattern="yyyy-MM-dd" /></td>
 										<td align="left">${order.productName }</td>
@@ -107,8 +108,8 @@
 										<td><button type="button" onclick="onclick_update(${order.orderNo});" class="btn btn-primary btn-xs">보기</button></td>
 									</tr>
 								</c:forEach>
-							</form>
-						</table>
+							</table>
+						</form:form>
 						<br>
 
 						<button type="button" onclick="selectDelete();" class="btn btn-danger btn-sm">
@@ -117,7 +118,7 @@
 						<button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm">
 							<i class="fa" aria-hidden="true"></i> Excel 다운로드
 						</button>
-						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do">
+						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
 							<input type="hidden" name="mode" value="downloadExcel"> 
 							<input type="hidden" name="search_data">
 							<input type="hidden" name="download_type" value="order"/>

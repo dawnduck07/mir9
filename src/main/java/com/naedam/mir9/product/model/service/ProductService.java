@@ -12,4 +12,6 @@ public interface ProductService {
 
 	List<ProductExcelForm> selectProductExcelForm();
 
+	int deleteProductByProductNo(String productNo);
+
 }

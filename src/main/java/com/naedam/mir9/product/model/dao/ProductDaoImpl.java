@@ -25,5 +25,11 @@ public class ProductDaoImpl implements ProductDao {
 		// TODO Auto-generated method stub
 		return session.selectList("product.selectProductExcelForm");
 	}
+
+	@Override
+	public int deleteProductByProductNo(String productNo) {
+		// TODO Auto-generated method stub
+		return session.delete("product.deleteProductByProductNo",productNo);
+	}
 	
 }

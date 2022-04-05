@@ -1,5 +1,6 @@
 package com.naedam.mir9.order.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.delivery.model.service.DeliveryService;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
@@ -122,6 +124,18 @@ public class OrderController {
 		jsonObject.put("orderStatusName", orderStatusName);
 
 		return jsonObject.toString();
+	}
+	
+	@PostMapping("/delete")
+	public String orderDelete(HttpServletRequest request, RedirectAttributes redirectAttr) {
+		List<String> orderNoList =  Arrays.asList(request.getParameterValues("list[]"));
+		int result = 0;
+		for(String orderNo : orderNoList) {
+			result = orderService.deleteOrderByOrderNo(orderNo);
+		}
+		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
+		
+		return "redirect:/order/list";
 	}
 	
 	@GetMapping("/logList")

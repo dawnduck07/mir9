@@ -1,14 +1,19 @@
 package com.naedam.mir9.product.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.category.model.service.CategoryService;
 import com.naedam.mir9.category.model.vo.Category;
@@ -107,5 +112,18 @@ public class ProductController {
 		
 		model.addAttribute("result",result);
 		
+	}
+	
+	@PostMapping("/delete")
+	public String productDelete(HttpServletRequest request, RedirectAttributes redirectAttr) {
+		List<String> productrNoList =  Arrays.asList(request.getParameterValues("list[]"));
+		int result = 0;
+		for(String productNo : productrNoList) {
+			result = productService.deleteProductByProductNo(productNo);
+		}
+		
+		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
+		
+		return "redirect:/product/list_sub";
 	}
 }

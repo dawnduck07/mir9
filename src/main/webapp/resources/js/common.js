@@ -240,6 +240,7 @@ function selectDelete(mode, message) {
 	var default_mode = 'delete';
 	var default_message = '해당 자료를 정말 삭제 하시겠습니까?';
 	var count = $(":input[name = 'list[]']").length;
+	console.log("count = ", count);
 	if (count > 0) {
 		if (isCheckedBox('form_list')) {
 			if (mode) default_mode = mode;

@@ -7,11 +7,16 @@
   	SELECT a.*, b.IMG_URL, c.CATEGORY_NAME 
 	FROM product a
 		JOIN product_img b ON(a.product_no = b.PRODUCT_NO)
-		JOIN category c ON(a.CATEGORY_NO = c.CATEGORY_NO)
+		left JOIN category c ON(a.CATEGORY_NO = c.CATEGORY_NO)
 	WHERE b.IMG_LEVEL = 1
   </select>
   
   <select id="selectProductExcelForm" resultType="productExcelForm">
   	SELECT * FROM v_product_excel_form
   </select>
+  
+  
+  <delete id="deleteProductByProductNo">
+  	delete from product where product_no = #{productNo}
+  </delete>
 </mapper>

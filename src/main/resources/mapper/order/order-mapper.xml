@@ -107,5 +107,8 @@
   <update id="updateAdminMemo">
   	update order_info set admin_memo = #{memo} where order_info_no = #{orderInfoNo}
   </update>
-
+  
+  <delete id="deleteOrderByOrderNo">
+  	delete from tb_order where order_no = #{orderNo}
+  </delete>
 </mapper>

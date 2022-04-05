@@ -54,36 +54,36 @@
 						</div>
 						<br> <br>
 
-						<div class="box-tools pull-right" style="margin-top: 20px;">
-							<form id="form_search" name="form_search" method="post" action="?tpf=admin/product/list_sub">
+						<form id="form_search" name="form_search" method="post" action="?tpf=admin/product/list_sub">
+							<div class="box-tools pull-right" style="margin-top: 20px;">
 								<input type="hidden" name="locale" value="ko"> <input type="hidden" name="category_code" value=""> <input type="hidden" name="is_best" value=""> <input type="hidden" name="is_new" value=""> <input type="hidden" name="is_event" value=""> <input type="hidden" name="status" value="">
 								<div class="has-feedback">
 									<span> <input type="text" name="keyword" value="" class="form-control input-sm" placeholder="상품 검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
 									</span>
 								</div>
-						</div>
-						<div class="box-tools pull-right" style="margin-top: 20px;">
-							<div class="has-feedback">
-								<span style="float: left; width: 180px;"> <input type="checkbox" name="is_best" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_new=&is_event=&is_best=y'" value="y"> BEST <input type="checkbox" name="is_new" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_best=&is_event=&is_new=y'" value="y"> NEW <input type="checkbox" name="is_event" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_best=&is_new=&is_event=y'" value="y"> EVENT
-								</span> <select name="field" onchange="location.href='index.php?tpf=admin/product/list_sub&is_best=&is_new=&is_event=&status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
-									<option value="">상태</option>
-									<option value="y">보임</option>
-									<option value="n">숨김</option>
-								</select> <select name="field" class="form-control input-sm" style="float: left; padding-right: 0; width: 100px;">
-									<option value="title">상품명</option>
-								</select>
 							</div>
-							</form>
-						</div>
+							<div class="box-tools pull-right" style="margin-top: 20px;">
+								<div class="has-feedback">
+									<span style="float: left; width: 180px;"> <input type="checkbox" name="is_best" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_new=&is_event=&is_best=y'" value="y"> BEST <input type="checkbox" name="is_new" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_best=&is_event=&is_new=y'" value="y"> NEW <input type="checkbox" name="is_event" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_best=&is_new=&is_event=y'" value="y"> EVENT
+									</span> <select name="field" onchange="location.href='index.php?tpf=admin/product/list_sub&is_best=&is_new=&is_event=&status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
+										<option value="">상태</option>
+										<option value="y">보임</option>
+										<option value="n">숨김</option>
+									</select> <select name="field" class="form-control input-sm" style="float: left; padding-right: 0; width: 100px;">
+										<option value="title">상품명</option>
+									</select>
+								</div>
+							</div>
+						</form>
 
 						<p class="text-light-blue">
 							<i class="fa fa-fw fa-list-ul"></i> <a href="?tpf=admin/product/list_sub&locale=ko">ROOT</a>
 						</p>
 						<label>총 ${productListCnt } 건</label>
 						
-						<form name="form_list" method="post" action="?tpf=admin/product/process">
+						<form:form name="form_list" method="post" action="${pageContext.request.contextPath }/product/delete">
+							<input type="hidden" name="mode" id="mode">
 							<table class="table table-bordered table-hover">
-								<input type="hidden" name="mode" id="mode">
 								<thead>
 									<tr>
 										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
@@ -101,7 +101,7 @@
 								</thead>
 								<c:forEach var="product" items="${productList }">
 									<tr>
-										<td><input type="checkbox" name="list[]" value="292" /></td>
+										<td><input type="checkbox" name="list[]" value="${product.productNo }" /></td>
 										<td>${product.productNo }</td>
 										<td><img src="${product.imgUrl }" style="width: 90px;"></td>
 										<td>${product.categoryName }</td>
@@ -111,12 +111,12 @@
 										<td><fmt:formatDate value="${product.regDate}" pattern="yyyy-MM-dd" /></td>
 										<td><button type="button" class="btn btn-success btn-xs">보임</button></td>
 										<td><input type="radio" name="order_code" value="10" /></td>
-										<td><button type="button" onclick="onclickUpdate(292);" class="btn btn-primary btn-xs">수정하기</button></td>
+										<td><button type="button" onclick="onclickUpdate('${product.productNo}');" class="btn btn-primary btn-xs">수정하기</button></td>
 									</tr>
 								</c:forEach>
 
 							</table>
-						</form>
+						</form:form>
 						<br>
 
 						<button type="button" onclick="selectDelete('deleteProduct');" class="btn btn-danger btn-sm">
@@ -128,7 +128,7 @@
 						<button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm" style="margin-left: 20px;">
 							<i class="fa fa-file-excel-o"></i> Excel 다운로드
 						</button>
-						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do">
+						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}" >
 							<input type="hidden" name="download_type" value="product"/>
 							<input type="hidden" name="mode" value="downloadExcel"> 
 							<input type="hidden" name="search_data">
@@ -162,8 +162,9 @@
         }
         
         function setData(code) {
+        	console.log(code);
             $.ajax({
-				url:'http://demoshop.mir9.kr/api/process.php',
+				url:'${pageContext.request.contextPath}/',
 				type:'post',
 				dataType:'json',
 				data:{

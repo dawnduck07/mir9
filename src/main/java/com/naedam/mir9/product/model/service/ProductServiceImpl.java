@@ -26,4 +26,10 @@ public class ProductServiceImpl implements ProductService{
 		return productDao.selectProductExcelForm();
 	}
 
+	@Override
+	public int deleteProductByProductNo(String productNo) {
+		// TODO Auto-generated method stub
+		return productDao.deleteProductByProductNo(productNo);
+	}
+	
 }
