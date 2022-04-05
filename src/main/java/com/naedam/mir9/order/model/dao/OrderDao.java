@@ -33,6 +33,8 @@ public interface OrderDao {
 
 	List<OrderExcelForm> selectOrderExcelForm();
 
+	int deleteOrderByOrderNo(String orderNo);
+
 
 
 }

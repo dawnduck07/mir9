@@ -1,20 +1,26 @@
 package com.naedam.mir9.product.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.category.model.service.CategoryService;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.option.model.service.OptionService;
 import com.naedam.mir9.option.model.vo.Option;
-import com.naedam.mir9.product.model.service.productService;
+import com.naedam.mir9.product.model.service.ProductService;
+import com.naedam.mir9.product.model.vo.ProductDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductController {
 	@Autowired
-	private productService productService;
+	private ProductService productService;
 	@Autowired
 	private OptionService optionService;
 	@Autowired
@@ -52,7 +58,14 @@ public class ProductController {
 	}
 	
 	@GetMapping("/list_sub")
-	public void list_sub() {}
+	public void list_sub(Model model) {
+		List<ProductDetail> productList = productService.selectAllProductList();
+		int productListCnt = productList.size();
+		
+		model.addAttribute("productList",productList);
+		model.addAttribute("productListCnt",productListCnt);
+		
+	}
 	
 	@GetMapping("/tree_model")
 	public void tree_model(Model model) {
@@ -75,7 +88,6 @@ public class ProductController {
 									if(c2.getCategoryNo() == c3.getParentNo()) {
 										sb.append("\n\t\t,['"+ c3.getCategoryName()+ "',' ']" );
 									}
-
 								}
 							}
 							sb.append(",]\n");
@@ -85,14 +97,10 @@ public class ProductController {
 							flag = false;
 							break;
 						}
-						
 					}
 				}
-				// 조건만 잘 세우자!
 				if(flag) {
 					sb.append(",]");					
-				}else {
-										
 				}
 			}
 			
@@ -100,10 +108,22 @@ public class ProductController {
 		sb.append(",]");
 		
 		String result = sb.toString();
-		log.debug("result = {}", result);
 		
 		
 		model.addAttribute("result",result);
 		
+	}
+	
+	@PostMapping("/delete")
+	public String productDelete(HttpServletRequest request, RedirectAttributes redirectAttr) {
+		List<String> productrNoList =  Arrays.asList(request.getParameterValues("list[]"));
+		int result = 0;
+		for(String productNo : productrNoList) {
+			result = productService.deleteProductByProductNo(productNo);
+		}
+		
+		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
+		
+		return "redirect:/product/list_sub";
 	}
 }

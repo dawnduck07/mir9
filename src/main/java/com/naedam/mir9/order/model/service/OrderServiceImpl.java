@@ -85,6 +85,12 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.selectOrderExcelForm();
 	}
 
+	@Override
+	public int deleteOrderByOrderNo(String orderNo) {
+		// TODO Auto-generated method stub
+		return orderDao.deleteOrderByOrderNo(orderNo);
+	}
+
 
 	
 	

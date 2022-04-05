@@ -26,6 +26,11 @@
 	<http auto-config="true">
 		<!-- 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
 		<intercept-url pattern="/" access="permitAll"/>
+		<!-- 유광현 작업영역 -->
+		<intercept-url pattern="/product/**" access="permitAll"/>
+		<intercept-url pattern="/excel/**" access="permitAll"/>
+		<intercept-url pattern="/order/**" access="permitAll"/>
+		
 		<!-- 포워딩되는 인덱스 페이지에 대한 접근권한을 모두에게 준다. -->
 		<intercept-url pattern="/index.jsp" access="permitAll"/>
 		
