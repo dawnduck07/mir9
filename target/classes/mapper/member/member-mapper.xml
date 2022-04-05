@@ -97,4 +97,14 @@
 	FROM
 		member
 </select>
+
+<!-- id 중복 검사 -->
+<select id="selectOneMemberByMap" resultType="member">
+	SELECT
+		*
+	FROM
+		member
+	WHERE
+		id = #{id}
+</select>
 </mapper>

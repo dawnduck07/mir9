@@ -1,6 +1,7 @@
 package com.naedam.mir9.member.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
@@ -18,6 +19,9 @@ public interface MemberDao {
 
 	// 회원 리스트 전체 게시물 수
 	int selectMemberListCount();
+
+	// id 중복 검사
+	Member selectOneMemberByMap(Map<String, Object> param);
 
 	
 

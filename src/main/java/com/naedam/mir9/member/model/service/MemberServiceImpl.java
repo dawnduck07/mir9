@@ -1,6 +1,7 @@
 package com.naedam.mir9.member.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,15 @@ public class MemberServiceImpl implements MemberService {
 	public int selectMemerListCount() {
 		return memberDao.selectMemberListCount();
 	}
+
+	// id 중복 검사
+	@Override
+	public Member selectOneMemberByMap(Map<String, Object> param) {
+		return memberDao.selectOneMemberByMap(param);
+	}
+
+	
+
 
 
 	

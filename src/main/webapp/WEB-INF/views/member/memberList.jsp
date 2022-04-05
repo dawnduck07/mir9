@@ -222,9 +222,9 @@
 						<table class="table table-bordered">
 							<tr>
 								<td class="menu">아이디</td>
-								<td align="left"><input type="text" name="id"
-									class="form-control input-sm" style="width: 30%; float: left;" />&nbsp;
-									<button type="button" id="btn_check_id"
+								<td align="left">
+									<input type="text" id="id" name="id" class="form-control input-sm" style="width: 30%; float: left;" />&nbsp;
+									<button type="button" id="btn_check_id" value="N"
 										class="btn btn-sm btn-default" onclick="onclickCheckId();">아이디
 										중복확인</button> 4~12자로 입력하세요.</td>
 							</tr>
@@ -519,6 +519,46 @@ function onclickInsert(){
 // 아이디 중복 확인
 function onclickCheckId(){
 	console.log("아이디 중복 확인");
-}
+	var id = $("#id").val();
+	console.log("id = " + id);
+	
+	// id 값을 입력하지 않았을 때
+	if(id == ""){
+		alert("id를 정확히 입력해주세요");
+		// 해당 위치로 입력 커서 이동
+		$("#id").focus();
+		return;
+	}
+	
+	// 아이디 개수 유효성 검사
+	if(!/^[a-zA-Z0-9]{4,12}$/.test(id)){
+		alert("id를 정확히 입력해주세요");
+		$("#id").focus();
+		return;
+	}
+	
+	const data = {
+			id : id
+	};
+	const jsonData = JSON.stringify(data);
+	
+	// 비동기 중복 검사
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/checkIdDuplicate.do`,
+		data : data,
+		contentType : "application/json ; charset=utf-8",
+		method : "GET",
+		success(data) {
+			const {available} = data;
+			if(available){
+				alert("사용 가능한 아이디 입니다.");
+			}
+			else{
+				alert("[" + id + "]은 이미 사용중인 아이디 입니다. \n\n 다른 아이디를 사용하시기 바랍니다.")
+			}
+		},
+		error : console.log
+	});
+};
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
