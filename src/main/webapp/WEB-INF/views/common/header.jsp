@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -27,19 +27,24 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/76afde4c0b.js"
 	crossorigin="anonymous"></script>
 <!-- Ionicons -->
 <script src="https://unpkg.com/ionicons@4.4.1/dist/ionicons.js"></script>
 <!-- jvectormap -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery.vector-map.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/jquery.vector-map.css">
 <!-- Theme style -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
-<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
+<link href="${pageContext.request.contextPath}/resources/css/admin.css"
+	rel="stylesheet" type="text/css" />
 
 <!-- fullcalendar -->
 <link href="//mir9.co.kr/resource/css/bootstrap-colorselector.css"
@@ -61,42 +66,44 @@
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
 <script type="text/javascript">
-	
-	$(function(){
-		
-		$("a[name='board']").on("click", function(){
+	$(function() {
 
-			$.ajax({
-				url : "/mir9/board/json/listBoard",
-				method : "GET" ,
-				dataType : "json" ,
-				headers : {
-					"Accept" : "application/json",
-					"Content-Type" : "application/json"
-				},
-				success : function(Data, status){
-					var display = '';
-					if(Data.length > 0){
-						for(var i = 0; i < Data.length; i++){
-							display = "<li>"
-									+ "<a href=/mir9/board/postList?boardNo="+Data[i].boardNo+">"
-									+ "<i class='fa fa-circle-o'></i> "+Data[i].boardTitle
-									+ "</a>"
-									+ "</li>"
-							$('#boardMenu').append(display);
-						}
-					}
-					
-				}
-			})
-				
-		})		
+		$("a[name='board']")
+				.on(
+						"click",
+						function() {
 
-		
+							$
+									.ajax({
+										url : "/mir9/board/json/listBoard",
+										method : "GET",
+										dataType : "json",
+										headers : {
+											"Accept" : "application/json",
+											"Content-Type" : "application/json"
+										},
+										success : function(Data, status) {
+											var display = '';
+											if (Data.length > 0) {
+												for (var i = 0; i < Data.length; i++) {
+													display = "<li>"
+															+ "<a href=/mir9/board/postList?boardNo="
+															+ Data[i].boardNo
+															+ ">"
+															+ "<i class='fa fa-circle-o'></i> "
+															+ Data[i].boardTitle
+															+ "</a>" + "</li>"
+													$('#boardMenu').append(
+															display);
+												}
+											}
+
+										}
+									})
+
+						})
+
 	})
-
-	
-
 </script>
 <!-- redirect Msg 처리 : deliveryController 참조 -->
 <c:if test="${not empty msg}">
@@ -105,7 +112,7 @@
 	</script>
 </c:if>
 
-	
+
 </head>
 <body class="hold-transition skin-red sidebar-mini">
 	<iframe name="iframe_process" width="0" height="0" frameborder="0"
@@ -128,22 +135,34 @@
 
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
-						<li class="dropdown user user-menu"><a href="#"
+						<li class="dropdown user user-menu">
+						
+						<a href="#"
 							class="dropdown-toggle" data-toggle="dropdown"> <img
 								src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/img/avatar5.png"
-								class="user-image" alt="User Image" /> <span class="hidden-xs">${loginMember.lastName}${loginMember.firstName}님</span>
+								class="user-image" alt="User Image" /> <span class="hidden-xs"><sec:authentication property="principal.username" />
+										<sec:authentication property="authorities" />${loginMember.lastName}${loginMember.firstName}님</span>
 						</a>
 							<ul class="dropdown-menu">
 								<li class="user-header"><img
 									src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/img/avatar5.png"
 									class="img-circle" alt="User Image" />
 									<p>
-										${loginMember.lastName}${loginMember.firstName}님 - Web Administrator <small>MIR9 SHOP 관리자</small>
+										<sec:authentication property="principal.username" />
+										${loginMember.lastName}${loginMember.firstName}님 - Web
+										Administrator <small>MIR9 SHOP 관리자</small>
 									</p></li>
 								<li class="user-footer">
 									<div class="pull-right">
-										<a onclick="location.href='${pageContext.request.contextPath}/member/memberLogout.do'" class="btn btn-danger btn-flat">Sign
-											out</a>
+									<form:form
+										name="memberLogoutFrm"
+										method="POST"
+										action="${pageContext.request.contextPath}/member/memberLogout.do">
+										<a
+											onclick="logoutSubmit()"
+											class="btn btn-danger btn-flat"
+											type="submit">Sign out</a>
+									</form:form>
 									</div>
 								</li>
 							</ul></li>
@@ -169,8 +188,8 @@
 									class="fa fa-circle-o"></i> 주문 리스트</a></li>
 							<li><a href="https://iniweb.inicis.com/security/login.do"
 								target="_new"><i class="fa fa-circle-o"></i> 이니시스 상점관리자</a></li>
-							<li><a href="/order/log_list"><i
-									class="fa fa-circle-o"></i>카드결제로그 리스트</a></li>
+							<li><a href="/order/log_list"><i class="fa fa-circle-o"></i>카드결제로그
+									리스트</a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i
 							class="fa fa-file-text-o"></i> <span>메뉴 관리</span> <i
@@ -188,14 +207,14 @@
 									class="fa fa-circle-o"></i> 메타 관리</a></li>
 						</ul></li>
 
-					<li class="treeview"><a href="#" name="board"> <i class="fa fa-list-alt"></i> 
-					<span>게시판 관리</span> <i class="fa fa-angle-left pull-right"></i>
+					<li class="treeview"><a href="#" name="board"> <i
+							class="fa fa-list-alt"></i> <span>게시판 관리</span> <i
+							class="fa fa-angle-left pull-right"></i>
 					</a>
-						<ul class="treeview-menu" id="boardMenu" >
+						<ul class="treeview-menu" id="boardMenu">
 							<li><a href="/mir9/board/listBoard"><i
 									class="fa fa-circle-o"></i> 리스트</a></li>
-						</ul>
-					</li>
+						</ul></li>
 					<li class="treeview"><a href="#"> <i class="fa fa-gift"></i>
 							<span>제품</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
@@ -211,7 +230,7 @@
 							<span>회원 관리</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li class="active"><a href="?tpf=admin/member/list"><i
+							<li class="active"><a href="${pageContext.request.contextPath}/member/list"><i
 									class="fa fa-circle-o"></i> 회원 리스트</a></li>
 							<li><a href="?tpf=admin/member/withdraw_list"><i
 									class="fa fa-circle-o"></i> 탈퇴회원 리스트</a></li>
@@ -308,3 +327,10 @@
 			</section>
 		</aside>
 		<!-- /.sidebar -->
+		
+		<script>
+		function logoutSubmit(){
+			console.log("logoutSubmit 도착했나요?");
+			$(document.memberLogoutFrm).submit();
+		}
+		</script>

@@ -90,12 +90,14 @@
 						method="POST"
 						style="padding: 20px;">
 						
+						<c:if test="${param.error != null}">
+							<span class="text-danger" style="font-weight:bold; font-size:120%;"> 아이디 또는 비밀번호가 일치하지 않습니다.</span>
+						</c:if>
 						<div class="form-group has-feedback">
 							<input type="text" name="id" class="form-control"
 								placeholder="ID" /> <span
 								class="glyphicon glyphicon-pencil form-control-feedback"></span>
 						</div>
-
 						<div class="form-group has-feedback">
 							<input type="password" name="password"
 								class="form-control" placeholder="PASSWORD" /> <span
