@@ -4,6 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -209,7 +211,7 @@
 							<span>회원 관리</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li class="active"><a href="?tpf=admin/member/list"><i
+							<li class="active"><a href="${pageContext.request.contextPath}/member/list"><i
 									class="fa fa-circle-o"></i> 회원 리스트</a></li>
 							<li><a href="?tpf=admin/member/withdraw_list"><i
 									class="fa fa-circle-o"></i> 탈퇴회원 리스트</a></li>
