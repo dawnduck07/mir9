@@ -21,12 +21,19 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String goIndex(Locale locale, Model model) {
 		logger.debug("HomeController ---- forward ----> index.jsp");
 		
 		// welcompage
-		//return "forward:/index.jsp";
-		return "login";
+		return "forward:/index.jsp";
 	}
+	
+	@RequestMapping(value = "/dashBoard", method = RequestMethod.GET)
+	public String goDashBoard(Locale locale, Model model) {
+		logger.debug("HomeController ---- forward ----> dashBoard");
+		
+		return "forward:/dashBoard.jsp";
+	}
+	
 	
 }
