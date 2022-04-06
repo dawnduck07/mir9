@@ -40,7 +40,7 @@
 <div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
     <div class="modal-dialog" style="width:600px;">
         <div class="modal-content">
-            <form name="form_register" method="post" onsubmit="return false;" action="?tpf=admin/product/process">
+            <form name="form_register" method="post" onsubmit="return false;" action="">
             <input type="hidden" name="mode" id="mode" value="insertCategory">
             <input type="hidden" name="code" id="code">
             <input type="hidden" name="category_code" id="category_code">
@@ -71,7 +71,7 @@
                 <td class="menu">상태</td>
                 <td>
                 <select name="status" id="status" class="form-control input-sm" style="width:100px;">
-      <option value="y">보임</option>      <option value="n">숨김</option>                </select>
+      <option value="Y">보임</option>      <option value="N">숨김</option>                </select>
                 </td>
             </tr>
             </form>
@@ -87,5 +87,43 @@
 </div>
 </div><!-- /.content-wrapper -->
 
+<script>
+	function register(){
+		if($('#mode').val() == 'updateCategory'){
+			var cteNo = $('#code').val()
+			updateCategory(cteNo);
+		}else{
+			console.log('insert')
+		}
+	}
+	
+	function updateCategory(cteNo){
+		const formData = new FormData(document["form_register"])
+		var obj = {};
+		for(const [k, v] of formData){
+			obj[k] = v;
+		};
 
+		const jsonStr = JSON.stringify(obj);
+		console.log(jsonStr)
+		
+		 $.ajax({
+             url:'${pageContext.request.contextPath}/category/update',
+             type:'get',
+             dataType:'json',
+             headers: {
+					"${_csrf.headerName}" : "${_csrf.token}"
+				},
+             data: {
+            	 jsonStr : jsonStr
+             },
+             contentType: "application/json; charset=utf-8",
+             success(data){
+                 if(data > 0) alert('카테고리가 수정되었습니다.')
+                 location.reload();
+             },
+             error: console.log
+         });
+	}
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

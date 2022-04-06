@@ -1,6 +1,7 @@
 package com.naedam.mir9.category.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,18 @@ public class CategoryDaoImpl implements CategoryDao {
 	public List<Category> selectProductCategoryByLevel(int level) {
 		// TODO Auto-generated method stub
 		return session.selectList("category.selectProductCategoryByLevel", level);
+	}
+
+	@Override
+	public Category selectOneProductCategoryByCteNo(String cteNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("category.selectOneProductCategoryByCteNo",cteNo);
+	}
+
+	@Override
+	public int updateProductCategoryByParam(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("category.updateProductCategoryByParam", param);
 	}
 	
 	
