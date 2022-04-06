@@ -1,6 +1,7 @@
 package com.naedam.mir9.member.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
@@ -19,6 +20,9 @@ public interface MemberService {
 
 	// 회원 리스트 전체 게시물 수 
 	int selectMemerListCount();
+
+	// id 중복 검사
+	Member selectOneMemberByMap(Map<String, Object> param);
 
 	
 

@@ -3,14 +3,15 @@ package com.naedam.mir9.member.controller;
 import java.beans.PropertyEditor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.member.model.service.MemberService;
@@ -55,6 +58,21 @@ public class MemberController {
 		
 		return "member/memberList";
 	}
+	
+	// id 중복 검사
+	@ResponseBody
+	@GetMapping("/checkIdDuplicate.do")
+	public Map<String, Object> checkIdDuplicate(@RequestParam Map<String, Object> param) {
+		log.debug("id = {}", param);
+		Map<String, Object> map = new HashMap<>();
+		Member member = memberService.selectOneMemberByMap(param);
+		log.debug("member = {}", member);
+
+		map.put("available", member == null);
+		
+		return map;
+	}
+	
 	
 	// 회원 적립금 내역보기
 	@GetMapping("/memberPointList/{memberNo}")
