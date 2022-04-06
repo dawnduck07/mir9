@@ -93,7 +93,7 @@ public class ProductController {
 		
 		List<Category> categoryList = categoryService.selectProductCategory(type);
 		Boolean flag = false;
-		sb.append("['Home', ' '\n");
+		sb.append("['Home', '" + url + "'\n");
 		
 		for(Category c1 : categoryList) {
 			if(c1.getLevel() == 1) {
@@ -105,7 +105,7 @@ public class ProductController {
 							for(Category c3 : categoryList) {
 								if(c3.getLevel() == 3) {
 									if(c2.getCategoryNo() == c3.getParentNo()) {
-										sb.append("\n\t\t,['"+ c3.getCategoryName() + "','"+ url + c1.getCategoryNo() +"']" );
+										sb.append("\n\t\t,['"+ c3.getCategoryName() + "','"+ url + c3.getCategoryNo() +"&']" );
 									}
 								}
 							}
@@ -167,6 +167,7 @@ public class ProductController {
 	@GetMapping("/productCategory_sub")
 	public void productCategory_sub(@RequestParam(defaultValue = "0") int cteNo, Model model) {
 		List<Category> cteList = new ArrayList<Category>(); 
+		
 		if(cteNo == 0) {
 			cteList = categoryService.selectProductCategoryByLevel(1);
 		}else {
@@ -174,6 +175,6 @@ public class ProductController {
 		}
 		
 		model.addAttribute("cteList",cteList);
-		
+		model.addAttribute("parentNo",cteNo);
 	}
 }

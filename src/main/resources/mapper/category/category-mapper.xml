@@ -94,8 +94,23 @@
   </select>
   
   
+  <insert id="insertProductCategoryByParam">
+	  <choose>
+		  <when test="parent_no == 0 ">
+		  	insert into category values(nextval(seq_category_no), #{title}, null, 'product', #{status})
+		  </when>
+		  <otherwise>
+		    insert into category values(nextval(seq_category_no), #{title}, #{parent_no}, 'product', #{status})
+		  </otherwise>
+	  </choose>
+  </insert>
+  
   
   <update id="updateProductCategoryByParam">
   	update category set category_name = #{title}, status = #{status} where category_no = #{code}
   </update>
+  
+  <delete id="deleteCategoryByCteNo">
+  	delete from category where category_no = #{cteNo} or parent_no = #{cteNo}
+  </delete>
 </mapper>

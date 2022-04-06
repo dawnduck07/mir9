@@ -43,6 +43,18 @@ public class CategoryDaoImpl implements CategoryDao {
 		// TODO Auto-generated method stub
 		return session.update("category.updateProductCategoryByParam", param);
 	}
+
+	@Override
+	public int insertProductCategoryByParam(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.insert("category.insertProductCategoryByParam", param);
+	}
+
+	@Override
+	public int deleteCategoryByCteNo(String cteNo) {
+		// TODO Auto-generated method stub
+		return session.delete("category.deleteCategoryByCteNo", cteNo);
+	}
 	
 	
 }

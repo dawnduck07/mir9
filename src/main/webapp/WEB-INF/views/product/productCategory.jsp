@@ -41,6 +41,7 @@
     <div class="modal-dialog" style="width:600px;">
         <div class="modal-content">
             <form name="form_register" method="post" onsubmit="return false;" action="">
+            <input type="hidden" name="parent_no" id="parent_no" />
             <input type="hidden" name="mode" id="mode" value="insertCategory">
             <input type="hidden" name="code" id="code">
             <input type="hidden" name="category_code" id="category_code">
@@ -93,7 +94,7 @@
 			var cteNo = $('#code').val()
 			updateCategory(cteNo);
 		}else{
-			console.log('insert')
+			insertCategory();
 		}
 	}
 	
@@ -124,6 +125,34 @@
              },
              error: console.log
          });
+	}
+	
+	function insertCategory(){
+		const formData = new FormData(document["form_register"])
+		var obj = {};
+		for(const [k, v] of formData){
+			obj[k] = v;
+		};
+		const jsonStr = JSON.stringify(obj);
+		console.log(jsonStr)
+		
+		$.ajax({
+            url:'${pageContext.request.contextPath}/category/insert',
+            type:'get',
+            dataType:'json',
+            headers: {
+					"${_csrf.headerName}" : "${_csrf.token}"
+				},
+            data: {
+           	 jsonStr : jsonStr
+            },
+            contentType: "application/json; charset=utf-8",
+            success(data){
+                if(data > 0) alert('카테고리가 추가되었습니다.')
+                location.reload();
+            },
+            error: console.log
+        });
 	}
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
