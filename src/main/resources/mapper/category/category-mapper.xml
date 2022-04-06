@@ -28,4 +28,64 @@
 	
 	SELECT category_no, IFNULL(parent_no, 0) AS parent_no, category_name, level FROM cte
   </select>
+  
+  <select id="selectProductCategoryChildByParentNo" resultType="category">
+    WITH recursive cte AS (
+
+	SELECT 
+		category_no, 
+		category_name, 
+		parent_no,
+		STATUS,
+		1 AS level
+	FROM category
+	WHERE parent_no IS NULL AND category_type = 'product'
+	
+	UNION ALL
+	
+	SELECT 
+		c.category_no,
+		c.category_name,
+		c.parent_no,
+		c.status,
+		1+level AS level
+	FROM category c 
+	INNER JOIN cte
+	ON c.parent_no = cte.category_no
+	)
+	
+	SELECT category_no, IFNULL(parent_no, 0) AS parent_no, category_name, STATUS, level FROM cte
+	WHERE parent_no = #{cteNo}
+	ORDER BY category_no
+  </select>
+  
+  <select id="selectProductCategoryByLevel" resultType="category">
+    WITH recursive cte AS (
+
+	SELECT 
+		category_no, 
+		category_name, 
+		parent_no,
+		STATUS,
+		1 AS level
+	FROM category
+	WHERE parent_no IS NULL AND category_type = 'product'
+	
+	UNION ALL
+	
+	SELECT 
+		c.category_no,
+		c.category_name,
+		c.parent_no,
+		c.status,
+		1+level AS level
+	FROM category c 
+	INNER JOIN cte
+	ON c.parent_no = cte.category_no
+	)
+	
+	SELECT category_no, IFNULL(parent_no, 0) AS parent_no, category_name, STATUS, level FROM cte
+	WHERE level = #{level}
+	ORDER BY category_no
+  </select>
 </mapper>

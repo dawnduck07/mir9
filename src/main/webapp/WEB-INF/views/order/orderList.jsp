@@ -304,7 +304,7 @@
 				
 		        var t_invoice = ${order.trackingNo};
 		        // DB에서 온거. 동일한 운송장의 하루 요청 건수를 초과 하였습니다.
-		        //var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
+		        var url = "http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice;
 		        var url ="http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=FV9kkSwcgfdK76xfE8qHIA&t_code=04&t_invoice=647223588260";
 			    var statusNo = 0;
 

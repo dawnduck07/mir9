@@ -18,6 +18,18 @@ public class CategoryDaoImpl implements CategoryDao {
 		// TODO Auto-generated method stub
 		return session.selectList("category.selectProductCategory", type);
 	}
+
+	@Override
+	public List<Category> selectProductCategoryChildByParentNo(int cteNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("category.selectProductCategoryChildByParentNo", cteNo);
+	}
+
+	@Override
+	public List<Category> selectProductCategoryByLevel(int level) {
+		// TODO Auto-generated method stub
+		return session.selectList("category.selectProductCategoryByLevel", level);
+	}
 	
 	
 }

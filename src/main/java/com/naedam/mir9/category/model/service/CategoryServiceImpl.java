@@ -18,6 +18,18 @@ public class CategoryServiceImpl implements CategoryService {
 		// TODO Auto-generated method stub
 		return categoryDao.selectProductCategory(type);
 	}
+
+	@Override
+	public List<Category> selectProductCategoryChildByParentNo(int cteNo) {
+		// TODO Auto-generated method stub
+		return categoryDao.selectProductCategoryChildByParentNo(cteNo);
+	}
+
+	@Override
+	public List<Category> selectProductCategoryByLevel(int level) {
+		// TODO Auto-generated method stub
+		return categoryDao.selectProductCategoryByLevel(level);
+	}
 	
 	
 }
