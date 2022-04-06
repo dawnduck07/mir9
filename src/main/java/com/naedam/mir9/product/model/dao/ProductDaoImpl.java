@@ -6,8 +6,12 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.naedam.mir9.option.model.vo.ProductOptionDetail;
+import com.naedam.mir9.product.model.vo.Product;
 import com.naedam.mir9.product.model.vo.ProductDetail;
+import com.naedam.mir9.product.model.vo.ProductDiscription;
 import com.naedam.mir9.product.model.vo.ProductExcelForm;
+import com.naedam.mir9.product.model.vo.ProductImg;
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
@@ -31,5 +35,30 @@ public class ProductDaoImpl implements ProductDao {
 		// TODO Auto-generated method stub
 		return session.delete("product.deleteProductByProductNo",productNo);
 	}
+
+	@Override
+	public Product selectOneProductByProductNo(String productNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("product.selectOneProductByProductNo",productNo);
+	}
+
+	@Override
+	public List<ProductImg> selectProductImgsByProductNo(String productNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("product.selectProductImgsByProductNo", productNo);
+	}
+
+	@Override
+	public List<ProductOptionDetail> selectProductOptionDetailByOptionNo(int optionNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("product.selectProductOptionDetailByOptionNo", optionNo);
+	}
+
+	@Override
+	public List<ProductDiscription> selectProductDiscriptionByProductNo(String productNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("product.selectProductDiscriptionByProductNo",productNo);
+	}
+	
 	
 }

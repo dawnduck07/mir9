@@ -15,6 +15,24 @@
   	SELECT * FROM v_product_excel_form
   </select>
   
+  <select id="selectOneProductByProductNo" resultType="product">
+  	select * from product where product_no = #{productNo}
+  </select>
+  
+  <select id="selectProductImgsByProductNo" resultType="productImg">
+  	select * from product_img where product_no = #{productNo}
+  </select>
+  
+  <select id="selectProductOptionDetailByOptionNo" resultType="productOptionDetail">
+  	SELECT * 
+	FROM product_option a 
+		JOIN option_value b ON(a.OPTION_NO = b.OPTION_NO)
+	WHERE a.option_no = #{optionNo}
+  </select>
+  
+  <select id="selectProductDiscriptionByProductNo" resultType="productDiscription">
+  	SELECT * from product_discription WHERE product_no = #{productNo}
+  </select>
   
   <delete id="deleteProductByProductNo">
   	delete from product where product_no = #{productNo}

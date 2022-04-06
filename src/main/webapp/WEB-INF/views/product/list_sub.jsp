@@ -32,7 +32,6 @@
 
 <body class="hold-transition login-page">
 	<!-- content-wrapper -->
-	<iframe name="iframe_process" width="0" height="0" frameborder="0"></iframe>
 	<section class="content" style="padding: 15px 15px 0 15px;">
 		<div class="row">
 			<div class="col-xs-12">
@@ -80,7 +79,7 @@
 							<i class="fa fa-fw fa-list-ul"></i> <a href="?tpf=admin/product/list_sub&locale=ko">ROOT</a>
 						</p>
 						<label>총 ${productListCnt } 건</label>
-						
+
 						<form:form name="form_list" method="post" action="${pageContext.request.contextPath }/product/delete">
 							<input type="hidden" name="mode" id="mode">
 							<table class="table table-bordered table-hover">
@@ -128,10 +127,8 @@
 						<button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm" style="margin-left: 20px;">
 							<i class="fa fa-file-excel-o"></i> Excel 다운로드
 						</button>
-						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}" >
-							<input type="hidden" name="download_type" value="product"/>
-							<input type="hidden" name="mode" value="downloadExcel"> 
-							<input type="hidden" name="search_data">
+						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
+							<input type="hidden" name="download_type" value="product" /> <input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data">
 						</form>
 
 						<div style="text-align: right;">
@@ -162,67 +159,69 @@
         }
         
         function setData(code) {
-        	console.log(code);
             $.ajax({
-				url:'${pageContext.request.contextPath}/',
+				url:'${pageContext.request.contextPath}/product/fillForm',
 				type:'post',
 				dataType:'json',
-				data:{
-					method:'BizProduct.infoProduct',
-                    code:code
+		        headers: {
+						"${_csrf.headerName}" : "${_csrf.token}"
 				},
-				success:function(data, textStatus, jqXHR){
-                    var json_data = data.data;
-                    parent.clearOptionList();
-
-                    parent.$('form[name="form_register"] #mode').val('updateProduct');
-                    parent.$('#code').val(code);
-
-                    var itemCategoryCode = json_data.category_code;
-
-					//제품 카테고리 불러오기
+				data:{
+                    productNo : code
+				},
+				success(data){
+                    var product = data[0];
+					var imgs = data[1];
+					var options = data[2];
+					var discriptions = data[3];
+					
+					console.log(options)
+					
 					parent.$('#category_depth').html('');
-					parent.Depth = 0
+					parent.Depth = 3
 					parent.getCategory(itemCategoryCode);
-                    parent.$('[name=model]').val(json_data.model);
-                    parent.$('[name=title]').val(json_data.title);
-                    parent.$('[name=title_eng]').val(json_data.title_eng);
-                    parent.$('[name=list_title]').val(json_data.list_title);
-                    parent.$('[name=list_title_eng]').val(json_data.list_title_eng);
-                    parent.$('[name=brief]').val(json_data.brief);
-                    parent.$('[name=keyword]').val(json_data.keyword);
-                    parent.$('[name=brief_eng]').val(json_data.brief_eng);
-                    parent.$('[name=consumer_price]').val(json_data.consumer_price);
-                    parent.$('[name=sale_price]').val(json_data.sale_price);
-                    parent.$('[name=point]').val(json_data.point);
-                    parent.objEditor.setData(json_data.content);
-                    //parent.$('[name=is_main]').val(json_data.is_main);
-					if (json_data.is_best == 'y') parent.$('input:checkbox[id="is_best"]').prop('checked',true);
-                    if (json_data.is_new == 'y') parent.$('input:checkbox[id="is_new"]').prop('checked',true);
-                    if (json_data.is_event == 'y') parent.$('input:checkbox[id="is_event"]').prop('checked',true);
-                    if (json_data.is_soldout == 'y') parent.$('input:checkbox[id="is_soldout"]').prop('checked',true);
-                    parent.$('[name=status]').val(json_data.status);
+					
+					parent.form_register.reset();
+					
+					parent.$('[name=model]').val(product.modelName);
+	                parent.$('[name=title]').val(product.productName);
+	                parent.$('[name=title_eng]').val('test3');
+	                parent.$('[name=list_title]').val(product.listTitle);
+	                parent.$('[name=list_title_eng]').val('test5');
+	                
+	                $.each(discriptions, (k, v)=>{
+	                	if(v.discriptionLevel == 1){
+			                parent.$('[name=brief]').val(v.content);
+	                	}else if(v.discriptionLevel == 2){
+			                parent.$('#content').val(v.content)
+	                	}
+	                });
+	                parent.$('[name=brief_eng]').val('test8'); // 
+	                
+	                
+	                parent.$('[name=keyword]').val('test7'); // 키워드
+	                parent.$('[name=consumer_price]').val(product.retailPrice);
+	                parent.$('[name=sale_price]').val(product.salePrice);
+	                parent.$('[name=point]').val(product.individualPoint);
+	                if (product.productBest== 'Y') parent.$('input:checkbox[id="is_best"]').prop('checked',true);
+                    if (product.productNew == 'Y') parent.$('input:checkbox[id="is_new"]').prop('checked',true);
+                    if (product.productEvent == 'Y') parent.$('input:checkbox[id="is_event"]').prop('checked',true);
+                    if (product.isSoldOut == 'Y') parent.$('input:checkbox[id="is_soldout"]').prop('checked',true);
+                    parent.$('[name=status]').val(product.status);
+					
                     parent.$("span[id^='display_file']").css('display','none');
-                    if (typeof json_data.files == 'object') {
-                        var img_tag = '';
-                        $.each(json_data.files, function(index, value) {
-                            var arrTmp = value.split('/');
-                            var arrValue = arrTmp[arrTmp.length-1].split('?');
-                            var url = '?tpf=common/image_view&file_name=product/'+arrValue[0];
-                            var url2 = '?tpf=common/image_delete&file_name=product/'+arrValue[0]+'&table=product&code='+index;
-                            img_tag = '<button type="button" onclick="winOpen(\''+url+'\');" class="btn btn-success btn-xs">보기</button>&nbsp;';
-                            img_tag += '<button type="button" onclick="confirmIframeDelete(\''+url2+'\');" class="btn btn-danger btn-xs">삭제</button>';
-                            parent.$('#display_file'+index).html(img_tag);
-                            parent.$('#display_file'+index).css('display','');
-                        });
-                    }
+                   
 
-                    // 옵션 처리
-					if(json_data.option.total > 0){
-						$.each(json_data.option.list, function(index, row) {
-                            parent.insertOption(row.option_name, row.option_value, row.option_price, row.is_necessary);
-						});
-					}
+
+                    
+                 // 옵션 처리
+             		if(options.length > 0){
+             			$.each(options, function(index, option) {
+             				console.log(option)
+                         	parent.insertOption(option.optionName, option.optionValue, option.optionValueCost, option.is_necessary);
+             			});
+             		}
+                    
 				},
 				error:function(jqXHR, textStatus, errorThrown){
 					console.log(textStatus);
