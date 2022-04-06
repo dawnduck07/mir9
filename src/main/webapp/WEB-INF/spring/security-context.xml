@@ -36,6 +36,7 @@
         <intercept-url pattern="/product/**" access="permitAll"/>
         <intercept-url pattern="/excel/**" access="permitAll"/>
         <intercept-url pattern="/order/**" access="permitAll"/>
+        <intercept-url pattern="/category/**" access="permitAll"/>
 		
 		<intercept-url pattern="/member/memberEnroll.do" access="permitAll"/>
 

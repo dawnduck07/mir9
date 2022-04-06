@@ -88,4 +88,14 @@
 	WHERE level = #{level}
 	ORDER BY category_no
   </select>
+  
+  <select id="selectOneProductCategoryByCteNo" resultType="category">
+  	select * from category where category_no = #{cteNo}
+  </select>
+  
+  
+  
+  <update id="updateProductCategoryByParam">
+  	update category set category_name = #{title}, status = #{status} where category_no = #{code}
+  </update>
 </mapper>

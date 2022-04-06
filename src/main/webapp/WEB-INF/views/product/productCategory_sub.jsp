@@ -85,7 +85,6 @@
 
 <script>
         function setData(code) {
-            // 회원정보
             $.ajax({
                 url:'${pageContext.request.contextPath}/category/info',
                 type:'post',
@@ -94,21 +93,15 @@
 					"${_csrf.headerName}" : "${_csrf.token}"
 				},
                 data:{
-                    method : 'BizProduct.infoCategory',
-                    locale : parent.$('[name=locale]').val(),
-                    code : code
+					cteNo : code
                 },
-                success:function(data, textStatus, jqXHR){
-                    var json_data = data.data;
+                success(data){
                     parent.$('form[name="form_register"] #mode').val('updateCategory');
                     parent.$('#code').val(code);
-                    parent.$('#title').val(json_data.title);
-                    parent.$('[name=status]').val(json_data.status);
+                    parent.$('#title').val(data.categoryName);
+                    parent.$('[name=status]').val(data.status);
                 },
-                error:function(jqXHR, textStatus, errorThrown){
-                    console.log(textStatus);
-                    // $('#content').val(errorThrown);
-                }
+                error: console.log
             });
         }
         function onclickInsert() {
