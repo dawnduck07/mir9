@@ -17,4 +17,8 @@ public interface CategoryDao {
 
 	int updateProductCategoryByParam(Map<String, Object> param);
 
+	int insertProductCategoryByParam(Map<String, Object> param);
+
+	int deleteCategoryByCteNo(String cteNo);
+
 }

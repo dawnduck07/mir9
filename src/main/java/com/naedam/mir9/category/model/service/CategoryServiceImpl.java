@@ -43,6 +43,20 @@ public class CategoryServiceImpl implements CategoryService {
 		// TODO Auto-generated method stub
 		return categoryDao.updateProductCategoryByParam(param);
 	}
+
+	@Override
+	public int insertProductCategoryByParam(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return categoryDao.insertProductCategoryByParam(param);
+	}
+
+	@Override
+	public int deleteCategoryByCteNo(String cteNo) {
+		// TODO Auto-generated method stub
+		return categoryDao.deleteCategoryByCteNo(cteNo);
+	}
+	
+	
 	
 	
 }

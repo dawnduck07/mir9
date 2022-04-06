@@ -42,7 +42,7 @@
                 <div class="box-body">
                     <p class="text-light-blue"><i class="fa fa-fw fa-list-ul"></i> <a href="?tpf=admin/product/category_sub&locale=ko">ROOT</a> </p>
 
-                    <form name="form_list" method="post" action="?tpf=admin/product/process">
+                    <form name="form_list" method="post" action="${pageContext.request.contextPath }/category/delete?${_csrf.parameterName}=${_csrf.token}">
                     <table class="table table-bordered table-hover">
 			            <input type="hidden" name="mode" id="mode">
                     <thead>
@@ -57,9 +57,9 @@
                         <td style="width:60px;">명령</td>
                     </tr>
                     </thead>
-                    <c:forEach var="cte" items="${cteList }" varStatus="vs">
+                    <c:forEach var="cte" items="${cteList }">
 	      				<tr>
-	                        <td><input type="checkbox" name="list[]" value="${vs.count }" /></td>
+	                        <td><input type="checkbox" name="list[]" value="${cte.categoryNo}" /></td>
 	                        <td>${cte.categoryName }</td>
 	                        <td><button type="button" class="btn btn-success btn-xs">보임</button></td>
 	                        <td><input type="radio" name="order_code" value="1" /></td>
@@ -84,6 +84,10 @@
 <script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
+(function(){
+	parent.$('#parent_no').val(${parentNo})
+
+})();
         function setData(code) {
             $.ajax({
                 url:'${pageContext.request.contextPath}/category/info',
