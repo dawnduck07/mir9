@@ -25,4 +25,6 @@ public interface ProductDao {
 
 	List<ProductDiscription> selectProductDiscriptionByProductNo(String productNo);
 
+	List<ProductDetail> selectProductListByCteNo(String cteNo);
+
 }

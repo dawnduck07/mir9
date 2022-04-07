@@ -21,4 +21,11 @@ public interface CategoryService {
 
 	int deleteCategoryByCteNo(String cteNo);
 
+	int selectCategoryLevel(String cteNo);
+
+	List<Category> selectRelatedCtegoryByCteNo(String cteNo);
+
+	List<String> selectCategoryNamesByCteLv(int level);
+
+
 }

@@ -59,6 +59,12 @@ public class ProductServiceImpl implements ProductService{
 		// TODO Auto-generated method stub
 		return productDao.selectProductDiscriptionByProductNo(productNo);
 	}
+
+	@Override
+	public List<ProductDetail> selectProductListByCteNo(String cteNo) {
+		// TODO Auto-generated method stub
+		return productDao.selectProductListByCteNo(cteNo);
+	}
 	
 	
 	

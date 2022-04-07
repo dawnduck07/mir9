@@ -55,6 +55,27 @@ public class CategoryServiceImpl implements CategoryService {
 		// TODO Auto-generated method stub
 		return categoryDao.deleteCategoryByCteNo(cteNo);
 	}
+
+	@Override
+	public int selectCategoryLevel(String cteNo) {
+		// TODO Auto-generated method stub
+		return categoryDao.selectCategoryLevel(cteNo);
+	}
+
+	@Override
+	public List<Category> selectRelatedCtegoryByCteNo(String cteNo) {
+		// TODO Auto-generated method stub
+		return categoryDao.selectRelatedCtegoryByCteNo(cteNo);
+	}
+
+	@Override
+	public List<String> selectCategoryNamesByCteLv(int level) {
+		// TODO Auto-generated method stub
+		return categoryDao.selectCategoryNamesByCteLv(level);
+	}
+
+
+	
 	
 	
 	

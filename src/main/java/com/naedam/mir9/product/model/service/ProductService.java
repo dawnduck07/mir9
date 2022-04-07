@@ -25,4 +25,6 @@ public interface ProductService {
 
 	List<ProductDiscription> selectProductDiscriptionByProductNo(String productNo);
 
+	List<ProductDetail> selectProductListByCteNo(String cteNo);
+
 }

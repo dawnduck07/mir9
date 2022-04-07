@@ -59,6 +59,12 @@ public class ProductDaoImpl implements ProductDao {
 		// TODO Auto-generated method stub
 		return session.selectList("product.selectProductDiscriptionByProductNo",productNo);
 	}
+
+	@Override
+	public List<ProductDetail> selectProductListByCteNo(String cteNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("product.selectProductListByCteNo", cteNo);
+	}
 	
 	
 }

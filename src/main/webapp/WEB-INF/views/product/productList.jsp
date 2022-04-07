@@ -7,7 +7,7 @@
 <div class="content-wrapper">
 	<section class="content-header">
 		<h1>
-			상품 관리 <small>order list</small>
+			상품 관리 <small>product list</small>
 		</h1>
 
 		<ol class="breadcrumb">
@@ -23,7 +23,7 @@
 				<div class="box">
 					<div class="box-body">
 						<div class="col-xs-3" style="padding: 0 5px 0 0;">
-							<iframe name="tree" id="iframe_tree" src="${pageContext.request.contextPath }/product/tree_model" width="100%" height="100%"></iframe>
+							<iframe name="tree" id="iframe_tree" src="${pageContext.request.contextPath }/product/tree_model?stp=pl" width="100%" height="100%"></iframe>
 						</div>
 
 						<div class="col-xs-9" style="padding: 0 5px 0 0;">
@@ -283,6 +283,35 @@
 	
 		$('#option_list').append(create_txt);
 	}
+	
+	function getCategory(cteNo){
+		 $.ajax({
+				url:'${pageContext.request.contextPath}/category/getCategory',
+				type:'post',
+				dataType:'json',
+		        headers: {
+						"${_csrf.headerName}" : "${_csrf.token}"
+				},
+				data:{
+                 	cteNo : cteNo
+				},
+				success(data){
+					createSelectBox(data.depth, data.lv1NameList, data.lv2NameList, data.lv3NameList);
+				},
+				error : console.log
+			});
+	}
+	
+	function createSelectBox(depth, lv1List, lv2List, lv3List){
+		for(var i = 0; i < depth; i++){
+			var selectboxName = 'category_select_box_'+category_code_depth;
+		}
+	}
+	
+	function register(){
+		console.log()
+	}
+	
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
