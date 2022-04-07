@@ -11,6 +11,15 @@
 	WHERE b.IMG_LEVEL = 1
   </select>
   
+  <select id="selectProductListByCteNo" resultType="productDetail">
+  	SELECT a.*, b.IMG_URL, c.CATEGORY_NAME 
+	FROM product a
+		JOIN product_img b ON(a.product_no = b.PRODUCT_NO)
+		left JOIN category c ON(a.CATEGORY_NO = c.CATEGORY_NO)
+	WHERE b.IMG_LEVEL = 1 AND a.category_no in (SELECT category_no FROM category WHERE parent_no IN(
+	SELECT category_no FROM category WHERE category_no = #{cteNo} OR parent_no = #{cteNo}) OR category_no IN(SELECT category_no FROM category WHERE category_no = #{cteNo} OR parent_no = #{cteNo}))
+  </select>
+  
   <select id="selectProductExcelForm" resultType="productExcelForm">
   	SELECT * FROM v_product_excel_form
   </select>

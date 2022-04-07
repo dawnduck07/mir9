@@ -66,9 +66,21 @@ public class ProductController {
 	}
 	
 	@GetMapping("/list_sub")
-	public void list_sub(Model model) {
-		List<ProductDetail> productList = productService.selectAllProductList();
+	public void list_sub(Model model, @RequestParam(defaultValue = "0") String cteNo) {
+		log.debug("cteNo = {}",cteNo);
+		List<ProductDetail> productList = new ArrayList<ProductDetail>();
+		if(cteNo.equals("0")) {
+			productList = productService.selectAllProductList();
+		}else {
+			productList = productService.selectProductListByCteNo(cteNo);			
+		}
+		
 		int productListCnt = productList.size();
+		
+		try {
+			int level = categoryService.selectCategoryLevel(cteNo);
+			model.addAttribute("level",level);
+		} catch (Exception e) {}
 		
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
