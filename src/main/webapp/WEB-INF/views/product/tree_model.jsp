@@ -15,7 +15,8 @@
 
     <link rel="canonical" href="http://demoshop.mir9.kr/index.php?tpf=admin/product/tree&menu=list">
     <!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-142394166-1"></script>
+	<script async="true" src="https://www.googletagmanager.com/gtag/js?id=UA-142394166-1"></script>
+	
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/common.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/font-awesome.min.css"  />
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/board.min.css" />
@@ -53,13 +54,12 @@ a:link, a:visited, a:hover, a, active, a:focus {
 </style>
 
 <body>
-<iframe name="iframe_process" width="0" height="0" frameborder="0" style="display:none;"></iframe>
 <script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript"></script>
 <script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
 
 
 
-<script language="JavaScript" src="${pageContext.request.contextPath }/resources/js/tree.js"></script>
+<script lang="JavaScript" src="${pageContext.request.contextPath }/resources/js/tree.js"></script>
 <script>
 var tree_tpl = {
 	'target'  : '_blank',	// name of the frame links will be opened in
@@ -93,27 +93,12 @@ var tree_tpl = {
 };
 
 var TREE_ITEMS = [
-//    ['Home', '?tpf=admin/product/list_sub',
-//        ['Dental Treats', ' ',
-//			['Dental Treats sub', ' ',
-//				['Dental Treats sub - sub', ' '],
-//			],
-//			['Dental Treats sub2', ' ',
-//				['', ' '],
-//			],
-//		],
-//		
-//		['Healthy Treats', ' '],
-//		
-//		['Grooming', ' '],
-//   ]
-
-${result}
+	${result}
 ];
 
 </script>
 
-<script language="JavaScript">
+<script lang="JavaScript">
 <!--
 function initMenu() {
 trees[0].tmB(1);trees[0].tmB(2);trees[0].tmB(3);trees[0].tmB(4);trees[0].tmB(5);}
