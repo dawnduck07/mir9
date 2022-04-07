@@ -2,12 +2,10 @@ package com.naedam.mir9.product.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,7 +65,6 @@ public class ProductController {
 	
 	@GetMapping("/list_sub")
 	public void list_sub(Model model, @RequestParam(defaultValue = "0") String cteNo) {
-		log.debug("cteNo = {}",cteNo);
 		List<ProductDetail> productList = new ArrayList<ProductDetail>();
 		if(cteNo.equals("0")) {
 			productList = productService.selectAllProductList();
@@ -84,6 +81,7 @@ public class ProductController {
 		
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
+		model.addAttribute("cteNo",cteNo);
 		
 	}
 	
@@ -166,6 +164,7 @@ public class ProductController {
 		List<ProductImg> productImgs = productService.selectProductImgsByProductNo(productNo);
 		List<ProductOptionDetail> option = productService.selectProductOptionDetailByOptionNo(product.getOptionNo());
 		List<ProductDiscription> discriptions = productService.selectProductDiscriptionByProductNo(productNo);
+		
 		productInfo.add(product);
 		productInfo.add(productImgs);
 		productInfo.add(option);
@@ -188,5 +187,20 @@ public class ProductController {
 		
 		model.addAttribute("cteList",cteList);
 		model.addAttribute("parentNo",cteNo);
+	}
+	
+	@PostMapping("/insert")
+	public String insertProduct(HttpServletRequest request, RedirectAttributes redirectAttr) {
+		Enumeration params = request.getParameterNames();
+		System.out.println("----------------------------");
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    System.out.println(name + " : " +request.getParameter(name));
+		}
+		System.out.println("----------------------------");
+		redirectAttr.addFlashAttribute("msg", "상품이 등록되었습니다.");
+		
+		return "redirect:/product/list";
+		
 	}
 }

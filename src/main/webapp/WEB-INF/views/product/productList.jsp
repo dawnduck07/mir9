@@ -42,7 +42,7 @@
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 800px;">
 			<div class="modal-content">
-				<form name="form_register" method="post" onsubmit="return false;" action="?tpf=admin/product/process" enctype="multipart/form-data">
+				<form name="form_register" method="post" action="?tpf=admin/product/process" enctype="multipart/form-data">
 					<input type="hidden" name="mode" id="mode" value="insertProduct"> <input type="hidden" name="code" id="code"> <input type="hidden" name="category_code" id="category_code"> <input type="hidden" name="locale" value="ko">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -255,33 +255,41 @@
 		var row_num = 0;
 		console.log(last_class)
 		if(!(typeof last_class == 'undefined')) {
-			row_num = (last_class.replace('option_num_','')*1) + 1;
+			var target = '#option_value_td';
+			var option_val_txt = '<input type="text" name="option_value['+row_num+']" class="form-control input-sm" value="'+option_value+'" readonly />'
+			$(target).append(option_val_txt);
+			target = '#option_value_cost_td';
+			option_val_txt = '<input type="text" name="option_price['+row_num+']" class="form-control input-sm" value="'+option_price+'" readonly />';
+			$(target).append(option_val_txt);
+			target = '#option_btns_td';
+			option_val_txt = '<button type="button" class="btn btn-primary btn-xs" onclick="modifyOption('+row_num+');"><span class="glyphicon glyphicon-plus"></span> 수정</button>\n<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);"><span class="fa fa-minus-square"></span> 삭제</button>'
+			$(target).append(option_val_txt);
 		}else if(typeof last_class == 'undefined'){
 			var create_txt = '<tr id="option_num_'+row_num+'" >';
 			create_txt += '<td>';
 			create_txt += '	<input type="text" name="option_name['+row_num+']" class="form-control input-sm" value="'+option_name+'" readonly />';
 			create_txt += '	<input type="checkbox" name="is_necessary['+row_num+']" '+check_necessary+' value="y"> 필수 선택 항목';
 			create_txt += '</td>';
-			create_txt += '<td>';
+			create_txt += '<td id="option_value_td">';
+			create_txt += '	<input type="text" name="option_value['+row_num+']" class="form-control input-sm" value="'+option_value+'" readonly />';
+			
+			create_txt += '</td>';
+			create_txt += '<td id="option_value_cost_td">';
+			
+			create_txt += '	<input type="text" name="option_price['+row_num+']" class="form-control input-sm" value="'+option_price+'" readonly />';
+			
+			create_txt += '</td>';
+			create_txt += '<td id="option_btns_td">';
+			create_txt += '	<button type="button" class="btn btn-primary btn-xs" onclick="modifyOption('+row_num+');"><span class="glyphicon glyphicon-plus"></span> 수정</button>';
+			create_txt += '	<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);"><span class="fa fa-minus-square"></span> 삭제</button>';
+			create_txt += '</td>';
+			create_txt += '</tr>';
+		
+			$('#option_list').append(create_txt);
 		}
 	
 
 		
-		create_txt += '	<input type="text" name="option_value['+row_num+']" class="form-control input-sm" value="'+option_value+'" readonly />';
-		
-		create_txt += '</td>';
-		create_txt += '<td>';
-		
-		create_txt += '	<input type="text" name="option_price['+row_num+']" class="form-control input-sm" value="'+option_price+'" readonly />';
-		
-		create_txt += '</td>';
-		create_txt += '<td>';
-		create_txt += '	<button type="button" class="btn btn-primary btn-xs" onclick="modifyOption('+row_num+');"><span class="glyphicon glyphicon-plus"></span> 수정</button>';
-		create_txt += '	<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);"><span class="fa fa-minus-square"></span> 삭제</button>';
-		create_txt += '</td>';
-		create_txt += '</tr>';
-	
-		$('#option_list').append(create_txt);
 	}
 	
 	function getCategory(cteNo){
@@ -297,6 +305,13 @@
 				},
 				success(data){
 					createSelectBox(data.depth, data.lv1NameList, data.lv2NameList, data.lv3NameList);
+					
+					if(typeof data.cteList != 'undefined'){
+						for(var i = 0; i < data.depth; i++){
+							var target = '#category_select_box_'+i;
+							$(target).val(data.cteList[i].categoryNo).prop("selected",true);
+						};
+					};
 				},
 				error : console.log
 			});
@@ -304,12 +319,42 @@
 	
 	function createSelectBox(depth, lv1List, lv2List, lv3List){
 		for(var i = 0; i < depth; i++){
-			var selectboxName = 'category_select_box_'+category_code_depth;
+			var selectBox = document.createElement('select');			
+			var selectboxName = 'category_select_box_'+i;
+		    selectBox.name = selectboxName;
+		    selectBox.id = selectboxName;
+		    selectBox.className = 'form-control input-sm categorySelectBox';
+		    selectBox.style.width = '30%';
+		    selectBox.style.margin = '0 0 0 5px';
+		    selectBox.style.display = 'inline-block';
+		    var cteNameList = null;
+		    
+		    switch (i){
+			    case 0 : cteNameList = lv1List; break;
+			    case 1 : cteNameList = lv2List; break;
+			    case 2 : cteNameList = lv3List; break;
+			    default : break;
+		    }
+		    
+		    $.each(cteNameList, (k,v)=>{
+			    var option = document.createElement('option');
+		        option.text = v.categoryName;
+		        option.value = v.categoryNo;
+			    selectBox.add(option, null);
+		    });
+		    
+		    $('#category_depth').append(selectBox)
 		}
 	}
 	
 	function register(){
-		console.log()
+		if($('#mode').val() == 'insertProduct'){
+			$(document["form_register"]).attr('action', '${pageContext.request.contextPath}/product/insert?${_csrf.parameterName}=${_csrf.token}').submit();
+			
+		}else if($('#mode').val() == 'updateProduct'){
+			
+		}
+
 	}
 	
 </script>

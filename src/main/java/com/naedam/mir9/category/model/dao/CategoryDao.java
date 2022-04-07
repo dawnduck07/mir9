@@ -25,7 +25,7 @@ public interface CategoryDao {
 
 	List<Category> selectRelatedCtegoryByCteNo(String cteNo);
 
-	List<String> selectCategoryNamesByCteLv(int level);
+	List<Category> selectCategoryNamesByCteLv(int level);
 
 
 }

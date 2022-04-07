@@ -69,7 +69,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	@Override
-	public List<String> selectCategoryNamesByCteLv(int level) {
+	public List<Category> selectCategoryNamesByCteLv(int level) {
 		// TODO Auto-generated method stub
 		return session.selectList("category.selectCategoryNamesByCteLv",level);
 	}

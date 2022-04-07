@@ -33,10 +33,10 @@
 		<intercept-url pattern="/index.jsp" access="permitAll"/>
 		
 		<!-- 유광현 작업영역 -->
-        <intercept-url pattern="/product/**" access="permitAll"/>
+<!--         <intercept-url pattern="/product/**" access="permitAll"/>
         <intercept-url pattern="/excel/**" access="permitAll"/>
         <intercept-url pattern="/order/**" access="permitAll"/>
-        <intercept-url pattern="/category/**" access="permitAll"/>
+        <intercept-url pattern="/category/**" access="permitAll"/> -->
 		
 		<intercept-url pattern="/member/memberEnroll.do" access="permitAll"/>
 

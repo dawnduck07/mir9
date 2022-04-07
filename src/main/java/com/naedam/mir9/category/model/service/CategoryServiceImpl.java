@@ -69,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<String> selectCategoryNamesByCteLv(int level) {
+	public List<Category> selectCategoryNamesByCteLv(int level) {
 		// TODO Auto-generated method stub
 		return categoryDao.selectCategoryNamesByCteLv(level);
 	}
