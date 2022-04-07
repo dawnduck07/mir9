@@ -128,22 +128,34 @@
 
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
-						<li class="dropdown user user-menu"><a href="#"
+						<li class="dropdown user user-menu">
+						
+						<a href="#"
 							class="dropdown-toggle" data-toggle="dropdown"> <img
 								src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/img/avatar5.png"
-								class="user-image" alt="User Image" /> <span class="hidden-xs">길동이</span>
+								class="user-image" alt="User Image" /> <span class="hidden-xs"><sec:authentication property="principal.username" />
+										<sec:authentication property="authorities" />${loginMember.lastName}${loginMember.firstName}님</span>
 						</a>
 							<ul class="dropdown-menu">
 								<li class="user-header"><img
 									src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/img/avatar5.png"
 									class="img-circle" alt="User Image" />
 									<p>
-										길동이 - Web Administrator <small>MIR9 SHOP 관리자</small>
+										<sec:authentication property="principal.username" />
+										${loginMember.lastName}${loginMember.firstName}님 - Web
+										Administrator <small>MIR9 SHOP 관리자</small>
 									</p></li>
 								<li class="user-footer">
 									<div class="pull-right">
-										<a href="?tpf=member/logout" class="btn btn-danger btn-flat">Sign
-											out</a>
+									<form:form
+										name="memberLogoutFrm"
+										method="POST"
+										action="${pageContext.request.contextPath}/member/memberLogout.do">
+										<a
+											onclick="logoutSubmit()"
+											class="btn btn-danger btn-flat"
+											type="submit">Sign out</a>
+									</form:form>
 									</div>
 								</li>
 							</ul></li>
