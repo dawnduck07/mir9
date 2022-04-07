@@ -153,7 +153,7 @@
 	ORDER BY category_no
   </select>
   
-  <select id="selectCategoryNamesByCteLv" resultType="string">
+  <select id="selectCategoryNamesByCteLv" resultType="category">
     WITH recursive cte AS (
 
 	SELECT 
@@ -178,7 +178,7 @@
 	ON c.parent_no = cte.category_no
 	)
 	
-	SELECT category_name FROM cte
+	SELECT category_no, IFNULL(parent_no, 0) AS parent_no, category_name, STATUS, level FROM cte
 	WHERE LEVEL = #{level}
 	ORDER BY category_no
   </select>

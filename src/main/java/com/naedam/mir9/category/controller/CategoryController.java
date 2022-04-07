@@ -76,9 +76,9 @@ public class CategoryController {
 	public Map<String, Object> getCategory(String cteNo){
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Category> cteList = categoryService.selectRelatedCtegoryByCteNo(cteNo);
-		List<String> lv1NameList = new ArrayList<String>();
-		List<String> lv2NameList = new ArrayList<String>();
-		List<String> lv3NameList = new ArrayList<String>();
+		List<Category> lv1NameList = new ArrayList<Category>();
+		List<Category> lv2NameList = new ArrayList<Category>();
+		List<Category> lv3NameList = new ArrayList<Category>();
 		int depth = 0;
 		for(Category c : cteList) {
 			if(c.getLevel() > depth) {
@@ -100,6 +100,9 @@ public class CategoryController {
 		map.put("lv2NameList", lv2NameList);
 		map.put("lv3NameList", lv3NameList);
 		map.put("depth", depth);
+		if(depth == 3) {
+			map.put("cteList", cteList);			
+		}
 		
 		return map;
 		

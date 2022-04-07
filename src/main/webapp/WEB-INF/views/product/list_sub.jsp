@@ -126,7 +126,7 @@
 						</button>
 						<!-- 상품등록 버튼은 3레벨일때만 출력 -->
 						<c:if test="${level == 3 }">
-							<button type="button" onclick="onclickinsert()" class="btn btn-primary btn-sm">
+							<button type="button" onclick="onclickInsert()" class="btn btn-primary btn-sm">
 								<i class="fa fa-plus-square"></i> 상품 등록
 							</button>
 						</c:if>
@@ -178,13 +178,10 @@
                     productNo : code
 				},
 				success(data){
-					console.log(data)
                     var product = data[0];
 					var imgs = data[1];
 					var options = data[2];
 					var discriptions = data[3];
-					
-					console.log(options)
 					
 					parent.$('#category_depth').html('');
 					parent.Depth = 3
@@ -242,7 +239,7 @@
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.$('#option_list').html('');
             parent.form_register.reset();
-            parent.objEditor.setData('');
+            parent.getCategory(${cteNo});
             parent.form_register.mode.value = 'insertProduct';
             parent.form_register.locale.value = 'ko';
             parent.form_register.category_code.value = '';
@@ -254,6 +251,7 @@
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
             setData(code);
+            parent.$('#mode').val('updateProduct');
         }
         
         // 제품복제 체크버튼 및 모달레이어창
@@ -285,9 +283,6 @@
             }
         }
         
-        function onclickinsert(){
-        	parent.$('#modalContent').modal({backdrop:'static', show:true});
-        }
         
 
         
