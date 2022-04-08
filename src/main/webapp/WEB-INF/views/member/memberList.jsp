@@ -38,7 +38,12 @@
 <section class="content">
 <div class="row">
 	<div class="col-xs-12">
-	<form:form name="memberDeleteFrm" action="${pageContext.request.contextPath}/member/memberDelete.do" method="POST">
+	<form:form 
+			id="memberDeleteFrm"	
+			name="memberDeleteFrm" 
+			action="${pageContext.request.contextPath}/member/memberDelete.do" 
+			method="POST">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<div class="box">
 			<div class="box-body">
 			<div id="totalCountContainer">
@@ -139,7 +144,8 @@
 					<%-- </form> --%>
 				</table>
 				<br>
-				<button type="button"
+				<button 
+					type="button"
 					id="memberListDeleteBtn"
 					class="btn btn-danger">
 					<i class="fa fa-minus-square"></i> 선택삭제
@@ -652,7 +658,7 @@ $(".member-is-checked").on("click", ((e)=>{
 	$(".member-is-checked").each((i, item)=>{
 		isChecked = isChecked && $(item).is(":checked");
 		console.log("i : " + i);
-		console.log(item);
+		//console.log(item);
 		console.log($(item).is(":checked"));
 	});
 	
@@ -661,8 +667,9 @@ $(".member-is-checked").on("click", ((e)=>{
 
 $("#memberListDeleteBtn").click((e)=>{
 	let isChecked = false;
+	console.log("isChecked : " + isChecked);
 	
-	$(".member-is-cheked").each((i, item)=>{
+	$(".member-is-checked").each((i, item)=>{
 		isChecked = isChecked || $(item).is(":checked");
 		let target = $(item).data("target");
 		
@@ -678,7 +685,7 @@ $("#memberListDeleteBtn").click((e)=>{
 	
 	console.log("클릭");
 	console.log($(document.memberDeleteFrm));
-	$(document.noticeDeleteFrm).submit();
+	$(document.memberDeleteFrm).submit();
 });
 
 

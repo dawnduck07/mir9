@@ -26,7 +26,6 @@ public class Member implements Serializable, UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 	private int memberNo;
-	private int memberGradeNo;
 	private String firstName;
 	private String lastName;
 	private String address;
