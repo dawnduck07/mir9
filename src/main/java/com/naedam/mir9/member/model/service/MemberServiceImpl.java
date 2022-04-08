@@ -59,6 +59,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectSearchListCount(param);
 	}
 
+	// 회원 삭제
+	@Override
+	public int deleteMember(int[] memberNo) {
+		return memberDao.deleteMember(memberNo);
+	}
+
 	
 
 

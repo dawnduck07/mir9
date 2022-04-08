@@ -30,6 +30,9 @@ public interface MemberService {
 	// 검색 게시물 수
 	int selectSearchListCount(Map<String, Object> param);
 
+	// 회원 삭제
+	int deleteMember(int[] memberNo);
+
 	
 
 }

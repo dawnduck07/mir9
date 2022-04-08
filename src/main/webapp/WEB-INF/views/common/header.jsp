@@ -148,6 +148,7 @@
 								<li class="user-footer">
 									<div class="pull-right">
 									<form:form
+										id="memberLogoutFrm"
 										name="memberLogoutFrm"
 										method="POST"
 										action="${pageContext.request.contextPath}/member/memberLogout.do">
