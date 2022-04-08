@@ -204,5 +204,20 @@ public class ProductController {
 		
 	}
 	
+	@PostMapping("/update")
+	public void updateProduct(HttpServletRequest request, RedirectAttributes redirecAttr) {
+		Enumeration params = request.getParameterNames();
+		System.out.println("----------------------------");
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    System.out.println(name + " : " +request.getParameter(name));
+		}
+		System.out.println("----------------------------");
+		
+	}
+	
+	@GetMapping("/img_test")
+	public void imgtest() {}
+	
 
 }

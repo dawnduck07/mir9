@@ -120,15 +120,28 @@
 							</tr>
 							<tr>
 								<td class="menu">리스트 이미지1</td>
-								<td align="left"><input type="file" name="file1" class="form-control input-sm" style="width: 80%; display: inline;" /> <span id="display_file1" style="display: none;"></span></td>
+								<td align="left">
+									<input type="file" name="file1" class="form-control input-sm" style="width: 80%; display: inline;" />
+									<span id="display_file1" style="display: none;"></span>
+									<input type="hidden" id="url_file1" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">리스트 이미지2</td>
-								<td align="left"><input type="file" name="file2" class="form-control input-sm" style="width: 80%; display: inline;" /> <span id="display_file2" style="display: none;"></span></td>
+								<td align="left">
+									<input type="file" name="file2" class="form-control input-sm" style="width: 80%; display: inline;" /> 
+									<span id="display_file2" style="display: none;"></span>
+									<input type="hidden" id="url_file2" />
+								</td>
+									
 							</tr>
 							<tr>
 								<td class="menu">제품 이미지(상세)</td>
-								<td align="left"><input type="file" name="file3" class="form-control input-sm" style="width: 80%; display: inline;" /> <span id="display_file3" style="display: none;"></span></td>
+								<td align="left">
+									<input type="file" name="file3" class="form-control input-sm" style="width: 80%; display: inline;" /> 
+									<span id="display_file3" style="display: none;"></span>
+									<input type="hidden" id="url_file3" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">간단 설명</td>
@@ -246,6 +259,47 @@
 <!-- /.content-wrapper -->
 
 <script>
+
+// 파일 변경 시 업로드 후 url 받아오기
+$("input[type=file]").change(function(e){
+	console.log($(e.target))
+	console.log($(e.target).attr('name'))
+	var target = "#url_" + $(e.target).attr('name');
+   // 이미지 업로드
+   var file = e.target;
+   //var imgPreview = document.getElementById("imgPreview");
+   var form = new FormData();
+   form.append("image", file.files[0]);
+
+   var settings = {
+     "url": "https://api.imgbb.com/1/upload?key=f84bfb11eb3ee5eedb859de8b49fdff1",
+     "method": "POST",
+     "timeout": 0,
+     "processData": false,
+     "mimeType": "multipart/form-data",
+     "contentType": false,
+     "data": form
+   };
+   
+   // 이미지 업로드 -> 확인
+   $.ajax(settings).done(function (response) {
+     // console.log("response" + response);
+     
+     var imgbb = JSON.parse(response);
+     // console.log("imgbb : " + imgbb);
+     
+     // 이미지 조회 및 다운로드
+     var url = imgbb.data.thumb.url;
+     $(target).val(url);
+
+     //imgPreview.src = url; // imgbb url
+     //imgPreview.name = name;
+     //$("#deleteUrl").attr("value", delUrl);
+
+   });
+   
+});
+
 	function insertOption(optionNo, optionValueNo, option_name, option_value, option_price, is_necessary) {
 	    var check_necessary = '';
 	    if (is_necessary == true || is_necessary == 'Y') check_necessary = 'checked';
@@ -350,7 +404,7 @@
 			$(document["form_register"]).attr('action', '${pageContext.request.contextPath}/product/insert?${_csrf.parameterName}=${_csrf.token}').submit();
 			
 		}else if($('#mode').val() == 'updateProduct'){
-			
+			$(document["form_register"]).attr('action', '${pageContext.request.contextPath}/product/update?${_csrf.parameterName}=${_csrf.token}').submit();
 		}
 
 	}
