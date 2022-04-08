@@ -107,4 +107,47 @@
 	WHERE
 		id = #{id}
 </select>
+
+<!-- 타입별 검색 -->
+<select id="selectSearchMemberList" resultType="memberEntity">
+	SELECT
+		m.member_no,
+	    m.id,
+	    m.last_name, 
+	    m.first_name,
+	    m.phone,
+	    a.address_main, 
+	    a.address_sub,
+	    p.point_amt,
+	    m.reg_date
+	FROM
+	    member m left join member_point mp
+	        on m.member_no = mp.member_no
+	            left join point p
+	                on mp.point_no = p.point_no
+	                    left join address_book ab
+	                        on m.member_no = ab.member_no
+	                            left join address a
+	                                on ab.address_no = a.address_no
+	WHERE
+		${type} LIKE CONCAT('%', #{keyword}, '%')	
+</select>
+
+<!-- 검색 게시물 수 -->
+<select id="selectSearchListCount" resultType="_int">
+	SELECT
+		count(*)
+	FROM
+	    member m left join member_point mp
+	        on m.member_no = mp.member_no
+	            left join point p
+	                on mp.point_no = p.point_no
+	                    left join address_book ab
+	                        on m.member_no = ab.member_no
+	                            left join address a
+	                                on ab.address_no = a.address_no
+	WHERE
+		${type} LIKE CONCAT('%', #{keyword}, '%')
+</select>
+
 </mapper>

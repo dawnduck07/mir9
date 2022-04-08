@@ -43,7 +43,7 @@ public class MemberController {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	// 회원 리스트
-	@RequestMapping("/list")
+	@RequestMapping("/list.do")
 	public String memberList(Model model, HttpServletRequest request) {
 		
 		// 회원 리스트 전체 게시물 목록
@@ -73,6 +73,36 @@ public class MemberController {
 		return map;
 	}
 	
+	// 타입별 검색
+	@ResponseBody
+	@GetMapping("/typeSearch.do")
+	public Map<String, Object> typeSearch(
+			@RequestParam String type, 
+			@RequestParam String keyword,
+			HttpServletRequest request){
+		log.debug("{}", "타입별 검색 시작");
+		log.debug("type = {}", type);
+		log.debug("keyboard = {}", keyword);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
+		log.debug("param = {}", param);
+		
+		// 검색 게시물 
+		List<MemberEntity> searchMemberList = memberService.selectSearchMemberList(param);
+		log.debug("searchMemberList = {}", searchMemberList);
+
+		// 검색 게시물 수
+		int searchListCount = memberService.selectSearchListCount(param);
+		log.debug("searchListCount = {}", searchListCount);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchMemberList", searchMemberList);
+		resultMap.put("searchListCount", searchListCount);
+		
+		return resultMap;
+	}
 	
 	// 회원 적립금 내역보기
 	@GetMapping("/memberPointList/{memberNo}")
@@ -106,7 +136,7 @@ public class MemberController {
 	}
 	
 	// 등급 관리
-	@GetMapping("/level")
+	@GetMapping("/memberGrade.do")
 	public String memberGrade() {
 		
 		return "member/memberGrade";
