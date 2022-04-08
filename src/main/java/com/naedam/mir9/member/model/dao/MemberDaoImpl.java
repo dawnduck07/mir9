@@ -47,6 +47,18 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectOneMemberByMap", param);
 	}
 
+	// 타입별 검색 게시물
+	@Override
+	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param) {
+		return session.selectList("member.selectSearchMemberList", param);
+	}
+
+	// 검색 게시물 수
+	@Override
+	public int selectSearchListCount(Map<String, Object> param) {
+		return session.selectOne("member.selectSearchListCount", param);
+	}
+
 
 
 	

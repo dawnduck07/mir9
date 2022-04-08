@@ -224,13 +224,13 @@
 							<span>회원 관리</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li class="active"><a href="${pageContext.request.contextPath}/member/list"><i
+							<li class="active"><a href="${pageContext.request.contextPath}/member/list.do"><i
 									class="fa fa-circle-o"></i> 회원 리스트</a></li>
 							<li><a href="?tpf=admin/member/withdraw_list"><i
 									class="fa fa-circle-o"></i> 탈퇴회원 리스트</a></li>
 							<li><a href="?tpf=admin/member/log"><i
 									class="fa fa-circle-o"></i> 회원 접속이력 관리</a></li>
-							<li><a href="?tpf=admin/member/level"><i
+							<li><a href="${pageContext.request.contextPath}/member/memberGrade.do"><i
 									class="fa fa-circle-o"></i> 등급 관리</a></li>
 							<li><a href="?tpf=admin/member/point"><i
 									class="fa fa-circle-o"></i> 회원 적립금 관리</a></li>

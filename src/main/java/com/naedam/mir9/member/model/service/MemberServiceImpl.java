@@ -47,6 +47,18 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectOneMemberByMap(param);
 	}
 
+	// 타입별 검색 게시물
+	@Override
+	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param) {
+		return memberDao.selectSearchMemberList(param);
+	}
+
+	// 검색 게시물 수
+	@Override
+	public int selectSearchListCount(Map<String, Object> param) {
+		return memberDao.selectSearchListCount(param);
+	}
+
 	
 
 

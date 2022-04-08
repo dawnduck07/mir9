@@ -5,7 +5,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>	
-	
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="회원 관리" name="title" />
@@ -26,7 +28,6 @@
 	<h1>
 		회원 관리 <small>member list</small>
 	</h1>
-
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 		<li>회원 관리</li>
@@ -37,38 +38,43 @@
 <section class="content">
 <div class="row">
 	<div class="col-xs-12">
+	<form:form name="memberDeleteFrm" action="${pageContext.request.contextPath}/member/memberDelete.do" method="POST">
 		<div class="box">
 			<div class="box-body">
+			<div id="totalCountContainer">
 				<label style="margin-top: 5px;">총 ${totalMemberListCount} 건</label>
-				<div class="box-tools pull-right" style="margin-bottom: 5px;">
-					<%-- <form name="" method="post"
-						action="?tpf=admin/member/list"> --%>
+			</div>
+				<!-- 타입별 검색 -->
+				<form name="search-form" onsubmit="return false">
+					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
-							<span> <input type="text" name="keyword" id="keyword"
-								value="" class="form-control input-sm" placeholder="검색" /> <span
-								class="glyphicon glyphicon-search form-control-feedback"></span>
+							<span> 
+								<input type="text" name="keyword" id="keyword"
+								value="" class="form-control input-sm" placeholder="검색" /> 
+								<span
+									class="glyphicon glyphicon-search form-control-feedback">
+								</span>
 							</span>
 						</div>
-				</div>
-				
-				<div class="box-tools pull-right" style="margin-bottom: 5px;">
-					<div class="has-feedback">
-						<select name="field" class="form-control input-sm">
-							<option value="name">이름</option>
-							<option value="mobile">휴대폰</option>
-						</select>
 					</div>
-				<%-- 	</form> --%>
-				</div>
-
-				<table class="table table-bordered table-hover">
+					<div class="box-tools pull-right" style="margin-bottom: 5px;">
+						<div class="has-feedback">
+							<select name="type" class="form-control input-sm">
+								<option value="last_name">성</option>
+								<option value="first_name">이름</option>
+								<option value="phone">휴대폰</option>
+							</select>
+						</div>
+					</div>
+				</form>
+				<table class="table table-bordered table-hover checkbox-group">
 					<%-- <form name="form_list" method="post"
 						action=""> --%>
 						<!-- <input type="hidden" name="mode" id="mode"> -->
 						<thead>
 							<tr>
 								<td style="width: 30px;">
-									<input type="checkbox"name="select_all" onclick=selectAllCheckBox( 'form_list'); />
+									<input type="checkbox" name="select_all" id="checkAll" />
 								</td>
 								<td style="width: 110px;">아이디</td>
 								<td style="width: 110px;">이름</td>
@@ -85,7 +91,7 @@
 							<c:forEach items="${memberList}" var="memberEntity">
 								<tr>
 									<td style="width: 30px;">
-										<input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); />
+										<input type="checkbox" class="member-is-checked" name="" data-target="${memberEntity.memberNo}"  />
 									</td>
 									<td style="width: 110px;">${memberEntity.id}</td>
 									<td style="width: 110px;">${memberEntity.lastName}${memberEntity.firstName}</td>
@@ -111,16 +117,6 @@
 								</tr>
 							</c:forEach>
 						</tbody>
-						<script>
-							$("button[id^='btn_']").on('click', function(e){
-								//console.log(e.target);
-								//console.log("해당 no = " + $(e.target).val());
-								var memberNo = $(e.target).val();
-								console.log("memberNo = " + memberNo);
-								
-								location.href = `${pageContext.request.contextPath}/member/memberPointList/\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
-							});
-						</script>
 <!-- 
 						<tr>
 							<td><input type="checkbox" name="list[]" value="18" /></td>
@@ -144,7 +140,7 @@
 				</table>
 				<br>
 				<button type="button"
-					onclick="selectDelete('delete','선택된 회원을 삭제하시겠습니까?');"
+					id="memberListDeleteBtn"
 					class="btn btn-danger">
 					<i class="fa fa-minus-square"></i> 선택삭제
 				</button>
@@ -186,6 +182,7 @@
 			<!-- /.box-body -->
 		</div>
 		<!-- /.box -->
+		</form:form>
 	</div>
 	<!-- /.col-xs-12 -->
 </div>
@@ -506,6 +503,15 @@ function downloadExcel() {  // Excel 다운로드
     form_download.submit();
 }
 
+// 상세보기
+$("button[id^='btn_']").on('click', function(e){
+	//console.log(e.target);
+	//console.log("해당 no = " + $(e.target).val());
+	var memberNo = $(e.target).val();
+	console.log("memberNo = " + memberNo);
+	
+	location.href = `${pageContext.request.contextPath}/member/memberPointList/\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
+});
 
 $('#findList').each(function(){
 	console.log("들어오냐");
@@ -560,5 +566,123 @@ function onclickCheckId(){
 		error : console.log
 	});
 };
+
+/* 타입별 검색 */
+$(document).ready(function(){
+	// Enter Event
+	$("#keyword").keydown(function(keyNum){
+		
+		var keyword = $('input[name=keyword]').val(); // 검색어
+		var type = $('select[name=type]').val(); // 검색 타입
+	
+		if(keyNum.keyCode == 13){
+			console.log("Enter Event! - 타입별 검색");
+			console.log("keyword = " + keyword);
+			console.log("type = " + type);
+			
+			const search = {
+				"type" : type,
+				"keyword" : keyword
+			};
+			
+			$.ajax({
+				type : "GET",
+				url : `${pageContext.request.contextPath}/member/typeSearch.do`,
+				data : search,
+				contentType: "application/json; charset=utf-8",
+				success(data){
+					console.log("ajaxData = " + JSON.stringify(data));
+					
+					$("#tbody").html('');
+					
+					$.each(data.searchMemberList, (k, v) => {
+						$("#tbody").append(`
+								<tr>
+								<td style="width: 30px;">
+									<input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); />
+								</td>
+								<td style="width: 110px;">\${v.id}</td>
+								<td style="width: 110px;">\${v.lastName}\${v.firstName}</td>
+								<td style="width: 110px;">\${v.phone}</td>
+								<td>\${v.addressMain} \${v.addressSub}</td>
+								<td style="width: 100px;">\${v.pointAmt}</td>
+								<td style="width: 120px;">\${v.regDate}</td>
+								<td>
+									<span class="label label-success" style="font-size: 12px;">보임</span>
+								</td>
+								<td>
+									<button type="button" id="btn_\${v.memberNo}" value="\${v.memberNo}" class="btn btn-primary btn-xs">
+										내역보기
+									</button>
+								</td>
+								<td>
+									<button type="button" onclick="onclickUpdate(18);" class="btn btn-primary btn-xs">
+										상세보기
+									</button>
+								</td>
+							</tr>
+								`);
+					});
+					
+					$("#totalCountContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
+				},
+				error : console.log	
+			});
+		}
+	})
+});
+
+// 체크박스 전체 선택
+$(".checkbox-group").on("click", "#checkAll", ((e)=>{
+	let checked = $(e.target).is(":checked");
+	console.log("전체 선택 : " + checked);
+	
+	if(checked){
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", true);
+	} else {
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", false);
+	}
+}));
+
+// 체크박스 개별 선택
+$(".member-is-checked").on("click", ((e)=>{
+	let isChecked = true;
+	console.log("개별 선택 : " + isChecked);
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked && $(item).is(":checked");
+		console.log("i : " + i);
+		console.log(item);
+		console.log($(item).is(":checked"));
+	});
+	
+	$("#checkAll").prop("checked", isChecked);
+}));
+
+$("#memberListDeleteBtn").click((e)=>{
+	let isChecked = false;
+	
+	$(".member-is-cheked").each((i, item)=>{
+		isChecked = isChecked || $(item).is(":checked");
+		let target = $(item).data("target");
+		
+		if($(item).is(":checked")){
+			$(item).after(`<input type="hidden" name="memberNo" value="\${target}"/>`);
+		}
+	});
+	
+	if(!isChecked){
+		alert("선택된 목록이 없습니다.");
+		return;
+	}
+	
+	console.log("클릭");
+	console.log($(document.memberDeleteFrm));
+	$(document.noticeDeleteFrm).submit();
+});
+
+
+
+
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
