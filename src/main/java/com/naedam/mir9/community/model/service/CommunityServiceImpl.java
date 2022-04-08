@@ -33,4 +33,22 @@ public class CommunityServiceImpl implements CommunityService {
 		return communityDao.reviewImgModal(reviewCode);
 	}
 
+	// 카테고리 조회
+	@Override
+	public int selectCategory(String reviewCode) {
+		return communityDao.selectCategory(reviewCode);
+	}	
+	
+	// 이미지 삭제
+	@Override
+	public int imgDelete(String reviewCode) {
+		return communityDao.imgDelete(reviewCode);
+	}	
+	
+	// 리뷰 삭제
+	@Override
+	public int selectDelete(String reviewCode) {
+		return communityDao.selectDelete(reviewCode);
+	}
+
 }

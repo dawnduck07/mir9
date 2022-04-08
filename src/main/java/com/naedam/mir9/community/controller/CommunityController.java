@@ -1,13 +1,17 @@
 package com.naedam.mir9.community.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,8 +65,39 @@ public class CommunityController {
 		
 		return "community/review";
 	}
-	
+		
 	// 리뷰 삭제
+	@PostMapping("/delete")
+	public String selectDelete(
+			HttpServletRequest request) {
+		
+		// 선택된 리뷰 번호
+		List<String> selectedCode = Arrays.asList(request.getParameterValues("list[]"));
 
+		int delImg = 0;
+		int delReview = 0;
+		int categoryNo = 0;
+		
+		for(String reviewCode : selectedCode) {
+			// 카테고리 조회
+			categoryNo = communityService.selectCategory(reviewCode);
+
+			// 이미지 삭제
+			if(categoryNo == 1) { // 포토 후기일 경우
+				delImg = communityService.imgDelete(reviewCode);
+			}
+			
+			// 리뷰 삭제
+			delReview = communityService.selectDelete(reviewCode);
+		}
+		
+		return "redirect:/comm/review";
+	}
+	
+	// imgbb 테스트
+	@RequestMapping(value="/imgbb", method={RequestMethod.GET, RequestMethod.POST}) 
+	public String imgbbTest(){
+		return "community/urlTest";
+	}
 	
 }
