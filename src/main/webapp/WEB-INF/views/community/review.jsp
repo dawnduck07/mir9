@@ -149,7 +149,7 @@
 	// 모달 띄우기
 	function review_detail(reviewCode){
 		$("#modalContent").modal({backdrop:"static", show:true}); // backdrop : 모달 영역 밖 클릭 시 닫힘 방지 
-		// console.log(reviewCode); 리뷰 번호 찍힘
+		// console.log(reviewCode); 
 		setData(reviewCode);
 	}
 	
@@ -169,18 +169,19 @@
 				$("#title").val(result.review[0].reviewTitle);
 				$("#content").val(result.review[0].reviewContent);
 				
-				// 이미지
+				// 관련 변수
 				var origin = '';
-				var change = '';
 				var imgUrl = '';
 				var imgList = '';
+				var aTag = '';
+				var reviewImg = '';
+				var dataUrl = '';
+				var leng = result.reviewImg.length;
 				
-				if(result.reviewImg.length > 0) { // 이미지가 있는 경우
-					for(var i = 0; i < result.reviewImg.length; i++) {
-						origin = result.reviewImg[i].originName;
-						change = result.reviewImg[i].changeName;
-						imgUrl = result.reviewImg[i].reviewImgUrl;
-						imgList += "<a download='" + origin + "' href='${pageContext.request.contextPath}" + imgUrl + change + "'><img src='${pageContext.request.contextPath}" + imgUrl + change + "' style='width:80px; cursor:pointer;'></a>";
+				// 태그 생성
+				if(leng > 0) { // 이미지가 leng개 있는 경우
+					for(var i = 0; i < leng; i++) {
+						imgList += "<a href='' download='' id='aTag" + i + "'><img src='' name='' id='reviewImg" + i + "' style='width:80px; cursor:pointer;'></a>";	
 					}
 					$('#file_list').html(imgList);
 				}
@@ -188,6 +189,19 @@
 					$('#file_list').html('');
 				}
 				
+				// 태그 속성값 부여
+				for(var i = 0; i < leng; i++) {
+					aTag = document.getElementById("aTag" + i);
+					reviewImg = document.getElementById("reviewImg" + i);
+					origin = result.reviewImg[i].originName;
+					imgUrl = result.reviewImg[i].reviewImgUrl;
+					
+					toDataURL(imgUrl, leng); // 데이터url : a태그 href 속성값
+					aTag.download = origin;
+					reviewImg.src = imgUrl;
+					reviewImg.name = origin;
+				}
+
 			},
 			error: function(textStatus, errorThrown){
 				console.log("리뷰 상세 조회에 실패했습니다.");
@@ -197,7 +211,25 @@
 		});
 		
 	}
-		
+	
+	// 데이터url 생성
+	function toDataURL(imgUrl, leng) {
+		  var xhr = new XMLHttpRequest();
+		  xhr.onload = function() {
+		    var reader = new FileReader();
+		    reader.onload= function() {
+		      for(var i = 0; i < leng; i++) {
+		      	var a = document.getElementById("aTag" + i);
+		      	a.href = reader.result;
+		      }
+		    }
+		    reader.readAsDataURL(xhr.response);
+		  };
+		  xhr.open('GET', imgUrl);
+		  xhr.responseType = 'blob';
+		  xhr.send();
+	}
+
 </script>
 
 

@@ -93,6 +93,95 @@
   	select * from category where category_no = #{cteNo}
   </select>
   
+  <select id="selectCategoryLevel" resultType="_int">
+  	WITH recursive cte AS (
+
+	SELECT 
+		category_no, 
+		category_name, 
+		parent_no,
+		STATUS,
+		1 AS level
+	FROM category
+	WHERE parent_no IS NULL AND category_type = 'product'
+	
+	UNION ALL
+	
+	SELECT 
+		c.category_no,
+		c.category_name,
+		c.parent_no,
+		c.status,
+		1+level AS level
+	FROM category c 
+	INNER JOIN cte
+	ON c.parent_no = cte.category_no
+	)
+	
+	SELECT level FROM cte
+	WHERE category_no = #{cteNo}
+  </select>
+  
+  <select id="selectRelatedCtegoryByCteNo" resultType="Category">
+    WITH recursive cte AS (
+
+	SELECT 
+		category_no, 
+		category_name, 
+		parent_no,
+		STATUS,
+		1 AS level
+	FROM category
+	WHERE parent_no IS NULL AND category_type = 'product'
+	
+	UNION ALL
+	
+	SELECT 
+		c.category_no,
+		c.category_name,
+		c.parent_no,
+		c.status,
+		1+level AS level
+	FROM category c 
+	INNER JOIN cte
+	ON c.parent_no = cte.category_no
+	)
+	
+	SELECT category_no, IFNULL(parent_no, 0) AS parent_no, category_name, STATUS, level FROM cte
+	WHERE category_no IN
+		(SELECT parent_no FROM category WHERE category_no IN (SELECT category_no FROM category WHERE category_no IN (SELECT parent_no FROM category WHERE category_no = #{cteNo}) OR category_no = #{cteNo})) OR category_no = #{cteNo}
+	ORDER BY category_no
+  </select>
+  
+  <select id="selectCategoryNamesByCteLv" resultType="category">
+    WITH recursive cte AS (
+
+	SELECT 
+		category_no, 
+		category_name, 
+		parent_no,
+		STATUS,
+		1 AS level
+	FROM category
+	WHERE parent_no IS NULL AND category_type = 'product'
+	
+	UNION ALL
+	
+	SELECT 
+		c.category_no,
+		c.category_name,
+		c.parent_no,
+		c.status,
+		1+level AS level
+	FROM category c 
+	INNER JOIN cte
+	ON c.parent_no = cte.category_no
+	)
+	
+	SELECT category_no, IFNULL(parent_no, 0) AS parent_no, category_name, STATUS, level FROM cte
+	WHERE LEVEL = #{level}
+	ORDER BY category_no
+  </select>
   
   <insert id="insertProductCategoryByParam">
 	  <choose>

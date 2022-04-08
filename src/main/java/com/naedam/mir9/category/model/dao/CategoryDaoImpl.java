@@ -55,6 +55,26 @@ public class CategoryDaoImpl implements CategoryDao {
 		// TODO Auto-generated method stub
 		return session.delete("category.deleteCategoryByCteNo", cteNo);
 	}
+
+	@Override
+	public int selectCategoryLevel(String cteNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("category.selectCategoryLevel",cteNo);
+	}
+
+	@Override
+	public List<Category> selectRelatedCtegoryByCteNo(String cteNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("category.selectRelatedCtegoryByCteNo",cteNo);
+	}
+
+	@Override
+	public List<Category> selectCategoryNamesByCteLv(int level) {
+		// TODO Auto-generated method stub
+		return session.selectList("category.selectCategoryNamesByCteLv",level);
+	}
+
+
 	
 	
 }

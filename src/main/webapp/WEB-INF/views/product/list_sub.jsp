@@ -124,9 +124,17 @@
 						<button type="button" onclick="onclickCopyProduct()" class="btn btn-warning btn-sm">
 							<i class="fa fa-copy"></i> 제품 복제
 						</button>
+						<!-- 상품등록 버튼은 3레벨일때만 출력 -->
+						<c:if test="${level == 3 }">
+							<button type="button" onclick="onclickInsert()" class="btn btn-primary btn-sm">
+								<i class="fa fa-plus-square"></i> 상품 등록
+							</button>
+						</c:if>
+						
 						<button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm" style="margin-left: 20px;">
 							<i class="fa fa-file-excel-o"></i> Excel 다운로드
 						</button>
+						
 						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
 							<input type="hidden" name="download_type" value="product" /> <input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data">
 						</form>
@@ -175,11 +183,9 @@
 					var options = data[2];
 					var discriptions = data[3];
 					
-					console.log(options)
-					
 					parent.$('#category_depth').html('');
 					parent.Depth = 3
-					parent.getCategory(itemCategoryCode);
+					parent.getCategory(product.categoryNo);
 					
 					parent.form_register.reset();
 					
@@ -233,18 +239,21 @@
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.$('#option_list').html('');
             parent.form_register.reset();
-            parent.objEditor.setData('');
+            parent.getCategory(${cteNo});
             parent.form_register.mode.value = 'insertProduct';
             parent.form_register.locale.value = 'ko';
             parent.form_register.category_code.value = '';
             parent.$('#category_depth').html('');
             parent.$('[id^=display_file]').css('display','none');
         }
+        
         function onclickUpdate(code) {
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
             setData(code);
+            parent.$('#mode').val('updateProduct');
         }
+        
         // 제품복제 체크버튼 및 모달레이어창
         function onclickCopyProduct() {
             var count = $(":input[name = 'list[]']").length;
@@ -273,6 +282,10 @@
                 return false;
             }
         }
+        
+        
+
+        
 </script>
 </body>
 </html>

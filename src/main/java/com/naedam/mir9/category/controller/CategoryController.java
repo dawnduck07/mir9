@@ -1,6 +1,8 @@
 package com.naedam.mir9.category.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,5 +69,42 @@ public class CategoryController {
 		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.!!!");
 		
 		return "redirect:/product/productCategory_sub?stp=pc";
+	}
+	
+	@PostMapping("/getCategory")
+	@ResponseBody
+	public Map<String, Object> getCategory(String cteNo){
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Category> cteList = categoryService.selectRelatedCtegoryByCteNo(cteNo);
+		List<Category> lv1NameList = new ArrayList<Category>();
+		List<Category> lv2NameList = new ArrayList<Category>();
+		List<Category> lv3NameList = new ArrayList<Category>();
+		int depth = 0;
+		for(Category c : cteList) {
+			if(c.getLevel() > depth) {
+				depth = c.getLevel();
+			}
+			switch(c.getLevel()) {
+				case 1 : 
+					lv1NameList = categoryService.selectCategoryNamesByCteLv(c.getLevel());
+					break;
+				case 2 : 
+					lv2NameList = categoryService.selectCategoryNamesByCteLv(c.getLevel());
+					break;
+				case 3 : 
+					lv3NameList = categoryService.selectCategoryNamesByCteLv(c.getLevel());
+					break;
+			}
+		}
+		map.put("lv1NameList", lv1NameList);
+		map.put("lv2NameList", lv2NameList);
+		map.put("lv3NameList", lv3NameList);
+		map.put("depth", depth);
+		if(depth == 3) {
+			map.put("cteList", cteList);			
+		}
+		
+		return map;
+		
 	}
 }

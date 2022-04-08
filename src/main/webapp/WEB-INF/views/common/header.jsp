@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -209,13 +208,13 @@
 									class="fa fa-circle-o"></i> 리스트</a></li>
 						</ul>
 					</li>
-					<li class="treeview"><a href="#"> <i class="fa fa-gift"></i>
+					<li class="treeview"><a href="${pageContext.request.contextPath }/product/list"> <i class="fa fa-gift"></i>
 							<span>제품</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li class="active"><a href="?tpf=admin/product/list"><i
+							<li class="active"><a href="${pageContext.request.contextPath }/product/list"><i
 									class="fa fa-circle-o"></i> 리스트 </a></li>
-							<li><a href="?tpf=admin/product/category"><i
+							<li><a href="${pageContext.request.contextPath }/product/category"><i
 									class="fa fa-circle-o"></i> 카테고리 </a></li>
 							<li><a href="?tpf=admin/product/option_bank"><i
 									class="fa fa-circle-o"></i> 자주쓰는 옵션 관리 </a></li>
