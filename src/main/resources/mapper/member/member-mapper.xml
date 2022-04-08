@@ -7,7 +7,6 @@
 <insert id="insertMember">
 	INSERT INTO member
 		(member_no,
-		 member_grade_no,
 		 first_name,
 		 last_name,
 		 email,
@@ -19,7 +18,6 @@
 		 profile_img) 
 	VALUES
 		(NEXTVAL(seq_member_no),
-		#{memberGradeNo},
 		#{firstName},
 		#{lastName},
 		#{email},
@@ -150,4 +148,11 @@
 		${type} LIKE CONCAT('%', #{keyword}, '%')
 </select>
 
+<!-- 회원 삭제 -->
+<delete id="deleteMember">
+	DELETE FROM
+		member
+	w
+
+</delete>
 </mapper>

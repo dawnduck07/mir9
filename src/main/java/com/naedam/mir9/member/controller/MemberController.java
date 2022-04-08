@@ -104,6 +104,25 @@ public class MemberController {
 		return resultMap;
 	}
 	
+	// 회원 선택 삭제
+	@PostMapping("/memberDelete.do")
+	public String memberDelete(
+						@RequestParam int[] memberNo,
+						@RequestParam(required = false) String type,
+						@RequestParam(required = false) String keyword,
+						RedirectAttributes redirectAttr,
+						HttpServletRequest request) throws Exception {
+		log.debug("memberNo = {}", memberNo);
+		log.debug("type = {}", type);
+		log.debug("keyword = {}", keyword);
+		
+		// 회원 삭제
+		int result = memberService.deleteMember(memberNo);
+		log.debug("result = {}", result);
+		
+		return "redirect:/member/memberList";
+	}
+	
 	// 회원 적립금 내역보기
 	@GetMapping("/memberPointList/{memberNo}")
 	public String memberPointList(
@@ -186,7 +205,7 @@ public class MemberController {
 	public String memberLoginPage() {
 		
 		
-		return "redirect:/";
+		return "member/memberList";
 	}
 	
 	@PostMapping("/memberLogin.do")

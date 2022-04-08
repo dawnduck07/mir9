@@ -59,6 +59,12 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectSearchListCount", param);
 	}
 
+	// 회원 삭제
+	@Override
+	public int deleteMember(int[] memberNo) {
+		return session.delete("member.deleteMember", memberNo);
+	}
+
 
 
 	

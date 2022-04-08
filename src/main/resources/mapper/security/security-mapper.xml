@@ -7,8 +7,8 @@
 		select
 		    *
 		from
-		    member m left join member_grade g
-		        on m.member_grade_no = g.member_grade_no
+		    member m left join authorities a
+		        on m.member_no = a.member_no
 		where
 		    m.id = #{username}	
 	</select>
@@ -16,7 +16,6 @@
 	<resultMap type="member" id="memberMap">
 		<id column="id" property="id"/>
 		<result column="member_no" property="memberNo"/>
-		<result column="member_grade_no" property="memberGradeNo"/>
 		<result column="first_name" property="firstName"/>
 		<result column="last_name" property="lastName"/>
 		<result column="email" property="email"/>
@@ -29,7 +28,7 @@
 			property="authorities" 
 			ofType="org.springframework.security.core.authority.SimpleGrantedAuthority">
 			<constructor>
-				<arg column="grade" javaType="string"/>
+				<arg column="authority" javaType="string"/>
 			</constructor>	
 		</collection>
 		
