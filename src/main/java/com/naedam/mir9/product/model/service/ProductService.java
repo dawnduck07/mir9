@@ -27,4 +27,6 @@ public interface ProductService {
 
 	List<ProductDetail> selectProductListByCteNo(String cteNo);
 
+	int updateProduct(Product product);
+
 }

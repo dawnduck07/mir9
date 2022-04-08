@@ -191,13 +191,9 @@ public class ProductController {
 	
 	@PostMapping("/insert")
 	public String insertProduct(HttpServletRequest request, RedirectAttributes redirectAttr) {
-		Enumeration params = request.getParameterNames();
-		System.out.println("----------------------------");
-		while (params.hasMoreElements()){
-		    String name = (String)params.nextElement();
-		    System.out.println(name + " : " +request.getParameter(name));
-		}
-		System.out.println("----------------------------");
+		Product product = setProduct(request);
+		
+		//int result = productService.insertProduct(product);
 		redirectAttr.addFlashAttribute("msg", "상품이 등록되었습니다.");
 		
 		return "redirect:/product/list";
@@ -205,19 +201,78 @@ public class ProductController {
 	}
 	
 	@PostMapping("/update")
-	public void updateProduct(HttpServletRequest request, RedirectAttributes redirecAttr) {
+	public String updateProduct(HttpServletRequest request, RedirectAttributes redirectAttr){
 		Enumeration params = request.getParameterNames();
-		System.out.println("----------------------------");
-		while (params.hasMoreElements()){
-		    String name = (String)params.nextElement();
-		    System.out.println(name + " : " +request.getParameter(name));
+		while(params.hasMoreElements()) {
+		  String name = (String) params.nextElement();
+		  System.out.print(name + " : " + request.getParameter(name) + "     "); 
 		}
-		System.out.println("----------------------------");
+		System.out.println();
+		
+		
+		/*
+		 * Product product = setProduct(request);
+		 * 
+		 * int result = productService.updateProduct(product);
+		 * 
+		 * if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
+		 */
+		List<String> imgNoList = Arrays.asList(request.getParameterValues("no_file"));
+		List<String> urlList = Arrays.asList(request.getParameterValues("url_file"));
+
+		for(int i = 0; i < urlList.size(); i++) {
+			ProductImg img = new ProductImg();
+			
+			try {
+				img.setProductImgNo(Integer.parseInt(imgNoList.get(i)));
+				img.setImgLevel(i+1);
+				img.setImgUrl(urlList.get(i));
+			} catch (NumberFormatException e) {}
+			
+			if(img.getImgUrl() != null) {
+				
+				//TODO
+				// update쿼리 날리기!
+			}
+			
+			
+			log.debug("img = {}", img);
+		}
+		
+		return "redirect:/product/list";
 		
 	}
 	
 	@GetMapping("/img_test")
 	public void imgtest() {}
 	
+	private Product setProduct(HttpServletRequest request) {
+		Product product = new Product();
+		product.setProductNo(Integer.parseInt(request.getParameter("product_no")));
+		product.setCategoryNo(Integer.parseInt(request.getParameter("category_select_box_2")));
+		product.setOptionNo(Integer.parseInt(request.getParameter("option_no")));
+		product.setIndividualPoint(Integer.parseInt(request.getParameter("point")));
+		product.setLangType(request.getParameter("locale"));
+		product.setListTitle(request.getParameter("list_title"));
+		product.setModelName(request.getParameter("model"));
+		product.setProductName(request.getParameter("title"));
+		product.setRetailPrice(Integer.parseInt(request.getParameter("consumer_price").replace(",", "")));
+		product.setSalePrice(Integer.parseInt(request.getParameter("sale_price").replace(",", "")));
+		product.setStatus(request.getParameter("status"));
+		
+		
+		
+		product.setIsSoldOut(request.getParameter("is_sold_out"));
+		product.setProductBest(request.getParameter("is_best"));
+		product.setProductNew(request.getParameter("is_new"));
+		product.setProductEvent(request.getParameter("is_event"));
+		
+		if(product.getIsSoldOut() == null) product.setIsSoldOut("N");
+		if(product.getProductBest() == null) product.setProductBest("N");
+		if(product.getProductNew() == null) product.setProductNew("N");
+		if(product.getProductEvent() == null) product.setProductEvent("N");
+		
+		return product;
+	}
 
 }

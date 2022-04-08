@@ -189,7 +189,7 @@
 					parent.getCategory(product.categoryNo);
 					
 					parent.form_register.reset();
-					
+					parent.$('[name=product_no]').val(product.productNo);
 					parent.$('[name=model]').val(product.modelName);
 	                parent.$('[name=title]').val(product.productName);
 	                parent.$('[name=title_eng]').val('test3');
@@ -207,8 +207,8 @@
 	                
 	                
 	                parent.$('[name=keyword]').val('test7'); // 키워드
-	                parent.$('[name=consumer_price]').val(product.retailPrice);
-	                parent.$('[name=sale_price]').val(product.salePrice);
+	                parent.$('[name=consumer_price]').val(product.retailPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+	                parent.$('[name=sale_price]').val(product.salePrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
 	                parent.$('[name=point]').val(product.individualPoint);
 	                if (product.productBest== 'Y') parent.$('input:checkbox[id="is_best"]').prop('checked',true);
                     if (product.productNew == 'Y') parent.$('input:checkbox[id="is_new"]').prop('checked',true);
@@ -227,6 +227,13 @@
                          	parent.insertOption(option.optionNo, option.optionValueNo, option.optionName, option.optionValue, option.optionValueCost, option.is_necessary);
              			});
              		}
+                 
+                 // img처리
+                 	if(imgs.length > 0){
+                 		$.each(imgs, function(index, img){
+                 			parent.insertImg(img.productImgNo, img.imgLevel, img.imgUrl);
+                 		});
+                 	}
                     
 				},
 				error:function(jqXHR, textStatus, errorThrown){

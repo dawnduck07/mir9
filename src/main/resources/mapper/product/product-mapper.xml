@@ -43,6 +43,12 @@
   	SELECT * from product_discription WHERE product_no = #{productNo}
   </select>
   
+  <update id="updateProduct">
+  	update product set category_no = #{categoryNo}, option_no = #{optionNo}, model_name = #{modelName}, product_name = #{productName}, list_title = #{listTitle},
+  		retail_price = #{retailPrice}, sale_price = #{salePrice}, is_sold_out = #{isSoldOut}, individual_point = #{individualPoint},  product_best = #{productBest},
+  		product_new = #{productNew}, product_event = #{productEvent}, status = #{status}, lang_type = #{langType}, reg_date = sysdate() where product_no = #{productNo}
+  </update>
+  
   <delete id="deleteProductByProductNo">
   	delete from product where product_no = #{productNo}
   </delete>

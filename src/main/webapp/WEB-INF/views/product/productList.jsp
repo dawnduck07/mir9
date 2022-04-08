@@ -43,7 +43,9 @@
 		<div class="modal-dialog" style="width: 800px;">
 			<div class="modal-content">
 				<form name="form_register" method="post" action="?tpf=admin/product/process" enctype="multipart/form-data">
-					<input type="hidden" name="mode" id="mode" value="insertProduct"> <input type="hidden" name="code" id="code"> <input type="hidden" name="category_code" id="category_code"> <input type="hidden" name="locale" value="ko">
+					<input type="hidden" name="mode" id="mode" value="insertProduct"> 
+					<input type="hidden" name="locale" value="ko">
+					<input type="hidden" name="product_no"/>
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabelPortfolio">상품 등록</h4>
@@ -93,6 +95,7 @@
 										</button>
 									</p> <br>
 									<div id="list_option">
+									<input type="hidden" name="option_no" />
 										<table class="table table-bordered table-hover">
 											<colgroup>
 												<col width="25%" />
@@ -123,7 +126,8 @@
 								<td align="left">
 									<input type="file" name="file1" class="form-control input-sm" style="width: 80%; display: inline;" />
 									<span id="display_file1" style="display: none;"></span>
-									<input type="hidden" id="url_file1" />
+									<input type="hidden" id="url_file1" name="url_file" />
+									<input type="hidden" id="no_file1" name="no_file" />
 								</td>
 							</tr>
 							<tr>
@@ -131,7 +135,8 @@
 								<td align="left">
 									<input type="file" name="file2" class="form-control input-sm" style="width: 80%; display: inline;" /> 
 									<span id="display_file2" style="display: none;"></span>
-									<input type="hidden" id="url_file2" />
+									<input type="hidden" id="url_file2" name="url_file" />
+									<input type="hidden" id="no_file2" name="no_file" />
 								</td>
 									
 							</tr>
@@ -140,7 +145,8 @@
 								<td align="left">
 									<input type="file" name="file3" class="form-control input-sm" style="width: 80%; display: inline;" /> 
 									<span id="display_file3" style="display: none;"></span>
-									<input type="hidden" id="url_file3" />
+									<input type="hidden" id="url_file3" name="url_file"/>
+									<input type="hidden" id="no_file3" name="no_file" />
 								</td>
 							</tr>
 							<tr>
@@ -160,11 +166,11 @@
             </tr> -->
 							<tr>
 								<td class="menu">BEST / NEW / EVENT</td>
-								<td align="left"><input type="checkbox" id="is_best" name="is_best" value='y'>BEST&nbsp;&nbsp; <input type="checkbox" id="is_new" name="is_new" value='y'>NEW&nbsp;&nbsp; <input type="checkbox" id="is_event" name="is_event" value='y'>EVENT</td>
+								<td align="left"><input type="checkbox" id="is_best" name="is_best" value='Y'>BEST&nbsp;&nbsp; <input type="checkbox" id="is_new" name="is_new" value='Y'>NEW&nbsp;&nbsp; <input type="checkbox" id="is_event" name="is_event" value='Y'>EVENT</td>
 							</tr>
 							<tr>
 								<td class="menu">품절 처리</td>
-								<td align="left"><input type="checkbox" id="is_soldout" name="is_soldout" value='y'>품절</td>
+								<td align="left"><input type="checkbox" id="is_soldout" name="is_soldout" value='Y'>품절</td>
 							</tr>
 
 							<tr>
@@ -303,7 +309,7 @@ $("input[type=file]").change(function(e){
 	function insertOption(optionNo, optionValueNo, option_name, option_value, option_price, is_necessary) {
 	    var check_necessary = '';
 	    if (is_necessary == true || is_necessary == 'Y') check_necessary = 'checked';
-	    
+	    $('input[name=option_no]').val(optionNo);
 	    var row_num = 0;
 		var last_class = $('#option_list tr:last').attr('id');
 		if(!(typeof last_class == 'undefined')) {
@@ -461,7 +467,14 @@ $("input[type=file]").change(function(e){
 		}
 
 	}
-
+	
+	function insertImg(pImgNo, level, url){
+		console.log(pImgNo, level, url)
+		var target = "#url_file"+level;
+		$(target).val(url);
+		var target = "#no_file"+level;
+		$(target).val(pImgNo);
+	}
 	
 	function removeOptionf(optionValueNo){
 		console.log()
