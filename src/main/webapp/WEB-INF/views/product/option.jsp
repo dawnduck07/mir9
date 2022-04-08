@@ -141,7 +141,7 @@ function addOption(){
 			<li class="first_item">
 				<input type="text" name="option_value" class="form-control input-sm" placeholder="옵션값" style="width:40%; display:inline; margin-bottom:10px;">
 				<input type="text" name="option_value_cost" class="form-control input-sm" placeholder="추가 가격(숫자만 입력)" onkeyup="this.value=displayComma(checkAmountNum(this.value))"  style="width:30%; display:inline; margin-bottom:10px;">
-				<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);"><span class="fa fa-minus-square"></span> 옵션값 제거</button>
+				<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);" />
 			</li>
 			`);
 }
@@ -173,6 +173,9 @@ function register(){
 		url:"${pageContext.request.contextPath}/option/insert",
 		method:"POST",
 		data: jsonStr,
+		headers: {
+			"${_csrf.headerName}" : "${_csrf.token}"
+		},
 		contentType: "application/json; charset=utf-8",
 		success(data){
 			console.log(data)
@@ -196,6 +199,9 @@ function onclickUpdate(optionNo){
 		url:"${pageContext.request.contextPath}/option/list",
 		data: {
 			optionNo : optionNo
+		},
+		headers: {
+			"${_csrf.headerName}" : "${_csrf.token}"
 		},
 		method:"POST",
 		success(data){
@@ -259,6 +265,9 @@ function option_update(optionNo){
 		url:"${pageContext.request.contextPath}/option/update",
 		method:"POST",
 		data: jsonStr,
+		headers: {
+			"${_csrf.headerName}" : "${_csrf.token}"
+		},
 		contentType: "application/json; charset=utf-8",
 		success(data){
 			if(data > 0){

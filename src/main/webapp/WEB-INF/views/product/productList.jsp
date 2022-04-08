@@ -222,13 +222,13 @@
 					<div class="row" style="margin: 0 0 5px 0;">
 						<div class="col-xs-12" style="padding: 0">
 							<div class="btn-group ">
-								<button type="button" onclick="optionTabChange('1', '/index.php?tpf=admin/product/option_manager')" class="btn btn-default" id="option_tab_btn1">
+								<button type="button" onclick="optionTabChange('1', '${pageContext.request.contextPath}/option/option_manager')" class="btn btn-default" id="option_tab_btn1">
 									<i class="fa fa-file-o" aria-hidden="true"></i> 직접입력
 								</button>
-								<button type="button" onclick="optionTabChange('2', '/index.php?tpf=admin/product/option_manager_bank')" class="btn btn-default" id="option_tab_btn2">
+								<button type="button" onclick="optionTabChange('2', '${pageContext.request.contextPath}/option/option_manager_bank')" class="btn btn-default" id="option_tab_btn2">
 									<i class="fa fa-bookmark-o" aria-hidden="true"></i> 자주쓰는 옵션
 								</button>
-								<button type="button" onclick="optionTabChange('3', '/index.php?tpf=admin/product/option_manager_product')" class="btn btn-default" id="option_tab_btn3">
+								<button type="button" onclick="optionTabChange('3', '${pageContext.request.contextPath}/option/option_manager_product')" class="btn btn-default" id="option_tab_btn3">
 									<i class="fa fa-clone" aria-hidden="true"></i> 기존 상품 옵션 불러오기
 								</button>
 							</div>
@@ -246,42 +246,40 @@
 <!-- /.content-wrapper -->
 
 <script>
-	function insertOption(option_name, option_value, option_price, is_necessary) {
+	function insertOption(optionNo, optionValueNo, option_name, option_value, option_price, is_necessary) {
 	    var check_necessary = '';
 	    if (is_necessary == true || is_necessary == 'Y') check_necessary = 'checked';
 	    
+	    var row_num = 0;
 		var last_class = $('#option_list tr:last').attr('id');
-		
-		var row_num = 0;
-		console.log(last_class)
 		if(!(typeof last_class == 'undefined')) {
 			var target = '#option_value_td';
-			var option_val_txt = '<input type="text" name="option_value['+row_num+']" class="form-control input-sm" value="'+option_value+'" readonly />'
+			var option_val_txt = '<input type="text" name="option_value['+optionValueNo+']" class="form-control input-sm" value="'+option_value+'" readonly />'
 			$(target).append(option_val_txt);
 			target = '#option_value_cost_td';
-			option_val_txt = '<input type="text" name="option_price['+row_num+']" class="form-control input-sm" value="'+option_price+'" readonly />';
+			option_val_txt = '<input type="text" name="option_price['+optionValueNo+']" class="form-control input-sm" value="'+option_price+'" readonly />';
 			$(target).append(option_val_txt);
 			target = '#option_btns_td';
-			option_val_txt = '<button type="button" class="btn btn-primary btn-xs" onclick="modifyOption('+row_num+');"><span class="glyphicon glyphicon-plus"></span> 수정</button>\n<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);"><span class="fa fa-minus-square"></span> 삭제</button>'
+			option_val_txt = '\n<button type="button" class="btn btn-primary btn-xs" onclick="modifyOption('+ optionNo +');"><span class="glyphicon glyphicon-plus"></span> 수정</button>\n<button type="button" class="btn btn-danger btn-xs" onclick="removeOption('+ optionNo +');"><span class="fa fa-minus-square"></span> 삭제</button>'
 			$(target).append(option_val_txt);
 		}else if(typeof last_class == 'undefined'){
-			var create_txt = '<tr id="option_num_'+row_num+'" >';
+			var create_txt = '<tr id="option_num_'+optionNo+'" >';
 			create_txt += '<td>';
 			create_txt += '	<input type="text" name="option_name['+row_num+']" class="form-control input-sm" value="'+option_name+'" readonly />';
 			create_txt += '	<input type="checkbox" name="is_necessary['+row_num+']" '+check_necessary+' value="y"> 필수 선택 항목';
 			create_txt += '</td>';
 			create_txt += '<td id="option_value_td">';
-			create_txt += '	<input type="text" name="option_value['+row_num+']" class="form-control input-sm" value="'+option_value+'" readonly />';
+			create_txt += '	<input type="text" name="option_value['+optionValueNo+']" class="form-control input-sm" value="'+option_value+'" readonly />';
 			
 			create_txt += '</td>';
 			create_txt += '<td id="option_value_cost_td">';
 			
-			create_txt += '	<input type="text" name="option_price['+row_num+']" class="form-control input-sm" value="'+option_price+'" readonly />';
+			create_txt += '	<input type="text" name="option_price['+optionValueNo+']" class="form-control input-sm" value="'+option_price+'" readonly />';
 			
 			create_txt += '</td>';
 			create_txt += '<td id="option_btns_td">';
-			create_txt += '	<button type="button" class="btn btn-primary btn-xs" onclick="modifyOption('+row_num+');"><span class="glyphicon glyphicon-plus"></span> 수정</button>';
-			create_txt += '	<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);"><span class="fa fa-minus-square"></span> 삭제</button>';
+			create_txt += '	<button type="button" class="btn btn-primary btn-xs" onclick="modifyOption('+ optionNo +');"><span class="glyphicon glyphicon-plus"></span> 수정</button>';
+			create_txt += '	<button type="button" class="btn btn-danger btn-xs" onclick="removeOption('+ optionNo +');"><span class="fa fa-minus-square"></span> 삭제</button>';
 			create_txt += '</td>';
 			create_txt += '</tr>';
 		
@@ -356,6 +354,65 @@
 		}
 
 	}
+	function modifyOption(optionNo) {
+		optionTabChange('1', '${pageContext.request.contextPath}/option/option_manager?optionNo='+optionNo);
+		var url = '${pageContext.request.contextPath}/option/option_manager?optionNo='+optionNo
+		$('#option_tab_btn1').attr('onclick',"optionTabChange('1','" + url + "')");
+		$('#modalContent2').modal({backdrop:'static', show:true});
+	}
+	
+	function optionTabChange(on_idx, url){
+		$('#option_tab_btn1').attr('class','btn btn-default');
+		$('#option_tab_btn2').attr('class','btn btn-default');
+		$('#option_tab_btn3').attr('class','btn btn-default');
+		$('#option_tab_btn'+on_idx).attr('class','btn btn-primary');
+
+		$('#modal_iframe').attr('src', url);
+	}
+	
+	function closeOptionManager() {
+		$('#modal_iframe').attr('src','#')
+		$('#modalContent2').modal('hide');
+	}
+	
+	function updateOption(optionNo, option_name, option_value_arr, option_price_arr, row_num, is_necessary) {
+		var tr = $('#option_num_'+optionNo);
+		$(tr).find('input[name^=option_name]').val(option_name);
+		$(tr).find('input[name^=is_necessary]').prop("checked", is_necessary);  // 필수 선택
+
+		var tm_option_value_arr = $(tr).find('input[name^=option_value]');
+		var tm_option_price_arr = $(tr).find('input[name^=option_price]');
+
+		for(var i=0 ; i<option_value_arr.length ; i++) {
+			if(i >= tm_option_value_arr.length) { // 새로운 옵션값이 추가될 경우
+				create_txt = '	<input type="text" name="option_value['+row_num+']['+i+']" class="form-control input-sm" value="'+option_value_arr[i]+'" readonly />';
+				var befor_html = $(tr).find('td:nth-child(2)').html();
+				$(tr).find('td:nth-child(2)').html(befor_html+create_txt);
+
+				var create_txt2 = '	<input type="text" name="option_price['+row_num+']['+i+']" class="form-control input-sm" value="'+option_price_arr[i]+'" readonly />';
+				var befor_html2 = $(tr).find('td:nth-child(3)').html();
+				$(tr).find('td:nth-child(3)').html(befor_html2+create_txt2);
+			} else {
+				$(tm_option_value_arr).get(i).value = option_value_arr[i];
+				$(tm_option_price_arr).get(i).value = option_price_arr[i];
+			}
+		}
+
+		if(option_value_arr.length < tm_option_value_arr.length){ // 배열 개수 비교로 값 체크
+			var delete_cnt = tm_option_value_arr.length - option_value_arr.length;
+			for(var i=0 ; i<delete_cnt ; i++){
+				$(tr).find('input[name^=option_value]:last').remove();
+				$(tr).find('input[name^=option_price]:last').remove();
+			}
+		}
+
+	}
+
+	
+	function removeOptionf(optionValueNo){
+		console.log()
+	}
+	
 	
 </script>
 
