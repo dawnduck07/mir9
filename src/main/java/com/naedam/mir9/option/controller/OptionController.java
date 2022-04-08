@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,11 +86,18 @@ public class OptionController {
 		ArrayList<String> valueNoList = (ArrayList<String>) map.get("option_value_no");
 		int result = 0;
 		
+		log.debug("optionNo = {}",map.get("optionNo").getClass().getName());
 		for(int i = 0; i < valueList.size(); i++) {
 			
 			OptionValue ov = new OptionValue();
 			ov.setOptionValueNo(Integer.parseInt(valueNoList.get(i)));
-			ov.setOptionNo((Integer) map.get("optionNo"));
+			
+			try {
+				ov.setOptionNo((Integer) map.get("optionNo"));
+			} catch (Exception e) {
+				ov.setOptionNo(Integer.parseInt((String) map.get("optionNo")));
+			}
+			
 			ov.setOptionValue(valueList.get(i));
 			ov.setOptionValueCost(Integer.parseInt(valueCostList.get(i).replace(",", "")));
 			
@@ -98,16 +107,29 @@ public class OptionController {
 		}
 		
 		ProductOption pOption = new ProductOption();
-		pOption.setOptionNo((Integer) map.get("optionNo"));
+		try {
+			pOption.setOptionNo((Integer) map.get("optionNo"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			pOption.setOptionNo(Integer.parseInt((String) map.get("optionNo")));
+		}
+		
 		pOption.setOptionName((String)map.get("option_name"));
 		
 		result = optionService.updateProductOption(pOption);
 		
-		
-		
-		
-		
-		
 		return result;
 	}
+	
+	@GetMapping("/option_manager")
+	public String option_manager(int optionNo, Model model) {
+		ProductOption pOption = optionService.selectOneProductOptionByoptionNo(optionNo);
+		List<OptionValue> optionValueList = optionService.selectOptionValueListByOptionNo(optionNo);
+			
+		model.addAttribute("optionValueList",optionValueList);
+		model.addAttribute("pOption",pOption);
+		
+		return "/product/option_manager";
+	}
+
 }

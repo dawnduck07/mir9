@@ -217,7 +217,7 @@
 									class="fa fa-circle-o"></i> 리스트 </a></li>
 							<li><a href="${pageContext.request.contextPath }/product/category"><i
 									class="fa fa-circle-o"></i> 카테고리 </a></li>
-							<li><a href="?tpf=admin/product/option_bank"><i
+							<li><a href="${pageContext.request.contextPath }/product/option"><i
 									class="fa fa-circle-o"></i> 자주쓰는 옵션 관리 </a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i class="fa fa-user"></i>

@@ -27,7 +27,7 @@
 				 ORDER BY R.REVIEW_CODE ASC) A
 		<where>
 			<if test="keyword != '' and keyword != null">
-				${field} LIKE CONCAT('%', #{keyword}, '%')
+				${field} LIKE '%' || #{keyword} || '%'
 			</if>
 		</where>
 	</select> 
@@ -61,15 +61,23 @@
   		 WHERE I.REVIEW_CODE = #{reviewCode}
   	</select>
   	
-  	<!-- 리뷰 삭제 : 포토후기일 경우 사진 파일 먼저 지우기 
-  	<delete id="deleteImg" parameterType="int">
+  	<!-- 카테고리 조회 -->
+  	<select id="selectCategory" resultType="int">
+  		SELECT REVIEW_CATEGORY_NO
+  		  FROM TB_REVIEW
+  		 WHERE REVIEW_CODE = #{reviewCode}
+  	</select>
+  	
+  	<!-- 리뷰 삭제 : 포토후기일 경우 사진 파일 먼저 지우기 -->
+  	<delete id="imgDelete">
   		DELETE FROM REVIEW_IMG
-  		 WHERE REVIEW_CODE = #{reviewCode} 
+  		 WHERE REVIEW_CODE = #{reviewCode}  
   	</delete>
-  	<delete id="deleteReview" parameterType="int">
-  		DELETE FROM TB_REVIEW 
-  	 	 WHERE REVIEW_CODE = #{reviewCode} 
+  	
+  	<delete id="selectDelete">
+  		DELETE FROM TB_REVIEW
+  		 WHERE REVIEW_CODE = #{reviewCode}  
   	</delete>
-  	-->
+  	
   	
 </mapper>
