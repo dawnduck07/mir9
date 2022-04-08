@@ -65,6 +65,12 @@ public class ProductDaoImpl implements ProductDao {
 		// TODO Auto-generated method stub
 		return session.selectList("product.selectProductListByCteNo", cteNo);
 	}
+
+	@Override
+	public int updateProduct(Product product) {
+		// TODO Auto-generated method stub
+		return session.update("product.updateProduct", product);
+	}
 	
 	
 }
