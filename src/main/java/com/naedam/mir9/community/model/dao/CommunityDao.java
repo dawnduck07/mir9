@@ -14,5 +14,10 @@ public interface CommunityDao {
 
 	List<ReviewImg> reviewImgModal(int reviewCode);
 
+	int selectCategory(String reviewCode);	
+	
+	int imgDelete(String reviewCode);	
+	
+	int selectDelete(String reviewCode);
 	
 }

@@ -32,5 +32,23 @@ public class CommunityDaoImpl implements CommunityDao {
 	public List<ReviewImg> reviewImgModal(int reviewCode) {
 		return session.selectList("review.reviewImgModal", reviewCode);
 	}
+
+	// 카테고리 조회
+	@Override
+	public int selectCategory(String reviewCode) {
+		return session.selectOne("review.selectCategory", reviewCode);
+	}	
+	
+	// 이미지 삭제
+	@Override
+	public int imgDelete(String reviewCode) {
+		return session.delete("review.imgDelete", reviewCode);
+	}	
+	
+	// 리뷰 삭제
+	@Override
+	public int selectDelete(String reviewCode) {
+		return session.delete("review.selectDelete", reviewCode);
+	}
 	
 }

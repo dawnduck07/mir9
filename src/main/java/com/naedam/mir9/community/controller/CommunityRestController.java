@@ -34,6 +34,5 @@ public class CommunityRestController {
 		
 		return result;
 	}
-
 	
 }
