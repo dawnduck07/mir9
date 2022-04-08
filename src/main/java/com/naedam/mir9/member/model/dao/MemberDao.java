@@ -23,6 +23,12 @@ public interface MemberDao {
 	// id 중복 검사
 	Member selectOneMemberByMap(Map<String, Object> param);
 
+	// 타입별 검색 게시물
+	List<MemberEntity> selectSearchMemberList(Map<String, Object> param);
+
+	// 검색 게시물 수
+	int selectSearchListCount(Map<String, Object> param);
+
 	
 
 }
