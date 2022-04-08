@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b8f31b40-e28f-4d67-8449-ae42a6ece8ba" name="변경" comment="유광현 인텔리제이 테스트">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/controller/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/dao/CategoryDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/dao/CategoryDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/dao/CategoryDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/dao/CategoryDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/service/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/naedam/mir9/category/model/service/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/category/category-mapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/category/category-mapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/spring/security-context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/spring/security-context.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/common/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/common/header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/product/productList.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/views/product/productList.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/mapper/category/category-mapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapper/category/category-mapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.naedam/mir9/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.naedam/mir9/pom.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="27SDzu8CqcAwCebjuAE2hUe3E6I" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="b8f31b40-e28f-4d67-8449-ae42a6ece8ba" name="변경" comment="" />
+      <created>1649304862457</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1649304862457</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="유광현 인텔리제이 테스트" />
+    <option name="LAST_COMMIT_MESSAGE" value="유광현 인텔리제이 테스트" />
+  </component>
+</project>

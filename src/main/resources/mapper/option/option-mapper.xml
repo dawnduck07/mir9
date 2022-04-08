@@ -14,7 +14,7 @@
   
   
   <select id="selectOptionList" resultType="option">
-	select a.option_no, a.option_name, LISTAGG(b.option_value, ',') WITHIN GROUP (ORDER BY option_value) as option_values
+	select a.option_no, a.option_name, GROUP_CONCAT(b.option_value ORDER BY b.option_value SEPARATOR ',') as option_values
 	from product_option a, option_value b
 	where a.option_no = b.option_no
 	group by a.option_no, a.option_name

@@ -183,6 +183,7 @@
 					var options = data[2];
 					var discriptions = data[3];
 					
+					
 					parent.$('#category_depth').html('');
 					parent.Depth = 3
 					parent.getCategory(product.categoryNo);
@@ -223,8 +224,7 @@
                  // 옵션 처리
              		if(options.length > 0){
              			$.each(options, function(index, option) {
-             				console.log(option)
-                         	parent.insertOption(option.optionName, option.optionValue, option.optionValueCost, option.is_necessary);
+                         	parent.insertOption(option.optionNo, option.optionValueNo, option.optionName, option.optionValue, option.optionValueCost, option.is_necessary);
              			});
              		}
                     
