@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="product">
   <select id="selectAllProductList" resultType="productDetail">
   	SELECT a.*, b.IMG_URL, c.CATEGORY_NAME 
@@ -48,8 +46,12 @@
   		retail_price = #{retailPrice}, sale_price = #{salePrice}, is_sold_out = #{isSoldOut}, individual_point = #{individualPoint},  product_best = #{productBest},
   		product_new = #{productNew}, product_event = #{productEvent}, status = #{status}, lang_type = #{langType}, reg_date = sysdate() where product_no = #{productNo}
   </update>
+  <update id="updateProductImg">
+    update product_img set img_url = #{imgUrl} where product_img_no = #{productImgNo}
+  </update>
   
   <delete id="deleteProductByProductNo">
   	delete from product where product_no = #{productNo}
   </delete>
+  
 </mapper>
