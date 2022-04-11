@@ -71,6 +71,12 @@ public class ProductDaoImpl implements ProductDao {
 		// TODO Auto-generated method stub
 		return session.update("product.updateProduct", product);
 	}
+
+	@Override
+	public int updateProductImg(ProductImg img) {
+		// TODO Auto-generated method stub
+		return session.update("product.updateProductImg", img);
+	}
 	
 	
 }

@@ -29,4 +29,6 @@ public interface ProductService {
 
 	int updateProduct(Product product);
 
+	int updateProductImg(ProductImg img);
+
 }

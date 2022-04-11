@@ -210,16 +210,16 @@ public class ProductController {
 		System.out.println();
 		
 		
-		/*
-		 * Product product = setProduct(request);
-		 * 
-		 * int result = productService.updateProduct(product);
-		 * 
-		 * if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
-		 */
+		
+		Product product = setProduct(request);
+		  
+		int result = productService.updateProduct(product);
+		  
+		if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
+		 
 		List<String> imgNoList = Arrays.asList(request.getParameterValues("no_file"));
 		List<String> urlList = Arrays.asList(request.getParameterValues("url_file"));
-
+		
 		for(int i = 0; i < urlList.size(); i++) {
 			ProductImg img = new ProductImg();
 			
@@ -227,17 +227,13 @@ public class ProductController {
 				img.setProductImgNo(Integer.parseInt(imgNoList.get(i)));
 				img.setImgLevel(i+1);
 				img.setImgUrl(urlList.get(i));
-			} catch (NumberFormatException e) {}
+			} catch (Exception e) {}
 			
 			if(img.getImgUrl() != null) {
-				
-				//TODO
-				// update쿼리 날리기!
+				result = productService.updateProductImg(img);
 			}
-			
-			
-			log.debug("img = {}", img);
 		}
+		
 		
 		return "redirect:/product/list";
 		
