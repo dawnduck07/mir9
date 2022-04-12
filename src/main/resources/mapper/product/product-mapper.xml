@@ -50,6 +50,10 @@
     update product_img set img_url = #{imgUrl} where product_img_no = #{productImgNo}
   </update>
   
+  <update id="updateProductDiscription">
+  	update product_discription set content = #{content} where product_no = #{productNo} and discription_level = #{discriptionLevel}
+  </update>
+  
   <delete id="deleteProductByProductNo">
   	delete from product where product_no = #{productNo}
   </delete>

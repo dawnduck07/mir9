@@ -31,4 +31,6 @@ public interface ProductDao {
 
 	int updateProductImg(ProductImg img);
 
+	int updateProductDiscription(ProductDiscription pd);
+
 }
