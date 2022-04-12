@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="product">
+  <select id="selectProductListByParam" resultType="productDetail">
+  	SELECT a.*, b.IMG_URL, c.CATEGORY_NAME 
+	FROM product a
+		JOIN product_img b ON(a.product_no = b.PRODUCT_NO)
+		left JOIN category c ON(a.CATEGORY_NO = c.CATEGORY_NO)
+	<where>
+	  b.IMG_LEVEL = 1 
+	  <if test="cteNo != 0">
+		  AND a.category_no in (SELECT category_no FROM category WHERE parent_no IN(
+			SELECT category_no FROM category WHERE category_no = #{cteNo} OR parent_no = #{cteNo}) OR category_no IN(SELECT category_no FROM category WHERE category_no = #{cteNo} OR parent_no = #{cteNo}))
+	  </if>
+	  <if test="bne != 'null'">
+		  <choose>
+		  	<when test='bne == "b"'>
+		  		and a.product_best = 'Y'
+		  	</when>
+		  	<when test='bne == "n"'>
+		  		and a.product_best = 'Y'
+		  	</when>
+		  	<when test='bne == "e"'>
+		  		and a.product_best = 'Y'
+		  	</when>
+		  </choose>
+	  </if>
+	  <if test="v_status != 'null'">
+	  	<choose>
+	  		<when test='v_status == "Y"'>
+	  			and a.status = 'Y'
+	  		</when>
+	  		<when test='v_status == "N"'>
+	  			and a.status = 'N'
+	  		</when>
+	  	</choose>
+	  </if>
+	</where>
+	  
+  </select>
+  
   <select id="selectAllProductList" resultType="productDetail">
   	SELECT a.*, b.IMG_URL, c.CATEGORY_NAME 
 	FROM product a
@@ -53,6 +91,10 @@
   
   <insert id="insertProductImg">
   	insert into product_img values(nextval(seq_product_img_no), #{productNo}, #{imgLevel}, #{imgUrl})
+  </insert>
+  
+  <insert id="insertProductDiscription">
+  	insert into product_discription values(nextval(seq_product_discription_no), #{productNo}, #{discriptionLevel}, #{content})
   </insert>
   
   <update id="updateProduct">

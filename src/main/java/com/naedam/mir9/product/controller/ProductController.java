@@ -3,7 +3,9 @@ package com.naedam.mir9.product.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -64,13 +66,19 @@ public class ProductController {
 	}
 	
 	@GetMapping("/list_sub")
-	public void list_sub(Model model, @RequestParam(defaultValue = "0") String cteNo) {
+	public void list_sub(Model model, @RequestParam(defaultValue = "0") String cteNo, @RequestParam(defaultValue = "null") String bne_check, @RequestParam(defaultValue = "null") String v_status) {
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("cteNo", cteNo);
+		param.put("bne", bne_check);
+		param.put("v_status", v_status);
+
 		List<ProductDetail> productList = new ArrayList<ProductDetail>();
-		if(cteNo.equals("0")) {
-			productList = productService.selectAllProductList();
-		}else {
-			productList = productService.selectProductListByCteNo(cteNo);			
-		}
+		
+		productList = productService.selectProductListByParam(param);
+		/*
+		 * if(cteNo.equals("0")) { productList = productService.selectAllProductList();
+		 * }else { productList = productService.selectProductListByCteNo(cteNo); }
+		 */
 		
 		int productListCnt = productList.size();
 		
@@ -79,6 +87,8 @@ public class ProductController {
 			model.addAttribute("level",level);
 		} catch (Exception e) {}
 		
+		model.addAttribute("bne_check", bne_check);
+		model.addAttribute("v_status", v_status);
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
 		model.addAttribute("cteNo",cteNo);
@@ -153,7 +163,7 @@ public class ProductController {
 		
 		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
 		
-		return "redirect:/product/list_sub";
+		return "redirect:/product/list";
 	}
 	
 	@PostMapping("/fillForm")
@@ -206,7 +216,6 @@ public class ProductController {
 		
 		ProductDiscription brief = setDiscription("brief", product, request);
 		ProductDiscription content = setDiscription("content", product, request);
-		List<String> imgNoList = Arrays.asList(request.getParameterValues("no_file"));
 		List<String> urlList = Arrays.asList(request.getParameterValues("url_file"));
 		
 		
@@ -226,11 +235,8 @@ public class ProductController {
 			}
 		}
 		
-		log.debug("brief = {}", brief);
-		log.debug("content = {}", content);
-		
-		
-		
+		result = productService.insertProductDiscription(brief);
+		result = productService.insertProductDiscription(content);
 		
 		redirectAttr.addFlashAttribute("msg", "상품이 등록되었습니다.");
 		

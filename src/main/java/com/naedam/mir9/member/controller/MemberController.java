@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
+import com.naedam.mir9.member.model.vo.MemberGrade;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -116,11 +117,21 @@ public class MemberController {
 		log.debug("type = {}", type);
 		log.debug("keyword = {}", keyword);
 		
-		// 회원 삭제
-		int result = memberService.deleteMember(memberNo);
-		log.debug("result = {}", result);
+		try {
+			// 회원 삭제
+			int result = memberService.deleteMember(memberNo);
+			log.debug("result = {}", result);
+			
+			redirectAttr.addFlashAttribute("msg", "해당 회원이 삭제되었습니다.");
+		} catch (Exception e) {
+			log.error("회원 삭제 실패", e);
+			throw e; // spring container에게 예외상황 알림
+		}
 		
-		return "redirect:/member/memberList";
+		String referer = request.getHeader("Referer");
+		log.debug("referer = {}", referer);
+		
+		return "redirect:" + referer;
 	}
 	
 	// 회원 적립금 내역보기
@@ -154,11 +165,41 @@ public class MemberController {
 		return "member/memberAccessHistory";
 	}
 	
-	// 등급 관리
+	// 등급 관리 조회(select)
 	@GetMapping("/memberGrade.do")
-	public String memberGrade() {
+	public Map<String, Object> memberGrade(Model model, HttpServletRequest request) {
 		
-		return "member/memberGrade";
+		// 명칭 가져오기
+		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
+		log.debug("memberGradeList = {}", memberGradeList);
+		//model.addAttribute("memberGardeList", memberGradeList);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("memberGradeList", memberGradeList);
+
+		return resultMap;
+	}
+	
+	// 등급 수정(update)
+	@PostMapping("/memberGradeInsert.do")
+	public String memberGradeInsert(
+						@RequestParam("title1") String title1,
+						@RequestParam("title2") String title2,
+						@RequestParam("title3") String title3,
+						@RequestParam("title4") String title4,
+						@RequestParam("title5") String title5,
+						RedirectAttributes redirectAttr) {
+		
+		log.debug("{}", "memberGradeInsert.do 요청");
+		log.debug("title1 = {}", title1);
+		log.debug("title2 = {}", title2);
+		log.debug("title3 = {}", title3);
+		log.debug("title4 = {}", title4);
+		log.debug("title5 = {}", title5);
+		
+		
+		
+		return "redirect:/member/memberGrade.do";
 	}
 	
 	// 회원 적립금 관리

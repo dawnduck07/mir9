@@ -1,6 +1,7 @@
 package com.naedam.mir9.product.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,18 @@ public class ProductDaoImpl implements ProductDao {
 	public int insertProductImg(ProductImg img) {
 		// TODO Auto-generated method stub
 		return session.insert("product.insertProductImg", img);
+	}
+
+	@Override
+	public int insertProductDiscription(ProductDiscription pd) {
+		// TODO Auto-generated method stub
+		return session.insert("product.insertProductDiscription", pd);
+	}
+
+	@Override
+	public List<ProductDetail> selectProductListByParam(Map<String, String> param) {
+		// TODO Auto-generated method stub
+		return session.selectList("product.selectProductListByParam", param);
 	}
 	
 	
