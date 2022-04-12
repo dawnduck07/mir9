@@ -14,14 +14,14 @@
 	  </if>
 	  <if test="bne != 'null'">
 		  <choose>
-		  	<when test='bne == "b"'>
+		  	<when test='bne == "best"'>
 		  		and a.product_best = 'Y'
 		  	</when>
-		  	<when test='bne == "n"'>
-		  		and a.product_best = 'Y'
+		  	<when test='bne == "new"'>
+		  		and a.product_new = 'Y'
 		  	</when>
-		  	<when test='bne == "e"'>
-		  		and a.product_best = 'Y'
+		  	<when test='bne == "event"'>
+		  		and a.product_event = 'Y'
 		  	</when>
 		  </choose>
 	  </if>
