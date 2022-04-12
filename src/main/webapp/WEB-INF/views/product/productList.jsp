@@ -43,7 +43,9 @@
 		<div class="modal-dialog" style="width: 800px;">
 			<div class="modal-content">
 				<form name="form_register" method="post" action="?tpf=admin/product/process" enctype="multipart/form-data">
-					<input type="hidden" name="mode" id="mode" value="insertProduct"> <input type="hidden" name="code" id="code"> <input type="hidden" name="category_code" id="category_code"> <input type="hidden" name="locale" value="ko">
+					<input type="hidden" name="mode" id="mode" value="insertProduct"> 
+					<input type="hidden" name="locale" value="ko">
+					<input type="hidden" name="product_no" value="0"/>
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabelPortfolio">상품 등록</h4>
@@ -82,7 +84,7 @@
 							</tr>
 							<tr>
 								<td class="menu">개별 적립금</td>
-								<td align="left"><input type="text" name="point" onkeyup="this.value=displayComma(checkAmountNum(this.value))" class="form-control input-sm" /> ※ 설정 > 적립금 관리 > 지급 설정에서 [개별] 옵션에 체크한 경우에만 적용됩니다.</td>
+								<td align="left"><input type="text" name="point" value="0" onkeyup="this.value=displayComma(checkAmountNum(this.value))" class="form-control input-sm" /> ※ 설정 > 적립금 관리 > 지급 설정에서 [개별] 옵션에 체크한 경우에만 적용됩니다.</td>
 							</tr>
 							<tr>
 								<td class="menu">옵션</td>
@@ -93,6 +95,7 @@
 										</button>
 									</p> <br>
 									<div id="list_option">
+									<input type="hidden" name="option_no" value="0"/>
 										<table class="table table-bordered table-hover">
 											<colgroup>
 												<col width="25%" />
@@ -120,15 +123,31 @@
 							</tr>
 							<tr>
 								<td class="menu">리스트 이미지1</td>
-								<td align="left"><input type="file" name="file1" class="form-control input-sm" style="width: 80%; display: inline;" /> <span id="display_file1" style="display: none;"></span></td>
+								<td align="left">
+									<input type="file" name="file1" class="form-control input-sm" style="width: 80%; display: inline;" />
+									<span id="display_file1" style="display: none;"></span>
+									<input type="hidden" id="url_file1" name="url_file" />
+									<input type="hidden" id="no_file1" name="no_file" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">리스트 이미지2</td>
-								<td align="left"><input type="file" name="file2" class="form-control input-sm" style="width: 80%; display: inline;" /> <span id="display_file2" style="display: none;"></span></td>
+								<td align="left">
+									<input type="file" name="file2" class="form-control input-sm" style="width: 80%; display: inline;" /> 
+									<span id="display_file2" style="display: none;"></span>
+									<input type="hidden" id="url_file2" name="url_file" />
+									<input type="hidden" id="no_file2" name="no_file" />
+								</td>
+									
 							</tr>
 							<tr>
 								<td class="menu">제품 이미지(상세)</td>
-								<td align="left"><input type="file" name="file3" class="form-control input-sm" style="width: 80%; display: inline;" /> <span id="display_file3" style="display: none;"></span></td>
+								<td align="left">
+									<input type="file" name="file3" class="form-control input-sm" style="width: 80%; display: inline;" /> 
+									<span id="display_file3" style="display: none;"></span>
+									<input type="hidden" id="url_file3" name="url_file"/>
+									<input type="hidden" id="no_file3" name="no_file" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">간단 설명</td>
@@ -147,11 +166,11 @@
             </tr> -->
 							<tr>
 								<td class="menu">BEST / NEW / EVENT</td>
-								<td align="left"><input type="checkbox" id="is_best" name="is_best" value='y'>BEST&nbsp;&nbsp; <input type="checkbox" id="is_new" name="is_new" value='y'>NEW&nbsp;&nbsp; <input type="checkbox" id="is_event" name="is_event" value='y'>EVENT</td>
+								<td align="left"><input type="checkbox" id="is_best" name="is_best" value='Y'>BEST&nbsp;&nbsp; <input type="checkbox" id="is_new" name="is_new" value='Y'>NEW&nbsp;&nbsp; <input type="checkbox" id="is_event" name="is_event" value='Y'>EVENT</td>
 							</tr>
 							<tr>
 								<td class="menu">품절 처리</td>
-								<td align="left"><input type="checkbox" id="is_soldout" name="is_soldout" value='y'>품절</td>
+								<td align="left"><input type="checkbox" id="is_soldout" name="is_soldout" value='Y'>품절</td>
 							</tr>
 
 							<tr>
@@ -246,10 +265,51 @@
 <!-- /.content-wrapper -->
 
 <script>
+
+// 파일 변경 시 업로드 후 url 받아오기
+$("input[type=file]").change(function(e){
+	console.log($(e.target))
+	console.log($(e.target).attr('name'))
+	var target = "#url_" + $(e.target).attr('name');
+   // 이미지 업로드
+   var file = e.target;
+   //var imgPreview = document.getElementById("imgPreview");
+   var form = new FormData();
+   form.append("image", file.files[0]);
+
+   var settings = {
+     "url": "https://api.imgbb.com/1/upload?key=f84bfb11eb3ee5eedb859de8b49fdff1",
+     "method": "POST",
+     "timeout": 0,
+     "processData": false,
+     "mimeType": "multipart/form-data",
+     "contentType": false,
+     "data": form
+   };
+   
+   // 이미지 업로드 -> 확인
+   $.ajax(settings).done(function (response) {
+     // console.log("response" + response);
+     
+     var imgbb = JSON.parse(response);
+     // console.log("imgbb : " + imgbb);
+     
+     // 이미지 조회 및 다운로드
+     var url = imgbb.data.thumb.url;
+     $(target).val(url);
+
+     //imgPreview.src = url; // imgbb url
+     //imgPreview.name = name;
+     //$("#deleteUrl").attr("value", delUrl);
+
+   });
+   
+});
+
 	function insertOption(optionNo, optionValueNo, option_name, option_value, option_price, is_necessary) {
 	    var check_necessary = '';
 	    if (is_necessary == true || is_necessary == 'Y') check_necessary = 'checked';
-	    
+	    $('input[name=option_no]').val(optionNo);
 	    var row_num = 0;
 		var last_class = $('#option_list tr:last').attr('id');
 		if(!(typeof last_class == 'undefined')) {
@@ -350,7 +410,7 @@
 			$(document["form_register"]).attr('action', '${pageContext.request.contextPath}/product/insert?${_csrf.parameterName}=${_csrf.token}').submit();
 			
 		}else if($('#mode').val() == 'updateProduct'){
-			
+			$(document["form_register"]).attr('action', '${pageContext.request.contextPath}/product/update?${_csrf.parameterName}=${_csrf.token}').submit();
 		}
 
 	}
@@ -407,7 +467,14 @@
 		}
 
 	}
-
+	
+	function insertImg(pImgNo, level, url){
+		console.log(pImgNo, level, url)
+		var target = "#url_file"+level;
+		$(target).val(url);
+		var target = "#no_file"+level;
+		$(target).val(pImgNo);
+	}
 	
 	function removeOptionf(optionValueNo){
 		console.log()

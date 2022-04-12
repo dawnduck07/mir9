@@ -3,7 +3,9 @@ package com.naedam.mir9.product.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -64,13 +66,19 @@ public class ProductController {
 	}
 	
 	@GetMapping("/list_sub")
-	public void list_sub(Model model, @RequestParam(defaultValue = "0") String cteNo) {
+	public void list_sub(Model model, @RequestParam(defaultValue = "0") String cteNo, @RequestParam(defaultValue = "null") String bne_check, @RequestParam(defaultValue = "null") String v_status) {
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("cteNo", cteNo);
+		param.put("bne", bne_check);
+		param.put("v_status", v_status);
+
 		List<ProductDetail> productList = new ArrayList<ProductDetail>();
-		if(cteNo.equals("0")) {
-			productList = productService.selectAllProductList();
-		}else {
-			productList = productService.selectProductListByCteNo(cteNo);			
-		}
+		
+		productList = productService.selectProductListByParam(param);
+		/*
+		 * if(cteNo.equals("0")) { productList = productService.selectAllProductList();
+		 * }else { productList = productService.selectProductListByCteNo(cteNo); }
+		 */
 		
 		int productListCnt = productList.size();
 		
@@ -79,6 +87,8 @@ public class ProductController {
 			model.addAttribute("level",level);
 		} catch (Exception e) {}
 		
+		model.addAttribute("bne_check", bne_check);
+		model.addAttribute("v_status", v_status);
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
 		model.addAttribute("cteNo",cteNo);
@@ -153,7 +163,7 @@ public class ProductController {
 		
 		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
 		
-		return "redirect:/product/list_sub";
+		return "redirect:/product/list";
 	}
 	
 	@PostMapping("/fillForm")
@@ -192,17 +202,133 @@ public class ProductController {
 	@PostMapping("/insert")
 	public String insertProduct(HttpServletRequest request, RedirectAttributes redirectAttr) {
 		Enumeration params = request.getParameterNames();
-		System.out.println("----------------------------");
-		while (params.hasMoreElements()){
-		    String name = (String)params.nextElement();
-		    System.out.println(name + " : " +request.getParameter(name));
+		while(params.hasMoreElements()) {
+		  String name = (String) params.nextElement();
+		  System.out.print(name + " : " + request.getParameter(name) + "     "); 
 		}
-		System.out.println("----------------------------");
+		System.out.println();
+		
+		int result = 0;
+		
+		Product product = setProduct(request);
+		result = productService.insertProduct(product);
+		log.debug("product = {}", product);
+		
+		ProductDiscription brief = setDiscription("brief", product, request);
+		ProductDiscription content = setDiscription("content", product, request);
+		List<String> urlList = Arrays.asList(request.getParameterValues("url_file"));
+		
+		
+		
+		for(int i = 0; i < urlList.size(); i++) {
+			ProductImg img = new ProductImg();
+			
+			try {
+				img.setProductNo(product.getProductNo());
+				img.setImgLevel(i+1);
+				img.setImgUrl(urlList.get(i));
+			} catch (Exception e) {}
+			
+			if(img.getImgUrl() != null) {
+				result = productService.insertProductImg(img);
+				
+			}
+		}
+		
+		result = productService.insertProductDiscription(brief);
+		result = productService.insertProductDiscription(content);
+		
 		redirectAttr.addFlashAttribute("msg", "상품이 등록되었습니다.");
 		
 		return "redirect:/product/list";
 		
 	}
 	
+	@PostMapping("/update")
+	public String updateProduct(HttpServletRequest request, RedirectAttributes redirectAttr){
+		Product product = setProduct(request);
+		int result = productService.updateProduct(product);
 
+		List<String> imgNoList = Arrays.asList(request.getParameterValues("no_file"));
+		List<String> urlList = Arrays.asList(request.getParameterValues("url_file"));
+		
+		for(int i = 0; i < urlList.size(); i++) {
+			ProductImg img = new ProductImg();
+			
+			try {
+				img.setProductImgNo(Integer.parseInt(imgNoList.get(i)));
+				img.setImgLevel(i+1);
+				img.setImgUrl(urlList.get(i));
+			} catch (Exception e) {}
+			
+			if(img.getImgUrl() != null) {
+				result = productService.updateProductImg(img);
+			}
+		}
+		
+		ProductDiscription brief = setDiscription("brief", product, request);
+		ProductDiscription content = setDiscription("content", product, request);
+		
+		result = productService.updateProductDiscription(brief);
+		result = productService.updateProductDiscription(content);
+		
+		if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
+		return "redirect:/product/list";
+		
+	}
+	
+	private Product setProduct(HttpServletRequest request) {
+		Product product = new Product();
+		product.setProductNo(Integer.parseInt(request.getParameter("product_no")));
+		product.setCategoryNo(Integer.parseInt(request.getParameter("category_select_box_2")));
+		product.setOptionNo(Integer.parseInt(request.getParameter("option_no")));
+		product.setIndividualPoint(Integer.parseInt(request.getParameter("point")));
+		product.setLangType(request.getParameter("locale"));
+		product.setListTitle(request.getParameter("list_title"));
+		product.setModelName(request.getParameter("model"));
+		product.setProductName(request.getParameter("title"));
+		product.setRetailPrice(Integer.parseInt(request.getParameter("consumer_price").replace(",", "")));
+		product.setSalePrice(Integer.parseInt(request.getParameter("sale_price").replace(",", "")));
+		product.setStatus(request.getParameter("status"));
+		
+		
+		
+		product.setIsSoldOut(request.getParameter("is_sold_out"));
+		product.setProductBest(request.getParameter("is_best"));
+		product.setProductNew(request.getParameter("is_new"));
+		product.setProductEvent(request.getParameter("is_event"));
+		
+		if(product.getIsSoldOut() == null) product.setIsSoldOut("N");
+		if(product.getProductBest() == null) product.setProductBest("N");
+		if(product.getProductNew() == null) product.setProductNew("N");
+		if(product.getProductEvent() == null) product.setProductEvent("N");
+		
+		return product;
+	}
+	
+	private ProductDiscription setDiscription(String type, Product product ,HttpServletRequest request) {
+		ProductDiscription pd = new ProductDiscription();
+
+		switch(type) {
+		
+		case "brief" :	
+			pd.setDiscriptionLevel(1);
+			pd.setContent(request.getParameter("brief"));
+			pd.setProductNo(product.getProductNo());
+			break;
+			
+		case "content" :
+			pd.setDiscriptionLevel(2);
+			pd.setContent(request.getParameter("content"));
+			pd.setProductNo(product.getProductNo());
+			break;
+		}
+				
+		return pd;
+	}
+
+	
+	@GetMapping("/img_test")
+	public void imgtest() {}
+	
 }
