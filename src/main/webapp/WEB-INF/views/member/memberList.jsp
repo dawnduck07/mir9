@@ -6,8 +6,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>	
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="회원 관리" name="title" />
@@ -122,28 +120,10 @@
 								</tr>
 							</c:forEach>
 						</tbody>
-<!-- 
-						<tr>
-							<td><input type="checkbox" name="list[]" value="18" /></td>
-							<td>asdf</td>
-							<td>나미르</td>
-							<td></td>
-							<td align="left">부산 중구 중앙대로 114(중앙동4가) 102동 2301호</td>
-							<td>1,000</td>
-							<td>2022/03/04 16:12</td>
-							<td><span class="label label-success"
-								style="font-size: 12px;">보임</span></td>
-							<td><button type="button"
-									onclick="location.replace('?tpf=admin/member/point&field=id&keyword=asdf')"
-									class="btn btn-primary btn-xs">내역보기</button></td>
-							<td>
-								<button type="button" onclick="onclickUpdate(18);"
-									class="btn btn-primary btn-xs">상세보기</button>
-							</td>
-						</tr> -->
-					<%-- </form> --%>
 				</table>
+				
 				<br>
+				
 				<button 
 					type="button"
 					id="memberListDeleteBtn"
@@ -685,7 +665,9 @@ $("#memberListDeleteBtn").click((e)=>{
 	
 	console.log("클릭");
 	console.log($(document.memberDeleteFrm));
-	$(document.memberDeleteFrm).submit();
+	if(confirm("선택된 회원을 삭제하시겠습니까?"))
+		$(document.memberDeleteFrm).submit();
+		
 });
 
 

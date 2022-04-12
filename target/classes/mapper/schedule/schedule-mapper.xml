@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="schedule">
+  
+  	<resultMap id="ScheduleSelectMap" type="schedule" >
+		<result property="scheduleNo"				column="SCHEDULE_NO"			jdbcType="NUMERIC"></result>
+		<result property="scheduleTitle"			column="SCHEDULE_TITLE"			jdbcType="VARCHAR"></result>
+		<result property="scheduleContents"			column="SCHEDULE_CONTENTS"		jdbcType="VARCHAR"></result>
+		<result property="scheduleStartDate"		column="SCHEDULE_START_DATE"	jdbcType="VARCHAR"></result>
+		<result property="scheduleEndDate"			column="SCHEDULE_END_DATE"		jdbcType="VARCHAR"></result>
+		<result property="scheduleColor"			column="SCHEDULE_COLOR"			jdbcType="VARCHAR"></result>
+  	</resultMap>
+  
+  	<insert id="addSchedule"	 parameterType="schedule" useGeneratedKeys="true" keyProperty="scheduleNo" keyColumn="SCHEDULE_NO">
+  		INSERT
+  		INTO SCHEDULE(SCHEDULE_NO,
+  					  SCHEDULE_TITLE,
+  					  SCHEDULE_CONTENTS,
+  					  SCHEDULE_START_DATE,
+  					  SCHEDULE_END_DATE,
+  					  SCHEDULE_COLOR)
+  		VALUES(schedule_seq.nextVal,
+  			   #{scheduleTitle:VARCHAR},
+  			   #{scheduleContents:VARCHAR},
+  			   TO_DATE(#{scheduleStartDate},'YYYY-MM-DD HH24:MI'),
+  			   TO_DATE(#{scheduleEndDate},'YYYY-MM-DD HH24:MI'),
+  			   #{scheduleColor:VARCHAR})
+  	</insert>
+  	
+  	<select id="getSchedule"	 parameterType="int"	 resultMap="ScheduleSelectMap">
+  		SELECT *
+  		FROM schedule
+  		WHERE schedule_no = #{value}
+  	</select>
+  	
+  	<select id="getScheduleList"  resultType="hashmap"	resultMap="ScheduleSelectMap">
+  		SELECT
+  				schedule_no,
+  				schedule_title,
+  				schedule_contents,
+  				schedule_start_date,
+  				schedule_end_date,
+  				schedule_color
+  		FROM	schedule
+  	</select>
+  	
+  	<update id="updateSchedule"	 parameterType="schedule">
+  		UPDATE schedule
+  		<set>
+  			schedule_title = #{scheduleTitle:VARCHAR},
+  			schedule_contents = #{scheduleContents:VARCHAR},
+  			schedule_start_date = TO_DATE(#{scheduleStartDate},'YYYY-MM-DD HH24:MI'),
+  			schedule_end_date = TO_DATE(#{scheduleEndDate},'YYYY-MM-DD HH24:MI'),
+  			schedule_color = #{scheduleColor:VARCHAR}
+  		</set>
+  		WHERE schedule_no = #{scheduleNo}
+  	</update>
+  	
+  	<delete id="deleteSchedule" parameterType="int">
+  		DELETE
+  			schedule
+  		WHERE
+  			schedule_no = #{value}
+  	</delete>
+  
+  
+  </mapper>
+  
+  
+  
+  
+  
+  

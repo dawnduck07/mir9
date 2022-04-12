@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.board.model.vo.BoardAuthority;
+import com.naedam.mir9.board.model.vo.BoardComment;
+import com.naedam.mir9.board.model.vo.BoardFile;
 import com.naedam.mir9.board.model.vo.BoardOption;
 import com.naedam.mir9.board.model.vo.BoardTranslate;
 import com.naedam.mir9.board.model.vo.Post;
-import com.naedam.mir9.board.model.vo.Search;
 import com.naedam.mir9.member.model.vo.Member;
 
 @Repository
@@ -37,6 +38,12 @@ public class BoardDaoImpl implements BoardDao {
 	public int addPost(Post post) throws Exception {
 		return sqlSession.insert("board.addPost", post);
 	}
+	
+	//게시글 답변 등록
+	@Override
+	public int addAnswerPost(Post post) throws Exception {
+		return sqlSession.insert("board.addAnswerPost", post);
+	}
 
 	//게시판 등록의 권한
 	@Override
@@ -56,22 +63,51 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.insert("board.addTranslate", boardTranslate);
 	}
 	
+	//게시글 파일 등록
+	@Override
+	public int addFile(BoardFile boardFile) throws Exception {
+		return sqlSession.insert("board.addFile", boardFile);
+	}
+	
+	//댓글 등록
+	@Override
+	public int addComment(BoardComment boardComment) throws Exception {
+		return sqlSession.insert("board.addComment", boardComment);
+	}
+	
 	//게시판 목록
 	@Override
-	public List<Board> getBoardList(Search search) throws Exception {
-		return sqlSession.selectList("board.getBoardList", search);
+	public List<Board> getBoardList(Map<String, Object> map) throws Exception {
+		return sqlSession.selectList("board.getBoardList", map);
 	}
 	
 	//게시판의 수
 	@Override
-	public int getTotalCount(Search search) throws Exception {
-		return sqlSession.selectOne("board.getTotalCount", search);
+	public int getTotalCount(Map<String, Object> map) {
+		return sqlSession.selectOne("board.getTotalCount", map);
+	}
+	
+	//게시글의 수
+	@Override
+	public int getTotalCount2(Map<String, Object> map) {
+		return sqlSession.selectOne("board.getTotalCount2", map);
+	}
+	
+	//게시판 등록 글 수
+	public int getTotalCount3(int boardNo) throws Exception {
+		return sqlSession.selectOne("board.getTotalCount3", boardNo);
 	}
 	
 	//게시글 목록
 	@Override
 	public List<Post> getPostList(Map<String, Object> map) throws Exception {
 		return sqlSession.selectList("board.getPostList", map);
+	}
+	
+	//댓글 목록
+	@Override
+	public List<BoardComment> getCommentList(int postNo) throws Exception {
+		return sqlSession.selectList("board.getCommentList", postNo);
 	}
 	
 	//header의 게시판 제목
@@ -86,6 +122,12 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.selectOne("board.getBoardData", boardNo);
 	}
 	
+	//게시글의 데이터
+	@Override
+	public Post getPostData(int postNo) throws Exception {
+		return sqlSession.selectOne("board.getPostData", postNo);
+	}
+	
 	//게시판의 모든 데이터
 	@Override
 	public Board getBoardAllData(int boardNo) throws Exception {
@@ -98,10 +140,41 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.selectOne("board.getMemberData", memberNo);
 	}
 	
+	//게시글의 파일 데이터
+	@Override
+	public List<BoardFile> getPostFile(int postNo) throws Exception {
+		return sqlSession.selectList("board.getPostFile", postNo);
+	}
+	
+	//파일 데이터
+	@Override
+	public BoardFile getFileData(int fileNo) throws Exception {
+		return sqlSession.selectOne("board.getFileData", fileNo);
+	}
+
+	
 	//게시판 선택 산제
 	@Override
 	public void deleteChoiceBoard(int boardNo) throws Exception {
 		sqlSession.delete("board.deleteChoiceBoard", boardNo);
+	}
+	
+	//게시글 선택 삭제
+	@Override
+	public void deleteChoicePost(int postNo) throws Exception {
+		sqlSession.delete("board.deleteChoicePost", postNo);
+	}
+	
+	//파일 삭제
+	@Override
+	public void deleteFile(int fileNo) throws Exception {
+		sqlSession.delete("board.deleteFile", fileNo);
+	}
+	
+	//댓글 삭제
+	@Override
+	public void deleteComment(int commentNo) throws Exception {
+		sqlSession.delete("board.deleteComment", commentNo);
 	}
 	
 	//게시판 수정 (게시판, 권한, 옵션) 시작 //////////////////////////////
@@ -121,11 +194,72 @@ public class BoardDaoImpl implements BoardDao {
 	}
 	//게시판 수정 (게시판, 권한, 옵션) 종료 //////////////////////////////
 	
-	//게시글의 수
+	//게시글 수정
 	@Override
-	public int getTotalCount2(Map<String, Object> map) {
-		return sqlSession.selectOne("board.getTotalCount2", map);
+	public int updatePost(Post post) throws Exception {
+		return sqlSession.update("board.updatePost", post);
 	}
+	
+	//게시글 조회수
+	@Override
+	public int postViewCount(Post post) throws Exception {
+		return sqlSession.update("board.postViewCount" , post);
+	}
+	
+	//다운로드수
+	@Override
+	public int postFileCount(Post post) throws Exception {
+		return sqlSession.update("board.postFileCount", post);
+	}
+	
+	//썸네일 삭제이지만 업데이트
+	@Override
+	public int updateThombnail(Post post) throws Exception {
+		return sqlSession.update("board.updateThombnail", post);
+	}
+	
+	//계층형 쿼리
+	@Override
+	public int updatePostReply(Post post) throws Exception {
+		return sqlSession.update("board.updatePostReply", post);
+	}
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	
+	
+	
+
+	
+
+	
+
+
 
 
 	

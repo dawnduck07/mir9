@@ -63,7 +63,7 @@
 	
 	$(function(){
 		
-		$("a[name='board']").on("click", function(){
+		$("a[name='board']").one("click", function(){
 
 			$.ajax({
 				url : "/mir9/board/json/listBoard",

@@ -65,6 +65,12 @@ public class MemberDaoImpl implements MemberDao {
 		return session.delete("member.deleteMember", memberNo);
 	}
 
+	// 회원 등급 리스트
+	@Override
+	public List<MemberGrade> selectMemberGradeList() {
+		return session.selectList("member.selectMemberGradeList");
+	}
+
 
 
 	

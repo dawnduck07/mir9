@@ -12,10 +12,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class MemberGrade implements Serializable {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	private int memberGradeNo;
-	private String grade;
+	private String memberGradeName;
+	private int memberNo;
 }

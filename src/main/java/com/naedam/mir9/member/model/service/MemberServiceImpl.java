@@ -65,6 +65,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.deleteMember(memberNo);
 	}
 
+	// 회원 등급 리스트
+	@Override
+	public List<MemberGrade> selectMemberGradeList() {
+		return memberDao.selectMemberGradeList();
+	}
+
 	
 
 

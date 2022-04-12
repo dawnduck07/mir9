@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
+import com.naedam.mir9.member.model.vo.MemberGrade;
 
 public interface MemberDao {
 
@@ -31,6 +32,9 @@ public interface MemberDao {
 
 	// 회원 삭제
 	int deleteMember(int[] memberNo);
+
+	// 회원 등급 리스트
+	List<MemberGrade> selectMemberGradeList();
 
 	
 
