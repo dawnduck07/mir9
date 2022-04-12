@@ -198,6 +198,36 @@ public class ProductController {
 		}
 		System.out.println();
 		
+		int result = 0;
+		
+		Product product = setProduct(request);
+		result = productService.insertProduct(product);
+		log.debug("product = {}", product);
+		
+		ProductDiscription brief = setDiscription("brief", product, request);
+		ProductDiscription content = setDiscription("content", product, request);
+		List<String> imgNoList = Arrays.asList(request.getParameterValues("no_file"));
+		List<String> urlList = Arrays.asList(request.getParameterValues("url_file"));
+		
+		
+		
+		for(int i = 0; i < urlList.size(); i++) {
+			ProductImg img = new ProductImg();
+			
+			try {
+				img.setProductNo(product.getProductNo());
+				img.setImgLevel(i+1);
+				img.setImgUrl(urlList.get(i));
+			} catch (Exception e) {}
+			
+			if(img.getImgUrl() != null) {
+				result = productService.insertProductImg(img);
+				
+			}
+		}
+		
+		log.debug("brief = {}", brief);
+		log.debug("content = {}", content);
 		
 		
 		
@@ -230,8 +260,11 @@ public class ProductController {
 			}
 		}
 		
-		result = updateDiscription("brief", product, request);
-		result = updateDiscription("content", product, request);
+		ProductDiscription brief = setDiscription("brief", product, request);
+		ProductDiscription content = setDiscription("content", product, request);
+		
+		result = productService.updateProductDiscription(brief);
+		result = productService.updateProductDiscription(content);
 		
 		if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
 		return "redirect:/product/list";
@@ -267,7 +300,7 @@ public class ProductController {
 		return product;
 	}
 	
-	private int updateDiscription(String type, Product product ,HttpServletRequest request) {
+	private ProductDiscription setDiscription(String type, Product product ,HttpServletRequest request) {
 		ProductDiscription pd = new ProductDiscription();
 
 		switch(type) {
@@ -284,10 +317,8 @@ public class ProductController {
 			pd.setProductNo(product.getProductNo());
 			break;
 		}
-		
-		int result = productService.updateProductDiscription(pd);
-		
-		return result;
+				
+		return pd;
 	}
 
 	

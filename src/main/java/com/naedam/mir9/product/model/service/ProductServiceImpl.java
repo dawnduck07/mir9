@@ -83,6 +83,18 @@ public class ProductServiceImpl implements ProductService{
 		// TODO Auto-generated method stub
 		return productDao.updateProductDiscription(pd);
 	}
+
+	@Override
+	public int insertProduct(Product product) {
+		// TODO Auto-generated method stub
+		return productDao.insertProduct(product);
+	}
+
+	@Override
+	public int insertProductImg(ProductImg img) {
+		// TODO Auto-generated method stub
+		return productDao.insertProductImg(img);
+	}
 	
 	
 	
