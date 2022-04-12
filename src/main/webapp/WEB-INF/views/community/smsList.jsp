@@ -27,7 +27,7 @@
 	                <div class="box-body">
 	                    <label style="margin-top:5px;">총 86건</label>
 	                    <div class="box-tools pull-right" style="margin-bottom:5px;">
-	                        <form name="form_search" method="post" action="${pageContext.request.contextPath }/comm/sms_list">
+	                        <form name="form_search" method="post" action="${pageContext.request.contextPath }/comm/sms_list?${_csrf.parameterName}=${_csrf.token}">
 	                        <div class="has-feedback">
 	                            <span>
 	                                <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색"/>

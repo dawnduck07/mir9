@@ -29,7 +29,7 @@
 	                <div class="box-body">
 	                    <label style="margin-top:5px;">총 ${ reviewList.size() }건</label>
 	                    <div class="box-tools pull-right" style="margin-bottom:5px;">
-	                        <form name="form_search" method="post" action="?tpf=admin/community/review">
+	                        <form name="form_search" method="post" action="${pageContext.request.contextPath }/comm/review?${_csrf.parameterName}=${_csrf.token}">
 	                        <div class="has-feedback">
 	                            <span>
 	                                <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색"/>
