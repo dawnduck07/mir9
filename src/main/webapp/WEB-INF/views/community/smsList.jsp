@@ -27,7 +27,7 @@
 	                <div class="box-body">
 	                    <label style="margin-top:5px;">총 86건</label>
 	                    <div class="box-tools pull-right" style="margin-bottom:5px;">
-	                        <form name="form_search" method="post" action="?tpf=admin/community/sms_list">
+	                        <form name="form_search" method="post" action="${pageContext.request.contextPath }/comm/sms_list">
 	                        <div class="has-feedback">
 	                            <span>
 	                                <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색"/>
@@ -88,13 +88,13 @@
 						<!-- 페이징 -->
 	                    <div style="text-align:right;">
 	                        <ul class="pagination" style="margin:0;">
-								<li class="active"><a href="?tpf=admin/community/sms_list&type=sms&arrSearch=&page=1">1</a></li>
-								<li><a href="?tpf=admin/community/sms_list&type=sms&arrSearch=&page=2">2</a></li>
-								<li><a href="?tpf=admin/community/sms_list&type=sms&arrSearch=&page=3">3</a></li>
-								<li><a href="?tpf=admin/community/sms_list&type=sms&arrSearch=&page=4">4</a></li>
-								<li><a href="?tpf=admin/community/sms_list&type=sms&arrSearch=&page=5">5</a></li>
-								<li class="next"><a href="?tpf=admin/community/sms_list&type=sms&arrSearch=&page=6">Next → </a></li>
-								<li><a href="?tpf=admin/community/sms_list&type=sms&arrSearch=&page=6">Last → </a></li>
+								<li class="active"><a href="${pageContext.request.contextPath }/comm/sms_list?type=sms&arrSearch=&page=1">1</a></li>
+								<li><a href="${pageContext.request.contextPath }/comm/sms_list?type=sms&arrSearch=&page=2">2</a></li>
+								<li><a href="${pageContext.request.contextPath }/comm/sms_list?type=sms&arrSearch=&page=3">3</a></li>
+								<li><a href="${pageContext.request.contextPath }/comm/sms_list?type=sms&arrSearch=&page=4">4</a></li>
+								<li><a href="${pageContext.request.contextPath }/comm/sms_list?type=sms&arrSearch=&page=5">5</a></li>
+								<li class="next"><a href="${pageContext.request.contextPath }/comm/sms_list?type=sms&arrSearch=&page=6">Next → </a></li>
+								<li><a href="${pageContext.request.contextPath }/comm/sms_list?type=sms&arrSearch=&page=6">Last → </a></li>
 							</ul>                    
 						</div>
 	                </div><!-- /.box-body -->

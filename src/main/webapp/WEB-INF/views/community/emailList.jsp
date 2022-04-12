@@ -27,7 +27,7 @@
                     <div class="box-body">
                         <label style="margin-top:5px;">총 202건</label>
                         <div class="box-tools pull-right" style="margin-bottom:5px;">
-                            <form name="form_search" method="post" action="?tpf=admin/community/email_list">
+                            <form name="form_search" method="post" action="${pageContext.request.contextPath }/comm/email_list">
                             <div class="has-feedback">
                                 <span>
                                     <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" />
@@ -101,13 +101,13 @@
                         <div style="text-align:right;">
                             <ul class="pagination" style="margin:0;">
                                 <li class="active"><a
-                                        href="?tpf=admin/community/email_list&type=email&arrSearch=&page=1">1</a></li>
-                                <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=2">2</a></li>
-                                <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=3">3</a></li>
-                                <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=4">4</a></li>
-                                <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=5">5</a></li>
-                                <li class="next"><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=6">Next → </a></li>
-                                <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=13">Last → </a></li>
+                                        href="${pageContext.request.contextPath }/comm/email_list?type=email&arrSearch=&page=1">1</a></li>
+                                <li><a href="${pageContext.request.contextPath }/comm/email_list?type=email&arrSearch=&page=2">2</a></li>
+                                <li><a href="${pageContext.request.contextPath }/comm/email_list?type=email&arrSearch=&page=3">3</a></li>
+                                <li><a href="${pageContext.request.contextPath }/comm/email_list?type=email&arrSearch=&page=4">4</a></li>
+                                <li><a href="${pageContext.request.contextPath }/comm/email_list?type=email&arrSearch=&page=5">5</a></li>
+                                <li class="next"><a href="${pageContext.request.contextPath }/comm/email_list?type=email&arrSearch=&page=6">Next → </a></li>
+                                <li><a href="?${pageContext.request.contextPath }/comm/email_list?type=email&arrSearch=&page=13">Last → </a></li>
                             </ul>
                         </div>
                     </div><!-- /.box-body -->

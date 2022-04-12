@@ -267,15 +267,15 @@
 							class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li><a href="?tpf=admin/community/email"><i
+							<li><a href="${pageContext.request.contextPath}/comm/email"><i
 									class="fa fa-circle-o"></i>메일 설정</a></li>
-							<li><a href="?tpf=admin/community/email_list"><i
+							<li><a href="${pageContext.request.contextPath}/comm/email_list"><i
 									class="fa fa-circle-o"></i>메일 발송 내역</a></li>
-							<li><a href="?tpf=admin/community/sms"><i
+							<li><a href="${pageContext.request.contextPath}/comm/sms"><i
 									class="fa fa-circle-o"></i>SMS 설정</a></li>
-							<li><a href="?tpf=admin/community/sms_list"><i
+							<li><a href="${pageContext.request.contextPath}/comm/sms_list"><i
 									class="fa fa-circle-o"></i>SMS 발송 내역</a></li>
-							<li><a href="?tpf=admin/community/review"><i
+							<li><a href="${pageContext.request.contextPath}/comm/review"><i
 									class="fa fa-circle-o"></i>주문후기 리스트</a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i class="fa fa-gear"></i>
