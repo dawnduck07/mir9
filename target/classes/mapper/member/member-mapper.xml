@@ -152,7 +152,27 @@
 <delete id="deleteMember">
 	DELETE FROM
 		member
-	w
-
+	<where>
+		<!-- 
+			collection = 전달받은 인자. List나 Array 형태만 가능
+			item = 전달받은 인자값을 alias 명으로 대체
+			open = 해당 구문이 시작될 때 삽입할 문자열
+			close = 해당 구문이 종료될 때 삽입할 문자열
+			separator = 반복되는 사이에 출력할 문자열
+		 -->
+		 <foreach collection="array" item="item" open="(" close=")" separator="or">
+		 	member_no = #{item}
+		 </foreach>
+	</where>
 </delete>
+
+<!-- 회원 등급 리스트 -->
+<select id="selectMemberGradeList" resultType="map">
+	SELECT 
+		member_grade_no,
+		member_grade_name,
+		COUNT(*) as cnt
+	FROM
+		member_grade GROUP BY member_grade_name
+</select>
 </mapper>
