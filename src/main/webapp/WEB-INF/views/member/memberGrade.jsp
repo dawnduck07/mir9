@@ -30,9 +30,14 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-body">
-					<table class="table table-bordered table-hover" style="width: 30%;">
-						<form name="form" method="post" action="?tpf=admin/member/process">
-							<input type="hidden" name="mode" value="level">
+				
+					<form:form 
+						id="memberGradeInsertFrm" 
+						name="memberGradeInsertFrm"
+						method="POST"
+						action="${pageContext.request.contextPath}/member/memberGradeInsert.do">
+						<table class="table table-bordered table-hover"
+							style="width: 30%;">
 							<thead>
 								<tr>
 									<td style="width: 60px;">등급</td>
@@ -40,50 +45,61 @@
 									<td style="width: 80px;">회원수</td>
 								</tr>
 							</thead>
+							<tbody id = "tbody">
+								<c:forEach items="${memberGradeList}" var="mgl">
+									<tr>
+										<td>${mgl.memberGradeNo}</td>
+										<td><input type="text" name="memberGradeName" value="${mgl.memberGradeName}"
+											class="form-control input-sm" style="width: 100%;" /></td>
+										<td>${mgl.cnt}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
 							
+							<!--  
 							<tr>
 								<td>1</td>
 								<td>
-									<input type="text" name="title1" value="관리자" readonly
-										class="form-control input-sm" style="width: 100%;" />
+									
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
+									<input type="text" name="memberGrade1" value="관리자" readonly class="form-control input-sm" style="width: 100%;"/>
 								</td>
-								<td>4</td>
+								<td></td>
 							</tr>
-							
 							<tr>
 								<td>2</td>
-								<td>
-									<input type="text" name="title2" value="회원"
-										class="form-control input-sm" style="width: 100%;" />
-								</td>
-								<td>2</td>
+								<td><input type="text" name="memberGrade2" value="${memberGradeList.memberGrade2}"
+									class="form-control input-sm" style="width: 100%;" /></td>
+								<td></td>
 							</tr>
 							<tr>
 								<td>3</td>
-								<td><input type="text" name="title3" value="ㅈㅇㅇㅈ"
+								<td><input type="text" name="memberGrade3" value="${memberGradeList.memberGrade3}"
 									class="form-control input-sm" style="width: 100%;" /></td>
 								<td></td>
 							</tr>
 							<tr>
 								<td>4</td>
-								<td><input type="text" name="title4" value=""
+								<td><input type="text" name="memberGrade4" value="${memberGradeList.memberGrade4}"
 									class="form-control input-sm" style="width: 100%;" /></td>
 								<td></td>
 							</tr>
 							<tr>
 								<td>5</td>
-								<td><input type="text" name="title5" value=""
+								<td><input type="text" name="memberGrade5" value="${memberGradeList.memberGrade5}"
 									class="form-control input-sm" style="width: 100%;" /></td>
 								<td></td>
 							</tr>
-						</form>
-					</table>
-					<br>
+							-->
+						</table>
 
-					<button type="button" onclick="register()"
-						class="btn btn-primary btn-sm">
-						<i class="fa fa-gear"></i> 등급 수정
-					</button>
+						<br>
+
+						<button type="button" onclick="insertGrade()"
+							class="btn btn-primary btn-sm">
+							<i class="fa fa-gear"></i> 등급 수정
+						</button>
+					</form:form>
 				</div>
 				<!-- /.box-body -->
 			</div>
@@ -95,6 +111,14 @@
 </div>
 <!-- /.content-wrapper -->
 
+<script>
+function insertGrade(){
+	console.log("등급수정(insertGrade()) 동작");
+	$(document.memberGradeInsertFrm).submit();
+		
+}
+
+</script>
 
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

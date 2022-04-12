@@ -3,10 +3,76 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<script>
+	$(function(){		
+		$("#modalContent2").one("hidden.bs.modal", function(){
+			location.reload();
+		})	
+	})
+	
+	function fncBoardTitle2(){
+		
+			$.ajax({
+				url : "/mir9/board/json/listBoard",
+				method : "GET" ,
+				dataType : "json" ,
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success : function(Data, status){
+					var display = '';
+					if(Data.length > 0){
+						for(var i = 0; i < Data.length; i++){
+							display = "<option value="+Data[i].boardNo+">"+Data[i].boardTitle+"</option>"
+							$('#boardNoCopy').append(display);
+						}
+					}
+					
+				}
+			})		
+	}
+	
+	function funPostCopy(){
+		
+			
+				
+			var postArr = new Array();
+			var boardNo = $("select[name='boardNoCopy']").val();
+			alert(boardNo)
+			
+			$("input[class='postNo']:checked").each(function(){
+				postArr.push($(this).val());
+			});
+			
+	  		$.ajax({
+  			 	 url : "/mir9/board/addPostCopy",
+	  		  	 type : "POST",
+  		  	 	 data : { 
+  		  	 		 postArr : postArr, 
+  		  	 		 boardNo
+  		  	 	 },
+    		 	 success : function(result){
+   		   	 		
+  		  	 	 }
+  		  	 	 
+	  		});		
+	  		alert("게시물 복사가 완료되었습니다.")
+	  		location.href = "/mir9/board/postList?boardNo="+boardNo;
+			
+		
+	}
+	
+	
+
+
+
+</script>
+
 <div class="modal fade" id="modalContent2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" style="width:400px;">
         <div class="modal-content">
-            <form name="form_copy_data" method="post" action="?tpf=admin/board/process">
+            <form name="formPostCopy" method="post" action="?tpf=admin/board/process">
             <input type="hidden" name="mode" id="mode">
             <input type="hidden" name="code" id="code">
             <div class="modal-header">
@@ -20,16 +86,16 @@
             <tr>
                 <td class="menu">게시판 제목</td>
                 <td align="left">
-                <select name="board_code" id="board_code" class="form-control input-sm">
+                <select name="boardNoCopy" id="boardNoCopy" class="form-control input-sm">
                 <option value="">선택</option>
-  <option value="1">공지사항</option>  <option value="2">자주하는 질문</option>  <option value="3">1:1 문의</option>                </select>
+  				</select>
                 </td>
             </tr>
             </table>
             </div>
 
             <div class="modal-footer">
-            <button type="button" onclick="registerCopyData()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" onclick="funPostCopy()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
             </div>
             </form>
         </div>
