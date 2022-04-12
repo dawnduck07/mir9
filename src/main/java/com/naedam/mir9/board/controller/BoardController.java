@@ -1,8 +1,22 @@
 package com.naedam.mir9.board.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +26,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.naedam.mir9.board.model.dao.BoardDao;
 import com.naedam.mir9.board.model.service.BoardService;
 import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.board.model.vo.BoardAuthority;
+import com.naedam.mir9.board.model.vo.BoardComment;
+import com.naedam.mir9.board.model.vo.BoardFile;
 import com.naedam.mir9.board.model.vo.BoardOption;
 import com.naedam.mir9.board.model.vo.Page;
 import com.naedam.mir9.board.model.vo.Post;
@@ -49,6 +66,102 @@ public class BoardController {
 		return "redirect:/board/listBoard";
 	}
 	
+	@PostMapping("addPost")
+	public String addPost(@ModelAttribute("post") Post post,
+						  @ModelAttribute("board") Board board,
+					      @RequestParam(value="postName") MultipartFile[] postName,
+					      @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception {
+		
+		System.out.println("addPost 시작");
+		
+		BoardFile boardFile = new BoardFile();
+		
+		//1번 회원이 로그인을 했다고 가정
+		Member member2 = boardService.getMemberData(1);
+		post.setPostMember(member2);
+		post.setPostMemberName(member2.getLastName()+member2.getFirstName());
+		System.out.println("이거 확인 ::: === "+ postName.length);
+		
+		//파일 업로드
+		String filePath = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		File file = new File(filePath+ThombnailName.getOriginalFilename());
+		post.setPostBoard(board);
+		post.setPostThombnail(ThombnailName.getOriginalFilename());
+		ThombnailName.transferTo(file);
+		boardService.addPost(post);
+		
+		for(int i = 0; i < postName.length; i++) {
+			File file2 = new File(filePath+postName[i].getOriginalFilename());
+			boardFile.setFilePost(post);;
+			boardFile.setFileName(postName[i].getOriginalFilename());
+			postName[i].transferTo(file2);
+			boardService.addFile(boardFile);
+		}
+		
+		
+		
+		System.out.println("post 데이터 확인 ::: "+post);
+		System.out.println("board 데이터 확인 ::: "+board);
+		
+		return "redirect:/board/postList?boardNo="+board.getBoardNo();
+	}
+	
+	@PostMapping("addAnswerPost")
+	public String addAnswerPost(@ModelAttribute("post") Post post,
+								@ModelAttribute("board") Board board,
+								@RequestParam(value="postName") MultipartFile[] postName,
+								@RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception {
+		
+		System.out.println("addAnswerPost 시작");
+		System.out.println("post 데이터 확인 ::: "+post);
+		BoardFile boardFile = new BoardFile();
+		//1번 회원이 로그인을 했다고 가정
+		Member member2 = boardService.getMemberData(1);
+		post.setPostMember(member2);
+		post.setPostMemberName(member2.getLastName()+member2.getFirstName());
+		System.out.println("memeberData ==== "+member2);
+		
+		//파일 업로드
+		String filePath = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		File file = new File(filePath+ThombnailName.getOriginalFilename());
+		post.setPostBoard(board);
+		post.setPostThombnail(ThombnailName.getOriginalFilename());
+		ThombnailName.transferTo(file);
+		
+		for(int i = 0; i < postName.length; i++) {
+			File file2 = new File(filePath+postName[i].getOriginalFilename());
+			boardFile.setFilePost(post);;
+			boardFile.setFileName(postName[i].getOriginalFilename());
+			postName[i].transferTo(file2);
+			boardService.addFile(boardFile);
+		}
+		//파일 업로드 끝	
+		
+		
+		Post post2 = boardService.getPostData(post.getPostNo());
+		System.out.println("post2의 데이터 === "+post2);
+		post.setPostOriginNo(post.getPostOriginNo()); // 이건 해결
+		post.setPostOrd(post2.getPostAsc());
+		post.setPostLayer(post2.getPostLayer());
+		post.setPostAsc(post2.getPostAsc());
+		
+		boardService.updatePostReply(post2);
+		
+		boardService.addAnswerPost(post);
+		
+		
+		System.out.println("board 데이터 확인 ::: "+board);
+		
+		return "redirect:/board/postList?boardNo="+board.getBoardNo();
+	}
+	
+	@PostMapping("addComment")
+	public void updateComment(@ModelAttribute("boardComment") BoardComment boardComment,
+							  @RequestParam("postNo") int postNo,
+							  @RequestParam("memberNo") int memberNo)throws Exception{
+		System.out.println("addComment 시작"); 
+	}
+	
 	@PostMapping("updateBoard")
 	public String updateBoard(@RequestParam("boardNo") int boardNo,
 			   @ModelAttribute("board") Board board,
@@ -70,6 +183,36 @@ public class BoardController {
 		return "redirect:/board/listBoard";
 	}
 	
+	@PostMapping("updatePost")
+	public String updataPost(@ModelAttribute("post") Post post,
+							 @RequestParam("boardNo") int boardNo,
+							 @RequestParam(value="postName") MultipartFile[] postName,
+						     @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception{
+		System.out.println("updatePost 시작");
+		System.out.println("file의 길이를 보자 ::: === "+postName.length);
+		Board board = new Board();
+		BoardFile boardFile = new BoardFile();
+		board.setBoardNo(boardNo);
+		
+		//파일 업로드
+		String filePath = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		File file = new File(filePath+ThombnailName.getOriginalFilename());
+		post.setPostBoard(board);
+		post.setPostThombnail(ThombnailName.getOriginalFilename());
+		ThombnailName.transferTo(file);
+		for(int i = 0; i < postName.length; i++) {
+			File file2 = new File(filePath+postName[i].getOriginalFilename());
+			boardFile.setFilePost(post);;
+			boardFile.setFileName(postName[i].getOriginalFilename());
+			postName[i].transferTo(file2);
+			boardService.addFile(boardFile);
+		}
+		//파일 업로드 끝
+		
+		boardService.updatePost(post);
+		
+		return "redirect:/board/postList?boardNo="+board.getBoardNo();
+	}
 	
 	
 	
@@ -77,23 +220,38 @@ public class BoardController {
 	public String listBoard(@ModelAttribute("search") Search search, Board board, Model model) throws Exception {
 		
 		System.out.println("listBoard 시작");
-		
 		//페이지 처리
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
+		List postCount = new ArrayList();
+		List<Board> board2 = boardService.getBoardTitle();
 		
-		Map<String, Object> map = boardService.getBoardList(search);
-		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		for(int i = 0 ; i < board2.size(); i++) {
+			int a = boardService.getTotalCount3(board2.get(i).getBoardNo());
+			postCount.add(a);
+		}
+		System.out.println("count 확인 ::: " + postCount);
 		
-		model.addAttribute("list", map.get("list"));
+		
+		
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		
+		Map<String, Object> resultMap = boardService.getBoardList(map);
+		
+		Page resultPage = new Page( search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("resultMap 확인 === "+resultMap);
+		model.addAttribute("list", resultMap.get("list"));
+		model.addAttribute("postCount", postCount);
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 		
 		return "board/boardList";
 	}
 	
-	@GetMapping("postList")
+	@RequestMapping( value="postList")
 	public String listPost(Board board, Model model, @ModelAttribute("search") Search search) throws Exception {
 		
 		System.out.println("/listPost 시작");
@@ -101,7 +259,7 @@ public class BoardController {
 		Post post = new Post();
 		Member member = new Member();
 		
-		Board board2 = boardService.getBoardData(board.getBoardNo());
+		Board board2 = boardService.getBoardAllData(board.getBoardNo());
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
@@ -110,21 +268,20 @@ public class BoardController {
 		Map<String, Object> resultMap = boardService.getPostList(map);
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
-		
-		member = boardService.getMemberData(board2.getBoardMemberNo().getMemberNo());
-		resultMap.put("member", member);
+				
+		System.out.println("resultMap 확인 ::: "+resultMap);
+		System.out.println("board2 확인 ::: "+board2);
 		
 		model.addAttribute("list", resultMap.get("list")); 
 		model.addAttribute("board", board);
 		model.addAttribute("board2", board2);
 		model.addAttribute("resultPage", resultPage);
-		model.addAttribute("member", member);
 		
 		return "board/postList";
 	}
 	
 	@PostMapping("deleteChoiceBoard")
-	public void deleteChoiceBoard(@RequestParam(value = "boardNo[]") List<String> boardArr, 
+	public void deleteChoiceBoard(@RequestParam(value = "boardArr[]") List<String> boardArr, 
 								  Board board) throws Exception{
 		
 		System.out.println("deleteChoiceBoard 시작");
@@ -141,11 +298,193 @@ public class BoardController {
 		
 	}
 	
+	@PostMapping("deleteChoicePost")
+	public void deleteChoicePost(@RequestParam(value = "postArr[]") List<String> postArr, 
+								  Post post) throws Exception{
+		
+		System.out.println("deleteChoicePost 시작");
+		
+		int result = 0;
+		int postNo = 0;
+	
+		for(String i : postArr) {
+			postNo = Integer.parseInt(i);
+			post.setPostNo(postNo);
+			boardService.deleteChoicePost(post.getPostNo());
+		}
+		result = 1;
+		
+	}
+	
+	@PostMapping("deleteThombnail")
+	public String deleteThombnail(@ModelAttribute("post") Post post,
+								  @RequestParam("boardNo") int boardNo) throws Exception {
+		System.out.println("deleteThombnail 시작");
+		
+		boardService.updateThombnail(post);
+		
+		return "redirect:/board/postList?boardNo="+boardNo;
+	}
+	
+	@PostMapping("addPostCopy")
+	public void addPostCopy(@RequestParam(value = "postArr[]") List<String> postArr,
+							@RequestParam("boardNo")int boardNo) throws Exception{
+		
+		System.out.println("addPostCopy 시작");
+		
+		Board board = new Board();
+		
+		
+		int result = 0;
+		int postNo = 0;
+		System.out.println("boardNo 확인 ::: "+boardNo);
+		for(String i : postArr) {
+			postNo = Integer.parseInt(i);
+			Post post = boardService.getPostData(postNo);
+			post.getPostBoard().setBoardNo(boardNo);
+			boardService.addPost(post);
+		}
+		result = 1;
+		
+	}
+	
+	@PostMapping("addPostChange")
+	public void addPostChange(@RequestParam(value = "postArr[]") List<String> postArr,
+							@RequestParam("boardNo")int boardNo) throws Exception{
+		
+		System.out.println("addPostChange 시작");
+		
+		Board board = new Board();
+		
+		
+		int result = 0;
+		int postNo = 0;
+		
+		for(String i : postArr) {
+			postNo = Integer.parseInt(i);
+			Post post = boardService.getPostData(postNo);
+			post.getPostBoard().setBoardNo(boardNo);
+			boardService.addPost(post);
+			boardService.deleteChoicePost(postNo);
+		}
+		result = 1;
+		
+	}	
+	
 	@GetMapping("test")
 	public String test() {
 		return "board/test";
 	}
+	
+	@GetMapping("test2")
+	public String test2() {
+		return "board/test2";
+	}
+	
+	@PostMapping("imageUpload")
+	public void imageUpload(HttpServletRequest request, HttpServletResponse response,
+							MultipartHttpServletRequest multiFile,
+							@RequestParam MultipartFile upload) throws Exception{
+		
+		System.out.println("진입 확인");
+		UUID uid = UUID.randomUUID();
+		
+		OutputStream out = null;
+		PrintWriter printWriter = null;
+		
+		
+		
+		try{ 
+			//파일 이름 가져오기 
+			String fileName = upload.getOriginalFilename(); 
+			byte[] bytes = upload.getBytes(); 
+			//이미지 경로 생성 
+			String path = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\";
+			// fileDir는 전역 변수라 그냥 이미지 경로 설정해주면 된다. 
+			String ckUploadPath = path + uid + "_" + fileName; 
+			File folder = new File(path); 
+			//해당 디렉토리 확인 
+			if(!folder.exists()){ 
+				try{ folder.mkdirs(); // 폴더 생성 
+				}catch(Exception e){ 
+					e.getStackTrace(); 
+				} 
+			} 
+			out = new FileOutputStream(new File(ckUploadPath)); 
+			out.write(bytes); 
+			out.flush(); // outputStram에 저장된 데이터를 전송하고 초기화 
+			String callback = request.getParameter("CKEditorFuncNum"); 
+			printWriter = response.getWriter(); 
+			String fileUrl = "/mir9/board/ckImgSubmit?uid=" + uid + "&fileName=" + fileName; // 작성화면 
+			// 업로드시 메시지 출력 
+			printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}"); 
+			printWriter.flush(); 
+			}catch(IOException e){ 
+				e.printStackTrace(); 
+			} finally { 
+				try { 
+					if(out != null) { 
+						out.close(); 
+					} 
+					if(printWriter != null) { 
+						printWriter.close(); 
+					} 
+				} catch(IOException e) { 
+					e.printStackTrace(); 
+				} 
+			} return;
+					
+	}
+	
+	@RequestMapping(value="ckImgSubmit") 
+	public void ckSubmit(@RequestParam(value="uid") String uid , 
+						 @RequestParam(value="fileName") String fileName , 
+						 HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{ 
+		//서버에 저장된 이미지 경로 
+		String path = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\"; 
+		
+		String sDirPath = path + uid + "_" + fileName; 
+		
+		File imgFile = new File(sDirPath); 
+		//사진 이미지 찾지 못하는 경우 예외처리로 빈 이미지 파일을 설정한다. 
+		
+		if(imgFile.isFile()){ 
+			byte[] buf = new byte[1024]; 
+			int readByte = 0; 
+			int length = 0; 
+			byte[] imgBuf = null; 
+			FileInputStream fileInputStream = null; 
+			ByteArrayOutputStream outputStream = null; 
+			ServletOutputStream out = null; 
+			
+			try{ 
+				fileInputStream = new FileInputStream(imgFile); 
+				outputStream = new ByteArrayOutputStream(); 
+				out = response.getOutputStream(); 
+				
+				while((readByte = fileInputStream.read(buf)) != -1){ 
+					outputStream.write(buf, 0, readByte); 
+				} 
+				
+				imgBuf = outputStream.toByteArray(); 
+				length = imgBuf.length; 
+				out.write(imgBuf, 0, length); 
+				out.flush(); 
+			}catch(IOException e){ 
+				 
+			}finally { 
+				outputStream.close(); 
+				fileInputStream.close(); 
+				out.close(); 
+			} 
+		} 
+	}
+	
+
+		
+	
 }
+
 
 
 
