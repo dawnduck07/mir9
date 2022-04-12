@@ -45,7 +45,7 @@
 				<form name="form_register" method="post" action="?tpf=admin/product/process" enctype="multipart/form-data">
 					<input type="hidden" name="mode" id="mode" value="insertProduct"> 
 					<input type="hidden" name="locale" value="ko">
-					<input type="hidden" name="product_no"/>
+					<input type="hidden" name="product_no" value="0"/>
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabelPortfolio">상품 등록</h4>
@@ -84,7 +84,7 @@
 							</tr>
 							<tr>
 								<td class="menu">개별 적립금</td>
-								<td align="left"><input type="text" name="point" onkeyup="this.value=displayComma(checkAmountNum(this.value))" class="form-control input-sm" /> ※ 설정 > 적립금 관리 > 지급 설정에서 [개별] 옵션에 체크한 경우에만 적용됩니다.</td>
+								<td align="left"><input type="text" name="point" value="0" onkeyup="this.value=displayComma(checkAmountNum(this.value))" class="form-control input-sm" /> ※ 설정 > 적립금 관리 > 지급 설정에서 [개별] 옵션에 체크한 경우에만 적용됩니다.</td>
 							</tr>
 							<tr>
 								<td class="menu">옵션</td>
@@ -95,7 +95,7 @@
 										</button>
 									</p> <br>
 									<div id="list_option">
-									<input type="hidden" name="option_no" />
+									<input type="hidden" name="option_no" value="0"/>
 										<table class="table table-bordered table-hover">
 											<colgroup>
 												<col width="25%" />
