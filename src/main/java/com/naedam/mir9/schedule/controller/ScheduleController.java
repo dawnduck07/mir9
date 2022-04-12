@@ -10,6 +10,7 @@ import com.naedam.mir9.schedule.model.service.ScheduleService;
 @Controller
 @RequestMapping("/schedule")
 public class ScheduleController {
+	
 	@Autowired
 	private ScheduleService scheduleService;
 	

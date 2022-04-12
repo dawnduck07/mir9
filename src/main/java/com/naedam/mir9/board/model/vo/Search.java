@@ -9,7 +9,9 @@ public class Search {
 	private int currentPage;
 	private String searchCondition;
 	private String searchKeyword;
-	private String studyType;
+	private String searchType;
+	private String searchFirst;
+	private String searchLast;
 	private int studyInterest;
 	private int studyEndFlag;
 	private int searchSort;

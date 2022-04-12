@@ -3,6 +3,74 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<script>
+	
+	$(function(){		
+		$("#modalContent3").one("hidden.bs.modal", function(){
+			location.reload();
+		})	
+	})
+	
+	function fncBoardTitle(){
+			
+			$.ajax({
+				url : "/mir9/board/json/listBoard",
+				method : "GET" ,
+				dataType : "json" ,
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success : function(Data, status){
+					var display = '';
+					if(Data.length > 0){
+						for(var i = 0; i < Data.length; i++){
+							display = "<option value="+Data[i].boardNo+">"+Data[i].boardTitle+"</option>"
+							$('#boardNoChange').append(display);
+							
+						}
+					}
+					
+				}
+			})
+		
+	}
+	
+	function funPostChange(){
+		
+		
+		
+		var postArr = new Array();
+		var boardNo = $("select[name='boardNoChange']").val();
+		
+		$("input[class='postNo']:checked").each(function(){
+			postArr.push($(this).val());
+		});
+		
+  		$.ajax({
+			 	 url : "/mir9/board/addPostChange",
+  		  	 	 type : "POST",
+		  	 	 data : { 
+		  	 		 postArr : postArr, 
+		  	 		 boardNo
+		  	 	 },
+		 		 success : function(result){
+		   	 		
+		  	 	 }
+		  	 	 
+  		});		
+  		alert("게시물 이전가 완료되었습니다.")
+  		location.href = "/mir9/board/postList?boardNo="+boardNo;
+		
+	
+}	
+	
+	
+	
+
+
+</script>
+
 <div class="modal fade" id="modalContent3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" style="width:400px;">
         <div class="modal-content">
@@ -20,16 +88,17 @@
             <tr>
                 <td class="menu">게시판 제목</td>
                 <td align="left">
-                <select name="board_code" id="board_code" class="form-control input-sm">
+                <select name="boardNoChange" id="boardNoChange" class="form-control input-sm">
                 <option value="">선택</option>
-  <option value="1">공지사항</option>  <option value="2">자주하는 질문</option>  <option value="3">1:1 문의</option>                </select>
+  			
+  				</select>
                 </td>
             </tr>
             </table>
             </div>
 
             <div class="modal-footer">
-            <button type="button" onclick="registerCopyData()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" id="boardCopy" onclick="funPostChange()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
             </div>
             </form>
         </div>
