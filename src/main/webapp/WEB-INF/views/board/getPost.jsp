@@ -13,7 +13,7 @@
 	}
 	
 	function funReply2(){	
-		$("form[name='getPostForm']").attr("method", "POST").attr("action", "/mir9/board/addAnswerPost").submit();
+		$("form[name='getPostForm']").attr("method", "POST").attr("action", "/mir9/board/addAnswerPost?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
 	
 	function fncDeleteThombnail(){
@@ -22,7 +22,7 @@
 			return;
 		}else{
 			alert("해당 파일이 삭제 되었습니다.")
-			$("form[name='getPostForm']").attr("method", "POST").attr("action", "/mir9/board/deleteThombnail").submit();	
+			$("form[name='getPostForm']").attr("method", "POST").attr("action", "/mir9/board/deleteThombnail?${_csrf.parameterName}=${_csrf.token}").submit();	
 		}
 		
 	}
@@ -36,7 +36,7 @@
 			alert(postName[i])
 		}
 		
-		$("form[name='getPostForm']").attr("method", "POST").attr("action", "/mir9/board/updatePost").submit();
+		$("form[name='getPostForm']").attr("method", "POST").attr("action", "/mir9/board/updatePost?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
 	
 	function fucAddFile2(){
@@ -50,7 +50,7 @@
 			
 		}else{
 		$.ajax({
-			url : "/mir9/board/json/deleteFile/"+fileNo,
+			url : "/mir9/board/json/deleteFile/"+fileNo+"?${_csrf.parameterName}=${_csrf.token}",
 			method : "GET",
 			dataType : "JSON",	
 			headers : {
@@ -71,7 +71,7 @@
 	function fileDownload(postNo){
 		
 		$.ajax({
-			url : "/mir9/board/json/postFileCount/"+postNo,
+			url : "/mir9/board/json/postFileCount/"+postNo+"?${_csrf.parameterName}=${_csrf.token}",
 			method : "GET",
 			dataType : "JSON",	
 			headers : {
@@ -89,7 +89,7 @@
 			
 		$.ajax({
 			
-			url : "/mir9/board/json/getMemberData",
+			url : "/mir9/board/json/getMemberData?${_csrf.parameterName}=${_csrf.token}",
 			method : "GET",
 			dataType : "JSON",
 			headers : {
@@ -114,7 +114,7 @@
 			
 		}else{
 		$.ajax({
-			url : "/mir9/board/json/deleteComment/"+commentNo,
+			url : "/mir9/board/json/deleteComment/"+commentNo+"?${_csrf.parameterName}=${_csrf.token}",
 			method : "GET",
 			dataType : "JSON",	
 			headers : {
@@ -169,6 +169,7 @@
 					$("input[name='postLayer']").val(JSONData.postLayer);
 					$("input[name='postAsc']").val(JSONData.postAsc);
 					$("input[name='postOriginNo']").val(JSONData.postOriginNo);
+					
 					CKEDITOR.instances.editor1.setData(JSONData.postContents)
 
 					if(JSONData.postThombnail != null){

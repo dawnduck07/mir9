@@ -54,7 +54,7 @@
 				
 			}else{
 	  		$.ajax({
-  			 	 url : "/mir9/board/deleteChoiceBoard",
+  			 	 url : "/mir9/board/deleteChoiceBoard?${_csrf.parameterName}=${_csrf.token}",
 	  		  	 type : "POST",
   		  	 	 data : { 
   		  	 		boardArr : boardArr 
@@ -144,7 +144,7 @@
 		var boardNo2 = $("#boardNo2").val()
 		
 		alert("수정이 완료되었습니다.")
-		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/mir9/board/updateBoard").submit();
+		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/mir9/board/updateBoard?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
 	
 	window.copyURL = function(){

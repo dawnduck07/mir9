@@ -53,7 +53,7 @@
 				
 			}else{
 	  		$.ajax({
-  			 	 url : "/mir9/board/deleteChoicePost",
+  			 	 url : "/mir9/board/deleteChoicePost?${_csrf.parameterName}=${_csrf.token}",
 	  		  	 type : "POST",
   		  	 	 data : { postArr : postArr },
     		 	 success : function(result){

@@ -14,7 +14,7 @@
 			var	boardEmail = $("input[name='boardEmail']").val();
 			
 			alert("게시판이 등록 되었습니다.")
-			$("form[name='addBoard']").attr("method", "POST").attr("action", "/mir9/board/addBoard").submit();
+			$("form[name='addBoard']").attr("method", "POST").attr("action", "/mir9/board/addBoard?${_csrf.parameterName}=${_csrf.token}").submit();
 			
 		}
 		

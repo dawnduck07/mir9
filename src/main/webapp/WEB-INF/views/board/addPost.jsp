@@ -11,10 +11,10 @@
 		
 		for(var i = 0; i < postFile; i++){
 			postName[i] = $("input[id='postName']")[i].value;
-			alert(postName[i])
+			//alert(postName[i])
 		}
 		alert("게시글이 등록 되었습니다.")
-		$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost").submit();			
+		$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost?${_csrf.parameterName}=${_csrf.token}").submit();			
 	}
 	
 	function fucAddFile(){
@@ -68,7 +68,7 @@
                  	<textarea name="postContents" id="editor" rows="10" cols="80" style="visibility: hidden; display: none;"></textarea>
                  	<script type="text/javascript">
 					 CKEDITOR.replace('editor'
-					                , {filebrowserUploadUrl:'/mir9/board/imageUpload'}
+					                , {filebrowserUploadUrl:'/mir9/board/imageUpload?${_csrf.parameterName}=${_csrf.token}'}
 					 );
 					</script>
 

@@ -141,7 +141,7 @@ public class BoardRestController {
 		
         // 직접 파일 정보를 변수에 저장해 놨지만, 이 부분이 db에서 읽어왔다고 가정한다.
 		String fileName = boardFile.getFileName();
-		String saveFileName = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board"+fileName;
+		String saveFileName = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board"+fileName;
 		String contentType = "image/jpg";
         File file = new File(saveFileName);
         long fileLength = file.length();

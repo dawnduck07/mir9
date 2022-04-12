@@ -12,7 +12,7 @@
 		var commentMemberNo = $("input[id='commentMemberNo']").val();
 
 		$.ajax({
-			url : "/mir9/board/json/addComment/",
+			url : "/mir9/board/json/addComment?${_csrf.parameterName}=${_csrf.token}",
 			method : "POST",
 			data: JSON.stringify({
 				'commentContents': commentContents,

@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,7 +57,10 @@ public class BoardController {
 						   @ModelAttribute("boardOption") BoardOption boardOption) throws Exception{
 		
 		System.out.println("board/addBoard 시작");
+		System.out.println("boardNo 1 확인 ::: "+board);
 		boardService.addBoard(board);
+		System.out.println("boardNo 2 확인 ::: "+board);
+		System.out.println("boardAuthority 확인 ::: "+boardAuthority);
 		boardAuthority.setAuthorityBoard(board);
 		boardService.addAuthority(boardAuthority);
 		boardOption.setOptionBoard(board);
@@ -83,16 +87,18 @@ public class BoardController {
 		System.out.println("이거 확인 ::: === "+ postName.length);
 		
 		//파일 업로드
-		String filePath = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
 		ThombnailName.transferTo(file);
 		boardService.addPost(post);
 		
+		System.out.println("post데이터 확인 ::: ==="+post);
+		
 		for(int i = 0; i < postName.length; i++) {
 			File file2 = new File(filePath+postName[i].getOriginalFilename());
-			boardFile.setFilePost(post);;
+			boardFile.setFilePost(post);
 			boardFile.setFileName(postName[i].getOriginalFilename());
 			postName[i].transferTo(file2);
 			boardService.addFile(boardFile);
@@ -122,7 +128,7 @@ public class BoardController {
 		System.out.println("memeberData ==== "+member2);
 		
 		//파일 업로드
-		String filePath = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
@@ -195,7 +201,7 @@ public class BoardController {
 		board.setBoardNo(boardNo);
 		
 		//파일 업로드
-		String filePath = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
@@ -399,7 +405,7 @@ public class BoardController {
 			String fileName = upload.getOriginalFilename(); 
 			byte[] bytes = upload.getBytes(); 
 			//이미지 경로 생성 
-			String path = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\";
+			String path = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\";
 			// fileDir는 전역 변수라 그냥 이미지 경로 설정해주면 된다. 
 			String ckUploadPath = path + uid + "_" + fileName; 
 			File folder = new File(path); 
@@ -441,7 +447,7 @@ public class BoardController {
 						 @RequestParam(value="fileName") String fileName , 
 						 HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{ 
 		//서버에 저장된 이미지 경로 
-		String path = "C:\\workspace\\NdMir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\"; 
+		String path = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\"; 
 		
 		String sDirPath = path + uid + "_" + fileName; 
 		

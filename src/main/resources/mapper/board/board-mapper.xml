@@ -115,8 +115,7 @@
 		<result property="profileImg"				column="PROFILE_IMG"			jdbcType="VARCHAR"></result>
 	</resultMap>	
 	
-	
-	<insert id="addBoard" parameterType="board" useGeneratedKeys="true" keyProperty="boardNo" keyColumn="BOARD_NO" >		
+	<insert id="addBoard" parameterType="board" useGeneratedKeys="true" keyProperty="boardNo" keyColumn="BOARD_NO">	
 		INSERT
 		INTO BOARD(BOARD_NO,
 				   BOARD_TITLE,
@@ -124,12 +123,15 @@
 				   BOARD_CATEGORY,
 				   BOARD_EMAIL,
 				   MEMBER_NO)
-		VALUES(board_seq.nextVal,
+		VALUES(NEXTVAL(board_seq),
 			   #{boardTitle : VARCHAR},
 			   #{boardType : VARCHAR},
 			   #{boardCategory : VARCHAR},
 			   #{boardEmail : VARCHAR},
 			   #{boardMemberNo.memberNo})		
+		<selectKey keyProperty="boardNo" resultType="int" order="AFTER">
+			SELECT LASTVAL(board_seq) from dual
+		</selectKey>
 	</insert>
 	
 	<insert id="addPost" parameterType="post" useGeneratedKeys="true" keyProperty="postNo" keyColumn="POST_NO">
@@ -149,21 +151,25 @@
 				  POST_LAYER,
 				  MEMBER_NO,
 				  MEMBER_NAME)
-		VALUES(post_seq.nextVal,
+		VALUES(NEXTVAL(post_seq),
 			   0,
 			   #{postBoard.boardNo},
 			   #{postTitle : VARCHAR},
 			   #{postContents : VARCHAR},
-			   SYSDATE,
+			   sysdate(),
 			   #{postThombnail : VARCHAR},			   
 			   0,
 			   0,
 			   0,
-			   post_seq.nextVal,
+			   LASTVAL(post_seq),
 			   #{postOrd : NUMERIC},
 			   #{postLayer : NUMERIC},
 			   #{postMember.memberNo},
 			   #{postMemberName : VARCHAR})		
+			   
+		<selectKey keyProperty="postNo" resultType="int" order="AFTER">
+			SELECT LASTVAL(post_seq) from dual
+		</selectKey>
 	</insert>
 	
 	<insert id="addAnswerPost" parameterType="post">
@@ -182,12 +188,12 @@
 				  POST_LAYER,
 				  MEMBER_NO,
 				  MEMBER_NAME)
-		VALUES(post_seq.nextVal,
+		VALUES(NEXTVAL(post_seq),
 			   #{postAsc : NUMERIC},
 			   #{postBoard.boardNo},
 			   #{postTitle : VARCHAR},
 			   #{postContents : VARCHAR},
-			   SYSDATE,
+			   sysdate(),
 			   #{postThombnail : VARCHAR},			   
 			   0,
 			   0,
@@ -210,7 +216,7 @@
 				   			 AUTHORITY_NOTICE,
 				   			 AUTHORITY_COMMENT,
 				   			 BOARD_NO )
-		VALUES(board_authority_seq.nextVal,
+		VALUES(NEXTVAL(authority_seq),	
 			   #{authorityList : VARCHAR},
 			   #{authorityView : VARCHAR},
 			   #{authorityWrite : VARCHAR},
@@ -234,8 +240,8 @@
 				   OPTION_ORDER,
 				   OPTION_ADDINFO,
 				   OPTION_POPUP,
-				   BOARD_NO)
-		VALUES(board_option_seq.nextVal,
+				   BOARD_NO) 
+		VALUES(NEXTVAL(board_option_seq),
 			   #{optionNotice : VARCHAR},
 			   #{optionComment : VARCHAR},
 			   #{optionSecret : VARCHAR},
@@ -252,8 +258,8 @@
 		INSERT
 		INTO BOARD(TRANSLATE_NO,
 				   TRANSLATE_CATEGORY,
-				   BOARD_NO)
-		VALUES(board_translate_seq.nextVal,
+				   BOARD_NO)	
+		VALUES(NEXTVAL(board_translate_seq),
 			   #{translateCategory : VARCHAR},
 			   #{boardNo.boardNo})	
 	</insert>		
@@ -262,8 +268,8 @@
 		INSERT
 		INTO BOARD_FILE(FILE_NO,
 						POST_NO,
-						FILE_NAME)
-		VALUES(board_file_seq.nextVal,
+						FILE_NAME)	
+		VALUES(NEXTVAL(board_file_seq),
 			   #{filePost.postNo},
 			   #{fileName : VARCHAR})
 	</insert>
@@ -276,9 +282,9 @@
 						   COMMENT_WRITER,
 						   MEMBER_NO,
 						   POST_NO)
-		VALUES(board_comment_seq.nextVal,
+		VALUES(NEXTVAL(board_comment_seq),	
 			   #{commentContents},
-			   SYSDATE,
+			   sysdate(),
 			   #{commentWriter},
 			   #{commentMemberNo},
 			   #{commentPostNo})
