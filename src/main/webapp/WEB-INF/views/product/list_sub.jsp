@@ -38,24 +38,30 @@
 				<div class="box">
 					<div class="box-body">
 						<div class="btn-group pull-right">
-							<button type="button" id="locale_ko" onclick="location.href='?tpf=admin/product/list_sub&category_code=&locale=ko'" class="btn btn-primary">
+							<button type="button" id="locale_ko" onclick="location.href='${pageContext.request.contextPath}/product/list_sub&category_code=&locale=ko'" class="btn btn-primary">
 								<i class="fa fa-globe" aria-hidden="true"></i> 한국어
 							</button>
-							<button type="button" id="locale_en" onclick="location.href='?tpf=admin/product/list_sub&category_code=&locale=en'" class="btn btn-default">
+							<button type="button" id="locale_en" onclick="location.href='${pageContext.request.contextPath}/product/list_sub&category_code=&locale=en'" class="btn btn-default">
 								<i class="fa fa-globe" aria-hidden="true"></i> ENG
 							</button>
-							<button type="button" id="locale_zh" onclick="location.href='?tpf=admin/product/list_sub&category_code=&locale=zh'" class="btn btn-default">
+							<button type="button" id="locale_zh" onclick="location.href='${pageContext.request.contextPath}/product/list_sub&category_code=&locale=zh'" class="btn btn-default">
 								<i class="fa fa-globe" aria-hidden="true"></i> 中国
 							</button>
-							<button type="button" id="locale_vn" onclick="location.href='?tpf=admin/product/list_sub&category_code=&locale=vn'" class="btn btn-default">
+							<button type="button" id="locale_vn" onclick="location.href='${pageContext.request.contextPath}/product/list_sub&category_code=&locale=vn'" class="btn btn-default">
 								<i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt
 							</button>
 						</div>
 						<br> <br>
 
-						<form id="form_search" name="form_search" method="post" action="?tpf=admin/product/list_sub">
+						<form id="form_search" name="form_search" method="post" action="${pageContext.request.contextPath}/product/list_sub">
 							<div class="box-tools pull-right" style="margin-top: 20px;">
-								<input type="hidden" name="locale" value="ko"> <input type="hidden" name="category_code" value=""> <input type="hidden" name="is_best" value=""> <input type="hidden" name="is_new" value=""> <input type="hidden" name="is_event" value=""> <input type="hidden" name="status" value="">
+								<input type="hidden" name="locale" value="ko"> 
+								<input type="hidden" name="category_code" value=""> 
+								<input type="hidden" name="is_best" value=""> 
+								<input type="hidden" name="is_new" value=""> 
+								<input type="hidden" name="is_event" value=""> 
+								<input type="hidden" name="status" value="">
+								
 								<div class="has-feedback">
 									<span> <input type="text" name="keyword" value="" class="form-control input-sm" placeholder="상품 검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
 									</span>
@@ -63,12 +69,19 @@
 							</div>
 							<div class="box-tools pull-right" style="margin-top: 20px;">
 								<div class="has-feedback">
-									<span style="float: left; width: 180px;"> <input type="checkbox" name="is_best" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_new=&is_event=&is_best=y'" value="y"> BEST <input type="checkbox" name="is_new" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_best=&is_event=&is_new=y'" value="y"> NEW <input type="checkbox" name="is_event" onclick="location.href='index.php?tpf=admin/product/list_sub&status=&is_best=&is_new=&is_event=y'" value="y"> EVENT
-									</span> <select name="field" onchange="location.href='index.php?tpf=admin/product/list_sub&is_best=&is_new=&is_event=&status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
+									<span style="float: left; width: 180px;"> 
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('b');" value="b" ${bne_check == "b" ? 'checked' : '' }> BEST 
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('n')" value="n" ${bne_check == "n" ? 'checked' : '' }> NEW 
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('e')" value="e" ${bne_check == "e" ? 'checked' : '' }> EVENT
+									</span> 
+									
+									<select name="field" onchange="location.href='${pageContext.request.contextPath}/product/list_sub?bne_check=${bne_check}&cteNo=${cteNo}&v_status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
 										<option value="">상태</option>
-										<option value="y">보임</option>
-										<option value="n">숨김</option>
-									</select> <select name="field" class="form-control input-sm" style="float: left; padding-right: 0; width: 100px;">
+										<option value="Y" ${v_status == "Y" ? 'selected' : '' }>보임</option>
+										<option value="N" ${v_status == "N" ? 'selected' : '' }>숨김</option>
+									</select> 
+									
+									<select name="field" class="form-control input-sm" style="float: left; padding-right: 0; width: 100px;">
 										<option value="title">상품명</option>
 									</select>
 								</div>
@@ -76,7 +89,7 @@
 						</form>
 
 						<p class="text-light-blue">
-							<i class="fa fa-fw fa-list-ul"></i> <a href="?tpf=admin/product/list_sub&locale=ko">ROOT</a>
+							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub&locale=ko">ROOT</a>
 						</p>
 						<label>총 ${productListCnt } 건</label>
 
@@ -94,7 +107,7 @@
 										<td>가격</td>
 										<td style="width: 90px;">등록일</td>
 										<td style="width: 55px;">상태</td>
-										<td style="width: 60px;"><i onclick="changeOrder('down','product','?tpf=admin/product/list_sub','','',);" class="fa fa-fw fa-arrow-circle-down cp"></i> <i onclick="changeOrder('up','product','?tpf=admin/product/list_sub','','',);" class="fa fa-fw fa-arrow-circle-up cp"></i></td>
+										<td style="width: 60px;"><i onclick="changeOrder('down','product','${pageContext.request.contextPath}/product/list_sub','','',);" class="fa fa-fw fa-arrow-circle-down cp"></i> <i onclick="changeOrder('up','product','${pageContext.request.contextPath}/product/list_sub','','',);" class="fa fa-fw fa-arrow-circle-up cp"></i></td>
 										<td style="width: 60px;">명령</td>
 									</tr>
 								</thead>
@@ -130,18 +143,18 @@
 								<i class="fa fa-plus-square"></i> 상품 등록
 							</button>
 						</c:if>
-						
+
 						<button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm" style="margin-left: 20px;">
 							<i class="fa fa-file-excel-o"></i> Excel 다운로드
 						</button>
-						
+
 						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
 							<input type="hidden" name="download_type" value="product" /> <input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data">
 						</form>
 
 						<div style="text-align: right;">
 							<ul class="pagination" style="margin: 0;">
-								<li class="active"><a href="?tpf=admin/product/list_sub&locale=ko&page=1">1</a></li>
+								<li class="active"><a href="${pageContext.request.contextPath}/product/list_sub&locale=ko&page=1">1</a></li>
 							</ul>
 						</div>
 					</div>
@@ -290,6 +303,27 @@
             }
         }
         
+        function bne_onclick(value){
+        	if(${bne_check == "0"}){
+    	    	var url = "${pageContext.request.contextPath}/product/list_sub?bne_check=" + value + "&v_status=${v_status}&cteNo=${cteNo}";
+        	}else{
+        		var url = "${pageContext.request.contextPath}/product/list_sub?bne_check=0&v_status=${v_status}&cteNo=${cteNo}";
+        	}
+			location.href = url;
+        }
+        
+        // 검색 개선 요구시 참고
+/*         var bne = [];
+        $('[name=bne_check]').change((e)=>{
+        	if($(e.target).is(":checked")){
+        		bne.push($(e.target).val())
+        	}else{
+        		
+        		bne.splice(bne.indexOf(($(e.target).val()), 1));
+        	}
+        	
+        	console.log(bne);
+        }) */
         
 
         

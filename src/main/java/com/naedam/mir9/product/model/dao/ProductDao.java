@@ -1,6 +1,7 @@
 package com.naedam.mir9.product.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.naedam.mir9.option.model.vo.ProductOptionDetail;
 import com.naedam.mir9.product.model.vo.Product;
@@ -36,5 +37,9 @@ public interface ProductDao {
 	int insertProduct(Product product);
 
 	int insertProductImg(ProductImg img);
+
+	int insertProductDiscription(ProductDiscription pd);
+
+	List<ProductDetail> selectProductListByParam(Map<String, String> param);
 
 }
