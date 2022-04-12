@@ -95,6 +95,39 @@ public class ProductController {
 		
 	}
 	
+	@PostMapping("/list_sub")
+	public String post_list_sub(Model model, HttpServletRequest request ,@RequestParam(defaultValue = "0") String cteNo, @RequestParam(defaultValue = "null") String bne_check, @RequestParam(defaultValue = "null") String v_status) {
+		Enumeration params = request.getParameterNames();
+		while(params.hasMoreElements()) {
+		  String name = (String) params.nextElement();
+		  System.out.print(name + " : " + request.getParameter(name) + "     "); 
+		}
+		System.out.println();
+		
+		List<ProductDetail> productList = new ArrayList<ProductDetail>();
+		  if(cteNo.equals("0")) { 
+			  productList = productService.selectAllProductList();
+		  }else { 
+			  productList = productService.selectProductListByCteNo(cteNo); 
+		  }
+		 
+		
+		int productListCnt = productList.size();
+		
+		try {
+			int level = categoryService.selectCategoryLevel(cteNo);
+			model.addAttribute("level",level);
+		} catch (Exception e) {}
+		
+		model.addAttribute("bne_check", bne_check);
+		model.addAttribute("v_status", v_status);
+		model.addAttribute("productList",productList);
+		model.addAttribute("productListCnt",productListCnt);
+		model.addAttribute("cteNo",cteNo);
+		
+		return "product/list_sub";
+	}
+	
 	@GetMapping("/tree_model")
 	public void tree_model(HttpServletRequest request,Model model, String stp) {
 		StringBuilder sb = new StringBuilder();
