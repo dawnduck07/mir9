@@ -53,7 +53,7 @@
 						</div>
 						<br> <br>
 
-						<form id="form_search" name="form_search" method="post" action="${pageContext.request.contextPath}/product/list_sub">
+						<form:form id="form_search" name="form_search" method="post" action="${pageContext.request.contextPath}/product/list_sub">
 							<div class="box-tools pull-right" style="margin-top: 20px;">
 								<input type="hidden" name="locale" value="ko"> 
 								<input type="hidden" name="category_code" value=""> 
@@ -63,16 +63,18 @@
 								<input type="hidden" name="status" value="">
 								
 								<div class="has-feedback">
-									<span> <input type="text" name="keyword" value="" class="form-control input-sm" placeholder="상품 검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
+									<span> 
+										<input type="text" name="keyword" value="" class="form-control input-sm" placeholder="상품 검색" onkeyup="keywordSeach()"/> 
+										<span class="glyphicon glyphicon-search form-control-feedback"></span>
 									</span>
 								</div>
 							</div>
 							<div class="box-tools pull-right" style="margin-top: 20px;">
 								<div class="has-feedback">
 									<span style="float: left; width: 180px;"> 
-										<input type="checkbox" name="bne_check" onclick="bne_onclick('b');" value="b" ${bne_check == "b" ? 'checked' : '' }> BEST 
-										<input type="checkbox" name="bne_check" onclick="bne_onclick('n')" value="n" ${bne_check == "n" ? 'checked' : '' }> NEW 
-										<input type="checkbox" name="bne_check" onclick="bne_onclick('e')" value="e" ${bne_check == "e" ? 'checked' : '' }> EVENT
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('best');" value="best" ${bne_check == "best" ? 'checked' : '' }> BEST 
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('new')" value="new" ${bne_check == "new" ? 'checked' : '' }> NEW 
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('event')" value="event" ${bne_check == "event" ? 'checked' : '' }> EVENT
 									</span> 
 									
 									<select name="field" onchange="location.href='${pageContext.request.contextPath}/product/list_sub?bne_check=${bne_check}&cteNo=${cteNo}&v_status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
@@ -86,7 +88,7 @@
 									</select>
 								</div>
 							</div>
-						</form>
+						</form:form>
 
 						<p class="text-light-blue">
 							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub&locale=ko">ROOT</a>
@@ -149,7 +151,9 @@
 						</button>
 
 						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
-							<input type="hidden" name="download_type" value="product" /> <input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data">
+							<input type="hidden" name="download_type" value="product" /> 
+							<input type="hidden" name="mode" value="downloadExcel"> 
+							<input type="hidden" name="search_data">
 						</form>
 
 						<div style="text-align: right;">
@@ -312,18 +316,29 @@
 			location.href = url;
         }
         
-        // 검색 개선 요구시 참고
-/*         var bne = [];
-        $('[name=bne_check]').change((e)=>{
-        	if($(e.target).is(":checked")){
-        		bne.push($(e.target).val())
-        	}else{
-        		
-        		bne.splice(bne.indexOf(($(e.target).val()), 1));
+        function keywordSeach(){
+        	if(window.event.keyCode == 13){
+        		console.log($('[name=keyword]').val())
         	}
-        	
-        	console.log(bne);
-        }) */
+        }
+        
+        
+        // 검색 개선 요구시 참고
+//         var bne = [];
+        $('[name=bne_check]').change((e)=>{
+        	var target = "[name=is_" + $(e.target).val() +"]";
+        	if($(e.target).is(":checked")){
+        		$(target).val('Y');
+        	}else{
+				$(target).val('');        		
+        	}
+			
+        	console.log($(target).val());
+        });
+        
+        $('[name=field]').change((e)=>{
+        	console.log($(e.target).val())
+        });
         
 
         
