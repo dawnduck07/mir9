@@ -31,4 +31,6 @@ public interface ProductService {
 
 	int updateProductImg(ProductImg img);
 
+	int updateProductDiscription(ProductDiscription pd);
+
 }

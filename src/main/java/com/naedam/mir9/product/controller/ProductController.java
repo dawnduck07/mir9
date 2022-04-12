@@ -191,17 +191,6 @@ public class ProductController {
 	
 	@PostMapping("/insert")
 	public String insertProduct(HttpServletRequest request, RedirectAttributes redirectAttr) {
-		Product product = setProduct(request);
-		
-		//int result = productService.insertProduct(product);
-		redirectAttr.addFlashAttribute("msg", "상품이 등록되었습니다.");
-		
-		return "redirect:/product/list";
-		
-	}
-	
-	@PostMapping("/update")
-	public String updateProduct(HttpServletRequest request, RedirectAttributes redirectAttr){
 		Enumeration params = request.getParameterNames();
 		while(params.hasMoreElements()) {
 		  String name = (String) params.nextElement();
@@ -211,12 +200,19 @@ public class ProductController {
 		
 		
 		
+		
+		
+		redirectAttr.addFlashAttribute("msg", "상품이 등록되었습니다.");
+		
+		return "redirect:/product/list";
+		
+	}
+	
+	@PostMapping("/update")
+	public String updateProduct(HttpServletRequest request, RedirectAttributes redirectAttr){
 		Product product = setProduct(request);
-		  
 		int result = productService.updateProduct(product);
-		  
-		if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
-		 
+
 		List<String> imgNoList = Arrays.asList(request.getParameterValues("no_file"));
 		List<String> urlList = Arrays.asList(request.getParameterValues("url_file"));
 		
@@ -234,13 +230,13 @@ public class ProductController {
 			}
 		}
 		
+		result = updateDiscription("brief", product, request);
+		result = updateDiscription("content", product, request);
 		
+		if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
 		return "redirect:/product/list";
 		
 	}
-	
-	@GetMapping("/img_test")
-	public void imgtest() {}
 	
 	private Product setProduct(HttpServletRequest request) {
 		Product product = new Product();
@@ -270,5 +266,32 @@ public class ProductController {
 		
 		return product;
 	}
+	
+	private int updateDiscription(String type, Product product ,HttpServletRequest request) {
+		ProductDiscription pd = new ProductDiscription();
 
+		switch(type) {
+		
+		case "brief" :	
+			pd.setDiscriptionLevel(1);
+			pd.setContent(request.getParameter("brief"));
+			pd.setProductNo(product.getProductNo());
+			break;
+			
+		case "content" :
+			pd.setDiscriptionLevel(2);
+			pd.setContent(request.getParameter("content"));
+			pd.setProductNo(product.getProductNo());
+			break;
+		}
+		
+		int result = productService.updateProductDiscription(pd);
+		
+		return result;
+	}
+
+	
+	@GetMapping("/img_test")
+	public void imgtest() {}
+	
 }
