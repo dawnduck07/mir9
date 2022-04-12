@@ -41,6 +41,20 @@
   	SELECT * from product_discription WHERE product_no = #{productNo}
   </select>
   
+  <insert id="insertProduct">
+  	insert into product values(nextval(seq_product_no), #{categoryNo}, #{optionNo}, #{modelName}, #{productName}, #{listTitle}, #{retailPrice}, #{salePrice}, #{isSoldOut}, #{individualPoint}, #{productBest}, #{productNew}, #{productEvent}, #{status}, #{langType}, 1, sysdate())
+  	  <selectKey keyProperty="productNo" resultType="_int" order="AFTER">
+					select
+						lastval(seq_product_no)
+					from
+						dual
+	  </selectKey>
+  </insert>
+  
+  <insert id="insertProductImg">
+  	insert into product_img values(nextval(seq_product_img_no), #{productNo}, #{imgLevel}, #{imgUrl})
+  </insert>
+  
   <update id="updateProduct">
   	update product set category_no = #{categoryNo}, option_no = #{optionNo}, model_name = #{modelName}, product_name = #{productName}, list_title = #{listTitle},
   		retail_price = #{retailPrice}, sale_price = #{salePrice}, is_sold_out = #{isSoldOut}, individual_point = #{individualPoint},  product_best = #{productBest},

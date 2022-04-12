@@ -33,4 +33,8 @@ public interface ProductService {
 
 	int updateProductDiscription(ProductDiscription pd);
 
+	int insertProduct(Product product);
+
+	int insertProductImg(ProductImg img);
+
 }
