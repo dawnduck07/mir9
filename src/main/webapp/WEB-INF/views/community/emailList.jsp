@@ -28,13 +28,12 @@
                         <label style="margin-top:5px;">총 202건</label>
                         <div class="box-tools pull-right" style="margin-bottom:5px;">
                             <form name="form_search" method="post" action="?tpf=admin/community/email_list">
-                                <div class="has-feedback">
-                                    <span>
-                                        <input type="text" name="keyword" id="keyword" value=""
-                                            class="form-control input-sm" placeholder="검색" />
-                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                                    </span>
-                                </div>
+                            <div class="has-feedback">
+                                <span>
+                                    <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" />
+                                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                </span>
+                            </div>
                         </div>
 
                         <div class="box-tools pull-right" style="margin-bottom:5px;">
@@ -76,305 +75,20 @@
                                     <td>email</td>
                                     <td>parkjongseo07@gmail.com</td>
                                     <td align="left">[MIR9 SHOP] 주문하신 상품이 취소처리 되었습니다.</td>
-                                    <td align="left">
-
-
-
-
-
-
-                                        &nbsp;
-
-
-                                        [MIR9 SHOP] 주문 취소 안내
-
-
-                                        &nbsp;
-
-
-
-
-
-
-                                        &nbsp;
-
-
-
-
-
-
-
-
-
-
-
-                                        주문하신 상품이 취소처리 되었습니다.
-
-
-
-                                        &nbsp;
-
-
-
-
-
-
-
-
-                                        &nbsp;
-                                        주문 정보
-                                        &nbsp;
-
-
-                                        &nbsp;
-
-
-
-
-
-                                        상태
-                                        주문취소
-
-
-
-                                        주문번호
-                                        220302_121817885
-
-
-
-                                        주문일자
-                                        2022-03-02 12:18:44
-
-
-
-
-                                        &nbsp;
-
-
-
-
-
-
-
-
-
-
-                                        &nbsp;
-                                        주문자 정보
-                                        &nbsp;
-
-
-                                        &nbsp;
-
-
-
-
-
-                                        이름
-                                        JONGSEO PARK
-
-
-
-                                        이메일
-                                        parkjongseo07@gmail.com
-
-
-
-                                        휴대폰 번호
-                                        010-4814-0719
-
-
-
-
-                                        &nbsp;
-
-
-
-
-
-
-
-
-
-
-                                        &nbsp;
-                                        주문 상품
-                                        &nbsp;
-
-
-                                        &nbsp;
-
-
-
-                                        제품 이미지
-                                        제품명
-                                        가격
-                                        수량
-                                        합계
-
-
-
-
-                                        로즈플라워캔들 사이즈 : S ( +1,000원) 색상 : 빨강
-
-                                        1,000원
-                                        1개
-                                        2,000원
-
-
-
-                                        총 상품 금액
-                                        2,000원
-
-
-
-                                        배송비
-                                        0원
-
-
-
-                                        총 결제 금액
-                                        2,000원
-
-
-                                        &nbsp;
-
-
-
-
-
-
-
-
-
-
-                                        &nbsp;
-                                        받는사람 정보
-                                        &nbsp;
-
-
-                                        &nbsp;
-
-
-
-
-
-                                        이름
-                                        JONGSEO PARK
-
-
-
-                                        이메일
-                                        parkjongseo07@gmail.com
-
-
-
-                                        휴대폰 번호
-                                        010-4814-0719
-
-
-
-                                        주소
-                                        서울 중랑구 용마산로115길 127(망우동, 한일써너스빌리젠시1단지) 102동 2301호
-
-
-
-                                        배송메시지
-
-
-
-
-
-                                        &nbsp;
-
-
-
-
-
-
-
-
-
-
-                                        &nbsp;
-                                        결제 정보
-                                        &nbsp;
-
-
-                                        &nbsp;
-
-
-
-
-                                        결제금액
-                                        2,000원
-
-
-
-                                        결제방법
-                                        무통장
-
-
-
-                                        입금 계좌번호
-                                        1005-102-xxxxxx
-
-
-
-                                        입금 은행명
-                                        은행명
-
-
-
-                                        예금주명
-                                        미르나인
-
-
-
-                                        입금자명
-                                        박종서
-
-
-
-                                        입금 만료일
-                                        2022년 3월 03일 12시 18분
-
-                                        &nbsp;
-
-
-
-
-
-
-
-
-
-
-                                        &nbsp;
-
-
-                                        &nbsp;
-
-
-
-
-
-
-                                        본 메일은 발신전용이므로 회신이 되지 않습니다.
-
-
-
-
-
-
-                                        &nbsp;
-
-
-
-
-
-
-
+                                    <td align="left">                                        
+                                    	&nbsp;[MIR9 SHOP] 주문 취소 안내
+                                        &nbsp;&nbsp;주문하신 상품이 취소처리 되었습니다.
+										&nbsp;&nbsp;주문 정보 <!-- 주문 정보 : 상태, 주문번호, 주문일자 -->
+                                        &nbsp;&nbsp;상태 주문취소 주문번호 220302_121817885 주문일자 2022-03-02 12:18:44 
+										&nbsp;&nbsp;주문자 정보 <!-- 주문자 정보 : 이름, 이메일, 휴대폰 번호 -->
+                                        &nbsp;&nbsp;이름 JONGSEO PARK 이메일 parkjongseo07@gmail.com 휴대폰 번호 010-4814-0719
+										&nbsp;&nbsp;주문 상품 <!-- 주문 상품 : 제품 이미지, 제품명, 옵션, 가격,  수량, 합계, 총 상품 금액, 배송비, 총 결제 금액 -->
+                                        &nbsp;&nbsp;제품 이미지 제품명 가격 수량 합계 로즈플라워캔들 사이즈 : S ( +1,000원) 색상 : 빨강 1,000원 1개 2,000원 총 상품 금액 2,000원 배송비  0원  총 결제 금액 2,000원
+										&nbsp;&nbsp;받는사람 정보 <!-- 받는 사람 정보 : 이름, 이메일, 휴대폰 번호, 주소, 배송 메시지 -->
+                                        &nbsp;&nbsp;이름 JONGSEO PARK 이메일 parkjongseo07@gmail.com 휴대폰 번호 010-4814-0719 주소 서울 중랑구 용마산로115길 127(망우동, 한일써너스빌리젠시1단지) 102동 2301호 배송메시지
+										&nbsp;&nbsp;결제 정보 <!-- 결제 정보 : 결제 금액, 결제 방법, 계좌번호, 입금 은행명, 예금주명, 입금자명, 입금 만료일 -->
+                                        &nbsp;&nbsp;결제금액 2,000원 결제방법 무통장 입금 계좌번호 1005-102-xxxxxx 입금 은행명 은행명 예금주명 미르나인 입금자명 박종서 입금 만료일 2022년 3월 03일 12시 18분
+										&nbsp;&nbsp;&nbsp; 본 메일은 발신전용이므로 회신이 되지 않습니다.&nbsp;
                                     </td>
                                     <td>100</td>
                                     <td>2022-03-02 12:21:56</td>
@@ -383,7 +97,7 @@
                         </table>
                         <br>
 
-
+						<!-- 페이징 -->
                         <div style="text-align:right;">
                             <ul class="pagination" style="margin:0;">
                                 <li class="active"><a
@@ -392,11 +106,8 @@
                                 <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=3">3</a></li>
                                 <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=4">4</a></li>
                                 <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=5">5</a></li>
-                                <li class="next"><a
-                                        href="?tpf=admin/community/email_list&type=email&arrSearch=&page=6">Next → </a>
-                                </li>
-                                <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=13">Last → </a>
-                                </li>
+                                <li class="next"><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=6">Next → </a></li>
+                                <li><a href="?tpf=admin/community/email_list&type=email&arrSearch=&page=13">Last → </a></li>
                             </ul>
                         </div>
                     </div><!-- /.box-body -->
@@ -404,9 +115,6 @@
             </div><!-- /.col-xs-12 -->
         </div><!-- /.row -->
     </section>
-
 </div><!-- /.content-wrapper -->
-
-
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
