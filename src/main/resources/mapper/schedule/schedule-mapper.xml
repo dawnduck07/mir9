@@ -21,11 +21,11 @@
   					  SCHEDULE_START_DATE,
   					  SCHEDULE_END_DATE,
   					  SCHEDULE_COLOR)
-  		VALUES(schedule_seq.nextVal,
+  		VALUES(NEXTVAL(schedule_seq),
   			   #{scheduleTitle:VARCHAR},
   			   #{scheduleContents:VARCHAR},
-  			   TO_DATE(#{scheduleStartDate},'YYYY-MM-DD HH24:MI'),
-  			   TO_DATE(#{scheduleEndDate},'YYYY-MM-DD HH24:MI'),
+  			   STR_TO_DATE(#{scheduleStartDate},'%Y-%m-%d %H:%i:%S'),
+  			   STR_TO_DATE(#{scheduleEndDate},'%Y-%m-%d %H:%i:%S'),
   			   #{scheduleColor:VARCHAR})
   	</insert>
   	
@@ -51,8 +51,8 @@
   		<set>
   			schedule_title = #{scheduleTitle:VARCHAR},
   			schedule_contents = #{scheduleContents:VARCHAR},
-  			schedule_start_date = TO_DATE(#{scheduleStartDate},'YYYY-MM-DD HH24:MI'),
-  			schedule_end_date = TO_DATE(#{scheduleEndDate},'YYYY-MM-DD HH24:MI'),
+  			schedule_start_date = STR_TO_DATE(#{scheduleStartDate},'%Y-%m-%d %H:%i:%S'),
+  			schedule_end_date = STR_TO_DATE(#{scheduleEndDate},'%Y-%m-%d %H:%i:%S'),
   			schedule_color = #{scheduleColor:VARCHAR}
   		</set>
   		WHERE schedule_no = #{scheduleNo}

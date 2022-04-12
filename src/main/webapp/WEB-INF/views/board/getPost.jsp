@@ -50,7 +50,7 @@
 			
 		}else{
 		$.ajax({
-			url : "/mir9/board/json/deleteFile/"+fileNo+"?${_csrf.parameterName}=${_csrf.token}",
+			url : "/mir9/board/json/deleteFile/"+fileNo,
 			method : "GET",
 			dataType : "JSON",	
 			headers : {
@@ -71,7 +71,7 @@
 	function fileDownload(postNo){
 		
 		$.ajax({
-			url : "/mir9/board/json/postFileCount/"+postNo+"?${_csrf.parameterName}=${_csrf.token}",
+			url : "/mir9/board/json/postFileCount/"+postNo,
 			method : "GET",
 			dataType : "JSON",	
 			headers : {
@@ -89,7 +89,7 @@
 			
 		$.ajax({
 			
-			url : "/mir9/board/json/getMemberData?${_csrf.parameterName}=${_csrf.token}",
+			url : "/mir9/board/json/getMemberData",
 			method : "GET",
 			dataType : "JSON",
 			headers : {
@@ -114,7 +114,7 @@
 			
 		}else{
 		$.ajax({
-			url : "/mir9/board/json/deleteComment/"+commentNo+"?${_csrf.parameterName}=${_csrf.token}",
+			url : "/mir9/board/json/deleteComment/"+commentNo,
 			method : "GET",
 			dataType : "JSON",	
 			headers : {
@@ -153,7 +153,7 @@
 		
 		$("button[name='getPostBotton']").on("click", function(){
 			var postNo = $(this).val();
-
+			
 			$.ajax({
 				url : "/mir9/board/json/getPostData/"+postNo,
 				method : "GET",
@@ -169,18 +169,23 @@
 					$("input[name='postLayer']").val(JSONData.postLayer);
 					$("input[name='postAsc']").val(JSONData.postAsc);
 					$("input[name='postOriginNo']").val(JSONData.postOriginNo);
+
 					
 					CKEDITOR.instances.editor1.setData(JSONData.postContents)
 
 					if(JSONData.postThombnail != null){
 						
 						var thombnail = "'${pageContext.request.contextPath}/resources/imgs/imageBoard/board"+JSONData.postThombnail+"'"
-						
-						var	display = '<span id="display_thumbnail" name="thumbnailSpan">'
-									+ '<button type="button" onclick="window.open('+thombnail+')" class="btn btn-success btn-xs">보기</button>'
-									+ '<button type="button" onclick="fncDeleteThombnail()" name="deleteThombnail" value="'+JSONData.postNo+'" class="btn btn-danger btn-xs">삭제</button>'
-									+ '</span>';
-						$("td[name='thombnailTd']").append(display)
+						if(JSONData.postThombnail != null && JSONData.postThombnail != ''){
+							var	display = '<span id="display_thumbnail" name="thumbnailSpan">'
+										+ '<button type="button" onclick="window.open('+thombnail+')" class="btn btn-success btn-xs">보기</button>'
+										+ '<button type="button" onclick="fncDeleteThombnail()" name="deleteThombnail" value="'+JSONData.postNo+'" class="btn btn-danger btn-xs">삭제</button>'
+										+ '</span>';
+						$("td[name='thombnailTd']").append(display);
+						}else{
+							var	display = '<span id="display_thumbnail" name="thumbnailSpan">'
+								+ '</span>';	
+						}
 					}
 					
 					$("#getPostTitle").val(JSONData.postTitle);

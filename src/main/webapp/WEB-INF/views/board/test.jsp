@@ -126,7 +126,7 @@
 		        		};
 		        		
 		        		$.ajax({
-		        			url : "/mir9/schedule/json/addSchedule/",
+		        			url : "/mir9/schedule/json/addSchedule?${_csrf.parameterName}=${_csrf.token}",
 		        			method : "POST",
 		        			data: JSON.stringify({
 		        				'scheduleStartDate':scheduleStartDate,
