@@ -473,6 +473,12 @@ public class BoardController {
 		} 
 	}
 	
+	@RequestMapping("test")
+	public String test() throws Exception{
+		
+		return "board/test";
+	}
+	
 
 		
 	

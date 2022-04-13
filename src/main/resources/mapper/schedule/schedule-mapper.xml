@@ -24,8 +24,8 @@
   		VALUES(NEXTVAL(schedule_seq),
   			   #{scheduleTitle:VARCHAR},
   			   #{scheduleContents:VARCHAR},
-  			   STR_TO_DATE(#{scheduleStartDate},'%Y-%m-%d %H:%i:%S'),
-  			   STR_TO_DATE(#{scheduleEndDate},'%Y-%m-%d %H:%i:%S'),
+  			   #{scheduleStartDate},
+  			   #{scheduleEndDate},
   			   #{scheduleColor:VARCHAR})
   	</insert>
   	
@@ -51,8 +51,8 @@
   		<set>
   			schedule_title = #{scheduleTitle:VARCHAR},
   			schedule_contents = #{scheduleContents:VARCHAR},
-  			schedule_start_date = STR_TO_DATE(#{scheduleStartDate},'%Y-%m-%d %H:%i:%S'),
-  			schedule_end_date = STR_TO_DATE(#{scheduleEndDate},'%Y-%m-%d %H:%i:%S'),
+  			schedule_start_date = #{scheduleStartDate},
+  			schedule_end_date = #{scheduleEndDate},
   			schedule_color = #{scheduleColor:VARCHAR}
   		</set>
   		WHERE schedule_no = #{scheduleNo}
@@ -60,9 +60,8 @@
   	
   	<delete id="deleteSchedule" parameterType="int">
   		DELETE
-  			schedule
-  		WHERE
-  			schedule_no = #{value}
+  		FROM schedule
+  		WHERE schedule_no = #{value}
   	</delete>
   
   
