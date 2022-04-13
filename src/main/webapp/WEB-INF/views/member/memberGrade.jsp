@@ -31,11 +31,9 @@
 			<div class="box">
 				<div class="box-body">
 				
-					<form:form 
-						id="memberGradeInsertFrm" 
-						name="memberGradeInsertFrm"
-						method="POST"
-						action="${pageContext.request.contextPath}/member/memberGradeInsert.do">
+					<form:form
+						id="memberGradeUpdateFrm" 
+						name="memberGradeUpdateFrm">
 						<table class="table table-bordered table-hover"
 							style="width: 30%;">
 							<thead>
@@ -48,54 +46,21 @@
 							<tbody id = "tbody">
 								<c:forEach items="${memberGradeList}" var="mgl">
 									<tr>
-										<td>${mgl.memberGradeNo}</td>
-										<td><input type="text" name="memberGradeName" value="${mgl.memberGradeName}"
-											class="form-control input-sm" style="width: 100%;" /></td>
+										<td>${mgl.member_grade_no}
+										<td>
+											<input type="text" id="memberGradeName_${mgl.member_grade_no}" name="memberGradeName" value="${mgl.member_grade_name}" class="form-control input-sm" style="width: 100%;" />
+											<input type="hidden" id="memberGradeNo_${mgl.member_grade_no}" name="memberGradeNo" value="${mgl.member_grade_no}" />
+											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+										</td>
 										<td>${mgl.cnt}</td>
 									</tr>
 								</c:forEach>
-							</tbody>
-							
-							<!--  
-							<tr>
-								<td>1</td>
-								<td>
-									
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
-									<input type="text" name="memberGrade1" value="관리자" readonly class="form-control input-sm" style="width: 100%;"/>
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td><input type="text" name="memberGrade2" value="${memberGradeList.memberGrade2}"
-									class="form-control input-sm" style="width: 100%;" /></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td><input type="text" name="memberGrade3" value="${memberGradeList.memberGrade3}"
-									class="form-control input-sm" style="width: 100%;" /></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>4</td>
-								<td><input type="text" name="memberGrade4" value="${memberGradeList.memberGrade4}"
-									class="form-control input-sm" style="width: 100%;" /></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>5</td>
-								<td><input type="text" name="memberGrade5" value="${memberGradeList.memberGrade5}"
-									class="form-control input-sm" style="width: 100%;" /></td>
-								<td></td>
-							</tr>
-							-->
+							</tbody>		
 						</table>
 
 						<br>
 
-						<button type="button" onclick="insertGrade()"
+						<button type="button" onclick="memberGradeUpdate()"
 							class="btn btn-primary btn-sm">
 							<i class="fa fa-gear"></i> 등급 수정
 						</button>
@@ -112,11 +77,68 @@
 <!-- /.content-wrapper -->
 
 <script>
-function insertGrade(){
-	console.log("등급수정(insertGrade()) 동작");
-	$(document.memberGradeInsertFrm).submit();
-		
-}
+
+// 등급 수정
+
+function memberGradeUpdate(){
+	console.log("등급수정(memberGradeUpdate()) 동작");
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	// memberGradeNo 배열
+	var memberGradeNoList = new Array();
+	$("input[name=memberGradeNo]").each(function(index, item){
+		memberGradeNoList.push($(item).val());
+	});
+	console.log("memberGradeNoList = ");
+	console.log(memberGradeNoList);
+	
+	// memberGradeName 배열
+	var memberGradeNameList = new Array();
+	$("input[name=memberGradeName]").each(function(index, item){
+		memberGradeNameList.push($(item).val());
+	});
+	console.log("memberGradeNameList = ");
+	console.log(memberGradeNameList);
+	
+	const keys = memberGradeNoList;
+	const values = memberGradeNameList;
+	 
+	const result = keys.reduce((acc, curr, idx) => {
+		acc[curr] = values[idx];
+		return acc;
+	}, new Object);
+	
+	console.log(result);
+	
+	const data = JSON.stringify(result);
+	console.log(data);
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/memberGradeUpdate.do`,
+		method : "POST",
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success(data){
+			console.log(data);
+			alert("등급이 수정 되었습니다.");
+			location.reload();
+		}, 
+		error : console.log
+	});
+};
+
+
+
+
+
+// 첫번 째 input 태그 readonly로 설정
+document.getElementById('memberGradeName_1').readOnly = true;
+
 
 </script>
 
