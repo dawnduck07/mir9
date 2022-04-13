@@ -9,7 +9,7 @@
 		$("button[name='display_reply']").css("display", "none")
 		$("button[name='updatePost']").attr("onclick", "funReply2();")
 		var append = $("#getPostTitle").val();
-		$("#getPostTitle").val("RE : "+append);
+		$("#getPostTitle").val(" RE   :   "+append);
 	}
 	
 	function funReply2(){	

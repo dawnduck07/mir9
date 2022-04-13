@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="1:1문의" name="title"/>
 </jsp:include>
+
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="nowDate"/>  
+
 <!-- content-wrapper -->
 <head>
 <meta charset="utf-8">
@@ -192,10 +197,13 @@
                         <td></td>
                         <td>공지</td>          
                         <td align="left">
-                        	${post.postTitle}
-                        </td>          
-                        <td>${post.postMemberName}</td>
-                        <td>${post.postDate}</td>
+                			<c:if test="${nowDate eq post.postDate}">
+                				<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/new.png" width="15">
+                			</c:if>
+                			${post.postTitle}
+                		</td>         
+                        <td>${post.postMemberName}</td>            
+                        <td>${post.postDate}</td>                        
                         <td>${post.postViewCount}</td>
                         <td>${post.postDownloadCount}</td>
                         <td>
@@ -229,10 +237,22 @@
                         	</td>
                    			<td>${ i }</td>
                    			<td align="left">
+                   				<c:if test="${nowDate eq post.postDate}">
+                   					<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/new.png" width="15">
+                   				</c:if>           
+	                			<c:if test="${post.postLayer > 0}">
+	                				&nbsp;&nbsp;<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/right.png" width="15">
+	                				&nbsp;&nbsp;
+	                			</c:if>                   				     				
                    				${post.postTitle}
+                   				<c:if test="${post.postThombnail != null && post.postThombnail != ''}">
+                   					<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/disk.png" width="15">
+                   				</c:if>
                    			</td>
                    			<td>${post.postMemberName}</td>
-                   			<td>${post.postDate}</td>
+                   			<td>
+	                        	${post.postDate}
+	                        </td>
                    			<td>${post.postViewCount}</td>
                    			<c:if test="${board2.option.optionOrder eq 'y'}">
                    			<td>
