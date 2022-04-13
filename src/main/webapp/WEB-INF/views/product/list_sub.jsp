@@ -104,7 +104,7 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
+										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');" /></td>
 										<td style="width: 50px;">CODE</td>
 										<td>제품 이미지</td>
 										<td>카테고리</td>

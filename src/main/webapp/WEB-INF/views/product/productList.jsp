@@ -90,7 +90,7 @@
 								<td class="menu">옵션</td>
 								<td align="left">
 									<p style="float: left; width: 100%;">
-										<button type="button" class="btn btn-primary btn-xs" onclick="optionManager('form','');">
+										<button type="button" class="btn btn-primary btn-xs" onclick="optionManager();">
 											<span class="glyphicon glyphicon-plus"></span> 옵션추가
 										</button>
 									</p> <br>
@@ -483,6 +483,11 @@ $("input[type=file]").change(function(e){
 	function registerCopyProduct(){
 		$(document.formCopyProduct).submit();
 	}
+	
+    function optionManager() {
+		optionTabChange('1', '${pageContext.request.contextPath}/option/option_manager?optionNo=0');
+		$('#modalContent2').modal({backdrop:'static', show:true});
+    }
 	
 	
 </script>
