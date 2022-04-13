@@ -91,7 +91,11 @@
 						</form:form>
 
 						<p class="text-light-blue">
-							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub&locale=ko">ROOT</a>
+							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub">ROOT</a>
+							<c:forEach var="cte" items="${cteList }">
+								<strong> > </strong> 
+								<a href="${pageContext.request.contextPath}/product/list_sub?cteNo=${cte.categoryNo}">${cte.categoryName}</a>
+							</c:forEach>
 						</p>
 						<label>총 ${productListCnt } 건</label>
 
