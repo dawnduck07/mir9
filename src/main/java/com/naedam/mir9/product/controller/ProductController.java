@@ -88,11 +88,14 @@ public class ProductController {
 			model.addAttribute("level",level);
 		} catch (Exception e) {}
 		
+		List<Category> cteList = categoryService.selectRelatedCtegoryByCteNo(cteNo);
+		
 		model.addAttribute("bne_check", bne_check);
 		model.addAttribute("v_status", v_status);
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
 		model.addAttribute("cteNo",cteNo);
+		model.addAttribute("cteList",cteList);
 		
 	}
 	
@@ -115,12 +118,15 @@ public class ProductController {
 			model.addAttribute("level",level);
 		} catch (Exception e) {}
 		
+		List<Category> cteList = categoryService.selectRelatedCtegoryByCteNo(cteNo);
+		
 		model.addAttribute("bne_check", bne_check);
 		model.addAttribute("v_status", request.getParameter("field"));
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
 		model.addAttribute("cteNo",cteNo);
 		model.addAttribute("keyword", request.getParameter("keyword"));
+		model.addAttribute("cteList",cteList);
 		return "product/list_sub";
 	}
 	
