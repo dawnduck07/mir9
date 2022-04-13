@@ -1,6 +1,6 @@
 package com.naedam.mir9.schedule.model.service;
 
-import java.util.Map;
+import java.util.List;
 
 import com.naedam.mir9.schedule.model.vo.Schedule;
 
@@ -10,7 +10,7 @@ public interface ScheduleService {
 	public int addSchedule(Schedule schedule) throws Exception;
 	
 	//일정 리스트
-	public Map<String, Object> getScheduleList(Map<String, Object> map) throws Exception;
+	public List<Schedule> getScheduleList() throws Exception;
 	
 	//일정 데이터
 	public int getSchedule(int scheduleNo) throws Exception;

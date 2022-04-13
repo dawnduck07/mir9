@@ -35,6 +35,9 @@
 	  		</when>
 	  	</choose>
 	  </if>
+	  <if test="keyword != 'null'">
+	  	and product_name like concat('%',#{keyword},'%')
+	  </if>
 	</where>
 	  
   </select>

@@ -64,7 +64,7 @@
 								
 								<div class="has-feedback">
 									<span> 
-										<input type="text" name="keyword" value="" class="form-control input-sm" placeholder="상품 검색" onkeyup="keywordSeach()"/> 
+										<input type="text" name="keyword" value="${keyword }" class="form-control input-sm" placeholder="상품 검색" onkeyup="keywordSeach()"/> 
 										<span class="glyphicon glyphicon-search form-control-feedback"></span>
 									</span>
 								</div>
@@ -78,7 +78,7 @@
 									</span> 
 									
 									<select name="field" onchange="location.href='${pageContext.request.contextPath}/product/list_sub?bne_check=${bne_check}&cteNo=${cteNo}&v_status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
-										<option value="">상태</option>
+										<option value="null">상태</option>
 										<option value="Y" ${v_status == "Y" ? 'selected' : '' }>보임</option>
 										<option value="N" ${v_status == "N" ? 'selected' : '' }>숨김</option>
 									</select> 
@@ -91,7 +91,11 @@
 						</form:form>
 
 						<p class="text-light-blue">
-							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub&locale=ko">ROOT</a>
+							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub">ROOT</a>
+							<c:forEach var="cte" items="${cteList }">
+								<strong> > </strong> 
+								<a href="${pageContext.request.contextPath}/product/list_sub?cteNo=${cte.categoryNo}">${cte.categoryName}</a>
+							</c:forEach>
 						</p>
 						<label>총 ${productListCnt } 건</label>
 
@@ -100,7 +104,7 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
+										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');" /></td>
 										<td style="width: 50px;">CODE</td>
 										<td>제품 이미지</td>
 										<td>카테고리</td>
@@ -274,6 +278,7 @@
         function onclickUpdate(code) {
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
+            parent.$('#option_list').html('');
             setData(code);
             parent.$('#mode').val('updateProduct');
         }
@@ -288,10 +293,11 @@
                     var chkBox = document.getElementsByName('list[]');
                     var chkLen = chkBox.length;
                     var code = '';
-
                     // 선택된 파일이 있는지 체크
                     for (i = 0; i < chkLen; i++) {
-                        if (chkBox[i].checked) code += chkBox[i].value+',';
+                        if (chkBox[i].checked){
+                        	code += chkBox[i].value+',';
+                        }
                     }
                     parent.$('#modalCopyProduct').modal({backdrop:'static', show:true});
                     parent.formCopyProduct.code.value = code;
@@ -331,13 +337,12 @@
         		$(target).val('Y');
         	}else{
 				$(target).val('');        		
-        	}
-			
-        	console.log($(target).val());
+        	}			
+        	console.log($(target).val())
         });
         
         $('[name=field]').change((e)=>{
-        	console.log($(e.target).val())
+        	$('[name=status]').val($(e.target).val());
         });
         
 

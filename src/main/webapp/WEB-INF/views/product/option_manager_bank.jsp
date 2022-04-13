@@ -1,17 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>AdminLTE 2 | Dashboard</title>
+<title>AdminLTE 2 | option_manager_bank</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-- Bootstrap 3.3.7 -->
-<link rel="stylesheet" href="/html/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 <!-- Font Awesome -->
-<link rel="stylesheet" href="/html/css/font-awesome.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css">
 <!-- Ionicons -->
 <link rel="stylesheet" href="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/Ionicons/css/ionicons.min.css">
 <!-- Theme style -->
@@ -20,7 +23,7 @@
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com${pageContext.request.contextPath}5shiv/3.7.3${pageContext.request.contextPath}5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 <!-- Google Font -->
@@ -43,35 +46,23 @@
 							<col width="10%" />
 						</colgroup>
                     <thead>
-                    <tr>
-                        <td>순번</td>
-                        <td>옵션명</td>
-                        <td>옵션값</td>
-                        <td>명령</td>
-                    </tr>
+	                    <tr>
+	                        <td>순번</td>
+	                        <td>옵션명</td>
+	                        <td>옵션값</td>
+	                        <td>명령</td>
+	                    </tr>
                     </thead>
-      <tr>
-                        <td>3</td>
-                        <td>악세사리</td>
-                        <td>2단, 3단, 4단</td>
-                        <td>
-							<button type="button" onclick="setOption(9);" class="btn btn-primary btn-xs">선택하기</button>
-						</td>
-                    </tr>      <tr>
-                        <td>2</td>
-                        <td>색상</td>
-                        <td>빨강, 노랑, 파랑</td>
-                        <td>
-							<button type="button" onclick="setOption(8);" class="btn btn-primary btn-xs">선택하기</button>
-						</td>
-                    </tr>      <tr>
-                        <td>1</td>
-                        <td>사이즈</td>
-                        <td>S, L, XL</td>
-                        <td>
-							<button type="button" onclick="setOption(7);" class="btn btn-primary btn-xs">선택하기</button>
-						</td>
-                    </tr>                    </form>
+                    	<c:forEach var="option" items="${optionList }" varStatus="vs">
+		    				<tr>
+		                        <td>${vs.end - vs.count }</td>
+		                        <td>${option.optionName }</td>
+		                        <td>${option.optionValues }</td>
+		                        <td>
+									<button type="button" onclick="setOption(${option.optionNo});" class="btn btn-primary btn-xs">선택하기</button>
+								</td>
+		                    </tr>                       
+                    	</c:forEach>
                     </table>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
@@ -84,11 +75,11 @@
 <script src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/html/js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="${pageContext.request.contextPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
-			function setOption(bank_code){
-				parent.optionTabChange('1', '/index.php?tpf=admin/product/option_manager&bank_code='+bank_code);
+			function setOption(optionNo){
+				parent.optionTabChange('1', '${pageContext.request.contextPath}/option/option_manager?optionNo='+optionNo);
 			}
 
 		

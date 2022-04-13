@@ -11,7 +11,7 @@ public interface ScheduleDao {
 	public int addSchedule(Schedule schedule) throws Exception;
 	
 	//일정 리스트
-	public List<Schedule> getScheduleList(Map<String, Object> map) throws Exception;
+	public List<Schedule> getScheduleList() throws Exception;
 	
 	//일정 데이터
 	public int getSchedule(int scheduleNo) throws Exception;

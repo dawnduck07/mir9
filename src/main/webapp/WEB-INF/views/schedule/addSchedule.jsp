@@ -4,75 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 <script>
-	function register(){
-		
-		var scheduleStartDate = $('input[name="scheduleStartDate"]').val();
-		var scheduleEndDate = $('input[name="scheduleEndDate"]').val();
-		var scheduleStartTime = $('select[name="scheduleStartTime"]').val();
-		var scheduleEndTime = $('select[name="scheduleEndTime"]').val();
-		var scheduleColor = $("select[name='scheduleColor']").val();
-		var scheduleTitle = $("input[name='scheduleTitle']").val();
-		var scheduleContents = $("textarea[name='scheduleContents']").val();
-		
-		var schedule = {
-				scheduleStartDate:scheduleStartDate,
-				scheduleEndDate:scheduleEndDate,
-				scheduleColor:scheduleColor,
-				scheduleTitle:scheduleTitle,
-				scheduleContents:scheduleContents
-		};
-		
-		$.ajax({
-			url : "/mir9/schedule/json/addSchedule/",
-			method : "POST",
-			data: JSON.stringify({
-				'scheduleStartDate':scheduleStartDate,
-				'scheduleEndDate':scheduleEndDate,
-				'scheduleColor':scheduleColor,
-				'scheduleTitle':scheduleTitle,
-				'scheduleContents':scheduleContents
-			}),
-			dataType : 'JSON',
-			headers : {
-				"Accept" : "application/json",
-				"Content-Type" : "application/json"	 						
-			} ,
-			success : function(JSONData, status){
-				calendar.addEvent({
-					title: scheduleTitle,
-					start: scheduleStartDate,
-					end: scheduleEndTime,
-					backgroundColor: scheduleColor
-				});
-				$("#modalContent6").modal("hide");
-			},
-			error:function(request, status, error){
-				alert("등록 실패")				
-			}
-				
-		})
-		
-		
-	}
-	
-    /* datepicker */
-    $( "#datepicker1,#datepicker2" ).datepicker({
-        dateFormat: 'yy-mm-dd',
-        prevText: '이전 달',
-        nextText: '다음 달',
-        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        dayNames: ['일','월','화','수','목','금','토'],
-        dayNamesShort: ['일','월','화','수','목','금','토'],
-        dayNamesMin: ['일','월','화','수','목','금','토'],
-        showMonthAfterYear: true,
-        yearSuffix: '년'
-    });
-    $('#datepicker1,#datepicker2').datepicker({
-        dateFormat: 'yy-mm-dd'
-    });
-	
-	
+
+
 	
 </script>
 
@@ -95,7 +28,7 @@
                 <td class="menu">날짜</td>
                 <td align="left">
                 <span style="float:left">
-                <input type="text" name="scheduleStartDate" id="datepicker1" class="form-control input-sm hasDatepicker" style="width:80px; float:left" readonly="" placeholder="시작일">
+                <input type="text" name="scheduleStartDate" id="datepicker1" class="form-control input-sm" style="width:80px; float:left" readonly="" placeholder="시작일">
                 <select name="scheduleStartTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
       					<option value="00:00">00:00</option>      
       					<option value="00:30">00:30</option>      
@@ -150,7 +83,7 @@
                 
                 <span style="float:left">&nbsp;&nbsp;~&nbsp;&nbsp;</span>
                 <span style="float:left">
-                <input type="text" name="scheduleEndDate" id="datepicker2" class="form-control input-sm hasDatepicker" style="width:80px; float:left" readonly="" placeholder="종료일">
+                <input type="text" name="scheduleEndDate" id="datepicker2" class="form-control input-sm" style="width:80px; float:left" readonly="" placeholder="종료일">
                 <select name="scheduleEndTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
       					<option value="00:00">00:00</option>      
       					<option value="00:30">00:30</option>      
@@ -212,28 +145,29 @@
                 
                 <tr>
                     <td style="width:8%; text-align:left;">
-	                    <select name="scheduleColor" id="colorselector" style="display: none;">
-	          				<option value="#A0522D" data-color="#A0522D"></option>          
-	          				<option value="#CD5C5C" data-color="#CD5C5C"></option>          
-	          				<option value="#FF4500" data-color="#FF4500"></option>          
-	          				<option value="#008B8B" data-color="#008B8B"></option>          
-	          				<option value="#B8860B" data-color="#B8860B"></option>          
-	          				<option value="#32CD32" data-color="#32CD32"></option>          
-	          				<option value="#FFD700" data-color="#FFD700"></option>          
-	          				<option value="#00C0EF" data-color="#00C0EF"></option>          
-	          				<option value="#87CEEB" data-color="#87CEEB"></option>          
-	          				<option value="#FF69B4" data-color="#FF69B4"></option>          
-	          				<option value="#87CEFA" data-color="#87CEFA"></option>          
-	          				<option value="#6495ED" data-color="#6495ED"></option>          
-	          				<option value="#DD4B39" data-color="#DD4B39"></option>          
-	          				<option value="#FF8C00" data-color="#FF8C00"></option>          
-	          				<option value="#C71585" data-color="#C71585"></option>          
-	          				<option value="#00A65A" data-color="#00A65A"></option>          
-	          				<option value="#F39C12" data-color="#F39C12"></option>          
-	          				<option value="#3C8DBC" data-color="#3C8DBC"></option>          
-	          				<option value="#000000" data-color="#000000"></option>                    
+	                    <select name="scheduleColor" id="colorselector">
+	          				<option value="#A0522D" data-color="#A0522D" style="background-color: #A0522D;"></option>          
+	          				<option value="#CD5C5C" data-color="#CD5C5C" style="background-color: #CD5C5C;"></option>          
+	          				<option value="#FF4500" data-color="#FF4500" style="background-color: #FF4500;"></option>          
+	          				<option value="#008B8B" data-color="#008B8B" style="background-color: #008B8B;"></option>          
+	          				<option value="#B8860B" data-color="#B8860B" style="background-color: #B8860B;"></option>          
+	          				<option value="#32CD32" data-color="#32CD32" style="background-color: #32CD32;"></option>          
+	          				<option value="#FFD700" data-color="#FFD700" style="background-color: #FFD700;"></option>          
+	          				<option value="#00C0EF" data-color="#00C0EF" style="background-color: #00C0EF;"></option>          
+	          				<option value="#87CEEB" data-color="#87CEEB" style="background-color: #87CEEB;"></option>          
+	          				<option value="#FF69B4" data-color="#FF69B4" style="background-color: #FF69B4;"></option>          
+	          				<option value="#87CEFA" data-color="#87CEFA" style="background-color: #87CEFA;"></option>          
+	          				<option value="#6495ED" data-color="#6495ED" style="background-color: #6495ED;"></option>          
+	          				<option value="#DD4B39" data-color="#DD4B39" style="background-color: #DD4B39;"></option>          
+	          				<option value="#FF8C00" data-color="#FF8C00" style="background-color: #FF8C00;"></option>          
+	          				<option value="#C71585" data-color="#C71585" style="background-color: #C71585;"></option>          
+	          				<option value="#00A65A" data-color="#00A65A" style="background-color: #00A65A;"></option>          
+	          				<option value="#F39C12" data-color="#F39C12" style="background-color: #F39C12;"></option>          
+	          				<option value="#3C8DBC" data-color="#3C8DBC" style="background-color: #3C8DBC;"></option>          
+	          				<option value="#000000" data-color="#000000" style="background-color: #000000;"></option>                    
 	          			</select>
-	          		<div class="dropdown dropdown-colorselector">
+	          			<!-- 
+	          			<div class="dropdown">
 	          			<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 	          				<span class="btn-colorselector" style="background-color: rgb(160, 82, 45);"></span>
 	          			</a>
@@ -297,8 +231,8 @@
 		          			</li>
 	          			</ul>
 	          		</div>
+	          		 -->
                     </td>
-                    
                     <td>
                     	<input type="text" name="scheduleTitle" id="title" class="form-control input-sm" style="width:100%;">
                     </td>
@@ -316,7 +250,6 @@
             </div>
             <div class="modal-footer">
             <button type="button" name="addSchedule" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" onclick="deleteSchedule()" id="display_reply" style="display:none;" class="btn btn-danger">삭제</button>
             </div>
             </form>
         </div>
