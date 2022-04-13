@@ -5,7 +5,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 <script>
 
-function(){	
     /* datepicker */
     $( "#datepicker1,#datepicker2" ).datepicker({
         dateFormat: 'yy-mm-dd',
@@ -22,14 +21,15 @@ function(){
     $('#datepicker1,#datepicker2').datepicker({
         dateFormat: 'yy-mm-dd'
     });
-}
+	
+	
 	
 </script>
 
-<div class="modal fade" id="modalContent6" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="modalContent7" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" style="width:600px;">
         <div class="modal-content">
-            <form name="form_register" method="post" action="?tpf=admin/schedule/process" enctype="multipart/form-data">
+            <form name="getSchedule" method="post" action="?tpf=admin/schedule/process" enctype="multipart/form-data">
             <input type="hidden" name="mode" id="mode" value="insert">
             <input type="hidden" name="type" value="nomal">
             <input type="hidden" name="code">
@@ -45,8 +45,8 @@ function(){
                 <td class="menu">날짜</td>
                 <td align="left">
                 <span style="float:left">
-                <input type="text" name="scheduleStartDate" id="datepicker1" class="form-control input-sm" style="width:80px; float:left" readonly="" placeholder="시작일">
-                <select name="scheduleStartTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
+                <input type="text" name="getScheduleStartDate" id="datepicker1" class="form-control input-sm hasDatepicker" style="width:80px; float:left" readonly="" placeholder="시작일">
+                <select name="getScheduleStartTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
       					<option value="00:00">00:00</option>      
       					<option value="00:30">00:30</option>      
       					<option value="01:00">01:00</option>      
@@ -100,8 +100,8 @@ function(){
                 
                 <span style="float:left">&nbsp;&nbsp;~&nbsp;&nbsp;</span>
                 <span style="float:left">
-                <input type="text" name="scheduleEndDate" id="datepicker2" class="form-control input-sm" style="width:80px; float:left" readonly="" placeholder="종료일">
-                <select name="scheduleEndTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
+                <input type="text" name="getScheduleEndDate" id="datepicker2" class="form-control input-sm hasDatepicker" style="width:80px; float:left" readonly="" placeholder="종료일">
+                <select name="getScheduleEndTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
       					<option value="00:00">00:00</option>      
       					<option value="00:30">00:30</option>      
       					<option value="01:00">01:00</option>      
@@ -162,28 +162,28 @@ function(){
                 
                 <tr>
                     <td style="width:8%; text-align:left;">
-	                    <select name="scheduleColor" id="colorselector" style="display: none;">
-	          				<option value="#A0522D" data-color="#A0522D"></option>          
-	          				<option value="#CD5C5C" data-color="#CD5C5C"></option>          
-	          				<option value="#FF4500" data-color="#FF4500"></option>          
-	          				<option value="#008B8B" data-color="#008B8B"></option>          
-	          				<option value="#B8860B" data-color="#B8860B"></option>          
-	          				<option value="#32CD32" data-color="#32CD32"></option>          
-	          				<option value="#FFD700" data-color="#FFD700"></option>          
-	          				<option value="#00C0EF" data-color="#00C0EF"></option>          
-	          				<option value="#87CEEB" data-color="#87CEEB"></option>          
-	          				<option value="#FF69B4" data-color="#FF69B4"></option>          
-	          				<option value="#87CEFA" data-color="#87CEFA"></option>          
-	          				<option value="#6495ED" data-color="#6495ED"></option>          
-	          				<option value="#DD4B39" data-color="#DD4B39"></option>          
-	          				<option value="#FF8C00" data-color="#FF8C00"></option>          
-	          				<option value="#C71585" data-color="#C71585"></option>          
-	          				<option value="#00A65A" data-color="#00A65A"></option>          
-	          				<option value="#F39C12" data-color="#F39C12"></option>          
-	          				<option value="#3C8DBC" data-color="#3C8DBC"></option>          
-	          				<option value="#000000" data-color="#000000"></option>                    
+	                    <select name="scheduleColor" id="colorselector">
+	          				<option value="#A0522D" data-color="#A0522D" style="background-color: #A0522D;"></option>          
+	          				<option value="#CD5C5C" data-color="#CD5C5C" style="background-color: #CD5C5C;"></option>          
+	          				<option value="#FF4500" data-color="#FF4500" style="background-color: #FF4500;"></option>          
+	          				<option value="#008B8B" data-color="#008B8B" style="background-color: #008B8B;"></option>          
+	          				<option value="#B8860B" data-color="#B8860B" style="background-color: #B8860B;"></option>          
+	          				<option value="#32CD32" data-color="#32CD32" style="background-color: #32CD32;"></option>          
+	          				<option value="#FFD700" data-color="#FFD700" style="background-color: #FFD700;"></option>          
+	          				<option value="#00C0EF" data-color="#00C0EF" style="background-color: #00C0EF;"></option>          
+	          				<option value="#87CEEB" data-color="#87CEEB" style="background-color: #87CEEB;"></option>          
+	          				<option value="#FF69B4" data-color="#FF69B4" style="background-color: #FF69B4;"></option>          
+	          				<option value="#87CEFA" data-color="#87CEFA" style="background-color: #87CEFA;"></option>          
+	          				<option value="#6495ED" data-color="#6495ED" style="background-color: #6495ED;"></option>          
+	          				<option value="#DD4B39" data-color="#DD4B39" style="background-color: #DD4B39;"></option>          
+	          				<option value="#FF8C00" data-color="#FF8C00" style="background-color: #FF8C00;"></option>          
+	          				<option value="#C71585" data-color="#C71585" style="background-color: #C71585;"></option>          
+	          				<option value="#00A65A" data-color="#00A65A" style="background-color: #00A65A;"></option>          
+	          				<option value="#F39C12" data-color="#F39C12" style="background-color: #F39C12;"></option>          
+	          				<option value="#3C8DBC" data-color="#3C8DBC" style="background-color: #3C8DBC;"></option>          
+	          				<option value="#000000" data-color="#000000" style="background-color: #000000;"></option>                    
 	          			</select>
-	          		<div class="dropdown dropdown-colorselector">
+	          		<!-- <div class="dropdown dropdown-colorselector">
 	          			<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 	          				<span class="btn-colorselector" style="background-color: rgb(160, 82, 45);"></span>
 	          			</a>
@@ -246,11 +246,11 @@ function(){
 			          			<a class="color-btn" href="#" data-color="#000000" data-value="#000000" title="" style="background-color: rgb(0, 0, 0);"></a>
 		          			</li>
 	          			</ul>
-	          		</div>
+	          		</div> -->
                     </td>
                     
                     <td>
-                    	<input type="text" name="scheduleTitle" id="title" class="form-control input-sm" style="width:100%;">
+                    	<input type="text" name="getScheduleTitle" id="title" class="form-control input-sm" style="width:100%;">
                     </td>
                 </tr>
                 </tbody>
@@ -259,13 +259,14 @@ function(){
             </tr>
             <tr>
                 <td class="menu">내용</td>
-                <td align="left"><textarea name="scheduleContents" id="contents" rows="5" style="width:100%"></textarea></td>
+                <td align="left"><textarea name="getScheduleContents" id="contents" rows="5" style="width:100%"></textarea></td>
             </tr>
             </tbody></table>
 
             </div>
             <div class="modal-footer">
-            <button type="button" name="addSchedule" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" name="updateSchedule" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" name="deleteSchedule" class="btn btn-danger">삭제</button>
             </div>
             </form>
         </div>
