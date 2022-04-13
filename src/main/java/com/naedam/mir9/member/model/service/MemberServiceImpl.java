@@ -2,6 +2,7 @@ package com.naedam.mir9.member.model.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,16 @@ public class MemberServiceImpl implements MemberService {
 	public List<MemberGrade> selectMemberGradeList() {
 		return memberDao.selectMemberGradeList();
 	}
+
+	// 회원 등급 수정
+	@Override
+	public int memberGradeUpdate(MemberGrade paramGrade) {
+		return memberDao.memberGradeUpdate(paramGrade);
+	}
+
+	
+
+	
 
 	
 

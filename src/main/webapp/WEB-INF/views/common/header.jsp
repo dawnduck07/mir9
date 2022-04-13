@@ -10,6 +10,8 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="_csrf_header" id="_csrf_header" content="${_csrf.headerName}">
+<meta name="_csrf" id="_scrf" content="${_csrf.token}">
 <title>AdminLTE 2 | ${param.title}</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
@@ -63,7 +65,7 @@
 	
 	$(function(){
 		
-		$("a[name='board']").on("click", function(){
+		$("a[name='board']").one("click", function(){
 
 			$.ajax({
 				url : "/mir9/board/json/listBoard",

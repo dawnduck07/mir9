@@ -174,5 +174,18 @@
 		COUNT(*) as cnt
 	FROM
 		member_grade GROUP BY member_grade_name
+	ORDER BY
+		member_grade_no
 </select>
+
+<!-- 회원 등급 수정 -->
+<update id="memberGradeUpdate">
+	UPDATE
+		member_grade
+	SET 
+		member_grade_name = #{memberGradeName}
+	WHERE
+		member_grade_no = #{memberGradeNo}
+</update>
+
 </mapper>
