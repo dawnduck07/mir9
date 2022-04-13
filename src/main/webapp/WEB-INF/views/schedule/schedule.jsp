@@ -210,6 +210,45 @@
 				  })
 	        	    	  
 	          },
+	          eventDrop: function(arg){
+	        	  var scheduleNo = arg.event.id;
+	        	  var scheduleTitle = arg.event.title;
+	        	  var scheduleContents = arg.event.extendedProps.contents;
+	        	  var scheduleStartDate = moment(arg.event.start).format('YYYY-MM-DD');
+	        	  var scheduleEndDate = moment(arg.event.end).format('YYYY-MM-DD');
+	        	  var scheduleStartTime = moment(arg.event.start).format('HH:mm');
+	        	  var scheduleEndTime = moment(arg.event.end).format('HH:mm');
+	        	  var scheduleColor = arg.event.backgroundColor;
+	        	  
+	        	  var startDate = scheduleStartDate+" "+scheduleStartTime;
+	        	  var endDate = scheduleEndDate+" "+scheduleEndTime;
+	        	  
+        		  $.ajax({
+          			  url : "/mir9/schedule/json/updateSchedule?${_csrf.parameterName}=${_csrf.token}",
+          			  method : "POST",
+        			  data: JSON.stringify({
+        				  'scheduleStartDate':startDate,
+        				  'scheduleEndDate':endDate,
+        				  'scheduleColor':scheduleColor,
+        				  'scheduleTitle':scheduleTitle,
+        				  'scheduleContents':scheduleContents,
+        				  'scheduleNo':scheduleNo
+        		  	  }),
+        			  dataType : 'JSON',
+        			  headers : {
+        				  "Accept" : "application/json",
+        				  "Content-Type" : "application/json"	 						
+        			  } ,
+        			  success : function(data){
+
+        			  },
+        			  error:function(request, status, error){
+        				
+        			  }  
+        				
+        		  })
+	        	  
+	          },
 			  select: function(event) { 
 				  $('#modalContent6').modal({backdrop:'static', show:true});
 				  
