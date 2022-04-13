@@ -63,6 +63,7 @@
 		
         var calendarEl = document.getElementById('calendar');
         var calendar;
+        
 		calendar = new FullCalendar.Calendar(calendarEl, {
 	          locale: 'ko',	//한국어 설정
 			  dayMaxEventRows: true, // 날짜당 일정 개수
@@ -91,13 +92,43 @@
 	          selectHelper: true,	// 얘도 드래그 자리 표시인데?
 	          editable: true,     // 드래그 수정 가능 여부
 	          droppable: true,    // drop 가능하게
+	          events: 
+	      		$.ajax({
+	    			url : "/mir9/schedule/json/getScheduleList/",
+	    			method : "GET",
+	    			dataType : "JSON",	
+	    			headers : {
+	    				"Accept" : "application/json",
+	    				"Content-Type" : "application/json"	 						
+	    			} ,
+	    			success : function(JSONData, status){
+	    				//alert(JSONData[i].scheduleNo)
+	    				
+	    				for(var i = 0; i < JSONData.length; i++){
+    						calendar.addEvent({
+    							title: JSONData[i].scheduleTitle,
+    							start: JSONData[i].scheduleStartDate,
+    							end: JSONData[i].scheduleEndDate,
+    							backgroundColor: JSONData[i].scheduleColor
+    						});
+	    				}
+	    			},
+        			error:function(request, status, error){
+        				alert("경고")
+        			}
+	    			
+	    		})
+	          ,
+	          eventClick: function(arg){
+	        	  alert("asd")
+	          },
 			  select: function(event) { 
 				  $('#modalContent6').modal({backdrop:'static', show:true});
 				  
 	              form_register.mode.value = 'update';
 	              form_register.code.value = event.code;
 	              $('input[name="scheduleStartDate"]').val(moment(event.start).format('YYYY-MM-DD'));
-	              $('input[name="scheduleEndDate"]').val(moment(event.end).format('YYYY-MM-DD'));
+	              $('input[name="scheduleEndDate"]').val(moment(event.end-1).format('YYYY-MM-DD'));
 	              $('select[name="scheduleStartTime"]').val(moment(event.start).format('HH:mm'));
 	              $('select[name="scheduleEndTime"]').val(moment(event.end).format('HH:mm'));
 	              $("input[name='scheduleTitle']").val(event.title);
@@ -148,6 +179,10 @@
 		        					end: scheduleEndDate,
 		        					backgroundColor: scheduleColor
 		        				});
+		        				
+		        				var allEvent = calendar.getEvents();
+		        				console.log(allEvent)
+		        				
 		        				$("#modalContent6").modal("hide");
 		        			},
 		        			error:function(request, status, error){
@@ -198,7 +233,7 @@
   </div><!-- /.row -->
 </section>
 
-<jsp:include page="/WEB-INF/views/board/addSchedule.jsp"/>
+<jsp:include page="/WEB-INF/views/schedule/addSchedule.jsp"/>
 </div><!-- /.content-wrapper -->
 
 <footer class="main-footer">

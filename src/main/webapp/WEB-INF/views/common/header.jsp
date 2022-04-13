@@ -235,7 +235,7 @@
 							<li><a href="?tpf=admin/member/point"><i
 									class="fa fa-circle-o"></i> 회원 적립금 관리</a></li>
 						</ul></li>
-					<li class=""><a href="?tpf=admin/schedule/list"> <i
+					<li class=""><a href="/mir9/schedule/schedule"> <i
 							class="fa fa-calendar"></i> <span>일정 관리</span>
 					</a></li>
 					<li class="treeview"><a href="#"> <i

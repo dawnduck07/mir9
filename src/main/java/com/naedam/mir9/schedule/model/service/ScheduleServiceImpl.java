@@ -1,6 +1,7 @@
 package com.naedam.mir9.schedule.model.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public Map<String, Object> getScheduleList(Map<String, Object> map) throws Exception {
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", scheduleDao.getScheduleList(map));
-		
-		return resultMap;
+	public List<Schedule> getScheduleList() throws Exception {
+		return scheduleDao.getScheduleList();
 	}
 
 	@Override
@@ -43,6 +40,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public void deleteSchedule(int scheduleNo) throws Exception {
 		scheduleDao.deleteSchedule(scheduleNo);
 	}
+
+
+
+	
 }
 
 

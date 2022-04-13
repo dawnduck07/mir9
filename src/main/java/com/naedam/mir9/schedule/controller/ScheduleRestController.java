@@ -1,6 +1,9 @@
 package com.naedam.mir9.schedule.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,4 +37,19 @@ public class ScheduleRestController {
 		return result; 
 	}
 	
+	@GetMapping(value="json/getScheduleList")
+	public List getScheduleList() throws Exception{
+		System.out.println("/json/getScheduleList 시작");
+		
+		List<Schedule> list = scheduleService.getScheduleList();
+		
+		return list;
+	}
+	
 }
+
+
+
+
+
+
