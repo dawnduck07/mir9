@@ -293,10 +293,11 @@
                     var chkBox = document.getElementsByName('list[]');
                     var chkLen = chkBox.length;
                     var code = '';
-
                     // 선택된 파일이 있는지 체크
                     for (i = 0; i < chkLen; i++) {
-                        if (chkBox[i].checked) code += chkBox[i].value+',';
+                        if (chkBox[i].checked){
+                        	code += chkBox[i].value+',';
+                        }
                     }
                     parent.$('#modalCopyProduct').modal({backdrop:'static', show:true});
                     parent.formCopyProduct.code.value = code;
