@@ -10,6 +10,7 @@ import com.naedam.mir9.option.model.dao.OptionDao;
 import com.naedam.mir9.option.model.vo.Option;
 import com.naedam.mir9.option.model.vo.OptionValue;
 import com.naedam.mir9.option.model.vo.ProductOption;
+import com.naedam.mir9.product.model.vo.ProductDetail;
 
 @Service
 
@@ -57,6 +58,12 @@ public class OptionServiceImpl implements OptionService {
 	public int updateProductOption(ProductOption pOption) {
 		// TODO Auto-generated method stub
 		return optionDao.updateProductOption(pOption);
+	}
+
+	@Override
+	public List<ProductDetail> selectProductDetailList() {
+		// TODO Auto-generated method stub
+		return optionDao.selectProductDetailList();
 	}
 	
 	

@@ -278,6 +278,7 @@
         function onclickUpdate(code) {
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
+            parent.$('#option_list').html('');
             setData(code);
             parent.$('#mode').val('updateProduct');
         }

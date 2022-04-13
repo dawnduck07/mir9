@@ -50,8 +50,8 @@
                     </p>
 
                     <form name="form_list" method="post" action="${pageContext.request.contextPath }/category/delete?${_csrf.parameterName}=${_csrf.token}">
-                    <table class="table table-bordered table-hover">
 			            <input type="hidden" name="mode" id="mode">
+                    <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <td style="width:30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox('form_list'); /></td>
