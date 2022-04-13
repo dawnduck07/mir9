@@ -196,7 +196,9 @@ public class ProductController {
 			result = productService.deleteProductByProductNo(productNo);
 		}
 		
-		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
+		if(result > 0) {
+			redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
+		}
 		
 		return "redirect:/product/list";
 	}
@@ -223,7 +225,7 @@ public class ProductController {
 	@GetMapping("/productCategory_sub")
 	public void productCategory_sub(@RequestParam(defaultValue = "0") int cteNo, Model model) {
 		List<Category> cteList = new ArrayList<Category>(); 
-		
+		List<Category> relatedCteList = categoryService.selectRelatedCtegoryByCteNo(Integer.toString(cteNo));
 		if(cteNo == 0) {
 			cteList = categoryService.selectProductCategoryByLevel(1);
 		}else {
@@ -232,6 +234,7 @@ public class ProductController {
 		
 		model.addAttribute("cteList",cteList);
 		model.addAttribute("parentNo",cteNo);
+		model.addAttribute("relatedCteList",relatedCteList);
 	}
 	
 	@PostMapping("/insert")
@@ -310,6 +313,32 @@ public class ProductController {
 		if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
 		return "redirect:/product/list";
 		
+	}
+	
+	@PostMapping("/copy_product")
+	public String copyProduct(HttpServletRequest request, RedirectAttributes redirectAttr) {
+		Enumeration params = request.getParameterNames();
+		System.out.println("----------------------------");
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    System.out.println(name + " : " +request.getParameter(name));
+		}
+		System.out.println("----------------------------");
+		
+		Product product = productService.selectOneProductByProductNo(request.getParameter("code"));
+		product.setLangType(request.getParameter("product_locale"));
+		int oldProductNo = product.getProductNo();
+		int result = productService.insertProduct(product);
+		int newProductNo = product.getProductNo();
+		List<ProductImg> imgList = productService.selectProductImgsByProductNo(Integer.toString(oldProductNo));
+		
+		for(ProductImg img : imgList) {
+			img.setProductNo(newProductNo);
+			result = productService.insertProductImg(img);
+		}
+		
+		redirectAttr.addFlashAttribute("msg", "제품이 복제되었습니다.");
+		return "redirect:/product/list";
 	}
 	
 	private Product setProduct(HttpServletRequest request) {

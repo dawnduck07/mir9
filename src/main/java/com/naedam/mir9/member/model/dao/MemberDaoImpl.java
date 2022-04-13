@@ -71,10 +71,14 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.selectMemberGradeList");
 	}
 
-
+	// 회원 등급 수정
+	@Override
+	public int memberGradeUpdate(MemberGrade paramGrade) {
+		return session.update("member.memberGradeUpdate", paramGrade);
+	}
 
 	
-	
+
 
 
 	

@@ -104,7 +104,7 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
+										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');" /></td>
 										<td style="width: 50px;">CODE</td>
 										<td>제품 이미지</td>
 										<td>카테고리</td>
@@ -278,6 +278,7 @@
         function onclickUpdate(code) {
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
+            parent.$('#option_list').html('');
             setData(code);
             parent.$('#mode').val('updateProduct');
         }
@@ -292,10 +293,11 @@
                     var chkBox = document.getElementsByName('list[]');
                     var chkLen = chkBox.length;
                     var code = '';
-
                     // 선택된 파일이 있는지 체크
                     for (i = 0; i < chkLen; i++) {
-                        if (chkBox[i].checked) code += chkBox[i].value+',';
+                        if (chkBox[i].checked){
+                        	code += chkBox[i].value+',';
+                        }
                     }
                     parent.$('#modalCopyProduct').modal({backdrop:'static', show:true});
                     parent.formCopyProduct.code.value = code;
