@@ -71,6 +71,7 @@ public class ProductController {
 		param.put("cteNo", cteNo);
 		param.put("bne", bne_check);
 		param.put("v_status", v_status);
+		param.put("keyword", "null");
 
 		List<ProductDetail> productList = new ArrayList<ProductDetail>();
 		
@@ -97,20 +98,15 @@ public class ProductController {
 	
 	@PostMapping("/list_sub")
 	public String post_list_sub(Model model, HttpServletRequest request ,@RequestParam(defaultValue = "0") String cteNo, @RequestParam(defaultValue = "null") String bne_check, @RequestParam(defaultValue = "null") String v_status) {
-		Enumeration params = request.getParameterNames();
-		while(params.hasMoreElements()) {
-		  String name = (String) params.nextElement();
-		  System.out.print(name + " : " + request.getParameter(name) + "     "); 
-		}
-		System.out.println();
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("cteNo", cteNo);
+		param.put("bne", bne_check);
+		param.put("v_status", request.getParameter("field"));
+		param.put("keyword", request.getParameter("keyword"));
+		
 		
 		List<ProductDetail> productList = new ArrayList<ProductDetail>();
-		  if(cteNo.equals("0")) { 
-			  productList = productService.selectAllProductList();
-		  }else { 
-			  productList = productService.selectProductListByCteNo(cteNo); 
-		  }
-		 
+		productList = productService.selectProductListByParam(param);
 		
 		int productListCnt = productList.size();
 		
@@ -120,11 +116,11 @@ public class ProductController {
 		} catch (Exception e) {}
 		
 		model.addAttribute("bne_check", bne_check);
-		model.addAttribute("v_status", v_status);
+		model.addAttribute("v_status", request.getParameter("field"));
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
 		model.addAttribute("cteNo",cteNo);
-		
+		model.addAttribute("keyword", request.getParameter("keyword"));
 		return "product/list_sub";
 	}
 	
