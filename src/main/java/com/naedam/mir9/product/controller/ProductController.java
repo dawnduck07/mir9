@@ -223,7 +223,7 @@ public class ProductController {
 	@GetMapping("/productCategory_sub")
 	public void productCategory_sub(@RequestParam(defaultValue = "0") int cteNo, Model model) {
 		List<Category> cteList = new ArrayList<Category>(); 
-		
+		List<Category> relatedCteList = categoryService.selectRelatedCtegoryByCteNo(Integer.toString(cteNo));
 		if(cteNo == 0) {
 			cteList = categoryService.selectProductCategoryByLevel(1);
 		}else {
@@ -232,6 +232,7 @@ public class ProductController {
 		
 		model.addAttribute("cteList",cteList);
 		model.addAttribute("parentNo",cteNo);
+		model.addAttribute("relatedCteList",relatedCteList);
 	}
 	
 	@PostMapping("/insert")
