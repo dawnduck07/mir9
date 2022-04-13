@@ -187,7 +187,6 @@ function updateOption(){
 		obj.option_value_no.push($(value).val());
 	});
 	const jsonStr = JSON.stringify(obj);
-	console.log(jsonStr);
 	
 	 $.ajax({
 		url:"${pageContext.request.contextPath}/option/update",

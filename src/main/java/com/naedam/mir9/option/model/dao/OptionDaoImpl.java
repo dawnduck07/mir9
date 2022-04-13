@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.naedam.mir9.option.model.vo.Option;
 import com.naedam.mir9.option.model.vo.OptionValue;
 import com.naedam.mir9.option.model.vo.ProductOption;
+import com.naedam.mir9.product.model.vo.ProductDetail;
 
 @Repository
 public class OptionDaoImpl implements OptionDao {
@@ -56,6 +57,12 @@ public class OptionDaoImpl implements OptionDao {
 	public int updateProductOption(ProductOption pOption) {
 		// TODO Auto-generated method stub
 		return session.update("option.updateProductOption", pOption);
+	}
+
+	@Override
+	public List<ProductDetail> selectProductDetailList() {
+		// TODO Auto-generated method stub
+		return session.selectList("option.selectProductDetailList");
 	}
 	
 	
