@@ -64,7 +64,7 @@
 								
 								<div class="has-feedback">
 									<span> 
-										<input type="text" name="keyword" value="" class="form-control input-sm" placeholder="상품 검색" onkeyup="keywordSeach()"/> 
+										<input type="text" name="keyword" value="${keyword }" class="form-control input-sm" placeholder="상품 검색" onkeyup="keywordSeach()"/> 
 										<span class="glyphicon glyphicon-search form-control-feedback"></span>
 									</span>
 								</div>
@@ -78,7 +78,7 @@
 									</span> 
 									
 									<select name="field" onchange="location.href='${pageContext.request.contextPath}/product/list_sub?bne_check=${bne_check}&cteNo=${cteNo}&v_status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
-										<option value="">상태</option>
+										<option value="null">상태</option>
 										<option value="Y" ${v_status == "Y" ? 'selected' : '' }>보임</option>
 										<option value="N" ${v_status == "N" ? 'selected' : '' }>숨김</option>
 									</select> 
@@ -331,13 +331,12 @@
         		$(target).val('Y');
         	}else{
 				$(target).val('');        		
-        	}
-			
-        	console.log($(target).val());
+        	}			
+        	console.log($(target).val())
         });
         
         $('[name=field]').change((e)=>{
-        	console.log($(e.target).val())
+        	$('[name=status]').val($(e.target).val());
         });
         
 
