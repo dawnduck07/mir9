@@ -288,7 +288,7 @@
 									class="fa fa-circle-o"></i> 쿠폰 관리</a></li>
 							<li><a href="?tpf=admin/setting/popup"><i
 									class="fa fa-circle-o"></i> 팝업 관리</a></li>
-							<li><a href="?tpf=admin/setting/map"><i
+							<li><a href="${pageContext.request.contextPath }/setting/map"><i
 									class="fa fa-circle-o"></i> 약도 관리</a></li>
 							<li><a href="?tpf=admin/setting/staff"><i
 									class="fa fa-circle-o"></i> 임원 관리</a></li>
@@ -298,9 +298,9 @@
 									class="fa fa-circle-o"></i> 배너 관리</a></li>
 							<li><a href="?tpf=admin/setting/contract"><i
 									class="fa fa-circle-o"></i> 약관 관리</a></li>
-							<li><a href="?tpf=admin/setting/delivery_setting"><i
+							<li><a href="${pageContext.request.contextPath }/setting/delivery_setting"><i
 									class="fa fa-circle-o"></i> 배송 설정</a></li>
-							<li><a href="?tpf=admin/setting/delivery_company"><i
+							<li><a href="${pageContext.request.contextPath }/setting/delivery_company"><i
 									class="fa fa-circle-o"></i> 택배사 관리</a></li>
 							<li><a href="?tpf=admin/setting/info"><i
 									class="fa fa-circle-o"></i> 기본 설정</a></li>

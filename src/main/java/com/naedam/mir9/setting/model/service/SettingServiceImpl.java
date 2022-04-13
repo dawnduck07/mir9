@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
+import com.naedam.mir9.map.model.vo.Maps;
 import com.naedam.mir9.setting.model.dao.SettingDao;
 
 @Service
@@ -31,6 +32,12 @@ public class SettingServiceImpl implements SettingService {
 	public List<Doseosangan> selectDoseosanganList() {
 		// TODO Auto-generated method stub
 		return settingDao.selectDoseosanganList();
+	}
+
+	@Override
+	public List<Maps> selectMapList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectMapList();
 	}
 	
 	
