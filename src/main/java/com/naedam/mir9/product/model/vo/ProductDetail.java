@@ -27,6 +27,7 @@ public class ProductDetail implements Serializable {
 	private int salePrice;
 	private Date regDate;
 	private String status;
+	private int categoryNo;
 	
 	
 

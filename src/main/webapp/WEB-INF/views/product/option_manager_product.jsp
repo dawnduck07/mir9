@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -8,9 +12,9 @@
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-- Bootstrap 3.3.7 -->
-<link rel="stylesheet" href="/html/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 <!-- Font Awesome -->
-<link rel="stylesheet" href="/html/css/font-awesome.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css">
 <!-- Ionicons -->
 <link rel="stylesheet" href="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/Ionicons/css/ionicons.min.css">
 <!-- Theme style -->
@@ -63,56 +67,17 @@
                         <td style="width:60px;">명령</td>
                     </tr>
                     </thead>
-      <tr>
-                        <td>Dental Treats sub - sub</td>
-                        <td>상품명23 (BEST,NEW - 보임)</td>
-                        <td>리스트 문구</td>
-                        <td>40,000</td>
-                        <td>2021-12-10</td>
-                        <td><button type="button" onclick="setOption(292);" class="btn btn-primary btn-xs">적용하기</button></td>
-                    </tr>      <tr>
-                        <td>Dental Treats sub - sub</td>
-                        <td>하루다섯팩</td>
-                        <td>리스트 문구</td>
-                        <td>10,000</td>
-                        <td>2020-01-29</td>
-                        <td><button type="button" onclick="setOption(290);" class="btn btn-primary btn-xs">적용하기</button></td>
-                    </tr>      <tr>
-                        <td>Dental Treats sub - sub</td>
-                        <td>로즈플라워캔들</td>
-                        <td>로즈플라워캔들</td>
-                        <td>1,000</td>
-                        <td>2020-01-13</td>
-                        <td><button type="button" onclick="setOption(288);" class="btn btn-primary btn-xs">적용하기</button></td>
-                    </tr>      <tr>
-                        <td>Dental Treats sub - sub</td>
-                        <td>Yellow&Brown Oriental</td>
-                        <td>바닐라베리 판매1위 테라피 클렌저</td>
-                        <td>15,000</td>
-                        <td>2020-01-08</td>
-                        <td><button type="button" onclick="setOption(285);" class="btn btn-primary btn-xs">적용하기</button></td>
-                    </tr>      <tr>
-                        <td>Dental Treats sub - sub</td>
-                        <td>상품명 500 (best,event-숨김)</td>
-                        <td>리스트 문구2</td>
-                        <td>500</td>
-                        <td>2019-10-29</td>
-                        <td><button type="button" onclick="setOption(283);" class="btn btn-primary btn-xs">적용하기</button></td>
-                    </tr>      <tr>
-                        <td>Dental Treats sub - sub</td>
-                        <td>하루한팩 (보임)</td>
-                        <td>하루한팩</td>
-                        <td>3,000</td>
-                        <td>2019-07-13</td>
-                        <td><button type="button" onclick="setOption(278);" class="btn btn-primary btn-xs">적용하기</button></td>
-                    </tr>      <tr>
-                        <td>Dental Treats sub - sub</td>
-                        <td>상품명23 (BEST,NEW - 보임)</td>
-                        <td>리스트 문구</td>
-                        <td>40,000</td>
-                        <td>2019-06-21</td>
-                        <td><button type="button" onclick="setOption(273);" class="btn btn-primary btn-xs">적용하기</button></td>
-                    </tr>                    </table>
+                    	<c:forEach var="product" items="${productList }">
+		     				<tr>
+		                        <td>${product.categoryName }</td>
+		                        <td>${product.productName }</td>
+		                        <td>${product.listTitle }</td>
+		                        <td><fmt:formatNumber value="${product.salePrice }" pattern="#,###" /></td>
+		                        <td><fmt:formatDate value="${product.regDate}" pattern="yyyy-MM-dd" /></td>
+		                        <td><button type="button" onclick="setOption(${product.categoryNo});" class="btn btn-primary btn-xs">적용하기</button></td>
+		                    </tr>                     
+                    	</c:forEach>
+                    </table>
                     <br />
 
                     <div style="text-align:right;">
@@ -128,39 +93,14 @@
 <script src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/html/js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="${pageContext.request.contextPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
-			function setOption(code){
-				if(confirm('기존 상품의 옵션정보를 등록 할 경우 상품 등록화면에 입력된 옵션이 초기화 후 등록됩니다.\n등록하시겠습니까?')){
-					$.ajax({
-						url:'http://demoshop.mir9.kr/api/process.php',
-						type:'post',
-						dataType:'json',
-						data:{
-							method:'BizProduct.infoProduct',
-							code:code
-						},
-						success:function(data, textStatus, jqXHR){
-							var json_data = data.data;
-
-							parent.clearOptionList();
-
-							// 옵션 처리
-							if(json_data.option.total > 0){
-								$.each(json_data.option.list, function(index, row) {
-									parent.insertOption(row.option_name, row.option_value, row.option_price);
-								});
-							}
-							parent.closeOptionManager();
-						},
-						error:function(jqXHR, textStatus, errorThrown){
-							console.log(textStatus);
-							// $('#content').val(errorThrown);
-						}
-					});
-				}
-			}
+	function setOption(optionNo){
+		if(confirm('기존 상품의 옵션정보를 등록 할 경우 상품 등록화면에 입력된 옵션이 초기화 후 등록됩니다.\n등록하시겠습니까?')){
+			parent.optionTabChange('1', '${pageContext.request.contextPath}/option/option_manager?optionNo='+optionNo);
+		}
+	}
         
 </script>
 </body>

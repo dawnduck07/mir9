@@ -40,11 +40,18 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <p class="text-light-blue"><i class="fa fa-fw fa-list-ul"></i> <a href="?tpf=admin/product/category_sub&locale=ko">ROOT</a> </p>
+                    <p class="text-light-blue">
+                    	<i class="fa fa-fw fa-list-ul"></i> 
+                    	<a href="?tpf=admin/product/category_sub&locale=ko">ROOT</a> 
+                    	<c:forEach var="rCte" items="${relatedCteList }">
+							<strong> > </strong> 
+							<a href="${pageContext.request.contextPath}/product/productCategory_sub?cteNo=${rCte.categoryNo}">${rCte.categoryName}</a>
+						</c:forEach>
+                    </p>
 
                     <form name="form_list" method="post" action="${pageContext.request.contextPath }/category/delete?${_csrf.parameterName}=${_csrf.token}">
-                    <table class="table table-bordered table-hover">
 			            <input type="hidden" name="mode" id="mode">
+                    <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <td style="width:30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox('form_list'); /></td>

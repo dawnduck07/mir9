@@ -33,7 +33,7 @@
 
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-<style>.cke{visibility:hidden;}</style><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/config.js?t=H7HD"></script><style type="text/css">.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;box-sizing: content-box;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style><link rel="stylesheet" type="text/css" href="http://mir9.co.kr/resource/js/ckeditor4.7.2/skins/office2013/editor.css?t=H7HD"><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/lang/ko.js?t=H7HD"></script><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/styles.js?t=H7HD"></script><script type="text/javascript" src="http://mir9.co.kr/resource/js/ckeditor4.7.2/plugins/tableresize/plugin.js?t=H7HD"></script><link rel="stylesheet" type="text/css" href="http://mir9.co.kr/resource/js/ckeditor4.7.2/plugins/scayt/dialogs/dialog.css"><link rel="stylesheet" type="text/css" href="http://mir9.co.kr/resource/js/ckeditor4.7.2/plugins/tableselection/styles/tableselection.css">
+
 
 <script type="text/javascript">
 
@@ -43,23 +43,31 @@
 		$("#deleteChoiceBoard").on("click", function(){
 			
 			var boardArr = new Array();
-			alert("asd")
 			
 			$("input[class='boardNo']:checked").each(function(){
 				boardArr.push($(this).val());
-			});
+ 			});
 			
+			if(!confirm("정말 삭제 하시겠습니까?")){
+				alert("취소 되었습니다.");
+				return;
+				
+			}else{
 	  		$.ajax({
-  			 	 url : "/mir9/board/deleteChoiceBoard",
+  			 	 url : "/mir9/board/deleteChoiceBoard?${_csrf.parameterName}=${_csrf.token}",
 	  		  	 type : "POST",
-  		  	 	 data : { boardNo : boardArr },
+  		  	 	 data : { 
+  		  	 		boardArr : boardArr 
+  		  	 	 },
     		 	 success : function(result){
-   		   	 		
+    		 		
   		  	 	 }
   		  	 	 
 	  		});		
-	  		alert("삭제가 완료되었습니다.")
-	  		location.href = "mir9/board/listBoard";
+				alert("게시판이 삭제 되었습니다.")
+				location.href = "/mir9/board/listBoard";
+			}
+	  		//location.href = "mir9/board/listBoard";
 		})	
 		//board 선택삭제 종료
 		
@@ -123,9 +131,11 @@
 					if(JSONData.option.optionPopup == "y"){
 						$("#optionPopup2").prop("checked", true)
 					}
+					
 				}
-			})			
-		})
+			});			
+			
+		}); 
 		// board 상세보기 종료		
 	})
 	
@@ -133,7 +143,13 @@
 		
 		var boardNo2 = $("#boardNo2").val()
 		
-		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/mir9/board/updateBoard").submit();
+		alert("수정이 완료되었습니다.")
+		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/mir9/board/updateBoard?${_csrf.parameterName}=${_csrf.token}").submit();
+	}
+	
+	window.copyURL = function(){
+		var boardNo = $("button[name='updateBoard']").find('input').val();
+		prompt("이 게시판의 URL 입니다. Ctrl+C를 눌러 복사하세요", "[include:tpf=mir9/board/boardNo="+boardNo+"]")
 	}
 	
 
@@ -200,7 +216,7 @@
                     </thead>
                     <tbody id="boardTable" >
                     	<c:set var="i" value="0"/>
-                    	 <c:forEach var="board" items="${list}">
+                    	 <c:forEach var="board" items="${list}" varStatus="status" >
                     	   <c:set var="i" value="${ i+1 }" />
 							<tr>
 		                        <td>
@@ -242,10 +258,11 @@
 							  		브로슈어
 							  	</c:if>	
 							  </td>
-							  <td>1</td>
+							  <td>${postCount[i-1]}</td>
 							  <td>
 		                        <button type="button" onclick="_onclickView('board',1);" class="btn btn-success btn-xs">바로가기</button>
-		                        <button type="button" onclick="onclickCopy(1);" class="btn btn-warning btn-xs">링크복사</button>
+		                        <button type="button" onclick="copyURL();" class="btn btn-warning btn-xs" value="${board.boardNo}">
+		                        	<input type="hidden" name="hiddenBoardNo2" value="${board.boardNo}" />링크복사</button>
 		                        <button type="button" class="btn btn-primary btn-xs" name="updateBoard" data-toggle="modal" data-target="#updateBoardModal">
 		                        	<input type="hidden" name="hiddenBoardNo" value="${board.boardNo}" />
 		                        	상세보기

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.naedam.mir9.option.model.vo.Option;
 import com.naedam.mir9.option.model.vo.OptionValue;
 import com.naedam.mir9.option.model.vo.ProductOption;
+import com.naedam.mir9.product.model.vo.ProductDetail;
 
 public interface OptionService {
 
@@ -22,5 +23,7 @@ public interface OptionService {
 	int updateOptionValue(OptionValue ov);
 
 	int updateProductOption(ProductOption pOption);
+
+	List<ProductDetail> selectProductDetailList();
 
 }

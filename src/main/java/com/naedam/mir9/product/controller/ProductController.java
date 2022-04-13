@@ -71,6 +71,7 @@ public class ProductController {
 		param.put("cteNo", cteNo);
 		param.put("bne", bne_check);
 		param.put("v_status", v_status);
+		param.put("keyword", "null");
 
 		List<ProductDetail> productList = new ArrayList<ProductDetail>();
 		
@@ -87,12 +88,46 @@ public class ProductController {
 			model.addAttribute("level",level);
 		} catch (Exception e) {}
 		
+		List<Category> cteList = categoryService.selectRelatedCtegoryByCteNo(cteNo);
+		
 		model.addAttribute("bne_check", bne_check);
 		model.addAttribute("v_status", v_status);
 		model.addAttribute("productList",productList);
 		model.addAttribute("productListCnt",productListCnt);
 		model.addAttribute("cteNo",cteNo);
+		model.addAttribute("cteList",cteList);
 		
+	}
+	
+	@PostMapping("/list_sub")
+	public String post_list_sub(Model model, HttpServletRequest request ,@RequestParam(defaultValue = "0") String cteNo, @RequestParam(defaultValue = "null") String bne_check, @RequestParam(defaultValue = "null") String v_status) {
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("cteNo", cteNo);
+		param.put("bne", bne_check);
+		param.put("v_status", request.getParameter("field"));
+		param.put("keyword", request.getParameter("keyword"));
+		
+		
+		List<ProductDetail> productList = new ArrayList<ProductDetail>();
+		productList = productService.selectProductListByParam(param);
+		
+		int productListCnt = productList.size();
+		
+		try {
+			int level = categoryService.selectCategoryLevel(cteNo);
+			model.addAttribute("level",level);
+		} catch (Exception e) {}
+		
+		List<Category> cteList = categoryService.selectRelatedCtegoryByCteNo(cteNo);
+		
+		model.addAttribute("bne_check", bne_check);
+		model.addAttribute("v_status", request.getParameter("field"));
+		model.addAttribute("productList",productList);
+		model.addAttribute("productListCnt",productListCnt);
+		model.addAttribute("cteNo",cteNo);
+		model.addAttribute("keyword", request.getParameter("keyword"));
+		model.addAttribute("cteList",cteList);
+		return "product/list_sub";
 	}
 	
 	@GetMapping("/tree_model")
@@ -161,7 +196,9 @@ public class ProductController {
 			result = productService.deleteProductByProductNo(productNo);
 		}
 		
-		if(result > 0) redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
+		if(result > 0) {
+			redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
+		}
 		
 		return "redirect:/product/list";
 	}
@@ -188,7 +225,7 @@ public class ProductController {
 	@GetMapping("/productCategory_sub")
 	public void productCategory_sub(@RequestParam(defaultValue = "0") int cteNo, Model model) {
 		List<Category> cteList = new ArrayList<Category>(); 
-		
+		List<Category> relatedCteList = categoryService.selectRelatedCtegoryByCteNo(Integer.toString(cteNo));
 		if(cteNo == 0) {
 			cteList = categoryService.selectProductCategoryByLevel(1);
 		}else {
@@ -197,6 +234,7 @@ public class ProductController {
 		
 		model.addAttribute("cteList",cteList);
 		model.addAttribute("parentNo",cteNo);
+		model.addAttribute("relatedCteList",relatedCteList);
 	}
 	
 	@PostMapping("/insert")
@@ -275,6 +313,32 @@ public class ProductController {
 		if(result > 0) redirectAttr.addFlashAttribute("msg", "제품정보가 수정되었습니다.");
 		return "redirect:/product/list";
 		
+	}
+	
+	@PostMapping("/copy_product")
+	public String copyProduct(HttpServletRequest request, RedirectAttributes redirectAttr) {
+		Enumeration params = request.getParameterNames();
+		System.out.println("----------------------------");
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    System.out.println(name + " : " +request.getParameter(name));
+		}
+		System.out.println("----------------------------");
+		
+		Product product = productService.selectOneProductByProductNo(request.getParameter("code"));
+		product.setLangType(request.getParameter("product_locale"));
+		int oldProductNo = product.getProductNo();
+		int result = productService.insertProduct(product);
+		int newProductNo = product.getProductNo();
+		List<ProductImg> imgList = productService.selectProductImgsByProductNo(Integer.toString(oldProductNo));
+		
+		for(ProductImg img : imgList) {
+			img.setProductNo(newProductNo);
+			result = productService.insertProductImg(img);
+		}
+		
+		redirectAttr.addFlashAttribute("msg", "제품이 복제되었습니다.");
+		return "redirect:/product/list";
 	}
 	
 	private Product setProduct(HttpServletRequest request) {

@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.naedam.mir9.common.Mir9Utils;
 import com.naedam.mir9.option.model.service.OptionService;
+import com.naedam.mir9.option.model.vo.Option;
 import com.naedam.mir9.option.model.vo.OptionValue;
 import com.naedam.mir9.option.model.vo.ProductOption;
+import com.naedam.mir9.product.model.vo.ProductDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -130,6 +132,22 @@ public class OptionController {
 		model.addAttribute("pOption",pOption);
 		
 		return "/product/option_manager";
+	}
+	
+	@GetMapping("/option_manager_bank")
+	public String option_manager_bank(Model model) {
+		List<Option> optionList = optionService.selectOptionList();
+		
+		model.addAttribute("optionList",optionList);
+		return "/product/option_manager_bank";
+	}
+	
+	@GetMapping("/option_manager_product")
+	public String option_manager_product(Model model) {
+		List<ProductDetail> productList = optionService.selectProductDetailList();
+		
+		model.addAttribute("productList",productList);
+		return "/product/option_manager_product";
 	}
 
 }

@@ -53,7 +53,7 @@
 						</div>
 						<br> <br>
 
-						<form id="form_search" name="form_search" method="post" action="${pageContext.request.contextPath}/product/list_sub">
+						<form:form id="form_search" name="form_search" method="post" action="${pageContext.request.contextPath}/product/list_sub">
 							<div class="box-tools pull-right" style="margin-top: 20px;">
 								<input type="hidden" name="locale" value="ko"> 
 								<input type="hidden" name="category_code" value=""> 
@@ -63,20 +63,22 @@
 								<input type="hidden" name="status" value="">
 								
 								<div class="has-feedback">
-									<span> <input type="text" name="keyword" value="" class="form-control input-sm" placeholder="상품 검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
+									<span> 
+										<input type="text" name="keyword" value="${keyword }" class="form-control input-sm" placeholder="상품 검색" onkeyup="keywordSeach()"/> 
+										<span class="glyphicon glyphicon-search form-control-feedback"></span>
 									</span>
 								</div>
 							</div>
 							<div class="box-tools pull-right" style="margin-top: 20px;">
 								<div class="has-feedback">
 									<span style="float: left; width: 180px;"> 
-										<input type="checkbox" name="bne_check" onclick="bne_onclick('b');" value="b" ${bne_check == "b" ? 'checked' : '' }> BEST 
-										<input type="checkbox" name="bne_check" onclick="bne_onclick('n')" value="n" ${bne_check == "n" ? 'checked' : '' }> NEW 
-										<input type="checkbox" name="bne_check" onclick="bne_onclick('e')" value="e" ${bne_check == "e" ? 'checked' : '' }> EVENT
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('best');" value="best" ${bne_check == "best" ? 'checked' : '' }> BEST 
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('new')" value="new" ${bne_check == "new" ? 'checked' : '' }> NEW 
+										<input type="checkbox" name="bne_check" onclick="bne_onclick('event')" value="event" ${bne_check == "event" ? 'checked' : '' }> EVENT
 									</span> 
 									
 									<select name="field" onchange="location.href='${pageContext.request.contextPath}/product/list_sub?bne_check=${bne_check}&cteNo=${cteNo}&v_status='+this.value" class="form-control input-sm" style="float: left; padding-right: 0; margin-right: 5px; width: 80px;">
-										<option value="">상태</option>
+										<option value="null">상태</option>
 										<option value="Y" ${v_status == "Y" ? 'selected' : '' }>보임</option>
 										<option value="N" ${v_status == "N" ? 'selected' : '' }>숨김</option>
 									</select> 
@@ -86,10 +88,14 @@
 									</select>
 								</div>
 							</div>
-						</form>
+						</form:form>
 
 						<p class="text-light-blue">
-							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub&locale=ko">ROOT</a>
+							<i class="fa fa-fw fa-list-ul"></i> <a href="${pageContext.request.contextPath}/product/list_sub">ROOT</a>
+							<c:forEach var="cte" items="${cteList }">
+								<strong> > </strong> 
+								<a href="${pageContext.request.contextPath}/product/list_sub?cteNo=${cte.categoryNo}">${cte.categoryName}</a>
+							</c:forEach>
 						</p>
 						<label>총 ${productListCnt } 건</label>
 
@@ -98,7 +104,7 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
+										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');" /></td>
 										<td style="width: 50px;">CODE</td>
 										<td>제품 이미지</td>
 										<td>카테고리</td>
@@ -149,7 +155,9 @@
 						</button>
 
 						<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
-							<input type="hidden" name="download_type" value="product" /> <input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data">
+							<input type="hidden" name="download_type" value="product" /> 
+							<input type="hidden" name="mode" value="downloadExcel"> 
+							<input type="hidden" name="search_data">
 						</form>
 
 						<div style="text-align: right;">
@@ -270,6 +278,7 @@
         function onclickUpdate(code) {
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
+            parent.$('#option_list').html('');
             setData(code);
             parent.$('#mode').val('updateProduct');
         }
@@ -284,10 +293,11 @@
                     var chkBox = document.getElementsByName('list[]');
                     var chkLen = chkBox.length;
                     var code = '';
-
                     // 선택된 파일이 있는지 체크
                     for (i = 0; i < chkLen; i++) {
-                        if (chkBox[i].checked) code += chkBox[i].value+',';
+                        if (chkBox[i].checked){
+                        	code += chkBox[i].value+',';
+                        }
                     }
                     parent.$('#modalCopyProduct').modal({backdrop:'static', show:true});
                     parent.formCopyProduct.code.value = code;
@@ -312,18 +322,28 @@
 			location.href = url;
         }
         
-        // 검색 개선 요구시 참고
-/*         var bne = [];
-        $('[name=bne_check]').change((e)=>{
-        	if($(e.target).is(":checked")){
-        		bne.push($(e.target).val())
-        	}else{
-        		
-        		bne.splice(bne.indexOf(($(e.target).val()), 1));
+        function keywordSeach(){
+        	if(window.event.keyCode == 13){
+        		console.log($('[name=keyword]').val())
         	}
-        	
-        	console.log(bne);
-        }) */
+        }
+        
+        
+        // 검색 개선 요구시 참고
+//         var bne = [];
+        $('[name=bne_check]').change((e)=>{
+        	var target = "[name=is_" + $(e.target).val() +"]";
+        	if($(e.target).is(":checked")){
+        		$(target).val('Y');
+        	}else{
+				$(target).val('');        		
+        	}			
+        	console.log($(target).val())
+        });
+        
+        $('[name=field]').change((e)=>{
+        	$('[name=status]').val($(e.target).val());
+        });
         
 
         
