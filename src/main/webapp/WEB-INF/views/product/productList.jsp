@@ -194,7 +194,7 @@
 	<div class="modal fade" id="modalCopyProduct" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 400px;">
 			<div class="modal-content">
-				<form name="formCopyProduct" method="post" action="?tpf=admin/product/process">
+				<form name="formCopyProduct" method="post" action="${pageContext.request.contextPath }/product/copy_product?${_csrf.parameterName}=${_csrf.token}">
 					<input type="hidden" name="mode" id="mode" value="copyProduct"> <input type="hidden" name="code" id="code">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -478,6 +478,10 @@ $("input[type=file]").change(function(e){
 	
 	function removeOptionf(optionValueNo){
 		console.log()
+	}
+	
+	function registerCopyProduct(){
+		$(document.formCopyProduct).submit();
 	}
 	
 	
