@@ -22,12 +22,13 @@ public class Maps implements Serializable {
 	private int mapNo;
 	private String mapTitle;
 	private int mapApiNo;
+	private String address;
 	private String mapApiName;
 	private String apiKey;
-	private long latitude;
-	private long longitude;
-	private int sizePer;
-	private int sizePx;
+	private double latitude;
+	private double longitude;
+	private String width;
+	private String height;
 	private int zoomLevel;
 	private String popupInfo;
 	private String connectingAddr;

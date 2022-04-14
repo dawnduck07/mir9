@@ -26,6 +26,18 @@ public class MapServiceImpl implements MapService {
 		// TODO Auto-generated method stub
 		return mapDao.selectAllMapApiList();
 	}
+
+	@Override
+	public int updateMapByMap(Maps map) {
+		// TODO Auto-generated method stub
+		return mapDao.updateMapMyMap(map);
+	}
+
+	@Override
+	public int insertMap(Maps map) {
+		// TODO Auto-generated method stub
+		return mapDao.insertMap(map);
+	}
 	
 	
 	

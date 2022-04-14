@@ -25,6 +25,19 @@ public class MapDaoImpl implements MapDao {
 		// TODO Auto-generated method stub
 		return session.selectList("map.selectAllMapApiList");
 	}
+
+	@Override
+	public int updateMapMyMap(Maps map) {
+		// TODO Auto-generated method stub
+		return session.update("map.updateMapMyMap", map);
+	}
+
+	@Override
+	public int insertMap(Maps map) {
+		// TODO Auto-generated method stub
+		return session.insert("map.insertMap", map);
+	}
+	
 	
 	
 	

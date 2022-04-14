@@ -11,4 +11,8 @@ public interface MapDao {
 
 	List<MapApi> selectAllMapApiList();
 
+	int updateMapMyMap(Maps map);
+
+	int insertMap(Maps map);
+
 }

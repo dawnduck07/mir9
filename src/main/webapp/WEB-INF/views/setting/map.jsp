@@ -29,14 +29,14 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-body">
-					<label style="margin-top: 5px;">총 1 건</label>
+					<label style="margin-top: 5px;">총 ${mapList.size()} 건</label>
 
-					<form name="form_list" method="post" action="?tpf=admin/setting/map_process">
+					<form name="form_list" method="post" action="${pageContext.request.contextPath }/map/map_process?${_csrf.parameterName}=${_csrf.token}">
 						<input type="hidden" name="mode" id="mode">
 						<table class="table table-bordered table-hover">
 							<thead>
 								<tr>
-									<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
+									<td style="width: 30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox( 'form_list')"; /></td>
 									<td style="width: 60px;">NO</td>
 									<td>제목</td>
 									<td style="width: 200px;">연결주소</td>
@@ -50,7 +50,7 @@
 							</thead>
 							<c:forEach var="map" items="${mapList }">
 								<tr>
-									<td><input type="checkbox" name="list[]" value="1" /></td>
+									<td><input type="checkbox" name="list[]" value="${map.mapNo } }" /></td>
 									<td>${map.mapNo }</td>
 									<td align="left">${map.mapTitle }</td>
 									<td align="left">${map.connectingAddr }</td>
@@ -89,8 +89,9 @@
 	<div class="modal fade" id="modalRegister" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 600px;">
 			<div class="modal-content">
-				<form name="form" method="post" action="?tpf=admin/setting/map_process">
-					<input type="hidden" name="mode" id="mode"> <input type="hidden" name="code">
+				<form name="form" method="post" action="${pageContext.request.contextPath }/map/map_process?${_csrf.parameterName}=${_csrf.token}">
+					<input type="hidden" name="mode" id="mode"> 
+					<input type="hidden" name="mapNo">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title">약도 등록</h4>
@@ -105,28 +106,33 @@
 						<table class="table table-bordered">
 							<tr>
 								<td class="menu">제목 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-								<td align="left"><input type="text" name="title" class="form-control input-sm"></td>
+								<td align="left"><input type="text" name="mapTitle" class="form-control input-sm"></td>
 							</tr>
 							<tr>
 								<td class="menu">API 종류 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-								<td align="left"><select name="map_type" class="form-control input-sm" style="width: 100px;">
+								<td align="left">
+									<select name="mapApiNo" class="form-control input-sm" style="width: 100px;">
 										<c:forEach var="api" items="${apiList }">
 											<option value="${api.mapApiNo }">${api.mapApiName }</option>
 										</c:forEach>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">API key <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-								<td align="left"><input type="text" name="api_key" class="form-control input-sm"></td>
+								<td align="left"><input type="text" name="apiKey" class="form-control input-sm"></td>
 							</tr>
 							<tr>
 								<td class="menu">주소</td>
-								<td align="left"><input type="text" name="addr" placeholder="주소를 입력하세요" class="form-control input-sm" style="width: 82%; margin-right: 5px; float: left">
+								<td align="left"><input type="text" name="address" placeholder="주소를 입력하세요" class="form-control input-sm" style="width: 82%; margin-right: 5px; float: left">
 									<button type="button" onclick="getCoord()" class="btn btn-primary btn-xs">좌표확인</button></td>
 							</tr>
 							<tr>
 								<td class="menu">좌표 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-								<td align="left"><input type="text" name="lat" placeholder="lat" class="form-control input-sm" style="width: 48%; margin-right: 10px; float: left"> <input type="text" name="lng" placeholder="lng" class="form-control input-sm" style="width: 48%; float: left"></td>
+								<td align="left">
+									<input type="text" name="latitude" placeholder="lat" class="form-control input-sm" style="width: 48%; margin-right: 10px; float: left"> 
+									<input type="text" name="longitude" placeholder="lng" class="form-control input-sm" style="width: 48%; float: left">
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">지도크기 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
@@ -134,7 +140,8 @@
 							</tr>
 							<tr>
 								<td class="menu">지도 확대 레벨 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-								<td align="left"><select name="level" class="form-control input-sm" style="width: 100px;">
+								<td align="left">
+									<select name="zoomLevel" class="form-control input-sm" style="width: 100px;">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -155,11 +162,14 @@
 										<option value="18">18</option>
 										<option value="19">19</option>
 										<option value="20">20</option>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">팝업 정보</td>
-								<td align="left"><textarea name="popup_infomation" rows="4" style="width: 160px; float: left; margin-right: 5px;" class="form-control input-sm" placeholder="금천구 가산동 미르나인"></textarea> ※ 선택사항<br>입력시 팝업정보 창 표출</td>
+								<td align="left">
+									<textarea name="popupInfo" rows="4" style="width: 160px; float: left; margin-right: 5px;" class="form-control input-sm" placeholder="금천구 가산동 미르나인"></textarea> ※ 선택사항<br>입력시 팝업정보 창 표출
+								</td>
 							</tr>
 						</table>
 
@@ -195,19 +205,18 @@ function setData(mapNo) {
             mapNo : mapNo
 		},
 		success(data){
-			//TODO
-			// 빈거 채우기
-            $('[name=code]').val(data.mapNo);
-            $('[name=title]').val(data.mapTitle);
-            //$('[name=map_type]').val(data.map_type);
-            $('[name=api_key]').val(data.apiKey);
+            $('[name=mapNo]').val(data.mapNo);
+            $('[name=mapTitle]').val(data.mapTitle);
+            $('[name=mapApiNo]').val(data.mapApiNo).prop("selected",true);
+            $('[name=apiKey]').val(data.apiKey);
+            $('[name=address]').val(data.address);
             //$('[name=agree_content]').val(data.agree_content);
-            $('[name=lat]').val(data.latitude);
-            $('[name=lng]').val(data.longitude);
+            $('[name=latitude]').val(data.latitude);
+            $('[name=longitude]').val(data.longitude);
             $('[name=width]').val(data.width);
             $('[name=height]').val(data.height);
-            $('[name=level]').val(data.mapLevel);
-            $('[name=popup_infomation]').val(data.popupInfo);
+            $('[name=zoomLevel]').val(data.zoomLevel).prop("selected",true);
+            $('[name=popupInfo]').val(data.popupInfo);
 		},
 		error:function(jqXHR, textStatus, errorThrown){
 			console.log(textStatus);
@@ -236,6 +245,23 @@ function getCoord() {
 	});
 }
 
+function onclickInsert(code) {
+    $('#modalRegister').modal({backdrop:'static', show:true});
+    form.reset();
+    form.mode.value = 'insert';
+}
+
+function register() {
+    if(form.mapTitle.value == '') { alert('제목이 입력되지 않았습니다.'); form.title.focus(); return false;}
+    if(form.apiKey.value == '') { alert('API key값이 입력되지 않았습니다.'); form.api_key.focus(); return false;}
+    if(form.latitude.value == '') { alert('lat값이 입력되지 않았습니다.'); form.lat.focus(); return false;}
+    if(form.longitude.value == '') { alert('lng값이 입력되지 않았습니다.'); form.lng.focus(); return false;}
+    if(form.width.value == '') { alert('width값이 입력되지 않았습니다.'); form.width.focus(); return false;}
+    if(form.height.value == '') { alert('height값이 입력되지 않았습니다.'); form.height.focus(); return false;}
+    form.target = 'iframe_process';
+    $('#modalRegister').modal({backdrop:'static', show:false});
+    form.submit();
+}
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

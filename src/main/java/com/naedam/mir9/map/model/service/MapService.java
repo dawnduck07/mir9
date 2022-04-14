@@ -11,4 +11,8 @@ public interface MapService {
 
 	List<MapApi> selectAllMapApiList();
 
+	int updateMapByMap(Maps map);
+
+	int insertMap(Maps map);
+
 }
