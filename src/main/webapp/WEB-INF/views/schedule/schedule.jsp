@@ -60,12 +60,19 @@
 
 
 <link rel='stylesheet'  href='${pageContext.request.contextPath}/resources/fullcalendar/lib/main.css'/>
+<link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/colorselector.css">
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/main.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/locales/ko.js'></script>
 <script src='${pageContext.request.contextPath}/resources/js/moment.js'></script>
+<style>
+	a { 
+		color: #333;
+	}
+	a.fc-col.header-cell-cushion{
+		color: #f90303;
+	}
+</style>
 <script>
-
-	
 
 	document.addEventListener('DOMContentLoaded', function() {
 		
@@ -74,7 +81,6 @@
         
 		calendar = new FullCalendar.Calendar(calendarEl, {
 	          locale: 'ko',	//한국어 설정
-			  dayMaxEventRows: true, // 날짜당 일정 개수
 			  //헤더에 표시할 툴바
 			  headerToolbar: { 
 					left: 'prev,next today', 
@@ -93,13 +99,11 @@
 	              week: '주간',
 	              day: '일간'
 	          },
-			  navLinks: true, // 요일 이름 주 이름 클릭할 수 있는지
-			  selectable: true, // 클릭하고 드래드 가능
-			  selectMirror: true, // 드래그 하는 동안 자리 표시 이벤트
-	          fixedWeekCount: false, //월별 표시되는 주의 수를 말함 true일 경우 항상 6주
-	          selectHelper: true,	// 얘도 드래그 자리 표시인데?
-	          editable: true,     // 드래그 수정 가능 여부
-	          droppable: true,    // drop 가능하게
+              fixedWeekCount: false,
+              selectable: true,
+              selectHelper: true,
+              editable: true,     // 드래그 수정 가능 여부
+              droppable: true,    // drop 가능하게
 	          events: 
 	      		$.ajax({
 	    			url : "/mir9/schedule/json/getScheduleList/",
@@ -112,6 +116,7 @@
 	    			success : function(JSONData, status){
 	    				//alert(JSONData[0].scheduleStartDate)
 	    				//alert(JSONData[0].scheduleNo)
+	    				
 	    				for(var i = 0; i < JSONData.length; i++){
     						calendar.addEvent({
     							title: JSONData[i].scheduleTitle,
@@ -137,7 +142,9 @@
 	        	  $("input[name='getScheduleEndDate']").val(moment(arg.event.end).format('YYYY-MM-DD'));
 	        	  $("select[name='getScheduleStartTime']").val(moment(arg.event.start).format('HH:mm'))
 	        	  $("select[name='getScheduleEndTime']").val(moment(arg.event.end).format('HH:mm'))
-				  
+				  $("select[name='getScheduleColor']").val(arg.event.backgroundColor);
+	        	  $("select[name='getScheduleColor']").colorselector('setColor', arg.event.backgroundColor);
+	        	  console.log($("select[name='getScheduleColor']").val())
 	        	  var scheduleNo = arg.event.id;
 	        	  
 	        	  $('button[name="updateSchedule"]').on("click", function(){
@@ -150,13 +157,6 @@
 		        		var scheduleTitle = $("input[name='getScheduleTitle']").val();
 		        		var scheduleContents = $("textarea[name='getScheduleContents']").val();
 
-		        		var schedule = {
-		        				scheduleStartDate:scheduleStartDate,
-		        				scheduleEndDate:scheduleEndDate,
-		        				scheduleColor:scheduleColor,
-		        				scheduleTitle:scheduleTitle,
-		        				scheduleContents:scheduleContents
-		        		};
 		        		var startDate = scheduleStartDate+" "+scheduleStartTime;
 		        		var endDate = scheduleEndDate+" "+scheduleEndTime;
 
@@ -191,7 +191,11 @@
 				  })
 				  
 				  $('button[name="deleteSchedule"]').on("click", function(){
-
+					  
+					  if(!confirm("해당 일정을 정말 삭제하시겠습니까?")){
+							return;
+							
+					  }else{
 	        		  $.ajax({
 			    			url : "/mir9/schedule/json/deleteSchedule/"+scheduleNo,
 			    			method : "GET",
@@ -206,6 +210,7 @@
 			    			}
 			    			
 			    	  })
+					  }
 					  
 				  })
 	        	    	  
@@ -252,8 +257,7 @@
 			  select: function(event) { 
 				  $('#modalContent6').modal({backdrop:'static', show:true});
 				  
-	              form_register.mode.value = 'update';
-	              form_register.code.value = event.code;
+	              console.log(event)
 	              $('input[name="scheduleStartDate"]').val(moment(event.start).format('YYYY-MM-DD'));
 	              $('input[name="scheduleEndDate"]').val(moment(event.end).format('YYYY-MM-DD'));
 	              $('select[name="scheduleStartTime"]').val(moment(event.start).format('09:00'));
@@ -325,25 +329,28 @@
       }); 
       
 
-      
-    /* datepicker */
-    $( "#datepicker1,#datepicker2" ).datepicker({
-        dateFormat: 'yy-mm-dd',
-        prevText: '이전 달',
-        nextText: '다음 달',
-        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        dayNames: ['일','월','화','수','목','금','토'],
-        dayNamesShort: ['일','월','화','수','목','금','토'],
-        dayNamesMin: ['일','월','화','수','목','금','토'],
-        showMonthAfterYear: true,
-        yearSuffix: '년'
-    });
-    $('#datepicker1,#datepicker2').datepicker({
-        dateFormat: 'yy-mm-dd'
-    });
+		$(function(){      
+		    /* datepicker */
+		    $( "#datepicker1,#datepicker2,#datepicker3,#datepicker4" ).datepicker({
+		        dateFormat: 'yy-mm-dd',
+		        prevText: '이전 달',
+		        nextText: '다음 달',
+		        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		        dayNames: ['일','월','화','수','목','금','토'],
+		        dayNamesShort: ['일','월','화','수','목','금','토'],
+		        dayNamesMin: ['일','월','화','수','목','금','토'],
+		        showMonthAfterYear: true,
+		        yearSuffix: '년'
+		    });
+		    $('#datepicker1,#datepicker2,#datepicker3,#datepicker4').datepicker({
+		        dateFormat: 'yy-mm-dd'
+		    });
+		    $('#colorselector').colorselector();
+		    $('#colorselector2').colorselector();
+		});
 	
-    $('#colorselector').colorselector();
+    	
      
       
 </script>
