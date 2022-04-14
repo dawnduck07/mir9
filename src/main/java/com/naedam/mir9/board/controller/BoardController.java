@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -275,8 +274,6 @@ public class BoardController {
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
 				
-		System.out.println("resultMap 확인 ::: "+resultMap);
-		System.out.println("board2 확인 ::: "+board2);
 		
 		model.addAttribute("list", resultMap.get("list")); 
 		model.addAttribute("board", board);
@@ -377,16 +374,6 @@ public class BoardController {
 		
 	}	
 	
-	@GetMapping("test")
-	public String test() {
-		return "board/test";
-	}
-	
-	@GetMapping("test2")
-	public String test2() {
-		return "board/test2";
-	}
-	
 	@PostMapping("imageUpload")
 	public void imageUpload(HttpServletRequest request, HttpServletResponse response,
 							MultipartHttpServletRequest multiFile,
@@ -484,6 +471,12 @@ public class BoardController {
 				out.close(); 
 			} 
 		} 
+	}
+	
+	@RequestMapping("test")
+	public String test() throws Exception{
+		
+		return "board/test";
 	}
 	
 

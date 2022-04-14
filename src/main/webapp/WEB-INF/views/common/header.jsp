@@ -10,6 +10,8 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="_csrf_header" id="_csrf_header" content="${_csrf.headerName}">
+<meta name="_csrf" id="_scrf" content="${_csrf.token}">
 <title>AdminLTE 2 | ${param.title}</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
@@ -236,7 +238,7 @@
 							<li><a href="?tpf=admin/member/point"><i
 									class="fa fa-circle-o"></i> 회원 적립금 관리</a></li>
 						</ul></li>
-					<li class=""><a href="?tpf=admin/schedule/list"> <i
+					<li class=""><a href="/mir9/schedule/schedule"> <i
 							class="fa fa-calendar"></i> <span>일정 관리</span>
 					</a></li>
 					<li class="treeview"><a href="#"> <i

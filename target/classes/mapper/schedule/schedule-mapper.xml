@@ -21,11 +21,11 @@
   					  SCHEDULE_START_DATE,
   					  SCHEDULE_END_DATE,
   					  SCHEDULE_COLOR)
-  		VALUES(schedule_seq.nextVal,
+  		VALUES(NEXTVAL(schedule_seq),
   			   #{scheduleTitle:VARCHAR},
   			   #{scheduleContents:VARCHAR},
-  			   TO_DATE(#{scheduleStartDate},'YYYY-MM-DD HH24:MI'),
-  			   TO_DATE(#{scheduleEndDate},'YYYY-MM-DD HH24:MI'),
+  			   #{scheduleStartDate},
+  			   #{scheduleEndDate},
   			   #{scheduleColor:VARCHAR})
   	</insert>
   	
@@ -35,14 +35,14 @@
   		WHERE schedule_no = #{value}
   	</select>
   	
-  	<select id="getScheduleList"  resultType="hashmap"	resultMap="ScheduleSelectMap">
+  	<select id="getScheduleList" resultMap="ScheduleSelectMap">
   		SELECT
-  				schedule_no,
-  				schedule_title,
-  				schedule_contents,
-  				schedule_start_date,
-  				schedule_end_date,
-  				schedule_color
+  				SCHEDULE_NO,
+  				SCHEDULE_TITLE,
+  				SCHEDULE_CONTENTS,
+  				SCHEDULE_START_DATE,
+  				SCHEDULE_END_DATE,
+  				SCHEDULE_COLOR
   		FROM	schedule
   	</select>
   	
@@ -51,8 +51,8 @@
   		<set>
   			schedule_title = #{scheduleTitle:VARCHAR},
   			schedule_contents = #{scheduleContents:VARCHAR},
-  			schedule_start_date = TO_DATE(#{scheduleStartDate},'YYYY-MM-DD HH24:MI'),
-  			schedule_end_date = TO_DATE(#{scheduleEndDate},'YYYY-MM-DD HH24:MI'),
+  			schedule_start_date = #{scheduleStartDate},
+  			schedule_end_date = #{scheduleEndDate},
   			schedule_color = #{scheduleColor:VARCHAR}
   		</set>
   		WHERE schedule_no = #{scheduleNo}
@@ -60,9 +60,8 @@
   	
   	<delete id="deleteSchedule" parameterType="int">
   		DELETE
-  			schedule
-  		WHERE
-  			schedule_no = #{value}
+  		FROM schedule
+  		WHERE schedule_no = #{value}
   	</delete>
   
   

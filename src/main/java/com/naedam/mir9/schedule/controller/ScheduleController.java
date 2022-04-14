@@ -8,15 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.naedam.mir9.schedule.model.service.ScheduleService;
 
 @Controller
-@RequestMapping("/schedule")
+@RequestMapping("/schedule/*")
 public class ScheduleController {
 	
 	@Autowired
 	private ScheduleService scheduleService;
 	
-	@GetMapping()
+	@GetMapping("schedule")
 	public String schedule() {
-		
 		return "schedule/schedule";
 	}
 }

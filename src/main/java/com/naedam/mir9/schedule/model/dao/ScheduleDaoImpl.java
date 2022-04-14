@@ -28,8 +28,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	
 	//일정 리스트
 	@Override
-	public List<Schedule> getScheduleList(Map<String, Object> map) throws Exception {
-		return sqlSession.selectList("schedule.getScheduleList", map);
+	public List<Schedule> getScheduleList() throws Exception {
+		return sqlSession.selectList("schedule.getScheduleList");
 	}
 	
 	//일정 데이터
@@ -49,6 +49,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	public void deleteSchedule(int scheduleNo) throws Exception {
 		sqlSession.delete("schedule.deleteSchedule", scheduleNo);
 	}
+
+	
 
 	
 	

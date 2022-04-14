@@ -2,6 +2,7 @@ package com.naedam.mir9.member.model.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
@@ -35,6 +36,17 @@ public interface MemberDao {
 
 	// 회원 등급 리스트
 	List<MemberGrade> selectMemberGradeList();
+
+	// 회원 등급 수정
+	int memberGradeUpdate(MemberGrade paramGrade);
+
+	
+
+	
+
+	
+
+	
 
 	
 
