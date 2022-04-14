@@ -15,5 +15,11 @@
 	<select id="selectDoseosanganList" resultType="doseosangan">
 		select * from doseosangan
 	</select>
+	
+	<select id="selectMapList" resultType="maps">
+		SELECT a.*, b.map_api_name
+		FROM map a, map_api b
+		WHERE a.map_api_no = b.map_api_no
+	</select>
   
 </mapper>

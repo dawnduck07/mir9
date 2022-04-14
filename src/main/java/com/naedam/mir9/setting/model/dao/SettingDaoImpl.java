@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
+import com.naedam.mir9.map.model.vo.Maps;
 
 @Repository
 public class SettingDaoImpl implements SettingDao {
@@ -31,6 +32,12 @@ public class SettingDaoImpl implements SettingDao {
 	public List<Doseosangan> selectDoseosanganList() {
 		// TODO Auto-generated method stub
 		return session.selectList("setting.selectDoseosanganList");
+	}
+
+	@Override
+	public List<Maps> selectMapList() {
+		// TODO Auto-generated method stub
+		return session.selectList("setting.selectMapList");
 	}
 	
 	

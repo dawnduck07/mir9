@@ -90,7 +90,7 @@
 								<td class="menu">옵션</td>
 								<td align="left">
 									<p style="float: left; width: 100%;">
-										<button type="button" class="btn btn-primary btn-xs" onclick="optionManager('form','');">
+										<button type="button" class="btn btn-primary btn-xs" onclick="optionManager();">
 											<span class="glyphicon glyphicon-plus"></span> 옵션추가
 										</button>
 									</p> <br>
@@ -194,7 +194,7 @@
 	<div class="modal fade" id="modalCopyProduct" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 400px;">
 			<div class="modal-content">
-				<form name="formCopyProduct" method="post" action="?tpf=admin/product/process">
+				<form name="formCopyProduct" method="post" action="${pageContext.request.contextPath }/product/copy_product?${_csrf.parameterName}=${_csrf.token}">
 					<input type="hidden" name="mode" id="mode" value="copyProduct"> <input type="hidden" name="code" id="code">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -479,6 +479,15 @@ $("input[type=file]").change(function(e){
 	function removeOptionf(optionValueNo){
 		console.log()
 	}
+	
+	function registerCopyProduct(){
+		$(document.formCopyProduct).submit();
+	}
+	
+    function optionManager() {
+		optionTabChange('1', '${pageContext.request.contextPath}/option/option_manager?optionNo=0');
+		$('#modalContent2').modal({backdrop:'static', show:true});
+    }
 	
 	
 </script>
