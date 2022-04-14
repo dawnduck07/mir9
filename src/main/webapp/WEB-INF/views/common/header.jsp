@@ -324,3 +324,9 @@
 			</section>
 		</aside>
 		<!-- /.sidebar -->
+		
+<script>
+function logoutSubmit(){
+	$(document.memberLogoutFrm).submit();
+}
+</script>
