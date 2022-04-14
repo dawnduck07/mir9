@@ -57,20 +57,55 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-colorselector@0.1.0/dist/bootstrap-colorselector.min.js">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-
 <link rel='stylesheet'  href='${pageContext.request.contextPath}/resources/fullcalendar/lib/main.css'/>
 <link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/colorselector.css">
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/main.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/locales/ko.js'></script>
 <script src='${pageContext.request.contextPath}/resources/js/moment.js'></script>
 <style>
+	.fc-col-header-cell.fc-day.fc-day-sun{ color:red; 
+				 background-color: red;
+	}
+	.fc-col-header-cell.fc-day.fc-day-sat{ color:blue;
+				 background-color: blue; }
 	a { 
 		color: #333;
+		
 	}
-	a.fc-col.header-cell-cushion{
-		color: #f90303;
+	.fc .fc-button-primary {
+	 	color: #444;
+	  	color: var(--fc-button-text-color, #2C3E50);
+	  	background-color: #f4f4f4;
+	  	background-color: var(--fc-button-bg-color, #f4f4f4);
+	  	border-color: #ddd;
+	  	border-color: var(--fc-button-border-color, #ddd);
+	}	
+	.fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
+    	color: #444;
+    	color: var(--fc-button-text-color, #2C3E50);
+    	background-color: #f4f4f4;
+    	background-color: var(--fc-button-active-bg-color, #f4f4f4);
+    	border-color: #ddd;
+    	border-color: var(--fc-button-active-border-color, #ddd);
 	}
+	.fc .fc-button-primary:disabled {
+	    color: #444;
+	    color: var(--fc-button-text-color, #2C3E50);
+	    background-color: #f4f4f4;
+	    background-color: var(--fc-button-bg-color, #f4f4f4);
+	    border-color: #ddd;
+	    border-color: var(--fc-button-border-color, #ddd);
+	}
+	.fc-sun {
+	    color: red;
+	}	
+	.fc-sat {
+	    color: blue;
+	}
+.fc-event, .fc-event:hover {
+    color: #fff;
+    text-decoration: none;
+}	
 </style>
 <script>
 
@@ -104,6 +139,9 @@
               selectHelper: true,
               editable: true,     // 드래그 수정 가능 여부
               droppable: true,    // drop 가능하게
+              dayClick: function(){
+            	  alert("asd")
+              },
 	          events: 
 	      		$.ajax({
 	    			url : "/mir9/schedule/json/getScheduleList/",
@@ -145,10 +183,13 @@
 				  $("select[name='getScheduleColor']").val(arg.event.backgroundColor);
 	        	  $("select[name='getScheduleColor']").colorselector('setColor', arg.event.backgroundColor);
 	        	  console.log($("select[name='getScheduleColor']").val())
-	        	  var scheduleNo = arg.event.id;
+	        	  console.log(arg.event.title)
+	        	  
+	        	  
+	        	  
 	        	  
 	        	  $('button[name="updateSchedule"]').on("click", function(){
-					
+	        		  	var scheduleNo = arg.event.id;
 	            	    var scheduleStartDate = $('input[name="getScheduleStartDate"]').val();
 		        		var scheduleEndDate = $('input[name="getScheduleEndDate"]').val();
 		        		var scheduleStartTime = $('select[name="getScheduleStartTime"]').val();
@@ -160,7 +201,6 @@
 		        		var startDate = scheduleStartDate+" "+scheduleStartTime;
 		        		var endDate = scheduleEndDate+" "+scheduleEndTime;
 
-		        		
 		        		$.ajax({
 		        			url : "/mir9/schedule/json/updateSchedule?${_csrf.parameterName}=${_csrf.token}",
 		        			method : "POST",
@@ -177,9 +217,11 @@
 		        				"Accept" : "application/json",
 		        				"Content-Type" : "application/json"	 						
 		        			} ,
-		        			success : function(data){
-		        				alert("수정이 완료되었습니다.")
-		        				location.reload();
+		        			async: false,
+		        			success : function(result){
+		        				if(result == true) {
+									arg.event.remove(); 
+								}
 		        			},
 		        			error:function(request, status, error){
 		        				
@@ -254,7 +296,7 @@
         		  })
 	        	  
 	          },
-			  select: function(event) { 
+			  select: function(event) {
 				  $('#modalContent6').modal({backdrop:'static', show:true});
 				  
 	              console.log(event)
