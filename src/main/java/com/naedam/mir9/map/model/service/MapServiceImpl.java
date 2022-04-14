@@ -38,6 +38,12 @@ public class MapServiceImpl implements MapService {
 		// TODO Auto-generated method stub
 		return mapDao.insertMap(map);
 	}
+
+	@Override
+	public int deleteMap(int mapNo) {
+		// TODO Auto-generated method stub
+		return mapDao.deleteMap(mapNo);
+	}
 	
 	
 	

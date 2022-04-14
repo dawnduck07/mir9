@@ -50,7 +50,7 @@
 							</thead>
 							<c:forEach var="map" items="${mapList }">
 								<tr>
-									<td><input type="checkbox" name="list[]" value="${map.mapNo } }" /></td>
+									<td><input type="checkbox" name="list[]" value="${map.mapNo }" /></td>
 									<td>${map.mapNo }</td>
 									<td align="left">${map.mapTitle }</td>
 									<td align="left">${map.connectingAddr }</td>
@@ -91,7 +91,7 @@
 			<div class="modal-content">
 				<form name="form" method="post" action="${pageContext.request.contextPath }/map/map_process?${_csrf.parameterName}=${_csrf.token}">
 					<input type="hidden" name="mode" id="mode"> 
-					<input type="hidden" name="mapNo">
+					<input type="hidden" name="mapNo" value="0">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title">약도 등록</h4>
@@ -227,17 +227,17 @@ function setData(mapNo) {
 
 //주소 -> 좌표 변환
 function getCoord() {   
-	var addr = $('[name=addr]').val()
+	var addr = $('[name=address]').val()
 	var geocoder = new kakao.maps.services.Geocoder();
 
 	geocoder.addressSearch(addr, function(result, status) {
 
 	    // 정상적으로 검색이 완료됐으면 
 	     if (status === kakao.maps.services.Status.OK) {
-
+			
 	        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-	        $('[name=lat]').val(coords.La);
-	        $('[name=lng]').val(coords.Ma);
+	        $('[name=latitude]').val(coords.La);
+	        $('[name=longitude]').val(coords.Ma);
 	     }else{
 	    	 alert("주소지를 다시 확인해주세요.")
 	     }

@@ -27,32 +27,6 @@
 		#{id},
 		#{password},
 		NULL)
-		
-<!-- 	INSERT INTO
-		member
-		(member_no,
-		 member_grade_no,
-		 first_name,
-		 last_name,
-		 email,
-		 phone,
-		 reg_date,
-		 status,
-		 id,
-		 password,
-		 profile_img) 
-	VALUES
-		(seq_member_no.nextval,
-		#{memberGradeNo},
-		#{firstName},
-		#{lastName},
-		#{email},
-		#{phone},
-		sysdate,
-		default,
-		#{id},
-		#{password},
-		null) -->
 </insert>
 
 <!-- 로그인 - 해당 id정보 가져오기 -->
