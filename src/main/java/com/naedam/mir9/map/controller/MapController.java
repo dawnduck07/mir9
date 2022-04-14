@@ -1,5 +1,8 @@
 package com.naedam.mir9.map.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +35,22 @@ public class MapController {
 
 	@PostMapping("/map_process")
 	public String map_process(HttpServletRequest request, Maps map, RedirectAttributes redirectAttr) {
+		log.debug("map = {}", map);
 		int result = 0;
 		String msg = "";
 		if(request.getParameter("mode").equals("update")) {
 			result = mapService.updateMapByMap(map);
 			msg = "약도 정보가 수정되었습니다.";
 		}else if(request.getParameter("mode").equals("insert")) {
-			//result = mapService.insertMap(map);
-			log.debug("map = {}", map);
+			result = mapService.insertMap(map);
+			msg = "약도가 생성되었습니다.";
 		}else if(request.getParameter("mode").equals("delete")) {
-			log.debug("check========================");
+			List<String> mapNoList = Arrays.asList(request.getParameterValues("list[]"));
+			log.debug("mapNoList = {}", mapNoList);
+			for(String mapNo : mapNoList) {
+				result = mapService.deleteMap(Integer.parseInt(mapNo));
+			}
+			msg = "약도가 삭제되었습니다.";
 		}
 		
 		redirectAttr.addFlashAttribute("msg", msg);
