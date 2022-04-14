@@ -24,7 +24,7 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-body">
-						<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/order/list">
+						<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/order/list?${_csrf.parameterName}=${_csrf.token}">
 							<table class="table table-bordered" style="margin-bottom: 0;">
 								<tbody>
 									<tr>
@@ -54,7 +54,7 @@
 										</select></td>
 										<td class="menu">키워드</td>
 										<td align="left"><select name="field" class="form-control input-sm" style="float: left; padding-right: 0; width: 130px;">
-												<option value="last_name || first_name">주문자 성명</option>
+												<option value="concat(last_name,first_name)">주문자 성명</option>
 												<option value="receiver">수취인 성명</option>
 												<option value="phone">휴대폰</option>
 												<option value="order_no">주문번호</option>
