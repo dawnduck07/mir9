@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import com.naedam.mir9.map.model.service.MapService;
 import com.naedam.mir9.map.model.vo.Maps;
 
@@ -18,12 +19,14 @@ public class MapController {
 
 	@Autowired
 	private MapService mapService;
-	
+
 	@PostMapping("/getMap")
 	@ResponseBody
 	public Maps getMap(int mapNo) {
 		Maps map = mapService.selectOneMapByMapNo(mapNo);
-		
+
 		return map;
 	}
+
+
 }

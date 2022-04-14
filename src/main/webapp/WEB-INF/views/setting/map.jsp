@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>  
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="약도 관리" name="title" />
@@ -58,14 +58,14 @@
 									<td>${map.latitude },${map.longitude }</td>
 									<td>${map.zoomLevel }</td>
 									<td>${map.popupInfo }</td>
-									<td><fmt:formatDate pattern = "yyyy/MM/dd HH:mm" value="${map.regDate}"/></td>
+									<td><fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${map.regDate}" /></td>
 									<td>
 										<button type="button" onclick="_onclickView('map',1);" class="btn btn-success btn-xs">바로가기</button>
 										<button type="button" onclick="onclickUpdate(${map.mapNo});" class="btn btn-primary btn-xs">상세보기</button>
 									</td>
 								</tr>
 							</c:forEach>
-							
+
 						</table>
 					</form>
 					<br>
@@ -109,13 +109,11 @@
 							</tr>
 							<tr>
 								<td class="menu">API 종류 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-								<td align="left">
-									<select name="map_type" class="form-control input-sm" style="width: 100px;">
+								<td align="left"><select name="map_type" class="form-control input-sm" style="width: 100px;">
 										<c:forEach var="api" items="${apiList }">
 											<option value="${api.mapApiNo }">${api.mapApiName }</option>
 										</c:forEach>
-									</select>
-								</td>
+								</select></td>
 							</tr>
 							<tr>
 								<td class="menu">API key <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
@@ -176,13 +174,15 @@
 	</div>
 </div>
 <!-- /.content-wrapper -->
-
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9a565ef86e588dc8b9bc46dd5db0fb88&libraries=services"></script>
 <script>
+
 function onclickUpdate(mapNo) {
     $('#modalRegister').modal({backdrop:'static', show:true});
     form.mode.value = 'update';
     setData(mapNo);
 }
+
 function setData(mapNo) {
 	$.ajax({
 		url:'${pageContext.request.contextPath}/map/getMap',
@@ -213,6 +213,26 @@ function setData(mapNo) {
 			console.log(textStatus);
 			// $('#content').val(errorThrown);
 		}
+	});
+}
+
+//주소 -> 좌표 변환
+function getCoord() {   
+	var addr = $('[name=addr]').val()
+	var geocoder = new kakao.maps.services.Geocoder();
+
+	geocoder.addressSearch(addr, function(result, status) {
+
+	    // 정상적으로 검색이 완료됐으면 
+	     if (status === kakao.maps.services.Status.OK) {
+
+	        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+	        $('[name=lat]').val(coords.La);
+	        $('[name=lng]').val(coords.Ma);
+	     }else{
+	    	 alert("주소지를 다시 확인해주세요.")
+	     }
+	
 	});
 }
 

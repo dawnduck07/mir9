@@ -45,6 +45,7 @@ public class SettingController {
 		List<MapApi> apiList = mapService.selectAllMapApiList();
 		model.addAttribute("mapList",mapList);
 		model.addAttribute("apiList",apiList);
+		model.addAttribute("apiKey", "D914287C-19AA-31AD-B187-1532CEF93E7F");
 	}
 	
 	@GetMapping("/staff")
@@ -100,4 +101,7 @@ public class SettingController {
 	
 	@GetMapping("/version")
 	public void version() {}
+	
+	@GetMapping("/test")
+	public void test() {}
 }
