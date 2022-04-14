@@ -714,7 +714,7 @@ function callAddress(){
 	$("#address").bind("keyup", function(){
 		console.log("addrss 입력창 작동");
 		console.log("address = " + $("#address").val());
-		//$("#addressSearch").delay(200).submit());
+		$("#addressSearch").delay(200).submit());
 	});
 }
 
