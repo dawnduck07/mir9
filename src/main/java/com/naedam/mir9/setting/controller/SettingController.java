@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
+import com.naedam.mir9.map.model.service.MapService;
+import com.naedam.mir9.map.model.vo.MapApi;
+import com.naedam.mir9.map.model.vo.Maps;
 import com.naedam.mir9.setting.model.service.SettingService;
 
 @Controller
@@ -18,6 +21,8 @@ import com.naedam.mir9.setting.model.service.SettingService;
 public class SettingController {
 	@Autowired
 	private SettingService settingService;
+	@Autowired
+	private MapService mapService;
 	
 	@GetMapping("/point")
 	public void point() {
@@ -35,8 +40,12 @@ public class SettingController {
 	}
 	
 	@GetMapping("/map")
-	public void map() {
-		
+	public void map(Model model) {
+		List<Maps> mapList = settingService.selectMapList();
+		List<MapApi> apiList = mapService.selectAllMapApiList();
+		model.addAttribute("mapList",mapList);
+		model.addAttribute("apiList",apiList);
+		model.addAttribute("apiKey", "D914287C-19AA-31AD-B187-1532CEF93E7F");
 	}
 	
 	@GetMapping("/staff")
@@ -92,4 +101,7 @@ public class SettingController {
 	
 	@GetMapping("/version")
 	public void version() {}
+	
+	@GetMapping("/test")
+	public void test() {}
 }
