@@ -4,7 +4,10 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="SMS발송 내역" name="title"/>
 </jsp:include>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!-- content-wrapper -->
 <div class="content-wrapper">
 	<section class="content-header">

@@ -4,7 +4,10 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="메일 설정" name="title"/>
 </jsp:include>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!-- content-wrapper -->
 <div class="content-wrapper">
 <style>
@@ -406,7 +409,7 @@ textarea {
 	var objEditor = CKEDITOR.replace('content', {
 		height: 300,
 	    extraPlugins : 'tableresize',
-	    filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+	    filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files', 
 	    filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images',
 	    fillEmptyBlocks : true,
 	    line_height : '0px'
@@ -435,13 +438,14 @@ textarea {
 	    form_register.submit();
 	}
 	
-	function registerContent() {
-	    if(formContent.title.value == '') { alert('제목이 입력되지 않았습니다.'); formContent.title.focus(); return false;}
-	    formContent.target = 'iframe_process';
-	    formContent.submit();
+	function registerContent() { // 변경 문구 저장 버튼
+	    if(formContent.title.value == '') {  
+	    	alert('제목이 입력되지 않았습니다.'); formContent.title.focus(); return false;}
+	    	formContent.target = 'iframe_process';
+	    	formContent.submit();
 	}
 	
-	function onclickUpdate(code, action, is_admin) {
+	function onclickUpdate(code, action, is_admin) { // 편집 버튼
 	    $('#code').val(code);
 	    $('#action').val(action);
 	    $('#is_admin').val(is_admin);
@@ -459,12 +463,31 @@ textarea {
 			},
 			success:function(data, textStatus, jqXHR){
 	            var json_data = data.data;
-	            console.log(json_data);
-	            if (is_admin == 'admin') {  // 관리자용
+	            
+	            // 확인용 
+	            console.log("===== 수정 data =====");
+	            console.log(json_data); 
+	            console.log("===================");
+	            /* 
+	            	회원가입 (회원) 편집시 json_data
+	            	action: "join"
+            		code: "10" => action에 따른 코드값...???
+            		content: "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t<tbody>\r\n\t\t<tr>\r\n\t\t\t<td align=\"center\" valign=\"top\">\r\n\t\t\t<table bgcolor=\"#0073bb\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"750\">\r\n\t\t\t\t<tbody>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"25\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#fff;font-size: 22px; line-height:28px;padding-left:23px; letter-spacing:-2px;\">[{{shop_name}}] 회원 가입 안내</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t<table bgcolor=\"#FFFFFF\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"730\">\r\n\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">회원 가입을 축하드립니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">보안을 위해 비밀번호는 정기적으로 변경해 주시기 바랍니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:solid 3px #e8e8e8;\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"padding-top:7px;padding-bottom:7px;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"680\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" bgcolor=\"#D1E6F4\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; line-height: 18px; color: #005D83; font-weight:bold; padding-left:15px\" width=\"670\">회원 정보</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"670\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"border-bottom:solid 1px #e8e8e8;\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color: #005D83; border-bottom:solid 1px #e8e8e8;\" width=\"100\">회원명</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#005D83; font-size: 16px; border-bottom:solid 1px #e8e8e8;\">{{user_name}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color: #005D83;\" width=\"100\">아이디</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, 굴림,돋움,seoul,Arial; color:#005D83; font-size: 16px; line-height:18px;\">{{user_id}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"10\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"15\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\" bgcolor=\"#E6EFF6\" height=\"30\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\"><font color=\"#005494\">본 메일은 발신전용이므로 회신이 되지 않습니다.</font></td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</tbody>\r\n\t\t\t</table>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n"
+            		content_admin: "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t<tbody>\r\n\t\t<tr>\r\n\t\t\t<td align=\"center\" valign=\"top\">\r\n\t\t\t<table bgcolor=\"#0073bb\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"750\">\r\n\t\t\t\t<tbody>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"25\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#fff;font-size: 22px; line-height:28px;padding-left:23px; letter-spacing:-2px;\">[{{shop_name}}] 회원 가입 안내</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t<table bgcolor=\"#FFFFFF\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"730\">\r\n\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">회원 가입을 축하드립니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">보안을 위해 비밀번호는 정기적으로 변경해 주시기 바랍니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:solid 3px #e8e8e8;\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"padding-top:7px;padding-bottom:7px;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"680\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" bgcolor=\"#D1E6F4\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; line-height: 18px; color: #005D83; font-weight:bold; padding-left:15px\" width=\"670\">회원 정보</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"670\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"border-bottom:solid 1px #e8e8e8;\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color:#005D83; border-bottom:solid 1px #e8e8e8;\" width=\"100\">회원명</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#005D83; font-size: 16px; border-bottom:solid 1px #e8e8e8;\">{{user_name}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color: #005D83;\" width=\"100\">아이디</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, 굴림,돋움,seoul,Arial; color:#005D83; font-size: 16px; line-height:18px;\">{{user_id}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"10\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"15\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\" bgcolor=\"#E6EFF6\" height=\"30\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\"><font color=\"#005494\">본 메일은 발신전용이므로 회신이 되지 않습니다.</font></td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</tbody>\r\n\t\t\t</table>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n"
+            		is_send: "y" => 회원 자동 발송 true
+            		is_send_admin: "n" => 관리자 자동 발송 false
+            		locale: "ko"  
+            		reg_date: "2022-04-13 10:18:43"
+            		title: "[{{shop_name}}] {{user_name}}님의 회원가입을 축하드립니다."
+            		title_admin: "[{{shop_name}}] {{user_name}} 회원님이 회원가입 하셨습니다."
+            		type: "email"
+	            */
+	            
+	            if (is_admin == 'admin') { // 관리자용
 	                $('#title').val(json_data.title_admin);
 	                objEditor.setData(json_data.content_admin);
 	            }
-	            else {                      // 고객용
+	            else { // 고객용
 	                $('#title').val(json_data.title);
 	                objEditor.setData(json_data.content);
 	            }
@@ -479,9 +502,9 @@ textarea {
 	
 	}
 	
-	function getDefaultTemplate(type, action, is_admin) {
+	function getDefaultTemplate(type, action, is_admin) { // 기존 양식 불러오기 
 		$.ajax({
-			url:'http://demoshop.mir9.kr/api/process.php',
+			url:'http://demoshop.mir9.kr/api/process.php', // 이메일 발송 api 
 			type:'post',
 			dataType:'json',
 			data:{
@@ -492,7 +515,12 @@ textarea {
 	            locale: $('#locale').val()
 			},
 			success:function(data, textStatus, jqXHR){
-	            console.log(data);
+	            
+				// 확인용
+	            console.log("===== 기존 data =====");
+				console.log(data);
+				console.log("===================");
+				
 				if(data.data.length > 0){
 					if(confirm('기본문구로 적용 하시겠습니까?')){
 	                    objEditor.setData(data.data);

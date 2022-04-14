@@ -49,7 +49,7 @@
 	                    </div>
 	
 	                    <table class="table table-bordered table-hover">
-	                        <form name="form_list" method="post" action="${pageContext.request.contextPath }/comm/delete">
+	                        <form name="form_list" method="post" action="${pageContext.request.contextPath }/comm/delete?${_csrf.parameterName}=${_csrf.token}">
 	                            <input type="hidden" name="mode" id="mode">
 	                            <input type="hidden" name="review_code" value="<br /><b>Notice</b>:  Undefined variable: review_code in <b>/home/demoshop/public_html/html/admin/community/review.html</b> on line <b>45</b><br />">
 	                            <thead>
@@ -75,7 +75,7 @@
 	                                    <c:otherwise>
 	                                        <c:forEach var="review" items="${ reviewList }"> 
 	                                        	<tr>
-		                                            <td><input type="checkbox" name="list[]" value="${ review.reviewCode }"/></td> <!-- select_review / common.js에 name 값이 list[] 로 되어있음 -->
+		                                            <td><input type="checkbox" name="list[]" value="${ review.reviewCode }"/></td> 
 		                                            <td>${ review.reviewCode }</td>
 		                                            <td>${ review.writer }</td> 
 		                                            <td>${ review.productName }</td> 
@@ -220,7 +220,7 @@
 		
 	}
 	
-	// 데이터url 생성 -> 학습 필요...
+	// 데이터url 생성
 	function toDataURL(imgUrl, leng) {
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function() {

@@ -4,7 +4,10 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="SMS 설정" name="title"/>
 </jsp:include>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!-- content-wrapper -->
 <div class="content-wrapper">
 <style>
@@ -42,7 +45,7 @@ textarea {
 					                <tr>
 					                    <td class="menu">SMS 잔여 포인트</td>
 					                    <td align="left">
-					                    	<span style="float:left;">검색된 회원정보가 없습니다.mir9 포인트</span><br>
+					                    	<span style="float:left;">검색된 회원정보가 없습니다.mir9 포인트</span><br> <!-- sms 발송 포인트 금액? -->
 					                    	<span style="line-height:1.0;">
 					                    		<small class="text-red">※ 포인트가 부족하면 메시지를 발신 할 수 없습니다.<br>※ 발신번호 등록(관리자 > 설정 > 기본설정 > 발신자 번호)을 사전에 하여야 발송이 가능합니다. (발신번호를 미르나인 담당자에게 알려주기 바랍니다.)</small>
 					                    	</span>
@@ -76,7 +79,7 @@ textarea {
 				      				<tr>
 										<td class="content">회원가입</td>
 					                    <td>
-					                        <input type="hidden" name="msg[join][code]" value="1" />
+					                        <input type="hidden" name="msg[join][code]" value="1" /> <!-- name 값들 분리 필요... 치환 문구 정보는 어떻게...?? -->
 					                        <textarea name="msg[join][content]">[{{shop_name}}] {{user_name}} 회원님의 가입을 진심으로 축하드립니다.</textarea>
 					                    </td>
 					                    <td class="content">
@@ -412,20 +415,20 @@ textarea {
 
 <script>
 
-	function register() {
+	function register() { // 전체 변경 확인 버튼 -> name 값 분리 필요
 		var is_send_arr = $("input[name='is_send']"); // 회원 자동 발송
 		var content_arr = $("textarea[name='content']"); // 회원 문구
 		var is_send_admin_arr = $("input[name='is_send_admin']"); // 관리자 자동 발송 
 		var content_admin_arr = $("textarea[name='content_admin']"); // 관리자 문구
 		for(var i=0 ; i<is_send_arr.length ; i++ ){
-			if(is_send_arr[i].checked == true){ // 회원 자동 발송이 체크 되어 있을 경우
+			if(is_send_arr[i].checked == true){ // 회원 자동 발송이 체크
 				if(content_arr[i].value.length < 10){ 
 					alert('자동발송을 하려면 '+category_txt(is_send_arr[i].name)+' 안내메시지가 최소 10자 이상 입력되어야 합니다. '); // category_txt(t_name) : name 값에 따른 txt 반환 함수
 					content_arr[i].focus();
 					return;
 				}
 			}
-			if(is_send_admin_arr[i].checked == true){ // 관리자 자동 발송이 체크 되어 있을 경우
+			if(is_send_admin_arr[i].checked == true){ // 관리자 자동 발송이 체크 
 				if(content_admin_arr[i].value.length < 10){
 					alert('자동발송을 하려면 '+category_txt(content_admin_arr[i].name)+' 안내메시지가 최소 10자 이상 입력되어야 합니다. ');
 					content_admin_arr[i].focus();
@@ -440,7 +443,7 @@ textarea {
 	
 	function getDefaultTemplate(type, action, is_admin) { // 기본 문구 
 		$.ajax({
-			url:'http://demoshop.mir9.kr/api/process.php',
+			url:'http://demoshop.mir9.kr/api/process.php', // sms 발송 api
 			type:'post',
 			dataType:'json',
 			data:{
@@ -450,7 +453,11 @@ textarea {
 	            is_admin: is_admin
 			},
 			success:function(data, textStatus, jqXHR){
+				
+				console.log("===== 기본 data =====");
 	            console.log(data);
+	            console.log("===================");
+	            
 				if(data.data.length > 0){
 					if(confirm(data.data + '\n\n해당 문구로 적용하시겠습니까?')){
 						if(is_admin == 'admin'){
