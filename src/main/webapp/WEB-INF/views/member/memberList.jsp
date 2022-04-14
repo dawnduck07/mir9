@@ -10,8 +10,43 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="회원 관리" name="title" />
 </jsp:include>
-
 <style>
+
+#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+.bg_white {background:#fff;}
+#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+#menu_wrap .option{text-align: center;}
+#menu_wrap .option p {margin:10px 0;}  
+#menu_wrap .option button {margin-left:5px;}
+#placesList li {list-style: none;}
+#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+#placesList .item span {display: block;margin-top:4px;}
+#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+#placesList .item .info{padding:10px 0 10px 55px;}
+#placesList .info .gray {color:#8a8a8a;}
+#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+#placesList .info .tel {color:#009900;}
+#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
+#placesList .item .marker_1 {background-position: 0 -10px;}
+#placesList .item .marker_2 {background-position: 0 -56px;}
+#placesList .item .marker_3 {background-position: 0 -102px}
+#placesList .item .marker_4 {background-position: 0 -148px;}
+#placesList .item .marker_5 {background-position: 0 -194px;}
+#placesList .item .marker_6 {background-position: 0 -240px;}
+#placesList .item .marker_7 {background-position: 0 -286px;}
+#placesList .item .marker_8 {background-position: 0 -332px;}
+#placesList .item .marker_9 {background-position: 0 -378px;}
+#placesList .item .marker_10 {background-position: 0 -423px;}
+#placesList .item .marker_11 {background-position: 0 -470px;}
+#placesList .item .marker_12 {background-position: 0 -516px;}
+#placesList .item .marker_13 {background-position: 0 -562px;}
+#placesList .item .marker_14 {background-position: 0 -608px;}
+#placesList .item .marker_15 {background-position: 0 -654px;}
+#pagination {margin:10px auto;text-align: center;}
+#pagination a {display:inline-block;margin-right:10px;}
+#pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+
 .ui-menu {
 	z-index: 9999;
 	width: 400px;
@@ -36,12 +71,6 @@
 <section class="content">
 <div class="row">
 	<div class="col-xs-12">
-	<form:form 
-			id="memberDeleteFrm"	
-			name="memberDeleteFrm" 
-			action="${pageContext.request.contextPath}/member/memberDelete.do" 
-			method="POST">
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<div class="box">
 			<div class="box-body">
 			<div id="totalCountContainer">
@@ -70,10 +99,13 @@
 						</div>
 					</div>
 				</form>
+			<form:form 
+					id="memberDeleteFrm"	
+					name="memberDeleteFrm" 
+					action="${pageContext.request.contextPath}/member/memberDelete.do" 
+					method="POST">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<table class="table table-bordered table-hover checkbox-group">
-					<%-- <form name="form_list" method="post"
-						action=""> --%>
-						<!-- <input type="hidden" name="mode" id="mode"> -->
 						<thead>
 							<tr>
 								<td style="width: 30px;">
@@ -121,7 +153,7 @@
 							</c:forEach>
 						</tbody>
 				</table>
-				
+				</form:form>
 				<br>
 				
 				<button 
@@ -168,7 +200,7 @@
 			<!-- /.box-body -->
 		</div>
 		<!-- /.box -->
-		</form:form>
+		
 	</div>
 	<!-- /.col-xs-12 -->
 </div>
@@ -206,34 +238,53 @@
 							<tr>
 								<td class="menu">아이디</td>
 								<td align="left">
-									<input type="text" id="id" name="id" class="form-control input-sm" style="width: 30%; float: left;" />&nbsp;
-									<button type="button" id="btn_check_id" value="N"
-										class="btn btn-sm btn-default" onclick="onclickCheckId();">아이디
-										중복확인</button> 4~12자로 입력하세요.</td>
+									<input type="text" id="id" name="id" class="form-control input-sm" style="width: 30%; float: left;" />
+									&nbsp;
+									<button 
+										type="button" 
+										id="CheckId" 
+										value=""
+										class="btn btn-sm btn-default" 
+										onclick="onclickCheckId();">아이디 중복확인</button> 4~12자로 입력하세요.
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">비밀번호</td>
-								<td align="left"><input type="password" name="password"
-									placeholder="" class="form-control input-sm"
+								<td align="left">
+								<input 
+									type="password" 
+									id="password"
+									name="password"
+									class="form-control input-sm"
 									style="width: 30%; float: left;" /> 대소문자와 숫자 포함 8~15자로 입력하세요</td>
 							</tr>
 							<tr>
 								<td class="menu">비밀번호 확인</td>
-								<td align="left"><input type="password"
-									name="password_confirm" placeholder=""
-									class="form-control input-sm" style="width: 30%;" /></td>
+								<td align="left">
+								<input 
+									type="password"
+									id="passwordCheck"
+									name="passwordCheck" 
+									class="form-control input-sm" 
+									style="width: 30%;" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">이름</td>
-								<td align="left"><input type="text" name="first_name"
+								<td align="left">
+									<input type="text" name="firstName" id="firstName"
 									class="form-control input-sm" style="width: 30%; float: left;"
-									placeholder="이름" /> <input type="text" name="name"
+									placeholder="이름" /> 
+									<input type="text" name="lastName" id="lastName"
 									class="form-control input-sm" style="width: 30%;"
 									placeholder="성" /></td>
 							</tr>
 							<tr>
 								<td class="menu">휴대폰</td>
-								<td align="left"><select name="mobile1"
+								<td align="left">
+								<select 
+									name="mobile1"
+									id="mobile1"
 									class="form-control input-sm" style="width: 15%; float: left;">
 										<option value="010">010</option>
 										<option value="011">011</option>
@@ -241,39 +292,68 @@
 										<option value="017">017</option>
 										<option value="018">018</option>
 										<option value="019">019</option>
-								</select> <span style="float: left;">-</span> <input type="text"
-									name="mobile2" onkeyup="this.value=checkNum(this.value)"
+								</select> 
+								<span style="float: left;">-</span> 
+								<input 
+									type="text"
+									name="mobile2"
+									id="mobile2" 
 									class="form-control input-sm" style="width: 15%; float: left;"
-									maxlength="4" /> <span style="float: left;">-</span> <input
-									type="text" name="mobile3"
-									onkeyup="this.value=checkNum(this.value)"
+									maxlength="4" /> 
+								<span style="float: left;">-</span> 
+								<input
+									type="text" 
+									name="mobile3"
+									id="mobile3"
 									class="form-control input-sm" style="width: 15%; float: left;"
 									maxlength="4" /></td>
 							</tr>
 							<tr>
 								<td class="menu">이메일</td>
-								<td align="left"><input type="text" name="email"
-									class="form-control input-sm" style="width: 60%;" /></td>
+								<td align="left">
+									<input type="text" name="email" id="email"
+									class="form-control input-sm" style="width: 60%;"/>
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">주소</td>
-								<td align="left"><input type="text" name="zipcode"
-									id="zipcode" readonly class="form-control input-sm"
+								<td align="left">
+									<input type="text" name="zipcode" id="zipcode" readonly class="form-control input-sm"
 									style="width: 15%; background-color: #dddddd; float: left;" />&nbsp;
-									<button type="button" onclick="callAddress();"
-										class="btn btn-sm btn-default">주소입력</button>
-									<span id="displaySearch"
-									style="float: right; font-size: 13px; padding-top: 10px; display: none;">[검색
-										자료 : <span id="displaySearchCount" style="color: red;"></span>건]
-								</span><br> <input type="text" class="input-addr" id="address"
-									placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152"
-									style="display: none; margin: 5px 0 0 0; width: 100%;">
+									<button type="button" onclick="callAddress();" class="btn btn-sm btn-default">
+										주소입력
+									</button>
+									<span id="displaySearch" style="float: right; font-size: 13px; padding-top: 10px; display: none;">
+										[검색자료 : 
+										<span id="displaySearchCount" style="color: red;"></span>건]
+									</span>
+									<br> 
+										
+									
+								        <div class="option">
+								            <div>
+								                <form id="addressSearch" onsubmit="searchPlaces(); return false;">
+								                    <input type="text" value="" id="address" size="15"
+					                    			placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152"
+					                    			style="display: none; margin: 5px 0 0 0; width: 100%;">  
+								                </form>
+								            </div>
+								        </div>
+								        <ul id="placesList"></ul>
+								        <div id="pagination"></div>
+								    
+										
+										
+										
+									
+
 									<input type="text" name="addr" id="addr" readonly
-									class="form-control input-sm"
-									style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
+										class="form-control input-sm"
+										style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
 									<input type="text" name="addr_etc" id="addr_etc"
-									placeholder="상세주소" class="form-control input-sm"
-									style="width: 100%;" /></td>
+										placeholder="상세주소" class="form-control input-sm"
+										style="width: 100%;" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">메모</td>
@@ -294,29 +374,6 @@
 										<option value="3">ㅈㅇㅇㅈ</option>
 								</select></td>
 							</tr>
-							<!-- 
-							<tr id="display_status">
-								<td class="menu">상태 <span class="text-light-blue"><i
-										class="fa fa-check"></i></span></td>
-								<td><select name="status" id="status"
-									class="form-control input-sm" style="width: 120px;">
-										<option value="y">정상</option>
-										<option value="n">대기</option>
-								</select></td>
-							</tr>
-							<tr id="display_last_login_date">
-								<td class="menu">최근 접속일</td>
-								<td align="left"><span id="last_login_date"></span></td>
-							</tr>
-							<tr id="display_update_date">
-								<td class="menu">수정일자</td>
-								<td align="left"><span id="update_date"></span></td>
-							</tr>
-							<tr id="display_reg_date">
-								<td class="menu">등록일자</td>
-								<td align="left"><span id="reg_date"></span></td>
-							</tr>
-							 -->
 						</table>
 				</form>
 			</div>
@@ -481,6 +538,8 @@
 </div>
 </div>
 <!-- /.content-wrapper -->
+<!-- 카카오 맵 -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=292fcbebc12a7089168e4f0553c2ae07&libraries=services"></script>
 
 <script>
 function downloadExcel() {  // Excel 다운로드
@@ -503,6 +562,7 @@ $('#findList').each(function(){
 	console.log("들어오냐");
 });
 
+// 등록 모달창
 function onclickInsert(){
 	console.log("등록(onclickInsert())");
 	$("#modalRegister").modal();
@@ -519,14 +579,14 @@ function onclickCheckId(){
 		alert("id를 정확히 입력해주세요");
 		// 해당 위치로 입력 커서 이동
 		$("#id").focus();
-		return;
+		return false;
 	}
 	
 	// 아이디 개수 유효성 검사
 	if(!/^[a-zA-Z0-9]{4,12}$/.test(id)){
 		alert("id를 정확히 입력해주세요");
 		$("#id").focus();
-		return;
+		return false;
 	}
 	
 	const data = {
@@ -541,19 +601,133 @@ function onclickCheckId(){
 		contentType : "application/json ; charset=utf-8",
 		method : "GET",
 		success(data) {
+			console.log(data);
 			const {available} = data;
 			if(available){
 				alert("사용 가능한 아이디 입니다.");
+				$("#password").focus();
 			}
 			else{
-				alert("[" + id + "]은 이미 사용중인 아이디 입니다. \n\n 다른 아이디를 사용하시기 바랍니다.")
+				alert("[" + id + "]은 이미 사용중인 아이디 입니다. \n\n 다른 아이디를 사용하시기 바랍니다.");
+				$("#id").focus();
 			}
 		},
 		error : console.log
 	});
 };
 
-/* 타입별 검색 */
+
+
+// 저장
+function register(){
+	console.log("저장(register()) 실행");
+	var password = $("#password").val();
+	var passwordCheck = $("#passwordCheck").val();
+	var firstName = $("#firstName").val();
+	var lastName = $("#lastName").val();
+	
+	
+	// 비밀번호 공란 확인
+	if(password == ''){
+		alert("비밀번호가 입력되지 않았습니다.");
+		$("#password").focus();
+		return false;
+	}
+	
+	// 비밀번호 유효성 검사
+	if(!/^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{8,15}$/.test(password)){
+		alert("비밀번호는 8 ~ 15 글자 이내로 공백 없이 영문자, 숫자, 특수문자를 혼합하여 입력해주세요.");
+		$("#password").focus();
+		return false;
+	}
+	
+	// 비밀번호 확인 공란 확인
+	if(passwordCheck == ''){
+		alert("비밀번호가 확인이 입력되지 않았습니다.");
+		$("#passwordCheck").focus();
+		return false;
+	}
+	
+	// 비밀번호 일치 확인
+	if(password != passwordCheck){
+		alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+		$("#passwordCheck").focus();
+		return false;
+	}
+	
+	// 이름 공란 확인
+	if(firstName == ''){
+		alert("이름이 입력되지 않았습니다.");
+		$("#firstName").focus();
+		return false;
+	}
+	// 성 공란 확인
+	if(lastName == ''){
+		alert("성이 입력되지 않았습니다.");
+		$("#lastName").focus();
+		return false;
+	}
+	
+	// 휴대폰 번호 유효성 검사
+	var mobile2 = $("#mobile2").val();
+	var mobile3 = $("#mobile3").val();
+	
+	if(mobile2 == '' || mobile3 == ''){
+		alert("휴대폰 번호가 입력되지 않았습니다.");
+		$("#mobile1").focus();
+		return false;
+	}
+	if(!/^([0-9]{3,4})$/.test(mobile2) || !/^([0-9]{4})$/.test(mobile3)){
+		alert("휴대폰 번호를 정확하게 입력해주세요.");
+		$("#mobile1").focus();
+		return false;
+	}
+
+	// 이메일 유효성 검사
+	var email = $("#email").val();
+	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+	
+	if(!regEmail.test(email)){
+		alert("이메일을 정확하게 입력해주세요.");
+		$("#email").focus();
+		return false;
+	}
+}
+
+
+
+//주소입력
+function callAddress(){
+	console.log("주소입력(callAddress()) 실행");
+	$("#displaySearch").show();
+	$("#address").show().focus();
+	
+	// 마커를 담을 배열입니다
+	var markers = [];
+	
+	// 장소 검색 객체를 생성합니다
+	var ps = new kakao.maps.services.Places();
+	
+	// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+	var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+	
+	$("#address").bind("keyup", function(){
+		console.log("addrss 입력창 작동");
+		console.log("address = " + $("#address").val());
+		//$("#addressSearch").delay(200).submit());
+	});
+}
+
+
+
+
+
+
+
+
+
+
+// 타입별 검색
 $(document).ready(function(){
 	// Enter Event
 	$("#keyword").keydown(function(keyNum){
@@ -571,6 +745,7 @@ $(document).ready(function(){
 				"keyword" : keyword
 			};
 			
+			
 			$.ajax({
 				type : "GET",
 				url : `${pageContext.request.contextPath}/member/typeSearch.do`,
@@ -585,7 +760,7 @@ $(document).ready(function(){
 						$("#tbody").append(`
 								<tr>
 								<td style="width: 30px;">
-									<input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); />
+									<input type="checkbox" class="member-is-checked" name="" data-target="\${v.memberNo}"/>
 								</td>
 								<td style="width: 110px;">\${v.id}</td>
 								<td style="width: 110px;">\${v.lastName}\${v.firstName}</td>
@@ -615,7 +790,7 @@ $(document).ready(function(){
 				error : console.log	
 			});
 		}
-	})
+	});
 });
 
 // 체크박스 전체 선택
@@ -630,8 +805,9 @@ $(".checkbox-group").on("click", "#checkAll", ((e)=>{
 	}
 }));
 
+
 // 체크박스 개별 선택
-$(".member-is-checked").on("click", ((e)=>{
+$(document).on("click", ".member-is-checked", function(){
 	let isChecked = true;
 	console.log("개별 선택 : " + isChecked);
 	
@@ -642,16 +818,18 @@ $(".member-is-checked").on("click", ((e)=>{
 		console.log($(item).is(":checked"));
 	});
 	
-	$("#checkAll").prop("checked", isChecked);
-}));
+	$("#checkAll").prop("checked", isChecked);	
+});
 
-$("#memberListDeleteBtn").click((e)=>{
+
+// 선택삭제
+$(document).on("click", "#memberListDeleteBtn", function(){
 	let isChecked = false;
-	console.log("isChecked : " + isChecked);
 	
 	$(".member-is-checked").each((i, item)=>{
 		isChecked = isChecked || $(item).is(":checked");
 		let target = $(item).data("target");
+		console.log("target = ", target); // target = memberNo
 		
 		if($(item).is(":checked")){
 			$(item).after(`<input type="hidden" name="memberNo" value="\${target}"/>`);
@@ -667,7 +845,6 @@ $("#memberListDeleteBtn").click((e)=>{
 	console.log($(document.memberDeleteFrm));
 	if(confirm("선택된 회원을 삭제하시겠습니까?"))
 		$(document.memberDeleteFrm).submit();
-		
 });
 
 
