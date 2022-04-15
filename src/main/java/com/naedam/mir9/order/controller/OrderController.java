@@ -47,20 +47,17 @@ public class OrderController {
 		return "order/orderList";
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping("/list")
 	public String orderSearch(HttpServletRequest request, Model model) {
 		Map<String, String> param = new HashMap<String, String>();
 		Enumeration params = request.getParameterNames();
-		
 		while (params.hasMoreElements()){
 		    String name = (String)params.nextElement();
 		    param.put(name, request.getParameter(name));
 		}
 		
-		log.debug("param = {}", param);
-		
 		orderListSetting(model, param);
-		
 		
 		return "order/orderList";
 	}

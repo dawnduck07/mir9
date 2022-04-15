@@ -295,7 +295,7 @@
 									class="fa fa-circle-o"></i> 약도 관리</a></li>
 							<li><a href="?tpf=admin/setting/staff"><i
 									class="fa fa-circle-o"></i> 임원 관리</a></li>
-							<li><a href="?tpf=admin/setting/history"><i
+							<li><a href="${pageContext.request.contextPath }/setting/history"><i
 									class="fa fa-circle-o"></i> 연혁 관리</a></li>
 							<li><a href="?tpf=admin/setting/banner"><i
 									class="fa fa-circle-o"></i> 배너 관리</a></li>
