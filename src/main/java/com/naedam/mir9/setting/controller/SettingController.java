@@ -8,9 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.naedam.mir9.banner.model.vo.Banner;
+import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
+import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.service.MapService;
 import com.naedam.mir9.map.model.vo.MapApi;
 import com.naedam.mir9.map.model.vo.Maps;
@@ -54,10 +57,19 @@ public class SettingController {
 	}
 	
 	@GetMapping("/history")
-	public void history() {}
+	public void history(Model model) {
+		List<History> historyList = settingService.selectHistoryList();
+		
+		model.addAttribute("historyList",historyList);
+	}
 	
 	@GetMapping("/banner")
-	public void banner() {}
+	public void banner(Model model) {
+		List<Banner> bannerList = settingService.selectBannerList();
+		List<Category> menuCteList = settingService.selectMenuCteList();
+		model.addAttribute("bannerList",bannerList);
+		model.addAttribute("menuCteList",menuCteList);
+	}
 	
 	@GetMapping("/contract")
 	public void contract() {}

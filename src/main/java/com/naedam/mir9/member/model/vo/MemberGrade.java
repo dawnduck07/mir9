@@ -20,5 +20,5 @@ public class MemberGrade implements Serializable {
 	
 	private int memberGradeNo;
 	private String memberGradeName;
-	private int memberNo;
+	private int memberGradeCount;
 }

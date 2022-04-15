@@ -44,15 +44,15 @@
 								</tr>
 							</thead>
 							<tbody id = "tbody">
-								<c:forEach items="${memberGradeList}" var="mgl">
+								<c:forEach items="${memberGradeList}" var="memberGrade" varStatus="status"  >
 									<tr>
-										<td>${mgl.member_grade_no}
+										<td>${memberGrade.memberGradeNo}
 										<td>
-											<input type="text" id="memberGradeName_${mgl.member_grade_no}" name="memberGradeName" value="${mgl.member_grade_name}" class="form-control input-sm" style="width: 100%;" />
-											<input type="hidden" id="memberGradeNo_${mgl.member_grade_no}" name="memberGradeNo" value="${mgl.member_grade_no}" />
+											<input type="text" id="memberGradeName_${memberGrade.memberGradeNo}" name="memberGradeName" value="${memberGrade.memberGradeName}" class="form-control input-sm" style="width: 100%;" />
+											<input type="hidden" id="memberGradeNo_${memberGrade.memberGradeNo}" name="memberGradeNo" value="${memberGrade.memberGradeNo}" />
 											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 										</td>
-										<td>${mgl.cnt}</td>
+										<td>${memberGrade.memberGradeCount}</td>
 									</tr>
 								</c:forEach>
 							</tbody>		
@@ -134,12 +134,10 @@ function memberGradeUpdate(){
 
 
 
-
-
 // 첫번 째 input 태그 readonly로 설정
 document.getElementById('memberGradeName_1').readOnly = true;
-
-
+// 두번 째 input 태그 readonly로 설정
+document.getElementById('memberGradeName_2').readOnly = true;
 </script>
 
 

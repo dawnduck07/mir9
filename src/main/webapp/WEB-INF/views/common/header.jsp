@@ -173,7 +173,7 @@
 			<section class="sidebar">
 				<ul class="sidebar-menu" data-widget="tree">
 					<li class="header">MAIN NAVIGATION</li>
-					<li><a href="?tpf=admin/dashboard/list"> <i
+					<li><a href="${pageContext.request.contextPath}/dashboard/list"> <i
 							class="fa fa-dashboard"></i> <span>Dashboard</span>
 					</a></li>
 					<li class="treeview"><a href="#"> <i
@@ -194,13 +194,13 @@
 					</a>
 						<ul class="treeview-menu">
 							<li class="active"><a
-								href="?tpf=admin/menu/list&menu=manager"><i
+								href="${pageContext.request.contextPath}/menu/list&menu=manager"><i
 									class="fa fa-circle-o"></i> 메뉴 관리</a></li>
-							<li><a href="?tpf=admin/menu/head"><i
+							<li><a href="${pageContext.request.contextPath}/menu/head"><i
 									class="fa fa-circle-o"></i> 헤더 관리</a></li>
-							<li><a href="?tpf=admin/menu/bottom"><i
+							<li><a href="${pageContext.request.contextPath}/menu/bottom"><i
 									class="fa fa-circle-o"></i> 하단 관리</a></li>
-							<li><a href="?tpf=admin/menu/meta"><i
+							<li><a href="${pageContext.request.contextPath}/menu/meta"><i
 									class="fa fa-circle-o"></i> 메타 관리</a></li>
 						</ul></li>
 
@@ -229,13 +229,13 @@
 						<ul class="treeview-menu">
 							<li class="active"><a href="${pageContext.request.contextPath}/member/list.do"><i
 									class="fa fa-circle-o"></i> 회원 리스트</a></li>
-							<li><a href="?tpf=admin/member/withdraw_list"><i
+							<li><a href="${pageContext.request.contextPath}/member/withdraw_list"><i
 									class="fa fa-circle-o"></i> 탈퇴회원 리스트</a></li>
-							<li><a href="?tpf=admin/member/log"><i
+							<li><a href="${pageContext.request.contextPath}/member/log"><i
 									class="fa fa-circle-o"></i> 회원 접속이력 관리</a></li>
 							<li><a href="${pageContext.request.contextPath}/member/memberGrade.do"><i
 									class="fa fa-circle-o"></i> 등급 관리</a></li>
-							<li><a href="?tpf=admin/member/point"><i
+							<li><a href="${pageContext.request.contextPath}/member/point"><i
 									class="fa fa-circle-o"></i> 회원 적립금 관리</a></li>
 						</ul></li>
 					<li class=""><a href="/mir9/schedule/schedule"> <i
@@ -246,9 +246,9 @@
 							class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li><a href="index.php?tpf=admin/form/manage"><i
+							<li><a href="index.php${pageContext.request.contextPath}/form/manage"><i
 									class="fa fa-circle-o"></i> 리스트</a></li>
-							<li><a href="index.php?tpf=admin/form/list&form_code=1"><i
+							<li><a href="index.php${pageContext.request.contextPath}/form/list&form_code=1"><i
 									class="fa fa-circle-o"></i> 문의사항</a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i
@@ -256,13 +256,13 @@
 							class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li><a href="?tpf=admin/statistics/sales_day"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/sales_day"><i
 									class="fa fa-circle-o"></i>기간별 매출 통계 </a></li>
-							<li><a href="?tpf=admin/statistics/sales_product"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/sales_product"><i
 									class="fa fa-circle-o"></i>제품별 매출 통계 </a></li>
-							<li><a href="?tpf=admin/statistics/sales_member"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/sales_member"><i
 									class="fa fa-circle-o"></i>회원별 매출 통계 </a></li>
-							<li><a href="?tpf=admin/statistics/sales_address_day"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/sales_address_day"><i
 									class="fa fa-circle-o"></i>지역별 매출 통계 </a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i
@@ -285,38 +285,38 @@
 							<span>설정</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li><a href="?tpf=admin/setting/point"><i
+							<li><a href="${pageContext.request.contextPath}/setting/point"><i
 									class="fa fa-circle-o"></i> 적립금 관리</a></li>
-							<li><a href="?tpf=admin/setting/coupon"><i
+							<li><a href="${pageContext.request.contextPath}/setting/coupon"><i
 									class="fa fa-circle-o"></i> 쿠폰 관리</a></li>
-							<li><a href="?tpf=admin/setting/popup"><i
+							<li><a href="${pageContext.request.contextPath}/setting/popup"><i
 									class="fa fa-circle-o"></i> 팝업 관리</a></li>
 							<li><a href="${pageContext.request.contextPath }/setting/map"><i
 									class="fa fa-circle-o"></i> 약도 관리</a></li>
-							<li><a href="?tpf=admin/setting/staff"><i
+							<li><a href="${pageContext.request.contextPath}/setting/staff"><i
 									class="fa fa-circle-o"></i> 임원 관리</a></li>
-							<li><a href="?tpf=admin/setting/history"><i
+							<li><a href="${pageContext.request.contextPath }/setting/history"><i
 									class="fa fa-circle-o"></i> 연혁 관리</a></li>
-							<li><a href="?tpf=admin/setting/banner"><i
+							<li><a href="${pageContext.request.contextPath}/setting/banner"><i
 									class="fa fa-circle-o"></i> 배너 관리</a></li>
-							<li><a href="?tpf=admin/setting/contract"><i
+							<li><a href="${pageContext.request.contextPath}/setting/contract"><i
 									class="fa fa-circle-o"></i> 약관 관리</a></li>
 							<li><a href="${pageContext.request.contextPath }/setting/delivery_setting"><i
 									class="fa fa-circle-o"></i> 배송 설정</a></li>
 							<li><a href="${pageContext.request.contextPath }/setting/delivery_company"><i
 									class="fa fa-circle-o"></i> 택배사 관리</a></li>
-							<li><a href="?tpf=admin/setting/info"><i
+							<li><a href="${pageContext.request.contextPath}/setting/info"><i
 									class="fa fa-circle-o"></i> 기본 설정</a></li>
-							<li><a href="?tpf=admin/setting/seo"><i
+							<li><a href="${pageContext.request.contextPath}/setting/seo"><i
 									class="fa fa-circle-o"></i> SEO 설정</a></li>
-							<li><a href="?tpf=admin/setting/paymentpg"><i
+							<li><a href="${pageContext.request.contextPath}/setting/paymentpg"><i
 									class="fa fa-circle-o"></i> 결제PG 설정</a></li>
-							<li><a href="?tpf=admin/setting/snslogin"><i
+							<li><a href="${pageContext.request.contextPath}/setting/snslogin"><i
 									class="fa fa-circle-o"></i> SNS 연동 설정</a></li>
-							<li><a href="?tpf=admin/setting/locale"><i
+							<li><a href="${pageContext.request.contextPath}/setting/locale"><i
 									class="fa fa-circle-o"></i> 다국어 번역</a></li>
 						</ul></li>
-					<li><a href="?tpf=admin/setting/version"> <i
+					<li><a href="${pageContext.request.contextPath}/setting/version"> <i
 							class="fa fa-exclamation-circle"></i> <span>Version</span> <small
 							class="label pull-right bg-green">2.8.1</small>
 					</a></li>

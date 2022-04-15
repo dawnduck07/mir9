@@ -21,5 +21,21 @@
 		FROM map a, map_api b
 		WHERE a.map_api_no = b.map_api_no
 	</select>
+	
+	<select id="selectHistoryList" resultType="history">
+		select * from history
+	</select>
+	
+	<select id="selectBannerList" resultType="banner">
+		SELECT 
+			a.*,
+			b.CATEGORY_NAME 
+		FROM banner a 
+			JOIN category b ON(a.category_no = b.CATEGORY_NO)
+	</select>
+	
+	<select id="selectMenuCteList" resultType="category">
+		select * from category where category_type = 'menu' order by category_no
+	</select>
   
 </mapper>

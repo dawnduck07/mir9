@@ -48,7 +48,7 @@
 				boardArr.push($(this).val());
  			});
 			
-			if(!confirm("정말 삭제 하시겠습니까?")){
+			if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
 				alert("취소 되었습니다.");
 				return;
 				
@@ -64,7 +64,7 @@
   		  	 	 }
   		  	 	 
 	  		});		
-				alert("게시판이 삭제 되었습니다.")
+				alert("해당 자료가 삭제 되었습니다.")
 				location.href = "/mir9/board/listBoard";
 			}
 	  		//location.href = "mir9/board/listBoard";
@@ -131,7 +131,6 @@
 					if(JSONData.option.optionPopup == "y"){
 						$("#optionPopup2").prop("checked", true)
 					}
-					
 				}
 			});			
 			
@@ -143,13 +142,12 @@
 		
 		var boardNo2 = $("#boardNo2").val()
 		
-		alert("수정이 완료되었습니다.")
+		alert("게시판이 수정 되었습니다.")
 		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/mir9/board/updateBoard?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
 	
-	window.copyURL = function(){
-		var boardNo = $("button[name='updateBoard']").find('input').val();
-		prompt("이 게시판의 URL 입니다. Ctrl+C를 눌러 복사하세요", "[include:tpf=mir9/board/boardNo="+boardNo+"]")
+	window.copyURL = function(boardNo){
+		prompt("이 게시판의 URL 입니다. Ctrl+C를 눌러 복사하세요", "http://localhost:8080/mir9/board/postList?boardNo="+boardNo)
 	}
 	
 
@@ -231,7 +229,7 @@
 		                        </td>
 							  <td>${i}</td>
 							  <td align="left">${board.boardTitle}</td>
-							  <td align="left">[include:tpf=board/list=${board.boardNo}]</td>
+							  <td align="left">http://localhost:8080/mir9/board/postList?boardNo=${board.boardNo}]</td>
 							  <td>
 								<c:if test="${board.boardType == 'list'}">
 							  		일반
@@ -261,7 +259,7 @@
 							  <td>${postCount[i-1]}</td>
 							  <td>
 		                        <button type="button" onclick="_onclickView('board',1);" class="btn btn-success btn-xs">바로가기</button>
-		                        <button type="button" onclick="copyURL();" class="btn btn-warning btn-xs" value="${board.boardNo}">
+		                        <button type="button" onclick="copyURL(${board.boardNo});" class="btn btn-warning btn-xs" value="${board.boardNo}">
 		                        	<input type="hidden" name="hiddenBoardNo2" value="${board.boardNo}" />링크복사</button>
 		                        <button type="button" class="btn btn-primary btn-xs" name="updateBoard" data-toggle="modal" data-target="#updateBoardModal">
 		                        	<input type="hidden" name="hiddenBoardNo" value="${board.boardNo}" />
