@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.naedam.mir9.banner.model.vo.Banner;
+import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
@@ -46,6 +48,19 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.selectHistoryList();
 	}
+
+	@Override
+	public List<Banner> selectBannerList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectBannerList();
+	}
+
+	@Override
+	public List<Category> selectMenuCteList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectMenuCteList();
+	}
+	
 	
 	
 	
