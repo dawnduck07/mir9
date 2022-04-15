@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.naedam.mir9.banner.model.vo.Banner;
+import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
@@ -45,6 +47,18 @@ public class SettingDaoImpl implements SettingDao {
 	public List<History> selectHistoryList() {
 		// TODO Auto-generated method stub
 		return session.selectList("setting.selectHistoryList");
+	}
+
+	@Override
+	public List<Banner> selectBannerList() {
+		// TODO Auto-generated method stub
+		return session.selectList("setting.selectBannerList");
+	}
+
+	@Override
+	public List<Category> selectMenuCteList() {
+		// TODO Auto-generated method stub
+		return session.selectList("setting.selectMenuCteList");
 	}
 	
 	
