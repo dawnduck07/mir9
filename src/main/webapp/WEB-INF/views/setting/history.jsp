@@ -286,7 +286,38 @@ function registerCopyContent() {
     historyCopyContent.submit();
 }
 
+// 파일 업로드
+$("input[type=file]").change(function(e){
+	console.log($(e.target))
+   // 이미지 업로드
+   var file = e.target;
+   //var imgPreview = document.getElementById("imgPreview");
+   var form = new FormData();
+   form.append("image", file.files[0]);
 
+   var settings = {
+     "url": "https://api.imgbb.com/1/upload?key=f84bfb11eb3ee5eedb859de8b49fdff1",
+     "method": "POST",
+     "timeout": 0,
+     "processData": false,
+     "mimeType": "multipart/form-data",
+     "contentType": false,
+     "data": form
+   };
+   
+   // 이미지 업로드 -> 확인
+   $.ajax(settings).done(function (response) {
+     
+     var imgbb = JSON.parse(response);
+     
+     // 이미지 조회 및 다운로드
+     var url = imgbb.data.thumb.url;
+     console.log(url)
+     $('[name=imgUrl]').val(url);
+
+
+   });
+});
 </script>
 
 

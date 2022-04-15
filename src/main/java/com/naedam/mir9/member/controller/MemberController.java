@@ -30,9 +30,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naedam.mir9.member.model.service.MemberService;
+import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
+import com.naedam.mir9.member.model.vo.MemberMemo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,6 +63,11 @@ public class MemberController {
 		log.debug("totalMemberListCount = {}", totalMemberListCount);
 		model.addAttribute("totalMemberListCount", totalMemberListCount);
 		
+		// 명칭 가져오기
+		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
+		log.debug("memberGradeList = {}", memberGradeList);
+		model.addAttribute("memberGradeList", memberGradeList);
+		
 		return "member/memberList";
 	}
 	
@@ -76,6 +83,65 @@ public class MemberController {
 		map.put("available", member == null);
 		
 		return map;
+	}
+	
+	// 회원리스트 - 등록
+	@PostMapping("/memberInsertModalFrm.do")
+	public String memberInsertModalFrm(
+						Member member, 
+						Address address,
+						MemberMemo memberMemo,
+						MemberGrade memberGradeNo,
+						@RequestParam String mobile1,
+						@RequestParam String mobile2,
+						@RequestParam String mobile3,
+						RedirectAttributes redirectAttributes) {
+		log.debug("{}", "memberInsertModalFrm.do 요청!");
+		log.debug("memberEntity = {}", member);
+		log.debug("memberMemo = {}", memberMemo);
+		log.debug("memberGradeNo = {}", memberGradeNo);
+		log.debug("mobile = {}", mobile1);
+		log.debug("mobile = {}", mobile2);
+		log.debug("mobile = {}", mobile3);
+		log.debug("address = {}", address);
+		
+		String phone = mobile1 + mobile2 + mobile3;
+		
+		// 0. 비밀번호 암호화 처리
+		log.debug("{}", passwordEncoder);
+		String rawPassword = member.getPassword();
+		String encryptedPassword = passwordEncoder.encode(rawPassword);
+		member.setPassword(encryptedPassword);
+		log.debug("{} -> {}", rawPassword, encryptedPassword);
+		
+		// 1. 회원(Member) 등록
+		Member paramMember = new Member();
+		
+		paramMember.setFirstName(member.getFirstName());
+		paramMember.setLastName(member.getLastName());
+		paramMember.setEmail(member.getEmail());
+		paramMember.setPhone(phone);
+		paramMember.setStatus(member.getStatus());
+		paramMember.setId(member.getId());
+		paramMember.setPassword(member.getPassword());
+		paramMember.setProfileImg(member.getProfileImg());
+				
+		int resultRegisterMember = memberService.insertMember(paramMember);
+		log.debug("resultRegisterMember = {}", resultRegisterMember);
+		
+		// 2. 주소 입력
+		int resultRegisterAddress = memberService.insertAddress(address);
+		log.debug("resultRegisterAddress = {}", resultRegisterAddress);
+		
+		// 3. 메모 입력
+		// 3.1. 회원 입력 시 생성된 회원번호(MemberNo) 설정
+		memberMemo.setMemberNo(paramMember.getMemberNo());
+		
+		// 3.2. 메모 입력
+		int resultRegisterMemberMemo = memberService.insertMemberMemo(memberMemo);
+		log.debug("resultRegisterMemberMemo = {}", resultRegisterMemberMemo);
+		
+		return "redirect:/member/memberList";
 	}
 	
 	// 타입별 검색

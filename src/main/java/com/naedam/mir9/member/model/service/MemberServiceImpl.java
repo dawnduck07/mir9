@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.member.model.dao.MemberDao;
+import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
+import com.naedam.mir9.member.model.vo.MemberMemo;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -78,11 +80,19 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.memberGradeUpdate(paramGrade);
 	}
 
-	
+	// 주소 입력
+	@Override
+	public int insertAddress(Address address) {
+		return memberDao.insertAddress(address);
+	}
 
-	
+	// 메모 입력
+	@Override
+	public int insertMemberMemo(MemberMemo memberMemo) {
+		return memberDao.insertMemberMemo(memberMemo);
+	}
 
-	
+
 
 
 

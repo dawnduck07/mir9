@@ -28,7 +28,6 @@ public class Member implements Serializable, UserDetails {
 	private int memberNo;
 	private String firstName;
 	private String lastName;
-	private String address;
 	private String email;
 	private String phone;
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd HH:mm", timezone="Asia/Seoul")

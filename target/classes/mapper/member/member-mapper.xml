@@ -141,15 +141,20 @@
 </delete>
 
 <!-- 회원 등급 리스트 -->
-<select id="selectMemberGradeList" resultType="map">
-	SELECT 
-		member_grade_no,
-		member_grade_name,
-		COUNT(*) as cnt
+<select id="selectMemberGradeList" resultType="memberGrade">
+	SELECT
+		mg.member_grade_no,
+		mg.member_grade_name,
+		COUNT(*) AS member_grade_count
 	FROM
-		member_grade GROUP BY member_grade_name
+		member_grade mg LEFT JOIN authorities a
+			ON (mg.authority = a.authority)
+	WHERE
+		a.authority IS NOT NULL 
+	GROUP BY
+		mg.member_grade_no
 	ORDER BY
-		member_grade_no
+		mg.member_grade_no
 </select>
 
 <!-- 회원 등급 수정 -->
@@ -162,4 +167,35 @@
 		member_grade_no = #{memberGradeNo}
 </update>
 
+<!-- 주소 입력 -->
+<insert id="insertAddress">
+	INSERT INTO 
+		address(
+			address_no,
+			address_main, 
+			address_sub, 
+			address_zipcode
+			)
+		VALUES(
+			NEXTVAL(seq_address_no),
+		 	#{addressMain},
+		 	#{addressSub}, 
+		 	#{addressZipcode}
+		 	)
+</insert>
+
+<!-- 메모 입력 -->
+<insert id="insertMemberMemo">
+	INSERT INTO
+		member_memo(
+			member_memo_no, 
+			member_no, 
+			member_memo
+			)
+		VALUES(
+			NEXTVAL(seq_member_memo_no),
+			#{memberNo},
+			#{memberMemo} 
+			)
+</insert>
 </mapper>

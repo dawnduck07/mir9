@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
+import com.naedam.mir9.member.model.vo.MemberMemo;
 
 public interface MemberService {
 
@@ -40,12 +42,12 @@ public interface MemberService {
 	// 회원 등급 수정
 	int memberGradeUpdate(MemberGrade paramGrade);
 
-	
+	// 주소 입력
+	int insertAddress(Address address);
 
-	
+	// 메모 입력
+	int insertMemberMemo(MemberMemo memberMemo);
 
-	
 
-	
 
 }
