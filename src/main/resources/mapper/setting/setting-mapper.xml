@@ -21,5 +21,9 @@
 		FROM map a, map_api b
 		WHERE a.map_api_no = b.map_api_no
 	</select>
+	
+	<select id="selectHistoryList" resultType="history">
+		select * from history
+	</select>
   
 </mapper>

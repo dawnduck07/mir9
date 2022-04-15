@@ -1,6 +1,7 @@
 package com.naedam.mir9.order.controller;
 
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,17 +43,21 @@ public class OrderController {
 	@GetMapping("/list")
 	public String orderList(Model model) {
 		Map<String, String> param = new HashMap<String, String>();
-		
 		orderListSetting(model, param);
 		return "order/orderList";
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping("/list")
 	public String orderSearch(HttpServletRequest request, Model model) {
 		Map<String, String> param = new HashMap<String, String>();
+		Enumeration params = request.getParameterNames();
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    param.put(name, request.getParameter(name));
+		}
 		
 		orderListSetting(model, param);
-		
 		
 		return "order/orderList";
 	}
@@ -145,7 +150,7 @@ public class OrderController {
 	}
 	
 	private void orderListSetting(Model model, Map<String, String> param) {
-		
+		log.debug("======param = {}=========", param);
 		List<Order> orderList = orderService.selectOrderList(param);
 		List<OrderStatus> orderStatusList = orderService.selectOrderStatusList();
 		int orderCnt = orderService.selectOrderCnt(param);

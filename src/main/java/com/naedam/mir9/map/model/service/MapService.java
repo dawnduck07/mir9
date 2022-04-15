@@ -15,4 +15,6 @@ public interface MapService {
 
 	int insertMap(Maps map);
 
+	int deleteMap(int mapNo);
+
 }

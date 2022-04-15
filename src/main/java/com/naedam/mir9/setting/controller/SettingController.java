@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
+import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.service.MapService;
 import com.naedam.mir9.map.model.vo.MapApi;
 import com.naedam.mir9.map.model.vo.Maps;
@@ -54,7 +55,11 @@ public class SettingController {
 	}
 	
 	@GetMapping("/history")
-	public void history() {}
+	public void history(Model model) {
+		List<History> historyList = settingService.selectHistoryList();
+		
+		model.addAttribute("historyList",historyList);
+	}
 	
 	@GetMapping("/banner")
 	public void banner() {}

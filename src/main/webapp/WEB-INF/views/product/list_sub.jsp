@@ -329,8 +329,6 @@
         }
         
         
-        // 검색 개선 요구시 참고
-//         var bne = [];
         $('[name=bne_check]').change((e)=>{
         	var target = "[name=is_" + $(e.target).val() +"]";
         	if($(e.target).is(":checked")){
