@@ -12,39 +12,7 @@
 </jsp:include>
 <style>
 
-#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
-.bg_white {background:#fff;}
-#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
-#menu_wrap .option{text-align: center;}
-#menu_wrap .option p {margin:10px 0;}  
-#menu_wrap .option button {margin-left:5px;}
-#placesList li {list-style: none;}
-#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
-#placesList .item span {display: block;margin-top:4px;}
-#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-#placesList .item .info{padding:10px 0 10px 55px;}
-#placesList .info .gray {color:#8a8a8a;}
-#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
-#placesList .info .tel {color:#009900;}
-#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
-#placesList .item .marker_1 {background-position: 0 -10px;}
-#placesList .item .marker_2 {background-position: 0 -56px;}
-#placesList .item .marker_3 {background-position: 0 -102px}
-#placesList .item .marker_4 {background-position: 0 -148px;}
-#placesList .item .marker_5 {background-position: 0 -194px;}
-#placesList .item .marker_6 {background-position: 0 -240px;}
-#placesList .item .marker_7 {background-position: 0 -286px;}
-#placesList .item .marker_8 {background-position: 0 -332px;}
-#placesList .item .marker_9 {background-position: 0 -378px;}
-#placesList .item .marker_10 {background-position: 0 -423px;}
-#placesList .item .marker_11 {background-position: 0 -470px;}
-#placesList .item .marker_12 {background-position: 0 -516px;}
-#placesList .item .marker_13 {background-position: 0 -562px;}
-#placesList .item .marker_14 {background-position: 0 -608px;}
-#placesList .item .marker_15 {background-position: 0 -654px;}
-#pagination {margin:10px auto;text-align: center;}
-#pagination a {display:inline-block;margin-right:10px;}
-#pagination .on {font-weight: bold; cursor: default;color:#777;}
+
 
 
 .ui-menu {
@@ -218,17 +186,18 @@
 		; role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
-				<form name="form" method="post" onsubmit="return false;"
-					action="?tpf=admin/member/process">
-					<input type="hidden" name="mode"> <input type="hidden"
-						name="member_code">
+			
+				<form:form 
+					name="memberInsertModalFrm" 
+					method="POST" 
+					action="${pageContext.request.contextPath}/member/memberInsertModalFrm.do">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">회원 등록</h4>
 					</div>
+					
 					<div class="modal-body">
-
 						<h4>
 							<p class="text-light-blue">
 								<i class="fa fa-fw fa-info-circle"></i> 회원정보
@@ -242,7 +211,8 @@
 									&nbsp;
 									<button 
 										type="button" 
-										id="CheckId" 
+										id="id"
+										name="id" 
 										value=""
 										class="btn btn-sm btn-default" 
 										onclick="onclickCheckId();">아이디 중복확인</button> 4~12자로 입력하세요.
@@ -315,67 +285,50 @@
 									class="form-control input-sm" style="width: 60%;"/>
 								</td>
 							</tr>
+							 <tr>
+				                <td class="menu">주소</td>
+				                <td align="left">
+				                <input type="text" id="address_zipcode" name="addressZipcode" readonly class="form-control input-sm" style="width:15%; background-color:#dddddd; float:left;" />
+				                &nbsp;
+				                <button type="button" onclick="callAddress()" class="btn btn-sm btn-default">
+				                	주소입력
+				                </button>
+				                
+				                <br>
+				                
+				                <input type="text" id="address_main" name="addressMain" readonly class="form-control input-sm" style="margin:5px 0; width:100%;  background-color:#dddddd;" />
+				                <input type="text" id="address_sub" name="addressSub" placeholder="상세주소" class="form-control input-sm" style="width:100%;" />
+				                </td>
+				            </tr>
 							<tr>
-								<td class="menu">주소</td>
+								<td class="menu">메모</td>
 								<td align="left">
-									<input type="text" name="zipcode" id="zipcode" readonly class="form-control input-sm"
-									style="width: 15%; background-color: #dddddd; float: left;" />&nbsp;
-									<button type="button" onclick="callAddress();" class="btn btn-sm btn-default">
-										주소입력
-									</button>
-									<span id="displaySearch" style="float: right; font-size: 13px; padding-top: 10px; display: none;">
-										[검색자료 : 
-										<span id="displaySearchCount" style="color: red;"></span>건]
-									</span>
-									<br> 
-										
-									
-								        <div class="option">
-								            <div>
-								                <form id="addressSearch" onsubmit="searchPlaces(); return false;">
-								                    <input type="text" value="" id="address" size="15"
-					                    			placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152"
-					                    			style="display: none; margin: 5px 0 0 0; width: 100%;">  
-								                </form>
-								            </div>
-								        </div>
-								        <ul id="placesList"></ul>
-								        <div id="pagination"></div>
-								    
-										
-										
-										
-									
-
-									<input type="text" name="addr" id="addr" readonly
-										class="form-control input-sm"
-										style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
-									<input type="text" name="addr_etc" id="addr_etc"
-										placeholder="상세주소" class="form-control input-sm"
-										style="width: 100%;" />
+									<textarea name="memberMemoContent" id="memberMemoContent" rows="4" class="form-control input-sm" style="width: 100%;"></textarea>
 								</td>
 							</tr>
 							<tr>
-								<td class="menu">메모</td>
-								<td align="left"><textarea name="memo" id="memo" rows="4"
-										class="form-control input-sm" style="width: 100%;"></textarea></td>
-							</tr>
-							<tr>
 								<td class="menu">현재 포인트</td>
-								<td align="left"><span id="current_point"></span></td>
+								<td align="left">
+									<span id="current_point">
+									</span>
+								</td>
 							</tr>
 							<tr id="display_level">
 								<td class="menu">등급 <span class="text-light-blue"><i
 										class="fa fa-check"></i></span></td>
-								<td><select name="level" id="level"
-									class="form-control input-sm" style="width: 120px;">
-										<option value="1">슈퍼관리자</option>
-										<option value="2">회원</option>
-										<option value="3">ㅈㅇㅇㅈ</option>
-								</select></td>
+								<td>
+									<select 
+										name="memberGradeNo" 
+										id="memberGradeNo"
+										class="form-control input-sm" style="width: 120px;">
+											<c:forEach items="${memberGradeList}" var="memberGrade">
+												<option value="${memberGrade.memberGradeNo}">${memberGrade.memberGradeName}</option>
+											</c:forEach>
+									</select>
+								</td>
 							</tr>
 						</table>
-				</form>
+				</form:form>
 			</div>
 		</div>
 		<div class="modal-footer">
@@ -538,8 +491,8 @@
 </div>
 </div>
 <!-- /.content-wrapper -->
-<!-- 카카오 맵 -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=292fcbebc12a7089168e4f0553c2ae07&libraries=services"></script>
+<!-- 다음 주소 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
 function downloadExcel() {  // Excel 다운로드
@@ -547,6 +500,7 @@ function downloadExcel() {  // Excel 다운로드
     form_download.search_data.value = $('#form_search :input').serialize();
     form_download.submit();
 }
+
 
 // 상세보기
 $("button[id^='btn_']").on('click', function(e){
@@ -566,7 +520,7 @@ $('#findList').each(function(){
 function onclickInsert(){
 	console.log("등록(onclickInsert())");
 	$("#modalRegister").modal();
-}
+};
 
 // 아이디 중복 확인
 function onclickCheckId(){
@@ -620,12 +574,20 @@ function onclickCheckId(){
 
 // 저장
 function register(){
-	console.log("저장(register()) 실행");
+	
+	/* console.log("저장(register()) 실행");
+	var id = $("#id").val();
 	var password = $("#password").val();
 	var passwordCheck = $("#passwordCheck").val();
 	var firstName = $("#firstName").val();
 	var lastName = $("#lastName").val();
 	
+	// 아이디 공란 확인
+	if(id == ''){
+		alert("아이디가 입력되지 않았습니다.");
+		$("#id").focus();
+		return false;
+	}
 	
 	// 비밀번호 공란 확인
 	if(password == ''){
@@ -691,32 +653,59 @@ function register(){
 		alert("이메일을 정확하게 입력해주세요.");
 		$("#email").focus();
 		return false;
-	}
+	} */
+	
+	$(window).unbind("beforeunload");
+	$(document.memberInsertModalFrm).submit();
 }
 
 
+// 주소 입력
+function callAddress() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-//주소입력
-function callAddress(){
-	console.log("주소입력(callAddress()) 실행");
-	$("#displaySearch").show();
-	$("#address").show().focus();
-	
-	// 마커를 담을 배열입니다
-	var markers = [];
-	
-	// 장소 검색 객체를 생성합니다
-	var ps = new kakao.maps.services.Places();
-	
-	// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
-	var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-	
-	$("#address").bind("keyup", function(){
-		console.log("addrss 입력창 작동");
-		console.log("address = " + $("#address").val());
-		$("#addressSearch").delay(200).submit());
-	});
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+            
+            } 
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('address_zipcode').value = data.zonecode;
+            document.getElementById("address_main").value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("address_sub").focus();
+        }
+    }).open();
 }
+
+
 
 
 

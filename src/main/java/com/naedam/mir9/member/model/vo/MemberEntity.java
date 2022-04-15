@@ -26,15 +26,18 @@ public class MemberEntity extends Member {
 
 	private String addressMain;
 	private String addressSub;
+	private String addressZipcode;
 	private int pointAmt;
 	
 	public MemberEntity(int memberNo, String firstName, String lastName, String address,
 			String email, String phone, Date regDate, String status, String id, String password, String profileImg,
-			List<SimpleGrantedAuthority> authorities, String addressMain, String addressSub, int pointAmt) {
-		super(memberNo, firstName, lastName, address, email, phone, regDate, status, id, password, profileImg,
+			List<SimpleGrantedAuthority> authorities, String addressMain, String addressSub, int pointAmt,
+			String addressZipcode) {
+		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg,
 				authorities);
 		this.addressMain = addressMain;
 		this.addressSub = addressSub;
+		this.addressZipcode = addressZipcode;
 		this.pointAmt = pointAmt;	
 	}
 	
