@@ -13,7 +13,7 @@
             <form name="getSchedule" method="post" action="?tpf=admin/schedule/process" enctype="multipart/form-data">
             <input type="hidden" name="mode" id="mode" value="insert">
             <input type="hidden" name="type" value="nomal">
-            <input type="hidden" name="code">
+            <input type="hidden" name="getSchedulNo" value="">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="myModalLabelPortfolio">일정 관리</h4>

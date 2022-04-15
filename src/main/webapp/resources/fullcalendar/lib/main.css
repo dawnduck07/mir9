@@ -5,9 +5,6 @@
 .fc-not-allowed .fc-event { /* override events' custom cursors */
   cursor: not-allowed;
 }
-.fc-day-sun{ color:red; 
-				 background-color: red;
-}
 
 .fc-unselectable {
   -webkit-user-select: none;
@@ -729,9 +726,9 @@ A HORIZONTAL event
       background-color: rgba(128, 108, 13, 0.15);
       background-color: var(--fc-today-bg-color, rgba(255, 220, 40, 0.15));
     }
-  	.fc-day-sun { 
-      color: red;  
-    }
+.fc-sun {
+    color: red;
+}
 .fc .fc-daygrid-day-frame {
     position: relative;
     min-height: 100%; /* seems to work better than `height` because sets height after rows/cells naturally do it */
