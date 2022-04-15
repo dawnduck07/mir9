@@ -1,276 +1,184 @@
-<!-- addSchedule.jsp 시작 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-<script>
 
-function(){	
-    /* datepicker */
-    $( "#datepicker1,#datepicker2" ).datepicker({
-        dateFormat: 'yy-mm-dd',
-        prevText: '이전 달',
-        nextText: '다음 달',
-        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        dayNames: ['일','월','화','수','목','금','토'],
-        dayNamesShort: ['일','월','화','수','목','금','토'],
-        dayNamesMin: ['일','월','화','수','목','금','토'],
-        showMonthAfterYear: true,
-        yearSuffix: '년'
-    });
-    $('#datepicker1,#datepicker2').datepicker({
-        dateFormat: 'yy-mm-dd'
-    });
-}
+<script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plupload/js/i18n/ko.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css">
+<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<link  href="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+<script>
+	function fncAddPost(){
+		
+		var postFile = $("input[id='postName']").length;
+		var postName = new Array(postFile);
+		
+		for(var i = 0; i < postFile; i++){
+			postName[i] = $("input[id='postName']")[i].value;
+			//alert(postName[i])
+		}
+		alert("게시글이 등록 되었습니다.")
+		$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost?${_csrf.parameterName}=${_csrf.token}").submit();			
+	}
 	
+	function fucAddFile(){
+		$("div[name='listFile']").append('<input type="file" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;">');
+	}
+	
+	$(function() {
+	    $("#uploader").plupload({
+	        // General settings
+	        runtimes : 'html5,flash,silverlight,html4',
+	        url : "/examples/upload",
+	 
+	        // Maximum file size
+	        max_file_size : '2mb',
+	 
+	        chunk_size: '1mb',
+	 
+	        // Resize images on clientside if we can
+	        resize : {
+	            width : 200,
+	            height : 200,
+	            quality : 90,
+	            crop: true // crop to exact dimensions
+	        },
+	 
+	        // Specify what files to browse for
+	        filters : [
+	            {title : "Image files", extensions : "jpg,gif,png"},
+	            {title : "Zip files", extensions : "zip,avi"}
+	        ],
+	 
+	        // Rename files by clicking on their titles
+	        rename: true,
+	         
+	        // Sort files
+	        sortable: true,
+	 
+	        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+	        dragdrop: true,
+	 
+	        // Views to activate
+	        views: {
+	            list: true,
+	            thumbs: true, // Show thumbs
+	            active: 'thumbs'
+	        },
+	 
+	        // Flash settings
+	        flash_swf_url : '/plupload/js/Moxie.swf',
+	     
+	        // Silverlight settings
+	        silverlight_xap_url : '/plupload/js/Moxie.xap'
+	    });
+	});	
 </script>
 
-<div class="modal fade" id="modalContent6" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" style="width:600px;">
+<div class="modal fade" id="modalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <form name="form_register" method="post" action="?tpf=admin/schedule/process" enctype="multipart/form-data">
-            <input type="hidden" name="mode" id="mode" value="insert">
-            <input type="hidden" name="type" value="nomal">
-            <input type="hidden" name="code">
+            <form name="addPostForm" method="post" enctype="multipart/form-data">
+            
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabelPortfolio">일정 관리</h4>
+                <h4 class="modal-title" id="myModalLabelPortfolio">게시물 관리</h4>
             </div>
             <div class="modal-body">
 
-            <h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 일정 <span id="board_sub_title">등록</span></p></h4>
+            <h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 글 <span id="board_sub_title">등록</span></p></h4>
             <table class="table table-bordered">
-            <tbody><tr>
-                <td class="menu">날짜</td>
-                <td align="left">
-                <span style="float:left">
-                <input type="text" name="scheduleStartDate" id="datepicker1" class="form-control input-sm" style="width:80px; float:left" readonly="" placeholder="시작일">
-                <select name="scheduleStartTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
-      					<option value="00:00">00:00</option>      
-      					<option value="00:30">00:30</option>      
-      					<option value="01:00">01:00</option>      
-      					<option value="01:30">01:30</option>      
-      					<option value="02:00">02:00</option>      
-      					<option value="02:30">02:30</option>      
-      					<option value="03:00">03:00</option>      
-      					<option value="03:30">03:30</option>      
-      					<option value="04:00">04:00</option>      
-      					<option value="04:30">04:30</option>      
-      					<option value="05:00">05:00</option>      
-      					<option value="05:30">05:30</option>      
-      					<option value="06:00">06:00</option>      
-      					<option value="06:30">06:30</option>      
-      					<option value="07:00">07:00</option>      
-      					<option value="07:30">07:30</option>      
-      					<option value="08:00">08:00</option>      
-      					<option value="08:30">08:30</option>      
-      					<option value="09:00">09:00</option>      
-      					<option value="09:30">09:30</option>      
-      					<option value="10:00">10:00</option>      
-      					<option value="10:30">10:30</option>      
-      					<option value="11:00">11:00</option>      
-      					<option value="11:30">11:30</option>      
-      					<option value="12:00">12:00</option>      
-      					<option value="12:30">12:30</option>      
-      					<option value="13:00">13:00</option>      
-      					<option value="13:30">13:30</option>      
-      					<option value="14:00">14:00</option>      
-      					<option value="14:30">14:30</option>      
-      					<option value="15:00">15:00</option>      
-      					<option value="15:30">15:30</option>      
-      					<option value="16:00">16:00</option>      
-      					<option value="16:30">16:30</option>      
-      					<option value="17:00">17:00</option>      
-      					<option value="17:30">17:30</option>      
-      					<option value="18:00">18:00</option>      
-      					<option value="18:30">18:30</option>      
-      					<option value="19:00">19:00</option>      
-      					<option value="19:30">19:30</option>      
-      					<option value="20:00">20:00</option>      
-      					<option value="20:30">20:30</option>      
-      					<option value="21:00">21:00</option>      
-      					<option value="21:30">21:30</option>      
-      					<option value="22:00">22:00</option>      
-      					<option value="22:30">22:30</option>      
-      					<option value="23:00">23:00</option>      
-      					<option value="23:30">23:30</option>				
-      			</select>
-                </span>
-                
-                <span style="float:left">&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-                <span style="float:left">
-                <input type="text" name="scheduleEndDate" id="datepicker2" class="form-control input-sm" style="width:80px; float:left" readonly="" placeholder="종료일">
-                <select name="scheduleEndTime" class="form-control input-sm" style="width:80px; margin-left:3px; float:left;">
-      					<option value="00:00">00:00</option>      
-      					<option value="00:30">00:30</option>      
-      					<option value="01:00">01:00</option>      
-      					<option value="01:30">01:30</option>      
-      					<option value="02:00">02:00</option>      
-      					<option value="02:30">02:30</option>      
-      					<option value="03:00">03:00</option>      
-      					<option value="03:30">03:30</option>      
-      					<option value="04:00">04:00</option>      
-      					<option value="04:30">04:30</option>      
-      					<option value="05:00">05:00</option>      
-      					<option value="05:30">05:30</option>      
-      					<option value="06:00">06:00</option>      
-      					<option value="06:30">06:30</option>      
-      					<option value="07:00">07:00</option>      
-      					<option value="07:30">07:30</option>      
-      					<option value="08:00">08:00</option>      
-      					<option value="08:30">08:30</option>      
-      					<option value="09:00">09:00</option>      
-      					<option value="09:30">09:30</option>      
-      					<option value="10:00">10:00</option>      
-      					<option value="10:30">10:30</option>      
-      					<option value="11:00">11:00</option>      
-      					<option value="11:30">11:30</option>      
-      					<option value="12:00">12:00</option>      
-      					<option value="12:30">12:30</option>      
-      					<option value="13:00">13:00</option>      
-      					<option value="13:30">13:30</option>      
-      					<option value="14:00">14:00</option>      
-      					<option value="14:30">14:30</option>      
-      					<option value="15:00">15:00</option>      
-      					<option value="15:30">15:30</option>      
-      					<option value="16:00">16:00</option>      
-      					<option value="16:30">16:30</option>      
-      					<option value="17:00">17:00</option>      
-      					<option value="17:30">17:30</option>      
-      					<option value="18:00">18:00</option>      
-      					<option value="18:30">18:30</option>      
-      					<option value="19:00">19:00</option>      
-      					<option value="19:30">19:30</option>      
-      					<option value="20:00">20:00</option>      
-      					<option value="20:30">20:30</option>      
-      					<option value="21:00">21:00</option>      
-      					<option value="21:30">21:30</option>      
-      					<option value="22:00">22:00</option>      
-      					<option value="22:30">22:30</option>      
-      					<option value="23:00">23:00</option>      
-      					<option value="23:30">23:30</option>
-      			</select>
-                </span>
-                </td>
+            <tbody>
+            <tr>
+                <td class="menu">작성자</td>
+                <td align="left"><input type="text" name="name" id="name" class="form-control input-sm"></td>
             </tr>
+            <c:if test="${board2.option.optionAddinfo eq 'y'}">
+            <tr>
+                <td class="menu">휴대전화</td>
+                <td align="left"><input type="text" name="phone" id="phone" class="form-control input-sm" style="width:50%;"></td>
+            </tr>
+            <tr>
+                <td class="menu">이메일</td>
+                <td align="left"><input type="text" name="email" id="email" class="form-control input-sm" style="width:50%;"></td>
+            </tr>
+            </c:if>
             <tr>
                 <td class="menu">제목</td>
                 <td align="left">
-                <table border="0" cellspacing="0" cellpadding="0" width="100%">
-                <tbody>
-                
-                <tr>
-                    <td style="width:8%; text-align:left;">
-	                    <select name="scheduleColor" id="colorselector" style="display: none;">
-	          				<option value="#A0522D" data-color="#A0522D"></option>          
-	          				<option value="#CD5C5C" data-color="#CD5C5C"></option>          
-	          				<option value="#FF4500" data-color="#FF4500"></option>          
-	          				<option value="#008B8B" data-color="#008B8B"></option>          
-	          				<option value="#B8860B" data-color="#B8860B"></option>          
-	          				<option value="#32CD32" data-color="#32CD32"></option>          
-	          				<option value="#FFD700" data-color="#FFD700"></option>          
-	          				<option value="#00C0EF" data-color="#00C0EF"></option>          
-	          				<option value="#87CEEB" data-color="#87CEEB"></option>          
-	          				<option value="#FF69B4" data-color="#FF69B4"></option>          
-	          				<option value="#87CEFA" data-color="#87CEFA"></option>          
-	          				<option value="#6495ED" data-color="#6495ED"></option>          
-	          				<option value="#DD4B39" data-color="#DD4B39"></option>          
-	          				<option value="#FF8C00" data-color="#FF8C00"></option>          
-	          				<option value="#C71585" data-color="#C71585"></option>          
-	          				<option value="#00A65A" data-color="#00A65A"></option>          
-	          				<option value="#F39C12" data-color="#F39C12"></option>          
-	          				<option value="#3C8DBC" data-color="#3C8DBC"></option>          
-	          				<option value="#000000" data-color="#000000"></option>                    
-	          			</select>
-	          			
-	          			
-	          			
-	          		<div class="dropdown">
-	          			<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-	          				<span class="btn-colorselector" style="background-color: rgb(160, 82, 45);"></span>
-	          			</a>
-	          			<ul class="dropdown-menu dropdown-caret">
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#A0522D" data-value="#A0522D" title="" style="background-color: rgb(160, 82, 45);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#CD5C5C" data-value="#CD5C5C" title="" style="background-color: rgb(205, 92, 92);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#FF4500" data-value="#FF4500" title="" style="background-color: rgb(255, 69, 0);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#008B8B" data-value="#008B8B" title="" style="background-color: rgb(0, 139, 139);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#B8860B" data-value="#B8860B" title="" style="background-color: rgb(184, 134, 11);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#32CD32" data-value="#32CD32" title="" style="background-color: rgb(50, 205, 50);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#FFD700" data-value="#FFD700" title="" style="background-color: rgb(255, 215, 0);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#00C0EF" data-value="#00C0EF" title="" style="background-color: rgb(0, 192, 239);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#87CEEB" data-value="#87CEEB" title="" style="background-color: rgb(135, 206, 235);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#FF69B4" data-value="#FF69B4" title="" style="background-color: rgb(255, 105, 180);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#87CEFA" data-value="#87CEFA" title="" style="background-color: rgb(135, 206, 250);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#6495ED" data-value="#6495ED" title="" style="background-color: rgb(100, 149, 237);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#DD4B39" data-value="#DD4B39" title="" style="background-color: rgb(221, 75, 57);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#FF8C00" data-value="#FF8C00" title="" style="background-color: rgb(255, 140, 0);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#C71585" data-value="#C71585" title="" style="background-color: rgb(199, 21, 133);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#00A65A" data-value="#00A65A" title="" style="background-color: rgb(0, 166, 90);"></a>
-		          			</li>
-		          			<li>
-		          				<a class="color-btn" href="#" data-color="#F39C12" data-value="#F39C12" title="" style="background-color: rgb(243, 156, 18);"></a>
-		          			</li>
-		          			<li>
-			          			<a class="color-btn" href="#" data-color="#3C8DBC" data-value="#3C8DBC" title="" style="background-color: rgb(60, 141, 188);"></a>
-		          			</li>
-		          			<li>
-			          			<a class="color-btn" href="#" data-color="#000000" data-value="#000000" title="" style="background-color: rgb(0, 0, 0);"></a>
-		          			</li>
-	          			</ul>
-	          		</div>
-                    </td>
-                    
-                    <td>
-                    	<input type="text" name="scheduleTitle" id="title" class="form-control input-sm" style="width:100%;">
-                    </td>
-                </tr>
-                </tbody>
-               </table>
+                <span style="float:left;width:80%;"><input type="text" name="postTitle" id="postTitle" class="form-control input-sm"></span>
+                <c:if test="${board2.option.optionNotice eq 'y'}">
+	                <span>&nbsp;&nbsp;
+	                	<input type="checkbox" name="titleNotice" value="y">공지사항
+	                </span>
+	            </c:if>
+                </td>
+            </tr>
+			<tr>
+                 <td class="menu">내용</td>
+                 <td align="left">
+                 	<textarea name="postContents" id="editor" rows="10" cols="80" style="visibility: hidden; display: none;"></textarea>
+                 	<script type="text/javascript">
+					 CKEDITOR.replace('editor'
+					                , {filebrowserUploadUrl:'/mir9/board/imageUpload?${_csrf.parameterName}=${_csrf.token}'}
+					 );
+					</script>
+
+                 </td>
+            </tr>
+            <c:if test="${board2.option.optionSecret eq 'y'}">
+	            <td class="menu">비밀글</td>
+	            <td align="left">
+	                <span>&nbsp;&nbsp;
+	                	<input type="checkbox" name="is_secret" value="y"></span>
+	                </td>
+	            <tr>
+            </c:if>
+                <td class="menu">썸네일 파일</td>
+                <td align="left">
+                <input type="file" name="ThombnailName" id="ThombnailName" class="form-control input-sm" style="width:80%; display:inline;">
+                <span id="display_thumbnail" style="display:none;">
+                <button type="button" onclick="winOpen('?tpf=common/image_view&amp;file_name=product/'+$('#code').val()+'_1');" class="btn btn-success btn-xs">보기</button>
+                <button type="button" onclick="confirmIframeDelete('?tpf=common/image_delete&amp;file_name=product/'+$('#code').val()+'_1&amp;table=product&amp;code='+$('#code').val());" class="btn btn-danger btn-xs">삭제</button>
+                </span>
                 </td>
             </tr>
             <tr>
-                <td class="menu">내용</td>
-                <td align="left"><textarea name="scheduleContents" id="contents" rows="5" style="width:100%"></textarea></td>
+                <td class="menu">파일</td>
+                <td align="left">
+                <p>
+                    <span id="file_list"></span>
+                </p>
+		<div id="uploader">
+		    <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+		</div>
+                <p style="padding-top:10px; float:left; width:100%;">
+                    <button type="button" class="btn btn-primary btn-xs" onclick="fucAddFile();"><span class="glyphicon glyphicon-plus"></span> 파일추가</button><br>
+                </p>
+                    <div id="list_file" name="listFile">
+                    	<input type="file" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;" >
+                    </div>
+                </td>
             </tr>
-            </tbody></table>
-
+            </tbody>
+            </table>
+            <c:if test="${board2.option.optionComment eq 'y'}">
+			<div id="displayMemo" style="">
+            	<h4>
+            		<p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 댓글 관리</p>
+            	</h4>
+            </div>
+            </c:if>
             </div>
             <div class="modal-footer">
-            <button type="button" name="addSchedule" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" onclick="fncAddPost()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
             </div>
-            </form>
-        </div>
+            <input type="hidden" value="${board.boardNo}" name="boardNo">
+        </form></div>
     </div>
 </div>
