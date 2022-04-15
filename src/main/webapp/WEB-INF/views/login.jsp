@@ -101,6 +101,8 @@
 	<script src="/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
 	<script>
+		
+	
 		function loginSubmit() {
 			console.log("loginSubmit 도착했나요?");
 			if (form.id.value == '') {
@@ -121,6 +123,37 @@
 		}
 		onload = onLoad;
 	
+	</script>
+	
+	<script>
+		// 사용자 토큰 발급
+		// 왜 발급이 안 될까....???????
+		// https://kauth.kakao.com/oauth/authorize?client_id={REST_API 앱키를 입력하세요}&response_type=code&redirect_uri={지정한 Redirect URI}
+		// Rest API Key : 692e25c8b6965b6470b9429719b4e5e7
+		// Redirect URI : http://localhost:8080/mir9/
+		$(function(){
+			$.ajax({
+				url : "https://kauth.kakao.com/oauth/token",
+				type :'post',
+				data : {
+					grant_type : "authorization_code",
+					client_id : "692e25c8b6965b6470b9429719b4e5e7",
+					redirect_uri : "http://localhost:8080/mir9/",
+					code : "1hWmD8q1goBnuEkghX9K3Eky73h5j9Hd5aNXlN2cAQkWkH8gpR5pn0Z_9iCE0WnUHXgeaQorDNQAAAGALColQw"
+				},
+				beforeSend : function(xhr){
+					xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");			
+				},
+				success : function(response){
+					console.log("=====인증토큰=====");
+					console.log(response);
+					console.log("================");
+				},
+				error : function(textStatus, errorThrown){
+					console.log(textStatus);
+				}
+			});
+		});
 	</script>
 </body>
 </html>
