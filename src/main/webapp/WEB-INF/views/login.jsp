@@ -101,8 +101,7 @@
 	<script src="/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
 	<script>
-		
-	
+
 		function loginSubmit() {
 			console.log("loginSubmit 도착했나요?");
 			if (form.id.value == '') {
@@ -125,78 +124,5 @@
 	
 	</script>
 	
-	<script>
-		// 사용자 토큰 발급
-		// 왜 발급이 안 될까....???????
-		// https://kauth.kakao.com/oauth/authorize?client_id={REST_API 앱키를 입력하세요}&response_type=code&redirect_uri={지정한 Redirect URI}
-		// Rest API Key : 692e25c8b6965b6470b9429719b4e5e7
-		// Redirect URI : http://localhost:8080/mir9/
-
-		$(document).ready(function(){
-			// [REST API 방식]
-			// 카카오 로그인 요청 (클라이언트 -> 카카오 Auth)
-			// 코드 발급 : GET(/oauth/authorize)			
-			// https://kauth.kakao.com/oauth/authorize?client_id=692e25c8b6965b6470b9429719b4e5e7&response_type=code&redirect_uri=http://localhost:8089/mir9/
-			
-			// Redirect URI로 인가 코드 반환 (카카오 Auth -> 클라이언트)
-			// ?code=VMGOvaYPt1rI1I1m5NqMLE9F54XsqXNUOJravN4IShRR168mj0UGaKx3MHndWYOXxBuDOAopyV8AAAGAOrLcrQ
-			// ** 해당 코드로 토큰 발급 시도는 단 한 번만 가능
-					
-			// 토큰 발급 : POST(/oauth/token)		
-			$.ajax({
-			    type: "POST",
-			    url: "https://kauth.kakao.com/oauth/token",
-			    header: {
-			        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-			    },
-			    data: { 
-			    	grant_type: "authorization_code", 
-			    	client_id: "692e25c8b6965b6470b9429719b4e5e7", 
-			    	redirect_uri: "http://localhost:8089/mir9/", 
-			    	code: "VMGOvaYPt1rI1I1m5NqMLE9F54XsqXNUOJravN4IShRR168mj0UGaKx3MHndWYOXxBuDOAopyV8AAAGAOrLcrQ" 
-			    },
-			    success: function(data) {
-					console.log("=====토큰=====");
-					console.log(data);
-					console.log(data.access_token);
-					console.log(data.refresh_token);
-					// jsonObj = JSON.parse(data);
-					// var kakaoToken = jsonObj.access_token;
-					// console.log(kakaoToken);
-			        console.log("=============");
-			    },
-			    error: function(textStatus, errorThrown){
-					console.log(textStatus);
-				}
-			});
-
-		});			
-		
-		/*
-		$(function(){
-			$.ajax({
-				url : "https://kauth.kakao.com/oauth/token",
-				type :'post',
-				data : {
-					grant_type : "authorization_code",
-					client_id : "692e25c8b6965b6470b9429719b4e5e7",
-					redirect_uri : "http://localhost:8080/mir9/",
-					code : "1hWmD8q1goBnuEkghX9K3Eky73h5j9Hd5aNXlN2cAQkWkH8gpR5pn0Z_9iCE0WnUHXgeaQorDNQAAAGALColQw"
-				},
-				beforeSend : function(xhr){
-					xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");			
-				},
-				success : function(response){
-					console.log("=====인증토큰=====");
-					console.log(response);
-					console.log("================");
-				},
-				error : function(textStatus, errorThrown){
-					console.log(textStatus);
-				}
-			});
-		});
-		*/
-	</script>
 </body>
 </html>
