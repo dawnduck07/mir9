@@ -267,4 +267,51 @@
 		)
 </insert>
 
+<!-- 회원정보 조회(회원번호) -->
+<select id="selectOneMemberByMemberNo" resultType="member">
+	SELECT 
+		*
+	FROM 
+		member
+	WHERE
+		member_no = #{memberNo}
+</select>
+
+<!-- 회원주소 조회 -->
+<select id="selectOneAddress" resultType="address">
+	SELECT
+		a.address_main,
+		a.address_sub,
+		a.address_zipcode
+	FROM 
+		member m LEFT JOIN address_book ab
+			ON m.member_no = ab.member_no
+				LEFT JOIN address a
+					ON ab.address_no = a.address_no
+	WHERE
+		m.member_no = #{memberNo}
+</select>
+
+<!-- 회원메모 조회 -->
+<select id="selectOneMemo" resultType="memberMemo">
+	SELECT
+		member_memo_content
+	FROM 
+		member_memo
+	WHERE
+		member_no = #{memberNo}
+</select>
+
+<!-- 회원등급 조회 -->
+<select id="selectOneAuthorities" resultType="authorities">
+	SELECT 
+		mg.authority
+	FROM
+		member m LEFT JOIN authorities a
+			ON m.member_no = a.member_no
+				LEFT JOIN member_grade mg
+					ON a.authority = mg.authority
+	WHERE
+		m.member_no = #{memberNo}
+</select>
 </mapper>

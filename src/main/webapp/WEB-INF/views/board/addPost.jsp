@@ -4,17 +4,113 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script>
+	$(function() {
+		var result = {
+				
+				"success" : 0,
+				
+				"fail" : 0
+				
+		}
+		var boardNo = $("input[name='boardNo']").val();
+		
+	    var uploader = $("#uploader").plupload({
+	    	
+	        // General settings
+	        runtimes : 'html5,flash,silverlight,html4',
+	        multiple_queues: true,
+	        multipart: true,
+	        url : "/mir9/board/json/plupload?${_csrf.parameterName}=${_csrf.token}",
+	 
+	        
+			//파일 형식 필터 집합
+	        filters : {
+	            // Maximum file size
+	            max_file_size : '1000mb',
+	            // Specify what files to browse for
+	        },
+	        
+            init : {
+            	FileUploaded: function(up, file, result) {
+                   
+                   console.log(file.name)
+                   
+                   var fileName = '<input type="hidden" name="postName" id="postName" value="'+file.name+'" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;">'
+                   $("#file_list").append(fileName)
+                   
+                   up.start();
+                }
+                
+            },
+        
+	        //대기열에 있는 파일 이름 변환
+	        rename: true,
+			
+	        //
+	        //업로드 우선 순위 변경 파일 정렬
+	        sortable: true,
+	
+	        //드래그 앤 드롭 하여 파일 삽입 가능
+	        dragdrop: true,
+	
+	        // Views to activate
+	        views: {
+	            list: true,
+	            thumbs: true, // Show thumbs
+	            active: 'thumbs'
+	        },
+
+				
+	        // Flash swf의 url
+	        flash_swf_url : '../../js/Moxie.swf',
+	
+	        // Silverlight xap의 URL
+	        silverlight_xap_url : '../../js/Moxie.xap'
+	    });
+		
+
+	    $('#form').submit(function(e) {
+	        // Files in queue upload them first
+	        if ($('#uploader').plupload('getFiles').length > 0) {
+	
+	            // When all files are uploaded submit form
+	            $('#uploader').on('complete', function() {
+	                $('#form')[0].submit();
+	            });
+	
+	            $('#uploader').plupload('start');
+	        } else {
+	            alert('You must have at least one file in the queue.');
+	        }
+	        return false; // Keep the form from submitting
+	    });
+	});
+
 	function fncAddPost(){
 		
-		var postFile = $("input[id='postName']").length;
-		var postName = new Array(postFile);
-		
-		for(var i = 0; i < postFile; i++){
-			postName[i] = $("input[id='postName']")[i].value;
-			//alert(postName[i])
+		if("${board2.option.optionMass}" != "y"){
+			var postFile = $("input[id='postName']").length;
+			var postName = new Array(postFile);
+			
+			for(var i = 0; i < postFile; i++){
+				postName[i] = $("input[id='postName']")[i].value;
+				//alert(postName[i])
+			}	
+			
+			alert("게시글이 등록 되었습니다.")
+			$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost?${_csrf.parameterName}=${_csrf.token}").submit();
+		}else if("${board2.option.optionMass}" == "y"){
+			var postFile = $("input[id='postName']").length;
+			var postName = new Array(postFile);
+			
+			for(var i = 0; i < postFile; i++){
+				postName[i] = $("input[id='postName']")[i].value;
+				//alert(postName[i])
+			}	
+			
+			alert("게시글이 등록 되었습니다.")
+			$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost2?${_csrf.parameterName}=${_csrf.token}").submit();	
 		}
-		alert("게시글이 등록 되었습니다.")
-		$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost?${_csrf.parameterName}=${_csrf.token}").submit();			
 	}
 	
 	function fucAddFile(){
@@ -94,16 +190,27 @@
             <tr>
                 <td class="menu">파일</td>
                 <td align="left">
+                <c:if test="${board2.option.optionMass eq null}">
                 <p>
-                    <span id="file_list"></span>
+                    <span id="file_list"></span>            
                 </p>
-
+				
                 <p style="padding-top:10px; float:left; width:100%;">
                     <button type="button" class="btn btn-primary btn-xs" onclick="fucAddFile();"><span class="glyphicon glyphicon-plus"></span> 파일추가</button><br>
                 </p>
                     <div id="list_file" name="listFile">
                     	<input type="file" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;" >
                     </div>
+                </c:if>
+                <c:if test="${board2.option.optionMass eq 'y'}">
+                <p id="diplay-plupload">
+                    <span id="file_list">
+                    	<input type="hidden" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;" >
+                    </span>            
+                </p>  
+					<div id="uploader"></div>                              
+                </c:if> 
+                
                 </td>
             </tr>
             </tbody>

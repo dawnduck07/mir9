@@ -96,10 +96,52 @@ public class BoardController {
 		System.out.println("post데이터 확인 ::: ==="+post);
 		
 		for(int i = 0; i < postName.length; i++) {
+			System.out.println("파일 확인 ::: === "+postName[i]);
 			File file2 = new File(filePath+postName[i].getOriginalFilename());
 			boardFile.setFilePost(post);
 			boardFile.setFileName(postName[i].getOriginalFilename());
 			postName[i].transferTo(file2);
+			boardService.addFile(boardFile);
+		}
+		
+		
+		
+		System.out.println("post 데이터 확인 ::: "+post);
+		System.out.println("board 데이터 확인 ::: "+board);
+		
+		return "redirect:/board/postList?boardNo="+board.getBoardNo();
+	}
+	
+	@PostMapping("addPost2")
+	public String addPost2(@ModelAttribute("post") Post post,
+						  @ModelAttribute("board") Board board,
+					      @RequestParam(value="postName") String[] postName,
+					      @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception {
+		
+		System.out.println("addPost 시작");
+		
+		BoardFile boardFile = new BoardFile();
+		
+		//1번 회원이 로그인을 했다고 가정
+		Member member2 = boardService.getMemberData(1);
+		post.setPostMember(member2);
+		post.setPostMemberName(member2.getLastName()+member2.getFirstName());
+		System.out.println("이거 확인 ::: === "+ postName.length);
+		
+		//파일 업로드
+		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		File file = new File(filePath+ThombnailName.getOriginalFilename());
+		post.setPostBoard(board);
+		post.setPostThombnail(ThombnailName.getOriginalFilename());
+		ThombnailName.transferTo(file);
+		boardService.addPost(post);
+		
+		System.out.println("post데이터 확인 ::: ==="+post);
+		
+		for(int i = 0; i < postName.length; i++) {
+			System.out.println("파일 확인 ::: === "+postName[i]);
+			boardFile.setFilePost(post);
+			boardFile.setFileName(postName[i]);
 			boardService.addFile(boardFile);
 		}
 		
@@ -210,6 +252,35 @@ public class BoardController {
 			boardFile.setFilePost(post);;
 			boardFile.setFileName(postName[i].getOriginalFilename());
 			postName[i].transferTo(file2);
+			boardService.addFile(boardFile);
+		}
+		//파일 업로드 끝
+		
+		boardService.updatePost(post);
+		
+		return "redirect:/board/postList?boardNo="+board.getBoardNo();
+	}
+	
+	@PostMapping("updatePost2")
+	public String updataPost2(@ModelAttribute("post") Post post,
+							 @RequestParam("boardNo") int boardNo,
+							 @RequestParam(value="postName") String[] postName,
+						     @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception{
+		System.out.println("updatePost 시작");
+		System.out.println("file의 길이를 보자 ::: === "+postName.length);
+		Board board = new Board();
+		BoardFile boardFile = new BoardFile();
+		board.setBoardNo(boardNo);
+		
+		//파일 업로드
+		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		File file = new File(filePath+ThombnailName.getOriginalFilename());
+		post.setPostBoard(board);
+		post.setPostThombnail(ThombnailName.getOriginalFilename());
+		ThombnailName.transferTo(file);
+		for(int i = 0; i < postName.length; i++) {
+			boardFile.setFilePost(post);;
+			boardFile.setFileName(postName[i]);
 			boardService.addFile(boardFile);
 		}
 		//파일 업로드 끝

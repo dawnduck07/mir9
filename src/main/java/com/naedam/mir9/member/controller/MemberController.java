@@ -2,6 +2,7 @@ package com.naedam.mir9.member.controller;
 
 import java.beans.PropertyEditor;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -266,6 +267,60 @@ public class MemberController {
 		return "member/memberPointList";
 	}
 	
+	// 회원 상세 보기
+	@ResponseBody
+	@GetMapping("/memberDetail.do/{memberNo}")
+	public Map<String, Object> memberDetail(@PathVariable int memberNo, Model model,
+								HttpServletRequest request,
+								HttpServletResponse response) {
+		
+		log.debug("memberNo = {}", memberNo);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		// 업무로직
+		// 1. 회원(Member) 조회
+		Member member = memberService.selectOneMemberByMemberNo(memberNo);
+		log.debug("member = {}", member);
+		model.addAttribute("member", member);
+		// 휴대폰 번호 분기
+		String mobile2 = member.getPhone().substring(3, 7);
+		String mobile3 = member.getPhone().substring(7, 11);
+		// 시간 양식 변경
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String regDate = dateFormat.format(member.getRegDate());
+		
+		
+		// 2. 주소(Address) 조회
+		Address address = memberService.selectOneAddress(memberNo);
+		log.debug("address = {}", address);
+		model.addAttribute("address", address);
+		
+		// 3. 메모(MemberMemoContent) 조회
+		MemberMemo memberMemo = memberService.selectOneMemo(memberNo);
+		log.debug("memberMemo = {}", memberMemo);
+
+		if(memberMemo.getMemberMemoContent() == null) 
+			 memberMemo.setMemberMemoContent("");
+	
+		model.addAttribute("memberMemo = {}", memberMemo);
+		
+		// 4. 회원 등급 조회
+		Authorities authorities = memberService.selectOneAuthorities(memberNo);
+		log.debug("authorities = {}", authorities);
+		model.addAttribute("authorities = {}", authorities);
+		
+		
+		map.put("member", member);
+		map.put("mobile2", mobile2);
+		map.put("mobile3", mobile3);
+		map.put("address", address);
+		map.put("memberMemo", memberMemo);
+		map.put("authorities", authorities);
+		map.put("regDate", regDate);
+		
+		return map;
+	}
 	
 	// 탈퇴회원 리스트
 	@GetMapping("/withdraw_list")
