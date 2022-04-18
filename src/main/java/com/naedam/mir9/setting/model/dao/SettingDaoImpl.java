@@ -13,6 +13,7 @@ import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.vo.Maps;
+import com.naedam.mir9.popup.model.vo.Popup;
 
 @Repository
 public class SettingDaoImpl implements SettingDao {
@@ -59,6 +60,12 @@ public class SettingDaoImpl implements SettingDao {
 	public List<Category> selectMenuCteList() {
 		// TODO Auto-generated method stub
 		return session.selectList("setting.selectMenuCteList");
+	}
+
+	@Override
+	public List<Popup> selectPopupList() {
+		// TODO Auto-generated method stub
+		return session.selectList("setting.selectPopupList");
 	}
 	
 	

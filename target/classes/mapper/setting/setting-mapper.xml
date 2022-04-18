@@ -37,5 +37,9 @@
 	<select id="selectMenuCteList" resultType="category">
 		select * from category where category_type = 'menu' order by category_no
 	</select>
+	
+	<select id="selectPopupList" resultType="popup">
+		select * from popup order by code
+	</select>
   
 </mapper>
