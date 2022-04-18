@@ -53,13 +53,6 @@ public class BannerController {
 	public String banner_process(HttpServletRequest request, Banner banner, RedirectAttributes redirectAttr) {
 		int result = 0;
 		String msg = null;
-		Enumeration params = request.getParameterNames();
-		while(params.hasMoreElements()) {
-		  String name = (String) params.nextElement();
-		  System.out.print(name + " : " + request.getParameter(name) + "     "); 
-		}
-		System.out.println();
-		
 		String mode = request.getParameter("mode");
 		
 		if(mode.equals("insert")) {
@@ -76,7 +69,6 @@ public class BannerController {
 		}
 		
 		redirectAttr.addFlashAttribute("msg", msg);
-		// redirect 안먹음 ;; ㅅㅂ 
 		return "redirect:/setting/banner";
 	}
 }
