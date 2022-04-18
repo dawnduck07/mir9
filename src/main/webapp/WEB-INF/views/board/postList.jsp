@@ -17,8 +17,6 @@
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-- Bootstrap 3.3.7 -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-<!-- Font Awesome -->
-<link rel="stylesheet" href="/html/css/font-awesome.min.css">
 <!-- Ionicons -->
 <link rel="stylesheet" href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/Ionicons/css/ionicons.min.css">
 <!-- jvectormap -->
@@ -29,13 +27,41 @@
 <link rel="stylesheet" href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/css/skins/_all-skins.min.css">
 <link href="//mir9.co.kr/resource/css/admin.css" rel="stylesheet" type="text/css">
 <link href="//mir9.co.kr/resource/css/jquery-ui.css" rel="stylesheet">
-<!-- fullcalendar -->
-<link href="//mir9.co.kr/resource/css/bootstrap-colorselector.css" rel="stylesheet">
-<link href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet" type="text/css">
-<link href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.print.css" rel="stylesheet" type="text/css" media="print">
+<!-- jQuery 3 -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/js/adminlte.min.js"></script>
+<!-- Sparkline -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<!-- jvectormap  -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<!-- SlimScroll -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- ChartJS -->
+<script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/chart.js/Chart.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="//mir9.co.kr/resource/js/jquery/jquery-ui.min.js"></script>
+<script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
+
+<script language='javascript' src='//www.gstatic.com/charts/loader.js'></script>
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<!-- plupload -->
+<script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plupload/js/i18n/ko.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css">
+<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<link  href="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
 
 <script type="text/javascript">
 	
@@ -52,7 +78,7 @@
 				postArr.push($(this).val());
 			});
 			
-			if(!confirm("정말 삭제 하시겠습니까?")){
+			if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
 				alert("취소 되었습니다.");
 				return;
 				
@@ -301,4 +327,10 @@
 
 </div><!-- /.content-wrapper -->
 
-<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+<footer class="main-footer">
+<div class="pull-right hidden-xs">
+    <b>Version</b> 2.7.4
+</div>
+<strong>Copyright &copy; 2017 <a href="/admin">MIR9 SHOP</a>.</strong> All rights reserved.
+</footer>
+</div>
