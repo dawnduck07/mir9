@@ -17,7 +17,7 @@
 
 		<br style="font-size: 5pt"> 
 		<a href=javascript:window.close();>
-			<img src="http://demoshop.mir9.kr/user/banner/8?dummy=1650007236" border=0>
+			<img src="${url }" border=0>
 		</a>
 
 </body>
