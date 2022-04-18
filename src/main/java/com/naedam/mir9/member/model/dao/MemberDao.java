@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.naedam.mir9.member.model.vo.Address;
+import com.naedam.mir9.member.model.vo.AddressBook;
+import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
@@ -47,6 +49,15 @@ public interface MemberDao {
 
 	// 메모 입력
 	int insertMemberMemo(MemberMemo memberMemo);
+
+	// 회원 등록
+	int insertRegisterMember(Member paramMember);
+
+	// 주소록 입력
+	int insertAddressBook(AddressBook paramAddressBook);
+
+	// 권한 입력
+	int insertAuthorities(Authorities paramAuthorities);
 
 
 

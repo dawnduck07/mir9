@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.naedam.mir9.member.model.vo.Address;
+import com.naedam.mir9.member.model.vo.AddressBook;
+import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
@@ -89,6 +91,24 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public int insertMemberMemo(MemberMemo memberMemo) {
 		return session.insert("member.insertMemberMemo", memberMemo);
+	}
+
+	// 회원 입력
+	@Override
+	public int insertRegisterMember(Member paramMember) {
+		return session.insert("member.insertRegisterMember", paramMember);
+	}
+
+	// 주소록 입력
+	@Override
+	public int insertAddressBook(AddressBook paramAddressBook) {
+		return session.insert("member.insertAddressBook", paramAddressBook);
+	}
+
+	// 권한 입력
+	@Override
+	public int insertAuthorities(Authorities paramAuthorities) {
+		return session.insert("member.insertAuthorities", paramAuthorities);
 	}
 
 	
