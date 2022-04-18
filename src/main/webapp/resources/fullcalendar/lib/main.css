@@ -165,6 +165,13 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
   /* theme */
 
 }
+.fc-button {
+  background: #f4f4f4;
+  background-image: none;
+  color: #444;
+  border-color: #ddd;
+  border-bottom-color: #ddd;
+}
 .fc .fc-button {
     display: inline-block;
     font-weight: 400;
@@ -197,28 +204,28 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
 
 }
 .fc .fc-button-primary {
-    color: #fff;
-    color: var(--fc-button-text-color, #fff);
-    background-color: #2C3E50;
-    background-color: var(--fc-button-bg-color, #2C3E50);
-    border-color: #2C3E50;
-    border-color: var(--fc-button-border-color, #2C3E50);
-  }
+  color: #fff;
+  color: var(--fc-button-text-color, #2C3E50);
+  background-color: #2C3E50;
+  background-color: var(--fc-button-bg-color, #fff);
+  border-color: #2C3E50;
+  border-color: var(--fc-button-border-color, #fff);
+}
 .fc .fc-button-primary:hover {
-    color: #fff;
-    color: var(--fc-button-text-color, #fff);
-    background-color: #1e2b37;
-    background-color: var(--fc-button-hover-bg-color, #1e2b37);
-    border-color: #1a252f;
-    border-color: var(--fc-button-hover-border-color, #1a252f);
+  color: #fff;
+  color: var(--fc-button-text-color, #333);
+  background-color: #2C3E50;
+  background-color: var(--fc-button-bg-color, #fff);
+  border-color: #2C3E50;
+  border-color: var(--fc-button-border-color, #fff);
   }
 .fc .fc-button-primary:disabled { /* not DRY */
-    color: #fff;
-    color: var(--fc-button-text-color, #fff);
-    background-color: #2C3E50;
-    background-color: var(--fc-button-bg-color, #2C3E50);
-    border-color: #2C3E50;
-    border-color: var(--fc-button-border-color, #2C3E50); /* overrides :hover */
+  color: #fff;
+  color: var(--fc-button-text-color, #333);
+  background-color: #2C3E50;
+  background-color: var(--fc-button-bg-color, #fff);
+  border-color: #2C3E50;
+  border-color: var(--fc-button-border-color, #fff); /* overrides :hover */
   }
 .fc .fc-button-primary:focus {
     box-shadow: 0 0 0 0.2rem rgba(76, 91, 106, 0.5);
@@ -226,11 +233,11 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
 .fc .fc-button-primary:not(:disabled):active,
   .fc .fc-button-primary:not(:disabled).fc-button-active {
     color: #fff;
-    color: var(--fc-button-text-color, #fff);
+    color: var(--fc-button-text-color, #333);
     background-color: #1a252f;
-    background-color: var(--fc-button-active-bg-color, #1a252f);
+    background-color: var(--fc-button-active-bg-color, #fff);
     border-color: #151e27;
-    border-color: var(--fc-button-active-border-color, #151e27);
+    border-color: var(--fc-button-active-border-color, #fff);
   }
 .fc .fc-button-primary:not(:disabled):active:focus,
   .fc .fc-button-primary:not(:disabled).fc-button-active:focus {
@@ -250,6 +257,10 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
     display: inline-flex;
     vertical-align: middle;
   }
+.fc .fc-button-group>* {
+    float: left;
+    margin: 0 0 0 -1px;
+}
 .fc .fc-button-group > .fc-button {
     position: relative;
     flex: 1 1 auto;
@@ -712,9 +723,12 @@ A HORIZONTAL event
     z-index: 1; /* container inner z-index's because <tr>s can't do it */
   }
 .fc .fc-daygrid-day.fc-day-today {
-      background-color: rgba(255, 220, 40, 0.15);
+      background-color: rgba(128, 108, 13, 0.15);
       background-color: var(--fc-today-bg-color, rgba(255, 220, 40, 0.15));
     }
+.fc-sun {
+    color: red;
+}
 .fc .fc-daygrid-day-frame {
     position: relative;
     min-height: 100%; /* seems to work better than `height` because sets height after rows/cells naturally do it */
