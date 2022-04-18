@@ -6,4 +6,6 @@ public interface ContractService {
 
 	Contract selectOneContractByLocale(String locale);
 
+	int updateContract(Contract contract);
+
 }

@@ -42,7 +42,7 @@
 						</div>
 					</div>
 
-					<form name="form_register" method="post" action="${pageContext.request.contextPath }/contract/updateContract">
+					<form name="form_register" method="post" action="${pageContext.request.contextPath }/contract/updateContract?${_csrf.parameterName}=${_csrf.token}">
 						<input type="hidden" name="mode" value="contract"> 
 						<input type="hidden" name="locale" value="ko">
 						<table class="table table-bordered">

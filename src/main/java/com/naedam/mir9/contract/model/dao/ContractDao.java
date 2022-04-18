@@ -6,4 +6,6 @@ public interface ContractDao {
 
 	Contract selectOneContractByLocale(String locale);
 
+	int updateContract(Contract contract);
+
 }

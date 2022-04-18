@@ -16,6 +16,12 @@ public class ContractDaoImpl implements ContractDao {
 		// TODO Auto-generated method stub
 		return session.selectOne("contract.selectOneContractByLocale", locale);
 	}
+
+	@Override
+	public int updateContract(Contract contract) {
+		// TODO Auto-generated method stub
+		return session.update("contract.updateContract", contract);
+	}
 	
 	
 }
