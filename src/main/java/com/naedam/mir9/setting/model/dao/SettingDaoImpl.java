@@ -1,6 +1,7 @@
 package com.naedam.mir9.setting.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,9 @@ public class SettingDaoImpl implements SettingDao {
 	}
 
 	@Override
-	public List<Popup> selectPopupList() {
+	public List<Popup> selectPopupListByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
-		return session.selectList("setting.selectPopupList");
+		return session.selectList("setting.selectPopupList", param);
 	}
 	
 	

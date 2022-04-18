@@ -39,7 +39,26 @@
 	</select>
 	
 	<select id="selectPopupList" resultType="popup">
-		select * from popup order by code
+		select * from popup 
+		<where>
+			<if test="field != null and keyword != ''">
+				${field} like concat('%',#{keyword},'%')
+			</if>
+			<if test="start_date != null and end_date != null">
+				<if test="start_date != '' and end_date == ''">
+					and start_date <![CDATA[>=]]> #{start_date} 
+				</if>
+				<if test="start_date != '' and end_date != ''">
+					and start_date <![CDATA[>=]]> #{start_date} 
+					and end_date <![CDATA[<=]]> #{end_date}
+				</if>
+				<if test="start_date == '' and end_date != ''">
+					and end_date <![CDATA[<=]]> #{end_date}
+				</if>
+			</if>
+		</where>
+		
+		order by code
 	</select>
   
 </mapper>

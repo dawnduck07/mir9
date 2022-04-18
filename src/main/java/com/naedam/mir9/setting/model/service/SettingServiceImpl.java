@@ -1,6 +1,7 @@
 package com.naedam.mir9.setting.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,9 +64,9 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
-	public List<Popup> selectPopupList() {
+	public List<Popup> selectPopupListByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
-		return settingDao.selectPopupList();
+		return settingDao.selectPopupListByParam(param);
 	}
 	
 	

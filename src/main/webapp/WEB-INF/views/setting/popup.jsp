@@ -29,12 +29,12 @@
 				<div class="box-body">
 					<label style="margin-top: 5px;">총 ${popupList.size() } 건</label>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-						<form name="form_search" method="post" action="">
+						<form name="form_search" method="post" action="${pageContext.request.contextPath }/setting/popup?${_csrf.parameterName}=${_csrf.token}">
 							<input type="hidden" name="tpf" value="admin/setting/popup"> <input type="hidden" name="board_code" value="<br />
 								<b>Notice</b>:  Undefined variable: board_code in <b>/home/demoshop/public_html/html/admin/setting/popup.html</b> on line <b>22</b><br />
 								">
 							<div class="has-feedback">
-								<span> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
+								<span> <input type="text" name="keyword" id="keyword" value="${param.keyword == null ? '' : param.keyword }" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
 								</span>
 							</div>
 					</div>
@@ -47,13 +47,13 @@
 					</div>
 					<div class="box-tools pull-right" style="margin: 0 10px 5px 0">
 						<div class="has-feedback">
-							<input type="text" name="end_date" id="datepicker1" readonly value="" class="form-control input-sm" placeholder="종료일" style="width: 80px; padding-right: 0;" />
+							<input type="text" name="end_date" id="datepicker1" readonly value="${param.end_date == null ? '' : param.end_date }" class="form-control input-sm" placeholder="종료일" style="width: 80px; padding-right: 0;" />
 						</div>
 					</div>
 					<div class="box-tools pull-right" style="padding: 5px 5px 0 5px;">~</div>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
-							<input type="text" name="start_date" id="datepicker2" readonly value="" class="form-control input-sm" placeholder="시작일" style="width: 80px; padding-right: 0;" />
+							<input type="text" name="start_date" id="datepicker2" readonly value="${param.start_date == null ? '' : param.start_date }" class="form-control input-sm" placeholder="시작일" style="width: 80px; padding-right: 0;" />
 						</div>
 						</form>
 					</div>

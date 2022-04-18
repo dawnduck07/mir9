@@ -1,6 +1,7 @@
 package com.naedam.mir9.setting.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
@@ -27,6 +28,6 @@ public interface SettingDao {
 
 	List<Category> selectMenuCteList();
 
-	List<Popup> selectPopupList();
+	List<Popup> selectPopupListByParam(Map<String, Object> param);
 
 }
