@@ -112,6 +112,30 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.insertAuthorities(paramAuthorities);
 	}
 
+	// 회원정보 조회(회원번호)
+	@Override
+	public Member selectOneMemberByMemberNo(int memberNo) {
+		return memberDao.selectOneMemberByMemberNo(memberNo);
+	}
+
+	// 회원주소 조회
+	@Override
+	public Address selectOneAddress(int memberNo) {
+		return memberDao.selectOneAddress(memberNo);
+	}
+
+	// 회원메모 조회
+	@Override
+	public MemberMemo selectOneMemo(int memberNo) {
+		return memberDao.selectOneMemo(memberNo);
+	}
+
+	// 회원등급 조회
+	@Override
+	public Authorities selectOneAuthorities(int memberNo) {
+		return memberDao.selectOneAuthorities(memberNo);
+	}
+
 
 
 

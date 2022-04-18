@@ -111,5 +111,29 @@ public class MemberDaoImpl implements MemberDao {
 		return session.insert("member.insertAuthorities", paramAuthorities);
 	}
 
+	// 회원정보 조회(회원번호)
+	@Override
+	public Member selectOneMemberByMemberNo(int memberNo) {
+		return session.selectOne("member.selectOneMemberByMemberNo", memberNo);
+	}
+
+	// 회원주소 조회
+	@Override
+	public Address selectOneAddress(int memberNo) {
+		return session.selectOne("member.selectOneAddress", memberNo);
+	}
+
+	// 회원메모 조회
+	@Override
+	public MemberMemo selectOneMemo(int memberNo) {
+		return session.selectOne("member.selectOneMemo", memberNo);
+	}
+
+	// 회원등급 조회
+	@Override
+	public Authorities selectOneAuthorities(int memberNo) {
+		return session.selectOne("member.selectOneAuthorities", memberNo);
+	}
+
 	
 }

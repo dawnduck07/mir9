@@ -59,6 +59,18 @@ public interface MemberService {
 	// 권한 입력
 	int insertAuthorities(Authorities paramAuthorities);
 
+	// 회원정보 조회(회원번호)
+	Member selectOneMemberByMemberNo(int memberNo);
+
+	// 회원주소 조회
+	Address selectOneAddress(int memberNo);
+
+	// 회원메모 조회
+	MemberMemo selectOneMemo(int memberNo);
+
+	// 회원등급 조회
+	Authorities selectOneAuthorities(int memberNo);
+
 
 
 }
