@@ -113,7 +113,7 @@
 										</button>
 									</td>
 									<td>
-										<button type="button" onclick="onclickUpdate(18);" class="btn btn-primary btn-xs">
+										<button type="button" id="detail_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">
 											상세보기
 										</button>
 									</td>
@@ -207,15 +207,14 @@
 							<tr>
 								<td class="menu">아이디</td>
 								<td align="left">
-									<input type="text" id="id" name="id" class="form-control input-sm" style="width: 30%; float: left;" />
+									<input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" />
 									&nbsp;
 									<button 
 										type="button" 
-										id="id"
-										name="id" 
-										value=""
+										id="btnCheckId"
+										name="btnCheckId" 
 										class="btn btn-sm btn-default" 
-										onclick="onclickCheckId();">아이디 중복확인</button> 4~12자로 입력하세요.
+										onclick="onclickCheckId()">아이디 중복확인</button> 4~12자로 입력하세요.
 								</td>
 							</tr>
 							<tr>
@@ -327,12 +326,36 @@
 									</select>
 								</td>
 							</tr>
+							 <tr id="display_status">
+				                <td class="menu">상태 
+				                	<span class="text-light-blue"><i class="fa fa-check"></i></span>
+				                </td>
+				                <td>
+					                <select name="status" id="status" class="form-control input-sm" style="width:120px;">
+					      				<option value="y">정상</option>      
+					      				<option value="n">대기</option>                
+					      			</select>
+				                </td>
+				            </tr>
+				            <tr id="display_last_login_date">
+				                <td class="menu">최근 접속일</td>
+				                <td align="left"><span id="last_login_date"></span></td>
+				            </tr>
+				            <tr id="display_update_date">
+				                <td class="menu">수정일자</td>
+				                <td align="left"><span id="update_date"></span></td>
+				            </tr>
+				            <tr id="display_reg_date">
+				                <td class="menu">등록일자</td>
+				                <td align="left"><span id="reg_date"></span></td>
+				            </tr>
 						</table>
 				</form:form>
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" onclick="register();" class="btn btn-primary">저장</button>
+			<button type="button" id="btnRegister" onclick="register()" class="btn btn-primary">저장</button>
+			<button type="button" id="btnUpdate" onclick="update()" class="btn btn-primary">저장</button>
 			<!--<button type="button" onclick="deleteMember();" class="btn btn-danger">삭제</button>-->
 		</div>
 	</div>
@@ -503,7 +526,7 @@ function downloadExcel() {  // Excel 다운로드
 }
 
 
-// 상세보기
+// 내역보기
 $("button[id^='btn_']").on('click', function(e){
 	//console.log(e.target);
 	//console.log("해당 no = " + $(e.target).val());
@@ -513,6 +536,63 @@ $("button[id^='btn_']").on('click', function(e){
 	location.href = `${pageContext.request.contextPath}/member/memberPointList/\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
 });
 
+// 상세보기 모달
+$("button[id^='detail_']").on('click', function(e){
+	//console.log(e.target);
+	//console.log("해당 no = " + $(e.target).val());
+	e.preventDefault();
+	var memberNo = $(e.target).val();
+	console.log("memberNo = " + memberNo);
+	
+	$("#modalRegister").modal();
+	$("[name=id]").prop("readonly", true);
+	$("#btnCheckId").hide();
+	$("#display_status").show();
+	$("#display_last_login_date").show();
+	$("#display_update_date").show();
+	$("#display_reg_date").show();
+	$("#btnUpdate").show();
+	$("#btnRegister").hide();
+	
+	
+	const data = {
+			memberNo : memberNo
+	};
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/memberDetail.do/\${memberNo}`,
+		data : data,
+		contentType : "application/json ; charset=utf-8",
+		method : "GET",
+		success : function(res) {
+			console.log("ajaxData = " + JSON.stringify(res));
+			var member = res.member;
+			var mobile2 = res.mobile2;
+			var mobile3 = res.mobile3;
+			var address = res.address;
+			var memberMemo = res.memberMemo;
+			var authorities = res.authorities;
+			var regDate = res.regDate;
+			
+			$("[name=id]").val(member.id);
+			$("[name=lastName]").val(member.lastName);
+			$("[name=firstName]").val(member.firstName);
+			$("[name=mobile2]").val(mobile2);
+			$("[name=mobile3]").val(mobile3);
+			$("[name=email]").val(member.email);
+			$("[name=addressZipcode]").val(address.addressZipcode);
+			$("[name=addressMain]").val(address.addressMain);
+			$("[name=addressSub]").val(address.addressSub);
+			$("[name=memberMemoContent]").val(memberMemo.memberMemoContent);
+			$("[name=authority]").val(authorities.authority);
+			$("#reg_date").text(regDate);
+		},
+		error : console.log
+	});
+	
+});
+
+
 $('#findList').each(function(){
 	console.log("들어오냐");
 });
@@ -521,6 +601,14 @@ $('#findList').each(function(){
 function onclickInsert(){
 	console.log("등록(onclickInsert())");
 	$("#modalRegister").modal();
+	$('[name=id]').prop('readonly', false);
+	$("#btnCheckId").show();
+	$("#display_status").hide();
+	$("#display_last_login_date").hide();
+	$("#display_update_date").hide();
+	$("#display_reg_date").hide();
+	$("#btnUpdate").hide();
+	memberInsertModalFrm.reset();
 };
 
 // 아이디 중복 확인
@@ -569,6 +657,7 @@ function onclickCheckId(){
 		},
 		error : console.log
 	});
+	
 };
 
 
@@ -576,7 +665,7 @@ function onclickCheckId(){
 // 저장
 function register(){
 	
-	/* console.log("저장(register()) 실행");
+	console.log("저장(register()) 실행");
 	var id = $("#id").val();
 	var password = $("#password").val();
 	var passwordCheck = $("#passwordCheck").val();
@@ -654,7 +743,7 @@ function register(){
 		alert("이메일을 정확하게 입력해주세요.");
 		$("#email").focus();
 		return false;
-	} */
+	}
 	
 	$(window).unbind("beforeunload");
 	$(document.memberInsertModalFrm).submit();
@@ -705,16 +794,6 @@ function callAddress() {
         }
     }).open();
 }
-
-
-
-
-
-
-
-
-
-
 
 
 // 타입별 검색
@@ -782,6 +861,7 @@ $(document).ready(function(){
 		}
 	});
 });
+
 
 // 체크박스 전체 선택
 $(".checkbox-group").on("click", "#checkAll", ((e)=>{
