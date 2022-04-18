@@ -16,6 +16,24 @@ public class BannerDaoImpl implements BannerDao {
 		// TODO Auto-generated method stub
 		return session.selectOne("banner.selectOneBannerByBannerNo", bannerNo);
 	}
+
+	@Override
+	public int updateBanner(Banner banner) {
+		// TODO Auto-generated method stub
+		return session.update("banner.updateBanner", banner);
+	}
+
+	@Override
+	public int insertBanner(Banner banner) {
+		// TODO Auto-generated method stub
+		return session.insert("banner.insertBanner", banner);
+	}
+
+	@Override
+	public int deleteBanner(int bannerNo) {
+		// TODO Auto-generated method stub
+		return session.delete("banner.deleteBanner", bannerNo);
+	}
 	
 	
 }
