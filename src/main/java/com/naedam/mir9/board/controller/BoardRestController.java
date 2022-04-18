@@ -10,12 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.naedam.mir9.board.model.service.BoardService;
 import com.naedam.mir9.board.model.vo.Board;
@@ -40,6 +43,27 @@ public class BoardRestController {
 		
 		boardService.addComment(boardComment);
 	}
+	
+	@PostMapping(value="json/addPost")
+	@ResponseBody
+	public void addPost(@RequestBody Post post,
+					    @RequestParam(value="boardNo", required=false) int boardNo)throws Exception{
+		System.out.println("/json/addPost 시작");
+		System.out.println("post데이터 확인 ::: === "+post);
+	}
+	
+	@PostMapping(value="json/plupload")
+	public String plupload(@RequestParam("file") MultipartFile file)throws Exception{
+		System.out.println("/json/plupload 시작");
+		System.out.println("확인합시다. === "+file);
+		String a = file.getOriginalFilename();
+		System.out.println("확인합시다2 === "+a);
+		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		File file2 = new File(filePath+file.getOriginalFilename());
+		file.transferTo(file2);
+		
+		return a;
+	}	
 	
 	@GetMapping(value="json/listBoard")
 	public List<Board> listBoard() throws Exception{		

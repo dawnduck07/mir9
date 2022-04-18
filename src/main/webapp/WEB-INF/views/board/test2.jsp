@@ -3,25 +3,138 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
-<script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="${pageContext.request.contextPath}/resources/plupload/js/i18n/ko.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css">
-<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-<link  href="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
 <script>
+	$(function() {
+		var result = {
+				
+				"success" : 0,
+				
+				"fail" : 0
+				
+		}
+		
+	    $("#uploader").plupload({
+	    	
+	        // General settings
+	        runtimes : 'html5,flash,silverlight,html4',
+	        url : "/mir9/board/json/plupload?${_csrf.parameterName}=${_csrf.token}",
+	 
+	        
+			//파일 형식 필터 집합
+	        filters : {
+	            // Maximum file size
+	            max_file_size : '1000mb',
+	            // Specify what files to browse for
+	        },
+	        
+            preinit : {
+                UploadFile: function(up, file) {
+                   // log('[UploadFile]', file);
+                   // You can override settings before the file is uploaded
+                   up.setOption('multipart_params', {content : $('textarea[name=imagecontent]').val()});
+                }
+            },	        
+	        
+	        multipart: true,
+	        
+	        //대기열에 있는 파일 이름 변환
+	        rename: true,
+			
+	        //
+	        //업로드 우선 순위 변경 파일 정렬
+	        sortable: true,
+	
+	        //드래그 앤 드롭 하여 파일 삽입 가능
+	        dragdrop: true,
+	
+	        // Views to activate
+	        views: {
+	            list: true,
+	            thumbs: true, // Show thumbs
+	            active: 'thumbs'
+	        },
+	          
+			
+
+				
+	        // Flash swf의 url
+	        flash_swf_url : '../../js/Moxie.swf',
+	
+	        // Silverlight xap의 URL
+	        silverlight_xap_url : '../../js/Moxie.xap'
+	    });
+	    
+	    $('#form').submit(function(e) {
+	        // Files in queue upload them first
+	        if ($('#uploader').plupload('getFiles').length > 0) {
+	
+	            // When all files are uploaded submit form
+	            $('#uploader').on('complete', function() {
+	                $('#form')[0].submit();
+	            });
+	
+	            $('#uploader').plupload('start');
+	        } else {
+	            alert('You must have at least one file in the queue.');
+	        }
+	        return false; // Keep the form from submitting
+	    });
+	});
+
 	function fncAddPost(){
 		
-		var postFile = $("input[id='postName']").length;
-		var postName = new Array(postFile);
 		
-		for(var i = 0; i < postFile; i++){
-			postName[i] = $("input[id='postName']")[i].value;
-			//alert(postName[i])
+		
+		if("${board2.option.optionMass}" != "y"){
+
+			var postFile = $("input[id='postName']").length;
+			var postName = new Array(postFile);
+			for(var i = 0; i < postFile; i++){
+				postName[i] = $("input[id='postName']")[i].value;
+			}
+		}else if("${board2.option.optionMass}" == "y"){
+			
+			console.log($('#uploader').plupload('getFiles'))
+			var postFile = $('#uploader').plupload('getFiles').length;
+			var postName = new Array(postFile);
+			for(var i = 0; i < postFile; i++){
+				postName[i] = $('#uploader').plupload('getFiles')[i].name;
+			}
+			
+			$.ajax({
+				url : "/mir9/board/json/addPost?${_csrf.parameterName}=${_csrf.token}",
+				method : "POST",
+				data: JSON.stringify({
+					'scheduleStartDate':startDate,
+					'scheduleEndDate':endDate,
+					'scheduleColor':scheduleColor,
+					'scheduleTitle':scheduleTitle,
+					'scheduleContents':scheduleContents
+				}),
+				dataType : 'JSON',
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"	 						
+				} ,
+				success : function(data){
+
+					calendar.addEvent({
+						title: scheduleTitle,
+						start: scheduleStartDate,
+						end: scheduleEndDate,
+						backgroundColor: scheduleColor
+					});
+					location.reload();
+				},
+				error:function(request, status, error){
+					alert("경고")
+				}
+					
+			})
 		}
+		
+		
+		
 		alert("게시글이 등록 되었습니다.")
 		$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost?${_csrf.parameterName}=${_csrf.token}").submit();			
 	}
@@ -30,54 +143,6 @@
 		$("div[name='listFile']").append('<input type="file" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;">');
 	}
 	
-	$(function() {
-	    $("#uploader").plupload({
-	        // General settings
-	        runtimes : 'html5,flash,silverlight,html4',
-	        url : "/examples/upload",
-	 
-	        // Maximum file size
-	        max_file_size : '2mb',
-	 
-	        chunk_size: '1mb',
-	 
-	        // Resize images on clientside if we can
-	        resize : {
-	            width : 200,
-	            height : 200,
-	            quality : 90,
-	            crop: true // crop to exact dimensions
-	        },
-	 
-	        // Specify what files to browse for
-	        filters : [
-	            {title : "Image files", extensions : "jpg,gif,png"},
-	            {title : "Zip files", extensions : "zip,avi"}
-	        ],
-	 
-	        // Rename files by clicking on their titles
-	        rename: true,
-	         
-	        // Sort files
-	        sortable: true,
-	 
-	        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
-	        dragdrop: true,
-	 
-	        // Views to activate
-	        views: {
-	            list: true,
-	            thumbs: true, // Show thumbs
-	            active: 'thumbs'
-	        },
-	 
-	        // Flash settings
-	        flash_swf_url : '/plupload/js/Moxie.swf',
-	     
-	        // Silverlight settings
-	        silverlight_xap_url : '/plupload/js/Moxie.xap'
-	    });
-	});	
 </script>
 
 <div class="modal fade" id="modalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -151,18 +216,25 @@
             <tr>
                 <td class="menu">파일</td>
                 <td align="left">
+                <c:if test="${board2.option.optionMass eq null}">
                 <p>
-                    <span id="file_list"></span>
+                    <span id="file_list"></span>            
                 </p>
-		<div id="uploader">
-		    <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
-		</div>
+				
                 <p style="padding-top:10px; float:left; width:100%;">
                     <button type="button" class="btn btn-primary btn-xs" onclick="fucAddFile();"><span class="glyphicon glyphicon-plus"></span> 파일추가</button><br>
                 </p>
                     <div id="list_file" name="listFile">
                     	<input type="file" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;" >
                     </div>
+                </c:if>
+                <c:if test="${board2.option.optionMass eq 'y'}">
+                <p id="diplay-plupload">
+                    <span id="file_list"></span>            
+                </p>  
+					<div id="uploader"></div>                              
+                </c:if> 
+                
                 </td>
             </tr>
             </tbody>
