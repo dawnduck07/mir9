@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.member.model.dao.MemberDao;
 import com.naedam.mir9.member.model.vo.Address;
+import com.naedam.mir9.member.model.vo.AddressBook;
+import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
@@ -90,6 +92,24 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int insertMemberMemo(MemberMemo memberMemo) {
 		return memberDao.insertMemberMemo(memberMemo);
+	}
+
+	// 회원 등록
+	@Override
+	public int insertRegisterMember(Member paramMember) {
+		return memberDao.insertRegisterMember(paramMember);
+	}
+
+	// 주소록 입력
+	@Override
+	public int insertAddressBook(AddressBook paramAddressBook) {
+		return memberDao.insertAddressBook(paramAddressBook);
+	}
+
+	// 권한 입력
+	@Override
+	public int insertAuthorities(Authorities paramAuthorities) {
+		return memberDao.insertAuthorities(paramAuthorities);
 	}
 
 

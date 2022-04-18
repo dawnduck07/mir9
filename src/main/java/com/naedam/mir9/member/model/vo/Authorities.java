@@ -11,15 +11,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MemberGrade implements Serializable {
+public class Authorities implements Serializable{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private int memberGradeNo;
 	private String authority;
-	private String memberGradeName;
-	private int memberGradeCount;
+	private int memberNo;
+
 }
