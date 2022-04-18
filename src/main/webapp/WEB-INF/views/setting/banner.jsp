@@ -45,7 +45,7 @@
 					<label style="margin-top: 5px;">총 ${bannerList.size() } 건</label>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;"></div>
 
-					<form name="form_list" method="post" action="?tpf=admin/setting/banner_process">
+					<form name="form_list" method="post" action="${pageContext.request.contextPath }/banner/banner_process?${_csrf.parameterName}=${_csrf.token}">
 						<input type="hidden" name="mode" id="mode">
 						<table class="table table-bordered table-hover">
 							<thead>
@@ -113,8 +113,9 @@
 			<div class="modal-content">
 				<form name="form_register" method="post" action="${pageContext.request.contextPath }/banner/banner_process?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
 					<input type="hidden" name="mode" id="mode" value="insert"> 
-					<input type="hidden" name="bannerNo" id="code"> 
+					<input type="hidden" name="bannerNo" id="code" value="0"> 
 					<input type="hidden" name="locale" id="locale" value="ko">
+					<input type="hidden" name="imgUrl" />
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabelPortfolio">배너 관리</h4>
@@ -159,7 +160,7 @@
 								<td class="menu">파일 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
 								<td align="left"><input type="file" name="file1" class="form-control input-sm" style="width: 70%; display: inline;"> <span id="display_file" style="display: none;">
 										<!-- Todo : onclick attr 로 변화시키기. @ajaxt success // https://jinstale.tistory.com/111 -->
-										<button type="button" onclick="" class="btn btn-success btn-xs">보기</button>
+										<button type="button" id="btn_img_view" onclick="" class="btn btn-success btn-xs">보기</button>
 										<button type="button" onclick="confirmIframeDelete('?tpf=common/image_delete&file_name=banner/'+$('[name=bannerNo]').val()+'&code='+$('#bannerNo').val());" class="btn btn-danger btn-xs">삭제</button>
 								</span>
 									<div style="font-weight: normal">※ 이미지 크기 : 1920 X 580</div></td>
@@ -194,6 +195,7 @@ function register() {
     if (form_register.mode.value == 'insert') {
         if(form_register.file1.value == '') { alert('파일이 입력되지 않았습니다.'); form_register.file1.focus(); return false;}
     }
+    if($('[name=imgUrl]').val() == '') return false;
     form_register.target = 'iframe_process';
     form_register.submit();
 }
@@ -220,6 +222,7 @@ function setData(code) {
             $('[name=status]').val(data.status);
             $('[name=tag]').val(data.tag);
             $('[name=imgUrl]').val(data.imgUrl);
+            $('#btn_img_view').attr('onclick', 'openWindow('+ data.bannerNo +');');
             if(data.imgUrl != null) $('#display_file').css('display','');
             else $('#display_file').css('display','none'); 
             // objEditor.setData(json_data.content);
@@ -246,6 +249,31 @@ function alertNo() {
      alert('슬라이드는 5개까지 등록 하실 수 있습니다');
 }
 
+function openWindow(bannerNo){
+	window.open('${pageContext.request.contextPath}/banner/img_view?bannerNo='+bannerNo, 'img_view', 'width=400, height=300, top=10, left=10');
+}
+// 이미지 업로드
+$("input[type=file]").change(function(e){
+   var file = e.target;
+   var form = new FormData();
+   form.append("image", file.files[0]);
+   var settings = {
+     "url": "https://api.imgbb.com/1/upload?key=f84bfb11eb3ee5eedb859de8b49fdff1",
+     "method": "POST",
+     "timeout": 0,
+     "processData": false,
+     "mimeType": "multipart/form-data",
+     "contentType": false,
+     "data": form
+   };
+   
+   // 이미지 업로드 -> 확인
+   $.ajax(settings).done(function (response) {
+     var imgbb = JSON.parse(response);
+     var url = imgbb.data.thumb.url;
+     $('[name=imgUrl]').val(url);
+   });
+});
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

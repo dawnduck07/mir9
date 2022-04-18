@@ -21,6 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Member implements Serializable, UserDetails {
+	
 	/**
 	 * 
 	 */

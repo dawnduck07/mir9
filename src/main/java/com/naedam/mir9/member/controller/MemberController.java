@@ -31,6 +31,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.member.model.vo.Address;
+import com.naedam.mir9.member.model.vo.AddressBook;
+import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
@@ -90,11 +92,13 @@ public class MemberController {
 	public String memberInsertModalFrm(
 						Member member, 
 						Address address,
+						AddressBook addressBook,
 						MemberMemo memberMemo,
 						MemberGrade memberGradeNo,
 						@RequestParam String mobile1,
 						@RequestParam String mobile2,
 						@RequestParam String mobile3,
+						@RequestParam String authority,
 						RedirectAttributes redirectAttributes) {
 		log.debug("{}", "memberInsertModalFrm.do 요청!");
 		log.debug("memberEntity = {}", member);
@@ -104,6 +108,7 @@ public class MemberController {
 		log.debug("mobile = {}", mobile2);
 		log.debug("mobile = {}", mobile3);
 		log.debug("address = {}", address);
+		log.debug("authority = {}", authority);
 		
 		String phone = mobile1 + mobile2 + mobile3;
 		
@@ -126,22 +131,63 @@ public class MemberController {
 		paramMember.setPassword(member.getPassword());
 		paramMember.setProfileImg(member.getProfileImg());
 				
-		int resultRegisterMember = memberService.insertMember(paramMember);
+		int resultRegisterMember = memberService.insertRegisterMember(paramMember);
 		log.debug("resultRegisterMember = {}", resultRegisterMember);
 		
 		// 2. 주소 입력
+		// 2.1. 주소 입력
 		int resultRegisterAddress = memberService.insertAddress(address);
+		log.debug("resultRegisterAddress = {}", resultRegisterAddress);
+		
+		// 2.2. 주소록 입력
+		AddressBook paramAddressBook = new AddressBook();
+		paramAddressBook.setAddressBookNo(addressBook.getAddressBookNo());
+		paramAddressBook.setAddressNo(address.getAddressNo());
+		paramAddressBook.setMemberNo(paramMember.getMemberNo());
+		
+		int resultRegisterAddressBook = memberService.insertAddressBook(paramAddressBook);
 		log.debug("resultRegisterAddress = {}", resultRegisterAddress);
 		
 		// 3. 메모 입력
 		// 3.1. 회원 입력 시 생성된 회원번호(MemberNo) 설정
-		memberMemo.setMemberNo(paramMember.getMemberNo());
+		MemberMemo paramMemberMemo = new MemberMemo();
+		paramMemberMemo.setMemberMemoNo(memberMemo.getMemberMemoNo());
+		paramMemberMemo.setMemberNo(paramMember.getMemberNo());
+		paramMemberMemo.setMemberMemoContent(memberMemo.getMemberMemoContent());
+		
+		int memberNo = paramMember.getMemberNo();
+		log.debug("memberNo = {}", memberNo);
 		
 		// 3.2. 메모 입력
-		int resultRegisterMemberMemo = memberService.insertMemberMemo(memberMemo);
+		int resultRegisterMemberMemo = memberService.insertMemberMemo(paramMemberMemo);
 		log.debug("resultRegisterMemberMemo = {}", resultRegisterMemberMemo);
 		
-		return "redirect:/member/memberList";
+		// 4. 등급 입력(update)
+		// 4.1. 권한 입력
+		Authorities paramAuthorities = new Authorities();
+		paramAuthorities.setAuthority(authority);
+		paramAuthorities.setMemberNo(paramMember.getMemberNo());
+		
+		int resultInsertAuthorities = memberService.insertAuthorities(paramAuthorities);
+		log.debug("resultInsertAuthorities = {}", resultInsertAuthorities);
+		
+		
+		
+		String msg = "";
+		
+		if(resultRegisterMember > 0 
+				&& resultRegisterAddress > 0 
+				&& resultRegisterAddressBook > 0
+				&& resultRegisterMemberMemo > 0
+				&& resultInsertAuthorities > 0) {
+			msg = "해당 회원이 등록 되었습니다.";
+		} else {
+			msg = "회원 등록이 실패했습니다.";
+		}
+
+		redirectAttributes.addFlashAttribute("msg", msg);
+		
+		return "redirect:/member/list.do";
 	}
 	
 	// 타입별 검색

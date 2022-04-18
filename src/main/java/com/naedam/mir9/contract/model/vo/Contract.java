@@ -1,4 +1,4 @@
-package com.naedam.mir9.member.model.vo;
+package com.naedam.mir9.contract.model.vo;
 
 import java.io.Serializable;
 
@@ -11,15 +11,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MemberGrade implements Serializable {
-	
+public class Contract implements Serializable{
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private int memberGradeNo;
-	private String authority;
-	private String memberGradeName;
-	private int memberGradeCount;
+	private int code;
+	private String provision;
+	private String privacy;
+	private String email;
+	private String personal;
+	private String distinguish;
+	private String locale;
 }

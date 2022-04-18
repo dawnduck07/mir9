@@ -16,6 +16,24 @@ public class BannerServiceImpl implements BannerService {
 		// TODO Auto-generated method stub
 		return bannerDao.selectOneBannerByBannerNo(bannerNo);
 	}
+
+	@Override
+	public int updateBanner(Banner banner) {
+		// TODO Auto-generated method stub
+		return bannerDao.updateBanner(banner);
+	}
+
+	@Override
+	public int insertBanner(Banner banner) {
+		// TODO Auto-generated method stub
+		return bannerDao.insertBanner(banner);
+	}
+
+	@Override
+	public int deleteBanner(int bannerNo) {
+		// TODO Auto-generated method stub
+		return bannerDao.deleteBanner(bannerNo);
+	}
 	
 	
 }
