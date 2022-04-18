@@ -25,5 +25,40 @@
 	<select id="selectHistoryList" resultType="history">
 		select * from history
 	</select>
+	
+	<select id="selectBannerList" resultType="banner">
+		SELECT 
+			a.*,
+			b.CATEGORY_NAME 
+		FROM banner a 
+			JOIN category b ON(a.category_no = b.CATEGORY_NO)
+	</select>
+	
+	<select id="selectMenuCteList" resultType="category">
+		select * from category where category_type = 'menu' order by category_no
+	</select>
+	
+	<select id="selectPopupList" resultType="popup">
+		select * from popup 
+		<where>
+			<if test="field != null and keyword != ''">
+				${field} like concat('%',#{keyword},'%')
+			</if>
+			<if test="start_date != null and end_date != null">
+				<if test="start_date != '' and end_date == ''">
+					and start_date <![CDATA[>=]]> #{start_date} 
+				</if>
+				<if test="start_date != '' and end_date != ''">
+					and start_date <![CDATA[>=]]> #{start_date} 
+					and end_date <![CDATA[<=]]> #{end_date}
+				</if>
+				<if test="start_date == '' and end_date != ''">
+					and end_date <![CDATA[<=]]> #{end_date}
+				</if>
+			</if>
+		</where>
+		
+		order by code
+	</select>
   
 </mapper>

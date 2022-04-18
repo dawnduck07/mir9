@@ -69,10 +69,11 @@ public class ScheduleRestController {
 		if(scheduleNo != 0) {
 			scheduleService.deleteSchedule(scheduleNo);
 			result = true;
+			
 		}
 		
-		
 		return result;
+		
 	}
 	
 }

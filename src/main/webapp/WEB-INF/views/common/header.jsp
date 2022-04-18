@@ -60,7 +60,7 @@
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-
+<link href="${pageContext.request.contextPath }/resources/css/jquery-ui.css" rel="stylesheet" />
 <script type="text/javascript">
 	
 	$(function(){
@@ -173,7 +173,7 @@
 			<section class="sidebar">
 				<ul class="sidebar-menu" data-widget="tree">
 					<li class="header">MAIN NAVIGATION</li>
-					<li><a href="${pageContext.request.contextPath}/dashboard/list"> <i
+					<li><a href="${pageContext.request.contextPath}/dashBoard"> <i
 							class="fa fa-dashboard"></i> <span>Dashboard</span>
 					</a></li>
 					<li class="treeview"><a href="#"> <i

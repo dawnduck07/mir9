@@ -1,13 +1,24 @@
 package com.naedam.mir9.setting.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.naedam.mir9.banner.model.vo.Banner;
+import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
@@ -15,10 +26,14 @@ import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.service.MapService;
 import com.naedam.mir9.map.model.vo.MapApi;
 import com.naedam.mir9.map.model.vo.Maps;
+import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/setting")
+@Slf4j
 public class SettingController {
 	@Autowired
 	private SettingService settingService;
@@ -36,9 +51,32 @@ public class SettingController {
 	}
 	
 	@GetMapping("/popup")
-	public void popup() {
+	public void popup(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+ 		List<Popup> popupList = settingService.selectPopupListByParam(param);
 		
+		model.addAttribute("popupList",popupList);
 	}
+	
+	@PostMapping("/popup")
+	public String popup(HttpServletRequest request, Model model) {
+		Map<String, Object> param = new HashMap<String, Object>(); 
+		param.put("start_date", request.getParameter("start_date"));
+		param.put("end_date", request.getParameter("end_date"));
+		param.put("field", request.getParameter("field"));
+		param.put("keyword", request.getParameter("keyword"));
+		
+		log.debug("param = {}", param);
+		
+		List<Popup> popupList = settingService.selectPopupListByParam(param);
+		
+		model.addAttribute("param", param);
+		model.addAttribute("popupList", popupList);
+		
+		
+		return "/setting/popup";
+	}
+	
 	
 	@GetMapping("/map")
 	public void map(Model model) {
@@ -62,7 +100,12 @@ public class SettingController {
 	}
 	
 	@GetMapping("/banner")
-	public void banner() {}
+	public void banner(Model model) {
+		List<Banner> bannerList = settingService.selectBannerList();
+		List<Category> menuCteList = settingService.selectMenuCteList();
+		model.addAttribute("bannerList",bannerList);
+		model.addAttribute("menuCteList",menuCteList);
+	}
 	
 	@GetMapping("/contract")
 	public void contract() {}

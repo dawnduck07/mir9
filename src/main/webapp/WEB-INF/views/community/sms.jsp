@@ -16,7 +16,76 @@ textarea {
     height:100px;
 }
 </style>
-
+	<!-- 
+		카카오 알림톡
+		https://ai-creator.tistory.com/23
+		https://ai-creator.tistory.com/170
+		https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#request-code
+		
+		1. 카카오 개발자 등록 > 애플리케이션 생성
+		- 프로필(닉네임/프로필 사진) : 필수 동의 
+		- 카카오계정(이메일) : 선택 동의
+		- 카카오톡 메시지 전송 : 선택 동의
+		
+		2. Redirect URI, 플랫폼 등록
+		- 카카오 로그인 on
+		- Redirect URI 생성
+		- 플랫폼 웹 도메인 등록 (Redirect URI와 순서를 맞춰줘야 함)
+		
+		3. 인증 코드 받기	
+		- 크롬 시크릿모드로 아래 접속 시도 > 전체 동의 > 주소창에 인증코드 출력
+		- https://kauth.kakao.com/oauth/authorize?client_id={REST_API 앱키를 입력하세요}&response_type=code&redirect_uri={지정한 Redirect URI}
+		- Rest API Key : 692e25c8b6965b6470b9429719b4e5e7
+		- Redirect URI : http://localhost:8080/mir9/
+		- Rest API 인증코드 : 1hWmD8q1goBnuEkghX9K3Eky73h5j9Hd5aNXlN2cAQkWkH8gpR5pn0Z_9iCE0WnUHXgeaQorDNQAAAGALColQw
+		
+		4. 사용자 토큰 받기 
+		- 주의사항 : 위에서 발급 받은 인증코드로 사용자 토큰 받기는 한 번만 가능함 
+		- 토큰 발급에 실패하거나, 재실행 해야 할 경우 인증코드를 다시 발급받은 후 다시 진행해야 함
+		==== 발급 (코드 변환 필요)
+		import requests
+		import json
+		
+		url = "https://kauth.kakao.com/oauth/token"
+		data = {
+		    "grant_type" : "authorization_code",
+		    "client_id" : "<REST_API 앱키를 입력하세요>",
+		    "redirect_uri" : "https://localhost.com",
+		    "code" : "<step2에서 발급받은 code를 입력하세요>"
+		}
+		response = requests.post(url, data=data);
+		tokens = response.json();
+		print(tokens);
+		
+		==== 결과
+		import requests
+		{'access_token': 'k3U------------------------------------------------',
+		'expires_in': 21599,
+		'refresh_token': '4I0------------------------------------------------',
+		'refresh_token_expires_in': 5183999,
+		'scope': 'talk_message profile',
+		'token_type': 'bearer'}
+		
+		5. 토큰 저장 예시
+		with open("kakao_token.json", "w") as fp:
+		  	json.dump(tokens, fp)
+		
+		6. 토큰 재발급 예시
+		==== 발급
+		url = "https://kauth.kakao.com/oauth/token"
+		data = {
+		    "grant_type" : "refresh_token",
+		    "client_id"  : "<REST_API 앱키를 입력하세요>",
+		    "refresh_token" : "<refresh token을 입력하세요>"
+		}
+		response = requests.post(url, data=data)
+		print(response.json())
+		
+		==== 결과
+		{'access_token': 'VMe------------------------------------------------',
+		'expires_in': 21599,
+		'token_type': 'bearer'}
+	-->
 	<section class="content-header">
 	    <h1>
 	    SMS 설정
@@ -414,7 +483,7 @@ textarea {
 </div><!-- /.content-wrapper -->
 
 <script>
-
+	
 	function register() { // 전체 변경 확인 버튼 -> name 값 분리 필요
 		var is_send_arr = $("input[name='is_send']"); // 회원 자동 발송
 		var content_arr = $("textarea[name='content']"); // 회원 문구
