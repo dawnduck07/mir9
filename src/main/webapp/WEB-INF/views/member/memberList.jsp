@@ -318,11 +318,11 @@
 										class="fa fa-check"></i></span></td>
 								<td>
 									<select 
-										name="memberGradeNo" 
-										id="memberGradeNo"
+										name="authority" 
+										id="memberGradeChk"
 										class="form-control input-sm" style="width: 120px;">
 											<c:forEach items="${memberGradeList}" var="memberGrade">
-												<option value="${memberGrade.memberGradeNo}">${memberGrade.memberGradeName}</option>
+												<option value="${memberGrade.authority}">${memberGrade.memberGradeName}</option>
 											</c:forEach>
 									</select>
 								</td>
@@ -495,6 +495,7 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
+
 function downloadExcel() {  // Excel 다운로드
     form_download.target = 'iframe_process';
     form_download.search_data.value = $('#form_search :input').serialize();

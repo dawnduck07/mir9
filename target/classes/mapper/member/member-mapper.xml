@@ -60,6 +60,7 @@
 	                        on m.member_no = ab.member_no
 	                            left join address a
 	                                on ab.address_no = a.address_no
+	ORDER BY m.member_no DESC
 </select>
 
 <!-- 회원 리스트 전체 게시물 수 -->
@@ -145,12 +146,11 @@
 	SELECT
 		mg.member_grade_no,
 		mg.member_grade_name,
+		a.authority,
 		COUNT(*) AS member_grade_count
 	FROM
 		member_grade mg LEFT JOIN authorities a
 			ON (mg.authority = a.authority)
-	WHERE
-		a.authority IS NOT NULL 
 	GROUP BY
 		mg.member_grade_no
 	ORDER BY
@@ -182,7 +182,65 @@
 		 	#{addressSub}, 
 		 	#{addressZipcode}
 		 	)
+	
+	<selectKey keyProperty="addressNo" resultType="_int" order="AFTER">
+		SELECT
+			LASTVAL(seq_address_no)
+		FROM
+			DUAL
+	</selectKey>
 </insert>
+
+<!-- 주소록 입력 -->
+<select id="insertAddressBook">
+	INSERT INTO 
+		address_book(
+			address_book_no, 
+			address_no, 
+			member_no, 
+			address_book_name
+			)
+		VALUES(
+			NEXTVAL(seq_address_book_no),
+			#{addressNo},
+			#{memberNo},
+			default
+			)
+</select>
+
+<!-- 회원 등록 -->
+<insert id="insertRegisterMember">
+	INSERT INTO member
+		(member_no,
+		 first_name,
+		 last_name,
+		 email,
+		 phone,
+		 reg_date,
+		 status,
+		 id,
+		 password,
+		 profile_img) 
+	VALUES
+		(NEXTVAL(seq_member_no),
+		#{firstName},
+		#{lastName},
+		#{email},
+		#{phone},
+		NOW(),
+		default,
+		#{id},
+		#{password},
+		NULL)
+
+	<selectKey keyProperty="memberNo" resultType="_int" order="AFTER">
+		SELECT
+			LASTVAL(seq_member_no)
+		FROM
+			DUAL
+	</selectKey>
+</insert>
+
 
 <!-- 메모 입력 -->
 <insert id="insertMemberMemo">
@@ -190,12 +248,23 @@
 		member_memo(
 			member_memo_no, 
 			member_no, 
-			member_memo
+			member_memo_content
 			)
 		VALUES(
 			NEXTVAL(seq_member_memo_no),
 			#{memberNo},
-			#{memberMemo} 
+			#{memberMemoContent} 
 			)
 </insert>
+
+<!-- 권한 입력 -->
+<insert id="insertAuthorities">
+	INSERT INTO 
+		authorities 
+	VALUES(
+		#{authority}, 
+		#{memberNo}
+		)
+</insert>
+
 </mapper>
