@@ -289,7 +289,7 @@ public class MemberController {
 		// 시간 양식 변경
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String regDate = dateFormat.format(member.getRegDate());
-		
+		String loginDate = dateFormat.format(member.getLoginDate());
 		
 		// 2. 주소(Address) 조회
 		Address address = memberService.selectOneAddress(memberNo);
@@ -318,6 +318,7 @@ public class MemberController {
 		map.put("memberMemo", memberMemo);
 		map.put("authorities", authorities);
 		map.put("regDate", regDate);
+		map.put("loginDate", loginDate);
 		
 		return map;
 	}

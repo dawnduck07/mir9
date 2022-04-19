@@ -6,4 +6,6 @@ public interface SecurityDao {
 
 	UserDetails loadUserByUsername(String username);
 
+	int insertLoginDate(Object name);
+
 }

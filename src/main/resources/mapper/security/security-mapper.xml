@@ -23,6 +23,8 @@
 		<result column="reg_date" property="regDate"/>
 		<result column="password" property="password"/>
 		<result column="profile_img" property="profileImg"/>
+		<result column="upate_date" property="updateDate"/>
+		<result column="login_date" property="loginDate"/>
 		
 		<collection 
 			property="authorities" 
@@ -31,6 +33,14 @@
 				<arg column="authority" javaType="string"/>
 			</constructor>	
 		</collection>
-		
 	</resultMap>
+	
+	<insert id="insertLoginDate">
+		UPDATE 
+			member 
+		SET 
+			login_date = NOW() 
+		WHERE 
+			id = #{username}
+	</insert>
 </mapper>

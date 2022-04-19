@@ -573,6 +573,7 @@ $("button[id^='detail_']").on('click', function(e){
 			var memberMemo = res.memberMemo;
 			var authorities = res.authorities;
 			var regDate = res.regDate;
+			var loginDate = res.loginDate;
 			
 			$("[name=id]").val(member.id);
 			$("[name=lastName]").val(member.lastName);
@@ -586,12 +587,17 @@ $("button[id^='detail_']").on('click', function(e){
 			$("[name=memberMemoContent]").val(memberMemo.memberMemoContent);
 			$("[name=authority]").val(authorities.authority);
 			$("#reg_date").text(regDate);
+			$("#last_login_date").text(loginDate);
 		},
 		error : console.log
 	});
-	
 });
 
+
+// 상세보기 저장
+function update(){
+	console.log("상세보기 저장(update()) 작동");
+}
 
 $('#findList').each(function(){
 	console.log("들어오냐");

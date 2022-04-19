@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
+import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
@@ -67,6 +68,12 @@ public class SettingServiceImpl implements SettingService {
 	public List<Popup> selectPopupListByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return settingDao.selectPopupListByParam(param);
+	}
+
+	@Override
+	public List<Coupon> selectCouponListByParam(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return settingDao.selectCouponListByParam(param);
 	}
 	
 	

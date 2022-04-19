@@ -4,8 +4,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
-	
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -26,25 +27,31 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/76afde4c0b.js"
 	crossorigin="anonymous"></script>
 <!-- Ionicons -->
 <script src="https://unpkg.com/ionicons@4.4.1/dist/ionicons.js"></script>
 <!-- jvectormap -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery.vector-map.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/jquery.vector-map.css">
 <!-- Theme style -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
-<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
+<link href="${pageContext.request.contextPath}/resources/css/admin.css"
+	rel="stylesheet" type="text/css" />
 
 <!-- fullcalendar -->
 <link href="//mir9.co.kr/resource/css/bootstrap-colorselector.css"
 	rel="stylesheet" />
 
-<link href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.min.css"
+<link
+	href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.min.css"
 	rel="stylesheet" type="text/css" />
 <link
 	href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.print.css"
@@ -55,9 +62,9 @@
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
 <c:if test="${not empty msg}">
-<script>
-	alert("${msg}");
-</script>
+	<script>
+		alert("${msg}");
+	</script>
 </c:if>
 </head>
 
@@ -78,14 +85,14 @@
 					<p class="text-muted text-center" style="padding: 10px;">아이디와
 						비밀번호 입력후 로그인해 주시기 바랍니다.</p>
 
-					<form:form 
-						name="form" 
-						action="${pageContext.request.contextPath}/member/memberLogin.do?${_csrf.parameterName}=${_csrf.token}" 
-						method="POST"
-						style="padding: 20px;">
-						
+					<form:form name="form"
+						action="${pageContext.request.contextPath}/member/memberLogin.do?${_csrf.parameterName}=${_csrf.token}"
+						method="POST" style="padding: 20px;">
+
 						<c:if test="${param.error != null}">
-							<span class="text-danger" style="font-weight:bold; font-size:120%;"> 아이디 또는 비밀번호가 일치하지 않습니다.</span>
+							<span class="text-danger"
+								style="font-weight: bold; font-size: 120%;"> 아이디 또는 비밀번호가
+								일치하지 않습니다.</span>
 						</c:if>
 						<div class="form-group has-feedback">
 							<input type="text" name="id" class="form-control"
@@ -93,14 +100,14 @@
 								class="glyphicon glyphicon-pencil form-control-feedback"></span>
 						</div>
 						<div class="form-group has-feedback">
-							<input type="password" name="password"
-								class="form-control" placeholder="PASSWORD" /> <span
-								class="glyphicon glyphicon-lock form-control-feedback"></span>
+							<input type="password" name="password" class="form-control" placeholder="PASSWORD" />
+							<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 						</div>
 						<a id="loginBtn" onclick="loginSubmit()"
 							class="btn btn-primary btn-block"><b>로그인</b></a>
 						&nbsp;
-						<a href="#none" onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do';"
+						<a href="#none"
+							onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do';"
 							class="btn btn-primary btn-block"><b>회원가입</b></a>
 					</form:form>
 				</div>
@@ -109,10 +116,12 @@
 					2018©MIR9 SHOP. All Rights Reserved.</p>
 			</div>
 		</div>
-	</div>	
+	</div>
 
 	<script>
-		function loginSubmit() {
+		$("input:checkbox[id='remember-me']").prop("checked", true);
+	
+		function loginSubmit() {		
 			console.log("loginSubmit 도착했나요?");
 			if (form.id.value == '') {
 				alert('아이디가 입력되지 않았습니다.');
@@ -126,7 +135,6 @@
 			}
 			form.submit();
 		}
-	
 	</script>
 </body>
 </html>
