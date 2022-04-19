@@ -37,6 +37,10 @@ public class Member implements Serializable, UserDetails {
 	private String id;
 	private String password;
 	private String profileImg;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd HH:mm", timezone="Asia/Seoul")
+	private Date updateDate;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd HH:mm", timezone="Asia/Seoul")
+	private Date loginDate;
 	
 	/**
 	 * 회원권한리스트
@@ -45,6 +49,7 @@ public class Member implements Serializable, UserDetails {
 	 */
 	private List<SimpleGrantedAuthority> authorities;
 	
+	// 계정이 갖고있는 권한 목록은 리턴
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
@@ -57,23 +62,28 @@ public class Member implements Serializable, UserDetails {
 		return id;
 	}
 	
+	// 계정이 만료되지 않았는지 리턴(true : 만료 안됨)
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 	
+	// 계정이 잠겨있는지 않았는지 리턴(true : 잠기지 않음)
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 	
+	// 비밀번호가 만료되지 않았는지 리턴(true : 만료 안됨)
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
+	// 계정이 활성화(사용가능)인지 리턴(true : 활성화)
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub

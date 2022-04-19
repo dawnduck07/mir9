@@ -31,9 +31,10 @@ public class MemberEntity extends Member {
 	
 	public MemberEntity(int memberNo, String firstName, String lastName, String address,
 			String email, String phone, Date regDate, String status, String id, String password, String profileImg,
+			Date updateDate, Date loginDate,
 			List<SimpleGrantedAuthority> authorities, String addressMain, String addressSub, int pointAmt,
 			String addressZipcode) {
-		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg,
+		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
 				authorities);
 		this.addressMain = addressMain;
 		this.addressSub = addressSub;
