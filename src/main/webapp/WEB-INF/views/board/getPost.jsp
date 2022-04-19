@@ -2,7 +2,19 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<style>
+	p {
+	    display: block;
+	    margin-block-start: 1em;
+	    margin-block-end: 1em;
+	    margin-inline-start: 0px;
+	    margin-inline-end: 0px;
+	}
+	element.style {
+	    heigth: 150px;
+	    overflow-y: scroll;
+	}	
+</style>
 <script>
 	$(function() {
 		var result = {				
@@ -255,6 +267,9 @@
 										+ '<button type="button" onclick="window.open('+thombnail+')" class="btn btn-success btn-xs">보기</button>'
 										+ '<button type="button" onclick="fncDeleteThombnail()" name="deleteThombnail" value="'+JSONData.postNo+'" class="btn btn-danger btn-xs">삭제</button>'
 										+ '</span>';
+										
+										
+										//<input type="hidden" name="postNo" id="getPostNo" >
 						$("td[name='thombnailTd']").append(display);
 						}else{
 							var	display = '<span id="display_thumbnail" name="thumbnailSpan">'
@@ -265,9 +280,11 @@
 					$("#getPostTitle").val(JSONData.postTitle);
 					$("#getThombnailName").val(JSONData.postThombnail);
 					$("#getPostName").val(JSONData.postFile);
+					
+					
 					if(JSONData.postNotice == 0){
 						$("#getPostNotice").prop("checked", false);
-					}else{
+					}else if(JSONData.postNotice == 1){
 						$("#getPostNotice").prop("checked", true);
 					}	
 				}				
