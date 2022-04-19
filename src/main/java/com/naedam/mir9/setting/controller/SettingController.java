@@ -1,5 +1,6 @@
 package com.naedam.mir9.setting.controller;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,23 @@ public class SettingController {
 		List<Coupon> couponList = settingService.selectCouponListByParam(param);
 		
 		model.addAttribute("couponList",couponList);
+	}
+	
+	@PostMapping("/coupon")
+	@SuppressWarnings("rawtypes")
+	public void coupon(HttpServletRequest request, Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		Enumeration params = request.getParameterNames();
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    param.put(name, request.getParameter(name));
+		}
+		
+		List<Coupon> couponList = settingService.selectCouponListByParam(param);
+		
+		model.addAttribute("couponList",couponList);
+		model.addAttribute("param",param);
 	}
 	
 	@GetMapping("/popup")

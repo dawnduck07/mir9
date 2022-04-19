@@ -63,6 +63,25 @@
 	
 	<select id="selectCouponListByParam" resultType="coupon">
 	 select * from coupon
+	 	<where>
+			<if test="field != null and keyword != ''">
+				${field} like concat('%',#{keyword},'%')
+			</if>
+			<if test="expiry_start_date != null and expiry_end_date != null">
+				<if test="expiry_start_date != '' and expiry_end_date == ''">
+					and expiry_start_date <![CDATA[>=]]> #{expiry_start_date} 
+				</if>
+				<if test="expiry_start_date != '' and expiry_end_date != ''">
+					and expiry_start_date <![CDATA[>=]]> #{expiry_start_date} 
+					and expiry_end_date <![CDATA[<=]]> #{expiry_end_date}
+				</if>
+				<if test="expiry_start_date == '' and expiry_end_date != ''">
+					and expiry_end_date <![CDATA[<=]]> #{expiry_end_date}
+				</if>
+				or expiry_type = 'unlimited'
+			</if>
+		</where>
+	 order by coupon_no
 	</select>
   
 </mapper>
