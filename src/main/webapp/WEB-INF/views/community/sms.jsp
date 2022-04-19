@@ -474,7 +474,9 @@ textarea {
 						</form>
 		
 		                <div style="text-align:center;"><button type="button" onclick="register()" class="btn btn-primary">확인</button></div>
-	
+		                <div style="text-align:center;"><button type="button" onclick="getToken()" class="btn btn-primary">토큰 내놔</button></div>
+		                <input type="hidden" value="https://kapi.kakao.com/v2/api/talk/memo/default/send?${_csrf.parameterName}=${_csrf.token}" id="postUrl">
+						<div style="text-align:center;"><button type="button" onclick="sendTok()" class="btn btn-primary">톡 보내봐</button></div>
 	                </div><!-- /.box-body -->
 	            </div><!-- /.box -->
 	        </div><!-- /.col-xs-12 -->
@@ -483,6 +485,94 @@ textarea {
 </div><!-- /.content-wrapper -->
 
 <script>
+	// 사용자 토큰 발급 
+	function getToken() {
+		// [REST API 방식]
+		// 1. REST Key 생성 : 692e25c8b6965b6470b9429719b4e5e7
+		// 2. RedirectURI : http://localhost:8080/mir9/comm/sms
+		// 3. 플랫폼 지정 : http://localhost:8080/
+		// 4. 인증 코드 발급 : GET(/oauth/authorize)
+		// ** 해당 인증 코드로 토큰 발급 시도는 단 한 번만 가능
+		// https://kauth.kakao.com/oauth/authorize?client_id={restKey}&response_type=code&redirect_uri={redirectURI}		
+		// ?code={code}
+		// 5. 사용자 토큰 발급 : POST(/oauth/token) 		
+		$.ajax({
+		    type: "POST",
+		    url: "https://kauth.kakao.com/oauth/token",
+		    header: {
+		        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+		    },
+		    data: { 
+		    	grant_type: "authorization_code", 
+		    	client_id: "692e25c8b6965b6470b9429719b4e5e7", 
+		    	redirect_uri: "http://localhost:8080/mir9/comm/sms", 
+		    	code: "AWkSZXaKwXDpzGKB0sMombKX_FqN83p7YApk9EzMX2eWebi_OM_b9_Y1X5F9eRQVsTrvxwopb7gAAAGAOvPl_A"
+		    },
+		    success: function(data) {
+				console.log("=====토큰=====");
+				console.log(data);
+				console.log(data.access_token); // 
+				console.log(data.refresh_token); // 
+				/*
+				
+				*/
+		        console.log("=============");
+		    },
+		    error: function(textStatus, errorThrown){
+				console.log(textStatus);
+			}
+		});
+	
+	};	
+
+	// 알림톡 보내기 테스트
+ 	function sendTok() {
+		
+		var shop_name = "mir9";
+		var member_name = "테스트";	
+		var text = "[" + shop_name + "]\n" + member_name + " 회원님의 가입을 진심으로 축하드립니다";
+
+		alert(text);
+		
+		var url = $("#postUrl").val();
+		// alert(url);
+		
+		// 텍스트 템플릿 알림톡
+		// CORS 오류 발생
+		// Access to XMLHttpRequest at 'https://kapi.kakao.com/v2/api/talk/memo/default/send' 
+		// from origin 'http://localhost:8080' has been blocked by CORS policy: 
+		// No 'Access-Control-Allow-Origin' header is present on the requested resource.
+		// https://kapi.kakao.com != http://localhost:8080  
+		// SOP(Same Origin Policy) 프로토콜, 호스트, 포트가 모두 같은 경우
+		// CORS(Cross Origin Resource Sharing) 프로토콜, 호스트, 포트 중 하나하도 일치하지 않는 경우
+		$.ajax({
+			type: "POST",
+			credentials: "include", // same-origin : 같은 출처 간 요청만 // include : 모든 요청 가능 // omit : 모든 요청 거부
+			url: "https://kapi.kakao.com/v2/api/talk/memo/default/send",
+			header: {
+				"Content-Type": "application/x-www-form-urlencoded",
+		        "Authorization": "Bearer r7nZtaBzckDGTFxyLmAKwnQCuavh3VuYfXHnSworDNMAAAGAO19oGw",
+		        // "Access-Control-Allow-origin" : "http://localhost:8080", // 정확한 origin url 명시
+		        // "Access-Control-Allow-Credentials" : true
+		    },
+		    data: {
+		    	object_type: "text",
+		    	text: text,
+		    	link: {
+		    		"web_url": "http://localhost:8080/mir9/comm/sms_list"
+		    	}
+		    },
+		    success: function(response) {
+		    	console.log("=====결과=====");
+		    	alert("성공!!");
+		    	console.log(response.result_code); // 성공 시 0 
+		    	console.log("=============");
+		    },
+		    error: function(response) {
+		    	alert(response.result_code + ", msg : " + response.msg + ", code : " + response.code + " 그만 좀 떠...");
+		    }
+		});
+	}	
 	
 	function register() { // 전체 변경 확인 버튼 -> name 값 분리 필요
 		var is_send_arr = $("input[name='is_send']"); // 회원 자동 발송
