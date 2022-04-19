@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
+import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
@@ -29,5 +30,7 @@ public interface SettingService {
 	List<Category> selectMenuCteList();
 
 	List<Popup> selectPopupListByParam(Map<String, Object> param);
+
+	List<Coupon> selectCouponListByParam(Map<String, Object> param);
 
 }
