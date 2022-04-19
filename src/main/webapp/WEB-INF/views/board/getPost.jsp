@@ -411,7 +411,7 @@
                  	<textarea name="postContents" id="editor1" rows="10" cols="80" style="visibility: hidden; display: none;"></textarea>
                  	<script type="text/javascript">
 					 CKEDITOR.replace('editor1'
-					                , {filebrowserUploadUrl:'/mir9/board/imageUpload'}
+					                , {filebrowserUploadUrl:'/mir9/board/imageUpload?${_csrf.parameterName}=${_csrf.token}'}
 					 );
 					</script>	                 	
                  </td>

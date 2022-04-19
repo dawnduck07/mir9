@@ -72,7 +72,6 @@
 		//board 선택삭제 종료
 		
 		
-		
 		// board 상세보기 시작
 		$("button[name='updateBoard']").on("click", function(){
 			

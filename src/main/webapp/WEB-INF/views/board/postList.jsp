@@ -48,13 +48,9 @@
 <script src="//mir9.co.kr/resource/js/jquery/jquery-ui.min.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
-
-<script language='javascript' src='//www.gstatic.com/charts/loader.js'></script>
-<!-- Google Font -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <!-- plupload -->
 <script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
 <script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
