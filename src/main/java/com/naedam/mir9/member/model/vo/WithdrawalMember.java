@@ -24,9 +24,11 @@ public class WithdrawalMember extends Member implements Serializable {
 	private String reason;
 	private Date withdrawalDate;
 	private List<SimpleGrantedAuthority> grade;
+	
 	public WithdrawalMember(int memberNo, String firstName, String lastName, String address,
-			String email, String phone, Date regDate, String status, String id, String password, String profileImg, String reason, Date withdrawalDate, List<SimpleGrantedAuthority> grade) {
-		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, grade);
+			String email, String phone, Date regDate, String status, String id, String password, String profileImg, String reason, Date withdrawalDate, List<SimpleGrantedAuthority> grade
+			, Date updateDate, Date loginDate) {
+		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate, grade);
 		this.reason = reason;
 		this.withdrawalDate = withdrawalDate;
 		this.grade = grade;

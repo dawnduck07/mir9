@@ -17,6 +17,7 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Service;
 
+import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.security.model.service.SecurityService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+	
 	
 	@Autowired
 	private SecurityService securityService;
@@ -38,7 +40,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			HttpServletRequest request, 
 			HttpServletResponse response, 
 			Authentication authentication
-			) throws IOException, ServletException {
+			) throws IOException, ServletException {	
 		
 		List<String> grade = new ArrayList();
 		
@@ -48,7 +50,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			grade.add(authority.getAuthority());
 		});
 		
+		Object name = authentication.getName();
+		log.debug("name = {}", name);
 		log.debug("grade = {}", grade);
+		
+		// 최근 로그인 시간 입력
+		int resultLoginDate = securityService.insertLoginDate(name);
+		log.debug("resultLoginDate = {}", resultLoginDate);
 		
 		// ADMIN 이 포함되어 있으면 /dashBoard로 리다이렉트
 		if(grade.contains("ROLE_ADMIN")) {

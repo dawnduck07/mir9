@@ -21,6 +21,10 @@ public class SecurityService implements UserDetailsService {
 	 * loadUserByUsername = selectOneMember
 	 * username = id
 	 * UserDetails : VO에서 구현한 interface
+	 * 
+	 * 스프링이 로그인 요청을 가로챙 때 username, password 변수 2개를 가로채는데
+	 * password 부분 처리는 알아서 처리,
+	 * username이 DB에 있는지 확인해줘야 함
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -37,6 +41,10 @@ public class SecurityService implements UserDetailsService {
 			throw new UsernameNotFoundException(username);
 		
 		return member;
+	}
+
+	public int insertLoginDate(Object name) {
+		return securityDao.insertLoginDate(name);
 	}
 
 }
