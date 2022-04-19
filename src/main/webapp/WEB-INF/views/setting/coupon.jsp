@@ -27,31 +27,30 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-body">
-					<label style="margin-top: 5px;">6 건</label>
+					<label style="margin-top: 5px;">총 ${couponList.size() } 건</label>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-						<form name="form_search" method="post" action="?tpf=admin/setting/coupon">
-							<input type="hidden" name="tpf" value="admin/setting/coupon">
+						<form name="form_search" method="post" action="${pageContext.request.contextPath }/setting/coupon?${_csrf.parameterName}=${_csrf.token}">
 							<div class="has-feedback">
-								<span> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
+								<span> <input type="text" name="keyword" id="keyword" value="${param.keyword == null ? '' : param.keyword }" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
 								</span>
 							</div>
 					</div>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
 							<select name="field" class="form-control input-sm">
-								<option value="title">쿠폰명</option>
+								<option value="coupon_name">쿠폰명</option>
 							</select>
 						</div>
 					</div>
 					<div class="box-tools pull-right" style="margin: 0 10px 5px 0">
 						<div class="has-feedback">
-							<input type="text" name="expiry_end_date" id="datepicker1" readonly value="" class="form-control input-sm" placeholder="종료일" style="width: 80px; padding-right: 0;" />
+							<input type="text" name="expiry_end_date" id="datepicker1" readonly value="${param.expiry_end_date == null ? '' : param.expiry_end_date }" class="form-control input-sm" placeholder="종료일" style="width: 80px; padding-right: 0;" />
 						</div>
 					</div>
 					<div class="box-tools pull-right" style="padding: 5px 5px 0 5px;">~</div>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
-							<input type="text" name="expiry_start_date" id="datepicker2" readonly value="" class="form-control input-sm" placeholder="시작일" style="width: 80px; padding-right: 0;" />
+							<input type="text" name="expiry_start_date" id="datepicker2" readonly value="${param.expiry_start_date == null ? '' : param.expiry_start_date }" class="form-control input-sm" placeholder="시작일" style="width: 80px; padding-right: 0;" />
 						</div>
 						</form>
 					</div>
