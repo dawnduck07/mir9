@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menu">
+ 
+	<resultMap id="MenuSelectMap" type="menu">
+		<result property="menuNo"				column="MENU_NO"			jdbcType="NUMERIC"></result>
+		<result property="menuName"				column="MENU_NAME"			jdbcType="VARCHAR"></result>
+		<result property="menuContent"			column="MENU_CONTENT"		jdbcType="VARCHAR"></result>
+		<result property="menuLink"				column="MENU_LINK"			jdbcType="VARCHAR"></result>
+		<result property="menuUrl"				column="MENU_URL"			jdbcType="VARCHAR"></result>
+		<result property="menuTarget"			column="MENU_TARGET"		jdbcType="VARCHAR"></result>
+		<result property="menuDate"				column="MENU_DATE"			jdbcType="VARCHAR"></result>
+		<result property="menuState"			column="MENU_STATE"			jdbcType="VARCHAR"></result>
+		<result property="menuHeader"			column="MENU_HEADER"		jdbcType="VARCHAR"></result>
+		<result property="menuMeta"				column="MENU_META"			jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="addMenu" parameterType="menu">
+		INSERT
+		INTO MENU(MENU_NO,
+				  MENU_NAME,
+				  MENU_CONTENT,
+				  MENU_LINK,
+				  MENU_URL,
+				  MENU_TARGET,
+				  MENU_DATE,
+				  MENU_STATE,
+				  MENU_HEADER,
+				  MENU_META)
+		VALUES(NEXTVAL(menu_seq),
+			   #{menuName : VARCHAR},
+			   #{menuContent : VARCHAR},
+			   #{menuLink : VARCHAR},
+			   #{menuUrl : VARCHAR},
+			   #{menuTarget : VARCHAR},
+			   sysdate(),
+			   #{menuState : VARCHAR},
+			   #{menuHeader : VARCHAR},
+			   #{menuMeta : VARCHAR})
+	</insert>
+	 
+</mapper>
+  
+  
+  
+  
+  
+  
