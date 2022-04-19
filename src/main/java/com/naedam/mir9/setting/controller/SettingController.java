@@ -1,8 +1,5 @@
 package com.naedam.mir9.setting.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
+import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
@@ -46,8 +44,28 @@ public class SettingController {
 	}
 	
 	@GetMapping("/coupon")
-	public void coupon() {
+	public void coupon(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<Coupon> couponList = settingService.selectCouponListByParam(param);
 		
+		model.addAttribute("couponList",couponList);
+	}
+	
+	@PostMapping("/coupon")
+	@SuppressWarnings("rawtypes")
+	public void coupon(HttpServletRequest request, Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		Enumeration params = request.getParameterNames();
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    param.put(name, request.getParameter(name));
+		}
+		
+		List<Coupon> couponList = settingService.selectCouponListByParam(param);
+		
+		model.addAttribute("couponList",couponList);
+		model.addAttribute("param",param);
 	}
 	
 	@GetMapping("/popup")
