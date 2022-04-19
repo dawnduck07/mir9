@@ -5,6 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>  
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="적립금 설정" name="title"/>
 </jsp:include>
@@ -101,7 +102,7 @@
 										<br>
 										<br> 
 										<span style="float: left;">
-											<input type="radio" name="point_type" value="i"> 개별 
+											<input type="radio" name="point_type" value="i"> 개별
 											<small class="text-red">상품마다 적립금을 개별로 지정할수 있음 (제품 > 리스트 > 상품 등록에서 설정)</small>
 										</span>
 									</td>

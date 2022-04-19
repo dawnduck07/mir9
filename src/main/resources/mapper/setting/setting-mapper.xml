@@ -60,5 +60,9 @@
 		
 		order by code
 	</select>
+	
+	<select id="selectCouponListByParam" resultType="coupon">
+	 select * from coupon
+	</select>
   
 </mapper>
