@@ -66,7 +66,7 @@
 	$(function(){
 		
 		$("a[name='board']").one("click", function(){
-
+			
 			$.ajax({
 				url : "/mir9/board/json/listBoard",
 				method : "GET" ,
@@ -76,6 +76,7 @@
 					"Content-Type" : "application/json"
 				},
 				success : function(Data, status){
+					
 					var display = '';
 					if(Data.length > 0){
 						for(var i = 0; i < Data.length; i++){
