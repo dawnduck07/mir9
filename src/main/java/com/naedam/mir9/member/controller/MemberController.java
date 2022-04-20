@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -397,6 +398,23 @@ public class MemberController {
 		model.addAttribute("mPointList",mPointList);
 		
 		return "member/memberPointList";
+	}
+	
+	@PostMapping("/point")
+	@SuppressWarnings("rawtypes")
+	public String memberPointList(HttpServletRequest request, Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		Enumeration params = request.getParameterNames();
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    param.put(name, request.getParameter(name));
+		}
+		
+		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
+		
+		model.addAttribute("mPointList",mPointList);
+		model.addAttribute("param",param);
+		return "/member/memberPointList";
 	}
 	
 	// 회원가입
