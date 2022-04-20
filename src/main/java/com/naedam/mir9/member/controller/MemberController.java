@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.point.model.vo.MemberPoint;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -389,9 +391,30 @@ public class MemberController {
 	
 	// 회원 적립금 관리
 	@GetMapping("/point")
-	public String memberPointList() {
+	public String memberPointList(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
+		
+		model.addAttribute("mPointList",mPointList);
 		
 		return "member/memberPointList";
+	}
+	
+	@PostMapping("/point")
+	@SuppressWarnings("rawtypes")
+	public String memberPointList(HttpServletRequest request, Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		Enumeration params = request.getParameterNames();
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    param.put(name, request.getParameter(name));
+		}
+		
+		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
+		
+		model.addAttribute("mPointList",mPointList);
+		model.addAttribute("param",param);
+		return "/member/memberPointList";
 	}
 	
 	// 회원가입

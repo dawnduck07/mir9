@@ -83,5 +83,14 @@
 		</where>
 	 order by coupon_no
 	</select>
-  
+  	
+  	<select id="selectPoint" resultType="point">
+  		select * from point
+  	</select>
+  	<select id="selectPointUse" resultType="pointUse">
+ 		select * from point_use 	
+  	</select>
+  	<select id="selectPointSave" resultType="pointSave">
+  		select * from point_save
+  	</select>
 </mapper>

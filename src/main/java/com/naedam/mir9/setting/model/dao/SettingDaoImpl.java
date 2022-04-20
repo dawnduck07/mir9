@@ -15,6 +15,9 @@ import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.vo.Maps;
+import com.naedam.mir9.point.model.vo.Point;
+import com.naedam.mir9.point.model.vo.PointSave;
+import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 
 @Repository
@@ -74,6 +77,24 @@ public class SettingDaoImpl implements SettingDao {
 	public List<Coupon> selectCouponListByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return session.selectList("setting.selectCouponListByParam", param);
+	}
+
+	@Override
+	public Point selectPoint() {
+		// TODO Auto-generated method stub
+		return session.selectOne("setting.selectPoint");
+	}
+
+	@Override
+	public PointUse selectPointUse() {
+		// TODO Auto-generated method stub
+		return session.selectOne("setting.selectPointUse");
+	}
+
+	@Override
+	public PointSave selectPointSave() {
+		// TODO Auto-generated method stub
+		return session.selectOne("setting.selectPointSave");
 	}
 	
 	

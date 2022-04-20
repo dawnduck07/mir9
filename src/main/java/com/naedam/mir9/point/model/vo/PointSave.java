@@ -20,8 +20,11 @@ public class PointSave implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int pointSaveNo;
-	private String type;
-	private int pointPct;
-	private String allYn;
+	private int pointMemberAmount;
+	private int pointMemoAmount;
+	private String pointType;
+	private int pointRate;
+	private String pointUseReceive;
+	
 	
 }
