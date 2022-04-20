@@ -93,4 +93,16 @@
   	<select id="selectPointSave" resultType="pointSave">
   		select * from point_save
   	</select>
+  	
+  	<select id="selectAdminMenuList" resultType="adminMenu">
+  		select * from admin_menu
+  	</select>
+  	
+  	<select id="selectLocaleList" resultType="locale">
+  		select * from locale ORDER BY locale_name desc
+  	</select>
+  	
+  	<select id="selectAdminSetting" resultType="adminSetting">
+  		select * from admin_setting
+  	</select>
 </mapper>
