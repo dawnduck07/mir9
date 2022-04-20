@@ -135,6 +135,12 @@ public class MemberDaoImpl implements MemberDao {
 	public Authorities selectOneAuthorities(int memberNo) {
 		return session.selectOne("member.selectOneAuthorities", memberNo);
 	}
+
+	// 회원정보 수정(상세보기)
+	@Override
+	public int memberUpdate(Member paramMember) {
+		return session.update("member.memberUpdate", paramMember);
+	}
 	
 	// 회원 적립금 관리
 	@Override
@@ -142,6 +148,25 @@ public class MemberDaoImpl implements MemberDao {
 		// TODO Auto-generated method stub
 		return session.selectList("member.selectMemberPointListByParam", param);
 	}
-	
+
+	// 회원주소 수정(상세보기)
+	@Override
+	public int addressUpdate(Address paramAddress) {
+		return session.update("member.addressUpdate", paramAddress);
+	}
+
+	// 권한(Authorities) 수정
+	@Override
+	public int authoritiesUpdate(Authorities paramAuthorities) {
+		return session.update("member.authoritiesUpdate", paramAuthorities);
+	}
+
+	@Override
+	public int memberMemoUpdate(MemberMemo paramMemberMemo) {
+		return session.update("member.memberMemoUpdate", paramMemberMemo);
+	}
+
+
+
 	
 }

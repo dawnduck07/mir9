@@ -75,6 +75,20 @@ public interface MemberService {
 	// 회원 적립금 관리
 	List<MemberPoint> selectMemberPointListByParam(Map<String, Object> param);
 
+	// 회원정보 수정(상세보기)
+	int memberUpdate(Member paramMember);
+
+	// 회원주소 수정(상세보기)
+	int addressUpdate(Address paramAddress);
+
+	// 권한(Authorities) 수정
+	int authoritiesUpdate(Authorities paramAuthorities);
+
+	// 메모(MemberMemo) 수정
+	int memberMemoUpdate(MemberMemo paramMemberMemo);
+
+
+
 
 
 }
