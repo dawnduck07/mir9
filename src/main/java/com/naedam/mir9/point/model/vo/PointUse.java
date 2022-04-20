@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PontUse implements Serializable {
+public class PointUse implements Serializable {
 
 	/**
 	 * 
@@ -19,8 +19,8 @@ public class PontUse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int pointUseNo;
-	private String type;
-	private int useablePoints;
-	private int useableMinPoints;
-	private int useableDate;
+	private int pointUnit;
+	private int pointLimitUsePoint;
+	private int pointLimitUseAmount;
+	private int pointLimitUseDay;
 }

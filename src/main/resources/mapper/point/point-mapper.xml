@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="point">
+  <update id="updatePoint">
+  	update point set point_use_type = #{pointUseType}, point_name = #{pointName} where point_no = 1
+  </update>
+  
+  <update id="updatePointSave">
+  	update point_save set point_member_amount = #{pointMemberAmount}, point_memo_amount = #{pointMemoAmount}, point_type = #{pointType}, point_rate = #{pointRate}, point_use_receive = #{pointUseReceive}
+  		where point_save_no = 1
+  </update>
+  
+  <update id="updatePointUse">
+  	update point_use set point_unit = #{pointUnit}, point_limit_use_point = #{pointLimitUsePoint}, point_limit_use_amount = #{pointLimitUseAmount}, point_limit_use_day = #{pointLimitUseDay}
+  		where point_use_no = 1
+  </update>
+</mapper>
