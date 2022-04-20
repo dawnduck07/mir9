@@ -69,7 +69,7 @@
 							<c:forEach var="mPoint" items="${mPointList }" varStatus="vs">
 								<tr>
 									<td><input type="checkbox" name="list[]" value="${mPoint.memberPointNo }" /></td>
-									<td>4</td>
+									<td>${mPointList.size() - vs.index }</td>
 									<td>${mPoint.id }</td>
 									<td>${mPoint.memberName }</td>
 									<td>${mPoint.email }</td>

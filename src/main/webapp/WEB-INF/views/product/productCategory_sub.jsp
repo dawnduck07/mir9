@@ -46,6 +46,7 @@
                     	<c:forEach var="rCte" items="${relatedCteList }">
 							<strong> > </strong> 
 							<a href="${pageContext.request.contextPath}/product/productCategory_sub?cteNo=${rCte.categoryNo}">${rCte.categoryName}</a>
+							<c:set value="${rCte.level }" var="level"/>
 						</c:forEach>
                     </p>
 
@@ -78,7 +79,9 @@
                     <br>
 
                     <button type="button" onclick="selectDelete('deleteCategory');" class="btn btn-danger btn-sm"><i class="fa fa-minus-square" aria-hidden="true"></i> 선택삭제</button>
-                    <button type="button" onclick="onclickInsert();" class="btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> 카테고리 등록</button>
+                    <c:if test="${level != 3 }">
+	                    <button type="button" onclick="onclickInsert();" class="btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> 카테고리 등록</button>
+                    </c:if>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div><!-- /.col-xs-12 -->
