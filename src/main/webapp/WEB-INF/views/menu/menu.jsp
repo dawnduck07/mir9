@@ -52,98 +52,159 @@
 	
 	<!-- 리비젼 보기 부터 -->
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true" style="display: none;">
-	    <div class="modal-dialog" style="width:90%;">
-	        <div class="modal-content">
-	            <form name="form_register" method="post" onsubmit="return false;" action="?tpf=admin/menu/process">
-	            	<input type="hidden" name="mode" value="updateMenu">
-	            	<input type="hidden" name="code" value="2">
-	            	<input type="hidden" name="category_code" value="">
-	            	<input type="hidden" name="locale" value="ko">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	                <h4 class="modal-title">메뉴 등록</h4>
-	            </div>
-	            <div class="modal-body">
-		            <div class="row" style="margin:0">
-			                <div class="col-xs-4">
-			                	<span style="float:left;"><h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 메뉴 등록</p></h4></span>
-			                	<span style="float:left; padding:5px 0 0 10px;"><button type="button" onclick="onclickManual();" class="btn btn-warning btn-xs"><i class="fa fa-fw fa-question-circle"></i> 프로그램 연동 방법</button></span>
-			                </div>
-			
-			                <div class="col-xs-8" style="padding:0">
-				                <div class="btn-group pull-right">
-				      				<button type="button" id="locale_ko" onclick="setLocale('ko')" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>      <button type="button" id="locale_en" onclick="setLocale('en')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>      <button type="button" id="locale_zh" onclick="setLocale('zh')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>      <button type="button" id="locale_vn" onclick="setLocale('vn')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                
-				      			</div>
-			                </div>
-		            </div>
-		
-		            <table class="table table-bordered">
-			            <tbody>
-				            <tr>
-				                <td class="menu">메뉴명</td>
-				                <td align="left">
-				                	<input type="text" name="menuName" class="form-control input-sm">
-				                </td>
-				                <td class="menu">url &nbsp;&nbsp;
-				                	<input type="checkbox" name="menuLink" onclick="checkOuterLink()" value="y">
-				                		<small>외부링크</small>
-				                </td>
-				                <td align="left">
-					                <select id="displayOuterLink" name="menuTarget" class="form-control input-sm" style="display:none; width:25%; padding:0; margin-right:5px; float:left;">
-					                	<option value="blank">새창</option>
-					                	<option value="self">현재창</option>
-					                </select>
-					                <input type="text" name="menuUrl" class="form-control input-sm" style="width:70%; float:left;">
-				                </td>
-				                <td class="menu">상태</td>
-								<td>
-					                <select name="menuState" class="form-control input-sm" style="width:100px;">
-					      					<option value="y">보임</option>      
-					      					<option value="n">숨김</option>                
-					      			</select>
-				                </td>
-				                <td class="menu">헤더선택</td>
-				                <td>
-					                <select name="menuHeader" class="form-control input-sm">
-					                	<option value="">선택하세요</option>
-					      				<option value="40">ABOUT</option>      
-					      				<option value="41">PRODUCTS</option>      
-					      				<option value="42">RnD</option>      
-					      				<option value="43">company</option>      
-					      				<option value="44">contact</option>                
-					      			</select>
-				                </td>
-				                <td class="menu">메타 태그</td>
-				                <td align="left">
-				                	<input type="checkbox" name="menuMeta" onclick="checkMeta()" value="y">사용
-				                </td>
-				            </tr>
-				            <tr id="displayMeta" style="display:none;">
-				                <td class="menu">메타 태그</td>
-				                <td align="left" colspan="9">
-					                <span style="float:left; padding:5px 5px 0 0;">title </span>
-					                <span style="float:left;"><input type="text" name="meta_title" class="form-control input-sm" style="width:500px;"></span>
-					                <span style="float:left; padding:5px 5px 0 10px;">description </span>
-					                <span style="float:left;"><input type="text" name="meta_description" class="form-control input-sm" style="width:500px;"></span>
-				                </td>
-				            </tr>
-				            <tr>
-				                <td align="left" colspan="10" style="padding:0">
-				                	<textarea name="menuCotent" id="content-editor" rows="10" cols="80" "></textarea>
-				                </td>
-				            </tr>
-			            </tbody>
-		            </table>
-	            </div>
-	          
-	            <div class="modal-footer">
-	            	<button type="button" id="displayButton" onclick="register();" class="btn btn-primary">저장하기</button>
-	            	<a href="main" id="previewLink" target="_new" style="display: none;"><button type="button" class="btn btn-success">미리보기</button></a>
-	            </div>
-	            </form>
-	          </div>
-	    </div>
-	</div>
+    <div class="modal-dialog" style="width:90%;">
+        <div class="modal-content">
+            <form name="form_register" method="post" onsubmit="return false;" action="/mir9/menu/addMenu?${_csrf.parameterName}=${_csrf.token}">
+            <input type="hidden" name="mode" value="insertMenu">
+            <!-- <input type="hidden" name="code">
+            <input type="hidden" name="category_code"> -->
+            <input type="hidden" name="locale" value="ko">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">메뉴 등록</h4>
+            </div>
+            <div class="modal-body">
+            <div class="row" style="margin:0">
+                <div class="col-xs-4">
+                <span style="float:left;"><h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 메뉴 등록</p></h4></span>
+                <span style="float:left; padding:5px 0 0 10px;"><button type="button" onclick="onclickManual();" class="btn btn-warning btn-xs"><i class="fa fa-fw fa-question-circle"></i> 프로그램 연동 방법</button></span>
+                </div>
+
+                <div class="col-xs-8" style="padding:0">
+                <div class="btn-group pull-right">
+      <button type="button" id="locale_ko" onclick="setLocale('ko')" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>      <button type="button" id="locale_en" onclick="setLocale('en')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>      <button type="button" id="locale_zh" onclick="setLocale('zh')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>      <button type="button" id="locale_vn" onclick="setLocale('vn')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                </div>
+                </div>
+            </div>
+
+            <table class="table table-bordered">
+            <tbody><tr>
+                <td class="menu">메뉴명</td>
+                <td align="left"><input type="text" name="title" class="form-control input-sm"></td>
+                <td class="menu">url &nbsp;&nbsp;<input type="checkbox" name="is_outer_link" onclick="checkOuterLink()" value="y"> <small>외부링크</small></td>
+                <td align="left">
+                <select id="displayOuterLink" name="target" class="form-control input-sm" style="width: 25%; padding: 0px; margin-right: 5px; float: left; display: none;">
+                <option value="_blank">새창</option>
+                <option value="_self">현재창</option>
+                </select>
+                <input type="text" name="url" class="form-control input-sm" style="width:70%; float:left;">
+                </td>
+                <td class="menu">상태</td>
+				<td>
+                <select name="status" class="form-control input-sm" style="width:100px;">
+      <option value="y">보임</option>      <option value="n">숨김</option>                </select>
+                </td>
+                <td class="menu">헤더선택</td>
+                <td>
+                <select name="menu_head_code" class="form-control input-sm">
+                <option value="">선택하세요</option>
+      <option value="40">ABOUT</option>      <option value="41">PRODUCTS</option>      <option value="42">RnD</option>      <option value="43">company</option>      <option value="44">contact</option>                </select>
+                </td>
+                <td class="menu">메타 태그</td>
+                <td align="left"><input type="checkbox" name="is_meta" onclick="checkMeta()" value="y"> 사용</td>
+            </tr>
+            <tr id="displayMeta" style="display: none;">
+                <td class="menu">메타 태그</td>
+                <td align="left" colspan="9">
+                <span style="float:left; padding:5px 5px 0 0;">title </span>
+                <span style="float:left;"><input type="text" name="meta_title" class="form-control input-sm" style="width:500px;"></span>
+                <span style="float:left; padding:5px 5px 0 10px;">description </span>
+                <span style="float:left;"><input type="text" name="meta_description" class="form-control input-sm" style="width:500px;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" colspan="10" style="padding:0">
+                <textarea name="content" id="content-editor" onfocus="javascript:this.value=''" rows="10" cols="80" "></textarea>
+                </td>
+            </tr>
+            </tbody></table>
+            
+            </div></form>
+
+            </div>
+            <div class="modal-footer">
+            <button type="button" id="displayButton" onclick="register();" class="btn btn-primary">저장하기</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- update모달 -->
+	<div class="modal fade" id="modalContent2" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="width:90%;">
+        <div class="modal-content">
+            <form name="form_register2" method="post" onsubmit="return false;" action="/mir9/menu/updateMenu?${_csrf.parameterName}=${_csrf.token}">
+            <input type="hidden" name="mode" value="insertMenu">
+            <input type="hidden" name="code" id="getCode">
+            <!-- <input type="hidden" name="category_code"> -->
+            <input type="hidden" name="locale" value="ko">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">메뉴 등록</h4>
+            </div>
+            <div class="modal-body">
+            <div class="row" style="margin:0">
+                <div class="col-xs-4">
+                <span style="float:left;"><h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 메뉴 등록</p></h4></span>
+                <span style="float:left; padding:5px 0 0 10px;"><button type="button" onclick="onclickManual();" class="btn btn-warning btn-xs"><i class="fa fa-fw fa-question-circle"></i> 프로그램 연동 방법</button></span>
+                </div>
+
+                <div class="col-xs-8" style="padding:0">
+                <div class="btn-group pull-right">
+      <button type="button" id="locale_ko" onclick="setLocale('ko')" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>      <button type="button" id="locale_en" onclick="setLocale('en')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>      <button type="button" id="locale_zh" onclick="setLocale('zh')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>      <button type="button" id="locale_vn" onclick="setLocale('vn')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                </div>
+                </div>
+            </div>
+
+            <table class="table table-bordered">
+            <tbody><tr>
+                <td class="menu">메뉴명</td>
+                <td align="left"><input type="text" name="title" id="getTitle" class="form-control input-sm"></td>
+                <td class="menu">url &nbsp;&nbsp;<input type="checkbox" name="is_outer_link" id="getIs_outer_link" onclick="checkOuterLink()" value="y"> <small>외부링크</small></td>
+                <td align="left">
+                <select id="displayOuterLink" name="target" id="getTarget" class="form-control input-sm" style="width: 25%; padding: 0px; margin-right: 5px; float: left; display: none;">
+                <option value="_blank">새창</option>
+                <option value="_self">현재창</option>
+                </select>
+                <input type="text" name="url" id="getUrl" class="form-control input-sm" style="width:70%; float:left;">
+                </td>
+                <td class="menu">상태</td>
+				<td>
+                <select name="status" id="getStatus" class="form-control input-sm" style="width:100px;">
+      <option value="y">보임</option>      <option value="n">숨김</option>                </select>
+                </td>
+                <td class="menu">헤더선택</td>
+                <td>
+                <select name="menu_head_code" id="getMenu_head_code" class="form-control input-sm">
+                <option value="">선택하세요</option>
+      <option value="40">ABOUT</option>      <option value="41">PRODUCTS</option>      <option value="42">RnD</option>      <option value="43">company</option>      <option value="44">contact</option>                </select>
+                </td>
+                <td class="menu">메타 태그</td>
+                <td align="left"><input type="checkbox" name="is_meta" id="getIs_meta" onclick="checkMeta()" value="y"> 사용</td>
+            </tr>
+            <tr id="displayMeta" style="display: none;">
+                <td class="menu">메타 태그</td>
+                <td align="left" colspan="9">
+                <span style="float:left; padding:5px 5px 0 0;">title </span>
+                <span style="float:left;"><input type="text" name="meta_title" id="getMeta_title" class="form-control input-sm" style="width:500px;"></span>
+                <span style="float:left; padding:5px 5px 0 10px;">description </span>
+                <span style="float:left;"><input type="text" name="meta_description" id="getMeta_description" class="form-control input-sm" style="width:500px;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" colspan="10" style="padding:0">
+                <textarea name="content" id="content-editor2" onfocus="javascript:this.value=''" rows="10" cols="80" "></textarea>
+                </td>
+            </tr>
+            </tbody></table>
+            
+            </div></form>
+
+            </div>
+            <div class="modal-footer">
+            <button type="button" id="displayButton" onclick="register2();" class="btn btn-primary">저장하기</button>
+            <button type="button" class="btn btn-success">미리보기</button>
+            </div>
+        </div>
+    </div>    
+    
 	
 	<div class="modal fade" id="modalManual" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:700px;">
@@ -294,19 +355,7 @@
 	            <span id="htmlTag">
 	            	<table class="table table-bordered">
 	            		<tbody>
-	            			<tr>   
-	            				<td class="menu">리비젼명</td>   
-	            				<td class="menu">날짜</td>   
-	            				<td class="menu">명령</td>
-	            			</tr>
-	            			<tr>   
-	            				<td>57</td>   
-	            				<td>2019-08-07 16:35</td>   
-	            				<td>   
-	            					<button type="button" onclick="infoRevision(221);" class="btn btn-warning btn-xs">보기</button>   
-	            					<button type="button" onclick="deleteRevision(221,this);" class="btn btn-danger btn-xs">삭제</button>   
-	            				</td>
-	            			</tr>
+
 	            		</tbody>
 	            	</table>
 	            </span>
@@ -353,197 +402,239 @@
 	    </div>
 	</div>
 </div>
-	<script>
-	        var is_revision = false;
-	        var revision_code;
-	        if (window.CKEDITOR) {  // CKEDITOR loading 여부 체크 (Web 버젼에서만 사용)
-	            var objEditor = CKEDITOR.replace('content-editor', {
-	                height: 800,
-	                extraPlugins : 'tableresize',
-	                extraPlugins: 'codemirror',
-	                removeButtons: 'Source',
-	                filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
-	                filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images',
-	                contentsCss : ['/html/css/common.css','/html/css/style.css']
-	            });
-	            CKEDITOR.on('dialogDefinition', function (ev) {
-	                var dialogName = ev.data.name;
-	                var dialog = ev.data.definition.dialog;
-	                var dialogDefinition = ev.data.definition;
-	
-	                if (dialogName == 'image') {
-	                    dialog.on('show', function (obj) {
-	                        this.selectPage('Upload'); //업로드텝으로 시작
-	                    });
-	                    dialogDefinition.removeContents('advanced'); // 자세히탭 제거
-	                    dialogDefinition.removeContents('Link'); // 링크탭 제거
-	                }
-	            });
-	            CKEDITOR.config.allowedContent = true;
-	            CKEDITOR.config.startupMode = 'source';
-	            CKEDITOR.config.codemirror = {
-	                // Set this to the theme you wish to use (codemirror themes)
-	                theme: '3024-night',
-	                // Whether or not to automatically format code should be done when the editor is loaded
-	                autoFormatOnStart: false
-	            };
-	        }
-	        function checkOuterLink() {
-	            if($('[name=is_outer_link]').is(':checked')) $('#displayOuterLink').show();
-	            else $('#displayOuterLink').hide();
-	        }
-	        function checkMeta() {
-	            if($('[name=is_meta]').is(':checked')) $('#displayMeta').show();
-	            else $('#displayMeta').hide();
-	        }
-	        function setLocale(locale) {
-	            $('button[id^=locale_]').attr('class', 'btn btn-default');
-	            $('#locale_'+locale).attr('class', 'btn btn-primary');
-	            $('[name=locale]').val(locale);
-	            if(is_revision == false) setData($('[name=code]').val());
-	            else infoRevision(revision_code);
-	
-	            console.log(':'+is_revision);
-	            console.log(':'+$('[name=code]').val()+':'+revision_code);
-	        }
-	        function register() {
-	            // if(form_register.title.value == '') { alert('메뉴명이 입력되지 않았습니다.'); form_register.title.focus(); return false;}
-	            // if(form_register.url.value == '') { alert('url이 입력되지 않았습니다.'); form_register.url.focus(); return false;}
-	            //form_register.target = 'iframe_process';
-	            //form_register.submit();
-	            alert("메뉴가 등록 되었습니다.");
-	        	$("form[name='form_register']").attr("method", "POST").attr("action", "/mir9/menu/addMenu?${_csrf.parameterName}=${_csrf.token}").submit();
-	        }
-	        function onclickManual() {
-	            $('#modalManual').modal({backdrop:'static', show:true});
-	        }
-	        function closeManual() {
-	            $('#modalManual').modal('hide');
-	        }
-	        function printData(json_data) {
-	            if (json_data.action_type != undefined && json_data.action_type == 'delete') {  // 삭제 -> 복구
-	                parent.$('[name=mode]').val('repairMenu');
-	                parent.form_register.mode.value = 'repairMenu';
-	                parent.$('[name=code]').val(revision_code);
-	                $('#displayButton').html('복구하기');
-	            }
-	            else {                                                                          // 수정 or 리비젼 보기
-	                parent.form_register.mode.value = 'updateMenu';
-	                parent.$('[name=code]').val(json_data.code);
-	                $('#displayButton').html('저장하기');
-	            }
-	            parent.$('[name=title]').val(json_data.title);
-	            if (json_data.menu_head_code == 0) json_data.menu_head_code = '';
-	            parent.$('[name=menu_head_code]').val(json_data.menu_head_code);
-	            parent.$('[name=url]').val(json_data.url);
-	            if (json_data.code == 1) parent.$('[name=url]').prop('readonly', true); // 메인 페이지는 url 변경 불가
-	            else  parent.$('[name=url]').prop('readonly', false);
-	            if(json_data.is_outer_link == 'y') {
-	                parent.$('[name=is_outer_link]').prop('checked', true);
-	                parent.$('#displayOuterLink').show();
-	            }
-	            else {
-	                parent.$('[name=is_outer_link]').prop('checked', false);
-	                parent.$('#displayOuterLink').hide();
-	            }
-	            if (json_data.is_outer_link == 'n') parent.$('[name=is_outer_link]').prop('checked', false);
-	            else parent.$('[name=is_outer_link]').prop('checked', true);
-	            parent.$('[name=target]').val(json_data.target);
-	            parent.$('[name=meta_title]').val(json_data.meta_title);
-	            parent.$('[name=meta_description]').val(json_data.meta_description);
-	            if(json_data.is_meta == 'y') {
-	                parent.$('[name=is_meta]').prop('checked', true);
-	                parent.$('#displayMeta').show();
-	            }
-	            else {
-	                parent.$('[name=is_meta]').prop('checked', false);
-	                parent.$('#displayMeta').hide();
-	            }
-	            parent.$('[name=status]').val(json_data.status);
-	            if (json_data.content == null) json_data.content = '';
-	            // 미리보기 링크 수정
-	            parent.$('#previewLink').attr('href',json_data.full_url);
-	
-	            setTimeout(function(){
-	                parent.objEditor.setData('\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n');
-	            }, 200);
-	            setTimeout(function(){
-	                parent.objEditor.setData(json_data.content);
-	            }, 200);
-	        }
-	        function setData(code) {
-	            // 정보
-	            $.ajax({
-	                url:'http://demoshop.mir9.kr/api/process.php',
-	                type:'post',
-	                dataType:'json',
-	                data:{
-	                    method : 'UtilMenu.infoMenu',
-	                    locale : parent.$('[name=locale]').val(),
-	                    code : code
-	                },
-	                success:function(data, textStatus, jqXHR){
-	                    var json_data = data.data;
-	                    printData(json_data);
-	                },
-	                error:function(jqXHR, textStatus, errorThrown){
-	                    console.log(textStatus);
-	                    // $('#content').val(errorThrown);
-	                }
-	            });
-	        }
-	        function closeRevision() {
-	            $('#modalRevision').modal('hide');
-	        }
-	        function infoRevision(code) {
-	            $('#modalRevision').modal('hide');
-	            parent.$('#modalContent').modal({backdrop:'static', show:true});
-	            // 리비젼 정보 보여주기
-	            $.ajax({
-	                url:'http://demoshop.mir9.kr/api/process.php',
-	                type:'post',
-	                dataType:'json',
-	                data:{
-	                    method : 'UtilMenu.infoRevision',
-	                    locale : parent.$('[name=locale]').val(),
-	                    code : code
-	                },
-	                success:function(data, textStatus, jqXHR){
-	                    var json_data = data.data;
-	                    console.log('--------------------------');
-	                    console.log(json_data);
-	                    json_data.code = json_data.menu_code;
-	                    is_revision = true;
-	                    revision_code = code;
-	                    printData(json_data);
-	                },
-	                error:function(jqXHR, textStatus, errorThrown){
-	                    console.log(textStatus);
-	                    // $('#content').val(errorThrown);
-	                }
-	            });
-	        }
-	        function deleteRevision(code, obj) {
-	            if(confirm('해당 리비젼 정보를 정말 삭제하시겠습니까?')) {
-	                parent.formDeleteRevision.code.value = code;
-	                parent.formDeleteRevision.target = 'iframe_process';
-	                parent.formDeleteRevision.submit();
-	                // tr 태그 삭제
-	                $(obj).parents('tr').remove();
-	            }
-	        }
-	        function checkHeight() {
-	            var height = $(window).height() - 200;
-	            document.getElementById('iframe_tree').height = height;
-	            document.getElementById('iframe_list').height = height;
-	        }
-	        checkHeight();
-	        function registerCopyMenu() {
-	            if(formCopyMenu.menu_locale.value == '') { alert('언어가 선택되지 않았습니다.'); formCopyMenu.menu_locale.focus(); return false;}
-	            formCopyMenu.target = 'iframe_process';
-	            formCopyMenu.submit();
-	        }
-	</script>
+<script>
+        var is_revision = false;
+        var revision_code;
+        if (window.CKEDITOR) {  // CKEDITOR loading 여부 체크 (Web 버젼에서만 사용)
+            var objEditor = CKEDITOR.replace('content-editor', {
+                height: 800,
+                extraPlugins : 'tableresize',
+                extraPlugins: 'codemirror',
+                removeButtons: 'Source',
+                filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+                filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images',
+                contentsCss : ['/html/css/common.css','/html/css/style.css']
+            });
+            CKEDITOR.on('dialogDefinition', function (ev) {
+                var dialogName = ev.data.name;
+                var dialog = ev.data.definition.dialog;
+                var dialogDefinition = ev.data.definition;
+
+                if (dialogName == 'image') {
+                    dialog.on('show', function (obj) {
+                        this.selectPage('Upload'); //업로드텝으로 시작
+                    });
+                    dialogDefinition.removeContents('advanced'); // 자세히탭 제거
+                    dialogDefinition.removeContents('Link'); // 링크탭 제거
+                }
+            });
+            CKEDITOR.config.allowedContent = true;
+            CKEDITOR.config.startupMode = 'source';
+            CKEDITOR.config.codemirror = {
+                // Set this to the theme you wish to use (codemirror themes)
+                theme: '3024-night',
+                // Whether or not to automatically format code should be done when the editor is loaded
+                autoFormatOnStart: false
+            };
+        }
+        if (window.CKEDITOR) {  // CKEDITOR loading 여부 체크 (Web 버젼에서만 사용)
+            var objEditor2 = CKEDITOR.replace('content-editor2', {
+                height: 800,
+                extraPlugins : 'tableresize',
+                extraPlugins: 'codemirror',
+                removeButtons: 'Source',
+                filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+                filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images',
+                contentsCss : ['/html/css/common.css','/html/css/style.css']
+            });
+            CKEDITOR.on('dialogDefinition', function (ev) {
+                var dialogName = ev.data.name;
+                var dialog = ev.data.definition.dialog;
+                var dialogDefinition = ev.data.definition;
+
+                if (dialogName == 'image') {
+                    dialog.on('show', function (obj) {
+                        this.selectPage('Upload'); //업로드텝으로 시작
+                    });
+                    dialogDefinition.removeContents('advanced'); // 자세히탭 제거
+                    dialogDefinition.removeContents('Link'); // 링크탭 제거
+                }
+            });
+            CKEDITOR.config.allowedContent = true;
+            CKEDITOR.config.startupMode = 'source';
+            CKEDITOR.config.codemirror = {
+                // Set this to the theme you wish to use (codemirror themes)
+                theme: '3024-night',
+                // Whether or not to automatically format code should be done when the editor is loaded
+                autoFormatOnStart: false
+            };
+        }        
+        function checkOuterLink() {
+            if($('[name=is_outer_link]').is(':checked')) $('#displayOuterLink').show();
+            else $('#displayOuterLink').hide();
+        }
+        function checkMeta() {
+            if($('[name=is_meta]').is(':checked')) $('#displayMeta').show();
+            else $('#displayMeta').hide();
+        }
+        function setLocale(locale) {
+            $('button[id^=locale_]').attr('class', 'btn btn-default');
+            $('#locale_'+locale).attr('class', 'btn btn-primary');
+            $('[name=locale]').val(locale);
+            if(is_revision == false) setData($('[name=code]').val());
+            else infoRevision(revision_code);
+
+            console.log(':'+is_revision);
+            console.log(':'+$('[name=code]').val()+':'+revision_code);
+        }
+        function register() {
+            // if(form_register.title.value == '') { alert('메뉴명이 입력되지 않았습니다.'); form_register.title.focus(); return false;}
+            // if(form_register.url.value == '') { alert('url이 입력되지 않았습니다.'); form_register.url.focus(); return false;}
+            form_register.target = 'iframe_process';
+            form_register.submit();
+            location.reload();
+        }
+        function register2() {
+            // if(form_register.title.value == '') { alert('메뉴명이 입력되지 않았습니다.'); form_register.title.focus(); return false;}
+            // if(form_register.url.value == '') { alert('url이 입력되지 않았습니다.'); form_register.url.focus(); return false;}
+            form_register2.target = 'iframe_process';
+            form_register2.submit();
+            location.reload();
+        }        
+        function onclickManual() {
+            $('#modalManual').modal({backdrop:'static', show:true});
+        }
+        function closeManual() {
+            $('#modalManual').modal('hide');
+        }
+        function printData(json_data) {
+        	/*
+            if (json_data.action_type != undefined && json_data.action_type == 'delete') {  // 삭제 -> 복구
+                parent.$('[name=mode]').val('repairMenu');
+                parent.form_register.mode.value = 'repairMenu';
+                parent.$('[name=code]').val(revision_code);
+                $('#displayButton').html('복구하기');
+            }
+            else {                                                                          // 수정 or 리비젼 보기
+                parent.form_register.mode.value = 'updateMenu';
+                parent.$('[name=code]').val(json_data.code);
+                $('#displayButton').html('저장하기');
+            }*/
+            parent.$('[name=title]').val(json_data.title);
+            parent.$('[id=getCode]').val(json_data.code);
+            if (json_data.menu_head_code == 0) json_data.menu_head_code = '';
+            parent.$('[name=menu_head_code]').val(json_data.menu_head_code);
+            parent.$('[name=url]').val(json_data.url);
+            if (json_data.code == 1) parent.$('[name=url]').prop('readonly', true); // 메인 페이지는 url 변경 불가
+            else  parent.$('[name=url]').prop('readonly', false);
+            if(json_data.is_outer_link == 'y') {
+                parent.$('[name=is_outer_link]').prop('checked', true);
+                parent.$('#displayOuterLink').show();
+            }
+            else {
+                parent.$('[name=is_outer_link]').prop('checked', false);
+                parent.$('#displayOuterLink').hide();
+            }
+            if (json_data.is_outer_link == 'n') parent.$('[name=is_outer_link]').prop('checked', false);
+            else parent.$('[name=is_outer_link]').prop('checked', true);
+            parent.$('[name=target]').val(json_data.target);
+            parent.$('[name=meta_title]').val(json_data.meta_title);
+            parent.$('[name=meta_description]').val(json_data.meta_description);
+            if(json_data.is_meta == 'y') {
+                parent.$('[name=is_meta]').prop('checked', true);
+                parent.$('#displayMeta').show();
+            }
+            else {
+                parent.$('[name=is_meta]').prop('checked', false);
+                parent.$('#displayMeta').hide();
+            }
+            parent.$('[name=status]').val(json_data.status);
+            if (json_data.content == null) json_data.content = '';
+            // 미리보기 링크 수정
+            parent.$('#previewLink').attr('href',json_data.full_url);
+
+            setTimeout(function(){
+                parent.objEditor.setData('\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n');
+                parent.objEditor2.setData('\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n');
+            }, 200);
+            setTimeout(function(){
+                parent.objEditor.setData(json_data.content);
+                parent.objEditor2.setData(json_data.content);
+            }, 200);
+        }
+        function setData(code) {
+            // 정보
+            $.ajax({
+                url:'/mir9/menu/json/getMenu?${_csrf.parameterName}=${_csrf.token}',
+                type:'post',
+                dataType:'json',
+                data:{
+                    method : 'menu.getMenu',
+                    locale : parent.$('[name=locale]').val(),
+                    code : code
+                },
+                success:function(data, textStatus, jqXHR){
+                    var json_data = data;
+                    printData(json_data);
+                },
+                error:function(jqXHR, textStatus, errorThrown){
+                    console.log(textStatus);
+                    // $('#content').val(errorThrown);
+                }
+            });
+        }
+        function closeRevision() {
+            $('#modalRevision').modal('hide');
+        }
+        function infoRevision(code) {
+            $('#modalRevision').modal('hide');
+            parent.$('#modalContent').modal({backdrop:'static', show:true});
+            // 리비젼 정보 보여주기
+            $.ajax({
+            	url:'/mir9/menu/json/getMenu?${_csrf.parameterName}=${_csrf.token}',
+                type:'post',
+                dataType:'json',
+                data:{
+                    method : 'menu.getMenu',
+                    locale : parent.$('[name=locale]').val(),
+                    code : code
+                },
+                success:function(data, textStatus, jqXHR){
+                    var json_data = data;
+                    console.log('--------------------------');
+                    console.log(json_data);
+                    json_data.code = json_data.menu_code;
+                    is_revision = true;
+                    revision_code = code;
+                    printData(json_data);
+                },
+                error:function(jqXHR, textStatus, errorThrown){
+                    console.log(textStatus);
+                    // $('#content').val(errorThrown);
+                }
+            });
+        }
+        function deleteRevision(code, obj) {
+            if(confirm('해당 리비젼 정보를 정말 삭제하시겠습니까?')) {
+                parent.formDeleteRevision.code.value = code;
+                parent.formDeleteRevision.target = 'iframe_process';
+                parent.formDeleteRevision.submit();
+                // tr 태그 삭제
+                $(obj).parents('tr').remove();
+            }
+        }
+        function checkHeight() {
+            var height = $(window).height() - 200;
+            document.getElementById('iframe_tree').height = height;
+            document.getElementById('iframe_list').height = height;
+        }
+        checkHeight();
+        function registerCopyMenu() {
+            if(formCopyMenu.menu_locale.value == '') { alert('언어가 선택되지 않았습니다.'); formCopyMenu.menu_locale.focus(); return false;}
+            formCopyMenu.target = 'iframe_process';
+            formCopyMenu.submit();
+        }
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 
 
