@@ -104,7 +104,7 @@ public class MemberController {
 						@RequestParam String authority,
 						RedirectAttributes redirectAttributes) {
 		log.debug("{}", "memberInsertModalFrm.do 요청!");
-		log.debug("memberEntity = {}", member);
+		log.debug("member = {}", member);
 		log.debug("memberMemo = {}", memberMemo);
 		log.debug("memberGradeNo = {}", memberGradeNo);
 		log.debug("mobile = {}", mobile1);
