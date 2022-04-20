@@ -188,7 +188,8 @@
 			<div class="modal-content">
 			
 				<form:form 
-					name="memberInsertModalFrm" 
+					name="memberInsertModalFrm"
+					id="memberInsertModalFrm" 
 					method="POST" 
 					action="${pageContext.request.contextPath}/member/memberInsertModalFrm.do">
 					<div class="modal-header">
@@ -208,6 +209,7 @@
 								<td class="menu">아이디</td>
 								<td align="left">
 									<input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" />
+									<input type="hidden" id=memberNo name="memberNo" value="" />
 									&nbsp;
 									<button 
 										type="button" 
@@ -575,6 +577,7 @@ $("button[id^='detail_']").on('click', function(e){
 			var regDate = res.regDate;
 			var loginDate = res.loginDate;
 			
+			$("[name=memberNo]").val(member.memberNo);
 			$("[name=id]").val(member.id);
 			$("[name=lastName]").val(member.lastName);
 			$("[name=firstName]").val(member.firstName);
@@ -597,6 +600,125 @@ $("button[id^='detail_']").on('click', function(e){
 // 상세보기 저장
 function update(){
 	console.log("상세보기 저장(update()) 작동");
+	var id = $("#id").val();
+	var password = $("#password").val();
+	var passwordCheck = $("#passwordCheck").val();
+	var firstName = $("#firstName").val();
+	var lastName = $("#lastName").val();
+	var memberMemoContent = $("#memberMemoContent").val();
+	console.log("memberMemoContent = " + memberMemoContent);
+	var authority = $("#memberGradeChk option:selected").val();
+	console.log("authority = " + authority);
+	var addressMain = $("#address_main").val();
+	var addressSub = $("#address_sub").val();
+	var addressZipcode = $("#address_zipcode").val();
+	console.log("addressMain = " + addressMain);
+	console.log("addressSub = " + addressSub);
+	console.log("addressZipcode = " + addressZipcode);
+	var memberNo = $("#memberNo").val();
+	console.log("memberNo = " + memberNo);
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	
+	if(password != ''){
+		// 비밀번호 유효성 검사
+		if(!/^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{8,15}$/.test(password)){
+			alert("비밀번호는 8 ~ 15 글자 이내로 공백 없이 영문자, 숫자, 특수문자를 혼합하여 입력해주세요.");
+			$("#password").focus();
+			return false;
+		}
+		// 비밀번호 확인 공란 확인
+		if(passwordCheck == ''){
+			alert("비밀번호가 확인이 입력되지 않았습니다.");
+			$("#passwordCheck").focus();
+			return false;	
+		}
+	}
+	
+	// 비밀번호 일치 확인
+	if(password != passwordCheck){
+		alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+		$("#passwordCheck").focus();
+		return false;
+	}
+	
+	// 이름 공란 확인
+	if(firstName == ''){
+		alert("이름이 입력되지 않았습니다.");
+		$("#firstName").focus();
+		return false;
+	}
+	// 성 공란 확인
+	if(lastName == ''){
+		alert("성이 입력되지 않았습니다.");
+		$("#lastName").focus();
+		return false;
+	}
+	
+	// 휴대폰 번호 유효성 검사
+	var mobile1 = $("#mobile1").val();
+	var mobile2 = $("#mobile2").val();
+	var mobile3 = $("#mobile3").val();
+	
+	if(mobile2 == '' || mobile3 == ''){
+		alert("휴대폰 번호가 입력되지 않았습니다.");
+		$("#mobile1").focus();
+		return false;
+	}
+	if(!/^([0-9]{3,4})$/.test(mobile2) || !/^([0-9]{4})$/.test(mobile3)){
+		alert("휴대폰 번호를 정확하게 입력해주세요.");
+		$("#mobile1").focus();
+		return false;
+	}
+
+	// 이메일 유효성 검사
+	var email = $("#email").val();
+	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+	
+	if(!regEmail.test(email)){
+		alert("이메일을 정확하게 입력해주세요.");
+		$("#email").focus();
+		return false;
+	}
+	
+	const result = {
+			memberNo : memberNo,
+			id : id,
+			password : password,
+			firstName : firstName,
+			lastName : lastName,
+			mobile1 : mobile1,
+			mobile2 : mobile2,
+			mobile3 : mobile3,
+			email : email,
+			addressZipcode : addressZipcode,
+			addressMain : addressMain,
+			addressSub : addressSub,
+			memberMemoContent : memberMemoContent,
+			authority : authority
+	};
+	
+	const data = JSON.stringify(result);
+	console.log(data);
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/memberUpdate.do`,
+		method : "POST",
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success(data){
+			console.log(data);
+			$(window).unbind("beforeunload");
+		}, 
+		error : console.log
+	});
+	
+
 }
 
 $('#findList').each(function(){

@@ -43,19 +43,16 @@
 <select id="selectMemberList" resultType="memberEntity">
 	SELECT
 		m.member_no,
-	    m.id,
-	    m.last_name, 
-	    m.first_name,
-	    m.phone,
-	    a.address_main, 
-	    a.address_sub,
-	    p.point_amt,
-	    m.reg_date
+		 m.id,
+		 m.last_name, 
+		 m.first_name,
+		 m.phone,
+		 a.address_main, 
+		 a.address_sub,
+		 m.reg_date
 	FROM
 	    member m left join member_point mp
 	        on m.member_no = mp.member_no
-	            left join point p
-	                on mp.point_no = p.point_no
 	                    left join address_book ab
 	                        on m.member_no = ab.member_no
 	                            left join address a

@@ -289,7 +289,13 @@ public class MemberController {
 		// 시간 양식 변경
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String regDate = dateFormat.format(member.getRegDate());
-		String loginDate = dateFormat.format(member.getLoginDate());
+		String loginDate = "";
+		
+		if(member.getLoginDate() == null){
+			loginDate = "";
+		} else {
+			loginDate = dateFormat.format(member.getLoginDate());
+		}
 		
 		// 2. 주소(Address) 조회
 		Address address = memberService.selectOneAddress(memberNo);
@@ -322,6 +328,49 @@ public class MemberController {
 		
 		return map;
 	}
+	
+	// 회원 상세보기 저장(update)
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@PostMapping("/memberUpdate.do")
+	public String memberUpdate(@RequestBody String data, RedirectAttributes redirectAttributes) {
+		log.debug("{}", "memberUpdate.do 요청!");
+		log.debug("param = {}", data);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			Map<String, String> map = mapper.readValue(data, Map.class);
+			log.debug("map = {}", map);
+			
+			String phone = map.get("mobile1") + map.get("mobile2") + map.get("mobile3");
+			
+			Member paramMember = new Member();
+			paramMember.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			paramMember.setFirstName(map.get("firstName"));
+			paramMember.setLastName(map.get("lastName"));
+			paramMember.setEmail(map.get("email"));
+			paramMember.setPhone(phone);
+
+			if(map.get("password") != "") {
+				paramMember.setPassword(map.get("password"));
+			}
+			
+			int resultMemberUpdate = memberService.memberUpdate(paramMember);
+			log.debug("resultMemberUpdate = {}", resultMemberUpdate);
+			
+		} catch(IOException e) {}
+		
+		
+		
+		
+		
+		
+		return "redirect:/member/list.do";
+	}
+	
+	
+	
 	
 	// 탈퇴회원 리스트
 	@GetMapping("/withdraw_list")

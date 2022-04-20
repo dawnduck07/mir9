@@ -135,5 +135,11 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectOneAuthorities", memberNo);
 	}
 
+	// 회원정보 수정(상세보기)
+	@Override
+	public int memberUpdate(Member paramMember) {
+		return session.update(null);
+	}
+
 	
 }

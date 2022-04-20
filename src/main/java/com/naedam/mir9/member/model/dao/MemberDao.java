@@ -71,6 +71,9 @@ public interface MemberDao {
 	// 회원등급 조회
 	Authorities selectOneAuthorities(int memberNo);
 
+	// 회원정보 수정(상세보기)
+	int memberUpdate(Member paramMember);
+
 
 
 	
