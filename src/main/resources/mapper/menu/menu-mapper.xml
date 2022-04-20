@@ -21,6 +21,13 @@
 		<result property="meta_description"		column="META_DESCRIPTION"	jdbcType="VARCHAR"></result>
 	</resultMap>
 	
+	<resultMap id="HeadSelectMap" type="head">
+		<result property="headNo"				column="HEAD_NO"			jdbcType="NUMERIC"></result>
+		<result property="title"				column="TITLE"				jdbcType="VARCHAR"></result>
+		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
+		<result property="content"				column="CONTENT"			jdbcType="VARCHAR"></result>
+	</resultMap>
+
 	<insert id="addMenu" parameterType="menu">
 		INSERT
 		INTO MENU(CODE,
@@ -51,6 +58,18 @@
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
 			   #{meta_description : VARCHAR})
+	</insert>
+	
+	<insert id="addHead" parameterType="head">
+		INSERT
+		INTO HEAD(HEAD_NO,
+				  TITLE,
+				  STATUS,
+				  CONTENT)
+		VALUES(NEXTVAL(head_seq),
+			   #{title : VARCHAR},
+			   #{status : VARCHAR},
+			   #{content : VARCHAR})
 	</insert>
 	
 	<insert id="addRevision" parameterType="menu">
