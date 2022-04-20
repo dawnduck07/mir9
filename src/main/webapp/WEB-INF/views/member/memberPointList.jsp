@@ -28,20 +28,22 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-body">
-					<label style="margin-top: 5px;">총 4 건</label>
-					<form name="form_search" method="post" action="?tpf=admin/member/point">
+					<label style="margin-top: 5px;">총 ${mPointList.size() } 건</label>
+					<form name="form_search" method="post" action="${pageContext.request.contextPath }/member/point?${_csrf.parameterName}=${_csrf.token}">
 						<div class="box-tools pull-right" style="margin-bottom: 5px;">
 							<div class="has-feedback">
-								<span> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"></span>
+								<span> 
+									<input type="text" name="keyword" id="keyword" value="${param.keyword == null ? '' : param.keyword }" class="form-control input-sm" placeholder="검색" /> 
+									<span class="glyphicon glyphicon-search form-control-feedback"></span>
 								</span>
 							</div>
 						</div>
 						<div class="box-tools pull-right" style="margin-bottom: 5px;">
 							<div class="has-feedback">
 								<select name="field" id="field" class="form-control input-sm">
-									<option value="b.id">아이디</option>
-									<option value="name">이름</option>
-									<option value="a.content">사용내역</option>
+									<option value="b.id" ${param.field == 'b.id' ? 'selected' : ''}>아이디</option>
+									<option value="member_name" ${param.field == 'member_name' ? 'selected' : ''}>이름</option>
+									<option value="a.point_title" ${param.field == 'a.point_title' ? 'selected' : ''}>사용내역</option>
 								</select>
 							</div>
 						</div>
