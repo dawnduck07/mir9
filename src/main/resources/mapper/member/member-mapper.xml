@@ -360,18 +360,39 @@
 		member_no = #{memberNo}
 </update>
 
-
 <select id="selectMemberPointListByParam" resultType="memberPoint">
-	SELECT a.MEMBER_POINT_NO, b.id, CONCAT(b.LAST_NAME, b.FIRST_NAME) AS member_name, b.EMAIL, a.point_title, a.point_amount, a.reg_date
+	SELECT a.MEBER_POINT_NO, b.id, CONCAT(b.LAST_NAME, b.FIRST_NAME) AS member_name, b.EMAIL, a.point_title, a.point_amount, a.reg_date
 	FROM member_point a 
 		JOIN member b ON(a.MEMBER_NO = b.MEMBER_NO)
-	<where>
-		<if test="keyword != null">
-			${field} like concat('%',#{keyword},'%')
-		</if>
-	</where>
 	order by a.reg_date desc
 </select>
 
+<select id="selectMemberListExcelForm" resultType="memberListExcelForm">
+	SELECT
+		m.id,
+		CONCAT(m.last_name, m.first_name) AS member_name,
+		CONCAT(SUBSTRING(m.phone FROM 1 FOR 3), '-', SUBSTRING(m.phone FROM 4 FOR 4), '-', SUBSTRING(m.phone FROM 8 FOR 4)) AS phone,
+		email AS email,
+		CONCAT(a.address_main, SPACE(1), a.address_sub) AS total_address,
+		IFNULL(mm.member_memo_content, '-') AS memo,
+		mg.member_grade_name AS grade,
+		m.status AS status,
+		m.login_date AS login_date,
+		m.update_date AS update_date,
+		m.reg_date
+	FROM
+		member m JOIN address_book ab
+			ON m.member_no = ab.member_no
+				JOIN address a
+					ON ab.address_no = a.address_no
+						JOIN member_memo mm
+							ON m.member_no = mm.member_no
+								JOIN authorities au
+									ON m.member_no = au.member_no
+										JOIN member_grade mg
+											ON au.authority = mg.authority
+	ORDER BY
+		m.reg_date DESC
+</select>
 
 </mapper>

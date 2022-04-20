@@ -78,6 +78,7 @@
 							<tr>
 								<td style="width: 30px;">
 									<input type="checkbox" name="select_all" id="checkAll" />
+									<input type="hidden" id="memberNo" name="memberNo" value="" />
 								</td>
 								<td style="width: 110px;">아이디</td>
 								<td style="width: 110px;">이름</td>
@@ -105,7 +106,12 @@
 										<fmt:formatDate pattern = "yyyy/MM/dd HH:mm" value="${memberEntity.regDate}"/>
 									</td>
 									<td>
+									<c:if test="">
 										<span class="label label-success" style="font-size: 12px;">보임</span>
+									</c:if>
+									<c:if test="">
+										<span class="label label-default" style="font-size: 12px;">숨김</span>
+									</c:if>
 									</td>
 									<td>
 										<button type="button" id="btn_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">
@@ -147,12 +153,12 @@
 				</button>
 				<button type="button" onclick="downloadExcel();"
 					class="btn btn-warning">
-					<i class="fa fa-file-excel-o"></i> Excel 다운로드
+					<i class="fa" aria-hidden="true"></i> Excel 다운로드
 				</button>
-				<form name="form_download" method="post"
-					action="?tpf=admin/member/process">
-					<input type="hidden" name="mode" value="downloadExcel"> <input
-						type="hidden" name="search_data">
+				<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
+					<input type="hidden" name="mode" value="downloadExcel"> 
+					<input type="hidden" name="search_data">
+					<input type="hidden" name="download_type" value="memberList">
 				</form>
 				<!--    // 관리자단에서 회원가입 숨김
                     <button type="button" onclick="onclickSMS();" class="btn btn-danger"><i class="fa fa-bell"></i> SMS발송</button>
@@ -209,7 +215,7 @@
 								<td class="menu">아이디</td>
 								<td align="left">
 									<input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" />
-									<input type="hidden" id="memberNo" name="memberNo" value="" />
+							
 									<input type="hidden" id="addressNo" name="addressNo" value="" />
 									&nbsp;
 									<button 
@@ -521,8 +527,8 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
-
 function downloadExcel() {  // Excel 다운로드
+	console.log("엑셀 다운로드");
     form_download.target = 'iframe_process';
     form_download.search_data.value = $('#form_search :input').serialize();
     form_download.submit();
@@ -547,7 +553,6 @@ $("button[id^='detail_']").on('click', function(e){
 	var memberNo = $(e.target).val();
 	console.log("memberNo = " + memberNo);
 	
-	$("#modalRegister").modal();
 	$("[name=id]").prop("readonly", true);
 	$("#btnCheckId").hide();
 	$("#display_status").show();
@@ -595,6 +600,7 @@ $("button[id^='detail_']").on('click', function(e){
 			$("#reg_date").text(regDate);
 			$("#last_login_date").text(loginDate);
 			$("#update_date").text(updateDate);
+			$("#modalRegister").modal();
 		},
 		error : console.log
 	});
@@ -743,6 +749,7 @@ function onclickInsert(){
 	$("#display_last_login_date").hide();
 	$("#display_update_date").hide();
 	$("#display_reg_date").hide();
+	$("#btnRegister").show();
 	$("#btnUpdate").hide();
 	memberInsertModalFrm.reset();
 };

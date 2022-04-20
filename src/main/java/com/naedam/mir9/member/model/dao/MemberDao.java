@@ -10,6 +10,7 @@ import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
+import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
@@ -86,6 +87,9 @@ public interface MemberDao {
 
 	// 메모(MemberMemo) 수정
 	int memberMemoUpdate(MemberMemo paramMemberMemo);
+
+	// 엑셀 다운로드
+	List<MemberListExcelForm> selectMemberListExcelForm();
 
 	
 
