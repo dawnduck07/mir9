@@ -15,4 +15,9 @@ public class SecurityDaoImpl implements SecurityDao {
 	public UserDetails loadUserByUsername(String username) {
 		return session.selectOne("security.loadUserByUsername", username);
 	}
+
+	@Override
+	public int insertLoginDate(Object name) {
+		return session.insert("security.insertLoginDate", name);
+	}
 }
