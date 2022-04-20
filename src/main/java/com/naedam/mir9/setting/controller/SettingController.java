@@ -24,6 +24,9 @@ import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.service.MapService;
 import com.naedam.mir9.map.model.vo.MapApi;
 import com.naedam.mir9.map.model.vo.Maps;
+import com.naedam.mir9.point.model.vo.Point;
+import com.naedam.mir9.point.model.vo.PointSave;
+import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 
@@ -39,8 +42,14 @@ public class SettingController {
 	private MapService mapService;
 	
 	@GetMapping("/point")
-	public void point() {
+	public void point(Model model) {
+		Point point = settingService.selectPoint();
+		PointUse pointUse = settingService.selectPointUse();
+		PointSave pointSave = settingService.selectPointSave();
 		
+		model.addAttribute("point", point);
+		model.addAttribute("pointUse", pointUse);
+		model.addAttribute("pointSave", pointSave);
 	}
 	
 	@GetMapping("/coupon")

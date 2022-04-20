@@ -30,6 +30,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 		log.debug("-------------------------------");
 		log.debug("modelAndView = {}", modelAndView);
 		log.debug("-------------------------------");
+		
+		// 메뉴 관리 -> 태그 정보 넘기는 지점.
+		//modelAndView.addObject("test", "<strong>testtesttest</strong>");
 	}
 
 	@Override
