@@ -68,16 +68,23 @@ textarea {
 				                </thead>
 				                <tbody>
 				      				<tr>
-					                    <input type="hidden" name="msg[join][code]" value="10" />
+				      					<!-- action에 해당하는 이름값 class로 분리하기 -->
+				      					<!-- 
+				      						안에 내용이 해당 code 값에 대응함 
+				      						code가 10일 경우 회원가입 이메일 메시지가 모달창에 조회됨 
+				      						API에서 지정한 코드값인 것 같음
+				      					-->
+					                    <input type="hidden" class="join" name="code" value="10" />
 										<td class="content">회원가입</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[join][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="join" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
+					                    	<!-- onclickUpdate(code, action, is_admin) -->
 					                    	<button type="button" onclick="onclickUpdate('10','join');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[join][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="join" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('10','join','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -89,16 +96,16 @@ textarea {
 										</td>
 				               		</tr>      
 				               		<tr>
-					                    <input type="hidden" name="msg[findid][code]" value="47" />
+					                    <input type="hidden" class="findid" name="code" value="47" />
 										<td class="content">아이디 찾기<br>[아이디 찾기시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[findid][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="findid" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('47','findid');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[findid][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="findid" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('47','findid','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -110,16 +117,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[findpw][code]" value="43" />
+					                    <input type="hidden" class="findpw" name="code" value="43" />
 										<td class="content">임시비밀번호 발급알림<br>[비밀번호 찾기시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[findpw][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="findpw" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('43','findpw');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[findpw][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="findpw" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('43','findpw','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -131,16 +138,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[order][code]" value="11" />
+					                    <input type="hidden" class="order" name="code" value="11" />
 										<td class="content">주문접수<br>[무통장/카드 결제시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[order][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="order" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('11','order');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[order][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="order" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('11','order','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -157,16 +164,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[pay_done][code]" value="12" />
+					                    <input type="hidden" class="pay_done" name="code" value="12" />
 										<td class="content">입금확인<br>[무통장 입금 완료시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[pay_done][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="pay_done" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('12','pay_done');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[pay_done][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="pay_done" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('12','pay_done','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -183,15 +190,17 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[delivery_ready][code]" value="49" />
+					                    <input type="hidden" class="delivery_ready" name="code" value="49" />
 										<td class="content">상품 배송 준비중<br>[주문상태 배송준비중으로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[delivery_ready][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="delivery_ready" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('49','delivery_ready');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
-					                    <td class="content"><input type="checkbox" name="msg[delivery_ready][is_send_admin]" value="y" /></td>
+					                    <td class="content">
+					                    	<input type="checkbox" class="delivery_ready" name="is_send_admin" />
+					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('49','delivery_ready','admin');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
@@ -207,15 +216,17 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[delivery_ing][code]" value="13" />
+					                    <input type="hidden" class="delivery_ing" name="code" value="13" />
 										<td class="content">상품 배송중<br>[주문상태 배송중으로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[delivery_ing][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="delivery_ing" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('13','delivery_ing');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
-					                    <td class="content"><input type="checkbox" name="msg[delivery_ing][is_send_admin]" value="y" /></td>
+					                    <td class="content">
+					                    	<input type="checkbox" class="delivery_ing" name="is_send_admin" />
+					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('13','delivery_ing','admin');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
@@ -231,16 +242,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[delivery_done][code]" value="50" />
+					                    <input type="hidden" class="delivery_done" name="code" value="50" />
 										<td class="content">상품 배송 완료<br>[주문상태 배송완료로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[delivery_done][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="delivery_done" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('50','delivery_done');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[delivery_done][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="delivery_done" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('50','delivery_done','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -257,16 +268,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[order_cancel][code]" value="14" />
+					                    <input type="hidden" class="order_cancel" name="code" value="14" />
 										<td class="content">주문취소<br>[주문 취소시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[order_cancel][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="order_cancel" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('14','order_cancel');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[order_cancel][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="order_cancel" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('14','order_cancel','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -283,16 +294,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[refund][code]" value="15" />
+					                    <input type="hidden" class="refund" name="code" value="15" />
 										<td class="content">환불완료<br>[주문상태 환불완료로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[refund][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="refund" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('15','refund');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[refund][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="refund" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('15','refund','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -309,16 +320,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[point][code]" value="16" />
+					                    <input type="hidden" class="point" name="code" value="16" />
 										<td class="content">적립금 적립<br>[개별 적립금 적립시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[point][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="point" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('16','point');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[point][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="point" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('16','point','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -330,16 +341,16 @@ textarea {
 										</td>
 					                </tr>      
 					                <tr>
-					                    <input type="hidden" name="msg[coupon][code]" value="18" />
+					                    <input type="hidden" class="coupon" name="code" value="18" />
 										<td class="content">쿠폰 지급<br>[개별 쿠폰 지급시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[coupon][is_send]" value="y" checked/>
+					                    	<input type="checkbox" class="coupon" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('18','coupon');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" name="msg[coupon][is_send_admin]" value="y" />
+					                    	<input type="checkbox" class="coupon" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('18','coupon','admin');" class="btn btn-primary btn-xs">편집</button>
@@ -377,7 +388,6 @@ textarea {
 		                <h4 class="modal-title" id="myModalLabelPortfolio">메일 문구설정 관리</h4>
 		            </div>
 		            <div class="modal-body">
-		
 		            	<h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 메일 문구설정</h4>
 			            <table class="table table-bordered">
 				            <tr>
@@ -394,6 +404,7 @@ textarea {
 		            </div>
 		            <div class="modal-footer">
 			            <button type="button" onclick="registerContent()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+			            <!-- getDefaultTemplate(type, action, is_admin) -->
 			            <button type="button" onclick="getDefaultTemplate();" class="btn btn-warning">기본문구 가져오기</button>
 		            </div>
 	            </form>
@@ -409,8 +420,8 @@ textarea {
 	var objEditor = CKEDITOR.replace('content', {
 		height: 300,
 	    extraPlugins : 'tableresize',
-	    filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files', 
-	    filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images',
+	    filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files', // 여기로 전송 됨 
+	    filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images', // 여기로 전송됨
 	    fillEmptyBlocks : true,
 	    line_height : '0px'
 	});
@@ -430,26 +441,16 @@ textarea {
 	});
 	
 	CKEDITOR.config.allowedContent = true;
-	
-	function register() {
-		var is_send_arr = $("input[name*='is_send']"); // 회원 자동 발송
-		var is_send_admin_arr = $("input[name*='is_send_admin']"); // 관리자 자동 발송
-		form_register.target = 'iframe_process';
-	    form_register.submit();
-	}
-	
-	function registerContent() { // 변경 문구 저장 버튼
-	    if(formContent.title.value == '') {  
-	    	alert('제목이 입력되지 않았습니다.'); formContent.title.focus(); return false;}
-	    	formContent.target = 'iframe_process';
-	    	formContent.submit();
-	}
-	
-	function onclickUpdate(code, action, is_admin) { // 편집 버튼
-	    $('#code').val(code);
-	    $('#action').val(action);
-	    $('#is_admin').val(is_admin);
+			
+	// 문구 편집 버튼
+	function onclickUpdate(code, action, is_admin) {
+		// 모달 히든에 각각의 값 전달
+	    $('#code').val(code); 
+	    $('#action').val(action); 
+	    $('#is_admin').val(is_admin); 
 	    $('#modalContent').modal({backdrop:'static', show:true});
+	    
+	    // 조회
 	    $.ajax({
 			url:'http://demoshop.mir9.kr/api/process.php',
 			type:'post',
@@ -467,22 +468,7 @@ textarea {
 	            // 확인용 
 	            console.log("===== 수정 data =====");
 	            console.log(json_data); 
-	            console.log("===================");
-	            /* 
-	            	회원가입 (회원) 편집시 json_data
-	            	action: "join"
-            		code: "10" => action에 따른 코드값...???
-            		content: "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t<tbody>\r\n\t\t<tr>\r\n\t\t\t<td align=\"center\" valign=\"top\">\r\n\t\t\t<table bgcolor=\"#0073bb\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"750\">\r\n\t\t\t\t<tbody>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"25\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#fff;font-size: 22px; line-height:28px;padding-left:23px; letter-spacing:-2px;\">[{{shop_name}}] 회원 가입 안내</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t<table bgcolor=\"#FFFFFF\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"730\">\r\n\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">회원 가입을 축하드립니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">보안을 위해 비밀번호는 정기적으로 변경해 주시기 바랍니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:solid 3px #e8e8e8;\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"padding-top:7px;padding-bottom:7px;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"680\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" bgcolor=\"#D1E6F4\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; line-height: 18px; color: #005D83; font-weight:bold; padding-left:15px\" width=\"670\">회원 정보</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"670\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"border-bottom:solid 1px #e8e8e8;\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color: #005D83; border-bottom:solid 1px #e8e8e8;\" width=\"100\">회원명</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#005D83; font-size: 16px; border-bottom:solid 1px #e8e8e8;\">{{user_name}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color: #005D83;\" width=\"100\">아이디</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, 굴림,돋움,seoul,Arial; color:#005D83; font-size: 16px; line-height:18px;\">{{user_id}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"10\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"15\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\" bgcolor=\"#E6EFF6\" height=\"30\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\"><font color=\"#005494\">본 메일은 발신전용이므로 회신이 되지 않습니다.</font></td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</tbody>\r\n\t\t\t</table>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n"
-            		content_admin: "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t<tbody>\r\n\t\t<tr>\r\n\t\t\t<td align=\"center\" valign=\"top\">\r\n\t\t\t<table bgcolor=\"#0073bb\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"750\">\r\n\t\t\t\t<tbody>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"25\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#fff;font-size: 22px; line-height:28px;padding-left:23px; letter-spacing:-2px;\">[{{shop_name}}] 회원 가입 안내</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t<table bgcolor=\"#FFFFFF\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"730\">\r\n\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\">\r\n\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">회원 가입을 축하드립니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" height=\"20\" width=\"20\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon1_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\">보안을 위해 비밀번호는 정기적으로 변경해 주시기 바랍니다.</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;\r\n\r\n\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:solid 3px #e8e8e8;\" width=\"700\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"padding-top:7px;padding-bottom:7px;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"680\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" bgcolor=\"#D1E6F4\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; line-height: 18px; color: #005D83; font-weight:bold; padding-left:15px\" width=\"670\">회원 정보</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td bgcolor=\"#D1E6F4\" height=\"28\" width=\"5\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"670\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" style=\"border-bottom:solid 1px #e8e8e8;\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color:#005D83; border-bottom:solid 1px #e8e8e8;\" width=\"100\">회원명</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, gulim, \\'굴림\\', \\'돋움\\',seoul,Arial; color:#005D83; font-size: 16px; border-bottom:solid 1px #e8e8e8;\">{{user_name}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<tr height=\"40\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"center\" width=\"30\"><img align=\"absmiddle\" src=\"http://mir9.co.kr/resource/img/icon2_1.gif\" /></td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\"font-family: tahoma, 굴림,돋움,seoul,Arial; font-size: 12px; color: #005D83;\" width=\"100\">아이디</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\" style=\" font-family:Malgun Gothic, \\'맑은 고딕\\', tahoma, 굴림,돋움,seoul,Arial; color:#005D83; font-size: 16px; line-height:18px;\">{{user_id}}</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<td align=\"left\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"10\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td height=\"15\">&nbsp;</td>\r\n\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td align=\"center\" bgcolor=\"#E6EFF6\" height=\"30\" style=\" font-family:tahoma, 굴림,돋움,seoul,Arial; color:#333333; font-size: 12px; line-height:18px;\"><font color=\"#005494\">본 메일은 발신전용이므로 회신이 되지 않습니다.</font></td>\r\n\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t</table>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td align=\"center\" height=\"20\">&nbsp;</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</tbody>\r\n\t\t\t</table>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n"
-            		is_send: "y" => 회원 자동 발송 true
-            		is_send_admin: "n" => 관리자 자동 발송 false
-            		locale: "ko"  
-            		reg_date: "2022-04-13 10:18:43"
-            		title: "[{{shop_name}}] {{user_name}}님의 회원가입을 축하드립니다."
-            		title_admin: "[{{shop_name}}] {{user_name}} 회원님이 회원가입 하셨습니다."
-            		type: "email"
-	            */
-	            
+
 	            if (is_admin == 'admin') { // 관리자용
 	                $('#title').val(json_data.title_admin);
 	                objEditor.setData(json_data.content_admin);
@@ -498,13 +484,25 @@ textarea {
 		});
 	}
 	
-	function setData(mode, type, action, code, locale){
+	// 변경 문구 저장 버튼 
+	function registerContent() { 
+	    // 제목 입력 필수
+		if(formContent.title.value == '') { 
+	    	alert('제목이 입력되지 않았습니다.'); 
+	    	formContent.title.focus(); 
+	    	return false;
+	    }
 	
-	}
-	
-	function getDefaultTemplate(type, action, is_admin) { // 기존 양식 불러오기 
+        /*
+		form_register.target = 'iframe_process';
+	    form_register.submit(); // action 값 수정 필요
+	    */
+	}	
+
+	// 기존 양식 불러오기
+	function getDefaultTemplate(type, action, is_admin) { 
 		$.ajax({
-			url:'http://demoshop.mir9.kr/api/process.php', // 이메일 발송 api 
+			url:'http://demoshop.mir9.kr/api/process.php', 
 			type:'post',
 			dataType:'json',
 			data:{
@@ -515,12 +513,10 @@ textarea {
 	            locale: $('#locale').val()
 			},
 			success:function(data, textStatus, jqXHR){
-	            
-				// 확인용
+	            // 확인용
 	            console.log("===== 기존 data =====");
 				console.log(data);
-				console.log("===================");
-				
+	            
 				if(data.data.length > 0){
 					if(confirm('기본문구로 적용 하시겠습니까?')){
 	                    objEditor.setData(data.data);
@@ -531,57 +527,88 @@ textarea {
 				console.log(textStatus);
 			}
 		});
-	}
+	}	
 	
-	function category_txt(t_name){
-		var return_txt = '';
+	// 전체 변경 확인 버튼
+	function register() { 
+		// 체크박스 값 설정
+		$("input:checkbox[name='is_send']").each(function() {
+        	if($(this).is(":checked")) { // 회원 자동 발송이 체크
+        		$(this).attr("value", "y");
+        	}
+        	else {
+        		$(this).attr("value", "n");
+        	}
+        });
 		
-			if(t_name.indexOf('join')){
-				return_txt = '회원가입';
+		$("input:checkbox[name='is_send_admin']").each(function() { 
+        	if($(this).is(":checked")) { // 관리자 자동 발송이 체크
+        		$(this).attr("value", "y");
+        	}
+        	else {
+        		$(this).attr("value", "n");
+        	}
+        });
+		
+        /*
+		form_register.target = 'iframe_process';
+	    form_register.submit(); 
+	    */
+	}	
+	
+	function setData(mode, type, action, code, locale){
+
+	}
+		
+	function category_txt(t_name){
+		var return_txt = "";
+		
+			if(t_name == "join"){
+				return_txt = "회원가입";
 			}
 		else
-			if(t_name.indexOf('findid')){
-				return_txt = '아이디 찾기<br>[아이디 찾기시]';
+			if(t_name == "findid"){
+				return_txt = "아이디 찾기 [아이디 찾기시]";
 			}
 		else
-			if(t_name.indexOf('findpw')){
-				return_txt = '임시비밀번호 발급알림<br>[비밀번호 찾기시]';
+			if(t_name == "findpw"){
+				return_txt = "임시비밀번호 발급알림 [비밀번호 찾기시]";
 			}
 		else
-			if(t_name.indexOf('order')){
-				return_txt = '주문접수<br>[무통장/카드 결제시]';
+			if(t_name == "order"){
+				return_txt = "주문접수 [무통장/카드 결제시]";
 			}
 		else
-			if(t_name.indexOf('pay_done')){
-				return_txt = '입금확인<br>[무통장 입금 완료시]';
+			if(t_name == "pay_done"){
+				return_txt = "입금확인 [무통장 입금 완료시]";
 			}
 		else
-			if(t_name.indexOf('delivery_ready')){
-				return_txt = '상품 배송 준비중<br>[주문상태 배송준비중으로 변경시]';
+			if(t_name == "delivery_ready"){
+				return_txt = "상품 배송 준비중 [주문상태 배송준비중으로 변경시]";
 			}
 		else
-			if(t_name.indexOf('delivery_ing')){
-				return_txt = '상품 배송중<br>[주문상태 배송중으로 변경시]';
+			if(t_name == "delivery_ing"){
+				return_txt = "상품 배송중 [주문상태 배송중으로 변경시]";
 			}
 		else
-			if(t_name.indexOf('delivery_done')){
-				return_txt = '상품 배송 완료<br>[주문상태 배송완료로 변경시]';
+			if(t_name == "delivery_done"){
+				return_txt = "상품 배송 완료 [주문상태 배송완료로 변경시]";
 			}
 		else
-			if(t_name.indexOf('order_cancel')){
-				return_txt = '주문취소<br>[주문 취소시]';
+			if(t_name == "order_cancel"){
+				return_txt = "주문취소 [주문 취소시]";
 			}
 		else
-			if(t_name.indexOf('refund')){
-				return_txt = '환불완료<br>[주문상태 환불완료로 변경시]';
+			if(t_name == "refund"){
+				return_txt = "환불완료 [주문상태 환불완료로 변경시]";
 			}
 		else
-			if(t_name.indexOf('point')){
-				return_txt = '적립금 적립<br>[개별 적립금 적립시]';
+			if(t_name == "point"){
+				return_txt = "적립금 적립 [개별 적립금 적립시]";
 			}
 		else
-			if(t_name.indexOf('coupon')){
-				return_txt = '쿠폰 지급<br>[개별 쿠폰 지급시]';
+			if(t_name == "coupon"){
+				return_txt = "쿠폰 지급 [개별 쿠폰 지급시]";
 			}
 		
 		return return_txt;
