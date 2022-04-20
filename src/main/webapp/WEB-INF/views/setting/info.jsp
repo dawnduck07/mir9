@@ -64,12 +64,12 @@
 								<tr>
 									<td class="menu">썸네일 이미지</td>
 									<td align="left"><input type="file" name="file1" class="form-control input-sm" style="width: 80%; display: inline;">
-										<button type="button" onclick="winOpen('?tpf=common/image_view&file_name=meta_logo.jpg');" class="btn btn-success btn-xs">보기</button> <br> ※ 350 * 285 사이즈로 등록해 주세요 (카카오톡등 메신저 url 노출시 보여지는 이미지 입니다)</td>
+										<button type="button" onclick="winOpen('${pageContext.request.contextPath}/setting/img_view?type=thumb');" class="btn btn-success btn-xs">보기</button> <br> ※ 350 * 285 사이즈로 등록해 주세요 (카카오톡등 메신저 url 노출시 보여지는 이미지 입니다)</td>
 								</tr>
 								<tr>
 									<td class="menu">파비콘 이미지</td>
 									<td align="left"><input type="file" name="file2" class="form-control input-sm" style="width: 80%; display: inline;">
-										<button type="button" onclick="winOpen('?tpf=common/image_view&file_name=favicon');" class="btn btn-success btn-xs">보기</button> <br> ※ 16 * 16 사이즈로 등록해 주세요 (확장자 : <span style="color: red">.ico .png</span>)</td>
+										<button type="button" onclick="winOpen('${pageContext.request.contextPath}/setting/img_view?type=favicon');" class="btn btn-success btn-xs">보기</button> <br> ※ 16 * 16 사이즈로 등록해 주세요 (확장자 : <span style="color: red">.ico .png</span>)</td>
 								</tr>
 								<tr>
 									<td class="menu">회원 등급별 할인율</td>

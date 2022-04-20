@@ -173,7 +173,18 @@ public class SettingController {
 		model.addAttribute("localeList", localeList);
 		
 	}
-	
+	@GetMapping("/img_view")
+	public void img_view(String type, Model model) {
+		AdminSetting adminSetting = settingService.selectAdminSetting();
+		String url = null;
+		if(type.equals("thumb")) {
+			url = adminSetting.getThumbnailImg();
+		}else if(type.equals("favicon")) {
+			url = adminSetting.getFaviconImg();
+		}
+		
+		model.addAttribute("url",url);
+	}
 	@GetMapping("/seo")
 	public void seo() {}
 	
