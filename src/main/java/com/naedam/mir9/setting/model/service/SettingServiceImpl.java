@@ -14,6 +14,9 @@ import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.vo.Maps;
+import com.naedam.mir9.point.model.vo.Point;
+import com.naedam.mir9.point.model.vo.PointSave;
+import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.dao.SettingDao;
 
@@ -74,6 +77,24 @@ public class SettingServiceImpl implements SettingService {
 	public List<Coupon> selectCouponListByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return settingDao.selectCouponListByParam(param);
+	}
+
+	@Override
+	public Point selectPoint() {
+		// TODO Auto-generated method stub
+		return settingDao.selectPoint();
+	}
+
+	@Override
+	public PointUse selectPointUse() {
+		// TODO Auto-generated method stub
+		return settingDao.selectPointUse();
+	}
+
+	@Override
+	public PointSave selectPointSave() {
+		// TODO Auto-generated method stub
+		return settingDao.selectPointSave();
 	}
 	
 	

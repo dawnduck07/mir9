@@ -20,8 +20,11 @@ public class MemberPoint implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int memberPointNo;
-	private int memberNo;
-	private int pointNo;
-	private Date memberPointDate;
+	private String id;
+	private String memberName;
+	private String email;
+	private String pointTitle;
+	private int pointAmount;
+	private Date regDate;
 
 }
