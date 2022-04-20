@@ -38,6 +38,7 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.point.model.vo.MemberPoint;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -389,7 +390,11 @@ public class MemberController {
 	
 	// 회원 적립금 관리
 	@GetMapping("/point")
-	public String memberPointList() {
+	public String memberPointList(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
+		
+		model.addAttribute("mPointList",mPointList);
 		
 		return "member/memberPointList";
 	}

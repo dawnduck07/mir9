@@ -1,9 +1,12 @@
 package com.naedam.mir9.point.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.point.model.dao.PointDao;
+import com.naedam.mir9.point.model.vo.MemberPointExcelForm;
 import com.naedam.mir9.point.model.vo.Point;
 import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
@@ -29,6 +32,12 @@ public class pointServiceImpl implements PointService {
 	public int updatePointUse(PointUse pointUse) {
 		// TODO Auto-generated method stub
 		return pointDao.updatePointUse(pointUse);
+	}
+
+	@Override
+	public List<MemberPointExcelForm> selectMemberPointExcelForm() {
+		// TODO Auto-generated method stub
+		return pointDao.selectMemberPointExcelForm();
 	}
 	
 	

@@ -11,6 +11,7 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.point.model.vo.MemberPoint;
 
 public interface MemberService {
 
@@ -70,6 +71,9 @@ public interface MemberService {
 
 	// 회원등급 조회
 	Authorities selectOneAuthorities(int memberNo);
+	
+	// 회원 적립금 관리
+	List<MemberPoint> selectMemberPointListByParam(Map<String, Object> param);
 
 
 
