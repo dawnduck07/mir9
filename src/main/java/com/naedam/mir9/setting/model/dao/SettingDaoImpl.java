@@ -19,6 +19,9 @@ import com.naedam.mir9.point.model.vo.Point;
 import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
+import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Locale;
 
 @Repository
 public class SettingDaoImpl implements SettingDao {
@@ -95,6 +98,24 @@ public class SettingDaoImpl implements SettingDao {
 	public PointSave selectPointSave() {
 		// TODO Auto-generated method stub
 		return session.selectOne("setting.selectPointSave");
+	}
+
+	@Override
+	public List<AdminMenu> selectAdminMenuList() {
+		// TODO Auto-generated method stub
+		return session.selectList("setting.selectAdminMenuList");
+	}
+
+	@Override
+	public List<Locale> selectLocaleList() {
+		// TODO Auto-generated method stub
+		return session.selectList("setting.selectLocaleList");
+	}
+
+	@Override
+	public AdminSetting selectAdminSetting() {
+		// TODO Auto-generated method stub
+		return session.selectOne("setting.selectAdminSetting");
 	}
 	
 	
