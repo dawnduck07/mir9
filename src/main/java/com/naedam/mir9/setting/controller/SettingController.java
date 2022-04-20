@@ -29,6 +29,9 @@ import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
+import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Locale;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -160,8 +163,28 @@ public class SettingController {
 	}
 	
 	@GetMapping("/info")
-	public void info() {}
-	
+	public void info(Model model) {
+		List<AdminMenu> adminMenuList = settingService.selectAdminMenuList();
+		List<Locale> localeList = settingService.selectLocaleList();
+		AdminSetting adminSetting = settingService.selectAdminSetting();
+		
+		model.addAttribute("adminSetting", adminSetting);
+		model.addAttribute("adminMenuList", adminMenuList);
+		model.addAttribute("localeList", localeList);
+		
+	}
+	@GetMapping("/img_view")
+	public void img_view(String type, Model model) {
+		AdminSetting adminSetting = settingService.selectAdminSetting();
+		String url = null;
+		if(type.equals("thumb")) {
+			url = adminSetting.getThumbnailImg();
+		}else if(type.equals("favicon")) {
+			url = adminSetting.getFaviconImg();
+		}
+		
+		model.addAttribute("url",url);
+	}
 	@GetMapping("/seo")
 	public void seo() {}
 	
