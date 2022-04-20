@@ -550,6 +550,32 @@ textarea {
         	}
         });
 		
+		// 폼 정보 불러오기 
+		const formData = new FormData(document["form_register"]);
+		var obj = {};
+		for(const [k, v] of formData) {
+			obj[k] = v; // key, value로 담기
+		}
+		
+		// code, checkbox 선언
+		obj.code = []; // 추후 변경
+		obj.is_send = [];
+		obj.is_send_admin = [];
+		
+		// obj에 각각의 값 담기
+		$.each($("input[name='code']"), function(index, value) { 
+			obj.code.push($(value).val());
+		});
+		$.each($("input[name='is_send']"), function(index, value) {
+			obj.is_send.push($(value).val());
+		});
+		$.each($("input[name='is_send_admin']"), function(index, value) {
+			obj.is_send_admin.push($(value).val());
+		});
+		
+		console.log("=====obj=====");
+		console.log(obj);		
+		
         /*
 		form_register.target = 'iframe_process';
 	    form_register.submit(); 

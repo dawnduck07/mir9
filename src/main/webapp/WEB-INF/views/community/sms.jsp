@@ -449,6 +449,39 @@ textarea {
 	
 	};	
 	
+	// 기본 양식 불러오기
+	function getDefaultTemplate(type, action, is_admin) { 
+		$.ajax({
+			url:'http://demoshop.mir9.kr/api/process.php', 
+			type:'post',
+			dataType:'json',
+			data:{
+				method:'UtilNotice.getCommunityTemplate',
+				type: type,
+				action: action,
+	            is_admin: is_admin
+			},
+			success:function(data, textStatus, jqXHR){
+				
+				console.log("===== 기본 data =====");
+	            console.log(data);
+	            
+				if(data.data.length > 0){
+					if(confirm(data.data + '\n\n해당 문구로 적용하시겠습니까?')){
+						if(is_admin == 'admin'){
+							$("textarea[class='" + action + "']").val(data.data);
+						}else{
+							$("textarea[class='" + action + "']").val(data.data);
+						}
+					}
+				}
+			},
+			error:function(jqXHR, textStatus, errorThrown){
+				console.log(textStatus);
+			}
+		});
+	}	
+	
 	// 전체 변경 확인 버튼 
 	function register() { 
 		// 체크박스 값 설정
@@ -525,38 +558,6 @@ textarea {
 		form_register.target = 'iframe_process';
 	    form_register.submit();
 		*/
-	}
-	
-	function getDefaultTemplate(type, action, is_admin) { // 기본 문구 
-		$.ajax({
-			url:'http://demoshop.mir9.kr/api/process.php', // sms 발송 api
-			type:'post',
-			dataType:'json',
-			data:{
-				method:'UtilNotice.getCommunityTemplate',
-				type: type,
-				action: action,
-	            is_admin: is_admin
-			},
-			success:function(data, textStatus, jqXHR){
-				
-				console.log("===== 기본 data =====");
-	            console.log(data);
-	            
-				if(data.data.length > 0){
-					if(confirm(data.data + '\n\n해당 문구로 적용하시겠습니까?')){
-						if(is_admin == 'admin'){
-							$("textarea[class='" + action + "']").val(data.data);
-						}else{
-							$("textarea[class='" + action + "']").val(data.data);
-						}
-					}
-				}
-			},
-			error:function(jqXHR, textStatus, errorThrown){
-				console.log(textStatus);
-			}
-		});
 	}
 	
 	function category_txt(t_name){
