@@ -15,6 +15,7 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.point.model.vo.MemberPoint;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -134,6 +135,13 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Authorities selectOneAuthorities(int memberNo) {
 		return memberDao.selectOneAuthorities(memberNo);
+	}
+	
+	// 회원 적립금 관리
+	@Override
+	public List<MemberPoint> selectMemberPointListByParam(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return memberDao.selectMemberPointListByParam(param);
 	}
 
 
