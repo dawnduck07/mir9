@@ -18,16 +18,23 @@ public class Menu implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private int menuNo;
-	private String menuName;
-	private String menuLink;
-	private String menuTarget;
-	private String menuUrl;
-	private String menuState;
-	private String menuHeader;
-	private String menuMeta;
+
+	private int code; 
+	private int category_code;
+	private int revision_code;
+	private String title; 
+	private String content;
+	private String is_outer_link; 
+	private String target; 
+	private String url; 
+	private String status; 
+	private String menu_head_code;	
 	private String menuDate;
-	private String menuCotent;
+	private String is_meta;	
+	private String meta_title;
+	private String meta_description;
+	
+	
 	
 	
 	
