@@ -94,8 +94,8 @@
 										</div>
 										<div align="left" style="margin-top: 20px; width: 100%; height: 40%; float: left;">
 											<select name="historyViewType" class="form-control input-sm" style="width: 300px;">
-												<option value="1" selected>연혁 - 2019/05/28</option>
-												<option value="2">연혁 - May. 2019</option>
+												<option value="1" ${adminSetting.historyViewType == 1 ? 'selected' : '' }>연혁 - 2019/05/28</option>
+												<option value="2" ${adminSetting.historyViewType == 2 ? 'selected' : '' }>연혁 - May. 2019</option>
 											</select>
 										</div>
 									</td>
@@ -226,7 +226,9 @@
 
 					<table class="table table-bordered">
 						<tr>
-							<td align="left" colspan="30" style="padding: 0"><textarea name="content" id="content" onfocus="javascript:this.value=''" rows="30" cols="80"></textarea></td>
+							<td align="left" colspan="30" style="padding: 0">
+								<textarea name="content" id="content" onfocus="javascript:this.value=''" rows="30" cols="80"></textarea>
+							</td>
 						</tr>
 					</table>
 			</form>
