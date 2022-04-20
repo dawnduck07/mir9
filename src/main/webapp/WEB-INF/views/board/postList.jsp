@@ -48,13 +48,9 @@
 <script src="//mir9.co.kr/resource/js/jquery/jquery-ui.min.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
-
-<script language='javascript' src='//www.gstatic.com/charts/loader.js'></script>
-<!-- Google Font -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <!-- plupload -->
 <script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
 <script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -222,15 +218,27 @@
                     <tr>
                         <td></td>
                         <td>공지</td>          
-                        <td align="left">
-                			<c:if test="${nowDate eq post.postDate}">
-                				<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/new.png" width="15">
-                			</c:if>
-                			${post.postTitle}
-                		</td>         
+                   		<td align="left">
+                   			<c:if test="${nowDate eq post.postDate}">
+                   				<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/new.png" width="15">
+                   			</c:if>           
+	                		<c:if test="${post.postLayer > 0}">
+	                			&nbsp;&nbsp;<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/right.png" width="15">
+	                			&nbsp;&nbsp;
+	                		</c:if>                   				     				
+                   			${post.postTitle}
+                   			<c:if test="${post.postThombnail != null && post.postThombnail != ''}">
+                   				<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/disk.png" width="15">
+                   			</c:if>
+                   		</td>        
                         <td>${post.postMemberName}</td>            
                         <td>${post.postDate}</td>                        
                         <td>${post.postViewCount}</td>
+               			<c:if test="${board2.option.optionOrder eq 'y'}">
+               				<td>
+               					<input type="radio" name="order_code" value="${post.postOriginNo}" chack="">
+               				</td>
+               			</c:if>                        
                         <td>${post.postDownloadCount}</td>
                         <td>
                 		<button type="button" name="getPostBotton" data-toggle="modal" data-target="#modalContent4" class="btn btn-primary btn-xs" value="${post.postNo}">상세보기

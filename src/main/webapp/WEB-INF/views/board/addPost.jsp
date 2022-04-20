@@ -96,7 +96,6 @@
 				postName[i] = $("input[id='postName']")[i].value;
 				//alert(postName[i])
 			}	
-			
 			alert("게시글이 등록 되었습니다.")
 			$("form[name='addPostForm']").attr("method", "POST").attr("action", "/mir9/board/addPost?${_csrf.parameterName}=${_csrf.token}").submit();
 		}else if("${board2.option.optionMass}" == "y"){

@@ -194,7 +194,7 @@
 					</a>
 						<ul class="treeview-menu">
 							<li class="active"><a
-								href="${pageContext.request.contextPath}/menu/list&menu=manager"><i
+								href="${pageContext.request.contextPath}/menu/menu"><i
 									class="fa fa-circle-o"></i> 메뉴 관리</a></li>
 							<li><a href="${pageContext.request.contextPath}/menu/head"><i
 									class="fa fa-circle-o"></i> 헤더 관리</a></li>

@@ -311,4 +311,11 @@
 	WHERE
 		m.member_no = #{memberNo}
 </select>
+
+<select id="selectMemberPointListByParam" resultType="memberPoint">
+	SELECT a.MEBER_POINT_NO, b.id, CONCAT(b.LAST_NAME, b.FIRST_NAME) AS member_name, b.EMAIL, a.point_title, a.point_amount, a.reg_date
+	FROM member_point a 
+		JOIN member b ON(a.MEMBER_NO = b.MEMBER_NO)
+	order by a.reg_date desc
+</select>
 </mapper>

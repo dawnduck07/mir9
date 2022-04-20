@@ -11,6 +11,9 @@ import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
 import com.naedam.mir9.map.model.vo.Maps;
+import com.naedam.mir9.point.model.vo.Point;
+import com.naedam.mir9.point.model.vo.PointSave;
+import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 
 public interface SettingDao {
@@ -32,5 +35,11 @@ public interface SettingDao {
 	List<Popup> selectPopupListByParam(Map<String, Object> param);
 
 	List<Coupon> selectCouponListByParam(Map<String, Object> param);
+
+	Point selectPoint();
+
+	PointUse selectPointUse();
+
+	PointSave selectPointSave();
 
 }
