@@ -209,7 +209,8 @@
 								<td class="menu">아이디</td>
 								<td align="left">
 									<input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" />
-									<input type="hidden" id=memberNo name="memberNo" value="" />
+									<input type="hidden" id="memberNo" name="memberNo" value="" />
+									<input type="hidden" id="addressNo" name="addressNo" value="" />
 									&nbsp;
 									<button 
 										type="button" 
@@ -576,6 +577,7 @@ $("button[id^='detail_']").on('click', function(e){
 			var authorities = res.authorities;
 			var regDate = res.regDate;
 			var loginDate = res.loginDate;
+			var updateDate = res.updateDate;
 			
 			$("[name=memberNo]").val(member.memberNo);
 			$("[name=id]").val(member.id);
@@ -584,6 +586,7 @@ $("button[id^='detail_']").on('click', function(e){
 			$("[name=mobile2]").val(mobile2);
 			$("[name=mobile3]").val(mobile3);
 			$("[name=email]").val(member.email);
+			$("[name=addressNo]").val(address.addressNo);
 			$("[name=addressZipcode]").val(address.addressZipcode);
 			$("[name=addressMain]").val(address.addressMain);
 			$("[name=addressSub]").val(address.addressSub);
@@ -591,6 +594,7 @@ $("button[id^='detail_']").on('click', function(e){
 			$("[name=authority]").val(authorities.authority);
 			$("#reg_date").text(regDate);
 			$("#last_login_date").text(loginDate);
+			$("#update_date").text(updateDate);
 		},
 		error : console.log
 	});
@@ -609,6 +613,7 @@ function update(){
 	console.log("memberMemoContent = " + memberMemoContent);
 	var authority = $("#memberGradeChk option:selected").val();
 	console.log("authority = " + authority);
+	var addressNo = $("#addressNo").val();
 	var addressMain = $("#address_main").val();
 	var addressSub = $("#address_sub").val();
 	var addressZipcode = $("#address_zipcode").val();
@@ -693,6 +698,7 @@ function update(){
 			mobile2 : mobile2,
 			mobile3 : mobile3,
 			email : email,
+			addressNo : addressNo,
 			addressZipcode : addressZipcode,
 			addressMain : addressMain,
 			addressSub : addressSub,
@@ -713,11 +719,13 @@ function update(){
 		},
 		success(data){
 			console.log(data);
-			$(window).unbind("beforeunload");
+			alert("해당 회원이 수정 되었습니다.");
+			location.reload();
 		}, 
 		error : console.log
 	});
 	
+		//$(window).unbind("beforeunload");
 
 }
 

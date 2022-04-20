@@ -298,6 +298,14 @@ public class MemberController {
 			loginDate = dateFormat.format(member.getLoginDate());
 		}
 		
+		String updateDate = "";
+		if(member.getUpdateDate() == null) {
+			updateDate = "";
+		} else {
+			updateDate = dateFormat.format(member.getUpdateDate());
+		}
+		
+		
 		// 2. 주소(Address) 조회
 		Address address = memberService.selectOneAddress(memberNo);
 		log.debug("address = {}", address);
@@ -312,11 +320,10 @@ public class MemberController {
 	
 		model.addAttribute("memberMemo = {}", memberMemo);
 		
-		// 4. 회원 등급 조회
+		// 4. 회원 권한 조회
 		Authorities authorities = memberService.selectOneAuthorities(memberNo);
 		log.debug("authorities = {}", authorities);
 		model.addAttribute("authorities = {}", authorities);
-		
 		
 		map.put("member", member);
 		map.put("mobile2", mobile2);
@@ -326,6 +333,7 @@ public class MemberController {
 		map.put("authorities", authorities);
 		map.put("regDate", regDate);
 		map.put("loginDate", loginDate);
+		map.put("updateDate", updateDate);
 		
 		return map;
 	}
@@ -346,27 +354,57 @@ public class MemberController {
 			
 			String phone = map.get("mobile1") + map.get("mobile2") + map.get("mobile3");
 			
+			// 회원(Member) 수정
 			Member paramMember = new Member();
 			paramMember.setMemberNo(Integer.parseInt(map.get("memberNo")));
 			paramMember.setFirstName(map.get("firstName"));
 			paramMember.setLastName(map.get("lastName"));
 			paramMember.setEmail(map.get("email"));
 			paramMember.setPhone(phone);
-
-			if(map.get("password") != "") {
+	
+			if(map.get("password").isEmpty()) {
 				paramMember.setPassword(map.get("password"));
+			} else {
+				// 비밀번호 암호화 처리
+				log.debug("{}", passwordEncoder);
+				String rawPassword = map.get("password"); 
+				String encryptedPassword = passwordEncoder.encode(rawPassword);
+				paramMember.setPassword(encryptedPassword);
+				log.debug("{} -> {}", rawPassword, encryptedPassword);
 			}
-			
+
 			int resultMemberUpdate = memberService.memberUpdate(paramMember);
 			log.debug("resultMemberUpdate = {}", resultMemberUpdate);
 			
+			// 주소(Address) 수정
+			Address paramAddress = new Address();
+			paramAddress.setAddressNo(Integer.parseInt(map.get("addressNo")));
+			paramAddress.setAddressMain(map.get("addressMain"));
+			paramAddress.setAddressSub(map.get("addressSub"));
+			paramAddress.setAddressZipcode(Integer.parseInt(map.get("addressZipcode")));
+			
+			int resultAddressUpdate = memberService.addressUpdate(paramAddress);
+			log.debug("resultAddressUpdate = {}", resultAddressUpdate);
+			
+			// 메모(MemberMemo) 수정
+			MemberMemo paramMemberMemo = new MemberMemo();
+			paramMemberMemo.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			paramMemberMemo.setMemberMemoContent(map.get("memberMemoContent"));
+			
+			int resultMemberMemo = memberService.memberMemoUpdate(paramMemberMemo);
+			log.debug("resultMemberMemo = {}", resultMemberMemo);
+			
+			// 권한(Authorities) 수정
+			Authorities paramAuthorities = new Authorities();
+			paramAuthorities.setAuthority(map.get("authority"));
+			paramAuthorities.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			
+			int resultAuthorities = memberService.authoritiesUpdate(paramAuthorities);
+			log.debug("resultAuthorities = {}", resultAuthorities);
+			
+	
 		} catch(IOException e) {}
-		
-		
-		
-		
-		
-		
+
 		return "redirect:/member/list.do";
 	}
 	

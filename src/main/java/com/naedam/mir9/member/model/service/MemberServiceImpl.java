@@ -150,6 +150,23 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.memberUpdate(paramMember);
 	}
 
+	// 회원주소 수정(상세보기)
+	@Override
+	public int addressUpdate(Address paramAddress) {
+		return memberDao.addressUpdate(paramAddress);
+	}
+
+	@Override
+	public int authoritiesUpdate(Authorities paramAuthorities) {
+		return memberDao.authoritiesUpdate(paramAuthorities);
+	}
+
+	@Override
+	public int memberMemoUpdate(MemberMemo paramMemberMemo) {
+		return memberDao.memberMemoUpdate(paramMemberMemo);
+	}
+
+
 
 
 

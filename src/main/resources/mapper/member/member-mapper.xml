@@ -277,6 +277,7 @@
 <!-- 회원주소 조회 -->
 <select id="selectOneAddress" resultType="address">
 	SELECT
+		a.address_no,
 		a.address_main,
 		a.address_sub,
 		a.address_zipcode
@@ -302,15 +303,63 @@
 <!-- 회원등급 조회 -->
 <select id="selectOneAuthorities" resultType="authorities">
 	SELECT 
-		mg.authority
+		a.authority
 	FROM
 		member m LEFT JOIN authorities a
 			ON m.member_no = a.member_no
-				LEFT JOIN member_grade mg
-					ON a.authority = mg.authority
 	WHERE
 		m.member_no = #{memberNo}
 </select>
+
+<!-- 회원정보 수정(상세보기) -->
+<update id="memberUpdate">
+	UPDATE 
+		member 
+	SET
+		first_name = #{firstName},
+		last_name = #{lastName},
+		email = #{email},
+		phone = #{phone},
+			<if test="password != null and password != ''">
+				password = #{password},
+		 	</if>
+		update_date = NOW()
+	WHERE
+		member_no = #{memberNo}
+</update>
+
+<!-- 회원주소 수정(상세보기) -->
+<update id="addressUpdate">
+	UPDATE 
+		address
+	SET
+		address_main = #{addressMain},
+		address_sub = #{addressSub},
+		address_zipcode = #{addressZipcode}
+	WHERE
+		address_no = #{addressNo}
+</update>
+
+<!-- 회원권한 수정(상세보기) -->
+<update id="authoritiesUpdate">
+	UPDATE 
+		authorities
+	SET
+		authority = #{authority}
+	WHERE
+		member_no = #{memberNo}
+</update>
+
+<!-- 회원메모 수정(상세보기) -->
+<update id="memberMemoUpdate">
+	UPDATE 
+		member_memo
+	SET
+		member_memo_content = #{memberMemoContent}
+	WHERE
+		member_no = #{memberNo}
+</update>
+
 
 <select id="selectMemberPointListByParam" resultType="memberPoint">
 	SELECT a.MEBER_POINT_NO, b.id, CONCAT(b.LAST_NAME, b.FIRST_NAME) AS member_name, b.EMAIL, a.point_title, a.point_amount, a.reg_date
@@ -318,4 +367,6 @@
 		JOIN member b ON(a.MEMBER_NO = b.MEMBER_NO)
 	order by a.reg_date desc
 </select>
+
+
 </mapper>
