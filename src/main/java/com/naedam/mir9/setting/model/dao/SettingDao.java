@@ -15,6 +15,9 @@ import com.naedam.mir9.point.model.vo.Point;
 import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
+import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Locale;
 
 public interface SettingDao {
 
@@ -41,5 +44,11 @@ public interface SettingDao {
 	PointUse selectPointUse();
 
 	PointSave selectPointSave();
+
+	List<AdminMenu> selectAdminMenuList();
+
+	List<Locale> selectLocaleList();
+
+	AdminSetting selectAdminSetting();
 
 }

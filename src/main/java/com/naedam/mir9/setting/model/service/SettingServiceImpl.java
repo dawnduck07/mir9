@@ -19,6 +19,9 @@ import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.dao.SettingDao;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
+import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Locale;
 
 @Service
 public class SettingServiceImpl implements SettingService {
@@ -96,6 +99,25 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.selectPointSave();
 	}
+
+	@Override
+	public List<AdminMenu> selectAdminMenuList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectAdminMenuList();
+	}
+
+	@Override
+	public List<Locale> selectLocaleList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectLocaleList();
+	}
+
+	@Override
+	public AdminSetting selectAdminSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectAdminSetting();
+	}
+	
 	
 	
 	
