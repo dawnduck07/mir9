@@ -25,7 +25,6 @@ public class AdminSetting implements Serializable {
 	private String isDiscount;
 	private int historyLayoutNo;
 	private int historyViewType;
-	private String deliveryNotice;
 
 
 }
