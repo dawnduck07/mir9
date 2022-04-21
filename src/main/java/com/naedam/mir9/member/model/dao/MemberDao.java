@@ -91,6 +91,12 @@ public interface MemberDao {
 	// 엑셀 다운로드
 	List<MemberListExcelForm> selectMemberListExcelForm();
 
+	// 회원 삭제
+	int memberWithdrawal(String id);
+
+	// 주소록 삭제
+	int deleteAddressBook(int memberNo);
+
 	
 
 

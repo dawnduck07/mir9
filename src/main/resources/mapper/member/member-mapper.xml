@@ -397,4 +397,17 @@
 		m.reg_date DESC
 </select>
 
+<!-- 회원 삭제 -->
+<delete id="memberWithdrawal">
+	DELETE FROM 
+		member 
+	WHERE 
+		id = #{id}
+</delete>
+
+<!-- 주소록 삭제 -->
+<delete id="deleteAddressBook">
+
+</delete>
+
 </mapper>

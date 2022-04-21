@@ -4,6 +4,7 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -13,9 +14,12 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +57,47 @@ public class MemberController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	// 회원 탈퇴
+	@GetMapping("/memberWithdrawal.do")
+	public void memberWithdrawal() {}
+	
+	// 회원 탈퇴 로직
+	@PostMapping("/memberWithdrawal.do")
+	public void memberWithdrawal(
+			@RequestParam String password,
+			@RequestParam String reason,
+			Authentication authentication,
+			RedirectAttributes redirectAttribute) {
+		log.debug("password = {}", password);
+		log.debug("reason = {}", reason);
+		Map<String, Object> param = new HashMap<>();
+		// 사용자 데이터 가져오기
+		Member member = (Member) authentication.getPrincipal();
+		log.debug("[principal] member = {}", member);
+		int memberNo = member.getMemberNo();
+		String id = member.getId();
+		param.put("memberNo", memberNo);
+		param.put("reason", reason);
+		
+		// 비밀번호 비교
+		if(passwordEncoder.matches(password, member.getPassword())){
+			
+			// 회원 삭제
+			int resultMemberWithdrawal = memberService.memberWithdrawal(id);
+			log.debug("resultMemberWithdrawal = {}", resultMemberWithdrawal);
+			// 주소록 삭제
+			//int resultDeleteAddressBook = memberService.deleteAddressBook(memberNo);
+			//log.debug("resultDeleteAddressBook = {}", resultDeleteAddressBook);
+			
+			 
+		}
+		
+		
+
+
+		
+	}
 	
 	// 회원 리스트
 	@RequestMapping("/list.do")
@@ -539,9 +584,7 @@ public class MemberController {
 	
 	// 로그인 화면 요청
 	@GetMapping("/memberLogin.do")
-	public String memberLoginPage() {
-		
-		
+	public String memberLoginPage() {	
 		return "member/memberList";
 	}
 	
