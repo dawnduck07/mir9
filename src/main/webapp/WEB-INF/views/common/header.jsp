@@ -257,13 +257,13 @@
 							class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_day"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/period_day"><i
 									class="fa fa-circle-o"></i>기간별 매출 통계 </a></li>
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_product"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/product"><i
 									class="fa fa-circle-o"></i>제품별 매출 통계 </a></li>
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_member"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/member"><i
 									class="fa fa-circle-o"></i>회원별 매출 통계 </a></li>
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_address_day"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/address_day"><i
 									class="fa fa-circle-o"></i>지역별 매출 통계 </a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i
