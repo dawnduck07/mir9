@@ -4,6 +4,7 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -31,6 +32,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naedam.mir9.coupon.model.service.CouponService;
+import com.naedam.mir9.coupon.model.vo.Coupon;
+import com.naedam.mir9.coupon.model.vo.MemberCoupon;
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
@@ -54,6 +58,9 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private CouponService couponService;
+	
 	// 회원 리스트
 	@RequestMapping("/list.do")
 	public String memberList(Model model, HttpServletRequest request) {
@@ -72,6 +79,10 @@ public class MemberController {
 		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
 		log.debug("memberGradeList = {}", memberGradeList);
 		model.addAttribute("memberGradeList", memberGradeList);
+		
+		// 쿠폰 리스트
+		List<Coupon> couponList = couponService.selectCouponList();
+		model.addAttribute("couponList",couponList);
 		
 		return "member/memberList";
 	}
@@ -251,22 +262,6 @@ public class MemberController {
 		log.debug("referer = {}", referer);
 		
 		return "redirect:" + referer;
-	}
-	
-	// 회원 적립금 내역보기
-	@GetMapping("/memberPointList/{memberNo}")
-	public String memberPointList(
-			@PathVariable int memberNo,
-			Model model,
-			HttpServletRequest request,
-			HttpServletResponse response) {
-		
-		log.debug("memberNo = {}", memberNo);
-		
-		// 업무로직
-		
-		
-		return "member/memberPointList";
 	}
 	
 	// 회원 상세 보기
@@ -477,10 +472,23 @@ public class MemberController {
 		return "redirect:/member/memberGrade.do";
 	}
 	
+	// 회원 적립금 내역보기
+	@GetMapping("/memberPointList/{memberNo}")
+	public String memberPointList(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
+		
+		log.debug("memberNo = {}", memberNo);
+		
+		// 업무로직
+		
+		
+		return "member/memberPointList";
+	}
+	
 	// 회원 적립금 관리
 	@GetMapping("/point")
-	public String memberPointList(Model model) {
+	public String memberPointList(Model model, @RequestParam(defaultValue = "0") int mNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("memberNo", mNo);
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
 		
 		model.addAttribute("mPointList",mPointList);
@@ -490,19 +498,54 @@ public class MemberController {
 	
 	@PostMapping("/point")
 	@SuppressWarnings("rawtypes")
-	public String memberPointList(HttpServletRequest request, Model model) {
+	public String memberPointList(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int mNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		Enumeration params = request.getParameterNames();
 		while (params.hasMoreElements()){
 		    String name = (String)params.nextElement();
 		    param.put(name, request.getParameter(name));
 		}
-		
+		param.put("memberNo", mNo);
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
 		
 		model.addAttribute("mPointList",mPointList);
 		model.addAttribute("param",param);
 		return "/member/memberPointList";
+	}
+	
+	//쿠폰 등록, 적립금 지급/차감
+	@PostMapping("/process.do")
+	public void process(HttpServletRequest request, Model model) {
+		Enumeration params = request.getParameterNames();
+		System.out.println("----------------------------");
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    System.out.println(name + " : " +request.getParameter(name));
+		}
+		System.out.println("----------------------------");
+		String mode = request.getParameter("mode");
+		int result = 0;
+		
+		if(mode.equals("coupon")) {
+			String couponNo = request.getParameter("coupon_code");
+			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
+			
+			for(String memberNo : memberNoList) {
+				MemberCoupon memberCoupon = new MemberCoupon(0, Integer.parseInt(memberNo), Integer.parseInt(couponNo), null);
+				result = couponService.insertMemberCoupon(memberCoupon);
+			}
+			
+		}else if(mode.equals("point")) {
+			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
+			String content = request.getParameter("content");
+			int point = Integer.parseInt(request.getParameter("point"));
+			MemberPoint memberPoint = new MemberPoint(0, 0, content, point, null, null, null, null);
+			
+			for(String memberNo : memberNoList) {
+				memberPoint.setMemberNo(Integer.parseInt(memberNo));
+			}
+		}
+		
 	}
 	
 	// 회원가입
