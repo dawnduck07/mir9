@@ -105,4 +105,23 @@
   	<select id="selectAdminSetting" resultType="adminSetting">
   		select * from admin_setting
   	</select>
+  	
+  	<select id="selectOneDeliveryNotice" resultType="deliveryNotice">
+  		select * from delivery_notice where locale = #{locale}
+  	</select>
+  	
+  	<update id="updateAdminSetting">
+  		update admin_setting set email = #{email}, phone = #{phone}, caller_id = #{callerId}, 
+			<if test="thumbnailImg != null and thumbnailImg != ''">
+	  			thumbnail_img = #{thumbnailImg}, 
+			</if>
+			<if test="faviconImg != null and faviconImg != ''">
+	  			favicon_img = #{faviconImg}, 
+			</if>
+  			is_discount = #{isDiscount}, history_layout_no = #{historyLayoutNo}, history_view_type = #{historyViewType} 
+  	</update>
+  	
+  	<update id="updateDeliveryNotice">
+  		update delivery_notice set content = #{content} where locale = #{locale}
+  	</update>
 </mapper>
