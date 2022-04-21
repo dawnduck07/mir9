@@ -10,6 +10,7 @@ import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
+import com.naedam.mir9.delivery.model.vo.DeliveryNotice;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
@@ -116,6 +117,24 @@ public class SettingServiceImpl implements SettingService {
 	public AdminSetting selectAdminSetting() {
 		// TODO Auto-generated method stub
 		return settingDao.selectAdminSetting();
+	}
+
+	@Override
+	public DeliveryNotice selectOneDeliveryNotice(String locale) {
+		// TODO Auto-generated method stub
+		return settingDao.selectOneDeliveryNotice(locale);
+	}
+
+	@Override
+	public int updateAdminSetting(AdminSetting adminSetting) {
+		// TODO Auto-generated method stub
+		return settingDao.updateAdminSetting(adminSetting);
+	}
+
+	@Override
+	public int updateDeliveryNotice(DeliveryNotice deliveryNotice) {
+		// TODO Auto-generated method stub
+		return settingDao.updateDeliveryNotice(deliveryNotice);
 	}
 	
 	
