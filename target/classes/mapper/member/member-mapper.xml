@@ -42,14 +42,15 @@
 <!-- 회원 리스트 전체 게시물 목록 -->
 <select id="selectMemberList" resultType="memberEntity">
 	SELECT
-		m.member_no,
+		 m.member_no,
 		 m.id,
 		 m.last_name, 
 		 m.first_name,
 		 m.phone,
 		 a.address_main, 
 		 a.address_sub,
-		 m.reg_date
+		 m.reg_date,
+		 m.status
 	FROM
 	    member m left join member_point mp
 	        on m.member_no = mp.member_no
@@ -320,6 +321,7 @@
 		last_name = #{lastName},
 		email = #{email},
 		phone = #{phone},
+		status = #{status},
 			<if test="password != null and password != ''">
 				password = #{password},
 		 	</if>

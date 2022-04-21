@@ -12,9 +12,6 @@
 </jsp:include>
 <style>
 
-
-
-
 .ui-menu {
 	z-index: 9999;
 	width: 400px;
@@ -106,10 +103,11 @@
 										<fmt:formatDate pattern = "yyyy/MM/dd HH:mm" value="${memberEntity.regDate}"/>
 									</td>
 									<td>
-									<c:if test="">
+									<!-- 보임:Y / 숨김:N -->
+									<c:if test="${memberEntity.status eq 'Y'}">
 										<span class="label label-success" style="font-size: 12px;">보임</span>
 									</c:if>
-									<c:if test="">
+									<c:if test="${memberEntity.status eq 'N'}">
 										<span class="label label-default" style="font-size: 12px;">숨김</span>
 									</c:if>
 									</td>
@@ -341,8 +339,8 @@
 				                </td>
 				                <td>
 					                <select name="status" id="status" class="form-control input-sm" style="width:120px;">
-					      				<option value="y">정상</option>      
-					      				<option value="n">대기</option>                
+					      				<option value="Y">보임</option>      
+					      				<option value="N">숨김</option>                
 					      			</select>
 				                </td>
 				            </tr>
@@ -596,6 +594,7 @@ $("button[id^='detail_']").on('click', function(e){
 			$("[name=addressMain]").val(address.addressMain);
 			$("[name=addressSub]").val(address.addressSub);
 			$("[name=memberMemoContent]").val(memberMemo.memberMemoContent);
+			$("[name=status]").val(member.status);
 			$("[name=authority]").val(authorities.authority);
 			$("#reg_date").text(regDate);
 			$("#last_login_date").text(loginDate);
@@ -628,6 +627,8 @@ function update(){
 	console.log("addressZipcode = " + addressZipcode);
 	var memberNo = $("#memberNo").val();
 	console.log("memberNo = " + memberNo);
+	var status = $("#status").val();
+	console.log("status = " + status);
 	
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -709,6 +710,7 @@ function update(){
 			addressMain : addressMain,
 			addressSub : addressSub,
 			memberMemoContent : memberMemoContent,
+			status : status,
 			authority : authority
 	};
 	
