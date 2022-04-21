@@ -1,17 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>	
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="회원 관리" name="title" />
 </jsp:include>
 <style>
-
 .ui-menu {
 	z-index: 9999;
 	width: 400px;
@@ -20,9 +18,9 @@
 
 <!-- content-wrapper -->
 <div class="content-wrapper">
-<!-- <link href="https://mir9.co.kr/resource/css/s9jss_single.css" rel="stylesheet"> -->
+	<!-- <link href="https://mir9.co.kr/resource/css/s9jss_single.css" rel="stylesheet"> -->
 
-<section class="content-header">
+	<section class="content-header">
 	<h1>
 		회원 관리 <small>member list</small>
 	</h1>
@@ -31,177 +29,136 @@
 		<li>회원 관리</li>
 		<li class="active">회원 리스트</li>
 	</ol>
-</section>
+	</section>
 
-<section class="content">
-<div class="row">
-	<div class="col-xs-12">
-		<div class="box">
-			<div class="box-body">
-			<div id="totalCountContainer">
-				<label style="margin-top: 5px;">총 ${totalMemberListCount} 건</label>
-			</div>
-				<!-- 타입별 검색 -->
-				<form name="search-form" onsubmit="return false">
-					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-						<div class="has-feedback">
-							<span> 
-								<input type="text" name="keyword" id="keyword"
-								value="" class="form-control input-sm" placeholder="검색" /> 
-								<span
-									class="glyphicon glyphicon-search form-control-feedback">
+	<section class="content">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box">
+				<div class="box-body">
+					<div id="totalCountContainer">
+						<label style="margin-top: 5px;">총 ${totalMemberListCount} 건</label>
+					</div>
+					<!-- 타입별 검색 -->
+					<form name="search-form" onsubmit="return false">
+						<div class="box-tools pull-right" style="margin-bottom: 5px;">
+							<div class="has-feedback">
+								<span> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"> </span>
 								</span>
-							</span>
+							</div>
 						</div>
-					</div>
-					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-						<div class="has-feedback">
-							<select name="type" class="form-control input-sm">
-								<option value="last_name">성</option>
-								<option value="first_name">이름</option>
-								<option value="phone">휴대폰</option>
-							</select>
+						<div class="box-tools pull-right" style="margin-bottom: 5px;">
+							<div class="has-feedback">
+								<select name="type" class="form-control input-sm">
+									<option value="last_name">성</option>
+									<option value="first_name">이름</option>
+									<option value="phone">휴대폰</option>
+								</select>
+							</div>
 						</div>
-					</div>
-				</form>
-			<form:form 
-					id="memberDeleteFrm"	
-					name="memberDeleteFrm" 
-					action="${pageContext.request.contextPath}/member/memberDelete.do" 
-					method="POST">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-				<table class="table table-bordered table-hover checkbox-group">
-						<thead>
-							<tr>
-								<td style="width: 30px;">
-									<input type="checkbox" name="select_all" id="checkAll" />
-									<input type="hidden" id="memberNo" name="memberNo" value="" />
-								</td>
-								<td style="width: 110px;">아이디</td>
-								<td style="width: 110px;">이름</td>
-								<td style="width: 110px;">휴대폰</td>
-								<td>주소</td>
-								<td style="width: 100px;">현재 적립금</td>
-								<td style="width: 120px;">가입일</td>
-								<td style="width: 50px;">상태</td>
-								<td style="width: 80px;">적립금</td>
-								<td style="width: 100px;">명령</td>
-							</tr>
-						</thead>
-						<tbody id = "tbody">
-							<c:forEach items="${memberList}" var="memberEntity">
+					</form>
+					<form:form id="memberDeleteFrm" name="memberDeleteFrm" action="${pageContext.request.contextPath}/member/memberDelete.do" method="POST">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						<table class="table table-bordered table-hover checkbox-group">
+							<thead>
 								<tr>
-									<td style="width: 30px;">
-										<input type="checkbox" class="member-is-checked" name="" data-target="${memberEntity.memberNo}"  />
-									</td>
-									<td style="width: 110px;">${memberEntity.id}</td>
-									<td style="width: 110px;">${memberEntity.lastName}${memberEntity.firstName}</td>
-									<td style="width: 110px;">${memberEntity.phone}</td>
-									<td>${memberEntity.addressMain} ${memberEntity.addressSub}</td>
-									<td style="width: 100px;">${memberEntity.pointAmt}</td>
-									<td style="width: 120px;">
-										<fmt:formatDate pattern = "yyyy/MM/dd HH:mm" value="${memberEntity.regDate}"/>
-									</td>
-									<td>
-									<!-- 보임:Y / 숨김:N -->
-									<c:if test="${memberEntity.status eq 'Y'}">
-										<span class="label label-success" style="font-size: 12px;">보임</span>
-									</c:if>
-									<c:if test="${memberEntity.status eq 'N'}">
-										<span class="label label-default" style="font-size: 12px;">숨김</span>
-									</c:if>
-									</td>
-									<td>
-										<button type="button" id="btn_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">
-											내역보기
-										</button>
-									</td>
-									<td>
-										<button type="button" id="detail_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">
-											상세보기
-										</button>
-									</td>
+									<td style="width: 30px;"><input type="checkbox" name="select_all" id="checkAll" /> <input type="hidden" id="memberNo" name="memberNo" value="" /></td>
+									<td style="width: 110px;">아이디</td>
+									<td style="width: 110px;">이름</td>
+									<td style="width: 110px;">휴대폰</td>
+									<td>주소</td>
+									<td style="width: 100px;">현재 적립금</td>
+									<td style="width: 120px;">가입일</td>
+									<td style="width: 50px;">상태</td>
+									<td style="width: 80px;">적립금</td>
+									<td style="width: 100px;">명령</td>
 								</tr>
-							</c:forEach>
-						</tbody>
-				</table>
-				</form:form>
-				<br>
-				
-				<button 
-					type="button"
-					id="memberListDeleteBtn"
-					class="btn btn-danger">
-					<i class="fa fa-minus-square"></i> 선택삭제
-				</button>
-				
-				<!-- 등록 -->
-				<button type="button" onclick="onclickInsert();"
-					class="btn btn-primary">
-					<i class="fa fa-plus-square"></i> 등록
-				</button>
-				
-				<button type="button" onclick="onclickPoint();"
-					class="btn btn-warning" style="margin-left: 20px;">
-					<i class="fa fa-won"></i> 적립금 지급
-				</button>
-				<button type="button" onclick="onclickCoupon();"
-					class="btn btn-warning">
-					<i class="fa fa-credit-card"></i> 쿠폰 지급
-				</button>
-				<button type="button" onclick="downloadExcel();"
-					class="btn btn-warning">
-					<i class="fa" aria-hidden="true"></i> Excel 다운로드
-				</button>
-				<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
-					<input type="hidden" name="mode" value="downloadExcel"> 
-					<input type="hidden" name="search_data">
-					<input type="hidden" name="download_type" value="memberList">
-				</form>
-				<!--    // 관리자단에서 회원가입 숨김
+							</thead>
+							<tbody id="tbody">
+								<c:forEach items="${memberList}" var="memberEntity">
+									<tr>
+										<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="list[]" value="${memberEntity.memberNo}" data-target="${memberEntity.memberNo}" /></td>
+										<td style="width: 110px;">${memberEntity.id}</td>
+										<td style="width: 110px;">${memberEntity.lastName}${memberEntity.firstName}</td>
+										<td style="width: 110px;">${memberEntity.phone}</td>
+										<td>${memberEntity.addressMain}${memberEntity.addressSub}</td>
+										<td style="width: 100px;">${memberEntity.pointAmt}</td>
+										<td style="width: 120px;"><fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${memberEntity.regDate}" /></td>
+										<td>
+											<!-- 보임:Y / 숨김:N --> <c:if test="${memberEntity.status eq 'Y'}">
+												<span class="label label-success" style="font-size: 12px;">보임</span>
+											</c:if> <c:if test="${memberEntity.status eq 'N'}">
+												<span class="label label-default" style="font-size: 12px;">숨김</span>
+											</c:if>
+										</td>
+										<td>
+											<button type="button" id="btn_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">내역보기</button>
+										</td>
+										<td>
+											<button type="button" id="detail_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">상세보기</button>
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</form:form>
+					<br>
+
+					<button type="button" id="memberListDeleteBtn" class="btn btn-danger">
+						<i class="fa fa-minus-square"></i> 선택삭제
+					</button>
+
+					<!-- 등록 -->
+					<button type="button" onclick="onclickInsert();" class="btn btn-primary">
+						<i class="fa fa-plus-square"></i> 등록
+					</button>
+
+					<button type="button" onclick="onclickPoint();" class="btn btn-warning" style="margin-left: 20px;">
+						<i class="fa fa-won"></i> 적립금 지급
+					</button>
+					<button type="button" onclick="onclickCoupon();" class="btn btn-warning">
+						<i class="fa fa-credit-card"></i> 쿠폰 지급
+					</button>
+					<button type="button" onclick="downloadExcel();" class="btn btn-warning">
+						<i class="fa" aria-hidden="true"></i> Excel 다운로드
+					</button>
+					<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
+						<input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data"> <input type="hidden" name="download_type" value="memberList">
+					</form>
+					<!--    // 관리자단에서 회원가입 숨김
                     <button type="button" onclick="onclickSMS();" class="btn btn-danger"><i class="fa fa-bell"></i> SMS발송</button>
 -->
 
-				<div style="text-align: right;">
-					<ul class="pagination" style="margin: 0;">
-						<li class="active"><a
-							href="?tpf=admin/member/list&status=y&page=1">1</a></li>
-					</ul>
+					<div style="text-align: right;">
+						<ul class="pagination" style="margin: 0;">
+							<li class="active"><a href="?tpf=admin/member/list&status=y&page=1">1</a></li>
+						</ul>
+					</div>
 				</div>
+				<!-- /.box-body -->
 			</div>
-			<!-- /.box-body -->
-		</div>
-		<!-- /.box -->
-		
-	</div>
-	<!-- /.col-xs-12 -->
-</div>
-<!-- /.row --> 
-</section>
+			<!-- /.box -->
 
-	<form name="formID" method="post" onsubmit="return false;"
-		action="?tpf=admin/member/process">
-		<input type="hidden" name="mode" value="checkId"> <input
-			type="hidden" name="id">
+		</div>
+		<!-- /.col-xs-12 -->
+	</div>
+	<!-- /.row --> </section>
+
+	<form name="formID" method="post" onsubmit="return false;" action="?tpf=admin/member/process">
+		<input type="hidden" name="mode" value="checkId"> <input type="hidden" name="id">
 	</form>
 
 	<!-- // 회원 등록 폼 -->
-	<div class="modal fade" id="modalRegister" tabindex="-2"
-		; role="dialog" aria-labelledby="myModal" aria-hidden="true">
+	<div class="modal fade" id="modalRegister" tabindex="-2" ; role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
-			
-				<form:form 
-					name="memberInsertModalFrm"
-					id="memberInsertModalFrm" 
-					method="POST" 
-					action="${pageContext.request.contextPath}/member/memberInsertModalFrm.do">
+
+				<form:form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/member/memberInsertModalFrm.do">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">회원 등록</h4>
 					</div>
-					
+
 					<div class="modal-body">
 						<h4>
 							<p class="text-light-blue">
@@ -211,151 +168,77 @@
 						<table class="table table-bordered">
 							<tr>
 								<td class="menu">아이디</td>
-								<td align="left">
-									<input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" />
-							
-									<input type="hidden" id="addressNo" name="addressNo" value="" />
-									&nbsp;
-									<button 
-										type="button" 
-										id="btnCheckId"
-										name="btnCheckId" 
-										class="btn btn-sm btn-default" 
-										onclick="onclickCheckId()">아이디 중복확인</button> 4~12자로 입력하세요.
-								</td>
+								<td align="left"><input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" /> <input type="hidden" id="addressNo" name="addressNo" value="" /> &nbsp;
+									<button type="button" id="btnCheckId" name="btnCheckId" class="btn btn-sm btn-default" onclick="onclickCheckId()">아이디 중복확인</button> 4~12자로 입력하세요.</td>
 							</tr>
 							<tr>
 								<td class="menu">비밀번호</td>
-								<td align="left">
-								<input 
-									type="password" 
-									id="password"
-									name="password"
-									class="form-control input-sm"
-									style="width: 30%; float: left;" /> 대소문자와 숫자 포함 8~15자로 입력하세요</td>
+								<td align="left"><input type="password" id="password" name="password" class="form-control input-sm" style="width: 30%; float: left;" /> 대소문자와 숫자 포함 8~15자로 입력하세요</td>
 							</tr>
 							<tr>
 								<td class="menu">비밀번호 확인</td>
-								<td align="left">
-								<input 
-									type="password"
-									id="passwordCheck"
-									name="passwordCheck" 
-									class="form-control input-sm" 
-									style="width: 30%;" />
-								</td>
+								<td align="left"><input type="password" id="passwordCheck" name="passwordCheck" class="form-control input-sm" style="width: 30%;" /></td>
 							</tr>
 							<tr>
 								<td class="menu">이름</td>
-								<td align="left">
-									<input type="text" name="firstName" id="firstName"
-									class="form-control input-sm" style="width: 30%; float: left;"
-									placeholder="이름" /> 
-									<input type="text" name="lastName" id="lastName"
-									class="form-control input-sm" style="width: 30%;"
-									placeholder="성" /></td>
+								<td align="left"><input type="text" name="firstName" id="firstName" class="form-control input-sm" style="width: 30%; float: left;" placeholder="이름" /> <input type="text" name="lastName" id="lastName" class="form-control input-sm" style="width: 30%;" placeholder="성" /></td>
 							</tr>
 							<tr>
 								<td class="menu">휴대폰</td>
-								<td align="left">
-								<select 
-									name="mobile1"
-									id="mobile1"
-									class="form-control input-sm" style="width: 15%; float: left;">
+								<td align="left"><select name="mobile1" id="mobile1" class="form-control input-sm" style="width: 15%; float: left;">
 										<option value="010">010</option>
 										<option value="011">011</option>
 										<option value="016">016</option>
 										<option value="017">017</option>
 										<option value="018">018</option>
 										<option value="019">019</option>
-								</select> 
-								<span style="float: left;">-</span> 
-								<input 
-									type="text"
-									name="mobile2"
-									id="mobile2" 
-									class="form-control input-sm" style="width: 15%; float: left;"
-									maxlength="4" /> 
-								<span style="float: left;">-</span> 
-								<input
-									type="text" 
-									name="mobile3"
-									id="mobile3"
-									class="form-control input-sm" style="width: 15%; float: left;"
-									maxlength="4" /></td>
+								</select> <span style="float: left;">-</span> <input type="text" name="mobile2" id="mobile2" class="form-control input-sm" style="width: 15%; float: left;" maxlength="4" /> <span style="float: left;">-</span> <input type="text" name="mobile3" id="mobile3" class="form-control input-sm" style="width: 15%; float: left;" maxlength="4" /></td>
 							</tr>
 							<tr>
 								<td class="menu">이메일</td>
-								<td align="left">
-									<input type="text" name="email" id="email"
-									class="form-control input-sm" style="width: 60%;"/>
-								</td>
+								<td align="left"><input type="text" name="email" id="email" class="form-control input-sm" style="width: 60%;" /></td>
 							</tr>
-							 <tr>
-				                <td class="menu">주소</td>
-				                <td align="left">
-				                <input type="text" id="address_zipcode" name="addressZipcode" readonly class="form-control input-sm" style="width:15%; background-color:#dddddd; float:left;" />
-				                &nbsp;
-				                <button type="button" onclick="callAddress()" class="btn btn-sm btn-default">
-				                	주소입력
-				                </button>
-				                
-				                <br>
-				                
-				                <input type="text" id="address_main" name="addressMain" readonly class="form-control input-sm" style="margin:5px 0; width:100%;  background-color:#dddddd;" />
-				                <input type="text" id="address_sub" name="addressSub" placeholder="상세주소" class="form-control input-sm" style="width:100%;" />
-				                </td>
-				            </tr>
+							<tr>
+								<td class="menu">주소</td>
+								<td align="left"><input type="text" id="address_zipcode" name="addressZipcode" readonly class="form-control input-sm" style="width: 15%; background-color: #dddddd; float: left;" /> &nbsp;
+									<button type="button" onclick="callAddress()" class="btn btn-sm btn-default">주소입력</button> <br> <input type="text" id="address_main" name="addressMain" readonly class="form-control input-sm" style="margin: 5px 0; width: 100%; background-color: #dddddd;" /> <input type="text" id="address_sub" name="addressSub" placeholder="상세주소" class="form-control input-sm" style="width: 100%;" /></td>
+							</tr>
 							<tr>
 								<td class="menu">메모</td>
-								<td align="left">
-									<textarea name="memberMemoContent" id="memberMemoContent" rows="4" class="form-control input-sm" style="width: 100%;"></textarea>
-								</td>
+								<td align="left"><textarea name="memberMemoContent" id="memberMemoContent" rows="4" class="form-control input-sm" style="width: 100%;"></textarea></td>
 							</tr>
 							<tr>
 								<td class="menu">현재 포인트</td>
-								<td align="left">
-									<span id="current_point">
-									</span>
-								</td>
+								<td align="left"><span id="current_point"> </span></td>
 							</tr>
 							<tr id="display_level">
-								<td class="menu">등급 <span class="text-light-blue"><i
-										class="fa fa-check"></i></span></td>
-								<td>
-									<select 
-										name="authority" 
-										id="memberGradeChk"
-										class="form-control input-sm" style="width: 120px;">
-											<c:forEach items="${memberGradeList}" var="memberGrade">
-												<option value="${memberGrade.authority}">${memberGrade.memberGradeName}</option>
-											</c:forEach>
-									</select>
-								</td>
+								<td class="menu">등급 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
+								<td><select name="authority" id="memberGradeChk" class="form-control input-sm" style="width: 120px;">
+										<c:forEach items="${memberGradeList}" var="memberGrade">
+											<option value="${memberGrade.authority}">${memberGrade.memberGradeName}</option>
+										</c:forEach>
+								</select></td>
 							</tr>
-							 <tr id="display_status">
-				                <td class="menu">상태 
-				                	<span class="text-light-blue"><i class="fa fa-check"></i></span>
-				                </td>
-				                <td>
-					                <select name="status" id="status" class="form-control input-sm" style="width:120px;">
-					      				<option value="Y">보임</option>      
-					      				<option value="N">숨김</option>                
-					      			</select>
-				                </td>
-				            </tr>
-				            <tr id="display_last_login_date">
-				                <td class="menu">최근 접속일</td>
-				                <td align="left"><span id="last_login_date"></span></td>
-				            </tr>
-				            <tr id="display_update_date">
-				                <td class="menu">수정일자</td>
-				                <td align="left"><span id="update_date"></span></td>
-				            </tr>
-				            <tr id="display_reg_date">
-				                <td class="menu">등록일자</td>
-				                <td align="left"><span id="reg_date"></span></td>
-				            </tr>
+							<tr id="display_status">
+								<td class="menu">상태 <span class="text-light-blue"><i class="fa fa-check"></i></span>
+								</td>
+								<td><select name="status" id="status" class="form-control input-sm" style="width: 120px;">
+										<option value="Y">보임</option>
+										<option value="N">숨김</option>
+								</select></td>
+							</tr>
+							<tr id="display_last_login_date">
+								<td class="menu">최근 접속일</td>
+								<td align="left"><span id="last_login_date"></span></td>
+							</tr>
+							<tr id="display_update_date">
+								<td class="menu">수정일자</td>
+								<td align="left"><span id="update_date"></span></td>
+							</tr>
+							<tr id="display_reg_date">
+								<td class="menu">등록일자</td>
+								<td align="left"><span id="reg_date"></span></td>
+							</tr>
 						</table>
 				</form:form>
 			</div>
@@ -370,17 +253,13 @@
 </div>
 
 <!-- // 적립금 지급 폼 -->
-<div class="modal fade" id="modalPoint" tabindex="-2" role="dialog"
-	aria-labelledby="myModal" aria-hidden="true">
+<div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	<div class="modal-dialog" style="width: 500px;">
 		<div class="modal-content">
-			<form name="formPoint" method="post" onsubmit="return false;"
-				action="?tpf=admin/member/process">
-				<input type="hidden" name="mode" value="point"> <input
-					type="hidden" name="member_code">
+			<form name="formPoint" method="post" onsubmit="return false;" action="?tpf=admin/member/process">
+				<input type="hidden" name="mode" value="point"> <input type="hidden" name="member_code">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabelPortfolio">적립금 지급</h4>
 				</div>
 				<div class="modal-body">
@@ -392,29 +271,22 @@
 						</tr>
 						<tr>
 							<td class="menu">지급 형태</td>
-							<td align="left"><select name="sms_type"
-								class="form-control input-sm" style="width: 120px;">
+							<td align="left"><select name="sms_type" class="form-control input-sm" style="width: 120px;">
 									<option value="+">지급</option>
 									<option value="-">차감</option>
 							</select></td>
 						</tr>
 						<tr>
 							<td class="menu">적립금</td>
-							<td align="left"><input type="text" name="point"
-								onkeyup="this.value=displayComma(checkNum(this.value))"
-								class="form-control input-sm" style="width: 120px;" /></td>
+							<td align="left"><input type="text" name="point" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="width: 120px;" /></td>
 						</tr>
 						<tr>
 							<td class="menu">메모</td>
-							<td align="left"><input type="text" name="content"
-								class="form-control input-sm" /></td>
+							<td align="left"><input type="text" name="content" class="form-control input-sm" /></td>
 						</tr>
 						<tr>
 							<td class="menu">알림 설정</td>
-							<td align="left"><input type="checkbox" name="is_send_sms"
-								value="y" /> SMS 알림 (설정된 SMS 발송)<br> <input
-								type="checkbox" name="is_send_email" value="y" /> 메일 알림 (설정된 메일
-								발송)<br></td>
+							<td align="left"><input type="checkbox" name="is_send_sms" value="y" /> SMS 알림 (설정된 SMS 발송)<br> <input type="checkbox" name="is_send_email" value="y" /> 메일 알림 (설정된 메일 발송)<br></td>
 						</tr>
 					</table>
 			</form>
@@ -422,25 +294,21 @@
 
 	</div>
 	<div class="modal-footer">
-		<button type="button" onclick="registerPoint();"
-			class="btn btn-primary">지급하기</button>
+		<button type="button" onclick="registerPoint();" class="btn btn-primary">지급하기</button>
 	</div>
 </div>
 </div>
 </div>
 
 <!-- // 쿠폰 지급 폼 -->
-<div class="modal fade" id="modalCoupon" tabindex="-2" role="dialog"
-	aria-labelledby="myModal" aria-hidden="true">
+<div class="modal fade" id="modalCoupon" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	<div class="modal-dialog" style="width: 500px;">
 		<div class="modal-content">
-			<form name="formCoupon" method="post" onsubmit="return false;"
-				action="?tpf=admin/member/process">
-				<input type="hidden" name="mode" value="coupon"> <input
-					type="hidden" name="member_code">
+			<form name="formCoupon" method="post" onsubmit="return false;" action="${pageContext.request.contextPath }/member/process.do?${_csrf.parameterName}=${_csrf.token}">
+				<input type="hidden" name="mode" value="coupon"> 
+				<input type="hidden" name="member_code">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabelPortfolio">쿠폰 지급</h4>
 				</div>
 				<div class="modal-body">
@@ -452,18 +320,20 @@
 						</tr>
 						<tr>
 							<td class="menu">쿠폰 선택</td>
-							<td align="left"><select name="coupon_code"
-								class="form-control input-sm">
+							<td align="left"><select name="coupon_code" class="form-control input-sm">
 									<option value="">선택</option>
-									<option value="12|신년인사 쿠폰|제한 없음">신년인사 쿠폰
+									<c:forEach var="coupon" items="${couponList }">
+										<option value="${coupon.couponNo }">${coupon.couponName }</option>
+									</c:forEach>
 							</select> ※ 쿠폰은 회원당 한번씩만 발급 할수 있습니다.</td>
 						</tr>
 						<tr>
+							<!-- 
+								TODO
+								email, sms 발송 처리 연동 
+							-->
 							<td class="menu">알림 설정</td>
-							<td align="left"><input type="checkbox" name="is_send_sms"
-								value="y" /> SMS 알림 (설정된 SMS 발송)<br> <input
-								type="checkbox" name="is_send_email" value="y" /> 메일 알림 (설정된 메일
-								발송)<br></td>
+							<td align="left"><input type="checkbox" name="is_send_sms" value="Y" /> SMS 알림 (설정된 SMS 발송)<br> <input type="checkbox" name="is_send_email" value="Y" /> 메일 알림 (설정된 메일 발송)<br></td>
 						</tr>
 					</table>
 			</form>
@@ -471,26 +341,20 @@
 
 	</div>
 	<div class="modal-footer">
-		<button type="button" onclick="registerCoupon();"
-			class="btn btn-primary">지급하기</button>
+		<button type="button" onclick="registerCoupon();" class="btn btn-primary">지급하기</button>
 	</div>
 </div>
 </div>
 </div>
 
 <!-- // SMS 발송 폼 -->
-<div class="modal fade" id="modalSMS" tabindex="-2" role="dialog"
-	aria-labelledby="myModal" aria-hidden="true">
+<div class="modal fade" id="modalSMS" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	<div class="modal-dialog" style="width: 500px;">
 		<div class="modal-content">
-			<form name="formSMS" method="post" onsubmit="return false;"
-				action="?tpf=admin/member/process">
-				<input type="hidden" name="mode" value="sms"> <input
-					type="hidden" name="field" value=""> <input type="hidden"
-					name="keyword" value="">
+			<form name="formSMS" method="post" onsubmit="return false;" action="?tpf=admin/member/process">
+				<input type="hidden" name="mode" value="sms"> <input type="hidden" name="field" value=""> <input type="hidden" name="keyword" value="">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabelPortfolio">SMS 발송</h4>
 				</div>
 				<div class="modal-body">
@@ -502,11 +366,9 @@
 						</tr>
 
 						<tr>
-							<td class="menu">메세지<br> (<span id="msg_count">0</span>
-								/ 90 byte)
+							<td class="menu">메세지<br> (<span id="msg_count">0</span> / 90 byte)
 							</td>
-							<td align="left"><textarea name="msg" id="msg" rows="4"
-									style="width: 100%;"></textarea></td>
+							<td align="left"><textarea name="msg" id="msg" rows="4" style="width: 100%;"></textarea></td>
 						</tr>
 					</table>
 			</form>
@@ -1063,7 +925,44 @@ $(document).on("click", "#memberListDeleteBtn", function(){
 });
 
 
+//쿠폰 지급
+function onclickCoupon() {
+    var f = eval('memberDeleteFrm');
+    var chkBox = f.elements['list[]'];
+    var chkLen = chkBox.length;
+    if (chkLen > 0) {
+        var member_code = '';
+        var member_count = '';
 
+        // 선택된 파일이 있는지 체크
+        for (i = 0; i < chkLen; i++) {
+            if (chkBox[i].checked) {
+                member_count++;
+                member_code += chkBox[i].value+',';
+            }
+        }
+        if (member_code == '') {
+            alert('항목이 선택되지 않았습니다.');
+            return false;
+        }
+        else {
+            member_code = member_code.substr(0, member_code.length -1);
+            $('[name=member_code]').val(member_code);
+            $('#sendCountCoupon').text(member_count);
+            console.log(member_code);
+        }
+    }
+    else {
+        alert('항목이 없습니다.');
+        return false;
+    }
+    $('#modalCoupon').modal({backdrop:'static', show:true});
+}
+function registerCoupon() {
+    if(formCoupon.coupon_code.value == '') { alert('쿠폰이 선택되지 않았습니다.'); formCoupon.coupon_code.focus(); return false;}
+    formCoupon.target = 'iframe_process';
+    formCoupon.submit();
+}
 
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

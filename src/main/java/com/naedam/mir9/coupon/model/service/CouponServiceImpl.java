@@ -1,10 +1,13 @@
 package com.naedam.mir9.coupon.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.coupon.model.dao.CouponDao;
 import com.naedam.mir9.coupon.model.vo.Coupon;
+import com.naedam.mir9.coupon.model.vo.MemberCoupon;
 
 @Service
 public class CouponServiceImpl implements CouponService {
@@ -33,6 +36,18 @@ public class CouponServiceImpl implements CouponService {
 	public int deleteCoupon(int couponNo) {
 		// TODO Auto-generated method stub
 		return couponDao.deleteCoupon(couponNo);
+	}
+
+	@Override
+	public List<Coupon> selectCouponList() {
+		// TODO Auto-generated method stub
+		return couponDao.selectCouponList();
+	}
+
+	@Override
+	public int insertMemberCoupon(MemberCoupon memberCoupon) {
+		// TODO Auto-generated method stub
+		return couponDao.insertMemberCoupon(memberCoupon);
 	}
 	
 	

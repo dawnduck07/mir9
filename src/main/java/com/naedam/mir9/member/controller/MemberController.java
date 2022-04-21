@@ -4,6 +4,7 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -31,6 +32,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naedam.mir9.coupon.model.service.CouponService;
+import com.naedam.mir9.coupon.model.vo.Coupon;
+import com.naedam.mir9.coupon.model.vo.MemberCoupon;
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
@@ -54,6 +58,9 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private CouponService couponService;
+	
 	// 회원 리스트
 	@RequestMapping("/list.do")
 	public String memberList(Model model, HttpServletRequest request) {
@@ -72,6 +79,10 @@ public class MemberController {
 		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
 		log.debug("memberGradeList = {}", memberGradeList);
 		model.addAttribute("memberGradeList", memberGradeList);
+		
+		// 쿠폰 리스트
+		List<Coupon> couponList = couponService.selectCouponList();
+		model.addAttribute("couponList",couponList);
 		
 		return "member/memberList";
 	}
@@ -500,6 +511,31 @@ public class MemberController {
 		model.addAttribute("mPointList",mPointList);
 		model.addAttribute("param",param);
 		return "/member/memberPointList";
+	}
+	
+	//쿠폰 등록, 적립금 지급/차감
+	@PostMapping("/process.do")
+	public void process(HttpServletRequest request, Model model) {
+		Enumeration params = request.getParameterNames();
+		System.out.println("----------------------------");
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    System.out.println(name + " : " +request.getParameter(name));
+		}
+		System.out.println("----------------------------");
+		String mode = request.getParameter("mode");
+		int result = 0;
+		
+		if(mode.equals("coupon")) {
+			String couponNo = request.getParameter("coupon_code");
+			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
+			
+			for(String memberNo : memberNoList) {
+				MemberCoupon memberCoupon = new MemberCoupon(0, Integer.parseInt(memberNo), Integer.parseInt(couponNo), null);
+				result = couponService.insertMemberCoupon(memberCoupon);
+			}
+		}
+		
 	}
 	
 	// 회원가입
