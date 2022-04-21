@@ -104,7 +104,7 @@ public class MemberController {
 						@RequestParam String authority,
 						RedirectAttributes redirectAttributes) {
 		log.debug("{}", "memberInsertModalFrm.do 요청!");
-		log.debug("memberEntity = {}", member);
+		log.debug("member = {}", member);
 		log.debug("memberMemo = {}", memberMemo);
 		log.debug("memberGradeNo = {}", memberGradeNo);
 		log.debug("mobile = {}", mobile1);
@@ -362,7 +362,8 @@ public class MemberController {
 			paramMember.setLastName(map.get("lastName"));
 			paramMember.setEmail(map.get("email"));
 			paramMember.setPhone(phone);
-	
+			paramMember.setStatus(map.get("status"));
+			
 			if(map.get("password").isEmpty()) {
 				paramMember.setPassword(map.get("password"));
 			} else {
