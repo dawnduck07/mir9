@@ -14,7 +14,7 @@
 		<result property="target"				column="TARGET"				jdbcType="VARCHAR"></result>
 		<result property="url"					column="URL"				jdbcType="VARCHAR"></result>
 		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
-		<result property="menu_head_code"		column="MENU_HEAD_CODE"		jdbcType="VARCHAR"></result>
+		<result property="menu_head_code.headNo"		column="MENU_HEAD_CODE"		jdbcType="NUMERIC"></result>
 		<result property="menuDate"				column="MENU_DATE"			jdbcType="VARCHAR"></result>
 		<result property="is_meta"				column="IS_META"			jdbcType="VARCHAR"></result>
 		<result property="meta_title"			column="META_TITLE"			jdbcType="VARCHAR"></result>
@@ -53,7 +53,7 @@
 			   #{target : VARCHAR},
 			   #{url : VARCHAR},
 			   #{status : VARCHAR},
-			   #{menu_head_code : VARCHAR},
+			   #{menu_head_code.headNo : NUMERIC},
 			   sysdate(),
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
@@ -97,7 +97,7 @@
 			   #{target : VARCHAR},
 			   #{url : VARCHAR},
 			   #{status : VARCHAR},
-			   #{menu_head_code : VARCHAR},
+			   #{menu_head_code.headNo : NUMERIC},
 			   sysdate(),
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
@@ -108,6 +108,12 @@
 		SELECT *
 		FROM menu
 		WHERE code = #{value}
+	</select>
+	
+	<select id="getHead" parameterType="int" resultMap="HeadSelectMap">
+		SELECT *
+		FROM head
+		WHERE head_No = #{value}
 	</select>
 	
 	<select id="getRevision" parameterType="menu" resultMap="MenuSelectMap">
@@ -138,6 +144,12 @@
 		WHERE revision_code = 2
 		ORDER BY menu_date ASC	
 	</select>
+	
+	<select id="getHeadList" resultType="hashmap" resultMap="HeadSelectMap">
+		SELECT *
+		FROM head
+		ORDER BY HEAD_NO ASC;
+	</select>
 	 
 	<update id="updateMenu" parameterType="menu">
 		UPDATE menu
@@ -150,7 +162,7 @@
 			TARGET = #{target : VARCHAR},
 			URL =#{url : VARCHAR},
 			STATUS = #{status : VARCHAR},
-			MENU_HEAD_CODE = #{menu_head_code : VARCHAR},
+			MENU_HEAD_CODE = #{menu_head_code.headNo : NUMERIC},
 			IS_META = #{is_meta : VARCHAR},
 			META_TITLE = #{meta_title : VARCHAR},
 			META_DESCRIPTION = #{meta_description : VARCHAR}
@@ -158,12 +170,28 @@
 		WHERE CODE = #{code:NUMERIC}	
 	</update>
 	
-	<delete id="updateChoiceMenu" parameterType="int">
+	<update id="updateHead" parameterType="head">
+		UPDATE head
+		<set>
+			TITLE = #{title : VARCHAR},
+			STATUS = #{status : VARCHAR},
+			CONTENT = #{content : VARCHAR}
+		</set>
+		WHERE HEAD_NO = #{headNo : NUMERIC}
+	</update>
+	
+	<update id="updateChoiceMenu" parameterType="int">
 		UPDATE menu
 		<set>
 			REVISION_CODE = 2
 		</set>
 		WHERE code = #{value}
+	</update>
+	
+	<delete id="deleteChoiceHead" parameterType="int">
+		DELETE
+		FROM head
+		WHERE head_no = #{value}
 	</delete>
 	 
 </mapper>

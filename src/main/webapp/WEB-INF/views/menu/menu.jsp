@@ -96,8 +96,11 @@
                 <td class="menu">헤더선택</td>
                 <td>
                 <select name="menu_head_code" class="form-control input-sm">
-                <option value="">선택하세요</option>
-      <option value="40">ABOUT</option>      <option value="41">PRODUCTS</option>      <option value="42">RnD</option>      <option value="43">company</option>      <option value="44">contact</option>                </select>
+                	    <option value="">선택하세요</option>
+	                <c:forEach var="head" items="${list2}">
+	      				<option value="${head.headNo}">${head.title}</option>        
+	      			</c:forEach>             
+      			</select>
                 </td>
                 <td class="menu">메타 태그</td>
                 <td align="left"><input type="checkbox" name="is_meta" onclick="checkMeta()" value="y"> 사용</td>
@@ -159,22 +162,27 @@
                 <td align="left"><input type="text" name="title" id="getTitle" class="form-control input-sm"></td>
                 <td class="menu">url &nbsp;&nbsp;<input type="checkbox" name="is_outer_link" id="getIs_outer_link" onclick="checkOuterLink()" value="y"> <small>외부링크</small></td>
                 <td align="left">
-                <select id="displayOuterLink" name="target" id="getTarget" class="form-control input-sm" style="width: 25%; padding: 0px; margin-right: 5px; float: left; display: none;">
-                <option value="_blank">새창</option>
-                <option value="_self">현재창</option>
-                </select>
+	                <select id="displayOuterLink" name="target" id="getTarget" class="form-control input-sm" style="width: 25%; padding: 0px; margin-right: 5px; float: left; display: none;">
+		                <option value="_blank">새창</option>
+		                <option value="_self">현재창</option>
+	                </select>
                 <input type="text" name="url" id="getUrl" class="form-control input-sm" style="width:70%; float:left;">
                 </td>
                 <td class="menu">상태</td>
 				<td>
-                <select name="status" id="getStatus" class="form-control input-sm" style="width:100px;">
-      <option value="y">보임</option>      <option value="n">숨김</option>                </select>
+	                <select name="status" id="getStatus" class="form-control input-sm" style="width:100px;">
+	      				<option value="y">보임</option>      
+	      				<option value="n">숨김</option>                
+	      			</select>
                 </td>
                 <td class="menu">헤더선택</td>
                 <td>
-                <select name="menu_head_code" id="getMenu_head_code" class="form-control input-sm">
-                <option value="">선택하세요</option>
-      <option value="40">ABOUT</option>      <option value="41">PRODUCTS</option>      <option value="42">RnD</option>      <option value="43">company</option>      <option value="44">contact</option>                </select>
+	                <select name="menu_head_code" id="getMenu_head_code" class="form-control input-sm">
+	                	    <option value="">선택하세요</option>
+		                <c:forEach var="head" items="${list2}">
+		      				<option value="${head.headNo}">${head.title}</option>        
+		      			</c:forEach>                
+	    			</select>
                 </td>
                 <td class="menu">메타 태그</td>
                 <td align="left"><input type="checkbox" name="is_meta" id="getIs_meta" onclick="checkMeta()" value="y"> 사용</td>

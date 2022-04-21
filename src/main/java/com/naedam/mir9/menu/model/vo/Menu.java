@@ -28,7 +28,7 @@ public class Menu implements Serializable {
 	private String target; 
 	private String url; 
 	private String status; 
-	private String menu_head_code;	
+	private Head menu_head_code;	
 	private String menuDate;
 	private String is_meta;	
 	private String meta_title;

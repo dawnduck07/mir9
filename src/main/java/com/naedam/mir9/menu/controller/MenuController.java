@@ -59,9 +59,10 @@ public class MenuController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		Map<String, Object> resultMap = menuService.getMenuList(map);
-		
+		Map<String, Object> resultMap2 = menuService.getHeadList(map);
 		model.addAttribute("list", resultMap.get("list"));
-		
+		model.addAttribute("list2", resultMap2.get("list"));
+		System.out.println("확인 ::: "+resultMap2);
 		return "menu/menu";
 	}
 	
@@ -72,8 +73,11 @@ public class MenuController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		Map<String, Object> resultMap = menuService.getMenuList(map);
-		
+		Map<String, Object> resultMap2 = menuService.getHeadList(map);
 		model.addAttribute("list", resultMap.get("list"));
+		model.addAttribute("list2", resultMap2.get("list"));
+		
+		System.out.println("확인 ::: "+resultMap2);
 		
 		return "menu/menuList";
 	}

@@ -31,7 +31,21 @@
 			            <input type="hidden" name="mode" id="mode">
 	                    <thead>
 	                    <tr>
-	                        <td style="width:30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');"></td>
+                        	<td style="width:30px;">
+	                      		<div class="allCheck">
+									<input type="checkbox" name="allCheck" id="allCheck" /><label for="allCheck"></label>
+										<script>
+											$("#allCheck").click(function() {
+												var chk = $("#allCheck").prop("checked");
+												if (chk) {
+													$('.headNo').prop("checked", true);
+												} else {
+													$('.headNo').prop("checked", false);
+												}
+											});
+										</script>
+								</div>
+	                        </td>
 	                        <td>헤더명</td>
 	                        <td style="width:55px;">상태</td>
 	                        <td style="width:60px;">
@@ -41,41 +55,41 @@
 	                        <td style="width:60px;">명령</td>
 	                    </tr>
 	                    </thead>
-	      <tbody><tr>
-	                        <td><input type="checkbox" name="list[]" value="40"></td>
-	                        <td>ABOUT</td>
-	                        <td><button type="button" class="btn btn-success btn-xs">보임</button></td>
-	                        <td><input type="radio" name="order_code" value="1"></td>
-	                        <td><button type="button" onclick="onclickUpdate(40);" class="btn btn-primary btn-xs">수정하기</button></td>
-	                    </tr>      <tr>
-	                        <td><input type="checkbox" name="list[]" value="41"></td>
-	                        <td>PRODUCTS</td>
-	                        <td><button type="button" class="btn btn-success btn-xs">보임</button></td>
-	                        <td><input type="radio" name="order_code" value="2"></td>
-	                        <td><button type="button" onclick="onclickUpdate(41);" class="btn btn-primary btn-xs">수정하기</button></td>
-	                    </tr>      <tr>
-	                        <td><input type="checkbox" name="list[]" value="42"></td>
-	                        <td>RnD</td>
-	                        <td><button type="button" class="btn btn-success btn-xs">보임</button></td>
-	                        <td><input type="radio" name="order_code" value="3"></td>
-	                        <td><button type="button" onclick="onclickUpdate(42);" class="btn btn-primary btn-xs">수정하기</button></td>
-	                    </tr>      <tr>
-	                        <td><input type="checkbox" name="list[]" value="43"></td>
-	                        <td>company</td>
-	                        <td><button type="button" class="btn btn-success btn-xs">보임</button></td>
-	                        <td><input type="radio" name="order_code" value="4"></td>
-	                        <td><button type="button" onclick="onclickUpdate(43);" class="btn btn-primary btn-xs">수정하기</button></td>
-	                    </tr>      <tr>
-	                        <td><input type="checkbox" name="list[]" value="44"></td>
-	                        <td>contact</td>
-	                        <td><button type="button" class="btn btn-success btn-xs">보임</button></td>
-	                        <td><input type="radio" name="order_code" value="5"></td>
-	                        <td><button type="button" onclick="onclickUpdate(44);" class="btn btn-primary btn-xs">수정하기</button></td>
-	                    </tr>                    
-	                    </tbody></table>
+	      				<tbody>
+	      					<c:forEach var="head" items="${list}">
+			      				<tr>
+			                        <td>
+				                        <div>
+				                        	<input type="checkbox" class="headNo" name="headNo"  value="${head.headNo}" />
+				                        	<script>
+												$(".headNo").click(function() {
+													$("#allCheck").prop("checked", false);
+												});
+											</script>
+										</div>
+			                        </td>
+			                        <td>${head.title}</td>
+			                        <td>
+			                          <c:if test="${head.status == 'y'}">
+			                        	<button type="button" class="btn btn-success btn-xs">보임</button>
+			                          </c:if>
+			                          <c:if test="${head.status == 'n'}">
+			                        	<button type="button" class="btn btn-success btn-xs">숨김</button>
+			                          </c:if>			                          
+			                        </td>
+			                        <td>
+			                        	<input type="radio" name="order_code" value="1">
+			                        </td>
+			                        <td>
+			                        	<button type="button" onclick="onclickUpdate(${head.headNo});" class="btn btn-primary btn-xs">수정하기</button>
+			                        </td>
+			                    </tr> 
+			                </c:forEach>                 
+	                    </tbody>
+	                    </table>
 	                    <br>
 	
-	                    <button type="button" onclick="selectDelete('deleteHead');" class="btn btn-danger btn-sm"><i class="fa fa-minus-square" aria-hidden="true"></i> 선택삭제</button>
+	                    <button type="button" onclick="deleteChoiceHead(${head.headNo});" class="btn btn-danger btn-sm"><i class="fa fa-minus-square" aria-hidden="true"></i> 선택삭제</button>
 	                    <button type="button" onclick="onclickInsert();" class="btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> 헤더 등록</button>
 	                    
 	                </div><!-- /.box-body -->
@@ -87,9 +101,8 @@
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:90%">
 	        <div class="modal-content">
-	            <form name="form_register" method="post" onsubmit="return false;" action="?tpf=admin/menu/process">
+	            <form name="form_register" method="post" onsubmit="return false;" action="/mir9/head/addHead?${_csrf.parameterName}=${_csrf.token}">
 	            <input type="hidden" name="mode" value="insertHead">
-	            <input type="hidden" name="code">
 	            <input type="hidden" name="locale" value="ko">
 	            <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -103,7 +116,7 @@
 	
 	                <div class="col-xs-8">
 	                <div class="btn-group pull-right">
-	      <button type="button" id="locale_ko" onclick="setLocale('ko')" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>      <button type="button" id="locale_en" onclick="setLocale('en')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>      <button type="button" id="locale_zh" onclick="setLocale('zh')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>      <button type="button" id="locale_vn" onclick="setLocale('vn')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                </div>
+	      		<button type="button" id="locale_ko" onclick="setLocale('ko')" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>      <button type="button" id="locale_en" onclick="setLocale('en')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>      <button type="button" id="locale_zh" onclick="setLocale('zh')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>      <button type="button" id="locale_vn" onclick="setLocale('vn')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                </div>
 	                </div>
 	            </div>
 	
@@ -116,7 +129,7 @@
 	                <td class="menu">상태</td>
 	                <td>
 	                <select name="status" class="form-control input-sm" style="width:100px;">
-	      <option value="y">보임</option>      <option value="n">숨김</option>                </select>
+	      				<option value="y">보임</option>      <option value="n">숨김</option>                </select>
 	                </td>
 	            </tr>
 	            <tr>
@@ -133,9 +146,60 @@
 	            <div class="modal-footer">
 	            <button type="button" onclick="register();" class="btn btn-primary">저장하기</button>
 	            </div>
-	        </div>
-	    
+	        </div> 
 	</div>
+	
+	<div class="modal fade" id="modalContent2" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
+	    <div class="modal-dialog" style="width:90%">
+	        <div class="modal-content">
+	            <form name="form_register2" method="post" onsubmit="return false;" action="/mir9/head/updateHead?${_csrf.parameterName}=${_csrf.token}">
+	            <input type="hidden" name="mode" value="insertHead">
+	            <input type="hidden" name="headNo">
+	            <input type="hidden" name="locale" value="ko">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	                <h4 class="modal-title">헤더 등록</h4>
+	            </div>
+	            <div class="modal-body">
+	            <div class="row">
+	                <div class="col-xs-4">
+	                <h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 헤더 등록</p></h4>
+	                </div>
+	
+	                <div class="col-xs-8">
+	                <div class="btn-group pull-right">
+	      		<button type="button" id="locale_ko" onclick="setLocale('ko')" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>      <button type="button" id="locale_en" onclick="setLocale('en')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>      <button type="button" id="locale_zh" onclick="setLocale('zh')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>      <button type="button" id="locale_vn" onclick="setLocale('vn')" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                </div>
+	                </div>
+	            </div>
+	
+	            <table class="table table-bordered">
+	            <tbody><tr>
+	                <td class="menu">헤더명</td>
+	                <td align="left"><input type="text" name="title" class="form-control input-sm"></td>
+	            </tr>
+	            <tr>
+	                <td class="menu">상태</td>
+	                <td>
+	                <select name="status" class="form-control input-sm" style="width:100px;">
+	      				<option value="y">보임</option>      <option value="n">숨김</option>                </select>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td colspan="2" style="text-align:left">
+	                ※ [menu] : 본 태그를 삽입시 각각의 서브페이지의 메뉴명을 표출 해 줍니다.
+	                	<textarea name="content" id="content-editor2" rows="10" cols="80" "></textarea>
+	                </td>
+	            </tr>
+	            </tbody></table>
+	            
+	            </div></form>
+	
+	            </div>
+	            <div class="modal-footer">
+	            <button type="button" onclick="register2();" class="btn btn-primary">저장하기</button>
+	            </div>
+	        </div> 
+	</div>	
 	
 	<div class="modal fade" id="modalCopyHeader" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:400px;">
@@ -207,6 +271,38 @@
                 autoFormatOnStart: false,
             };
         }
+        if (window.CKEDITOR) {  // CKEDITOR loading 여부 체크 (Web 버젼에서만 사용)
+            var objEditor = CKEDITOR.replace('content-editor2', {
+                height: 500,
+                extraPlugins : 'tableresize',
+                extraPlugins: 'codemirror',
+                removeButtons: 'Source',
+                filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+                filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images',
+                contentsCss : ['/html/css/common.css','/html/css/style.css']
+            });
+            CKEDITOR.on('dialogDefinition', function (ev) {
+                var dialogName = ev.data.name;
+                var dialog = ev.data.definition.dialog;
+                var dialogDefinition = ev.data.definition;
+
+                if (dialogName == 'image') {
+                    dialog.on('show', function (obj) {
+                        this.selectPage('Upload'); //업로드텝으로 시작
+                    });
+                    dialogDefinition.removeContents('advanced'); // 자세히탭 제거
+                    dialogDefinition.removeContents('Link'); // 링크탭 제거
+                }
+            });
+            CKEDITOR.config.allowedContent = true;
+            CKEDITOR.config.startupMode = 'source';
+            CKEDITOR.config.codemirror = {
+                // Set this to the theme you wish to use (codemirror themes)
+                theme: '3024-night',
+                // Whether or not to automatically format code should be done when the editor is loaded
+                autoFormatOnStart: false,
+            };
+        }        
         function setLocale(locale) {
             $('button[id^=locale_]').attr('class', 'btn btn-default');
             $('#locale_'+locale).attr('class', 'btn btn-primary');
@@ -217,23 +313,30 @@
             if(form_register.title.value == '') { alert('헤더명이 입력되지 않았습니다.'); form_register.title.focus(); return false;}
             form_register.target = 'iframe_process';
             form_register.submit();
+            location.reload();
         }
+        function register2() {
+            if(form_register2.title.value == '') { alert('헤더명이 입력되지 않았습니다.'); form_register2.title.focus(); return false;}
+            form_register2.target = 'iframe_process';
+            form_register2.submit();
+            location.reload();
+        }        
         function setData(code) {
             // 정보
             $.ajax({
-                url:'http://demoshop.mir9.kr/api/process.php',
+            	url:'/mir9/head/json/getHead?${_csrf.parameterName}=${_csrf.token}',
                 type:'post',
                 dataType:'json',
                 data:{
-                    method : 'UtilMenu.infoHead',
+                    method : 'head.getHead',
                     locale : $('[name=locale]').val(),
-                    code : code
+                    headNo : code
                 },
                 success:function(data, textStatus, jqXHR){
-                    var json_data = data.data;
+                    var json_data = data;
                     console.log(json_data);
                     $('[name=mode]').val('updateHead');
-                    $('[name=code]').val(code);
+                    $('[name=headNo]').val(code);
                     $('[name=title]').val(json_data.title);
                     $('[name=status]').val(json_data.status);
                     if (json_data.content == null) json_data.content = '';
@@ -266,7 +369,7 @@
             }, 210);
         }
         function onclickUpdate(code) {
-            $('#modalContent').modal({backdrop:'static', show:true});
+            $('#modalContent2').modal({backdrop:'static', show:true});
             setData(code);
         }
         // 헤더 복사
@@ -278,6 +381,35 @@
             formCopyHeader.target = 'iframe_process';
             formCopyHeader.submit();            
         }
+        
+        function deleteChoiceHead(code){
+        	
+        	var headArr = new Array();
+        	
+			$("input[class='headNo']:checked").each(function(){
+				headArr.push($(this).val());
+ 			});
+			
+			if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
+				alert("취소 되었습니다.");
+				return;
+				
+			}else{
+	  		$.ajax({
+  			 	 url : "/mir9/head/deleteChoiceHead?${_csrf.parameterName}=${_csrf.token}",
+	  		  	 type : "POST",
+  		  	 	 data : { 
+  		  	 		headArr : headArr 
+  		  	 	 },
+    		 	 success : function(result){
+    		 		
+  		  	 	 }
+  		  	 	 
+	  		});		
+				alert("해당 자료가 삭제 되었습니다.")
+				location.reload();
+			}
+        }        
 </script>
 	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
