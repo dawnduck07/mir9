@@ -253,22 +253,6 @@ public class MemberController {
 		return "redirect:" + referer;
 	}
 	
-	// 회원 적립금 내역보기
-	@GetMapping("/memberPointList/{memberNo}")
-	public String memberPointList(
-			@PathVariable int memberNo,
-			Model model,
-			HttpServletRequest request,
-			HttpServletResponse response) {
-		
-		log.debug("memberNo = {}", memberNo);
-		
-		// 업무로직
-		
-		
-		return "member/memberPointList";
-	}
-	
 	// 회원 상세 보기
 	@ResponseBody
 	@GetMapping("/memberDetail.do/{memberNo}")
@@ -477,10 +461,23 @@ public class MemberController {
 		return "redirect:/member/memberGrade.do";
 	}
 	
+	// 회원 적립금 내역보기
+	@GetMapping("/memberPointList/{memberNo}")
+	public String memberPointList(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
+		
+		log.debug("memberNo = {}", memberNo);
+		
+		// 업무로직
+		
+		
+		return "member/memberPointList";
+	}
+	
 	// 회원 적립금 관리
 	@GetMapping("/point")
-	public String memberPointList(Model model) {
+	public String memberPointList(Model model, @RequestParam(defaultValue = "0") int mNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("memberNo", mNo);
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
 		
 		model.addAttribute("mPointList",mPointList);
@@ -490,14 +487,14 @@ public class MemberController {
 	
 	@PostMapping("/point")
 	@SuppressWarnings("rawtypes")
-	public String memberPointList(HttpServletRequest request, Model model) {
+	public String memberPointList(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int mNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		Enumeration params = request.getParameterNames();
 		while (params.hasMoreElements()){
 		    String name = (String)params.nextElement();
 		    param.put(name, request.getParameter(name));
 		}
-		
+		param.put("memberNo", mNo);
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
 		
 		model.addAttribute("mPointList",mPointList);

@@ -15,7 +15,7 @@
 .ui-menu {
 	z-index: 9999;
 	width: 400px;
-	}
+}
 </style>
 
 <!-- content-wrapper -->
@@ -540,7 +540,7 @@ $("button[id^='btn_']").on('click', function(e){
 	var memberNo = $(e.target).val();
 	console.log("memberNo = " + memberNo);
 	
-	location.href = `${pageContext.request.contextPath}/member/memberPointList/\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
+	location.href = `${pageContext.request.contextPath}/member/point?mNo=\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
 });
 
 // 상세보기 모달
