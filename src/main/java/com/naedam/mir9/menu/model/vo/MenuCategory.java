@@ -21,7 +21,9 @@ public class MenuCategory implements Serializable {
 	
 	private int menuCategoryNo;
 	private String menuCategoryName;
-	private int parentNo;
+	private int originNo;
+	private int ord;
+	private int layer;
 	private String menuCategoryType;
 	private String status;
 }

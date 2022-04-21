@@ -197,9 +197,9 @@
 							<li class="active"><a
 								href="${pageContext.request.contextPath}/menu/menu"><i
 									class="fa fa-circle-o"></i> 메뉴 관리</a></li>
-							<li><a href="${pageContext.request.contextPath}/menu/head"><i
+							<li><a href="${pageContext.request.contextPath}/head/headList"><i
 									class="fa fa-circle-o"></i> 헤더 관리</a></li>
-							<li><a href="${pageContext.request.contextPath}/menu/bottom"><i
+							<li><a href="${pageContext.request.contextPath}/bottom/bottomList"><i
 									class="fa fa-circle-o"></i> 하단 관리</a></li>
 							<li><a href="${pageContext.request.contextPath}/menu/meta"><i
 									class="fa fa-circle-o"></i> 메타 관리</a></li>
