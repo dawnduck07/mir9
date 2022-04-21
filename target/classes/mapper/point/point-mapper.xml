@@ -13,6 +13,14 @@
   
   </select>
   
+  <select id="selectPointName" resultType="string">
+   select point_name from point
+  </select>
+  
+  <insert id="insertMemberPoint">
+  	insert into member_point values(nextval(seq_member_point_no), #{memberNo}, #{pointTitle}, #{pointAmount}, sysdate())
+  </insert>
+  
   <update id="updatePoint">
   	update point set point_use_type = #{pointUseType}, point_name = #{pointName} where point_no = 1
   </update>

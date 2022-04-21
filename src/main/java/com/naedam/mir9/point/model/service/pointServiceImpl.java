@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.point.model.dao.PointDao;
+import com.naedam.mir9.point.model.vo.MemberPoint;
 import com.naedam.mir9.point.model.vo.MemberPointExcelForm;
 import com.naedam.mir9.point.model.vo.Point;
 import com.naedam.mir9.point.model.vo.PointSave;
@@ -38,6 +39,18 @@ public class pointServiceImpl implements PointService {
 	public List<MemberPointExcelForm> selectMemberPointExcelForm() {
 		// TODO Auto-generated method stub
 		return pointDao.selectMemberPointExcelForm();
+	}
+
+	@Override
+	public int insertMemberPoint(MemberPoint memberPoint) {
+		// TODO Auto-generated method stub
+		return pointDao.insertMemberPoint(memberPoint);
+	}
+
+	@Override
+	public String selectPointName() {
+		// TODO Auto-generated method stub
+		return pointDao.selectPointName();
 	}
 	
 	
