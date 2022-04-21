@@ -1,4 +1,4 @@
-package com.naedam.mir9.menu.model.vo;
+package com.naedam.mir9.delivery.model.vo;
 
 import java.io.Serializable;
 
@@ -11,14 +11,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Bottom implements Serializable {
-	
-	/**
+public class DeliveryNotice implements Serializable {/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private int bottomNo;
-	private String content;	
+	private int no;
+	private String content;
+	private String locale;
 	
 }

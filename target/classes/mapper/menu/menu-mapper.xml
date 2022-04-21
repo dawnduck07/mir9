@@ -14,11 +14,13 @@
 		<result property="target"				column="TARGET"				jdbcType="VARCHAR"></result>
 		<result property="url"					column="URL"				jdbcType="VARCHAR"></result>
 		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
-		<result property="menu_head_code"		column="MENU_HEAD_CODE"		jdbcType="VARCHAR"></result>
+		<result property="menu_head_code"		column="MENU_HEAD_CODE"		jdbcType="NUMERIC"></result>
 		<result property="menuDate"				column="MENU_DATE"			jdbcType="VARCHAR"></result>
 		<result property="is_meta"				column="IS_META"			jdbcType="VARCHAR"></result>
 		<result property="meta_title"			column="META_TITLE"			jdbcType="VARCHAR"></result>
 		<result property="meta_description"		column="META_DESCRIPTION"	jdbcType="VARCHAR"></result>
+		<result property="originNo"				column="ORIGIN_NO"			jdbcType="NUMERIC"></result>
+		<result property="ord"					column="ORD"			jdbcType="NUMERIC"></result>
 	</resultMap>
 	
 	<resultMap id="HeadSelectMap" type="head">
@@ -27,6 +29,27 @@
 		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
 		<result property="content"				column="CONTENT"			jdbcType="VARCHAR"></result>
 	</resultMap>
+	
+	<resultMap id="BottomSelectMap" type="bottom">
+		<result property="bottomNo"				column="BOTTOM_NO"			jdbcType="NUMERIC"></result>
+		<result property="content"				column="CONTENT"			jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="MetaSelectMap" type="meta">
+		<result property="metaNo"				column="META_NO"			jdbcType="NUMERIC"></result>
+		<result property="meta_title"			column="META_TITLE"			jdbcType="VARCHAR"></result>
+		<result property="meta_description"		column="META_DESCRIPTION"	jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="MenuCategorySelectMap" type="menuCategory">
+		<result property="menuCategoryNo"		column="MENU_CATEGORY_NO"	jdbcType="NUMERIC"></result>
+		<result property="menuCategoryName"		column="MENU_CATEGORY_NAME"	jdbcType="VARCHAR"></result>
+		<result property="originNo"				column="ORIGIN_NO"			jdbcType="NUMERIC"></result>
+		<result property="ord"					column="ORD"				jdbcType="NUMERIC"></result>
+		<result property="layer"				column="LAYER"				jdbcType="NUMERIC"></result>
+		<result property="menuCategoryType"		column="MENU_CATEGORY_TYPE"	jdbcType="VARCHAR"></result>
+		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
+	</resultMap>	
 
 	<insert id="addMenu" parameterType="menu">
 		INSERT
@@ -43,7 +66,9 @@
 				  MENU_DATE,
 				  IS_META,
 				  META_TITLE,
-				  META_DESCRIPTION)
+				  META_DESCRIPTION,
+				  ORIGIN_NO,
+				  ORD)
 		VALUES(NEXTVAL(menu_seq),
 			   #{category_code},
 			   0,
@@ -53,11 +78,14 @@
 			   #{target : VARCHAR},
 			   #{url : VARCHAR},
 			   #{status : VARCHAR},
-			   #{menu_head_code : VARCHAR},
+			   #{menu_head_code : NUMERIC},
 			   sysdate(),
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
-			   #{meta_description : VARCHAR})
+			   #{meta_description : VARCHAR},
+			   LASTVAL(menu_seq),
+			   <if test="ord == null or ord == 0">1</if>
+			   <if test="ord != null and ord == 1">2</if>)
 	</insert>
 	
 	<insert id="addHead" parameterType="head">
@@ -97,7 +125,7 @@
 			   #{target : VARCHAR},
 			   #{url : VARCHAR},
 			   #{status : VARCHAR},
-			   #{menu_head_code : VARCHAR},
+			   #{menu_head_code.headNo : NUMERIC},
 			   sysdate(),
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
@@ -108,6 +136,24 @@
 		SELECT *
 		FROM menu
 		WHERE code = #{value}
+	</select>
+	
+	<select id="getHead" parameterType="int" resultMap="HeadSelectMap">
+		SELECT *
+		FROM head
+		WHERE head_No = #{value}
+	</select>
+	
+	<select id="getBottom" resultMap="BottomSelectMap">
+		SELECT *
+		FROM bottom
+		WHERE bottom_no = 1
+	</select>
+	
+	<select id="getMeta" resultMap="MetaSelectMap">
+		SELECT *
+		FROM meta
+		WHERE meta_no = 1
 	</select>
 	
 	<select id="getRevision" parameterType="menu" resultMap="MenuSelectMap">
@@ -124,6 +170,14 @@
 		ORDER BY code ASC
 	</select>
 	
+	<select id="getMenuList2" resultType="hashmap" resultMap="MenuSelectMap">
+		SELECT *
+		FROM menu
+		WHERE revision_code = 0
+		AND   origin_no = #{menu.originNo}
+		ORDER BY code ASC
+	</select>	
+	
 	<select id="getRevisionList" resultType="hashmap" resultMap="MenuSelectMap">
 		SELECT *
 		FROM menu
@@ -138,6 +192,26 @@
 		WHERE revision_code = 2
 		ORDER BY menu_date ASC	
 	</select>
+	
+	<select id="getHeadList" resultType="hashmap" resultMap="HeadSelectMap">
+		SELECT *
+		FROM head
+		ORDER BY HEAD_NO ASC;
+	</select>
+	
+	<select id="getMenuCategoryList" resultType="hashmap" resultMap="MenuSelectMap">
+		SELECT *
+		FROM menu
+		WHERE ord = 1
+		ORDER BY code ASC
+	</select>
+	
+	<select id="getMenuCategoryList2" resultType="hashmap" resultMap="MenuSelectMap">
+		SELECT *
+		FROM menu
+		WHERE ord = 2
+		ORDER BY code ASC
+	</select>
 	 
 	<update id="updateMenu" parameterType="menu">
 		UPDATE menu
@@ -150,7 +224,7 @@
 			TARGET = #{target : VARCHAR},
 			URL =#{url : VARCHAR},
 			STATUS = #{status : VARCHAR},
-			MENU_HEAD_CODE = #{menu_head_code : VARCHAR},
+			MENU_HEAD_CODE = #{menu_head_code.headNo : NUMERIC},
 			IS_META = #{is_meta : VARCHAR},
 			META_TITLE = #{meta_title : VARCHAR},
 			META_DESCRIPTION = #{meta_description : VARCHAR}
@@ -158,12 +232,45 @@
 		WHERE CODE = #{code:NUMERIC}	
 	</update>
 	
-	<delete id="updateChoiceMenu" parameterType="int">
+	<update id="updateHead" parameterType="head">
+		UPDATE head
+		<set>
+			TITLE = #{title : VARCHAR},
+			STATUS = #{status : VARCHAR},
+			CONTENT = #{content : VARCHAR}
+		</set>
+		WHERE HEAD_NO = #{headNo : NUMERIC}
+	</update>
+	
+	<update id="updateBottom" parameterType="bottom">
+		UPDATE bottom
+		<set>
+			CONTENT = #{content : VARCHAR}
+		</set>
+		WHERE BOTTOM_NO = 1
+	</update>
+	
+	<update id="updateMeta" parameterType="meta">
+		UPDATE meta
+		<set>
+			META_TITLE = #{meta_title : VARCHAR},
+			META_DESCRIPTION = #{meta_description : VARCHAR}
+		</set>
+		WHERE META_NO = 1
+	</update>
+	
+	<update id="updateChoiceMenu" parameterType="int">
 		UPDATE menu
 		<set>
 			REVISION_CODE = 2
 		</set>
 		WHERE code = #{value}
+	</update>
+	
+	<delete id="deleteChoiceHead" parameterType="int">
+		DELETE
+		FROM head
+		WHERE head_no = #{value}
 	</delete>
 	 
 </mapper>

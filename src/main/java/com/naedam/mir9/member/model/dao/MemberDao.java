@@ -90,6 +90,9 @@ public interface MemberDao {
 
 	// 엑셀 다운로드
 	List<MemberListExcelForm> selectMemberListExcelForm();
+	
+	// 포인트 총계
+	int selectMemberTotalPoint(int memberNo);
 
 	
 

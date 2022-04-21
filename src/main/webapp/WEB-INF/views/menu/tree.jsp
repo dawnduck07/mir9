@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head>
     <title>MIR9 SHOP</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,12 +16,12 @@
     <meta name="description" content="아름다운 맘이 준비한 한주동안 지친 당신의 피부를 위한 시간">
     <meta property="og:title" content="아름다운맘">
     <meta property="og:url" content="http://demoshop.mir9.kr">
-    <meta property="og:image" content="http://demoshop.mir9.kr/user/meta_logo.jpg?dummy=1650343822">
+    <meta property="og:image" content="http://demoshop.mir9.kr/user/meta_logo.jpg?dummy=1650512783">
     <meta property="og:description" content="아름다운 맘이 준비한 한주동안 지친 당신의 피부를 위한 시간">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="아름다운맘">
     <meta name="twitter:url" content="http://demoshop.mir9.kr">
-    <meta name="twitter:image" content="http://demoshop.mir9.kr/user/meta_logo.jpg?dummy=1650343822">
+    <meta name="twitter:image" content="http://demoshop.mir9.kr/user/meta_logo.jpg?dummy=1650512783">
     <meta name="twitter:description" content="아름다운 맘이 준비한 한주동안 지친 당신의 피부를 위한 시간">
     <link rel="canonical" href="http://demoshop.mir9.kr/index.php?tpf=admin/menu/tree&amp;menu=category">
     <link rel="shortcut icon" href="/user/favicon">
@@ -33,9 +33,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-142394166-1');
 </script>
-    <link rel="stylesheet" type="text/css" href="/html/css/common.css">
-    <link rel="stylesheet" type="text/css" href="/html/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/html/css/board.min.css">
+
     <!--[if lt IE 9]>
     <script type="text/javascript" src="/html/js/html5shiv.js"></script>
     <script type="text/javascript" src="/html/js/IE9.js"></script>
@@ -60,70 +58,124 @@ a:link, a:visited, a:hover, a, active, a:focus {
 }
 </style>
 
-<script language="JavaScript" src="/html/js/tree.js"></script>
+<script language="JavaScript" src="${pageContext.request.contextPath }/resources/js/tree.js"></script>
 <script>
 var tree_tpl = {
 	'target'  : '_blank',	// name of the frame links will be opened in
 							// other possible values are: _blank, _parent, _search, _self and _top
 
-	'icon_e'  : '/img/tree/empty.gif',	// empty image
-	'icon_l'  : '/img/tree/line.gif',	// vertical line
+	'icon_e'  : '${pageContext.request.contextPath}/resources/imgs/tree/empty.gif',	// empty image
+	'icon_l'  : '${pageContext.request.contextPath}/resources/imgs/tree/line.gif',	// vertical line
 
-	'icon_32' : '/img/tree/base.gif',   // root leaf icon normal
-	'icon_36' : '/img/tree/base.gif',   // root leaf icon selected
+	'icon_32' : '${pageContext.request.contextPath}/resources/imgs/tree/base.gif',   // root leaf icon normal
+	'icon_36' : '${pageContext.request.contextPath}/resources/imgs/tree/base.gif',   // root leaf icon selected
 
-	'icon_48' : '/img/tree/base.gif',   // root icon normal
-	'icon_52' : '/img/tree/base.gif',   // root icon selected
-	'icon_56' : '/img/tree/base.gif',   // root icon opened
-	'icon_60' : '/img/tree/base.gif',   // root icon selected
+	'icon_48' : '${pageContext.request.contextPath}/resources/imgs/tree/base.gif',   // root icon normal
+	'icon_52' : '${pageContext.request.contextPath}/resources/imgs/tree/base.gif',   // root icon selected
+	'icon_56' : '${pageContext.request.contextPath}/resources/imgs/tree/base.gif',   // root icon opened
+	'icon_60' : '${pageContext.request.contextPath}/resources/imgs/tree/base.gif',   // root icon selected
 
-	'icon_16' : '/img/tree/folder.gif', // node icon normal
-	'icon_20' : '/img/tree/folderopen.gif', // node icon selected
-	'icon_24' : '/img/tree/folderopen.gif', // node icon opened
-	'icon_28' : '/img/tree/folderopen.gif', // node icon selected opened
+	'icon_16' : '${pageContext.request.contextPath}/resources/imgs/tree/folder.gif', // node icon normal
+	'icon_20' : '${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif', // node icon selected
+	'icon_24' : '${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif', // node icon opened
+	'icon_28' : '${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif', // node icon selected opened
 
-	'icon_0'  : '/img/tree/page.gif', // leaf icon normal
-	'icon_4'  : '/img/tree/page.gif', // leaf icon selected
+	'icon_0'  : '${pageContext.request.contextPath}/resources/imgs/tree/page.gif', // leaf icon normal
+	'icon_4'  : '${pageContext.request.contextPath}/resources/imgs/tree/page.gif', // leaf icon selected
 
-	'icon_2'  : '/img/tree/joinbottom.gif', // junction for leaf
-	'icon_3'  : '/img/tree/join.gif',       // junction for last leaf
-	'icon_18' : '/img/tree/plusbottom.gif', // junction for closed node
-	'icon_19' : '/img/tree/plus.gif',       // junctioin for last closed node
-	'icon_26' : '/img/tree/minusbottom.gif',// junction for opened node
-	'icon_27' : '/img/tree/minus.gif'       // junctioin for last opended node
+	'icon_2'  : '${pageContext.request.contextPath}/resources/imgs/tree/joinbottom.gif', // junction for leaf
+	'icon_3'  : '${pageContext.request.contextPath}/resources/imgs/tree/join.gif',       // junction for last leaf
+	'icon_18' : '${pageContext.request.contextPath}/resources/imgs/tree/plusbottom.gif', // junction for closed node
+	'icon_19' : '${pageContext.request.contextPath}/resources/imgs/tree/plus.gif',       // junctioin for last closed node
+	'icon_26' : '${pageContext.request.contextPath}/resources/imgs/tree/minusbottom.gif',// junction for opened node
+	'icon_27' : '${pageContext.request.contextPath}/resources/imgs/tree/minus.gif'       // junctioin for last opended node
 };
 
-var TREE_ITEMS = [
-    ['Home', '?tpf=admin/menu/list_sub',
-    ['메인페이지', '?tpf=admin/menu/list_sub&category_code=99'],
-	['제품', '?tpf=admin/menu/list_sub&category_code=10',
-	['Dental Treats', '?tpf=admin/menu/list_sub&category_code=1010'],
-	['Grooming', '?tpf=admin/menu/list_sub&category_code=1011'],
-	['건강 측정', '?tpf=admin/menu/list_sub&category_code=1012'],
-	['test', '?tpf=admin/menu/list_sub&category_code=1013'],
-	],
-	['R&D', '?tpf=admin/menu/list_sub&category_code=11',
-	['기술정책', '?tpf=admin/menu/list_sub&category_code=1110'],
-	['주요 활동', '?tpf=admin/menu/list_sub&category_code=1111'],
-	['연구소 투어', '?tpf=admin/menu/list_sub&category_code=1112'],
-	['보고서', '?tpf=admin/menu/list_sub&category_code=1113'],
-	],
-	['회사소개', '?tpf=admin/menu/list_sub&category_code=12',
-	['회사소개', '?tpf=admin/menu/list_sub&category_code=1210'],
-	['정보', '?tpf=admin/menu/list_sub&category_code=1211'],
-	['공장 투어', '?tpf=admin/menu/list_sub&category_code=1212'],
-	['문의하기', '?tpf=admin/menu/list_sub&category_code=1213'],
-	],
-	['커뮤니티', '?tpf=admin/menu/list_sub&category_code=13',
-	['공지사항', '?tpf=admin/menu/list_sub&category_code=1310'],
-	['자주하는 질문', '?tpf=admin/menu/list_sub&category_code=1311'],
-	['1:1문의', '?tpf=admin/menu/list_sub&category_code=1312'],
-	['상담후기', '?tpf=admin/menu/list_sub&category_code=1313'],
-	['이용약관', '?tpf=admin/menu/list_sub&category_code=1314'],
-	['개인정보 취급방침', '?tpf=admin/menu/list_sub&category_code=1315'],
-	],
-	    ]
-	];
+
 </script>
 
-</body></html>
+<script language="JavaScript">
+<!--
+function initMenu() {
+trees[0].tmB(1);trees[0].tmB(2);trees[0].tmB(3);trees[0].tmB(4);trees[0].tmB(5);trees[0].tmB(6);trees[0].tmB(7);trees[0].tmB(8);trees[0].tmB(9);trees[0].tmB(10);trees[0].tmB(11);trees[0].tmB(12);trees[0].tmB(13);trees[0].tmB(14);trees[0].tmB(15);trees[0].tmB(16);trees[0].tmB(17);trees[0].tmB(18);trees[0].tmB(19);trees[0].tmB(20);trees[0].tmB(21);trees[0].tmB(22);}
+new tree (TREE_ITEMS, tree_tpl);
+initMenu();
+//-->
+</script>
+<table cellpadding="0" cellspacing="0" border="0">
+	<tbody>
+		<tr>
+			<td nowrap="">
+				<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&quot;);" onclick="return trees[0].tmG(0)" class="t0i" id="i_txt0_0">
+					<img src="${pageContext.request.contextPath}/resources/imgs/tree/base.gif" border="0" align="absbottom" name="i_img0_0" class="t0im">Home
+				</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div id="i_div0_0" style="display: block;">
+	<c:forEach var="menu" items="${list}">
+		<table cellpadding="0" cellspacing="0" border="0">
+			<tbody>
+				<input type="hidden" name="code" value="${menu.code}">
+				<input type="hidden" name="originNo" value="${menu.originNo}">
+				<c:if test="${menu.code == 1}">
+					<tr>
+						<td nowrap="">
+							<img src="${pageContext.request.contextPath}/resources/imgs/tree/joinbottom.gif" border="0" align="absbottom">
+								<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&amp;category_code=99&quot;);" onclick="return trees[0].tmG(1)" class="t0i" id="i_txt0_1">
+							<img src="${pageContext.request.contextPath}/resources/imgs/page.gif" border="0" align="absbottom" name="i_img0_1" class="t0im">메인페이지</a>
+						</td>
+					</tr>
+				</c:if>
+				<c:if test="${menu.code != 1}">
+					<tr>
+						<td nowrap="">
+							<a href="javascript: trees[0].tmB(2)" onmouseover="trees[0].tmJ(2)" onmouseout="trees[0].tmH(2)">
+								<img src="${pageContext.request.contextPath}/resources/imgs/tree/minusbottom.gif" border="0" align="absbottom" name="j_img0_2">
+							</a>
+							<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&amp;category_code=10&quot;);" onclick="return trees[0].tmG(2)" class="t0i" id="i_txt0_2">
+								<img src="${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif" border="0" align="absbottom" name="i_img0_2" class="t0im">${menu.title}
+							</a>
+						</td>
+					</tr>
+				</c:if>
+			</tbody>
+		</table>
+		<c:forEach var="menu2" items="${list2}">
+		  <c:if test="${menu.originNo == menu2.originNo}">
+			<div id="i_div0_2" style="display: block;">
+				<table cellpadding="0" cellspacing="0" border="0">
+					<tbody>
+						<tr>
+							<td nowrap="">
+								<img src="${pageContext.request.contextPath}/resources/imgs/tree/line.gif" border="0" align="absbottom">
+								<img src="${pageContext.request.contextPath}/resources/imgs/tree/joinbottom.gif" border="0" align="absbottom">
+									<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&amp;category_code=1010&quot;);" onclick="return trees[0].tmG(3)" class="t0i" id="i_txt0_3">
+										<img src="${pageContext.request.contextPath}/resources/imgs/tree/page.gif" border="0" align="absbottom" name="i_img0_3" class="t0im">${menu2.title}
+									</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		  </c:if>
+		</c:forEach>
+	</c:forEach>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
