@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.naedam.mir9.point.model.vo.MemberPoint;
 import com.naedam.mir9.point.model.vo.MemberPointExcelForm;
 import com.naedam.mir9.point.model.vo.Point;
 import com.naedam.mir9.point.model.vo.PointSave;
@@ -38,6 +39,18 @@ public class PointDaoImpl implements PointDao {
 	public List<MemberPointExcelForm> selectMemberPointExcelForm() {
 		// TODO Auto-generated method stub
 		return session.selectList("point.selectMemberPointExcelForm");
+	}
+
+	@Override
+	public int insertMemberPoint(MemberPoint memberPoint) {
+		// TODO Auto-generated method stub
+		return session.insert("point.insertMemberPoint", memberPoint);
+	}
+
+	@Override
+	public String selectPointName() {
+		// TODO Auto-generated method stub
+		return session.selectOne("point.selectPointName");
 	}
 	
 	

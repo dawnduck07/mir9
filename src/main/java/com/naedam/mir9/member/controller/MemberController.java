@@ -48,6 +48,7 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.point.model.service.PointService;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +67,7 @@ public class MemberController {
 	@Autowired
 	private CouponService couponService;
 	
+
 	// 회원 탈퇴
 	@GetMapping("/memberWithdrawal.do")
 	public void memberWithdrawal() {}
@@ -137,6 +139,10 @@ public class MemberController {
 		}
 			
 	}
+
+	@Autowired
+	private PointService pointService;
+
 	
 	// 회원 리스트
 	@RequestMapping("/list.do")
@@ -398,6 +404,13 @@ public class MemberController {
 		log.debug("authorities = {}", authorities);
 		model.addAttribute("authorities = {}", authorities);
 		
+		// 5. 회원 포인트 총계 조회
+		int totalPoint = 0;
+		try {
+			totalPoint = memberService.selectMemberTotalPoint(memberNo);
+		} catch (Exception e) {}
+		String pointName = pointService.selectPointName();
+		
 		map.put("member", member);
 		map.put("mobile2", mobile2);
 		map.put("mobile3", mobile3);
@@ -407,6 +420,8 @@ public class MemberController {
 		map.put("regDate", regDate);
 		map.put("loginDate", loginDate);
 		map.put("updateDate", updateDate);
+		map.put("totalPoint", totalPoint);
+		map.put("pointName", pointName);
 		
 		return map;
 	}
@@ -591,18 +606,16 @@ public class MemberController {
 	}
 	
 	//쿠폰 등록, 적립금 지급/차감
+	/* TODO
+	 * - email, sms 처리 미완.
+	 * */
 	@PostMapping("/process.do")
-	public void process(HttpServletRequest request, Model model) {
-		Enumeration params = request.getParameterNames();
-		System.out.println("----------------------------");
-		while (params.hasMoreElements()){
-		    String name = (String)params.nextElement();
-		    System.out.println(name + " : " +request.getParameter(name));
-		}
-		System.out.println("----------------------------");
+	public String process(HttpServletRequest request, Model model, RedirectAttributes redirectAttr) {
 		String mode = request.getParameter("mode");
+		String msg = null;
 		int result = 0;
 		
+		// 쿠폰 등록
 		if(mode.equals("coupon")) {
 			String couponNo = request.getParameter("coupon_code");
 			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
@@ -611,17 +624,30 @@ public class MemberController {
 				MemberCoupon memberCoupon = new MemberCoupon(0, Integer.parseInt(memberNo), Integer.parseInt(couponNo), null);
 				result = couponService.insertMemberCoupon(memberCoupon);
 			}
-			
+			if(result > 0) msg = "쿠폰이 정상 지급되었습니다.";
+		// 적립금 지금
 		}else if(mode.equals("point")) {
-			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
-			String content = request.getParameter("content");
-			int point = Integer.parseInt(request.getParameter("point"));
-			MemberPoint memberPoint = new MemberPoint(0, 0, content, point, null, null, null, null);
+			int point = Integer.parseInt(request.getParameter("point").replace(",", ""));
 			
+			// 차감일 경우, 음수로 변환
+			if(request.getParameter("plus_minus_type").equals("-")) point *= -1;
+			
+			MemberPoint memberPoint = new MemberPoint();
+			memberPoint.setPointAmount(point);
+			memberPoint.setPointTitle(request.getParameter("content"));
+			
+			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
 			for(String memberNo : memberNoList) {
 				memberPoint.setMemberNo(Integer.parseInt(memberNo));
+				result = pointService.insertMemberPoint(memberPoint);
 			}
+			
+			if(result > 0) msg = "적립금이 정상 지급/차감되었습니다.";
 		}
+		
+		redirectAttr.addFlashAttribute("msg",msg);
+		
+		return "redirect:/member/list.do";
 		
 	}
 	

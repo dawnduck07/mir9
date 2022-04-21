@@ -38,7 +38,7 @@
 	                </div>
 	
 	                <table class="table table-bordered">
-	                <form name="form_register" method="post" action="?tpf=admin/menu/process"></form>
+	                <form name="form_register" method="post" action="/mir9/bottom/updateBottom?${_csrf.parameterName}=${_csrf.token}">
 	                <input type="hidden" name="mode" value="makeBottom">
 	                <input type="hidden" name="locale" value="ko">
 	                <tbody><tr>
@@ -47,7 +47,9 @@
 	                    </td>
 	                </tr>
 	                
-	                </tbody></table>
+	                </tbody>
+	                </table>
+	                </form>
 	
 	                <br>
 	                <div align="center">
@@ -139,20 +141,22 @@
                 return false;
             }
             form_register.target = 'iframe_process';
+            alert("하단 정보가 수정 되었습니다.")
             form_register.submit();
         }
         function setData() {
             // 정보
             $.ajax({
-                url:'http://demoshop.mir9.kr/api/process.php',
+            	url:'/mir9/bottom/json/getBottom?${_csrf.parameterName}=${_csrf.token}',
                 type:'post',
                 dataType:'json',
                 data:{
-                    method : 'UtilMenu.infoBottom',
+                    method : 'menu.getBottom',
                     locale : $('[name=locale]').val()
                 },
                 success:function(data, textStatus, jqXHR){
-                    var json_data = data.data;
+                	
+                    var json_data = data;
                     // console.log(json_data.content[$('[name=locale]').val()]);
                     if (json_data.content[$('[name=locale]').val()] != null) var content = json_data.content[$('[name=locale]').val()];
                     else var content = '';
@@ -161,7 +165,7 @@
                         objEditor.setData('\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n');
                     }, 200);
                     setTimeout(function(){
-                        objEditor.setData(content);
+                        objEditor.setData(data.content);
                     }, 200);
                 },
                 error:function(jqXHR, textStatus, errorThrown){

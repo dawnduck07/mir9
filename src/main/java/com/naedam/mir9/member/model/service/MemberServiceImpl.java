@@ -212,7 +212,14 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	// 포인트 총계
+	@Override
+	public int selectMemberTotalPoint(int memberNo) {
+		// TODO Auto-generated method stub
+		return memberDao.selectMemberTotalPoint(memberNo);
+	}
 
+	
 
 
 

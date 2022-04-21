@@ -39,7 +39,7 @@
 	                </div>
 	
 	                <table class="table table-bordered">
-	                <form name="form_register" method="post" action="?tpf=admin/menu/process"></form>
+	                <form name="form_register" method="post" action="/mir9/bottom/updateMeta?${_csrf.parameterName}=${_csrf.token}">
 	                <input type="hidden" name="mode" value="makeMeta">
 	                <input type="hidden" name="locale" value="ko">
 	                <tbody><tr>
@@ -50,7 +50,7 @@
 	                    <td class="menu">description</td>
 	                    <td align="left"><input type="text" name="meta_description" value="" class="form-control input-sm"></td>
 	                </tr>
-	                
+	                </form>
 	                </tbody></table>
 	
 	                <br>
@@ -71,23 +71,26 @@
             if(form_register.meta_title.value == '') { alert('title 값이 입력되지 않았습니다.'); form_register.meta_title.focus(); return false;}
             if(form_register.meta_description.value == '') { alert('description 값이 입력되지 않았습니다.'); form_register.meta_description.focus(); return false;}
             form_register.target = 'iframe_process';
+            alert("메타 정보가 수정 되었습니다.")
             form_register.submit();
         }
         function setData() {
             // 정보
             $.ajax({
-                url:'http://demoshop.mir9.kr/api/process.php',
+            	url:'/mir9/bottom/json/getMeta?${_csrf.parameterName}=${_csrf.token}',
                 type:'post',
                 dataType:'json',
                 data:{
-                    method : 'UtilMenu.infoMeta',
+                    method : 'menu.getMeta',
                     locale : $('[name=locale]').val()
                 },
                 success:function(data, textStatus, jqXHR){
-                    var json_data = data.data;
+                    var json_data = data;
                     // console.log(json_data);
-                    $('[name=meta_title]').val(json_data.meta_title[$('[name=locale]').val()]);
-                    $('[name=meta_description]').val(json_data.meta_description[$('[name=locale]').val()]);
+                    //$('[name=meta_title]').val(json_data.meta_title[$('[name=locale]').val()]);
+                    //$('[name=meta_description]').val(json_data.meta_description[$('[name=locale]').val()]);
+                    $('[name=meta_title]').val(json_data.meta_title);
+                    $('[name=meta_description]').val(json_data.meta_description);
                 },
                 error:function(jqXHR, textStatus, errorThrown){
                     console.log(textStatus);

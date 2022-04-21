@@ -41,7 +41,7 @@
 
 <!-- 회원 리스트 전체 게시물 목록 -->
 <select id="selectMemberList" resultType="memberEntity">
-	SELECT
+	SELECT distinct
 		 m.member_no,
 		 m.id,
 		 m.last_name, 
@@ -456,5 +456,10 @@
 		member_no = #{memberNo}
 </update>
 
-
+<select id="selectMemberTotalPoint" resultType="_int">
+SELECT 
+	SUM(point_amount) 
+FROM member_point
+WHERE member_no = #{memberNo};
+</select>
 </mapper>

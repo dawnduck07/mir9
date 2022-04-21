@@ -90,6 +90,9 @@ public interface MemberService {
 
 	// 엑셀 다운로드
 	List<MemberListExcelForm> selectMemberListExcelForm();
+	
+	// 포인트 총계
+	int selectMemberTotalPoint(int memberNo);
 
 	// 회원 삭제
 	int memberWithdrawal(String id);
