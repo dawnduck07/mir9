@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.menu.model.service.MenuService;
 import com.naedam.mir9.menu.model.vo.Menu;
+import com.naedam.mir9.menu.model.vo.MenuCategory;
 
 
 
@@ -32,6 +33,7 @@ public class MenuController {
 	public String addMenu(@ModelAttribute("menu") Menu menu)throws Exception{
 		
 		System.out.println("menu/addMenu 시작");
+		
 		menuService.addMenu(menu);
 		
 		return "menu/menu";
@@ -60,11 +62,27 @@ public class MenuController {
 		
 		Map<String, Object> resultMap = menuService.getMenuList(map);
 		Map<String, Object> resultMap2 = menuService.getHeadList(map);
+		
 		model.addAttribute("list", resultMap.get("list"));
 		model.addAttribute("list2", resultMap2.get("list"));
-		System.out.println("확인 ::: "+resultMap2);
+		
 		return "menu/menu";
 	}
+	
+	@RequestMapping(value="menu2")
+	public String listMenu2(Menu menu, Model model) throws Exception{
+		System.out.println("menu2 시작");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Map<String, Object> resultMap = menuService.getMenuList2(map);
+		Map<String, Object> resultMap2 = menuService.getHeadList(map);
+		
+		model.addAttribute("list", resultMap.get("list"));
+		model.addAttribute("list2", resultMap2.get("list"));
+		
+		return "menu/menuList";
+	}	
 	
 	@RequestMapping(value="menuList")
 	public String menuList(Menu menu, Model model, HttpServletRequest request) throws Exception{
@@ -101,7 +119,16 @@ public class MenuController {
 	}
 	
 	@GetMapping("tree")
-	public String tree(HttpServletRequest request,Model model) throws Exception{
+	public String tree(Model model, MenuCategory menuCategory) throws Exception{
+		System.out.println("menuCategory/tree 시작");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Map<String, Object> resultMap = menuService.getMenuCategoryList(map);
+		Map<String, Object> resultMap2 = menuService.getMenuCategoryList2(map);
+		
+		model.addAttribute("list", resultMap.get("list"));
+		model.addAttribute("list2", resultMap2.get("list"));
 		
 		return "menu/tree";
 	}

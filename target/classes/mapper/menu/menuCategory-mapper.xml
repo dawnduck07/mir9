@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menu_category">
+	
+	<resultMap id="MenuCategorySelectMap" type="menuCategory">
+		<result property="menuCategoryNo"		column="MENU_CATEGORY_NO"	jdbcType="NUMERIC"></result>
+		<result property="menuCategoryName"		column="MENU_CATEGORY_NAME"	jdbcType="VARCHAR"></result>
+		<result property="originNo"				column="ORIGIN_NO"			jdbcType="NUMERIC"></result>
+		<result property="ord"					column="ORD"				jdbcType="NUMERIC"></result>
+		<result property="layer"				column="LAYER"				jdbcType="NUMERIC"></result>
+		<result property="menuCategoryType"		column="MENU_CATEGORY_TYPE"	jdbcType="VARCHAR"></result>
+		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="MenuSelectMap" type="menu">
+		<result property="code"					column="CODE"				jdbcType="NUMERIC"></result>
+		<result property="category_code"		column="CATEGORY_CODE"		jdbcType="NUMERIC"></result>
+		<result property="revision_code"		column="REVISION_CODE"		jdbcType="NUMERIC"></result>
+		<result property="title"				column="TITLE"				jdbcType="VARCHAR"></result>
+		<result property="content"				column="CONTENT"			jdbcType="VARCHAR"></result>
+		<result property="is_outer_link"		column="IS_OUTER_LINK"		jdbcType="VARCHAR"></result>
+		<result property="target"				column="TARGET"				jdbcType="VARCHAR"></result>
+		<result property="url"					column="URL"				jdbcType="VARCHAR"></result>
+		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
+		<result property="menu_head_code.headNo"		column="MENU_HEAD_CODE"		jdbcType="NUMERIC"></result>
+		<result property="menuDate"				column="MENU_DATE"			jdbcType="VARCHAR"></result>
+		<result property="is_meta"				column="IS_META"			jdbcType="VARCHAR"></result>
+		<result property="meta_title"			column="META_TITLE"			jdbcType="VARCHAR"></result>
+		<result property="meta_description"		column="META_DESCRIPTION"	jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="HeadSelectMap" type="head">
+		<result property="headNo"				column="HEAD_NO"			jdbcType="NUMERIC"></result>
+		<result property="title"				column="TITLE"				jdbcType="VARCHAR"></result>
+		<result property="status"				column="STATUS"				jdbcType="VARCHAR"></result>
+		<result property="content"				column="CONTENT"			jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="BottomSelectMap" type="bottom">
+		<result property="bottomNo"				column="BOTTOM_NO"			jdbcType="NUMERIC"></result>
+		<result property="content"				column="CONTENT"			jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="MetaSelectMap" type="meta">
+		<result property="metaNo"				column="META_NO"			jdbcType="NUMERIC"></result>
+		<result property="meta_title"			column="META_TITLE"			jdbcType="VARCHAR"></result>
+		<result property="meta_description"		column="META_DESCRIPTION"	jdbcType="VARCHAR"></result>
+	</resultMap>
+</mapper>

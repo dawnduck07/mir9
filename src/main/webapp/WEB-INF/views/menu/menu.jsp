@@ -96,7 +96,7 @@
                 <td class="menu">헤더선택</td>
                 <td>
                 <select name="menu_head_code" class="form-control input-sm">
-                	    <option value="">선택하세요</option>
+                	    <option value="0">선택하세요</option>
 	                <c:forEach var="head" items="${list2}">
 	      				<option value="${head.headNo}">${head.title}</option>        
 	      			</c:forEach>             
@@ -178,7 +178,7 @@
                 <td class="menu">헤더선택</td>
                 <td>
 	                <select name="menu_head_code" id="getMenu_head_code" class="form-control input-sm">
-	                	    <option value="">선택하세요</option>
+	                	    <option value="0">선택하세요</option>
 		                <c:forEach var="head" items="${list2}">
 		      				<option value="${head.headNo}">${head.title}</option>        
 		      			</c:forEach>                
@@ -500,6 +500,7 @@
             // if(form_register.url.value == '') { alert('url이 입력되지 않았습니다.'); form_register.url.focus(); return false;}
             form_register.target = 'iframe_process';
             form_register.submit();
+            alert("등록 완료")
             location.reload();
         }
         function register2() {

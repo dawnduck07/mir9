@@ -2,8 +2,10 @@ package com.naedam.mir9.menu.model.service;
 
 import java.util.Map;
 
+import com.naedam.mir9.menu.model.vo.Bottom;
 import com.naedam.mir9.menu.model.vo.Head;
 import com.naedam.mir9.menu.model.vo.Menu;
+import com.naedam.mir9.menu.model.vo.Meta;
 
 public interface MenuService {
 	
@@ -19,6 +21,9 @@ public interface MenuService {
 	//메뉴 리스트
 	public Map<String, Object> getMenuList(Map<String, Object> map) throws Exception;
 	
+	//조건식 메뉴 리스트
+	public Map<String, Object> getMenuList2(Map<String, Object> map) throws Exception;
+	
 	//리비젼 리스트
 	public Map<String, Object> getRevisionList(Map<String, Object> map) throws Exception;
 	
@@ -28,17 +33,35 @@ public interface MenuService {
 	//헤더 리스트
 	public Map<String, Object> getHeadList(Map<String, Object> map) throws Exception;
 	
+	//메뉴 카테고리 리스트
+	public Map<String, Object> getMenuCategoryList(Map<String, Object> map) throws Exception;
+	
+	//메뉴 카테고리 리스트2
+	public Map<String, Object> getMenuCategoryList2(Map<String, Object> map) throws Exception;
+	
 	//메뉴 수정
 	public int updateMenu(Menu menu) throws Exception;
 	
 	//헤더 수정
 	public int updateHead(Head head) throws Exception;
 	
+	//하단 수정
+	public int updateBottom(Bottom bottom) throws Exception;
+	
+	//메타 수정
+	public int updateMeta(Meta meta) throws Exception;
+	
 	//메뉴 정보
 	public Menu getMenu(int code) throws Exception;
 	
 	//헤더 정보
 	public Head getHead(int headNo) throws Exception;
+	
+	//하단 정보
+	public Bottom getBottom() throws Exception;
+	
+	//메타 정보
+	public Meta getMeta() throws Exception;
 	
 	//리비젼 가져오기
 	public Menu getRevision(Menu menu) throws Exception;
