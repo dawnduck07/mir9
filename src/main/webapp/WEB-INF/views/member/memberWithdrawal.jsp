@@ -24,9 +24,9 @@
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css" />
 <script>
-<c:if test="${param.error != null}">
-alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-</c:if>
+//<c:if test="${param.error != null}">
+//	alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+//</c:if>
 
 $(() => {
 	$(loginModal)

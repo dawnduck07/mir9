@@ -152,7 +152,7 @@
 	<div class="modal fade" id="modalRegister" tabindex="-2" ; role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
-
+				<input type="hidden" id="addressNo" name="addressNo" value="" />
 				<form:form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/member/memberInsertModalFrm.do">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -168,7 +168,7 @@
 						<table class="table table-bordered">
 							<tr>
 								<td class="menu">아이디</td>
-								<td align="left"><input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" /> <input type="hidden" id="addressNo" name="addressNo" value="" /> &nbsp;
+								<td align="left"><input type="text" id="id" name="id" value="" class="form-control input-sm" style="width: 30%; float: left;" />  &nbsp;
 									<button type="button" id="btnCheckId" name="btnCheckId" class="btn btn-sm btn-default" onclick="onclickCheckId()">아이디 중복확인</button> 4~12자로 입력하세요.</td>
 							</tr>
 							<tr>

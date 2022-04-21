@@ -181,11 +181,36 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.memberWithdrawal(id);
 	}
 
+	// 주소 삭제
+	@Override
+	public int deleteAddress(int addressNo) {
+		return memberDao.deleteAddress(addressNo);
+	}
+
+	// 주소록 조회
+	@Override
+	public AddressBook selectOneAddressBook(int memberNo) {
+		return memberDao.selectOneAddressBook(memberNo);
+	}
+
 	// 주소록 삭제
 	@Override
-	public int deleteAddressBook(int memberNo) {
-		return memberDao.deleteAddressBook(memberNo);
+	public int deleteAddressBook(int addressBookNo) {
+		return memberDao.deleteAddressBook(addressBookNo);
 	}
+
+	// 권한 삭제
+	@Override
+	public int deleteAuthorties(int memberNo) {
+		return memberDao.deleteAuthorties(memberNo);
+	}
+
+	// 탈퇴 사유
+	@Override
+	public int updateReason(Map<String, Object> param) {
+		return memberDao.updateReason(param);
+	}
+
 
 
 

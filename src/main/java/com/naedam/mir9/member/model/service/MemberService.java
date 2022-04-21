@@ -94,8 +94,21 @@ public interface MemberService {
 	// 회원 삭제
 	int memberWithdrawal(String id);
 
+	// 주소삭제
+	int deleteAddress(int addressNo);
+
+	// 주소록 조회
+	AddressBook selectOneAddressBook(int memberNo);
+
 	// 주소록 삭제
-	int deleteAddressBook(int memberNo);
+	int deleteAddressBook(int addressBookNo);
+
+	// 권한 삭제
+	int deleteAuthorties(int memberNo);
+
+	// 탈퇴 사유
+	int updateReason(Map<String, Object> param);
+
 
 
 
