@@ -174,6 +174,12 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.selectMemberListExcelForm");
 	}
 
+	@Override
+	public int selectMemberTotalPoint(int memberNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("member.selectMemberTotalPoint", memberNo);
+	}
+
 
 
 	
