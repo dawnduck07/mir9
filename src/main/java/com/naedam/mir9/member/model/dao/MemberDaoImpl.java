@@ -13,6 +13,7 @@ import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
+import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
@@ -161,9 +162,22 @@ public class MemberDaoImpl implements MemberDao {
 		return session.update("member.authoritiesUpdate", paramAuthorities);
 	}
 
+	// 메모(MemberMemo) 수정
 	@Override
 	public int memberMemoUpdate(MemberMemo paramMemberMemo) {
 		return session.update("member.memberMemoUpdate", paramMemberMemo);
+	}
+
+	// 엑셀 다운로드
+	@Override
+	public List<MemberListExcelForm> selectMemberListExcelForm() {
+		return session.selectList("member.selectMemberListExcelForm");
+	}
+
+	@Override
+	public int selectMemberTotalPoint(int memberNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("member.selectMemberTotalPoint", memberNo);
 	}
 
 

@@ -14,6 +14,7 @@ import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
+import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
@@ -156,17 +157,32 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.addressUpdate(paramAddress);
 	}
 
+	// 권한(Authorities) 수정
 	@Override
 	public int authoritiesUpdate(Authorities paramAuthorities) {
 		return memberDao.authoritiesUpdate(paramAuthorities);
 	}
 
+	// 메모(MemberMemo) 수정
 	@Override
 	public int memberMemoUpdate(MemberMemo paramMemberMemo) {
 		return memberDao.memberMemoUpdate(paramMemberMemo);
 	}
 
+	// 엑셀 다운로드
+	@Override
+	public List<MemberListExcelForm> selectMemberListExcelForm() {
+		return memberDao.selectMemberListExcelForm();
+	}
 
+	// 포인트 총계
+	@Override
+	public int selectMemberTotalPoint(int memberNo) {
+		// TODO Auto-generated method stub
+		return memberDao.selectMemberTotalPoint(memberNo);
+	}
+
+	
 
 
 

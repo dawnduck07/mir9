@@ -13,11 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
+import com.naedam.mir9.delivery.model.vo.DeliveryNotice;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
@@ -29,6 +31,9 @@ import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
+import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Locale;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -160,7 +165,57 @@ public class SettingController {
 	}
 	
 	@GetMapping("/info")
-	public void info() {}
+	public void info(Model model) {
+		List<AdminMenu> adminMenuList = settingService.selectAdminMenuList();
+		List<Locale> localeList = settingService.selectLocaleList();
+		AdminSetting adminSetting = settingService.selectAdminSetting();
+		
+		model.addAttribute("adminSetting", adminSetting);
+		model.addAttribute("adminMenuList", adminMenuList);
+		model.addAttribute("localeList", localeList);
+		
+	}
+	
+	@GetMapping("/img_view")
+	public void img_view(String type, Model model) {
+		AdminSetting adminSetting = settingService.selectAdminSetting();
+		String url = null;
+		if(type.equals("thumb")) {
+			url = adminSetting.getThumbnailImg();
+		}else if(type.equals("favicon")) {
+			url = adminSetting.getFaviconImg();
+		}
+		
+		model.addAttribute("url",url);
+	}
+	
+	@PostMapping("/getDeliveryNotice.do")
+	@ResponseBody
+	public DeliveryNotice getDeliveryNotice(String locale) {
+		DeliveryNotice deliveryNotice = settingService.selectOneDeliveryNotice(locale);
+		
+		return deliveryNotice;
+	}
+	
+	@PostMapping("/process.do")
+	public String process(HttpServletRequest request, AdminSetting adminSetting, DeliveryNotice deliveryNotice) {
+		int result = 0;
+		String mode = request.getParameter("mode");
+		if(mode.equals("info")) {
+			String phone = request.getParameter("mobile1") + request.getParameter("mobile2") + request.getParameter("mobile3");
+			String callerId = request.getParameter("tel1") + request.getParameter("tel2") + request.getParameter("tel3");
+			adminSetting.setPhone(phone);
+			adminSetting.setCallerId(callerId);
+			if(adminSetting.getIsDiscount() == null) adminSetting.setIsDiscount("N");
+			
+			result = settingService.updateAdminSetting(adminSetting);
+		}else if(mode.equals("updateGuide")) {
+			result = settingService.updateDeliveryNotice(deliveryNotice);
+		}
+		
+		
+		return "redirect:/setting/info";
+	}
 	
 	@GetMapping("/seo")
 	public void seo() {}

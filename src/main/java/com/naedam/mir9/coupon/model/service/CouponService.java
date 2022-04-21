@@ -1,6 +1,9 @@
 package com.naedam.mir9.coupon.model.service;
 
+import java.util.List;
+
 import com.naedam.mir9.coupon.model.vo.Coupon;
+import com.naedam.mir9.coupon.model.vo.MemberCoupon;
 
 public interface CouponService {
 
@@ -11,5 +14,9 @@ public interface CouponService {
 	int updateCoupon(Coupon coupon);
 
 	int deleteCoupon(int couponNo);
+
+	List<Coupon> selectCouponList();
+
+	int insertMemberCoupon(MemberCoupon memberCoupon);
 
 }

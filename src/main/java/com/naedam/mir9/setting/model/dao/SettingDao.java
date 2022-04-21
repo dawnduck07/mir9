@@ -7,6 +7,7 @@ import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
+import com.naedam.mir9.delivery.model.vo.DeliveryNotice;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
@@ -15,6 +16,9 @@ import com.naedam.mir9.point.model.vo.Point;
 import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
+import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Locale;
 
 public interface SettingDao {
 
@@ -41,5 +45,17 @@ public interface SettingDao {
 	PointUse selectPointUse();
 
 	PointSave selectPointSave();
+
+	List<AdminMenu> selectAdminMenuList();
+
+	List<Locale> selectLocaleList();
+
+	AdminSetting selectAdminSetting();
+
+	DeliveryNotice selectOneDeliveryNotice(String locale);
+
+	int updateAdminSetting(AdminSetting adminSetting);
+
+	int updateDeliveryNotice(DeliveryNotice deliveryNotice);
 
 }

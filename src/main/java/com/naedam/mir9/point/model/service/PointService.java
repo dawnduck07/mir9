@@ -2,6 +2,8 @@ package com.naedam.mir9.point.model.service;
 
 import java.util.List;
 
+import com.naedam.mir9.member.model.vo.MemberListExcelForm;
+import com.naedam.mir9.point.model.vo.MemberPoint;
 import com.naedam.mir9.point.model.vo.MemberPointExcelForm;
 import com.naedam.mir9.point.model.vo.Point;
 import com.naedam.mir9.point.model.vo.PointSave;
@@ -16,5 +18,10 @@ public interface PointService {
 	int updatePointUse(PointUse pointUse);
 
 	List<MemberPointExcelForm> selectMemberPointExcelForm();
+
+	int insertMemberPoint(MemberPoint memberPoint);
+
+	String selectPointName();
+
 
 }

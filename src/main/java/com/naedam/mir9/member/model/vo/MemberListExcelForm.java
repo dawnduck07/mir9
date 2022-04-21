@@ -1,4 +1,4 @@
-package com.naedam.mir9.point.model.vo;
+package com.naedam.mir9.member.model.vo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,20 +12,22 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MemberPoint implements Serializable {
-
+public class MemberListExcelForm implements Serializable {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private int memberPointNo;
-	private int memberNo;
-	private String pointTitle;
-	private int pointAmount;
-	private Date regDate;
+
 	private String id;
 	private String memberName;
+	private String phone;
 	private String email;
-
+	private String totalAddress;
+	private String memo;
+	private String grade;
+	private String status;
+	private Date loginDate;
+	private Date updateDate;
+	private Date regDate;
 }

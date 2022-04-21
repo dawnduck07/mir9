@@ -4,6 +4,7 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -31,6 +32,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naedam.mir9.coupon.model.service.CouponService;
+import com.naedam.mir9.coupon.model.vo.Coupon;
+import com.naedam.mir9.coupon.model.vo.MemberCoupon;
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
@@ -39,6 +43,7 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.point.model.service.PointService;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +58,12 @@ public class MemberController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private CouponService couponService;
+	
+	@Autowired
+	private PointService pointService;
 	
 	// 회원 리스트
 	@RequestMapping("/list.do")
@@ -72,6 +83,10 @@ public class MemberController {
 		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
 		log.debug("memberGradeList = {}", memberGradeList);
 		model.addAttribute("memberGradeList", memberGradeList);
+		
+		// 쿠폰 리스트
+		List<Coupon> couponList = couponService.selectCouponList();
+		model.addAttribute("couponList",couponList);
 		
 		return "member/memberList";
 	}
@@ -104,7 +119,7 @@ public class MemberController {
 						@RequestParam String authority,
 						RedirectAttributes redirectAttributes) {
 		log.debug("{}", "memberInsertModalFrm.do 요청!");
-		log.debug("memberEntity = {}", member);
+		log.debug("member = {}", member);
 		log.debug("memberMemo = {}", memberMemo);
 		log.debug("memberGradeNo = {}", memberGradeNo);
 		log.debug("mobile = {}", mobile1);
@@ -253,22 +268,6 @@ public class MemberController {
 		return "redirect:" + referer;
 	}
 	
-	// 회원 적립금 내역보기
-	@GetMapping("/memberPointList/{memberNo}")
-	public String memberPointList(
-			@PathVariable int memberNo,
-			Model model,
-			HttpServletRequest request,
-			HttpServletResponse response) {
-		
-		log.debug("memberNo = {}", memberNo);
-		
-		// 업무로직
-		
-		
-		return "member/memberPointList";
-	}
-	
 	// 회원 상세 보기
 	@ResponseBody
 	@GetMapping("/memberDetail.do/{memberNo}")
@@ -326,6 +325,13 @@ public class MemberController {
 		log.debug("authorities = {}", authorities);
 		model.addAttribute("authorities = {}", authorities);
 		
+		// 5. 회원 포인트 총계 조회
+		int totalPoint = 0;
+		try {
+			totalPoint = memberService.selectMemberTotalPoint(memberNo);
+		} catch (Exception e) {}
+		String pointName = pointService.selectPointName();
+		
 		map.put("member", member);
 		map.put("mobile2", mobile2);
 		map.put("mobile3", mobile3);
@@ -335,6 +341,8 @@ public class MemberController {
 		map.put("regDate", regDate);
 		map.put("loginDate", loginDate);
 		map.put("updateDate", updateDate);
+		map.put("totalPoint", totalPoint);
+		map.put("pointName", pointName);
 		
 		return map;
 	}
@@ -362,7 +370,8 @@ public class MemberController {
 			paramMember.setLastName(map.get("lastName"));
 			paramMember.setEmail(map.get("email"));
 			paramMember.setPhone(phone);
-	
+			paramMember.setStatus(map.get("status"));
+			
 			if(map.get("password").isEmpty()) {
 				paramMember.setPassword(map.get("password"));
 			} else {
@@ -476,10 +485,23 @@ public class MemberController {
 		return "redirect:/member/memberGrade.do";
 	}
 	
+	// 회원 적립금 내역보기
+	@GetMapping("/memberPointList/{memberNo}")
+	public String memberPointList(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
+		
+		log.debug("memberNo = {}", memberNo);
+		
+		// 업무로직
+		
+		
+		return "member/memberPointList";
+	}
+	
 	// 회원 적립금 관리
 	@GetMapping("/point")
-	public String memberPointList(Model model) {
+	public String memberPointList(Model model, @RequestParam(defaultValue = "0") int mNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("memberNo", mNo);
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
 		
 		model.addAttribute("mPointList",mPointList);
@@ -489,19 +511,65 @@ public class MemberController {
 	
 	@PostMapping("/point")
 	@SuppressWarnings("rawtypes")
-	public String memberPointList(HttpServletRequest request, Model model) {
+	public String memberPointList(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int mNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		Enumeration params = request.getParameterNames();
 		while (params.hasMoreElements()){
 		    String name = (String)params.nextElement();
 		    param.put(name, request.getParameter(name));
 		}
-		
+		param.put("memberNo", mNo);
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
 		
 		model.addAttribute("mPointList",mPointList);
 		model.addAttribute("param",param);
 		return "/member/memberPointList";
+	}
+	
+	//쿠폰 등록, 적립금 지급/차감
+	/* TODO
+	 * - email, sms 처리 미완.
+	 * */
+	@PostMapping("/process.do")
+	public String process(HttpServletRequest request, Model model, RedirectAttributes redirectAttr) {
+		String mode = request.getParameter("mode");
+		String msg = null;
+		int result = 0;
+		
+		// 쿠폰 등록
+		if(mode.equals("coupon")) {
+			String couponNo = request.getParameter("coupon_code");
+			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
+			
+			for(String memberNo : memberNoList) {
+				MemberCoupon memberCoupon = new MemberCoupon(0, Integer.parseInt(memberNo), Integer.parseInt(couponNo), null);
+				result = couponService.insertMemberCoupon(memberCoupon);
+			}
+			if(result > 0) msg = "쿠폰이 정상 지급되었습니다.";
+		// 적립금 지금
+		}else if(mode.equals("point")) {
+			int point = Integer.parseInt(request.getParameter("point").replace(",", ""));
+			
+			// 차감일 경우, 음수로 변환
+			if(request.getParameter("plus_minus_type").equals("-")) point *= -1;
+			
+			MemberPoint memberPoint = new MemberPoint();
+			memberPoint.setPointAmount(point);
+			memberPoint.setPointTitle(request.getParameter("content"));
+			
+			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
+			for(String memberNo : memberNoList) {
+				memberPoint.setMemberNo(Integer.parseInt(memberNo));
+				result = pointService.insertMemberPoint(memberPoint);
+			}
+			
+			if(result > 0) msg = "적립금이 정상 지급/차감되었습니다.";
+		}
+		
+		redirectAttr.addFlashAttribute("msg",msg);
+		
+		return "redirect:/member/list.do";
+		
 	}
 	
 	// 회원가입

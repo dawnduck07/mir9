@@ -1,10 +1,13 @@
 package com.naedam.mir9.coupon.model.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.naedam.mir9.coupon.model.vo.Coupon;
+import com.naedam.mir9.coupon.model.vo.MemberCoupon;
 
 @Repository
 public class CouponDaoImpl implements CouponDao {
@@ -33,6 +36,18 @@ public class CouponDaoImpl implements CouponDao {
 	public int deleteCoupon(int couponNo) {
 		// TODO Auto-generated method stub
 		return session.delete("coupon.deleteCoupon", couponNo);
+	}
+
+	@Override
+	public List<Coupon> selectCouponList() {
+		// TODO Auto-generated method stub
+		return session.selectList("coupon.selectCouponList");
+	}
+
+	@Override
+	public int insertMemberCoupon(MemberCoupon memberCoupon) {
+		// TODO Auto-generated method stub
+		return session.insert("coupon.insertMemberCoupon", memberCoupon);
 	}
 	
 	

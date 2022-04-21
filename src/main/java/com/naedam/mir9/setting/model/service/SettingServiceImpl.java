@@ -10,6 +10,7 @@ import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
+import com.naedam.mir9.delivery.model.vo.DeliveryNotice;
 import com.naedam.mir9.delivery.model.vo.DeliverySetting;
 import com.naedam.mir9.delivery.model.vo.Doseosangan;
 import com.naedam.mir9.history.model.vo.History;
@@ -19,6 +20,9 @@ import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.dao.SettingDao;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
+import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Locale;
 
 @Service
 public class SettingServiceImpl implements SettingService {
@@ -96,6 +100,43 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.selectPointSave();
 	}
+
+	@Override
+	public List<AdminMenu> selectAdminMenuList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectAdminMenuList();
+	}
+
+	@Override
+	public List<Locale> selectLocaleList() {
+		// TODO Auto-generated method stub
+		return settingDao.selectLocaleList();
+	}
+
+	@Override
+	public AdminSetting selectAdminSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectAdminSetting();
+	}
+
+	@Override
+	public DeliveryNotice selectOneDeliveryNotice(String locale) {
+		// TODO Auto-generated method stub
+		return settingDao.selectOneDeliveryNotice(locale);
+	}
+
+	@Override
+	public int updateAdminSetting(AdminSetting adminSetting) {
+		// TODO Auto-generated method stub
+		return settingDao.updateAdminSetting(adminSetting);
+	}
+
+	@Override
+	public int updateDeliveryNotice(DeliveryNotice deliveryNotice) {
+		// TODO Auto-generated method stub
+		return settingDao.updateDeliveryNotice(deliveryNotice);
+	}
+	
 	
 	
 	
