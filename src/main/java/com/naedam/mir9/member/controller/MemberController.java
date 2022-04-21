@@ -362,7 +362,8 @@ public class MemberController {
 			paramMember.setLastName(map.get("lastName"));
 			paramMember.setEmail(map.get("email"));
 			paramMember.setPhone(phone);
-	
+			paramMember.setStatus(map.get("status"));
+			
 			if(map.get("password").isEmpty()) {
 				paramMember.setPassword(map.get("password"));
 			} else {
