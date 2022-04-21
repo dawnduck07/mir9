@@ -21,6 +21,6 @@ public class AddressBook implements Serializable {
 	private int addressBookNo;
 	private int addressNo;
 	private int memberNo;
-	private int addressBookName;
+	private String addressBookName;
 
 }

@@ -174,6 +174,42 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.selectMemberListExcelForm");
 	}
 
+	// 회원 삭제
+	@Override
+	public int memberWithdrawal(String id) {
+		return session.delete("member.memberWithdrawal", id);
+	}
+
+	// 주소 삭제
+	@Override
+	public int deleteAddress(int addressNo) {
+		return session.delete("member.deleteAddress", addressNo);
+	}
+
+	// 주소록 조회
+	@Override
+	public AddressBook selectOneAddressBook(int memberNo) {
+		return session.selectOne("member.selectOneAddressBook", memberNo);
+	}
+
+	// 주소록 삭제
+	@Override
+	public int deleteAddressBook(int addressBookNo) {
+		return session.delete("member.deleteAddressBook", addressBookNo);
+	}
+
+	// 권한 삭제
+	@Override
+	public int deleteAuthorties(int memberNo) {
+		return session.delete("member.deleteAuthorties", memberNo);
+	}
+
+	@Override
+	public int updateReason(Map<String, Object> param) {
+		return session.update("member.updateReason", param);
+	}
+
+
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
 		// TODO Auto-generated method stub

@@ -175,6 +175,43 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectMemberListExcelForm();
 	}
 
+	// 회원 삭제
+	@Override
+	public int memberWithdrawal(String id) {
+		return memberDao.memberWithdrawal(id);
+	}
+
+	// 주소 삭제
+	@Override
+	public int deleteAddress(int addressNo) {
+		return memberDao.deleteAddress(addressNo);
+	}
+
+	// 주소록 조회
+	@Override
+	public AddressBook selectOneAddressBook(int memberNo) {
+		return memberDao.selectOneAddressBook(memberNo);
+	}
+
+	// 주소록 삭제
+	@Override
+	public int deleteAddressBook(int addressBookNo) {
+		return memberDao.deleteAddressBook(addressBookNo);
+	}
+
+	// 권한 삭제
+	@Override
+	public int deleteAuthorties(int memberNo) {
+		return memberDao.deleteAuthorties(memberNo);
+	}
+
+	// 탈퇴 사유
+	@Override
+	public int updateReason(Map<String, Object> param) {
+		return memberDao.updateReason(param);
+	}
+
+
 	// 포인트 총계
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
