@@ -534,6 +534,16 @@ public class MemberController {
 				MemberCoupon memberCoupon = new MemberCoupon(0, Integer.parseInt(memberNo), Integer.parseInt(couponNo), null);
 				result = couponService.insertMemberCoupon(memberCoupon);
 			}
+			
+		}else if(mode.equals("point")) {
+			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
+			String content = request.getParameter("content");
+			int point = Integer.parseInt(request.getParameter("point"));
+			MemberPoint memberPoint = new MemberPoint(0, 0, content, point, null, null, null, null);
+			
+			for(String memberNo : memberNoList) {
+				memberPoint.setMemberNo(Integer.parseInt(memberNo));
+			}
 		}
 		
 	}

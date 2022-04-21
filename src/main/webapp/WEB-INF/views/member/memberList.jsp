@@ -256,7 +256,7 @@
 <div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	<div class="modal-dialog" style="width: 500px;">
 		<div class="modal-content">
-			<form name="formPoint" method="post" onsubmit="return false;" action="?tpf=admin/member/process">
+			<form name="formPoint" method="post" onsubmit="return false;" action="${pageContext.request.contextPath }/member/process.do?${_csrf.parameterName}=${_csrf.token}">
 				<input type="hidden" name="mode" value="point"> <input type="hidden" name="member_code">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -964,5 +964,44 @@ function registerCoupon() {
     formCoupon.submit();
 }
 
+// 적립금 지급
+function onclickPoint() {
+    var f = eval('memberDeleteFrm');
+    var chkBox = f.elements['list[]'];
+    var chkLen = chkBox.length;
+    if (chkLen > 0) {
+        var member_code = '';
+        var member_count = '';
+
+        // 선택된 파일이 있는지 체크
+        for (i = 0; i < chkLen; i++) {
+            if (chkBox[i].checked) {
+                member_count++;
+                member_code += chkBox[i].value+',';
+            }
+        }
+        if (member_code == '') {
+            alert('항목이 선택되지 않았습니다.');
+            return false;
+        }
+        else {
+            member_code = member_code.substr(0, member_code.length -1);
+            $('[name=member_code]').val(member_code);
+            $('#sendCount').text(member_count);
+            console.log(member_code);
+        }
+    }
+    else {
+        alert('항목이 없습니다.');
+        return false;
+    }
+    $('#modalPoint').modal({backdrop:'static', show:true});
+}
+function registerPoint() {
+    if(formPoint.point.value == '') { alert('적립금이 입력되지 않았습니다.'); formPoint.point.focus(); return false;}
+    if(formPoint.content.value == '') { alert('메모가 입력되지 않았습니다.'); formPoint.content.focus(); return false;}
+    formPoint.target = 'iframe_process';
+    formPoint.submit();
+}
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
