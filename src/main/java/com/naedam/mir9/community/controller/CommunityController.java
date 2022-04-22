@@ -43,7 +43,7 @@ public class CommunityController {
 	
 		// 인증키
 		String appKey = "TWbQQdDr6QbBg3rI";
-		String secretKey = "YNKmdjfR";
+		String secretKey = "YNKmdjfR";  
 		
 		// CORS 문제 해결을 위해 
 		HashMap<String, Object> originSms = communityService.originSms(appKey, secretKey);  
