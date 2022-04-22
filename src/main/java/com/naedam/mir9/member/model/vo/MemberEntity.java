@@ -36,11 +36,12 @@ public class MemberEntity extends Member {
 			String addressZipcode) {
 		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
 				authorities);
+		
 		this.addressMain = addressMain;
 		this.addressSub = addressSub;
 		this.addressZipcode = addressZipcode;
 		this.pointAmt = pointAmt;	
 	}
-	
+
 }
 

@@ -16,6 +16,7 @@ import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.member.model.vo.WithdrawalMember;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 @Service
@@ -211,8 +212,31 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.updateReason(param);
 	}
 
+	// 탈퇴 회원 리스트
+	@Override
+	public List<WithdrawalMember> selectWithdrawalMemberList() {
+		return memberDao.selectWithdrawalMemberList();
+	}
 
+	// 탈퇴 회원 전체 게시물 수
+	@Override
+	public int selectWithdrawalCount() {
+		return memberDao.selectWithdrawalCount();
+	}
 
+	// 탈퇴회원 검색 게시물 
+	@Override
+	public List<WithdrawalMember> selectSearchWithdrawalList(Map<String, Object> param) {
+		return memberDao.selectSearchWithdrawalList(param);
+	}
+
+	// 탈퇴회원 검색 게시물 수
+	@Override
+	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
+		return memberDao.selectSearchWithdrawalListCount(param);
+	}
+
+	
 
 
 
