@@ -4,8 +4,6 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
-import java.util.Collection;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
@@ -16,12 +14,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +44,7 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.member.model.vo.WithdrawalMember;
 import com.naedam.mir9.point.model.service.PointService;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
@@ -130,11 +127,10 @@ public class MemberController {
 				log.error("회원 탈퇴 오류", e);
 				throw e;
 			}
-			return "redirect:/member/memberLogout.do";
+			return "redirect:/";
 			 
 		} else {
 			redirectAttribute.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");
-			
 			return "redirect:/member/memberWithdrawal.do";
 		}
 			
@@ -497,15 +493,56 @@ public class MemberController {
 		return "redirect:/member/list.do";
 	}
 	
-	
-	
-	
+
 	// 탈퇴회원 리스트
-	@GetMapping("/withdraw_list")
-	public String withdarawalMemberList() {
+	@GetMapping("/withdrawalList.do")
+	public String withdarawalMemberList(Model model, HttpServletRequest request) {
+		log.debug("withdarawalMemberList = {}","withdarawalMemberList 시작");
+		
+		// 탈퇴 회원 리스트
+		List<WithdrawalMember> withdrawalMemberList = memberService.selectWithdrawalMemberList();
+		log.debug("withdrawalMember = {}", withdrawalMemberList);
+		model.addAttribute("withdrawalMemberList", withdrawalMemberList);
+		
+		// 탈퇴 회원 전체 게시물 수
+		int withdrawalCount = memberService.selectWithdrawalCount();
+		log.debug("withdrawalCount = {}", withdrawalCount);
+		model.addAttribute("withdrawalCount", withdrawalCount);
 		
 		return "member/withdrawalMemberList";
 	}
+	
+	// 탈퇴회원 타입별 검색
+	@ResponseBody
+	@GetMapping("/withdrawalTypeSearch.do")
+	public Map<String, Object> withdrawalTypeSearch(
+			@RequestParam String type, 
+			@RequestParam String keyword,
+			HttpServletRequest request){
+		log.debug("{}", "타입별 검색 시작");
+		log.debug("type = {}", type);
+		log.debug("keyboard = {}", keyword);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
+		log.debug("param = {}", param);
+		
+		// 탈퇴회원 검색 게시물 
+		List<WithdrawalMember> searchWithdrawalList = memberService.selectSearchWithdrawalList(param);
+		log.debug("searchWithdrawalList = {}", searchWithdrawalList);
+
+		// 탈퇴회원 검색 게시물 수
+		int searchListCount = memberService.selectSearchWithdrawalListCount(param);
+		log.debug("searchListCount = {}", searchListCount);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchWithdrawalList", searchWithdrawalList);
+		resultMap.put("searchListCount", searchListCount);
+		
+		return resultMap;
+	}
+	
 	
 	// 회원 접속이력 관리
 	@GetMapping("/log")

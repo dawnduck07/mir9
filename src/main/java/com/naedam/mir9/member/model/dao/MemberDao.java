@@ -12,6 +12,7 @@ import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.member.model.vo.WithdrawalMember;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 public interface MemberDao {
@@ -111,6 +112,20 @@ public interface MemberDao {
 
 	// 탈퇴 사유
 	int updateReason(Map<String, Object> param);
+
+	// 탈퇴 회원 리스트
+	List<WithdrawalMember> selectWithdrawalMemberList();
+
+	// 탈퇴 회원 전체 게시물 수
+	int selectWithdrawalCount();
+
+	// 탈퇴회원 검색 게시물 
+	List<WithdrawalMember> selectSearchWithdrawalList(Map<String, Object> param);
+
+	// 탈퇴회원 검색 게시물 수
+	int selectSearchWithdrawalListCount(Map<String, Object> param);
+
+
 
 	
 
