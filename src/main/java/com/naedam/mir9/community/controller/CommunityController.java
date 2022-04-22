@@ -37,8 +37,26 @@ public class CommunityController {
 		return "community/emailList";
 	}
 	
+	// sms 설정 + 기본 문구
 	@GetMapping("/sms")
-	public String commSms() {
+	public String commSms(Model model) {
+	
+		// 인증키
+		String appKey = "TWbQQdDr6QbBg3rI";
+		String secretKey = "YNKmdjfR";
+		
+		// CORS 문제 해결을 위해 
+		HashMap<String, Object> originSms = communityService.originSms(appKey, secretKey);  
+		
+		List<String> templateId = (List<String>) originSms.get("templateId");
+		List<String> content = (List<String>) originSms.get("body");
+		
+		model.addAttribute("templateId", templateId);
+		model.addAttribute("content", content);
+		
+		System.out.println("=====Controller:originSms=====");
+		System.out.println("templateId : " + templateId);
+		System.out.println("content : " + content);
 		
 		return "community/sms";
 	}

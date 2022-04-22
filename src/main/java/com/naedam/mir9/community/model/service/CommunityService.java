@@ -1,5 +1,6 @@
 package com.naedam.mir9.community.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,5 +20,7 @@ public interface CommunityService {
 	int imgDelete(String reviewCode);	
 	
 	int selectDelete(String reviewCode);
+
+	HashMap<String, Object> originSms(String appKey, String secretKey);
 
 }
