@@ -46,6 +46,7 @@
                     <table class="table table-bordered table-hover">
 	                    <form name="form_list" method="post" action="?tpf=admin/menu/process"></form>
 			            <input type="hidden" name="mode" id="mode">
+			            <input type="hidden" name="code" id="ordCode" value="${menu.code}">
 	                    <thead>
 		                    <tr>
 		                        <td style="width:30px;">
@@ -73,6 +74,7 @@
 		                        <td style="width:220px;">명령</td>
 		                    </tr>
 	                    </thead>
+	      				<c:if test="${list != null || list != ''}">
 	      				<tbody>
 	      				  <c:forEach var="menu" items="${list}">
 		      				<tr>
@@ -105,14 +107,23 @@
 		                            <button type="button" onclick="onclickView('${menu.url}');" class="btn btn-success btn-xs">바로가기</button>
 		                            <button type="button" onclick="onclickUpdate(${menu.code});" class="btn btn-primary btn-xs">수정하기</button>
 		                        </td>
-		                    </tr> 
-		                   </c:forEach>     
-	                    </tbody>
+		                    </tr>			                
+		                   </c:forEach>               
+	                    </tbody>   
+	                    </c:if>
+	      				<c:if test="${list[0] == null || list[0] == ''}">	                     
+						<tbody>		                    
+		                    <tr>
+			                	<td colspan="10"><br>등록된 자료가 없습니다.<br><br>
+			                	</td>
+			                </tr>
+			            </tbody>
+			            </c:if>                 
                     </table>
                     <br>
 
                     <button type="button" onclick="updateChoiceMenu();" class="btn btn-danger btn-sm"><i class="fa fa-minus-square" aria-hidden="true"></i> 선택삭제</button>
-                    <button type="button" onclick="onclickInsert();" class="btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> 메뉴 등록</button>
+                    <button type="button" onclick="onclickInsert(${menu.code}, ${menu.ord});" class="btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> 메뉴 등록</button>
                     <div style="float:right; margin-right:12px;">
                         <button type="button" onclick="onclickRevision2();" class="btn btn-warning btn-sm"><i class="fa fa-minus-square"></i> 삭제 리비젼보기</button>
                     </div>
@@ -121,6 +132,8 @@
         </div><!-- /.col-xs-12 -->
     </div><!-- /.row -->
 </section>
+
+
 <!-- jQuery 3 -->
 <script src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -131,7 +144,7 @@
         function onclickView(full_url) {
             window.open('/'+full_url, '_blank');
         }
-        function onclickInsert() {
+        function onclickInsert(code, ord) {
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
             parent.$('#displayMeta').hide();
@@ -142,6 +155,9 @@
             parent.$('input:radio[name=icon_code]').attr('checked', false);
             parent.$('#previewLink').hide();
             parent.$('#displayButton').html('저장하기');
+            parent.$('input[id="originCode"]').val(code)
+            parent.$('input[id="ordCode"]').val(ord)
+            
             setTimeout(function(){
                 parent.objEditor.setData('\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n');
             }, 200);
@@ -285,8 +301,12 @@
 	  		});		
 				alert("해당 자료가 삭제 되었습니다.")
 				location.reload();
+				$("iframe[name='tree']").location.reload();
 			}
         }
+        
+        
+        
 </script>
 
 </body>

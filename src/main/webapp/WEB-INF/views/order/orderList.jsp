@@ -294,7 +294,7 @@
 	<script>
 		(function(){
 			if(${order.trackingNo} != 0){				
-				const myKey = "FV9kkSwcgfdK76xfE8qHIA";
+				const myKey = "W6uLYBYnEW8LOmyfKjFtiA";
 				var deliComNo = ${order.deliComNo}
 				if(deliComNo < 10){
 					var t_code = "0" + deliComNo;				

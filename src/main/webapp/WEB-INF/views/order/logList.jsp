@@ -1,8 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>  
+
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="카드결제 로그관리" name="title"/>
 </jsp:include>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js" type="text/javascript"></script>
+
+<script>
+const { IMP } = window;
+IMP.init('imp86621495');
+</script>
     <!-- content-wrapper -->
 <div class="content-wrapper">
 <section class="content-header">
@@ -231,46 +242,19 @@
 </div><!-- /.content-wrapper -->
 
 <script>
-$(document).ready(function(){
-    var myKey = "FV9kkSwcgfdK76xfE8qHIA"; // sweet tracker에서 발급받은 자신의 키 넣는다.
-        // 택배사 목록 조회 company-api
-        $.ajax({
-            type:"GET",
-            dataType : "json",
-            url:"http://info.sweettracker.co.kr/api/v1/companylist?t_key="+myKey,
-            success:function(data){
-                    // 방법 1. JSON.parse 이용하기
-                    var parseData = JSON.parse(JSON.stringify(data));
-                    // console.log(parseData.Company); // 그중 Json Array에 접근하기 위해 Array명 Company 입력
-                    // 방법 2. Json으로 가져온 데이터에 Array로 바로 접근하기
-                    var CompanyArray = data.Company; // Json Array에 접근하기 위해 Array명 Company 입력
-                    //console.log(CompanyArray); 
-                    var myData="";
-                    $.each(CompanyArray,function(key,value) {
-                            myData += ('<option value='+value.Code+'>' +'key:'+key+', Code:'+value.Code+',Name:'+value.Name + '</option>');        
-                    });
-                    $("#tekbeCompnayList").html(myData);
-            }
-        });
-        // 배송정보와 배송추적 tracking-api
-        $(document).ready(function() {
-        	
-            var t_code = $('#tekbeCompnayList option:selected').attr('value');
-            var t_invoice = $('#invoiceNumberText').val();
-            $.ajax({
-                type:"GET",
-                dataType : "json",
-                url:"http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code=04&t_invoice=560040659205",
-                success:function(data){
-                    //console.log(data);
-                    var trackingDetails = data.trackingDetails;    
-                    $.each(trackingDetails,function(key,value) {
-                        console.log(key, value)      
-                    });
-                },
-                error : console.log
-            });
-        });    
+
+// IMP.certification(param, callback) 호출
+IMP.certification({ // param
+  merchant_uid: "merchant_1650586972341", // 주문 번호
+  m_redirect_url : "{${pageContext.request.contextPath}/order/log_list}", // 모바일환경에서 popup:false(기본값) 인 경우 필수, 예: https://www.myservice.com/payments/complete/mobile
+  popup : false // PC환경에서는 popup 파라메터가 무시되고 항상 true 로 적용됨
+}, function (rsp) { // callback
+  if (rsp.success) {
+    console.log(rsp)
+  } else {
+    console.log("fail")
+    console.log(rsp)
+  }
 });
 </script>
 
