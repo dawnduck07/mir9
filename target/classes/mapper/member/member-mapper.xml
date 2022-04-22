@@ -405,6 +405,58 @@
 		m.reg_date DESC
 </select>
 
+<!-- 회원 삭제 -->
+<delete id="memberWithdrawal">
+	DELETE FROM 
+		member 
+	WHERE 
+		id = #{id}
+</delete>
+
+<!-- 주소 삭제 -->
+<delete id="deleteAddress">
+	DELETE FROM 
+		address 
+	WHERE 
+		address_no = #{addressNo}
+</delete>
+
+<!-- 주소록 조회 -->
+<select id="selectOneAddressBook" resultType="addressBook">
+	SELECT
+		*
+	FROM
+		address_book
+	WHERE
+		member_no = #{memberNo}
+</select>
+
+<!-- 주소록 삭제 -->
+<delete id="deleteAddressBook">
+	DELETE FROM 
+		address_book
+	WHERE 
+		address_book_no = #{addressBookNo}
+</delete>
+
+<!-- 권한 삭제 -->
+<delete id="deleteAuthorties">
+	DELETE FROM 
+		authorities
+	WHERE 
+		member_no = #{memberNo}
+</delete>
+
+<update id="updateReason">
+	UPDATE 
+		withdrawal_member
+	SET
+		reason = #{reason}
+	WHERE
+		member_no = #{memberNo}
+</update>
+
+
 <select id="selectMemberTotalPoint" resultType="_int">
 SELECT 
 	SUM(point_amount) 

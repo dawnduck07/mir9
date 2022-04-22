@@ -150,17 +150,23 @@
 										Administrator <small>MIR9 SHOP 관리자</small>
 									</p></li>
 								<li class="user-footer">
+									<div class="pull-left">
+										<button 
+									    	class="btn btn-outline-success my-2 my-sm-0" 
+									    	type="button"
+									    	onclick="location.href='${pageContext.request.contextPath}/member/memberWithdrawal.do';">탈퇴</button>
+									</div>
 									<div class="pull-right">
-									<form:form
-										id="memberLogoutFrm"
-										name="memberLogoutFrm"
-										method="POST"
-										action="${pageContext.request.contextPath}/member/memberLogout.do">
-										<a
-											onclick="logoutSubmit()"
-											class="btn btn-danger btn-flat"
-											type="submit">Sign out</a>
-									</form:form>
+										<form:form
+											id="memberLogoutFrm"
+											name="memberLogoutFrm"
+											method="POST"
+											action="${pageContext.request.contextPath}/member/memberLogout.do">
+											<a
+												onclick="logoutSubmit()"
+												class="btn btn-danger btn-flat"
+												type="submit">Sign out</a>
+										</form:form>
 									</div>
 								</li>
 							</ul></li>
@@ -257,13 +263,13 @@
 							class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_day"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/period_day"><i
 									class="fa fa-circle-o"></i>기간별 매출 통계 </a></li>
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_product"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/product"><i
 									class="fa fa-circle-o"></i>제품별 매출 통계 </a></li>
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_member"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/member"><i
 									class="fa fa-circle-o"></i>회원별 매출 통계 </a></li>
-							<li><a href="${pageContext.request.contextPath}/statistics/sales_address_day"><i
+							<li><a href="${pageContext.request.contextPath}/statistics/address_day"><i
 									class="fa fa-circle-o"></i>지역별 매출 통계 </a></li>
 						</ul></li>
 					<li class="treeview"><a href="#"> <i
@@ -326,6 +332,7 @@
 		</aside>
 		<!-- /.sidebar -->
 		
+
 <script>
 function logoutSubmit(){
 	$(document.memberLogoutFrm).submit();

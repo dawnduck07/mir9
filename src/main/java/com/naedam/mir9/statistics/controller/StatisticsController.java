@@ -13,10 +13,22 @@ public class StatisticsController {
 	@Autowired
 	private StatisticsService statisticsService;
 	
-	@GetMapping("/period")
-	public String statisticsPeriod() {
+	@GetMapping("/period_day")
+	public String statisticsPeriod_day() {
 		
-		return "statistics/period";
+		return "statistics/period_day";
+	}
+	
+	@GetMapping("/period_month")
+	public String statisticsPeriod_month() {
+		
+		return "statistics/period_month";
+	}
+	
+	@GetMapping("/period_year")
+	public String statisticsPeriod_year() {
+		
+		return "statistics/period_year";
 	}
 	
 	@GetMapping("/product")
@@ -31,9 +43,21 @@ public class StatisticsController {
 		return "statistics/member";
 	}
 	
-	@GetMapping("/address")
-	public String statisticsAddress() {
+	@GetMapping("/address_day")
+	public String statisticsAddress_day() {
 		
-		return "statistics/address";
+		return "statistics/address_day";
+	}
+	
+	@GetMapping("/address_month")
+	public String statisticsAddress_month() {
+		
+		return "statistics/address_month";
+	}
+	
+	@GetMapping("/address_year")
+	public String statisticsAddress_year() {
+		
+		return "statistics/address_year";
 	}
 }

@@ -4,6 +4,8 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+import java.util.Collection;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
@@ -14,9 +16,12 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,8 +67,82 @@ public class MemberController {
 	@Autowired
 	private CouponService couponService;
 	
+
+	// 회원 탈퇴
+	@GetMapping("/memberWithdrawal.do")
+	public void memberWithdrawal() {}
+	
+	// 회원 탈퇴 로직
+	@PostMapping("/memberWithdrawal.do")
+	public String memberWithdrawal(
+			@RequestParam String password,
+			@RequestParam String reason,
+			Authentication authentication,
+			RedirectAttributes redirectAttribute,
+			HttpServletRequest request) {
+		log.debug("password = {}", password);
+		log.debug("reason = {}", reason);
+		Map<String, Object> param = new HashMap<>();
+		// 회원 조회
+		Member member = (Member) authentication.getPrincipal();
+		log.debug("[principal] member = {}", member);
+		int memberNo = member.getMemberNo();
+		// 주소록 조회
+		Address address = memberService.selectOneAddress(memberNo);
+		int addressNo = address.getAddressNo();
+		String id = member.getId();
+		param.put("memberNo", memberNo);
+		param.put("reason", reason);
+		
+		// 주소록 조회
+		AddressBook resultAddressBook = memberService.selectOneAddressBook(memberNo);
+		log.debug("resultAddressBook = {}", resultAddressBook);
+		int addressBookNo = resultAddressBook.getAddressBookNo();
+		
+		// 비밀번호 비교
+		if(passwordEncoder.matches(password, member.getPassword())){
+			
+			try {
+				// 주소록 삭제
+				int resultDeleteAddressBook = memberService.deleteAddressBook(addressBookNo);
+				log.debug("resultDeleteAddressBook = {}", resultDeleteAddressBook);
+				
+				// 주소 삭제
+				int resultDeleteAddress = memberService.deleteAddress(addressNo);
+				log.debug("resultDeleteAddress = {}", resultDeleteAddress);
+				
+				// 권한 삭제
+				int resultDeleteAuthorities = memberService.deleteAuthorties(memberNo);
+				log.debug("resultDeleteAuthorities = {}", resultDeleteAuthorities);
+
+				// 회원 삭제
+				int resultMemberWithdrawal = memberService.memberWithdrawal(id);
+				log.debug("resultMemberWithdrawal = {}", resultMemberWithdrawal);
+				
+				// 탈퇴 사유(update)
+				int resultUpdateReason = memberService.updateReason(param);
+				log.debug("resultUpdateReason = {}", resultUpdateReason);
+				
+				String msg = resultUpdateReason > 0 ? "회원 탈퇴가 완료되었습니다." : "회원 탈퇴에 실패했습니다.";
+				redirectAttribute.addFlashAttribute("msg", msg);
+				
+			} catch (Exception e) {
+				log.error("회원 탈퇴 오류", e);
+				throw e;
+			}
+			return "redirect:/member/memberLogout.do";
+			 
+		} else {
+			redirectAttribute.addFlashAttribute("msg", "비밀번호가 일치하지 않습니다.");
+			
+			return "redirect:/member/memberWithdrawal.do";
+		}
+			
+	}
+
 	@Autowired
 	private PointService pointService;
+
 	
 	// 회원 리스트
 	@RequestMapping("/list.do")
@@ -606,9 +685,7 @@ public class MemberController {
 	
 	// 로그인 화면 요청
 	@GetMapping("/memberLogin.do")
-	public String memberLoginPage() {
-		
-		
+	public String memberLoginPage() {	
 		return "member/memberList";
 	}
 	
