@@ -56,8 +56,9 @@
         <div class="modal-content">
             <form name="form_register" method="post" onsubmit="return false;" action="/mir9/menu/addMenu?${_csrf.parameterName}=${_csrf.token}">
             <input type="hidden" name="mode" value="insertMenu">
-            <!-- <input type="hidden" name="code">
-            <input type="hidden" name="category_code"> -->
+            <input type="hidden" name="originNo" id="originCode">
+            <input type="hidden" name="ord" id="ordCode">
+            
             <input type="hidden" name="locale" value="ko">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -137,7 +138,7 @@
             <form name="form_register2" method="post" onsubmit="return false;" action="/mir9/menu/updateMenu?${_csrf.parameterName}=${_csrf.token}">
             <input type="hidden" name="mode" value="insertMenu">
             <input type="hidden" name="code" id="getCode">
-            <!-- <input type="hidden" name="category_code"> -->
+            
             <input type="hidden" name="locale" value="ko">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -623,15 +624,32 @@
                 }
             });
         }
-        function deleteRevision(code, obj) {
-            if(confirm('해당 리비젼 정보를 정말 삭제하시겠습니까?')) {
-                parent.formDeleteRevision.code.value = code;
-                parent.formDeleteRevision.target = 'iframe_process';
-                parent.formDeleteRevision.submit();
-                // tr 태그 삭제
-                $(obj).parents('tr').remove();
-            }
+        function deleteRevision(code) {
+    		if(!confirm("해당 리비젼 정보를 정말 삭제하시겠습니까?")){
+    			alert("취소 되었습니다.");
+    			return;
+    		}else{
+        		$.ajax({
+        			url : "/mir9/menu/json/deleteMenu/"+code,
+        			method : "GET",
+        			dataType : "JSON",	
+        			headers : {
+        				"Accept" : "application/json",
+        				"Content-Type" : "application/json"	 						
+        			} ,
+        			success : function(result){
+        				alert("해당 메뉴가 삭제 되었습니다.")
+        				 parent.formDeleteRevision.target = 'iframe_process';
+        				$(obj).parents('tr').remove();
+        			}
+        			
+        		})
+        		
+          		//$("span[id='"+fileNo+"']").remove();
+        		}
+            
         }
+        
         function checkHeight() {
             var height = $(window).height() - 200;
             document.getElementById('iframe_tree').height = height;
@@ -643,6 +661,8 @@
             formCopyMenu.target = 'iframe_process';
             formCopyMenu.submit();
         }
+        
+        
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 

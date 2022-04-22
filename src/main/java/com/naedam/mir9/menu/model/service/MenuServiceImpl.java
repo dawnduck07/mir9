@@ -56,6 +56,16 @@ public class MenuServiceImpl implements MenuService {
 		return resultMap;
 	}	
 	
+	//조건식 메뉴 리스트 출력2
+	@Override
+	public Map<String, Object> getMenuList3(Map<String,Object> map) throws Exception{
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", menuDao.getMenuList3(map));
+		
+		return resultMap;
+	}	
+	
 	//리비젼 리스트
 	@Override
 	public Map<String, Object> getRevisionList(Map<String, Object> map) throws Exception {
@@ -166,6 +176,12 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public void deleteChoiceHead(int headNo) throws Exception {
 		menuDao.deleteChoiceHead(headNo);
+	}
+
+	//리비젼의 메뉴 삭제
+	@Override
+	public void deleteMenu(int code) throws Exception {
+		menuDao.deleteMenu(code);
 	}
 
 

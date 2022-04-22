@@ -94,19 +94,11 @@ var tree_tpl = {
 
 </script>
 
-<script language="JavaScript">
-<!--
-function initMenu() {
-trees[0].tmB(1);trees[0].tmB(2);trees[0].tmB(3);trees[0].tmB(4);trees[0].tmB(5);trees[0].tmB(6);trees[0].tmB(7);trees[0].tmB(8);trees[0].tmB(9);trees[0].tmB(10);trees[0].tmB(11);trees[0].tmB(12);trees[0].tmB(13);trees[0].tmB(14);trees[0].tmB(15);trees[0].tmB(16);trees[0].tmB(17);trees[0].tmB(18);trees[0].tmB(19);trees[0].tmB(20);trees[0].tmB(21);trees[0].tmB(22);}
-new tree (TREE_ITEMS, tree_tpl);
-initMenu();
-//-->
-</script>
 <table cellpadding="0" cellspacing="0" border="0">
 	<tbody>
 		<tr>
 			<td nowrap="">
-				<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&quot;);" onclick="return trees[0].tmG(0)" class="t0i" id="i_txt0_0">
+				<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menuList');" onclick="return trees[0].tmG(0)" class="t0i" id="i_txt0_0">
 					<img src="${pageContext.request.contextPath}/resources/imgs/tree/base.gif" border="0" align="absbottom" name="i_img0_0" class="t0im">Home
 				</a>
 			</td>
@@ -123,7 +115,7 @@ initMenu();
 					<tr>
 						<td nowrap="">
 							<img src="${pageContext.request.contextPath}/resources/imgs/tree/joinbottom.gif" border="0" align="absbottom">
-								<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&amp;category_code=99&quot;);" onclick="return trees[0].tmG(1)" class="t0i" id="i_txt0_1">
+								<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu.code}&originNo=${menu.originNo}&ord=${menu.ord}');" onclick="return trees[0].tmG(1)" class="t0i" id="i_txt0_1">
 							<img src="${pageContext.request.contextPath}/resources/imgs/page.gif" border="0" align="absbottom" name="i_img0_1" class="t0im">메인페이지</a>
 						</td>
 					</tr>
@@ -134,7 +126,7 @@ initMenu();
 							<a href="javascript: trees[0].tmB(2)" onmouseover="trees[0].tmJ(2)" onmouseout="trees[0].tmH(2)">
 								<img src="${pageContext.request.contextPath}/resources/imgs/tree/minusbottom.gif" border="0" align="absbottom" name="j_img0_2">
 							</a>
-							<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&amp;category_code=10&quot;);" onclick="return trees[0].tmG(2)" class="t0i" id="i_txt0_2">
+							<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu.code}&originNo=${menu.originNo}&ord=${menu.ord}');" onclick="return trees[0].tmG(2)" class="t0i" id="i_txt0_2">
 								<img src="${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif" border="0" align="absbottom" name="i_img0_2" class="t0im">${menu.title}
 							</a>
 						</td>
@@ -151,7 +143,7 @@ initMenu();
 							<td nowrap="">
 								<img src="${pageContext.request.contextPath}/resources/imgs/tree/line.gif" border="0" align="absbottom">
 								<img src="${pageContext.request.contextPath}/resources/imgs/tree/joinbottom.gif" border="0" align="absbottom">
-									<a href="javascript:parent.list.location.replace(&quot;?tpf=admin/menu/list_sub&amp;category_code=1010&quot;);" onclick="return trees[0].tmG(3)" class="t0i" id="i_txt0_3">
+									<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu2.code}&originNo=${menu2.originNo}&ord=${menu2.ord}');" onclick="return trees[0].tmG(3)" class="t0i" id="i_txt0_3">
 										<img src="${pageContext.request.contextPath}/resources/imgs/tree/page.gif" border="0" align="absbottom" name="i_img0_3" class="t0im">${menu2.title}
 									</a>
 							</td>
