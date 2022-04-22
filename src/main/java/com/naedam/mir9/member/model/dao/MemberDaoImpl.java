@@ -238,6 +238,12 @@ public class MemberDaoImpl implements MemberDao {
 	
 
 
+	@Override
+	public int selectMemberTotalPoint(int memberNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("member.selectMemberTotalPoint", memberNo);
+	}
+
 
 
 	

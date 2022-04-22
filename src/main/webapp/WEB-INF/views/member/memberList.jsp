@@ -273,7 +273,7 @@
 						</tr>
 						<tr>
 							<td class="menu">지급 형태</td>
-							<td align="left"><select name="sms_type" class="form-control input-sm" style="width: 120px;">
+							<td align="left"><select name="plus_minus_type" class="form-control input-sm" style="width: 120px;">
 									<option value="+">지급</option>
 									<option value="-">차감</option>
 							</select></td>
@@ -445,6 +445,9 @@ $("button[id^='detail_']").on('click', function(e){
 			var regDate = res.regDate;
 			var loginDate = res.loginDate;
 			var updateDate = res.updateDate;
+			var totalPoint = res.totalPoint + res.pointName;
+			
+			console.log(res.pointName)
 			
 			$("[name=memberNo]").val(member.memberNo);
 			$("[name=id]").val(member.id);
@@ -464,6 +467,7 @@ $("button[id^='detail_']").on('click', function(e){
 			$("#last_login_date").text(loginDate);
 			$("#update_date").text(updateDate);
 			$("#modalRegister").modal();
+			$("#current_point").text(totalPoint);
 		},
 		error : console.log
 	});

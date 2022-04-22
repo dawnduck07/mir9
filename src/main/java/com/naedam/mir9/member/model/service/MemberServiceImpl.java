@@ -222,6 +222,15 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int selectWithdrawalCount() {
 		return memberDao.selectWithdrawalCount();
+
+	}
+	
+	// 포인트 총계
+	@Override
+	public int selectMemberTotalPoint(int memberNo) {
+		// TODO Auto-generated method stub
+		return memberDao.selectMemberTotalPoint(memberNo);
+
 	}
 
 	// 탈퇴회원 검색 게시물 
