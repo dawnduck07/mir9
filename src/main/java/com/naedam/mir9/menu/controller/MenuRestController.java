@@ -1,10 +1,11 @@
 package com.naedam.mir9.menu.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,22 +42,35 @@ public class MenuRestController {
 		
 		Map<String, Object> resultMap = menuService.getRevisionList(map);
 		
-		return resultMap;
-		
-		
+		return resultMap;				
 	}
 	
 	@PostMapping(value="json/deleteRevisionList")
 	public Map deleteRevisionList() throws Exception{
-		System.out.println("/json/getRevisionList 시작");
+		System.out.println("/json/deleteRevisionList 시작");
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		Map<String, Object> resultMap = menuService.deleteRevisionList(map);
 		
 		return resultMap;
-		
-		
 	}	
 	
+	@GetMapping(value="json/deleteMenu/{code}")
+	public Boolean deleteMenu(@PathVariable("code") int code) throws Exception{
+		System.out.println("json/deleteMenu 시작");
+		Boolean result = false;
+		if(code != 0) {
+			menuService.deleteMenu(code);
+			result = true;
+		}
+		
+		return result;
+	}
+	
 }
+
+
+
+
+

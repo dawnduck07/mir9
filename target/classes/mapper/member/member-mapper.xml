@@ -456,6 +456,7 @@
 		member_no = #{memberNo}
 </update>
 
+
 <select id="selectMemberTotalPoint" resultType="_int">
 SELECT 
 	SUM(point_amount) 

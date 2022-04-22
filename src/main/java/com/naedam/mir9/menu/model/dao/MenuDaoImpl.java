@@ -53,7 +53,13 @@ public class MenuDaoImpl implements MenuDao {
 	//조건식 메뉴 리스트 출력
 	@Override
 	public List<Menu> getMenuList2(Map<String, Object> map) throws Exception {
-		return sqlSession.selectList("menu.getMenuList", map);
+		return sqlSession.selectList("menu.getMenuList2", map);
+	}	
+	
+	//조건식 메뉴 리스트 출력2
+	@Override
+	public List<Menu> getMenuList3(Map<String, Object> map) throws Exception {
+		return sqlSession.selectList("menu.getMenuList3", map);
 	}	
 	
 	//리비젼 리스트
@@ -150,6 +156,12 @@ public class MenuDaoImpl implements MenuDao {
 	@Override
 	public void deleteChoiceHead(int headNo) throws Exception {
 		sqlSession.delete("menu.deleteChoiceHead", headNo);
+	}
+
+	//리비젼의 메뉴 삭제
+	@Override
+	public void deleteMenu(int code) throws Exception {
+		sqlSession.delete("menu.deleteMenu", code);
 	}
 
 

@@ -83,9 +83,18 @@
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
 			   #{meta_description : VARCHAR},
-			   LASTVAL(menu_seq),
-			   <if test="ord == null or ord == 0">1</if>
-			   <if test="ord != null and ord == 1">2</if>)
+			   <if test="originNo == 0">
+			   	LASTVAL(menu_seq),
+			   </if>
+			   <if test="originNo != 0">
+			   	#{originNo},
+			   </if>
+			   <if test="ord == null or ord == 0">
+			   	1
+			   </if>
+			   <if test="ord != null and ord != '' ">
+			   	#{ord}
+			   </if>)
 	</insert>
 	
 	<insert id="addHead" parameterType="head">
@@ -115,9 +124,11 @@
 				  MENU_DATE,
 				  IS_META,
 				  META_TITLE,
-				  META_DESCRIPTION)
+				  META_DESCRIPTION,
+				  ORIGIN_NO,
+				  ORD)
 		VALUES(NEXTVAL(menu_seq),
-			   #{code},
+			   #{category_code},
 			   1,
 			   #{title : VARCHAR},
 			   #{content : VARCHAR},
@@ -125,11 +136,13 @@
 			   #{target : VARCHAR},
 			   #{url : VARCHAR},
 			   #{status : VARCHAR},
-			   #{menu_head_code.headNo : NUMERIC},
+			   #{menu_head_code : NUMERIC},
 			   sysdate(),
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
-			   #{meta_description : VARCHAR})
+			   #{meta_description : VARCHAR},
+			   #{originNo},
+			   #{ord})
 	</insert>	
 	
 	<select id="getMenu" parameterType="int" resultMap="MenuSelectMap">
@@ -167,6 +180,7 @@
 		SELECT *
 		FROM menu
 		WHERE revision_code = 0
+		AND	  ORD = 1
 		ORDER BY code ASC
 	</select>
 	
@@ -175,14 +189,27 @@
 		FROM menu
 		WHERE revision_code = 0
 		AND   origin_no = #{menu.originNo}
+		AND   code != 1
+		AND   ORD = #{menu.ord}
 		ORDER BY code ASC
 	</select>	
+	
+	
+	<select id="getMenuList3" resultType="hashmap" resultMap="MenuSelectMap">
+		SELECT *
+		FROM menu
+		WHERE revision_code = 0
+		AND   origin_no = #{menu.originNo}
+		AND   code != 1
+		AND   ORD = 3
+		ORDER BY code ASC
+	</select>
 	
 	<select id="getRevisionList" resultType="hashmap" resultMap="MenuSelectMap">
 		SELECT *
 		FROM menu
 		WHERE revision_code = 1
-		AND	  CATEGORY_CODE = #{menu.code}
+		AND	  origin_no = #{menu.code}
 		ORDER BY menu_date ASC
 	</select>
 	
@@ -203,6 +230,7 @@
 		SELECT *
 		FROM menu
 		WHERE ord = 1
+		AND revision_code = 0
 		ORDER BY code ASC
 	</select>
 	
@@ -210,6 +238,7 @@
 		SELECT *
 		FROM menu
 		WHERE ord = 2
+		AND revision_code = 0
 		ORDER BY code ASC
 	</select>
 	 
@@ -224,7 +253,7 @@
 			TARGET = #{target : VARCHAR},
 			URL =#{url : VARCHAR},
 			STATUS = #{status : VARCHAR},
-			MENU_HEAD_CODE = #{menu_head_code.headNo : NUMERIC},
+			MENU_HEAD_CODE = #{menu_head_code : NUMERIC},
 			IS_META = #{is_meta : VARCHAR},
 			META_TITLE = #{meta_title : VARCHAR},
 			META_DESCRIPTION = #{meta_description : VARCHAR}
@@ -271,6 +300,12 @@
 		DELETE
 		FROM head
 		WHERE head_no = #{value}
+	</delete>
+	
+	<delete id="deleteMenu" parameterType="int">
+		DELETE
+		FROM menu
+		WHERE code = #{value}
 	</delete>
 	 
 </mapper>

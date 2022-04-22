@@ -27,6 +27,9 @@ public interface MenuDao {
 	//메뉴 리스트
 	public List<Menu> getMenuList2(Map<String, Object> map) throws Exception;
 	
+	//메뉴 리스트
+	public List<Menu> getMenuList3(Map<String, Object> map) throws Exception;
+	
 	//리비젼 리스트
 	public List<Menu> getRevisionList(Map<String, Object> map) throws Exception;
 	
@@ -74,6 +77,9 @@ public interface MenuDao {
 	
 	//헤더 선택삭제
 	public void deleteChoiceHead(int headNo) throws Exception;
+	
+	//리비젼의 메뉴 삭제
+	public void deleteMenu(int code) throws Exception;
 	
 
 }
