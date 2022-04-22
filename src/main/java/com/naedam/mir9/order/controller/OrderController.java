@@ -143,10 +143,15 @@ public class OrderController {
 		return "redirect:/order/list";
 	}
 	
-	@GetMapping("/logList")
+	@GetMapping("/log_list")
 	public String paymentLogList() {
 		
 		return "order/logList";
+	}
+	
+	@GetMapping("/pay_test")
+	public void pay_test() {
+		
 	}
 	
 	private void orderListSetting(Model model, Map<String, String> param) {
