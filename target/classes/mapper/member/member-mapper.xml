@@ -525,8 +525,71 @@ FROM member_point
 WHERE member_no = #{memberNo};
 </select>
 
+
+<!-- 회원 삭제 -->
+<delete id="deleteWithdrawal">
+	DELETE FROM
+		withdrawal_member
+	<where>
+		<!-- 
+			collection = 전달받은 인자. List나 Array 형태만 가능
+			item = 전달받은 인자값을 alias 명으로 대체
+			open = 해당 구문이 시작될 때 삽입할 문자열
+			close = 해당 구문이 종료될 때 삽입할 문자열
+			separator = 반복되는 사이에 출력할 문자열
+		 -->
+		 <foreach collection="array" item="item" open="(" close=")" separator="or">
+		 	member_no = #{item}
+		 </foreach>
+	</where>
+</delete>
+
+<!-- 주소번호 조회 -->
+<select id="findAddressNo" resultType="address">
+	SELECT
+		address_no
+	FROM
+		withdrawal_address_book
+	<where>
+		 <foreach collection="array" item="item" open="(" close=")" separator="or">
+		 	member_no = #{item}
+		 </foreach>
+	</where>
+</select>
+
+<!-- 주소 삭제 -->
+<delete id="deleteWithdrawalAddress">
+	DELETE FROM
+		withdrawal_address
+	WHERE
+		address_no = #{address_no}
+</delete>
+
+<!-- 주소록 삭제 -->
+<delete id="deleteWithdrawalAddressBook">
+	DELETE FROM
+		withdrawal_address_book
+	<where>
+		 <foreach collection="array" item="item" open="(" close=")" separator="or">
+		 	member_no = #{item}
+		 </foreach>
+	</where>
+</delete>
+
+<!-- 권한 삭제 -->
+<delete id="deleteWithdrawalAuthority">
+	DELETE FROM
+		withdrawal_authorities
+	<where>
+		 <foreach collection="array" item="item" open="(" close=")" separator="or">
+		 	member_no = #{item}
+		 </foreach>
+	</where>
+</delete>
+
 <select id="selectTodayRegMemberCnt" resultType="_int">
 SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 </select>
+
 
 </mapper>
