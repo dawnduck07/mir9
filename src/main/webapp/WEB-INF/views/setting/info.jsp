@@ -264,7 +264,7 @@ function register() {
     form_register.submit();
     setTimeout(function() {
     	 location.reload();
-    	}, 500);
+    	}, 700);
     
 }
 

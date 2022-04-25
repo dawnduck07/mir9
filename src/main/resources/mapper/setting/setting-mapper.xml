@@ -129,7 +129,19 @@
   		update admin_menu set status = 'N'
   	</update>
   	
+  	<update id="updateLocaleAllN">
+  		update locale set is_default = 'N', is_choosen = 'N'
+  	</update>
+  	
   	<update id="updateAdminMenu">
   		update admin_menu set status = 'Y' where menu_no = #{menuNo}
+  	</update>
+  	
+  	<update id="updateLocaleChoosen">
+  		update locale set is_choosen = 'Y' where locale_code = #{localeCode}
+  	</update>
+  	
+  	<update id="updateLocaleDefault">
+  		update locale set is_default = 'Y' where locale_code = #{localeCode}
   	</update>
 </mapper>

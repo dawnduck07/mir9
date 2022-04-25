@@ -214,9 +214,13 @@ public class SettingController {
 			for(String menuNo : menuList) {
 				result = settingService.updateAdminMenu(menuNo);
 			}
+			List<String> localeList = Arrays.asList(request.getParameterValues("locale_list[]"));
+			result = settingService.updateLocaleAllN();
+			for(String localeCode : localeList) {
+				result = settingService.updateLocaleChoosen(localeCode);
+			}
 			
-			
-			
+			result = settingService.updateLocaleDefault(request.getParameter("default_locale"));
 			result = settingService.updateAdminSetting(adminSetting);
 			
 			

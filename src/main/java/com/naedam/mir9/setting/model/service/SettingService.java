@@ -62,4 +62,10 @@ public interface SettingService {
 
 	int updateAdminMenuAllN();
 
+	int updateLocaleAllN();
+
+	int updateLocaleChoosen(String localeCode);
+
+	int updateLocaleDefault(String parameter);
+
 }

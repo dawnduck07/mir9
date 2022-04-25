@@ -148,6 +148,24 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.updateAdminMenuAllN();
 	}
+
+	@Override
+	public int updateLocaleAllN() {
+		// TODO Auto-generated method stub
+		return settingDao.updateLocaleAllN();
+	}
+
+	@Override
+	public int updateLocaleChoosen(String localeCode) {
+		// TODO Auto-generated method stub
+		return settingDao.updateLocaleChoosen(localeCode);
+	}
+
+	@Override
+	public int updateLocaleDefault(String localeCode) {
+		// TODO Auto-generated method stub
+		return settingDao.updateLocaleDefault(localeCode);
+	}
 	
 	
 	
