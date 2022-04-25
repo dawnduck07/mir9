@@ -1,5 +1,6 @@
 package com.naedam.mir9.order.model.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -89,6 +90,18 @@ public class OrderServiceImpl implements OrderService {
 	public int deleteOrderByOrderNo(String orderNo) {
 		// TODO Auto-generated method stub
 		return orderDao.deleteOrderByOrderNo(orderNo);
+	}
+
+	@Override
+	public int selectTodayOrderCnt() {
+		// TODO Auto-generated method stub
+		return orderDao.selectTodayOrderCnt();
+	}
+
+	@Override
+	public int selectMonthOrderCnt() {
+		// TODO Auto-generated method stub
+		return orderDao.selectMonthOrderCnt();
 	}
 
 

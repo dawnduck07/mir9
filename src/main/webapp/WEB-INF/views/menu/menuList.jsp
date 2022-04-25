@@ -32,7 +32,11 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-
+<style>
+.modal-open {
+    overflow: hidden;
+}
+</style>
 <body class="hold-transition login-page">
 <!-- content-wrapper -->
 <iframe name="iframe_process" width="0" height="0" frameborder="0"></iframe>
@@ -138,13 +142,14 @@
 <script src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="https://mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- <script src="/html/js/common.js" type="text/javascript" charset="utf-8"></script>  -->
+<script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
         function onclickView(full_url) {
             window.open('/'+full_url, '_blank');
         }
         function onclickInsert(code, ord) {
+        	
             parent.$('#modalContent').modal({backdrop:'static', show:true});
             parent.form_register.reset();
             parent.$('#displayMeta').hide();
@@ -245,11 +250,12 @@
                     if (json_data.list != null) {
                         parent.$('#revisionTitle').html(json_data.title);
                         $.each(json_data.list, function(index, value) {
+                        	console.log(value)
                             html_tag += '<tr>';
                             html_tag += '   <td>'+value['title']+'</td>';
                             html_tag += '   <td>'+value['menuDate']+'</td>';
                             html_tag += '   <td>';
-                            html_tag += '   <button type="button" onclick="infoRevision('+value['code']+');" class="btn btn-warning btn-xs">보기</button>';
+                            html_tag += '   <button type="button" onclick="infoRevision('+value['code']+','+value['revision_code']+');" class="btn btn-warning btn-xs">보기</button>';
                             html_tag += '   <button type="button" onclick="deleteRevision('+value['code']+',this);" class="btn btn-danger btn-xs">삭제</button>';
                             html_tag += '   </td>';
                             html_tag += '</tr>';
@@ -300,8 +306,8 @@
   		  	 	 
 	  		});		
 				alert("해당 자료가 삭제 되었습니다.")
-				location.reload();
-				$("iframe[name='tree']").location.reload();
+				$('#iframe_tree').attr('src', '${pageContext.request.contextPath}/menu/tree');
+				$('#iframe_list').attr('src', '${pageContext.request.contextPath}/menu/menuList');
 			}
         }
         

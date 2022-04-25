@@ -15,6 +15,7 @@ import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
+import com.naedam.mir9.member.model.vo.WithdrawalMember;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 @Repository
@@ -204,16 +205,49 @@ public class MemberDaoImpl implements MemberDao {
 		return session.delete("member.deleteAuthorties", memberNo);
 	}
 
+	// 탈퇴 사유
 	@Override
 	public int updateReason(Map<String, Object> param) {
 		return session.update("member.updateReason", param);
 	}
+
+	// 탈퇴 회원 리스트
+	@Override
+	public List<WithdrawalMember> selectWithdrawalMemberList() {
+		return session.selectList("member.selectWithdrawalMemberList");
+	}
+
+	// 탈퇴 회원 전체 게시물 수
+	@Override
+	public int selectWithdrawalCount() {
+		return session.selectOne("member.selectWithdrawalCount");
+	}
+
+	// 탈퇴회원 검색 게시물 
+	@Override
+	public List<WithdrawalMember> selectSearchWithdrawalList(Map<String, Object> param) {
+		return session.selectList("member.selectSearchWithdrawalList", param);
+	}
+
+	// 탈퇴회원 검색 게시물 수
+	@Override
+	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
+		return session.selectOne("member.selectSearchWithdrawalListCount", param);
+	}
+
+	
 
 
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
 		// TODO Auto-generated method stub
 		return session.selectOne("member.selectMemberTotalPoint", memberNo);
+	}
+
+	@Override
+	public int selectTodayRegMemberCnt() {
+		// TODO Auto-generated method stub
+		return session.selectOne("member.selectTodayRegMemberCnt");
 	}
 
 

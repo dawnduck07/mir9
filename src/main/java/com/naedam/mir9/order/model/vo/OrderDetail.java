@@ -26,12 +26,13 @@ public class OrderDetail implements Serializable {
 	private String name;
 	private String phone;
 	private long orderNo;
-	private String payType;
-	private int payAmt;
+	private String payMethod;
+	private int amount;
 	private String account;
 	private String bankName;
 	private String owner;
-	private String payDepositor;
+	private String buyerName;
+	private String piStatus;
 	private String receiver;
 	private String receiverPhone;
 	private String shippingAddress;

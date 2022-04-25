@@ -456,6 +456,67 @@
 		member_no = #{memberNo}
 </update>
 
+<!-- 탈퇴 회원 리스트 -->
+<select id="selectWithdrawalMemberList" resultType="withdrawalMember">
+	SELECT 
+		wm.member_no,
+		wm.id,
+		CONCAT(wm.last_name, wm.first_name) AS name,
+		CONCAT(SUBSTRING(wm.phone FROM 1 FOR 3), '-', SUBSTRING(wm.phone FROM 4 FOR 4), '-', SUBSTRING(wm.phone FROM 8 FOR 4)) AS phone,
+		CONCAT(wa.address_main, SPACE(1), wa.address_sub) AS address,
+		wm.reg_date
+	FROM
+		withdrawal_member wm JOIN withdrawal_address_book wab
+			ON wm.member_no = wab.member_no
+				JOIN withdrawal_address wa
+					ON wab.address_no = wa.address_no
+						JOIN withdrawal_authorities wau
+							ON wm.member_no = wau.member_no
+</select>
+
+
+<!-- 탈퇴 회원 전체 게시물 수 -->
+<select id="selectWithdrawalCount" resultType="_int">
+	SELECT
+		COUNT(*)
+	FROM
+		withdrawal_member
+</select>
+
+<!-- 탈퇴회원 검색 게시물  -->
+<select id="selectSearchWithdrawalList" resultType="withdrawalMember">
+	SELECT 
+		wm.member_no,
+		wm.id,
+		CONCAT(wm.last_name, wm.first_name) AS name,
+		CONCAT(SUBSTRING(wm.phone FROM 1 FOR 3), '-', SUBSTRING(wm.phone FROM 4 FOR 4), '-', SUBSTRING(wm.phone FROM 8 FOR 4)) AS phone,
+		CONCAT(wa.address_main, SPACE(1), wa.address_sub) AS address,
+		wm.reg_date
+	FROM
+		withdrawal_member wm JOIN withdrawal_address_book wab
+			ON wm.member_no = wab.member_no
+				JOIN withdrawal_address wa
+					ON wab.address_no = wa.address_no
+						JOIN withdrawal_authorities wau
+							ON wm.member_no = wau.member_no
+		WHERE
+		${type} LIKE CONCAT('%', #{keyword}, '%')
+</select>
+
+<!-- 탈퇴회원 검색 게시물 수 -->
+<select id="selectSearchWithdrawalListCount" resultType="_int">
+	SELECT 
+		count(*)
+	FROM
+		withdrawal_member wm JOIN withdrawal_address_book wab
+			ON wm.member_no = wab.member_no
+				JOIN withdrawal_address wa
+					ON wab.address_no = wa.address_no
+						JOIN withdrawal_authorities wau
+							ON wm.member_no = wau.member_no
+		WHERE
+		${type} LIKE CONCAT('%', #{keyword}, '%')
+</select>
 
 <select id="selectMemberTotalPoint" resultType="_int">
 SELECT 
@@ -463,4 +524,9 @@ SELECT
 FROM member_point
 WHERE member_no = #{memberNo};
 </select>
+
+<select id="selectTodayRegMemberCnt" resultType="_int">
+SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
+</select>
+
 </mapper>

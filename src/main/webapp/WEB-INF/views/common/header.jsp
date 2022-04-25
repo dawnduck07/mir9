@@ -92,7 +92,56 @@
 				}
 			})
 				
-		})		
+		})
+		$.ajax({
+			url : "/mir9/board/json/getAdminMenu",
+			method : "GET" ,
+			dataType : "json" ,
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+			success : function(Data, status){
+				if(Data[0].status == 'N'){
+					document.getElementById("menuManage").style.display = 'none';
+				}if(Data[1].status == 'N'){
+					document.getElementById("boardManage").style.display = 'none';
+				}if(Data[2].status == 'N'){
+					document.getElementById("productManage").style.display = 'none';
+				}if(Data[3].status == 'N'){
+					document.getElementById("memberManage").style.display = 'none';
+				}if(Data[4].status == 'N'){
+					document.getElementById("scheduleManage").style.display = 'none';
+				}if(Data[5].status == 'N'){
+					document.getElementById("formMailManage").style.display = 'none';
+				}if(Data[6].status == 'N'){
+					document.getElementById("popupManage").style.display = 'none';
+				}if(Data[7].status == 'N'){
+					document.getElementById("mapManage").style.display = 'none';
+				}if(Data[8].status == 'N'){
+					document.getElementById("staffManage").style.display = 'none';
+				}if(Data[9].status == 'N'){
+					document.getElementById("historyManage").style.display = 'none';
+				}if(Data[10].status == 'N'){
+					document.getElementById("bannerManage").style.display = 'none';
+				}if(Data[11].status == 'N'){
+					document.getElementById("contractManage").style.display = 'none';
+				}if(Data[12].status == 'N'){
+					document.getElementById("companyManage").style.display = 'none';
+				}if(Data[13].status == 'N'){
+					document.getElementById("infoManage").style.display = 'none';
+				}if(Data[14].status == 'N'){
+					document.getElementById("localeManage").style.display = 'none';
+				}if(Data[15].status == 'N'){
+					document.getElementById("seoManage").style.display = 'none';
+				}if(Data[16].status == 'N'){
+					document.getElementById("paymentManage").style.display = 'none';
+				}if(Data[17].status == 'N'){
+					document.getElementById("snsManage").style.display = 'none';
+				}
+			}
+			
+		})
 
 		
 	})
@@ -105,7 +154,6 @@
 	<script>
 		alert("${msg}");
 		location.reload();
-
 	</script>
 </c:if>
 
@@ -195,7 +243,7 @@
 							<li><a href="${pageContext.request.contextPath}/order/log_list"><i
 									class="fa fa-circle-o"></i>카드결제로그 리스트</a></li>
 						</ul></li>
-					<li class="treeview"><a href="#"> <i
+					<li class="treeview" id="menuManage"><a href="#"> <i
 							class="fa fa-file-text-o"></i> <span>메뉴 관리</span> <i
 							class="fa fa-angle-left pull-right"></i>
 					</a>
@@ -211,7 +259,7 @@
 									class="fa fa-circle-o"></i> 메타 관리</a></li>
 						</ul></li>
 
-					<li class="treeview"><a href="#" name="board"> <i class="fa fa-list-alt"></i> 
+					<li class="treeview" id="boardManage"><a href="#" name="board"> <i class="fa fa-list-alt"></i> 
 					<span>게시판 관리</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu" id="boardMenu" >
@@ -219,7 +267,7 @@
 									class="fa fa-circle-o"></i> 리스트</a></li>
 						</ul>
 					</li>
-					<li class="treeview"><a href="${pageContext.request.contextPath }/product/list"> <i class="fa fa-gift"></i>
+					<li class="treeview" id="productManage"><a href="${pageContext.request.contextPath }/product/list"> <i class="fa fa-gift"></i>
 							<span>제품</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
@@ -230,13 +278,13 @@
 							<li><a href="${pageContext.request.contextPath }/product/option"><i
 									class="fa fa-circle-o"></i> 자주쓰는 옵션 관리 </a></li>
 						</ul></li>
-					<li class="treeview"><a href="#"> <i class="fa fa-user"></i>
+					<li class="treeview" id="memberManage"><a href="#"> <i class="fa fa-user"></i>
 							<span>회원 관리</span> <i class="fa fa-angle-left pull-right"></i>
 					</a>
 						<ul class="treeview-menu">
 							<li class="active"><a href="${pageContext.request.contextPath}/member/list.do"><i
 									class="fa fa-circle-o"></i> 회원 리스트</a></li>
-							<li><a href="${pageContext.request.contextPath}/member/withdraw_list"><i
+							<li><a href="${pageContext.request.contextPath}/member/withdrawalList.do"><i
 									class="fa fa-circle-o"></i> 탈퇴회원 리스트</a></li>
 							<li><a href="${pageContext.request.contextPath}/member/log"><i
 									class="fa fa-circle-o"></i> 회원 접속이력 관리</a></li>
@@ -245,10 +293,10 @@
 							<li><a href="${pageContext.request.contextPath}/member/point"><i
 									class="fa fa-circle-o"></i> 회원 적립금 관리</a></li>
 						</ul></li>
-					<li class=""><a href="/mir9/schedule/schedule"> <i
+					<li class="" id="scheduleManage"><a href="/mir9/schedule/schedule"> <i
 							class="fa fa-calendar"></i> <span>일정 관리</span>
 					</a></li>
-					<li class="treeview"><a href="#"> <i
+					<li class="treeview" id="formMailManage" ><a href="#"> <i
 							class="fa fa-check-square-o"></i> <span>폼메일 관리</span> <i
 							class="fa fa-angle-left pull-right"></i>
 					</a>
@@ -258,7 +306,7 @@
 							<li><a href="index.php${pageContext.request.contextPath}/form/list&form_code=1"><i
 									class="fa fa-circle-o"></i> 문의사항</a></li>
 						</ul></li>
-					<li class="treeview"><a href="#"> <i
+					<li class="treeview" id="statisticsManage"><a href="#"> <i
 							class="fa fa-shopping-cart"></i> <span>통계</span> <i
 							class="fa fa-angle-left pull-right"></i>
 					</a>
@@ -296,31 +344,31 @@
 									class="fa fa-circle-o"></i> 적립금 관리</a></li>
 							<li><a href="${pageContext.request.contextPath}/setting/coupon"><i
 									class="fa fa-circle-o"></i> 쿠폰 관리</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/popup"><i
+							<li id="popupManage"><a href="${pageContext.request.contextPath}/setting/popup"><i
 									class="fa fa-circle-o"></i> 팝업 관리</a></li>
-							<li><a href="${pageContext.request.contextPath }/setting/map"><i
+							<li id="mapManage"><a href="${pageContext.request.contextPath }/setting/map"><i
 									class="fa fa-circle-o"></i> 약도 관리</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/staff"><i
+							<li id="staffManage"><a href="${pageContext.request.contextPath}/setting/staff"><i
 									class="fa fa-circle-o"></i> 임원 관리</a></li>
-							<li><a href="${pageContext.request.contextPath }/setting/history"><i
+							<li id="historyManage"><a href="${pageContext.request.contextPath }/setting/history"><i
 									class="fa fa-circle-o"></i> 연혁 관리</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/banner"><i
+							<li id="bannerManage"><a href="${pageContext.request.contextPath}/setting/banner"><i
 									class="fa fa-circle-o"></i> 배너 관리</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/contract"><i
+							<li id="contractManage"><a href="${pageContext.request.contextPath}/setting/contract"><i
 									class="fa fa-circle-o"></i> 약관 관리</a></li>
 							<li><a href="${pageContext.request.contextPath }/setting/delivery_setting"><i
 									class="fa fa-circle-o"></i> 배송 설정</a></li>
-							<li><a href="${pageContext.request.contextPath }/setting/delivery_company"><i
+							<li id="companyManage"><a href="${pageContext.request.contextPath }/setting/delivery_company"><i
 									class="fa fa-circle-o"></i> 택배사 관리</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/info"><i
+							<li id="infoManage"><a href="${pageContext.request.contextPath}/setting/info"><i
 									class="fa fa-circle-o"></i> 기본 설정</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/seo"><i
+							<li id="seoManage"><a href="${pageContext.request.contextPath}/setting/seo"><i
 									class="fa fa-circle-o"></i> SEO 설정</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/paymentpg"><i
+							<li id="paymentManage"><a href="${pageContext.request.contextPath}/setting/paymentpg"><i
 									class="fa fa-circle-o"></i> 결제PG 설정</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/snslogin"><i
+							<li id="snsManage"><a href="${pageContext.request.contextPath}/setting/snslogin"><i
 									class="fa fa-circle-o"></i> SNS 연동 설정</a></li>
-							<li><a href="${pageContext.request.contextPath}/setting/locale"><i
+							<li id="localeManage"><a href="${pageContext.request.contextPath}/setting/locale"><i
 									class="fa fa-circle-o"></i> 다국어 번역</a></li>
 						</ul></li>
 					<li><a href="${pageContext.request.contextPath}/setting/version"> <i

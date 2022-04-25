@@ -101,10 +101,15 @@
 										<td align="left">${order.productName }</td>
 										<td>${order.lastName}${order.firstName}</td>
 										<td>${fn:substring(order.phone,0,3) }-${fn:substring(order.phone,3,7) }-${fn:substring(order.phone,7,13)}</td>
-										<td align="right" style="color: #ff0505; font-weight: bold"><fmt:formatNumber value="${order.payAmt }" pattern="#,###" /></td>
-										<td>${order.payType }</td>
-										<td><fmt:formatDate value="${order.payDate}" pattern="yyyy-MM-dd" /> ${order.payDate == null ? ' - ':'' }</td>
-										<td style="font-weight: bold"><span id="order_status_name_${order.orderNo }">${order.statusName}</span></td>
+										<td align="right" style="color: #ff0505; font-weight: bold"><fmt:formatNumber value="${order.amount }" pattern="#,###" /></td>
+										<td>${order.payMethod == null ? '무통장' :'카드'}</td>
+										<c:if test="${order.piStatus == 'ready' }">
+											<td>${order.piStatus == 'ready' ? ' - ':'' }</td>
+										</c:if>
+										<c:if test="${order.piStatus == 'paid' }">
+											<td><fmt:formatDate value="${order.paidAt}" pattern="yyyy-MM-dd" /> </td>
+										</c:if>
+										<td style="font-weight: bold"><span id="order_status_name_${order.orderNo }">${order.piStatus == 'ready' ? '입금 대기' : order.piStatus == 'paid' ? order.statusName : '결제 완료'}</span></td>
 										<td><button type="button" onclick="onclick_update(${order.orderNo});" class="btn btn-primary btn-xs">보기</button></td>
 									</tr>
 								</c:forEach>
@@ -454,19 +459,27 @@
 								$("#p_totalPrice").text(trTotalPrice + deliFee);
 							}
 							
-						
+
 						
 						
 						// 결제 정보
 						$("#order_name").text(data.orderDetail.name);
 						$("#order_mobile").text(data.orderDetail.phone);
 						$("#order_number").text(data.orderDetail.orderNo);
-						$("#total_price").text(data.orderDetail.payAmt);
-						$("#payment_type").text(data.orderDetail.payType);
+						$("#total_price").text(data.orderDetail.amount);
+						
+						var paymentType = '';
+						if(data.orderDetail.payMethod == null){
+							paymentType = '무통장';
+						}else{
+							paymentType = '카드';
+						}
+						
+						$("#payment_type").text(paymentType);
 						$("#bank_account").text(data.orderDetail.account);
 						$("#bank_name").text(data.orderDetail.bankName);
 						$("#bank_depositor").text(data.orderDetail.owner);
-						$("#pay_name").text(data.orderDetail.payDepositor);
+						$("#pay_name").text(data.orderDetail.buyerName);
 						
 						
 						
@@ -477,7 +490,13 @@
 						$("#request_message").text(data.orderDetail.memo);
 						$("#memo").val(data.orderDetail.adminMemo);
 						$("#delivery_code").val(data.orderDetail.trackingNo == 0 ? '' : data.orderDetail.trackingNo);
-						$('#payment_status').val(data.orderDetail.orderStatusNo).prop("selected",true);
+						var orderStatusNo = 0;
+						if(data.orderDetail.piStatus == 'ready'){
+							orderStatusNo = 1;
+						}else{
+							orderStatusNo = data.orderDetail.orderStatusNo;
+						}
+						$('#payment_status').val(orderStatusNo).prop("selected",true);
 						
 						// 주문 상태 변경
 						
