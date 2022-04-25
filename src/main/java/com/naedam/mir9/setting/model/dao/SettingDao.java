@@ -62,4 +62,10 @@ public interface SettingDao {
 
 	int updateAdminMenuAllN();
 
+	int updateLocaleAllN();
+
+	int updateLocaleChoosen(String localeCode);
+
+	int updateLocaleDefault(String localeCode);
+
 }
