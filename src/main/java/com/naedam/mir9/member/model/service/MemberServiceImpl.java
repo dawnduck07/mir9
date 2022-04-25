@@ -245,6 +245,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectSearchWithdrawalListCount(param);
 	}
 
+	@Override
+	public int selectTodayRegMemberCnt() {
+		// TODO Auto-generated method stub
+		return memberDao.selectTodayRegMemberCnt();
+	}
+
 	
 
 

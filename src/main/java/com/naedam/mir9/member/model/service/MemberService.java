@@ -125,6 +125,8 @@ public interface MemberService {
 	// 탈퇴회원 검색 게시물 수
 	int selectSearchWithdrawalListCount(Map<String, Object> param);
 
+	int selectTodayRegMemberCnt();
+
 
 
 

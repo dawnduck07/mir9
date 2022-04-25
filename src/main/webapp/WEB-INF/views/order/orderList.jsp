@@ -103,7 +103,12 @@
 										<td>${fn:substring(order.phone,0,3) }-${fn:substring(order.phone,3,7) }-${fn:substring(order.phone,7,13)}</td>
 										<td align="right" style="color: #ff0505; font-weight: bold"><fmt:formatNumber value="${order.amount }" pattern="#,###" /></td>
 										<td>${order.payMethod == null ? '무통장' :'카드'}</td>
-										<td><fmt:formatDate value="${order.paidAt}" pattern="yyyy-MM-dd" /> ${order.paidAt == null ? ' - ':'' }</td>
+										<c:if test="${order.piStatus == 'ready' }">
+											<td>${order.piStatus == 'ready' ? ' - ':'' }</td>
+										</c:if>
+										<c:if test="${order.piStatus == 'paid' }">
+											<td><fmt:formatDate value="${order.paidAt}" pattern="yyyy-MM-dd" /> </td>
+										</c:if>
 										<td style="font-weight: bold"><span id="order_status_name_${order.orderNo }">${order.piStatus == 'ready' ? '입금 대기' : order.piStatus == 'paid' ? order.statusName : '결제 완료'}</span></td>
 										<td><button type="button" onclick="onclick_update(${order.orderNo});" class="btn btn-primary btn-xs">보기</button></td>
 									</tr>

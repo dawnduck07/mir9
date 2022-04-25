@@ -244,6 +244,12 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectMemberTotalPoint", memberNo);
 	}
 
+	@Override
+	public int selectTodayRegMemberCnt() {
+		// TODO Auto-generated method stub
+		return session.selectOne("member.selectTodayRegMemberCnt");
+	}
+
 
 
 	

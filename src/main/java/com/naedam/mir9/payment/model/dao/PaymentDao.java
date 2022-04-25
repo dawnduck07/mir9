@@ -11,4 +11,14 @@ public interface PaymentDao {
 
 	List<PaymentInfo> selectPaymentInfoList();
 
+	int selectTodayPaidCnt();
+
+	int selectTodayPayReadyCnt();
+
+	int selectTotalSaleAmountMonth();
+
+	int selectTotalCancelAmountMonth();
+
+	int selectMonthCancelCnt();
+
 }
