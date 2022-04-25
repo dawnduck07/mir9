@@ -167,6 +167,7 @@ public class OrderController {
 		int orderCnt = orderService.selectOrderCnt(param);
 		DeliverySetting deliSet = settingService.selectOneDeliverySetting();
 		
+		
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("orderCnt", orderCnt);
 		model.addAttribute("orderStatusList", orderStatusList);

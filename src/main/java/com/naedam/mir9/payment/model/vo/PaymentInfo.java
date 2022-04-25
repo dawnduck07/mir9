@@ -18,7 +18,7 @@ public class PaymentInfo implements Serializable {/**
 	
 	private int amount;
 	private String impUid;
-	private String merchantUid;
+	private long merchantUid;
 	private String buyerAddr;
 	private String buyerName;
 	private String buyerPostcode;
