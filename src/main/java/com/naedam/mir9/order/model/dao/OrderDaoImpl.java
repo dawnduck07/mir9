@@ -1,5 +1,6 @@
 package com.naedam.mir9.order.model.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -88,6 +89,18 @@ public class OrderDaoImpl implements OrderDao {
 	public int deleteOrderByOrderNo(String orderNo) {
 		// TODO Auto-generated method stub
 		return session.delete("order.deleteOrderByOrderNo", orderNo);
+	}
+
+	@Override
+	public int selectTodayOrderCnt() {
+		// TODO Auto-generated method stub
+		return session.selectOne("order.selectTodayOrderCnt");
+	}
+
+	@Override
+	public int selectMonthOrderCnt() {
+		// TODO Auto-generated method stub
+		return session.selectOne("order.selectMonthOrderCnt");
 	}
 
 

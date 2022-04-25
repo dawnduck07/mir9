@@ -32,6 +32,46 @@ public class PaymentServiceImpl implements PaymentService {
 		// TODO Auto-generated method stub
 		return paymentDao.selectPaymentInfoList();
 	}
+
+
+
+	@Override
+	public int selectTodayPaidCnt() {
+		// TODO Auto-generated method stub
+		return paymentDao.selectTodayPaidCnt();
+	}
+
+
+
+	@Override
+	public int selectTodayPayReadyCnt() {
+		// TODO Auto-generated method stub
+		return paymentDao.selectTodayPayReadyCnt();
+	}
+
+
+
+	@Override
+	public int selectTotalSaleAmountMonth() {
+		// TODO Auto-generated method stub
+		return paymentDao.selectTotalSaleAmountMonth();
+	}
+
+
+
+	@Override
+	public int selectTotalCancelAmountMonth() {
+		// TODO Auto-generated method stub
+		return paymentDao.selectTotalCancelAmountMonth();
+	}
+
+
+
+	@Override
+	public int selectMonthCancelCnt() {
+		// TODO Auto-generated method stub
+		return paymentDao.selectMonthCancelCnt();
+	}
 	
 	
 

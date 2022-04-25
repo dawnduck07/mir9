@@ -1,5 +1,6 @@
 package com.naedam.mir9.order.model.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,10 @@ public interface OrderDao {
 	List<OrderExcelForm> selectOrderExcelForm();
 
 	int deleteOrderByOrderNo(String orderNo);
+
+	int selectTodayOrderCnt();
+
+	int selectMonthOrderCnt();
 
 
 

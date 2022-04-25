@@ -98,6 +98,14 @@
     where a.order_no = #{orderNo}
   </select>
   
+  <select id="selectTodayOrderCnt" resultType="_int">
+    SELECT COUNT(*) FROM tb_order WHERE DATE(order_date) = DATE(SYSDATE())
+  </select>
+  
+  <select id="selectMonthOrderCnt" resultType="_int">
+	SELECT COUNT(*) FROM tb_order WHERE YEAR(order_date) = YEAR(SYSDATE()) AND MONTH(order_date) = MONTH(SYSDATE())
+  </select>
+  
   <update id="updateOrderStaus">
   	update tb_order set order_status_no = #{statusNo}, order_status_update = sysdate()  where order_no = #{orderNo}
   </update>
