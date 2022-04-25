@@ -85,9 +85,11 @@
 										<td style="width: 100px;">${memberEntity.pointAmt}</td>
 										<td style="width: 120px;"><fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${memberEntity.regDate}" /></td>
 										<td>
-											<!-- 보임:Y / 숨김:N --> <c:if test="${memberEntity.status eq 'Y'}">
+											<!-- 보임:Y / 숨김:N --> 
+											<c:if test="${memberEntity.status eq 'Y'}">
 												<span class="label label-success" style="font-size: 12px;">보임</span>
-											</c:if> <c:if test="${memberEntity.status eq 'N'}">
+											</c:if> 
+											<c:if test="${memberEntity.status eq 'N'}">
 												<span class="label label-default" style="font-size: 12px;">숨김</span>
 											</c:if>
 										</td>

@@ -105,7 +105,6 @@
 	<script>
 		alert("${msg}");
 		location.reload();
-
 	</script>
 </c:if>
 
@@ -236,7 +235,7 @@
 						<ul class="treeview-menu">
 							<li class="active"><a href="${pageContext.request.contextPath}/member/list.do"><i
 									class="fa fa-circle-o"></i> 회원 리스트</a></li>
-							<li><a href="${pageContext.request.contextPath}/member/withdraw_list"><i
+							<li><a href="${pageContext.request.contextPath}/member/withdrawalList.do"><i
 									class="fa fa-circle-o"></i> 탈퇴회원 리스트</a></li>
 							<li><a href="${pageContext.request.contextPath}/member/log"><i
 									class="fa fa-circle-o"></i> 회원 접속이력 관리</a></li>
