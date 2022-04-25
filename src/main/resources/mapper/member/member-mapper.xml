@@ -525,4 +525,8 @@ FROM member_point
 WHERE member_no = #{memberNo};
 </select>
 
+<select id="selectTodayRegMemberCnt" resultType="_int">
+SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
+</select>
+
 </mapper>

@@ -1,5 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>  
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Dashboard" name="title" />
 </jsp:include>
@@ -45,7 +49,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-aqua">
 							<div class="inner">
-								<h3>0</h3>
+								<h3>${counts.todayOrderCnt }</h3>
 								<p>주문건</p>
 							</div>
 							<div class="icon">
@@ -61,7 +65,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-green">
 							<div class="inner">
-								<h3>0</h3>
+								<h3>${counts.todayPaidCnt }</h3>
 								<p>입금완료</p>
 							</div>
 							<div class="icon">
@@ -78,7 +82,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-yellow">
 							<div class="inner">
-								<h3>0</h3>
+								<h3>${counts.todayPayReadyCnt }</h3>
 								<p>입금대기</p>
 							</div>
 							<div class="icon">
@@ -95,7 +99,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-red">
 							<div class="inner">
-								<h3>1</h3>
+								<h3>${counts.todayRegMemberCnt }</h3>
 
 								<p>가입회원 수</p>
 							</div>
@@ -274,7 +278,7 @@ ul {
 							<div class="col-sm-3 col-xs-6">
 								<div class="description-block border-right">
 									<span class="description-percentage text-green">총 누적판매액</span>
-									<h5 class="description-header">27,400</h5>
+									<h5 class="description-header"><fmt:formatNumber value="${counts.totalSaleAmountMonth }" pattern="#,###" /></td></h5>
 									<span class="description-text">(원)</span>
 								</div>
 								<!-- /.description-block -->
@@ -285,7 +289,7 @@ ul {
 									<span class="description-percentage text-yellow">
 										<!--i class="fa fa-caret-left"></i--> 총 주문건수
 									</span>
-									<h5 class="description-header">3</h5>
+									<h5 class="description-header">${counts.monthOrderCnt }</h5>
 									<span class="description-text">(건)</span>
 								</div>
 								<!-- /.description-block -->
@@ -296,7 +300,7 @@ ul {
 									<span class="description-percentage text-green">
 										<!--i class="fa fa-caret-up"></i--> 총 누적환불액
 									</span>
-									<h5 class="description-header">0</h5>
+									<h5 class="description-header"><fmt:formatNumber value="${counts.totalCancelAmountMonth }" pattern="#,###" /></h5>
 									<span class="description-text">(원)</span>
 								</div>
 								<!-- /.description-block -->
@@ -305,7 +309,7 @@ ul {
 							<div class="col-sm-3 col-xs-6">
 								<div class="description-block">
 									<span class="description-percentage text-red">총 환불건수</span>
-									<h5 class="description-header">0</h5>
+									<h5 class="description-header">${counts.monthCancelCnt }</h5>
 									<span class="description-text">(건)</span>
 								</div>
 								<!-- /.description-block -->

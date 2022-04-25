@@ -11,6 +11,16 @@ public interface PaymentService {
 	int insertPaymentInfo(Map<String, Object> param);
 
 	List<PaymentInfo> selectPaymentInfoList();
+
+	int selectTodayPaidCnt();
+
+	int selectTodayPayReadyCnt();
+
+	int selectTotalSaleAmountMonth();
+
+	int selectTotalCancelAmountMonth();
+
+	int selectMonthCancelCnt();
 	
 }
 
