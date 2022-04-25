@@ -1,6 +1,7 @@
 package com.naedam.mir9;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.order.model.service.OrderService;
+import com.naedam.mir9.order.model.vo.OrderDetail;
 import com.naedam.mir9.payment.model.service.PaymentService;
+import com.naedam.mir9.product.model.service.ProductService;
+import com.naedam.mir9.product.model.vo.ProductDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +32,8 @@ public class HomeController {
 	private PaymentService paymentService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private ProductService productService;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -52,10 +58,11 @@ public class HomeController {
 		counts.put("totalCancelAmountMonth", paymentService.selectTotalCancelAmountMonth());
 		counts.put("monthCancelCnt", paymentService.selectMonthCancelCnt());
 		
-		
-		
+		List<OrderDetail> orderList = orderService.selectOrderDetailList();
+		List<ProductDetail> productList = productService.selectAllProductList();
 		model.addAttribute("counts", counts);
-
+		model.addAttribute("orderList",orderList);
+		model.addAttribute("productList",productList);
 		
 		return "forward:/dashBoard.jsp";
 	}
