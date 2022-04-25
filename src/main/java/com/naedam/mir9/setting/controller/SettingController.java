@@ -1,5 +1,6 @@
 package com.naedam.mir9.setting.controller;
 
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -198,7 +199,7 @@ public class SettingController {
 	}
 	
 	@PostMapping("/process.do")
-	public String process(HttpServletRequest request, AdminSetting adminSetting, DeliveryNotice deliveryNotice) {
+	public String process(HttpServletRequest request, AdminSetting adminSetting, DeliveryNotice deliveryNotice, AdminMenu adminMenu) {
 		int result = 0;
 		String mode = request.getParameter("mode");
 		if(mode.equals("info")) {
@@ -208,7 +209,19 @@ public class SettingController {
 			adminSetting.setCallerId(callerId);
 			if(adminSetting.getIsDiscount() == null) adminSetting.setIsDiscount("N");
 			
+			List<String> menuList = Arrays.asList(request.getParameterValues("admin_menu_list[]"));
+			result = settingService.updateAdminMenuAllN();
+			for(String menuNo : menuList) {
+				result = settingService.updateAdminMenu(menuNo);
+			}
+			
+			
+			
 			result = settingService.updateAdminSetting(adminSetting);
+			
+			
+			
+			
 		}else if(mode.equals("updateGuide")) {
 			result = settingService.updateDeliveryNotice(deliveryNotice);
 		}

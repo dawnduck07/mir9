@@ -136,6 +136,18 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.updateDeliveryNotice(deliveryNotice);
 	}
+
+	@Override
+	public int updateAdminMenu(String menuNo) {
+		// TODO Auto-generated method stub
+		return settingDao.updateAdminMenu(menuNo);
+	}
+
+	@Override
+	public int updateAdminMenuAllN() {
+		// TODO Auto-generated method stub
+		return settingDao.updateAdminMenuAllN();
+	}
 	
 	
 	
