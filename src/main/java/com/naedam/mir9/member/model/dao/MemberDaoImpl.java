@@ -236,13 +236,49 @@ public class MemberDaoImpl implements MemberDao {
 	}
 
 	
-
-
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
 		// TODO Auto-generated method stub
 		return session.selectOne("member.selectMemberTotalPoint", memberNo);
 	}
+
+	// 탈퇴회원 삭제
+	@Override
+	public int deleteWithdrawal(int[] memberNo) {
+		return session.delete("member.deleteWithdrawal", memberNo);
+	}
+
+	// 주소번호 조회
+	@Override
+	public List<Address> findAddressNo(int[] memberNo) {
+		return session.selectList("member.findAddressNo", memberNo);
+	}
+
+	// 주소 삭제
+	@Override
+	public int deleteWithdrawalAddress(int addressNo) {
+		return session.delete("member.deleteWithdrawalAddress", addressNo);
+	}
+
+	// 주소록 삭제
+	@Override
+	public int deleteWithdrawalAddressBook(int[] memberNo) {
+		return session.delete("member.deleteWithdrawalAddressBook", memberNo);
+	}
+
+	// 권한 삭제
+	@Override
+	public int deleteWithdrawalAuthority(int[] memberNo) {
+		return session.delete("member.deleteWithdrawalAuthority", memberNo);
+	}
+
+	
+
+	
+
+
+
+
 
 
 

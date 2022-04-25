@@ -244,6 +244,44 @@ public class MemberServiceImpl implements MemberService {
 	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
 		return memberDao.selectSearchWithdrawalListCount(param);
 	}
+ 
+	// 탈퇴회원 삭제
+	@Override
+	public int deleteWithdrawal(int[] memberNo) {
+		return memberDao.deleteWithdrawal(memberNo);
+	}
+
+	// 주소번호 조회
+	@Override
+	public List<Address> findAddressNo(int[] memberNo) {
+		return memberDao.findAddressNo(memberNo);
+	}
+
+	// 주소 삭제
+	@Override
+	public int deleteWithdrawalAddress(int addressNo) {
+		return memberDao.deleteWithdrawalAddress(addressNo);
+	}
+
+	// 주소록 삭제
+	@Override
+	public int deleteWithdrawalAddressBook(int[] memberNo) {
+		return memberDao.deleteWithdrawalAddressBook(memberNo);
+	}
+
+	// 권한 삭제
+	@Override
+	public int deleteWithdrawalAuthority(int[] memberNo) {
+		return memberDao.deleteWithdrawalAuthority(memberNo);
+	}
+
+	
+
+	
+
+
+
+	
 
 	
 
