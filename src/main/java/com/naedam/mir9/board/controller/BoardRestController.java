@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +25,8 @@ import com.naedam.mir9.board.model.vo.BoardComment;
 import com.naedam.mir9.board.model.vo.BoardFile;
 import com.naedam.mir9.board.model.vo.Post;
 import com.naedam.mir9.member.model.vo.Member;
+import com.naedam.mir9.setting.model.service.SettingService;
+import com.naedam.mir9.setting.model.vo.AdminMenu;
 
 @RestController
 @RequestMapping("/board/*")
@@ -33,6 +34,9 @@ public class BoardRestController {
 	
 	@Autowired
 	private BoardService boardService;
+	
+	@Autowired
+	private SettingService settingService;
 	
 	@PostMapping(value="json/addComment")
 	public void addComment(@RequestBody BoardComment boardComment)throws Exception{
@@ -156,6 +160,16 @@ public class BoardRestController {
 		System.out.println("json/deleteComment 시작");
 		boardService.deleteComment(commentNo);
 	}
+	
+	@GetMapping(value="json/getAdminMenu")
+	public List<AdminMenu> getAdminMenu() throws Exception{
+		System.out.println("json/getAdminMenu 시작");
+		
+		List<AdminMenu> adminMenu = settingService.selectAdminMenuList();
+		
+		return adminMenu;
+	}
+	
 	
 	
 	@GetMapping(value="json/downloadImg/{fileNo}")
