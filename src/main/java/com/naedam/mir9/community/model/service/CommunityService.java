@@ -23,4 +23,8 @@ public interface CommunityService {
 
 	HashMap<String, Object> originSms(String appKey, String secretKey);
 
+	HashMap<String, Object> savedSms(String appKey, String secretKey);
+
+	int updateSms(String appKey, String secretKey, String code, String is_send, String content);
+
 }

@@ -72,6 +72,9 @@ public interface MenuDao {
 	//메타 정보
 	public Meta getMeta() throws Exception;
 	
+	//삭제리비전 복구
+	public void updateRevision(int code) throws Exception;
+	
 	//메뉴 선택삭제
 	public void updateChoiceMenu(int code) throws Exception;
 	

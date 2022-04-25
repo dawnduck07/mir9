@@ -152,6 +152,12 @@ public class MenuDaoImpl implements MenuDao {
 		sqlSession.update("menu.updateChoiceMenu", code);
 	}
 	
+	//삭제 리비전 복구
+	@Override
+	public void updateRevision(int code) throws Exception {
+		sqlSession.update("menu.updateRevision", code);
+	}
+	
 	//헤더관리 선택삭제
 	@Override
 	public void deleteChoiceHead(int headNo) throws Exception {
@@ -163,6 +169,8 @@ public class MenuDaoImpl implements MenuDao {
 	public void deleteMenu(int code) throws Exception {
 		sqlSession.delete("menu.deleteMenu", code);
 	}
+
+
 
 
 

@@ -23,8 +23,13 @@ import com.naedam.mir9.community.model.vo.Review;
 @Controller
 @RequestMapping("/comm")
 public class CommunityController {
+
 	@Autowired
 	private CommunityService communityService;
+	
+	// 인증키
+	private String appKey = "pDjJmaKLu6bg9i9j";
+	private String secretKey = "YRs5WbpK";
 	
 	@GetMapping("/email")
 	public String commEmail() {
@@ -37,26 +42,42 @@ public class CommunityController {
 		return "community/emailList";
 	}
 	
-	// sms 설정 + 기본 문구
+	// sms 설정 + 기본 문구 + 저장 문구
 	@GetMapping("/sms")
 	public String commSms(Model model) {
 	
-		// 인증키
-		String appKey = "TWbQQdDr6QbBg3rI";
-		String secretKey = "YNKmdjfR";  
+		// CORS 문제 해결
+		// 기본 문구 (categodyId : 78519)
+		HashMap<String, Object> originSms = communityService.originSms(appKey, secretKey); // 기존 양식
 		
-		// CORS 문제 해결을 위해 
-		HashMap<String, Object> originSms = communityService.originSms(appKey, secretKey);  
-		
+		// list에 담기
 		List<String> templateId = (List<String>) originSms.get("templateId");
 		List<String> content = (List<String>) originSms.get("body");
 		
 		model.addAttribute("templateId", templateId);
 		model.addAttribute("content", content);
 		
+		/* 확인
 		System.out.println("=====Controller:originSms=====");
 		System.out.println("templateId : " + templateId);
-		System.out.println("content : " + content);
+		System.out.println("content : " + content);		
+		*/
+		
+		// 저장 문구(categodyId : 78520)
+		HashMap<String, Object> savedSms = communityService.savedSms(appKey, secretKey); // 저장 양식
+		
+		// list에 담기
+		List<String> savedTemplateId = (List<String>) savedSms.get("savedTemplateId");
+		List<String> savedContent = (List<String>) savedSms.get("savedBody");
+		
+		model.addAttribute("savedTemplateId", savedTemplateId);
+		model.addAttribute("savedContent", savedContent);
+		
+		/* 확인
+		System.out.println("=====Controller:savedSms=====");
+		System.out.println("savedTemlateId : " + savedTemplateId);
+		System.out.println("savedContent : " + savedContent);
+		*/
 		
 		return "community/sms";
 	}

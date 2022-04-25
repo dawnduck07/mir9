@@ -137,7 +137,7 @@
 			   #{url : VARCHAR},
 			   #{status : VARCHAR},
 			   #{menu_head_code : NUMERIC},
-			   sysdate(),
+			   NOW(),
 			   #{is_meta : VARCHAR},
 			   #{meta_title : VARCHAR},
 			   #{meta_description : VARCHAR},
@@ -206,18 +206,51 @@
 	</select>
 	
 	<select id="getRevisionList" resultType="hashmap" resultMap="MenuSelectMap">
-		SELECT *
+		SELECT
+		code,
+		category_code,
+		revision_code,
+		title,
+		content,
+		is_outer_link,
+		target,
+		url,
+		status,
+		menu_head_code,
+		DATE_FORMAT(menu_date, '%Y-%m-%d %H:%i') menu_date,
+		is_meta,
+		meta_title,
+		meta_description,
+		origin_no,
+		ord
 		FROM menu
 		WHERE revision_code = 1
-		AND	  origin_no = #{menu.code}
+		AND	  origin_no = #{menu.originNo}
+		AND   ord = #{menu.ord}
 		ORDER BY menu_date ASC
 	</select>
 	
 	<select id="deleteRevisionList" resultType="hashmap" resultMap="MenuSelectMap">
-		SELECT *
+		SELECT
+		code,
+		category_code,
+		revision_code,
+		title,
+		content,
+		is_outer_link,
+		target,
+		url,
+		status,
+		menu_head_code,
+		DATE_FORMAT(menu_date, '%Y-%m-%d %H:%i') menu_date,
+		is_meta,
+		meta_title,
+		meta_description,
+		origin_no,
+		ord
 		FROM menu
 		WHERE revision_code = 2
-		ORDER BY menu_date ASC	
+		ORDER BY menu_date ASC
 	</select>
 	
 	<select id="getHeadList" resultType="hashmap" resultMap="HeadSelectMap">
@@ -286,6 +319,14 @@
 			META_DESCRIPTION = #{meta_description : VARCHAR}
 		</set>
 		WHERE META_NO = 1
+	</update>
+	
+	<update id="updateRevision" parameterType="int">
+		UPDATE menu
+		<set>
+			REVISION_CODE = 0
+		</set>
+		WHERE code = #{value}
 	</update>
 	
 	<update id="updateChoiceMenu" parameterType="int">
