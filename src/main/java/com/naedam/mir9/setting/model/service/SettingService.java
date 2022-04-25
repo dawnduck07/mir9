@@ -58,4 +58,8 @@ public interface SettingService {
 
 	int updateDeliveryNotice(DeliveryNotice deliveryNotice);
 
+	int updateAdminMenu(String menuNo);
+
+	int updateAdminMenuAllN();
+
 }
