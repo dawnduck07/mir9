@@ -525,6 +525,7 @@ FROM member_point
 WHERE member_no = #{memberNo};
 </select>
 
+
 <!-- 회원 삭제 -->
 <delete id="deleteWithdrawal">
 	DELETE FROM
@@ -585,4 +586,10 @@ WHERE member_no = #{memberNo};
 		 </foreach>
 	</where>
 </delete>
+
+<select id="selectTodayRegMemberCnt" resultType="_int">
+SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
+</select>
+
+
 </mapper>

@@ -24,6 +24,8 @@ import com.naedam.mir9.order.model.service.OrderService;
 import com.naedam.mir9.order.model.vo.Order;
 import com.naedam.mir9.order.model.vo.OrderDetail;
 import com.naedam.mir9.order.model.vo.OrderStatus;
+import com.naedam.mir9.payment.model.service.PaymentService;
+import com.naedam.mir9.payment.model.vo.PaymentInfo;
 import com.naedam.mir9.setting.model.service.SettingService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,8 @@ public class OrderController {
 	private DeliveryService deliveryService;
 	@Autowired
 	private SettingService settingService;
+	@Autowired
+	private PaymentService paymentService;
 	
 	@GetMapping("/list")
 	public String orderList(Model model) {
@@ -144,8 +148,10 @@ public class OrderController {
 	}
 	
 	@GetMapping("/log_list")
-	public String paymentLogList() {
+	public String paymentLogList(Model model) {
+		List<PaymentInfo> paymentInfoList = paymentService.selectPaymentInfoList();
 		
+		model.addAttribute("paymentInfoList", paymentInfoList);
 		return "order/logList";
 	}
 	
@@ -160,6 +166,7 @@ public class OrderController {
 		List<OrderStatus> orderStatusList = orderService.selectOrderStatusList();
 		int orderCnt = orderService.selectOrderCnt(param);
 		DeliverySetting deliSet = settingService.selectOneDeliverySetting();
+		
 		
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("orderCnt", orderCnt);

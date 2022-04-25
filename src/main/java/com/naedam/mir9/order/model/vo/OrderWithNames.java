@@ -20,31 +20,36 @@ public class OrderWithNames extends Order {
 	
 	private String productName;
 	private String phone;
-	private String payType;
-	private Date payDate;
+	private String payMethod;
+	private Date paidAt;
+	private String piStatus;
 	private String status;
 	private String lastName;
 	private String firstName;
-	private int payAmt;
+	private int amount;
 	private String statusName;
 	private long trackingNo;
 	private int deliComNo;
+	
 	public OrderWithNames(long orderNo, int memberNo, int productNo, int orderStatusNo, Date orderDate,
-			String productName, String phone, String payType, Date payDate, String status, String lastName,
-			String firstName, int payAmt, String statusName, Long trackingNo, int deliComNo) {
+			String productName, String phone, String payMethod, Date paidAt, String piStatus, String status,
+			String lastName, String firstName, int amount, String statusName, long trackingNo, int deliComNo) {
 		super(orderNo, memberNo, productNo, orderStatusNo, orderDate);
 		this.productName = productName;
 		this.phone = phone;
-		this.payType = payType;
-		this.payDate = payDate;
+		this.payMethod = payMethod;
+		this.paidAt = paidAt;
+		this.piStatus = piStatus;
 		this.status = status;
 		this.lastName = lastName;
 		this.firstName = firstName;
-		this.payAmt = payAmt;
+		this.amount = amount;
 		this.statusName = statusName;
 		this.trackingNo = trackingNo;
 		this.deliComNo = deliComNo;
 	}
+
+	
 	
 
 	

@@ -242,6 +242,7 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectMemberTotalPoint", memberNo);
 	}
 
+
 	// 탈퇴회원 삭제
 	@Override
 	public int deleteWithdrawal(int[] memberNo) {
@@ -278,6 +279,12 @@ public class MemberDaoImpl implements MemberDao {
 
 
 
+
+	@Override
+	public int selectTodayRegMemberCnt() {
+		// TODO Auto-generated method stub
+		return session.selectOne("member.selectTodayRegMemberCnt");
+	}
 
 
 

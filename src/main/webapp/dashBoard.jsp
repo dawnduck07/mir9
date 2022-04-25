@@ -1,5 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>  
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Dashboard" name="title" />
 </jsp:include>
@@ -45,7 +49,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-aqua">
 							<div class="inner">
-								<h3>0</h3>
+								<h3>${counts.todayOrderCnt }</h3>
 								<p>주문건</p>
 							</div>
 							<div class="icon">
@@ -61,7 +65,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-green">
 							<div class="inner">
-								<h3>0</h3>
+								<h3>${counts.todayPaidCnt }</h3>
 								<p>입금완료</p>
 							</div>
 							<div class="icon">
@@ -78,7 +82,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-yellow">
 							<div class="inner">
-								<h3>0</h3>
+								<h3>${counts.todayPayReadyCnt }</h3>
 								<p>입금대기</p>
 							</div>
 							<div class="icon">
@@ -95,7 +99,7 @@ ul {
 						<!-- small box -->
 						<div class="small-box bg-red">
 							<div class="inner">
-								<h3>1</h3>
+								<h3>${counts.todayRegMemberCnt }</h3>
 
 								<p>가입회원 수</p>
 							</div>
@@ -274,7 +278,7 @@ ul {
 							<div class="col-sm-3 col-xs-6">
 								<div class="description-block border-right">
 									<span class="description-percentage text-green">총 누적판매액</span>
-									<h5 class="description-header">27,400</h5>
+									<h5 class="description-header"><fmt:formatNumber value="${counts.totalSaleAmountMonth }" pattern="#,###" /></td></h5>
 									<span class="description-text">(원)</span>
 								</div>
 								<!-- /.description-block -->
@@ -285,7 +289,7 @@ ul {
 									<span class="description-percentage text-yellow">
 										<!--i class="fa fa-caret-left"></i--> 총 주문건수
 									</span>
-									<h5 class="description-header">3</h5>
+									<h5 class="description-header">${counts.monthOrderCnt }</h5>
 									<span class="description-text">(건)</span>
 								</div>
 								<!-- /.description-block -->
@@ -296,7 +300,7 @@ ul {
 									<span class="description-percentage text-green">
 										<!--i class="fa fa-caret-up"></i--> 총 누적환불액
 									</span>
-									<h5 class="description-header">0</h5>
+									<h5 class="description-header"><fmt:formatNumber value="${counts.totalCancelAmountMonth }" pattern="#,###" /></h5>
 									<span class="description-text">(원)</span>
 								</div>
 								<!-- /.description-block -->
@@ -305,7 +309,7 @@ ul {
 							<div class="col-sm-3 col-xs-6">
 								<div class="description-block">
 									<span class="description-percentage text-red">총 환불건수</span>
-									<h5 class="description-header">0</h5>
+									<h5 class="description-header">${counts.monthCancelCnt }</h5>
 									<span class="description-text">(건)</span>
 								</div>
 								<!-- /.description-block -->
@@ -344,30 +348,36 @@ ul {
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200221_100335502</a></td>
-										<td>하루다섯팩</td>
-										<td><span class="label label-info">입금대기</span></td>
-										<td>2020/02/21 10:03</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200219_163444881</a></td>
-										<td>하루한팩 (보임)</td>
-										<td><span class="label label-success">배송완료</span></td>
-										<td>2020/02/19 16:35</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200213_104244389</a></td>
-										<td>하루다섯팩</td>
-										<td><span class="label label-success">배송중</span></td>
-										<td>2020/02/13 10:42</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200213_104111821</a></td>
-										<td>하루다섯팩</td>
-										<td><span class="label label-warning">입금확인</span></td>
-										<td>2020/02/13 10:41</td>
-									</tr>
+									<c:forEach var="order" items="${orderList }">
+										<tr>
+											<td><a href="${pageContext.request.contextPath }/order/list">${fn:substring(order.orderNo,0,6) }-${fn:substring(order.orderNo,7,15) }</a></td>
+											<td>${order.productName }</td>
+											
+											<c:choose>
+												<c:when test="${order.orderStatusNo == 1 }">
+													<td><span class="label label-info">입금 대기</span></td>
+												</c:when>
+												<c:when test="${order.orderStatusNo == 2 }">
+													<td><span class="label label-warning">입금확인</span></td>
+												</c:when>
+												<c:when test="${order.orderStatusNo == 4 }">
+													<td><span class="label label-success">배송중</span></td>
+												</c:when>
+												<c:when test="${order.orderStatusNo == 5 }">
+													<td><span class="label label-success">배송완료</span></td>
+												</c:when>
+											</c:choose>
+											
+											<c:if test="${order.piStatus == 'ready' }">
+												<td>${order.piStatus == 'ready' ? ' - ':'' }</td>
+											</c:if>
+											<c:if test="${order.piStatus == 'paid' }">
+												<td><fmt:formatDate value="${order.paidAt}" pattern="yyyy-MM-dd" /> </td>
+											</c:if>
+											
+										</tr>
+									</c:forEach>
+									
 								</tbody>
 							</table>
 						</div>
@@ -390,50 +400,15 @@ ul {
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">모델명34</a></td>
-										<td>상품명23 (BEST,NEW - 보임)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2021-12-10</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">하루모델</a></td>
-										<td>하루다섯팩</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2020-01-29</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">로즈플라워</a></td>
-										<td>로즈플라워캔들</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2020-01-13</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">Yellow&Brown
-												Oriental</a></td>
-										<td>Yellow&Brown Oriental</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2020-01-08</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">Dental
-												Treats sub - sub</a></td>
-										<td>상품명 500 (best,event-숨김)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2019-10-29</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">하루한팩</a></td>
-										<td>하루한팩 (보임)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2019-07-13</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">모델명34</a></td>
-										<td>상품명23 (BEST,NEW - 보임)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2019-06-21</td>
-									</tr>
+									<c:forEach var="product" items="${productList }">
+										<tr>
+											<td><a href="${pageContext.request.contextPath }/product/list">${product.modelName }</a></td>
+											<td>${product.productName }</td>
+											<td>${product.categoryName }</td>
+											<td><td><fmt:formatDate value="${product.regDate}" pattern="yyyy-MM-dd" /></td>
+										</tr>
+									</c:forEach>
+									
 								</tbody>
 							</table>
 						</div>
@@ -467,11 +442,11 @@ ul {
 				</div>
 
 				<div style="text-align: center;">
-					<a href="/index.php?tpf=admin/product/list"
+					<a href="${pageContext.request.contextPath }/product/list"
 						class="btn btn-default btn-lg"><i class="fa fa-gift"></i> 상품
-						관리</a> <a href="/index.php?tpf=admin/setting/point"
+						관리</a> <a href="${pageContext.request.contextPath }/setting/point"
 						class="btn btn-default btn-lg"><i class="fa fa-dollar"></i>
-						적립금 관리</a> <a href="/index.php?tpf=admin/setting/coupon"
+						적립금 관리</a> <a href="${pageContext.request.contextPath }/setting/coupon"
 						class="btn btn-default btn-lg"><i class="fa fa-credit-card"></i>
 						쿠폰 관리</a>
 				</div>

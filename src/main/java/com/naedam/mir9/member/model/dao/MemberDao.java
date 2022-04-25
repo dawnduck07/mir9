@@ -125,6 +125,7 @@ public interface MemberDao {
 	// 탈퇴회원 검색 게시물 수
 	int selectSearchWithdrawalListCount(Map<String, Object> param);
 
+
 	// 탈퇴회원 삭제
 	int deleteWithdrawal(int[] memberNo);
 
@@ -147,6 +148,9 @@ public interface MemberDao {
 
 
 	
+
+	int selectTodayRegMemberCnt();
+
 
 
 

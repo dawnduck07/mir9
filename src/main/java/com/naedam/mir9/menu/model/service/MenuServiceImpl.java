@@ -172,6 +172,12 @@ public class MenuServiceImpl implements MenuService {
 		menuDao.updateChoiceMenu(code);
 	}
 	
+	//삭제 리비전 복구
+	@Override
+	public void updateRevision(int code) throws Exception {
+		menuDao.updateRevision(code);
+	}
+	
 	//헤더관리 선택삭제
 	@Override
 	public void deleteChoiceHead(int headNo) throws Exception {
@@ -183,6 +189,8 @@ public class MenuServiceImpl implements MenuService {
 	public void deleteMenu(int code) throws Exception {
 		menuDao.deleteMenu(code);
 	}
+
+
 
 
 

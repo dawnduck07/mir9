@@ -1,38 +1,21 @@
 CKEDITOR.editorConfig = function( config ) {
 	config.toolbarGroups = [
-		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
-		{ name: 'links' },
-		{ name: 'insert' },
-		{ name: 'forms' },
-		{ name: 'tools' },
-		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'others' },
+		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+		{ name: 'forms', groups: [ 'forms' ] },
+		{ name: 'links', groups: [ 'links' ] },
+		{ name: 'insert', groups: [ 'insert' ] },
+		{ name: 'tools', groups: [ 'tools' ] },
+		{ name: 'document', groups: [ 'mode', 'doctools', 'document' ] },
 		'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		{ name: 'styles' },
-		{ name: 'colors' },
-		{ name: 'about' }
+		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+		{ name: 'styles', groups: [ 'styles' ] },
+		{ name: 'colors', groups: [ 'colors' ] },
+		{ name: 'about', groups: [ 'about' ] },
+		'/',
+		{ name: 'others', groups: [ 'others' ] }
 	];
 
-	// Remove some buttons provided by the standard plugins, which are
-	// not needed in the Standard(s) toolbar.
-	config.removeButtons = 'Underline,Subscript,Superscript';
-
-	// Set the most common block elements.
-	config.format_tags = 'p;h1;h2;h3;pre';
-
-	// Simplify the dialog windows.
-	config.removeDialogTabs = 'image:advanced;link:advanced';
-
-	config.font_defaultLabel = "굴림";
-    config.font_names = "굴림;돋움;바탕;궁서;굴림체;돋움체;바탕체;궁서체;나눔고딕;나눔명조;"+
-		'Arial;Comic Sans MS;Courier New;Lucida Sans Unicode;monospace;sans-serif;serif;Tahoma;Times New Roman;Verdana';
-	config.extraPlugins = 'codemirror';		
-	config.allowedContent = true;
-	config.fillEmptyBlocks = false; // Prevent filler nodes in all empty blocks.
-	config.protectedSource.push(/<p[^>]*><\/p>/g);
-	config.protectedSource.push(/<span[^>]*><\/span>/g);
-	config.protectedSource.push(/<i[^>]*><\/i>/g);	
+	config.removeButtons = 'Save,NewPage,ExportPdf,Preview,Templates,Find,Replace,Format,Styles,ShowBlocks,Smiley,PageBreak,Iframe,BidiLtr,BidiRtl,Language,Blockquote,CreateDiv,CopyFormatting,Underline,Superscript,Subscript,HiddenField,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,SelectAll';
 };

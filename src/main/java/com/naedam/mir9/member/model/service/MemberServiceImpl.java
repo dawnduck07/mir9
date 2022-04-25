@@ -283,6 +283,12 @@ public class MemberServiceImpl implements MemberService {
 
 	
 
+	@Override
+	public int selectTodayRegMemberCnt() {
+		// TODO Auto-generated method stub
+		return memberDao.selectTodayRegMemberCnt();
+	}
+
 	
 
 

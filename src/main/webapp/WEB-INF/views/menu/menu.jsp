@@ -8,16 +8,22 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판 관리" name="title"/>
 </jsp:include>
-
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+<script src="https://mir9.co.kr/resource/js/ckeditor4.7.2/ckeditor.js"></script>
+<!-- content-wrapper -->
+<div class="content-wrapper" style="min-height: 868px;">
 <style>
 .table {
     margin-bottom : 0px;
 }
+body.modal-open {
+    overflow: hidden;
+}
+.modal-body {
+    overflow: open;
+}
 </style>
-<div class="content-wrapper">
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-<script src="https://mir9.co.kr/resource/js/ckeditor4.7.2/ckeditor.js"></script>
 
 	<section class="content-header">
 	    <h1>
@@ -51,7 +57,7 @@
 	</section>
 	
 	<!-- 리비젼 보기 부터 -->
-	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true" style="display: none;">
+	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
     <div class="modal-dialog" style="width:90%;">
         <div class="modal-content">
             <form name="form_register" method="post" onsubmit="return false;" action="/mir9/menu/addMenu?${_csrf.parameterName}=${_csrf.token}">
@@ -117,7 +123,7 @@
             </tr>
             <tr>
                 <td align="left" colspan="10" style="padding:0">
-                <textarea name="content" id="content-editor" onfocus="javascript:this.value=''" rows="10" cols="80" "></textarea>
+                <textarea name="content" id="content-editor" onfocus="javascript:this.value=''" rows="10" cols="80"  style="visibility: hidden; display: none; "></textarea>
                 </td>
             </tr>
             </tbody></table>
@@ -130,6 +136,7 @@
             </div>
         </div>
     </div>
+    
     
     <!-- update모달 -->
 	<div class="modal fade" id="modalContent2" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true" style="display: none;">
@@ -161,9 +168,9 @@
             <tbody><tr>
                 <td class="menu">메뉴명</td>
                 <td align="left"><input type="text" name="title" id="getTitle" class="form-control input-sm"></td>
-                <td class="menu">url &nbsp;&nbsp;<input type="checkbox" name="is_outer_link" id="getIs_outer_link" onclick="checkOuterLink()" value="y"> <small>외부링크</small></td>
+                <td class="menu">url &nbsp;&nbsp;<input type="checkbox" name="is_outer_link" id="getIs_outer_link" onclick="checkOuterLink2()"> <small>외부링크</small></td>
                 <td align="left">
-	                <select id="displayOuterLink" name="target" id="getTarget" class="form-control input-sm" style="width: 25%; padding: 0px; margin-right: 5px; float: left; display: none;">
+	                <select id="displayOuterLink2" name="target" class="form-control input-sm" style="width: 25%; padding: 0px; margin-right: 5px; float: left; display: none;">
 		                <option value="_blank">새창</option>
 		                <option value="_self">현재창</option>
 	                </select>
@@ -199,7 +206,7 @@
             </tr>
             <tr>
                 <td align="left" colspan="10" style="padding:0">
-                <textarea name="content" id="content-editor2" onfocus="javascript:this.value=''" rows="10" cols="80" "></textarea>
+                <textarea name="content" id="content-editor2" onfocus="javascript:this.value=''" rows="10" cols="80" style="visibility: hidden; display: none; "></textarea>
                 </td>
             </tr>
             </tbody></table>
@@ -208,11 +215,12 @@
 
             </div>
             <div class="modal-footer">
-            <button type="button" id="displayButton" onclick="register2();" class="btn btn-primary">저장하기</button>
+            <button type="button" id="displayButton2" onclick="register2();" class="btn btn-primary">저장하기</button>
             <button type="button" class="btn btn-success">미리보기</button>
             </div>
         </div>
-    </div>    
+    </div>
+</div>        
     
 	
 	<div class="modal fade" id="modalManual" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
@@ -482,6 +490,10 @@
             if($('[name=is_outer_link]').is(':checked')) $('#displayOuterLink').show();
             else $('#displayOuterLink').hide();
         }
+        function checkOuterLink2() {
+            if($('[id=getIs_outer_link]').is(':checked')) $('#displayOuterLink2').show();
+            else $('#displayOuterLink2').hide();
+        }        
         function checkMeta() {
             if($('[name=is_meta]').is(':checked')) $('#displayMeta').show();
             else $('#displayMeta').hide();
@@ -502,14 +514,19 @@
             form_register.target = 'iframe_process';
             form_register.submit();
             alert("등록 완료")
-            location.reload();
+            $('#iframe_tree').attr('src', '${pageContext.request.contextPath}/menu/tree');
+			$('#iframe_list').attr('src', '${pageContext.request.contextPath}/menu/menuList');
+            //location.reload();
         }
         function register2() {
             // if(form_register.title.value == '') { alert('메뉴명이 입력되지 않았습니다.'); form_register.title.focus(); return false;}
             // if(form_register.url.value == '') { alert('url이 입력되지 않았습니다.'); form_register.url.focus(); return false;}
             form_register2.target = 'iframe_process';
             form_register2.submit();
-            location.reload();
+            alert("메뉴가 수정되었습니다.")
+			$('#iframe_tree').attr('src', '${pageContext.request.contextPath}/menu/tree');
+			$('#iframe_list').attr('src', '${pageContext.request.contextPath}/menu/menuList');            
+            //location.reload();
         }        
         function onclickManual() {
             $('#modalManual').modal({backdrop:'static', show:true});
@@ -538,15 +555,16 @@
             if (json_data.code == 1) parent.$('[name=url]').prop('readonly', true); // 메인 페이지는 url 변경 불가
             else  parent.$('[name=url]').prop('readonly', false);
             if(json_data.is_outer_link == 'y') {
-                parent.$('[name=is_outer_link]').prop('checked', true);
-                parent.$('#displayOuterLink').show();
+            	parent.$('[id=getIs_outer_link]').prop('checked', true);
+                parent.$('#displayOuterLink2').show();
+                
             }
             else {
-                parent.$('[name=is_outer_link]').prop('checked', false);
-                parent.$('#displayOuterLink').hide();
+            	parent.$('[id=getIs_outer_link]').prop('checked', false);
+                parent.$('#displayOuterLink2').hide();
             }
             if (json_data.is_outer_link == 'n') parent.$('[name=is_outer_link]').prop('checked', false);
-            else parent.$('[name=is_outer_link]').prop('checked', true);
+            else parent.$('[name=is_outer_link]').prop('checked', false);
             parent.$('[name=target]').val(json_data.target);
             parent.$('[name=meta_title]').val(json_data.meta_title);
             parent.$('[name=meta_description]').val(json_data.meta_description);
@@ -596,9 +614,14 @@
         function closeRevision() {
             $('#modalRevision').modal('hide');
         }
-        function infoRevision(code) {
+        function infoRevision(code, revisionCode) {
             $('#modalRevision').modal('hide');
-            parent.$('#modalContent').modal({backdrop:'static', show:true});
+            if(revisionCode == 2){
+            	$('#displayButton2').html('복구하기');
+            	$('#displayButton2').attr("onclick", "fncRestore("+code+")");
+            	$('#displayButton2').attr("id", "restoreButton");
+            }
+            parent.$('#modalContent2').modal({backdrop:'static', show:true});
             // 리비젼 정보 보여주기
             $.ajax({
             	url:'/mir9/menu/json/getMenu?${_csrf.parameterName}=${_csrf.token}',
@@ -639,7 +662,8 @@
         			} ,
         			success : function(result){
         				alert("해당 메뉴가 삭제 되었습니다.")
-        				 parent.formDeleteRevision.target = 'iframe_process';
+        				$('#iframe_tree').attr('src', '${pageContext.request.contextPath}/menu/tree');
+    					$('#iframe_list').attr('src', '${pageContext.request.contextPath}/menu/menuList');
         				$(obj).parents('tr').remove();
         			}
         			
@@ -648,6 +672,27 @@
           		//$("span[id='"+fileNo+"']").remove();
         		}
             
+        }
+        function fncRestore(code){
+        	$.ajax({
+    			url : "/mir9/menu/json/updateRevision/"+code,
+    			method : "GET",
+    			dataType : "JSON",	
+    			headers : {
+    				"Accept" : "application/json",
+    				"Content-Type" : "application/json"	 						
+    			} ,
+    			success : function(result){
+    				alert("메뉴가 복구 되었습니다.")
+    				$('#modalContent2').modal('hide');
+    				$('#restoreButton').attr("id", "displayButton2");
+    				$('#displayButton2').html('저장하기');
+            		$('#displayButton2').attr("onclick", "register2()");
+    				$('#iframe_tree').attr('src', '${pageContext.request.contextPath}/menu/tree');
+    				$('#iframe_list').attr('src', '${pageContext.request.contextPath}/menu/menuList');
+    			}
+    			
+    		})
         }
         
         function checkHeight() {
@@ -666,4 +711,4 @@
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 
-
+</body></html>
