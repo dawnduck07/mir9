@@ -35,14 +35,14 @@ public class MenuRestController {
 	public Map getRevisionList(@RequestParam("code") int code) throws Exception{
 		System.out.println("/json/getRevisionList 시작");
 		
-		Menu menu = new Menu();
-		menu.setCode(code);
+		Menu menu = menuService.getMenu(code);
+		menu.setOriginNo(code);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("menu", menu);
 		
 		Map<String, Object> resultMap = menuService.getRevisionList(map);
 		
-		return resultMap;				
+		return resultMap;
 	}
 	
 	@PostMapping(value="json/deleteRevisionList")
@@ -62,6 +62,18 @@ public class MenuRestController {
 		Boolean result = false;
 		if(code != 0) {
 			menuService.deleteMenu(code);
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	@GetMapping(value="json/updateRevision/{code}")
+	public Boolean updateRevision(@PathVariable("code") int code) throws Exception{
+		System.out.println("json/updateRevision 시작");
+		Boolean result = false;
+		if(code != 0) {
+			menuService.updateRevision(code);
 			result = true;
 		}
 		

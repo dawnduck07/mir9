@@ -54,6 +54,9 @@ public interface MenuService {
 	//메타 수정
 	public int updateMeta(Meta meta) throws Exception;
 	
+	//삭제 리비전 복구
+	public void updateRevision(int code) throws Exception;
+	
 	//메뉴 정보
 	public Menu getMenu(int code) throws Exception;
 	
