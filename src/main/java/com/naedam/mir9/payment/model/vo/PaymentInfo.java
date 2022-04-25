@@ -30,6 +30,7 @@ public class PaymentInfo implements Serializable {/**
 	private String name;
 	private Date paidAt;
 	private String payMethod;
+	private String status;
 	
 
 }

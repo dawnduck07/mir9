@@ -1,16 +1,16 @@
 package com.naedam.mir9.payment.model.service;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
-import com.naedam.mir9.payment.model.vo.TempPayInfo;
+import com.naedam.mir9.payment.model.vo.PaymentInfo;
+
 
 public interface PaymentService {
-	
-	String getToken() throws IOException;
-	
-	TempPayInfo paymentInfo(String imp_uid, String access_token) throws IOException;
-	
-	public void payMentCancle(String access_token, String imp_uid, String amount, String reason);
+
+	int insertPaymentInfo(Map<String, Object> param);
+
+	List<PaymentInfo> selectPaymentInfoList();
 	
 }
 

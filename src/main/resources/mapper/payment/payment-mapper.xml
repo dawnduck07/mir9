@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payment">
+
+  <select id="selectPaymentInfoList" resultType="paymentInfo">
+  	select * from payment_info
+  </select> 	 
+  <insert id="insertPaymentInfo">
+  	insert into payment values(#{paid_amount}, #{imp_uid}, #{merchant_uid}, buyer_addr}, #{buyer_name}, #{buyer_postcode}, #{buyer_tel}, #{cancle_amount}, #{cancel_reason}, #{cancel_at}, #{name}, #{paid_at}, #{pay_method}, #{status)
+  </insert>
+</mapper>
