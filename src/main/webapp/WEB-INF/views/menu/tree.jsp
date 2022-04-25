@@ -32,19 +32,32 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-142394166-1');
+
+function displayTree(code){
+	
+	var tree = document.getElementById("i_div"+code+"");
+	if(tree.style.display == 'none'){
+		tree.style.display = 'block';
+		$("img[name='j_img"+code+"']").attr("src", "${pageContext.request.contextPath}/resources/imgs/tree/plusbottom.gif")
+	}else{
+		tree.style.display = 'none';
+		$("img[name='j_img"+code+"']").attr("src", "${pageContext.request.contextPath}/resources/imgs/tree/minusbottom.gif")
+	}
+	
+}
 </script>
 
     <!--[if lt IE 9]>
     <script type="text/javascript" src="/html/js/html5shiv.js"></script>
     <script type="text/javascript" src="/html/js/IE9.js"></script>
     <![endif]-->
-    <script src="/html/js/common.js" type="text/javascript"></script>
+    
     <script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
 </head>
 
 <body>
 <iframe name="iframe_process" width="0" height="0" frameborder="0" style="display:none;"></iframe>
-<script src="/html/js/common.js" type="text/javascript"></script>
+
 <script src="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
 <style>
 table td {
@@ -98,15 +111,14 @@ var tree_tpl = {
 	<tbody>
 		<tr>
 			<td nowrap="">
-				<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menuList');" onclick="return trees[0].tmG(0)" class="t0i" id="i_txt0_0">
+				<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menuList');">
 					<img src="${pageContext.request.contextPath}/resources/imgs/tree/base.gif" border="0" align="absbottom" name="i_img0_0" class="t0im">Home
 				</a>
 			</td>
 		</tr>
 	</tbody>
 </table>
-<div id="i_div0_0" style="display: block;">
-	<c:forEach var="menu" items="${list}">
+<c:forEach var="menu" items="${list}" varStatus="status">
 		<table cellpadding="0" cellspacing="0" border="0">
 			<tbody>
 				<input type="hidden" name="code" value="${menu.code}">
@@ -115,47 +127,70 @@ var tree_tpl = {
 					<tr>
 						<td nowrap="">
 							<img src="${pageContext.request.contextPath}/resources/imgs/tree/joinbottom.gif" border="0" align="absbottom">
-								<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu.code}&originNo=${menu.originNo}&ord=${menu.ord}');" onclick="return trees[0].tmG(1)" class="t0i" id="i_txt0_1">
-							<img src="${pageContext.request.contextPath}/resources/imgs/page.gif" border="0" align="absbottom" name="i_img0_1" class="t0im">메인페이지</a>
+								<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu.code}&originNo=${menu.originNo}&ord=${menu.ord}');"class="t0i" id="i_txt0_1">
+							<img src="${pageContext.request.contextPath}/resources/imgs/tree/page.gif" border="0" align="absbottom" name="i_img0_1" class="t0im">메인페이지</a>
 						</td>
 					</tr>
 				</c:if>
 				<c:if test="${menu.code != 1}">
 					<tr>
-						<td nowrap="">
-							<a href="javascript: trees[0].tmB(2)" onmouseover="trees[0].tmJ(2)" onmouseout="trees[0].tmH(2)">
-								<img src="${pageContext.request.contextPath}/resources/imgs/tree/minusbottom.gif" border="0" align="absbottom" name="j_img0_2">
-							</a>
-							<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu.code}&originNo=${menu.originNo}&ord=${menu.ord}');" onclick="return trees[0].tmG(2)" class="t0i" id="i_txt0_2">
-								<img src="${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif" border="0" align="absbottom" name="i_img0_2" class="t0im">${menu.title}
-							</a>
-						</td>
+						<c:if test="${!status.last}">
+							<td nowrap="">
+								<a>
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/minusbottom.gif" border="0" align="absbottom" name="j_img${menu.code}" onclick="displayTree(${menu.code})">
+								</a>
+								<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu.code}&originNo=${menu.originNo}&ord=${menu.ord}');">
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif" border="0" align="absbottom" name="i_img0_2" class="t0im">${menu.title}
+								</a>
+							</td>
+						</c:if>
+						<c:if test="${status.last}">
+							<td nowrap="">
+								<a>
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/minus.gif" border="0" align="absbottom" name="j_img${menu.code}" onclick="displayTree(${menu.code})">
+								</a>
+								<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu.code}&originNo=${menu.originNo}&ord=${menu.ord}');">
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/folderopen.gif" border="0" align="absbottom" name="i_img0_2" class="t0im">${menu.title}
+								</a>
+							</td>
+						</c:if>						
 					</tr>
 				</c:if>
 			</tbody>
 		</table>
-		<c:forEach var="menu2" items="${list2}">
+<div id="i_div${menu.code}" style="display: block;">		
+		<c:forEach var="menu2" items="${list2}" varStatus="status2">
 		  <c:if test="${menu.originNo == menu2.originNo}">
 			<div id="i_div0_2" style="display: block;">
 				<table cellpadding="0" cellspacing="0" border="0">
 					<tbody>
 						<tr>
-							<td nowrap="">
-								<img src="${pageContext.request.contextPath}/resources/imgs/tree/line.gif" border="0" align="absbottom">
-								<img src="${pageContext.request.contextPath}/resources/imgs/tree/joinbottom.gif" border="0" align="absbottom">
-									<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu2.code}&originNo=${menu2.originNo}&ord=${menu2.ord}');" onclick="return trees[0].tmG(3)" class="t0i" id="i_txt0_3">
-										<img src="${pageContext.request.contextPath}/resources/imgs/tree/page.gif" border="0" align="absbottom" name="i_img0_3" class="t0im">${menu2.title}
-									</a>
-							</td>
+							<c:if test="${!status.last}">
+								<td nowrap="">
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/line.gif" border="0" align="absbottom">
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/join.gif" border="0" align="absbottom">
+										<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu2.code}&originNo=${menu2.originNo}&ord=${menu2.ord}');" >
+											<img src="${pageContext.request.contextPath}/resources/imgs/tree/page.gif" border="0" align="absbottom" name="i_img0_3" class="t0im">${menu2.title}
+										</a>
+								</td>
+							</c:if>
+							<c:if test="${status.last}">
+								<td nowrap="">
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/empty.gif" border="0" align="absbottom">
+									<img src="${pageContext.request.contextPath}/resources/imgs/tree/join.gif" border="0" align="absbottom">
+										<a href="javascript:parent.list.location.replace('${pageContext.request.contextPath}/menu/menu2?code=${menu2.code}&originNo=${menu2.originNo}&ord=${menu2.ord}');" >
+											<img src="${pageContext.request.contextPath}/resources/imgs/tree/page.gif" border="0" align="absbottom" name="i_img0_3" class="t0im">${menu2.title}
+										</a>
+								</td>
+							</c:if>							
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		  </c:if>
 		</c:forEach>
-	</c:forEach>
-</div>
-
+	</div>
+</c:forEach>
 </body>
 </html>
 
