@@ -40,7 +40,7 @@ public class OrderDetail implements Serializable {
 	private String adminMemo;
 	private int orderStatusNo;
 	private String statusName;
-	private Date payDate;
+	private Date paidAt;
 	private int OrderInfoNo;
 	private Date orderStatusUpdate;
 	private int deliComNo;

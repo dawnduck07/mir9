@@ -25,6 +25,45 @@ ul {
 	color: #97989b;
 }
 </style>
+<script>
+
+
+	function fncPostList(boardNo){
+		
+		$("li[name='postData']").remove();
+		
+		$.ajax({
+			url : "/mir9/board/json/getPostList/"+boardNo,
+			method : "GET",
+			dataType : "JSON",
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"	 						
+			} ,
+			success : function(JSONData, status){
+				if(status == 'success'){
+					if(JSONData.list.length != 0){
+						for(var i = 0; i <= JSONData.list.length; i++){
+							var post = JSONData.list;
+							display = '<li name="postData">'
+									+ '<a href="/mir9/board/postList?boardNo='+post[i].postBoard.boardNo+'">'+post[i].postTitle+''
+									+ '<span class="pull-right cs-m-right20">'+post[i].postDate+'</span>'
+									+ '</a>'
+									+ '</li>';
+							$("ul[class='list']").append(display);
+						}
+					}else if(JSONData.list.length == 0){
+						display = '<li name="postData">등록된 게시물이 없습니다.</li>';
+						$("ul[class='list']").append(display);
+					}
+				}
+			},
+			error:function(request, status, error){
+				alert("에러")
+			}
+		});
+	}
+</script>
 
 	<section class="content-header">
 		<h1>
@@ -348,30 +387,36 @@ ul {
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200221_100335502</a></td>
-										<td>하루다섯팩</td>
-										<td><span class="label label-info">입금대기</span></td>
-										<td>2020/02/21 10:03</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200219_163444881</a></td>
-										<td>하루한팩 (보임)</td>
-										<td><span class="label label-success">배송완료</span></td>
-										<td>2020/02/19 16:35</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200213_104244389</a></td>
-										<td>하루다섯팩</td>
-										<td><span class="label label-success">배송중</span></td>
-										<td>2020/02/13 10:42</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/order/list">200213_104111821</a></td>
-										<td>하루다섯팩</td>
-										<td><span class="label label-warning">입금확인</span></td>
-										<td>2020/02/13 10:41</td>
-									</tr>
+									<c:forEach var="order" items="${orderList }">
+										<tr>
+											<td><a href="${pageContext.request.contextPath }/order/list">${fn:substring(order.orderNo,0,6) }-${fn:substring(order.orderNo,7,15) }</a></td>
+											<td>${order.productName }</td>
+											
+											<c:choose>
+												<c:when test="${order.orderStatusNo == 1 }">
+													<td><span class="label label-info">입금 대기</span></td>
+												</c:when>
+												<c:when test="${order.orderStatusNo == 2 }">
+													<td><span class="label label-warning">입금확인</span></td>
+												</c:when>
+												<c:when test="${order.orderStatusNo == 4 }">
+													<td><span class="label label-success">배송중</span></td>
+												</c:when>
+												<c:when test="${order.orderStatusNo == 5 }">
+													<td><span class="label label-success">배송완료</span></td>
+												</c:when>
+											</c:choose>
+											
+											<c:if test="${order.piStatus == 'ready' }">
+												<td>${order.piStatus == 'ready' ? ' - ':'' }</td>
+											</c:if>
+											<c:if test="${order.piStatus == 'paid' }">
+												<td><fmt:formatDate value="${order.paidAt}" pattern="yyyy-MM-dd" /> </td>
+											</c:if>
+											
+										</tr>
+									</c:forEach>
+									
 								</tbody>
 							</table>
 						</div>
@@ -394,50 +439,15 @@ ul {
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">모델명34</a></td>
-										<td>상품명23 (BEST,NEW - 보임)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2021-12-10</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">하루모델</a></td>
-										<td>하루다섯팩</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2020-01-29</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">로즈플라워</a></td>
-										<td>로즈플라워캔들</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2020-01-13</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">Yellow&Brown
-												Oriental</a></td>
-										<td>Yellow&Brown Oriental</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2020-01-08</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">Dental
-												Treats sub - sub</a></td>
-										<td>상품명 500 (best,event-숨김)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2019-10-29</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">하루한팩</a></td>
-										<td>하루한팩 (보임)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2019-07-13</td>
-									</tr>
-									<tr>
-										<td><a href="/index.php?tpf=admin/product/list">모델명34</a></td>
-										<td>상품명23 (BEST,NEW - 보임)</td>
-										<td>Dental Treats sub - sub</td>
-										<td>2019-06-21</td>
-									</tr>
+									<c:forEach var="product" items="${productList }">
+										<tr>
+											<td><a href="${pageContext.request.contextPath }/product/list">${product.modelName }</a></td>
+											<td>${product.productName }</td>
+											<td>${product.categoryName }</td>
+											<td><td><fmt:formatDate value="${product.regDate}" pattern="yyyy-MM-dd" /></td>
+										</tr>
+									</c:forEach>
+									
 								</tbody>
 							</table>
 						</div>
@@ -471,11 +481,11 @@ ul {
 				</div>
 
 				<div style="text-align: center;">
-					<a href="/index.php?tpf=admin/product/list"
+					<a href="${pageContext.request.contextPath }/product/list"
 						class="btn btn-default btn-lg"><i class="fa fa-gift"></i> 상품
-						관리</a> <a href="/index.php?tpf=admin/setting/point"
+						관리</a> <a href="${pageContext.request.contextPath }/setting/point"
 						class="btn btn-default btn-lg"><i class="fa fa-dollar"></i>
-						적립금 관리</a> <a href="/index.php?tpf=admin/setting/coupon"
+						적립금 관리</a> <a href="${pageContext.request.contextPath }/setting/coupon"
 						class="btn btn-default btn-lg"><i class="fa fa-credit-card"></i>
 						쿠폰 관리</a>
 				</div>
@@ -486,33 +496,31 @@ ul {
 				<!-- Custom Tabs -->
 				<div class="nav-tabs-custom">
 					<ul class="nav nav-tabs">
-						<li class="active"><a aria-expanded="true" href="#tab_1"
-							data-toggle="tab">공지사항</a></li>
-						<li class=""><a aria-expanded="true" href="#tab_2"
-							data-toggle="tab">자주하는 질문</a></li>
-						<li class=""><a aria-expanded="true" href="#tab_3"
-							data-toggle="tab">1:1 문의</a></li>
-						<li class="pull-right"><a class="text-muted"
-							href="/index.php?tpf=admin/board/list&board_code=1">더보기 <i
-								class="fa fa-arrow-circle-right"></i></a></li>
+						<c:forEach var="board" items="${boardList}" varStatus="status">
+							<c:if test="${status.first}">
+								<li class="active">
+									<a aria-expanded="true" href="#tab_${board.boardNo}" data-toggle="tab" onclick="fncPostList(${board.boardNo})" >${board.boardTitle}</a>
+								</li>
+							</c:if>
+							<c:if test="${!status.first}">
+								<li class="">
+									<a aria-expanded="true" href="#tab_${board.boardNo}" data-toggle="tab" onclick="fncPostList(${board.boardNo})">${board.boardTitle}</a>
+								</li>
+							</c:if>							
+						</c:forEach>
+						<li class="pull-right">
+							<a class="text-muted" href="/index.php?tpf=admin/board/list&board_code=1">더보기 
+								<i class="fa fa-arrow-circle-right"></i>
+							</a>
+						</li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_1">
 							<ul class="list">
-								<li><a href="/index.php?tpf=admin/board/list&board_code=1">공지사항<span
-										class="pull-right cs-m-right20">2020-02-06</span></a></li>
+								
 							</ul>
 						</div>
-						<div class="tab-pane " id="tab_2">
-							<ul class="list">
-								<li>등록된 게시물이 없습니다.</li>
-							</ul>
-						</div>
-						<div class="tab-pane " id="tab_3">
-							<ul class="list">
-								<li>등록된 게시물이 없습니다.</li>
-							</ul>
-						</div>
+						
 					</div>
 					<!-- /.tab-content -->
 				</div>

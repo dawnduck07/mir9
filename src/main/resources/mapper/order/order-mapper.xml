@@ -106,6 +106,10 @@
 	SELECT COUNT(*) FROM tb_order WHERE YEAR(order_date) = YEAR(SYSDATE()) AND MONTH(order_date) = MONTH(SYSDATE())
   </select>
   
+  <select id="selectOrderDetailList" resultType="orderDetail">
+  	select * from v_order_detail ORDER BY paid_at DESC LIMIT 10
+  </select>
+  
   <update id="updateOrderStaus">
   	update tb_order set order_status_no = #{statusNo}, order_status_update = sysdate()  where order_no = #{orderNo}
   </update>

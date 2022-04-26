@@ -262,6 +262,10 @@ function register() {
         if(!checkMobile(form_register.mobile1.value+form_register.mobile2.value+form_register.mobile3.value)) { form_register.mobile.focus(); return false;}
     }
     form_register.submit();
+    setTimeout(function() {
+    	 location.reload();
+    	}, 700);
+    
 }
 
 function viewSkinPreview(parameter) {

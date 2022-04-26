@@ -244,12 +244,86 @@ public class MemberServiceImpl implements MemberService {
 	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
 		return memberDao.selectSearchWithdrawalListCount(param);
 	}
+ 
+	// 탈퇴회원 삭제
+	@Override
+	public int deleteWithdrawal(int[] memberNo) {
+		return memberDao.deleteWithdrawal(memberNo);
+	}
+
+	// 주소번호 조회
+	@Override
+	public List<Address> findAddressNo(int[] memberNo) {
+		return memberDao.findAddressNo(memberNo);
+	}
+
+	// 주소 삭제
+	@Override
+	public int deleteWithdrawalAddress(int addressNo) {
+		return memberDao.deleteWithdrawalAddress(addressNo);
+	}
+
+	// 주소록 삭제
+	@Override
+	public int deleteWithdrawalAddressBook(int[] memberNo) {
+		return memberDao.deleteWithdrawalAddressBook(memberNo);
+	}
+
+	// 권한 삭제
+	@Override
+	public int deleteWithdrawalAuthority(int[] memberNo) {
+		return memberDao.deleteWithdrawalAuthority(memberNo);
+	}
+
+	
+
+	
+
+
+
+	
 
 	@Override
 	public int selectTodayRegMemberCnt() {
 		// TODO Auto-generated method stub
 		return memberDao.selectTodayRegMemberCnt();
 	}
+
+	// 탈퇴회원 조회
+	@Override
+	public WithdrawalMember selectOneMemberByWithdrawalMemberNo(int memberNo) {
+		return memberDao.selectOneMemberByWithdrawalMemberNo(memberNo);
+	}
+
+	// 주소록 삭제
+	@Override
+	public int deleteAddressBookByMemberNo(int[] memberNo) {
+		return memberDao.deleteAddressBookByMemberNo(memberNo);
+	}
+
+	// 권한 삭제
+	@Override
+	public int deleteAuthorityByMemberNo(int[] memberNo) {
+		return memberDao.deleteAuthorityByMemberNo(memberNo);
+	}
+
+	@Override
+	public List<Address> findMemberAddressList(int[] memberNo) {
+		return memberDao.findMemberAddressList(memberNo);
+	}
+
+	@Override
+	public int deleteMemoByMemberNo(int[] memberNo) {
+		return memberDao.deleteMemoByMemberNo(memberNo);
+	}
+
+	// 메모 영구삭제
+	@Override
+	public int deleteWithdrawalMemo(int[] memberNo) {
+		return memberDao.deleteWithdrawalMemo(memberNo);
+	}
+
+	
 
 	
 

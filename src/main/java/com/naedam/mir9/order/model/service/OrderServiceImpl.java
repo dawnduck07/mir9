@@ -104,6 +104,12 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.selectMonthOrderCnt();
 	}
 
+	@Override
+	public List<OrderDetail> selectOrderDetailList() {
+		// TODO Auto-generated method stub
+		return orderDao.selectOrderDetailList();
+	}
+
 
 	
 	

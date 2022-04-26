@@ -21,6 +21,13 @@
 	width: 400px;
 }
 </style>
+<script>
+<!-- redirect Msg 처리 -->
+<c:if test="${not empty msg}">
+		alert("${msg}");
+		location.reload();
+</c:if>
+</script>
 
 	<section class="content-header">
 	<h1>
@@ -62,12 +69,13 @@
 							</div>
 						</div>
 					</form>
+					<form:form id="withdrawalDeleteFrm" name="withdrawalDeleteFrm" action="${pageContext.request.contextPath}/member/withdrawalDelete.do" method="POST">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<table class="table table-bordered table-hover checkbox-group">
 						<thead>
 							<tr>
 								<td style="width: 30px;">
 									<input type="checkbox" name="select_all" id="checkAll" /> 
-									<input type="hidden" id="memberNo" name="memberNo" value="" />
 								</td>
 								<td style="width: 110px;">아이디</td>
 								<td style="width: 110px;">이름</td>
@@ -79,10 +87,11 @@
 							</tr>
 						</thead>
 						<tbody id="tbody">
+						<c:if test="${not empty withdrawalMemberList}">
 							<c:forEach items="${withdrawalMemberList}" var="withdrawal">
 								<tr>
 									<td style="width: 30px;">
-										<input type="checkbox" class="member-is-checked" name="list[]" value="${withdrawal.memberNo}" data-target="${withdrawal.memberNo}" />
+										<input type="checkbox" name="" class="member-is-checked" data-target="${withdrawal.memberNo}"/>
 									</td>
 									<td style="width: 110px;">${withdrawal.id}</td>
 									<td style="width: 110px;">${withdrawal.name}</td>
@@ -99,15 +108,20 @@
 									</td>
 								</tr>
 							</c:forEach>
+							</c:if>
+							<c:if test="${empty withdrawalMemberList}">
+								<tr><td colspan="10"><br>등록된 자료가 없습니다.<br><br></td></tr>  
+							</c:if>
 						</tbody>
 						<!-- <tr>
 							<td colspan="10"><br>등록된 자료가 없습니다.<br>
 							<br></td>
 						</tr> -->
 					</table>
+					</form:form>
 					<br>
 					<button type="button"
-						onclick="selectDelete('delete','선택된 회원을 삭제하시겠습니까?');"
+						id="withdrawalDeleteBtn"
 						class="btn btn-danger">
 						<i class="fa fa-minus-square"></i> 선택삭제
 					</button>
@@ -178,8 +192,7 @@
 							</tr>
 							<tr>
 								<td class="menu">이름</td>
-								<td align="left"><input type="text" name="name"
-									class="form-control input-sm" style="width: 30%;" /></td>
+								<td align="left"><input type="text" name="firstName" id="firstName" class="form-control input-sm" style="width: 30%; float: left;" placeholder="이름" /> <input type="text" name="lastName" id="lastName" class="form-control input-sm" style="width: 30%;" placeholder="성" /></td>
 							</tr>
 							<tr>
 								<td class="menu">휴대폰</td>
@@ -207,20 +220,15 @@
 							</tr>
 							<tr>
 								<td class="menu">주소</td>
-								<td align="left"><input type="text" name="zipcode"
-									id="zipcode" readonly class="form-control input-sm"
-									style="width: 15%; background-color: #dddddd; float: left;" />&nbsp;
-									<button type="button" onclick="callAddress();"
-										class="btn btn-sm btn-default">주소입력</button>
-									<br> <input type="text" class="input-addr" id="address"
-									placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152"
-									style="display: none; margin: 5px 0; width: 100%;"> <input
-									type="text" name="addr" id="addr" readonly
-									class="form-control input-sm"
-									style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
-									<input type="text" name="addr_etc" id="addr_etc"
-									placeholder="상세주소" class="form-control input-sm"
-									style="width: 100%;" /></td>
+								<td align="left">
+									<input type="text" name="addressZipcode" id="addressZipcode" readonly class="form-control input-sm" style="width: 15%; background-color: #dddddd; float: left;" />
+									&nbsp;
+									<button type="button" onclick="callAddress();" class="btn btn-sm btn-default">주소입력</button>
+									<br> 
+									<input type="text" class="input-addr" id="address" placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152" style="display: none; margin: 5px 0; width: 100%;"> 
+									<input type="text" name="addrressMain" id="addrressMain" readonly class="form-control input-sm" style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
+									<input type="text" name="addressSub" id="addressSub" placeholder="상세주소" class="form-control input-sm" style="width: 100%;" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">메모</td>
@@ -342,6 +350,94 @@ $(document).ready(function(){
 	});
 });
 
+// 체크박스 전체 선택
+$(".checkbox-group").on("click", "#checkAll", ((e)=>{
+	let checked = $(e.target).is(":checked");
+	console.log("전체 선택 : " + checked);
+	
+	if(checked){
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", true);
+	} else {
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", false);
+	}
+}));
+
+// 체크박스 개별 선택
+$(document).on("click", ".member-is-checked", function(){
+	let isChecked = true;
+	console.log("개별 선택 : " + isChecked);
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked && $(item).is(":checked");
+		console.log("i : " + i);
+		console.log($(item).is(":checked"));
+	});
+	
+	$("#checkAll").prop("checked", isChecked);
+});
+
+// 선택 삭제
+$(document).on("click", "#withdrawalDeleteBtn", function(){
+	let isChecked = false;
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked || $(item).is(":checked");
+        let target = $(item).data("target");
+		console.log("target = ", target); // target = memberNo
+		
+		if($(item).is(":checked")){
+        	$(item).after(`<input type="hidden" name="memberNo" value="\${target}"/>`);
+        }
+	});
+	
+	if(!isChecked){
+		alert("선택된 목록이 없습니다.");
+		return;
+	}
+	
+	console.log("클릭");
+	console.log($(document.withdrawalDeleteFrm));
+    if(confirm("선택된 회원을 삭제하시겠습니까?"))
+		$(document.withdrawalDeleteFrm).submit();
+});
+
+// 상세보기 모달
+$("button[id^='detail_']").on('click', function(e){
+	console.log(e.target);
+	console.log("해당 no = " + $(e.target).val());
+	e.preventDefault();
+	var memberNo = $(e.target).val();
+	
+	$("[name=id]").prop("readonly", true);
+	$("#modalRegister").modal();
+	
+	const data = {
+			memberNo : memberNo
+	};
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/withdrawalMemberDetail.do/\${memberNo}`,
+		data : data,
+		contentType : "application/json; charset=utf8",
+		method : "GET",
+		success : function(res){
+			console.log("ajaxData = " + JSON.stringify(res));
+			var withdrawalMember = res.withdrawalMember;
+			var mobile1 = res.mobile1;
+			var mobile2 = res.mobile2;
+			var mobile3 = res.mobile3;
+			
+			$("[name=id]").val(withdrawalMember.id);
+			$("[name=lastName]").val(withdrawalMember.lastName);
+			$("[name=firstName]").val(withdrawalMember.firstName);
+			$("[name=mobile1]").val(mobile1);
+			$("[name=mobile2]").val(mobile2);
+			$("[name=mobile3]").val(mobile3);
+			$("[name=email]").val(withdrawalMember.email);
+		},
+		error : console.log
+	});
+});
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

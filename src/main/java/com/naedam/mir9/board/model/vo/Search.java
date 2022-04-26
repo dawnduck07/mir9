@@ -10,8 +10,8 @@ public class Search {
 	private String searchCondition;
 	private String searchKeyword;
 	private String searchType;
-	private String searchFirst;
-	private String searchLast;
+	private String start_date;
+	private String end_date;
 	private int studyInterest;
 	private int studyEndFlag;
 	private int searchSort;
