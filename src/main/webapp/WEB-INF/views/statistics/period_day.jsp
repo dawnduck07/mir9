@@ -127,43 +127,44 @@
 							<c:forEach var="r" items="${result }">
 								<tr>
 									<td><fmt:formatDate value="${r.paidAt}" pattern="yyyy-MM-dd" /></td>
-									<td align="right">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount }</td>
-									<td align="right">${r.salePrice == null ? '0' : r.salePrice }</td>
-									<!-- 배송비 연산 -->
+									<td class="total1" align="right">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount }</td>
 									
-										<td align="right">deli</td>
+									<td class="total2" align="right">${r.totalSalePrice == null ? '0' : r.totalSalePrice }</td>
 									
-									<!-- 쿠폰 연산 -->
-									<td align="right">cou</td>
+									<td class="total3" align="right">${r.totalDeliFee }</td>
 									
-									<td align="right">${r.point }</td>
-									<td align="right">${r.totalAmount == null ? '0' : r.totalAmount }</td>
-									<td align="right">${r.salePrice == null ? '0' : r.salePrice }</td>
+									<td class="total4" align="right">${r.totalCouponAmount }</td>											
+
+									<td class="total5" align="right">${r.totalPointAmount }</td>
+									<td class="total6" align="right">${r.totalAmount == null ? '0' : r.totalAmount }</td>
 									
-									<!-- 배송비 연산 -->
-									<td align="right">0</td>
-									<!-- 쿠폰 연산 -->
-									<td align="right">0</td>
 									
-									<td align="right">${r.point }</td>
-									<td align="right">${r.totalCancelAmount == null ? '0' : r.totalCancelAmount }</td>
+										
+										
+											<td class="total7" align="right">${r.totalSalePriceCancel == null ? '0' : r.totalSalePriceCancel }</td>
+											<td class="total8" align="right">${r.totalDeliFeeCancel == null ? '0' : r.totalDeliFeeCancel }</td>
+											<td class="total9" align="right">${r.totalCouponAmountCancel == null ? '0' : r.totalCouponAmountCancel }</td>
+											
+											<td class="total10" align="right">${r.totalPointAmountCancel == null ? '0' : r.totalPointAmountCancel }</td>
+											<td class="total11" align="right">${r.totalCancelAmount == null ? '0' : r.totalCancelAmount }</td>
+																	
 								</tr>
 							</c:forEach>							
 						</tbody>
 						<tfoot>
 							<tr>
 								<td>총 합계</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
-								<td align="right">0</td>
+								<td id="total1" align="right">0</td>
+								<td id="total2" align="right">0</td>
+								<td id="total3" align="right">0</td>
+								<td id="total4" align="right">0</td>
+								<td id="total5" align="right">0</td>
+								<td id="total6" align="right">0</td>
+								<td id="total7" align="right">0</td>
+								<td id="total8" align="right">0</td>
+								<td id="total9" align="right">0</td>
+								<td id="total10" align="right">0</td>
+								<td id="total11" align="right">0</td>
 							</tr>
 						</tfoot>
 
@@ -234,7 +235,7 @@
 		var data = google.visualization.arrayToDataTable(chart_data);
 
 		var chart_div_width = $('#columnchart_values').width();
-		console.log(chart_div_width);
+		//console.log(chart_div_width);
 		var view = new google.visualization.DataView(data);
 		view.setColumns([ 0, 1, {
 			calc : "stringify",
@@ -282,6 +283,19 @@
 		});
 		google.charts.setOnLoadCallback(drawChart);
 	});
+	
+$(document).ready(function(){
+	for(var i = 1; i <= $(".total1").length; i++){
+		var target = ".total"+ i;
+		var result = 0*1;
+		$.each($(target), (k, v)=>{
+			result += $(v).text()*1;
+		})
+		target = "#total" + i;
+		$(target).text(result);
+	}
+	
+});	
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
