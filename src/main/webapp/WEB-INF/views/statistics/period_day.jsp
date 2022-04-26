@@ -72,37 +72,16 @@
 						chart_data.push(dataRow);
 					</script>
 					
-					<c:forEach var="data" items="${statisticsList }">
+					<c:forEach var="r" items="${result }">
+						<c:set var="dateStr"><fmt:formatDate value="${r.paidAt}" pattern="yyyy-MM-dd" /></c:set>
+						<c:set var="tAmount">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount}</c:set>
 						<script>
-							dataRow = [ '2022-04-20', 50000, '#76A7FA' ];
+							dataRow = ['${dateStr}', ${tAmount} , '#76A7FA' ];
 							chart_data.push(dataRow);
 						</script>
 					</c:forEach>
 					
-					<script>
-						dataRow = [ '2022-04-21', 0, '#76A7FA' ];
-						chart_data.push(dataRow);
-					</script>
-					<script>
-						dataRow = [ '2022-04-22', 0, '#76A7FA' ];
-						chart_data.push(dataRow);
-					</script>
-					<script>
-						dataRow = [ '2022-04-23', 0, '#76A7FA' ];
-						chart_data.push(dataRow);
-					</script>
-					<script>
-						dataRow = [ '2022-04-24', 0, '#76A7FA' ];
-						chart_data.push(dataRow);
-					</script>
-					<script>
-						dataRow = [ '2022-04-25', 0, '#76A7FA' ];
-						chart_data.push(dataRow);
-					</script>
-					<script>
-						dataRow = [ '2022-04-26', 0, '#76A7FA' ];
-						chart_data.push(dataRow);
-					</script>
+					
 					
 					<div id="chard_div" style="border: 1px solid #cdcdcd; width: 100%; margin-bottom: 10px;">
 						<div id="columnchart_values" style="width: 100%; height: 370px;"></div>
@@ -148,17 +127,26 @@
 							<c:forEach var="r" items="${result }">
 								<tr>
 									<td><fmt:formatDate value="${r.paidAt}" pattern="yyyy-MM-dd" /></td>
+									<td align="right">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount }</td>
+									<td align="right">${r.salePrice == null ? '0' : r.salePrice }</td>
+									<!-- 배송비 연산 -->
+									
+										<td align="right">deli</td>
+									
+									<!-- 쿠폰 연산 -->
+									<td align="right">cou</td>
+									
+									<td align="right">${r.point }</td>
+									<td align="right">${r.totalAmount == null ? '0' : r.totalAmount }</td>
+									<td align="right">${r.salePrice == null ? '0' : r.salePrice }</td>
+									
+									<!-- 배송비 연산 -->
 									<td align="right">0</td>
+									<!-- 쿠폰 연산 -->
 									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
-									<td align="right">0</td>
+									
+									<td align="right">${r.point }</td>
+									<td align="right">${r.totalCancelAmount == null ? '0' : r.totalCancelAmount }</td>
 								</tr>
 							</c:forEach>							
 						</tbody>
