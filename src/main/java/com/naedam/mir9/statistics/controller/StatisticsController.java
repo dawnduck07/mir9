@@ -2,8 +2,6 @@ package com.naedam.mir9.statistics.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.naedam.mir9.board.model.vo.Search;
 import com.naedam.mir9.statistics.model.service.StatisticsService;
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
+import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,9 +71,18 @@ public class StatisticsController {
 		return "statistics/period_year";
 	}
 	
-	@GetMapping("/product")
-	public String statisticsProduct() {
-		
+	@RequestMapping(value="/product")
+	public String statisticsProduct(Model model, @ModelAttribute("search") Search search) throws Exception {
+		System.out.println("statistics/product 시작");
+		ProductStatisticVo product = new ProductStatisticVo();
+		product.setRegStartdate(search.getStart_date());
+		product.setRegEnddate(search.getEnd_date());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("product", product);
+		Map<String, Object> resultMap = statisticsService.selectProductStatistics(map);
+		System.out.println("데이터 확인 ::: "+resultMap.get("list"));
+		model.addAttribute("list", resultMap.get("list"));
 		return "statistics/product";
 	}
 	
