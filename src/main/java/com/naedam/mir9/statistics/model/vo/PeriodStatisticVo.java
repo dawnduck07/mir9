@@ -35,5 +35,6 @@ public class PeriodStatisticVo implements Serializable {
 	private int useLimit;
 	private int useMax;
 	private int point;
-
+	private double totalAmount;
+	private double totalCancelAmount;
 }
