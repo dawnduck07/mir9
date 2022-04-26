@@ -58,4 +58,14 @@ public interface SettingDao {
 
 	int updateDeliveryNotice(DeliveryNotice deliveryNotice);
 
+	int updateAdminMenu(String menuNo);
+
+	int updateAdminMenuAllN();
+
+	int updateLocaleAllN();
+
+	int updateLocaleChoosen(String localeCode);
+
+	int updateLocaleDefault(String localeCode);
+
 }

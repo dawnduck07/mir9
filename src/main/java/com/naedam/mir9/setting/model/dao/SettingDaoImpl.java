@@ -136,6 +136,36 @@ public class SettingDaoImpl implements SettingDao {
 		// TODO Auto-generated method stub
 		return session.update("setting.updateDeliveryNotice", deliveryNotice);
 	}
+
+	@Override
+	public int updateAdminMenu(String menuNo) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateAdminMenu", menuNo);
+	}
+
+	@Override
+	public int updateAdminMenuAllN() {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateAdminMenuAllN");
+	}
+
+	@Override
+	public int updateLocaleAllN() {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateLocaleAllN");
+	}
+
+	@Override
+	public int updateLocaleChoosen(String localeCode) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateLocaleChoosen", localeCode);
+	}
+
+	@Override
+	public int updateLocaleDefault(String localeCode) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateLocaleDefault", localeCode);
+	}
 	
 	
 	
