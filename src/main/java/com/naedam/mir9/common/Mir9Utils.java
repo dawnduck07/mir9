@@ -2,6 +2,7 @@ package com.naedam.mir9.common;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -175,5 +176,14 @@ public class Mir9Utils {
 		return map;
 	}
 	
+	
+	public static Date stringToDate(String dateStr) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		try {
+			date = sdf.parse(dateStr);
+		} catch (ParseException e) {}
+		return date;
+	}
 	
 }
