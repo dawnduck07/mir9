@@ -67,6 +67,8 @@
 		COUNT(*)
 	FROM
 		member
+	WHERE
+		status = 'Y'
 </select>
 
 <!-- id 중복 검사 -->
@@ -83,24 +85,22 @@
 <select id="selectSearchMemberList" resultType="memberEntity">
 	SELECT
 		m.member_no,
-	    m.id,
-	    m.last_name, 
-	    m.first_name,
-	    m.phone,
-	    a.address_main, 
-	    a.address_sub,
-	    p.point_amt,
-	    m.reg_date
+		m.id,
+		m.last_name,
+		m.first_name,
+		m.phone,
+		a.address_main,
+		a.address_sub,
+		m.reg_date,
+		m.`status`
 	FROM
-	    member m left join member_point mp
-	        on m.member_no = mp.member_no
-	            left join point p
-	                on mp.point_no = p.point_no
-	                    left join address_book ab
-	                        on m.member_no = ab.member_no
-	                            left join address a
-	                                on ab.address_no = a.address_no
+		member m JOIN address_book ab
+			ON m.member_no = ab.member_no
+				JOIN address a
+					ON ab.address_no = a.address_no
 	WHERE
+		m.`status` = 'Y'	
+		and
 		${type} LIKE CONCAT('%', #{keyword}, '%')	
 </select>
 
@@ -109,16 +109,14 @@
 	SELECT
 		count(*)
 	FROM
-	    member m left join member_point mp
-	        on m.member_no = mp.member_no
-	            left join point p
-	                on mp.point_no = p.point_no
-	                    left join address_book ab
-	                        on m.member_no = ab.member_no
-	                            left join address a
-	                                on ab.address_no = a.address_no
+		member m JOIN address_book ab
+			ON m.member_no = ab.member_no
+				JOIN address a
+					ON ab.address_no = a.address_no
 	WHERE
-		${type} LIKE CONCAT('%', #{keyword}, '%')
+		m.`status` = 'Y'	
+		and
+		${type} LIKE CONCAT('%', #{keyword}, '%')	
 </select>
 
 <!-- 회원 삭제 -->
@@ -472,6 +470,8 @@
 					ON wab.address_no = wa.address_no
 						JOIN withdrawal_authorities wau
 							ON wm.member_no = wau.member_no
+	ORDER BY
+		wm.withdrawal_date DESC
 </select>
 
 
@@ -480,7 +480,9 @@
 	SELECT
 		COUNT(*)
 	FROM
-		withdrawal_member
+		member
+	WHERE
+		status = 'N'
 </select>
 
 <!-- 탈퇴회원 검색 게시물  -->
@@ -656,5 +658,44 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 			member_no = #{item}
 		</foreach>
 	</where>
+</delete>
+
+
+<!-- 탈퇴회원 상세조회 -->
+<select id="selectOneWithdrawalMemberEntity" resultType="withdrawalMemberEntity">
+	SELECT 
+		wm.id,
+		wm.last_name,
+		wm.first_name,
+		wm.phone,
+		wm.email,
+		wa.address_zipcode,
+		wa.address_main,
+		wa.address_sub,
+		wmm.member_memo_content,
+		wm.reason,
+		wau.authority,
+		wm.`status`,
+		wm.login_date,
+		wm.reg_date,
+		wm.withdrawal_date
+	FROM
+		withdrawal_member wm JOIN withdrawal_address_book wab
+			ON wm.member_no = wab.member_no
+				JOIN withdrawal_address wa
+					ON wab.address_no = wa.address_no
+						JOIN withdrawal_authorities wau
+							ON wm.member_no = wau.member_no
+								JOIN withdrawal_member_memo wmm
+									ON wm.member_no = wmm.member_no
+	WHERE
+		wm.member_no = #{memberNo}
+</select>
+
+<delete id="deleteMemberMemo">
+	DELETE FROM
+		member_memo
+	WHERE
+		member_no = #{memberNo}
 </delete>
 </mapper>

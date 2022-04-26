@@ -13,6 +13,7 @@ import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
 import com.naedam.mir9.member.model.vo.WithdrawalMember;
+import com.naedam.mir9.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 public interface MemberDao {
@@ -166,6 +167,11 @@ public interface MemberDao {
 
 	// 메모 영구삭제
 	int deleteWithdrawalMemo(int[] memberNo);
+
+	// 탈퇴회원 상세조회
+	WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo);
+
+	int deleteMemberMemo(int memberNo);
 
 
 
