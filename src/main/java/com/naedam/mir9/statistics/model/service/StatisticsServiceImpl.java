@@ -1,5 +1,6 @@
 package com.naedam.mir9.statistics.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 	public PeriodStatisticVo selectPeriodStatistics(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return statisticsDao.selectPeriodStatistics(param);
+	}
+
+	@Override
+	public Map<String, Object> selectProductStatistics(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", statisticsDao.selectProductStatistics(map));
+		return resultMap;
 	}
 
 
