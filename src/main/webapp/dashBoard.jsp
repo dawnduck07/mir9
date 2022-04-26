@@ -25,6 +25,45 @@ ul {
 	color: #97989b;
 }
 </style>
+<script>
+
+
+	function fncPostList(boardNo){
+		
+		$("li[name='postData']").remove();
+		
+		$.ajax({
+			url : "/mir9/board/json/getPostList/"+boardNo,
+			method : "GET",
+			dataType : "JSON",
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"	 						
+			} ,
+			success : function(JSONData, status){
+				if(status == 'success'){
+					if(JSONData.list.length != 0){
+						for(var i = 0; i <= JSONData.list.length; i++){
+							var post = JSONData.list;
+							display = '<li name="postData">'
+									+ '<a href="/mir9/board/postList?boardNo='+post[i].postBoard.boardNo+'">'+post[i].postTitle+''
+									+ '<span class="pull-right cs-m-right20">'+post[i].postDate+'</span>'
+									+ '</a>'
+									+ '</li>';
+							$("ul[class='list']").append(display);
+						}
+					}else if(JSONData.list.length == 0){
+						display = '<li name="postData">등록된 게시물이 없습니다.</li>';
+						$("ul[class='list']").append(display);
+					}
+				}
+			},
+			error:function(request, status, error){
+				alert("에러")
+			}
+		});
+	}
+</script>
 
 	<section class="content-header">
 		<h1>
@@ -486,33 +525,31 @@ ul {
 				<!-- Custom Tabs -->
 				<div class="nav-tabs-custom">
 					<ul class="nav nav-tabs">
-						<li class="active"><a aria-expanded="true" href="#tab_1"
-							data-toggle="tab">공지사항</a></li>
-						<li class=""><a aria-expanded="true" href="#tab_2"
-							data-toggle="tab">자주하는 질문</a></li>
-						<li class=""><a aria-expanded="true" href="#tab_3"
-							data-toggle="tab">1:1 문의</a></li>
-						<li class="pull-right"><a class="text-muted"
-							href="/index.php?tpf=admin/board/list&board_code=1">더보기 <i
-								class="fa fa-arrow-circle-right"></i></a></li>
+						<c:forEach var="board" items="${boardList}" varStatus="status">
+							<c:if test="${status.first}">
+								<li class="active">
+									<a aria-expanded="true" href="#tab_${board.boardNo}" data-toggle="tab" onclick="fncPostList(${board.boardNo})" >${board.boardTitle}</a>
+								</li>
+							</c:if>
+							<c:if test="${!status.first}">
+								<li class="">
+									<a aria-expanded="true" href="#tab_${board.boardNo}" data-toggle="tab" onclick="fncPostList(${board.boardNo})">${board.boardTitle}</a>
+								</li>
+							</c:if>							
+						</c:forEach>
+						<li class="pull-right">
+							<a class="text-muted" href="/index.php?tpf=admin/board/list&board_code=1">더보기 
+								<i class="fa fa-arrow-circle-right"></i>
+							</a>
+						</li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_1">
 							<ul class="list">
-								<li><a href="/index.php?tpf=admin/board/list&board_code=1">공지사항<span
-										class="pull-right cs-m-right20">2020-02-06</span></a></li>
+								
 							</ul>
 						</div>
-						<div class="tab-pane " id="tab_2">
-							<ul class="list">
-								<li>등록된 게시물이 없습니다.</li>
-							</ul>
-						</div>
-						<div class="tab-pane " id="tab_3">
-							<ul class="list">
-								<li>등록된 게시물이 없습니다.</li>
-							</ul>
-						</div>
+						
 					</div>
 					<!-- /.tab-content -->
 				</div>
