@@ -30,7 +30,7 @@
 			<div class="box">
 				<div class="box-body">
 
-					<form name="form_search" id="form_search" method="post" action="?tpf=admin/statistics/sales_day">
+					<form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/period_day?${_csrf.parameterName}=${_csrf.token}">
 						<div class="box-tools " style="margin-bottom: 5px;">
 							<table class="table table-bordered">
 								<tbody>
@@ -61,6 +61,7 @@
 								</tfoot>
 							</table>
 						</div>
+						<input type="hidden" name="dateLength" />
 					</form>
 					
 					<script>
@@ -129,7 +130,7 @@
 									<td><fmt:formatDate value="${r.paidAt}" pattern="yyyy-MM-dd" /></td>
 									<td class="total1" align="right">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount }</td>
 									
-									<td class="total2" align="right">${r.totalSalePrice == null ? '0' : r.totalSalePrice }</td>
+									<td class="total2" align="right">${r.totalSalePrice == null ? '0' : r.totalSalePrice + r.totalOptionCost }</td>
 									
 									<td class="total3" align="right">${r.totalDeliFee }</td>
 									
@@ -141,7 +142,7 @@
 									
 										
 										
-											<td class="total7" align="right">${r.totalSalePriceCancel == null ? '0' : r.totalSalePriceCancel }</td>
+											<td class="total7" align="right">${r.totalSalePriceCancel == null ? '0' : r.totalSalePriceCancel + r.totalOptionCostCancel }</td>
 											<td class="total8" align="right">${r.totalDeliFeeCancel == null ? '0' : r.totalDeliFeeCancel }</td>
 											<td class="total9" align="right">${r.totalCouponAmountCancel == null ? '0' : r.totalCouponAmountCancel }</td>
 											
@@ -203,7 +204,7 @@
 	function setSearchDate(type){
 		$("input[name=start_date]").val(dateStr(type));
 		$("input[name=end_date]").val(dateStr('D0'));
-
+		$("[name=dateLength]").val(type);
 		
 	}
 	/* 날짜 포맷팅 */
