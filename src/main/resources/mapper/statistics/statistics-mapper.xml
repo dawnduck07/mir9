@@ -4,6 +4,33 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="statistics">
   <select id="selectPeriodStatistics" resultType="periodStatisticVo">
-  	SELECT *, SUM(amount) AS total_amount, SUM(cancel_amount) AS total_cancel_amount FROM v_period_statistics  WHERE date(paid_at) = date(#{date}) GROUP BY paid_at
+  	SELECT *
+	FROM v_period_statistics_paid
+		left JOIN v_period_statistics_cancel USING(paid_at)
+	WHERE DATE(paid_at) = DATE(#{date})
   </select>
+
+  <select id="selectProductStatistics" parameterType="hashmap" resultType="productStatisticVo">
+	SELECT *,
+	(SELECT count(amount)
+	 FROM v_product_statistics
+	 WHERE order_status_no >= 2) paymentCount,
+	 (SELECT COUNT(amount)
+	 FROM v_product_statistics
+	 WHERE order_status_no = 7) returnCount,
+	 (SELECT SUM(amount)
+	 FROM v_product_statistics
+	 WHERE order_status_no >= 2) paymentSum,
+	 (ROW_NUMBER() over(ORDER BY (SELECT
+		 						   COUNT(amount)
+		 						   FROM v_product_statistics
+		 						   WHERE order_status_no >= 2
+		 						   AND   order_status_no != 7) DESC)) AS productRank
+	 FROM v_product_statistics
+	 <if test="search.start_date != null and search.end_date">
+	 	WHERE reg_date between #{search.start_date} and #{search.end_date}
+	 </if>
+	 ORDER BY productRank ASC
+  </select>  
+  
 </mapper>

@@ -417,6 +417,14 @@ textarea {
 
 <script type="text/javascript">
 
+	$(function(){
+		// 시그니처, timestamp 조회
+		var postSig = "<c:out value='${ postSig }' />";
+		var timestamp = "<c:out value='${ timestamp }' />";
+		console.log(postSig);
+		console.log(timestamp);
+	});
+
 	var objEditor = CKEDITOR.replace('content', {
 		height: 300,
 	    extraPlugins : 'tableresize',

@@ -1,17 +1,22 @@
 package com.naedam.mir9.community.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,13 +32,49 @@ public class CommunityController {
 	@Autowired
 	private CommunityService communityService;
 	
-	// 인증키
-	private String appKey = "pDjJmaKLu6bg9i9j";
-	private String secretKey = "YRs5WbpK";
+	// MAIL 인증키
+	private String access = "40cnTtyIUldTMRjjpSYu";
+	private String secret = "zjDqLElCNgwzMUBrqBso3nLvLGLD2Kh6wOljQQjF";
 	
+	// SMS 인증키
+	private String appKey = "pDjJmaKLu6bg9i9j";
+	private String secretKey = "YRs5WbpK";	
+	
+	// 시그니처 키값 가져오기	
 	@GetMapping("/email")
-	public String commEmail() {
+	public String commEmail(Model model) 
+			throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
 		
+		long time = System.currentTimeMillis();
+		String space = " "; // 공백
+		String method = "POST"; // 메소드
+	    String newLine = "\n"; // 줄바꿈
+	    String url = "/api/v1/mails"; // 도메인을 제외한 "/" 아래 전체 url (쿼리스트링 포함)
+	    String timestamp = String.valueOf(time); // 현재 타임스탬프 
+	    String accessKey = access; // access 
+	    String secretKey = secret; // secret
+	    
+	    String message = new StringBuilder()
+	        .append(method)
+	        .append(space)
+	        .append(url)
+	        .append(newLine)
+	        .append(timestamp)
+	        .append(newLine)
+	        .append(accessKey)
+	        .toString();
+
+	    SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+	    Mac mac = Mac.getInstance("HmacSHA256");
+	    mac.init(signingKey);
+	    
+	    // POST
+	    byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
+	    String postSig = Base64.getEncoder().encodeToString(rawHmac);
+	    
+	    model.addAttribute("postSig", postSig);
+	    model.addAttribute("timestamp", timestamp);
+	    
 		return "community/email";
 	}
 	

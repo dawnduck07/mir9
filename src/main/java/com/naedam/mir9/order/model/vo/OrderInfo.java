@@ -27,5 +27,7 @@ public class OrderInfo implements Serializable {
 	private String adminMemo;
 	private int orderAmt;
 	private int couponNo;
+	private int point;
+	private int optionCost;
 
 }

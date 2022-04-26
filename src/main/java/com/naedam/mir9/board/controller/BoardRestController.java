@@ -3,7 +3,9 @@ package com.naedam.mir9.board.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,6 +26,7 @@ import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.board.model.vo.BoardComment;
 import com.naedam.mir9.board.model.vo.BoardFile;
 import com.naedam.mir9.board.model.vo.Post;
+import com.naedam.mir9.board.model.vo.Search;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
@@ -73,6 +76,19 @@ public class BoardRestController {
 	public List<Board> listBoard() throws Exception{		
 		return boardService.getBoardTitle();
 	}
+	
+	@GetMapping(value="json/getPostList/{boardNo}")
+	public Map<String, Object> getPostList(@PathVariable("boardNo") int boardNo) throws Exception{
+		Board board = new Board();
+		Search search = new Search();
+		board.setBoardNo(boardNo);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("board", board);
+		map.put("search", search);
+		Map<String, Object> resultMap = boardService.getPostList(map);
+		
+		return resultMap;
+	}	
 	
 	@GetMapping(value="json/getBoardAllData/{boardNo}")
 	public Board getBoardAllData(@PathVariable("boardNo") int boardNo, Model model) throws Exception{

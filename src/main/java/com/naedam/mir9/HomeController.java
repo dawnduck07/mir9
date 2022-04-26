@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.naedam.mir9.board.model.service.BoardService;
+import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.order.model.service.OrderService;
 import com.naedam.mir9.order.model.vo.OrderDetail;
@@ -33,8 +35,9 @@ public class HomeController {
 	@Autowired
 	private MemberService memberService;
 	@Autowired
+	private BoardService boardService;
+	@Autowired
 	private ProductService productService;
-
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -46,7 +49,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/dashBoard", method = RequestMethod.GET)
-	public String goDashBoard(Locale locale, Model model) {
+	public String goDashBoard(Locale locale, Model model) throws Exception {
 		log.debug("HomeController ---- forward ----> dashBoard");
 		Map<String, Integer> counts = new HashMap<String, Integer>();
 		counts.put("todayOrderCnt", orderService.selectTodayOrderCnt());
@@ -57,12 +60,15 @@ public class HomeController {
 		counts.put("monthOrderCnt", orderService.selectMonthOrderCnt());
 		counts.put("totalCancelAmountMonth", paymentService.selectTotalCancelAmountMonth());
 		counts.put("monthCancelCnt", paymentService.selectMonthCancelCnt());
-		
+
+		List<Board> boardList = boardService.getBoardTitle();		
 		List<OrderDetail> orderList = orderService.selectOrderDetailList();
 		List<ProductDetail> productList = productService.selectAllProductList();
 		model.addAttribute("counts", counts);
+		model.addAttribute("boardList", boardList);
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("productList",productList);
+
 		
 		return "forward:/dashBoard.jsp";
 	}

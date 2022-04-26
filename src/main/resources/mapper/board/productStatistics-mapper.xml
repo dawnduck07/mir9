@@ -2,15 +2,17 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="statistics">
+<mapper namespace="productStatistics">
   <select id="selectPeriodStatistics" resultType="periodStatisticVo">
-  	SELECT *
-	FROM v_period_statistics_paid
-		left JOIN v_period_statistics_cancel USING(paid_at)
-	WHERE DATE(paid_at) = DATE(#{date})
+  	SELECT *, 
+  	SUM(amount) AS total_amount, 
+  	SUM(cancel_amount) AS total_cancel_amount 
+  	FROM v_period_statistics  
+  	WHERE date(paid_at) = date(#{date}) 
+  	GROUP BY paid_at
   </select>
-
-  <select id="selectProductStatistics" parameterType="hashmap" resultType="productStatisticVo">
+  
+  <select id="selectProductStatistics" resultType="productStatisticVo">
 	SELECT *,
 	(SELECT count(amount)
 	 FROM v_product_statistics
@@ -25,12 +27,10 @@
 		 						   COUNT(amount)
 		 						   FROM v_product_statistics
 		 						   WHERE order_status_no >= 2
-		 						   AND   order_status_no != 7) DESC)) AS productRank
+		 						   AND   order_status_no != 7) DESC)) AS 'productRank'
 	 FROM v_product_statistics
-	 <if test="search.start_date != null and search.end_date">
-	 	WHERE reg_date between #{search.start_date} and #{search.end_date}
-	 </if>
-	 ORDER BY productRank ASC
-  </select>  
+  </select>
   
 </mapper>
+
+
