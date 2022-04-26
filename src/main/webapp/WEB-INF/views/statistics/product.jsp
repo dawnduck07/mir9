@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="제품별 통계" name="title"/>
@@ -28,7 +29,7 @@
                 <div class="box-body">
 
                     <div class="box-tools " style="margin-bottom:5px;" >
-                    <form name="form_search" id="form_search" method="post" action="?tpf=admin/statistics/sales_product">
+                    <form name="form_search" id="form_search" method="post" action="/mir9/statistics/product?${_csrf.parameterName}=${_csrf.token}">
                         <table class="table table-bordered">
 						<tbody>
 						<tr>
@@ -59,8 +60,8 @@
 						<tr>
 							<td class="menu">기간 검색</td>
 							<td align="left">
-								<input type="text" name="start_date" id="start_date" value="2022-03-09" class="form-control input-sm txt_date1" style="width:100px;display:inline-block;" /> ~ 
-								<input type="text" name="end_date"  id="end_date" value="2022-03-15" class="form-control input-sm txt_date1" style="width:100px;display:inline-block;" />
+								<input type="text" name="start_date" id="start_date" value="" class="form-control input-sm txt_date1" style="width:100px;display:inline-block;" /> ~ 
+								<input type="text" name="end_date"  id="end_date" value="" class="form-control input-sm txt_date1" style="width:100px;display:inline-block;" />
 
 								<button type="button" onclick="setSearchDate('D1');" class="btn btn-primary btn-xs">오늘</button>
 								<button type="button" onclick="setSearchDate('D7');" class="btn btn-primary btn-xs">7일</button>
@@ -83,7 +84,9 @@
 					<script>
 						var chart_data1 = new Array();
 						var dataRow1 = [];
+						
 						dataRow1 = ['제품명', '결제수량'];
+						
 						chart_data1.push(dataRow1);
 
 						var chart_data2 = new Array();
@@ -121,7 +124,19 @@
 							</tr>
 						</thead>
 						<tbody>
-      <tr><td colspan="12"><br>검색된 데이터가 없습니다.<br><br></td></tr>						<tbody>
+						<c:forEach var="product" items="${list}" varStatus="status">
+     						 <tr>
+     						 	<td>${product.productRank}</td>
+     						 	<td>${product.categoryName}</td>
+     						 	<td>${product.productName}</td>
+     						 	<td>${product.amount}원</td>
+     						 	<td>${product.paymentCount}</td>
+     						 	<td>${product.returnCount}</td>
+     						 	<td>${product.paymentCount-product.returnCount}</td>
+     						 	<td>${product.paymentSum}원</td>
+     						 </tr>
+     					</c:forEach>
+     					<tbody>
                     </table>
 
                     <br />
@@ -137,6 +152,122 @@
 </section>
 
 </div><!-- /.content-wrapper -->
+<script>
+        
+		function selectAction(){
+			if(sForm.start_date.value > sForm.end_date.value){
+				alert('검색 기간을 확인해주세요.');
+				return;
+			}
+			sForm.submit();
+		}
+		
+		/* 기간 검색 디폴트 및 기능 */
+		setSearchDate("D6");
+		function setSearchDate(type){
+			$("input[name=start_date]").val(dateStr(type));
+			$("input[name=end_date]").val(dateStr('D0'));	
+		}
+		
+		/* 날짜 포맷팅 */
+		function dateStr(type){
+			var date = new Date();
+			i = type.slice(1,3) * 1;
+			if(type.slice(0,1) == 'D'){
+				date = new Date(date-(60 * 60 * 24 * i));
+			}else if(type.slice(0,1) == 'M'){
+				date.setMonth(date.getMonth() - i);
+			}
+				var year = date.getFullYear();
+				var month = ('0' + (date.getMonth() + 1)).slice(-2);
+				var day = ('0' + (date.getDate() - i)).slice(-2);
+				var dateString = year + '-' + month  + '-' + day;	
+			return dateString;
+		}
+		
 
+        function downloadExcel() {  // Excel 다운로드
+            form_download.target = 'iframe_process';
+            form_download.search_data.value = $('#form_search').serialize();
+            form_download.submit();
+        }
+
+		function drawChart() {
+
+			var data = google.visualization.arrayToDataTable([
+				['제품명', '결제수량'],
+				<c:forEach var="product" items="${list}" varStatus="status">
+					<c:if test="${!status.last}">
+						['${product.productName}', ${product.paymentCount}],
+					</c:if>
+					<c:if test="${status.last}">
+						['${product.productName}', ${product.paymentCount}]
+					</c:if>						
+				</c:forEach>
+			]);
+
+			var chart_div_width = $('#columnchart_values1').width();
+
+			var options = {
+				title: "상위 TOP 10 제품 결제수량",
+				width: chart_div_width,
+				height: 350,
+				pieHole : 0.4,
+			};
+
+			var chart = new google.visualization.PieChart(document.getElementById("columnchart_values1"));
+			chart.draw(data, options);
+		}
+
+		function drawChart2() {
+
+			var data = google.visualization.arrayToDataTable([
+				['제품명', '결제수량'],
+				<c:forEach var="product" items="${list}" varStatus="status">
+					<c:if test="${!status.last}">
+						['${product.productName}', ${product.returnCount}],
+					</c:if>
+					<c:if test="${status.last}">
+						['${product.productName}', ${product.returnCount}]
+					</c:if>						
+				</c:forEach>
+			]);
+
+			var chart_div_width = $('#columnchart_values2').width();
+
+			var options = {
+				title: "상위 TOP 10 제품 환불수량",
+				width: chart_div_width,
+				height: 350,
+				pieHole : 0.4,
+			};
+
+			var chart = new google.visualization.PieChart(document.getElementById("columnchart_values2"));
+			chart.draw(data, options);
+		}
+
+
+		var sForm = null;
+		
+		$(function() {
+			sForm = document.form_search;
+
+			$( ".txt_date1" ).datepicker({
+					defaultDate: "+0d",
+					changeYear: true,
+					changeMonth: true,
+					dateFormat: "yy-mm-dd",
+					maxDate : '2022-04-26',
+					showMonthAfterYear: true , 
+					dayNamesMin: ['일', '월', '화', '수', '목', '금', '토' ],
+					monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+			});
+
+			google.charts.load("current", {packages:['corechart']});
+			google.charts.setOnLoadCallback(drawChart);
+			google.charts.setOnLoadCallback(drawChart2);
+		});
+		
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

@@ -9,4 +9,28 @@
 		left JOIN v_period_statistics_cancel USING(paid_at)
 	WHERE DATE(paid_at) = DATE(#{date})
   </select>
+
+  <select id="selectProductStatistics" parameterType="hashmap" resultType="productStatisticVo">
+	SELECT *,
+	(SELECT count(amount)
+	 FROM v_product_statistics
+	 WHERE order_status_no >= 2) paymentCount,
+	 (SELECT COUNT(amount)
+	 FROM v_product_statistics
+	 WHERE order_status_no = 7) returnCount,
+	 (SELECT SUM(amount)
+	 FROM v_product_statistics
+	 WHERE order_status_no >= 2) paymentSum,
+	 (ROW_NUMBER() over(ORDER BY (SELECT
+		 						   COUNT(amount)
+		 						   FROM v_product_statistics
+		 						   WHERE order_status_no >= 2
+		 						   AND   order_status_no != 7) DESC)) AS productRank
+	 FROM v_product_statistics
+	 <if test="search.start_date != null and search.end_date">
+	 	WHERE reg_date between #{search.start_date} and #{search.end_date}
+	 </if>
+	 ORDER BY productRank ASC
+  </select>  
+  
 </mapper>
