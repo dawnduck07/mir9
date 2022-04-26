@@ -544,7 +544,7 @@ WHERE member_no = #{memberNo};
 	</where>
 </delete>
 
-<!-- 주소번호 조회 -->
+<!-- 탈퇴회원 주소번호 조회 -->
 <select id="findAddressNo" resultType="address">
 	SELECT
 		address_no
@@ -591,5 +591,70 @@ WHERE member_no = #{memberNo};
 SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 </select>
 
+<!-- 탈퇴회원 조회 -->
+<select id="selectOneMemberByWithdrawalMemberNo" resultType="withdrawalMember">
+	SELECT 
+		*
+	FROM 
+		withdrawal_member
+	WHERE
+		member_no = #{memberNo}
+</select>
 
+<!-- 주소록 삭제 -->
+<delete id="deleteAddressBookByMemberNo">
+	DELETE FROM
+		address_book
+	<where>
+		<foreach collection="array" item="item" open="(" close=")" separator="or">
+			member_no = #{item}
+		</foreach>
+	</where>
+</delete>
+
+<!-- 권한 삭제 -->
+<delete id="deleteAuthorityByMemberNo">
+	DELETE FROM
+		authorities
+	<where>
+		<foreach collection="array" item="item" open="(" close=")" separator="or">
+			member_no = #{item}
+		</foreach>
+	</where>
+</delete>
+
+<!-- 메모 삭제 -->
+<delete id="deleteMemoByMemberNo">
+	DELETE FROM
+		member_memo
+	<where>
+		<foreach collection="array" item="item" open="(" close=")" separator="or">
+			member_no = #{item}
+		</foreach>
+	</where>
+</delete>
+
+<!-- 회원 주소번호 조회 -->
+<select id="findMemberAddressList" resultType="address">
+	SELECT
+		address_no
+	FROM
+		address_book
+	<where>
+		 <foreach collection="array" item="item" open="(" close=")" separator="or">
+		 	member_no = #{item}
+		 </foreach>
+	</where>
+</select>
+
+<!-- 메모 영구삭제 -->
+<delete id="deleteWithdrawalMemo">
+	DELETE FROM
+		withdrawal_member_memo
+	<where>
+		<foreach collection="array" item="item" open="(" close=")" separator="or">
+			member_no = #{item}
+		</foreach>
+	</where>
+</delete>
 </mapper>

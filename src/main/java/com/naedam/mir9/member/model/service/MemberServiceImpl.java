@@ -289,6 +289,42 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectTodayRegMemberCnt();
 	}
 
+	// 탈퇴회원 조회
+	@Override
+	public WithdrawalMember selectOneMemberByWithdrawalMemberNo(int memberNo) {
+		return memberDao.selectOneMemberByWithdrawalMemberNo(memberNo);
+	}
+
+	// 주소록 삭제
+	@Override
+	public int deleteAddressBookByMemberNo(int[] memberNo) {
+		return memberDao.deleteAddressBookByMemberNo(memberNo);
+	}
+
+	// 권한 삭제
+	@Override
+	public int deleteAuthorityByMemberNo(int[] memberNo) {
+		return memberDao.deleteAuthorityByMemberNo(memberNo);
+	}
+
+	@Override
+	public List<Address> findMemberAddressList(int[] memberNo) {
+		return memberDao.findMemberAddressList(memberNo);
+	}
+
+	@Override
+	public int deleteMemoByMemberNo(int[] memberNo) {
+		return memberDao.deleteMemoByMemberNo(memberNo);
+	}
+
+	// 메모 영구삭제
+	@Override
+	public int deleteWithdrawalMemo(int[] memberNo) {
+		return memberDao.deleteWithdrawalMemo(memberNo);
+	}
+
+	
+
 	
 
 
