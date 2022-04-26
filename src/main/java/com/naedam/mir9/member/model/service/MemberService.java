@@ -155,6 +155,24 @@ public interface MemberService {
 
 	int selectTodayRegMemberCnt();
 
+	// 탈퇴회원 조회
+	WithdrawalMember selectOneMemberByWithdrawalMemberNo(int memberNo);
+
+	// 주소록 삭제
+	int deleteAddressBookByMemberNo(int[] memberNo);
+
+	// 권한 삭제
+	int deleteAuthorityByMemberNo(int[] memberNo);
+
+	List<Address> findMemberAddressList(int[] memberNo);
+
+	int deleteMemoByMemberNo(int[] memberNo);
+
+	// 메모 영구삭제
+	int deleteWithdrawalMemo(int[] memberNo);
+
+	
+
 
 
 

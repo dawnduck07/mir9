@@ -192,8 +192,7 @@
 							</tr>
 							<tr>
 								<td class="menu">이름</td>
-								<td align="left"><input type="text" name="name"
-									class="form-control input-sm" style="width: 30%;" /></td>
+								<td align="left"><input type="text" name="firstName" id="firstName" class="form-control input-sm" style="width: 30%; float: left;" placeholder="이름" /> <input type="text" name="lastName" id="lastName" class="form-control input-sm" style="width: 30%;" placeholder="성" /></td>
 							</tr>
 							<tr>
 								<td class="menu">휴대폰</td>
@@ -221,20 +220,15 @@
 							</tr>
 							<tr>
 								<td class="menu">주소</td>
-								<td align="left"><input type="text" name="zipcode"
-									id="zipcode" readonly class="form-control input-sm"
-									style="width: 15%; background-color: #dddddd; float: left;" />&nbsp;
-									<button type="button" onclick="callAddress();"
-										class="btn btn-sm btn-default">주소입력</button>
-									<br> <input type="text" class="input-addr" id="address"
-									placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152"
-									style="display: none; margin: 5px 0; width: 100%;"> <input
-									type="text" name="addr" id="addr" readonly
-									class="form-control input-sm"
-									style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
-									<input type="text" name="addr_etc" id="addr_etc"
-									placeholder="상세주소" class="form-control input-sm"
-									style="width: 100%;" /></td>
+								<td align="left">
+									<input type="text" name="addressZipcode" id="addressZipcode" readonly class="form-control input-sm" style="width: 15%; background-color: #dddddd; float: left;" />
+									&nbsp;
+									<button type="button" onclick="callAddress();" class="btn btn-sm btn-default">주소입력</button>
+									<br> 
+									<input type="text" class="input-addr" id="address" placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152" style="display: none; margin: 5px 0; width: 100%;"> 
+									<input type="text" name="addrressMain" id="addrressMain" readonly class="form-control input-sm" style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
+									<input type="text" name="addressSub" id="addressSub" placeholder="상세주소" class="form-control input-sm" style="width: 100%;" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">메모</td>
@@ -407,6 +401,43 @@ $(document).on("click", "#withdrawalDeleteBtn", function(){
 		$(document.withdrawalDeleteFrm).submit();
 });
 
+// 상세보기 모달
+$("button[id^='detail_']").on('click', function(e){
+	console.log(e.target);
+	console.log("해당 no = " + $(e.target).val());
+	e.preventDefault();
+	var memberNo = $(e.target).val();
+	
+	$("[name=id]").prop("readonly", true);
+	$("#modalRegister").modal();
+	
+	const data = {
+			memberNo : memberNo
+	};
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/withdrawalMemberDetail.do/\${memberNo}`,
+		data : data,
+		contentType : "application/json; charset=utf8",
+		method : "GET",
+		success : function(res){
+			console.log("ajaxData = " + JSON.stringify(res));
+			var withdrawalMember = res.withdrawalMember;
+			var mobile1 = res.mobile1;
+			var mobile2 = res.mobile2;
+			var mobile3 = res.mobile3;
+			
+			$("[name=id]").val(withdrawalMember.id);
+			$("[name=lastName]").val(withdrawalMember.lastName);
+			$("[name=firstName]").val(withdrawalMember.firstName);
+			$("[name=mobile1]").val(mobile1);
+			$("[name=mobile2]").val(mobile2);
+			$("[name=mobile3]").val(mobile3);
+			$("[name=email]").val(withdrawalMember.email);
+		},
+		error : console.log
+	});
+});
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
