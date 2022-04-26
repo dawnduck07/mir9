@@ -36,18 +36,28 @@ textarea {
 		            <div class="box-body">
 		                <h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> SMS 발송 정보 설정 </p></h4>
 	
-						<form name="form_register" method="post" action="/index.php?tpf=admin/community/sms_process">
+						<form name="form_register">
 			                <input type="hidden" name="mode" value="updateSMS">
-			
+			                
+			                <c:forEach var="templateId" items="${ templateId }">
+			                	<input type="hidden" name="templateId" value="${ templateId }">
+			                </c:forEach>
+			                <c:forEach var="content" items="${ content }">
+			                	<input type="hidden" name="bodyContent" value="${ content }">
+			               	</c:forEach>
+			                <c:forEach var="savedTemplateId" items="${ savedTemplateId }">
+			                	<input type="hidden" name="savedTemplateId" value="${ savedTemplateId }">
+			                </c:forEach>
+			                <c:forEach var="savedContent" items="${ savedContent }">
+			                	<input type="hidden" name="savedContent" value="${ savedContent }">
+			               	</c:forEach>			            
+			               	
 			                <table class="table table-bordered">
 				                <tbody>
 					                <tr>
 					                    <td class="menu">SMS 잔여 포인트</td>
 					                    <td align="left">
-					                    	<!-- 
-					                    		관리자가 해당 포인트를 부여해주는 방식을 모르겠음;;; 
-					                    	-->
-					                    	<span style="float:left;">검색된 회원정보가 없습니다.mir9 포인트</span><br> 
+					                    	<span style="float:left;">검색된 회원정보가 없습니다.mir9 포인트</span><br> <!-- sms 발송 포인트 금액 : 이용하는 API측에서 가져오기 -->
 					                    	<span style="line-height:1.0;">
 					                    		<small class="text-red">※ 포인트가 부족하면 메시지를 발신 할 수 없습니다.<br>※ 발신번호 등록(관리자 > 설정 > 기본설정 > 발신자 번호)을 사전에 하여야 발송이 가능합니다. (발신번호를 미르나인 담당자에게 알려주기 바랍니다.)</small>
 					                    	</span>
@@ -81,29 +91,29 @@ textarea {
 				      				<tr>
 										<td class="content">회원가입</td>
 					                    <td>
-					                    	<!-- action에 해당하는 이름값 class로 분리 -->
+					                    	<!-- action에 해당하는 이름값 class로 분리하기 -->
 					                        <input type="hidden" class="join" name="code" value="join" /> 
-					                        <textarea class="join" name="content" >[{{shop_name}}] {{user_name}} 회원님의 가입을 진심으로 축하드립니다.</textarea>
+					                        <textarea class="join" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="join" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<!-- getDefaultTemplate(type, action, is_admin) -->
-					                   		<button type="button" onclick="getDefaultTemplate('sms', 'join', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                   		<button type="button" onclick="getDefaultTemplate('join');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="join" name="content_admin">[{{shop_name}}] {{user_name}} 회원님이 회원가입하셨습니다.</textarea>
+					                    	<textarea class="join_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="join" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'join', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('join_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{user_name}} : 회원명</li>			
+												<li>##shop_name## : 사이트명</li> <li>##user_name## : 회원명</li>			
 											</ul>
 										</td>      
 									</tr>      
@@ -111,26 +121,26 @@ textarea {
 										<td class="content">아이디 찾기<br>[아이디 찾기시]</td>
 					                    <td>
 					                        <input type="hidden" class="findid" name="code" value="findid" />
-					                        <textarea class="findid" name="content">[{{shop_name}}] {{user_name}} 회원님의 아이디가 메일로 발송되었습니다.</textarea>
+					                        <textarea class="findid" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="findid" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'findid', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('findid');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="findid" name="content_admin">[{{shop_name}}] {{user_name}} 회원님의 아이디가 메일로 발송되었습니다.</textarea>
+					                    	<textarea class="findid_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="findid" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'findid', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('findid_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{user_name}} : 회원명</li>			
+												<li>##shop_name## : 사이트명</li> <li>##user_name## : 회원명</li>			
 											</ul>
 										</td>      
 									</tr>      
@@ -138,26 +148,26 @@ textarea {
 										<td class="content">임시비밀번호 발급알림<br>[비밀번호 찾기시]</td>
 					                    <td>
 					                        <input type="hidden" class="findpw" name="code" value="findpw" />
-					                        <textarea class="findpw" name="content">[{{shop_name}}] {{user_name}} 회원님의 메일로 임시 비밀번호가 발송 되었습니다.</textarea>
+					                        <textarea class="findpw" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="findpw" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'findpw', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('findpw');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="findpw" name="content_admin">[{{shop_name}}] {{user_name}} 회원님의 메일로 임시 비밀번호가 발송 되었습니다.</textarea>
+					                    	<textarea class="findpw_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="findpw" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'findpw', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('findpw_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{user_name}} : 회원명</li>			
+												<li>##shop_name## : 사이트명</li> <li>##user_name## : 회원명</li>			
 											</ul>
 										</td>      
 									</tr>      
@@ -165,26 +175,26 @@ textarea {
 										<td class="content">주문접수<br>[무통장/카드 결제시]</td>
 					                    <td>
 					                        <input type="hidden" class="order" name="code" value="order" />
-					                        <textarea class="order" name="content">[{{shop_name}}] {{order_name}}님의 주문({{order_number}})이 접수되었습니다. 감사합니다.</textarea>
+					                        <textarea class="order" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="order" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'order', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('order');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="order" name="content_admin">[{{shop_name}}] {{order_name}}님의 주문({{order_number}})이 접수되었습니다.</textarea>
+					                    	<textarea class="order_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="order" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'order', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('order_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{order_name}} : 주문자명</li> <li>{{order_number}} : 주문번호</li>			
+												<li>##shop_name## : 사이트명</li> <li>##order_name## : 주문자명</li> <li>##order_number## : 주문번호</li>			
 											</ul>
 										</td>      
 									</tr>      
@@ -192,25 +202,26 @@ textarea {
 										<td class="content">입금확인<br>[무통장 입금 완료시]</td>
 					                    <td>
 					                        <input type="hidden" class="pay_done" name="code" value="pay_done" />
-					                        <textarea class="pay_done" name="content">[{{shop_name}}] {{order_name}}님의 주문({{order_number}})이 결제완료 되었습니다.</textarea>
+					                        <textarea class="pay_done" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="pay_done" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'pay_done', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('pay_done');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
-					                    	<td><textarea class="pay_done" name="content_admin">[{{shop_name}}] {{order_name}}님의 주문({{order_number}})이 결제완료 되었습니다.</textarea>
+					                    <td>
+					                    	<textarea class="pay_done_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="pay_done" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'pay_done', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('pay_done_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{order_name}} : 주문자명</li> <li>{{order_number}} : 주문번호</li>
+												<li>##shop_name## : 사이트명</li> <li>##order_name## : 주문자명</li> <li>##order_number## : 주문번호</li>
 											</ul>
 										</td>      
 									</tr>      
@@ -218,26 +229,26 @@ textarea {
 										<td class="content">상품 배송 준비중<br>[주문상태 배송준비중으로 변경시]</td>
 					                    <td>
 					                        <input type="hidden" class="delivery_ready" name="code" value="delivery_ready" />
-					                        <textarea class="delivery_ready" name="content">[{{shop_name}}] {{order_name}}님의 주문하신 상품이 배송준비중 입니다.</textarea>
+					                        <textarea class="delivery_ready" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_ready" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'delivery_ready', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('delivery_ready');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="delivery_ready" name="content_admin">[{{shop_name}}] {{order_name}}님의 주문하신 상품이 배송준비중 입니다.</textarea>
+					                    	<textarea class="delivery_ready_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_ready" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'delivery_ready', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('delivery_ready_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{order_name}} : 주문자명</li>
+												<li>##shop_name## : 사이트명</li> <li>##order_name## : 주문자명</li>
 											</ul>
 										</td>      
 									</tr>      
@@ -245,26 +256,26 @@ textarea {
 										<td class="content">상품 배송중<br>[주문상태 배송중으로 변경시]</td>
 					                    <td>
 					                        <input type="hidden" class="delivery_ing" name="code" value="delivery_ing" />
-					                        <textarea class="delivery_ing" name="content">[{{shop_name}}] {{order_name}}님의 주문하신 상품이 배송중 입니다.</textarea>
+					                        <textarea class="delivery_ing" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_ing" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'delivery_ing', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('delivery_ing');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="delivery_ing" name="content_admin">[{{shop_name}}] {{order_name}}님의 주문하신 상품이 발송 되었습니다.</textarea>
+					                    	<textarea class="delivery_ing_admin" name="content_admin"  ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_ing" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'delivery_ing', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('delivery_ing_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{order_name}} : 주문자명</li>			
+												<li>##shop_name## : 사이트명</li> <li>##order_name## : 주문자명</li>			
 											</ul>
 										</td>      
 									</tr>      
@@ -272,25 +283,25 @@ textarea {
 										<td class="content">상품 배송 완료<br>[주문상태 배송완료로 변경시]</td>
 					                    <td>
 					                        <input type="hidden" class="delivery_done" name="code" value="delivery_done" />
-					                        <textarea class="delivery_done" name="content">[{{shop_name}}] {{order_name}}님의 주문하신 상품이 배송완료 되었습니다.</textarea>
+					                        <textarea class="delivery_done" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_done" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'delivery_done', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('delivery_done');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="delivery_done" name="content_admin">[{{shop_name}}] {{order_name}}님의 주문하신 상품이 배송완료 되었습니다.</textarea>
+					                    	<textarea class="delivery_done_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_done" name="is_send_admin"  /></td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'delivery_done', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('delivery_done_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{order_name}} : 주문자명</li>
+												<li>##shop_name## : 사이트명</li> <li>##order_name## : 주문자명</li>
 											</ul>
 										</td>      
 									</tr>      
@@ -298,26 +309,26 @@ textarea {
 										<td class="content">주문취소<br>[주문 취소시]</td>
 					                    <td>
 					                        <input type="hidden" class="order_cancle" name="code" value="order_cancle" />
-					                        <textarea class="order_cancle" name="content">[{{shop_name}}] {{order_name}}님께서 요청하신 주문({{order_number}})이 취소되었습니다.</textarea>
+					                        <textarea class="order_cancle" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="order_cancle" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'order_cancel', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('order_cancel');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="order_cancle" name="content_admin">[{{shop_name}}] {{order_name}}님께서 요청하신 주문({{order_number}})이 취소되었습니다.</textarea>
+					                    	<textarea class="order_cancle_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="order_cancle" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'order_cancel', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('order_cancel_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{order_name}} : 주문자명</li> <li>{{order_number}} : 주문번호</li>			
+												<li>##shop_name## : 사이트명</li> <li>##order_name## : 주문자명</li> <li>##order_number## : 주문번호</li>			
 											</ul>
 										</td>      
 									</tr>      
@@ -325,26 +336,26 @@ textarea {
 										<td class="content">환불완료<br>[주문상태 환불완료로 변경시]</td>
 					                    <td>
 					                        <input type="hidden" class="refund" name="code" value="refund" />
-					                        <textarea class="refund" name="content">[{{shop_name}}] {{order_name}}님께서 요청하신 주문({{order_number}})이 환불 처리되었습니다.</textarea>
+					                        <textarea class="refund" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="refund" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'refund', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('refund');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="refund" name="content_admin">[{{shop_name}}] {{order_name}}님께서 요청하신 주문({{order_number}})이 환불 처리되었습니다.</textarea>
+					                    	<textarea class="refund_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="refund" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'refund', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('refund_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{order_name}} : 주문자명</li> <li>{{order_number}} : 주문번호</li>			
+												<li>##shop_name## : 사이트명</li> <li>##order_name## : 주문자명</li> <li>##order_number## : 주문번호</li>			
 											</ul>
 										</td>      
 									</tr>      
@@ -352,26 +363,26 @@ textarea {
 										<td class="content">적립금 적립<br>[개별 적립금 적립시]</td>
 					                    <td>
 					                        <input type="hidden" class="point" name="code" value="point" />
-					                        <textarea class="point" name="content">[{{shop_name}}] {{user_name}}님에게 적립금 [{{point}}]이 {{point_type}} 되었습니다. 감사합니다.</textarea>
+					                        <textarea class="point" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="point" name="is_send" checked>
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'point', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('point');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="point" name="content_admin">[{{shop_name}}] {{user_name}}님에게 적립금 [{{point}}]이 {{point_type}} 되었습니다. 감사합니다.</textarea>
+					                    	<textarea class="point_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="point" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'point', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('point_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{user_name}} : 회원명</li> <li>{{point}} : 포인트</li> <li>{{point_type}} : 포인트 구분</li>
+												<li>##shop_name## : 사이트명</li> <li>##user_name## : 회원명</li> <li>##point## : 포인트</li> <li>##point_type## : 포인트 구분</li>
 											</ul>
 										</td>      
 									</tr>      
@@ -379,26 +390,26 @@ textarea {
 										<td class="content">쿠폰 지급<br>[개별 쿠폰 지급시]</td>
 					                    <td>
 					                        <input type="hidden" class="coupon" name="code" value="coupon" />
-					                        <textarea class="coupon" name="content">[{{shop_name}}] {{user_name}}님에게 [{{coupon_name}}]이 지급 되었습니다. 감사합니다.</textarea>
+					                        <textarea class="coupon" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="coupon" name="is_send" checked />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'coupon', '');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('coupon');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="coupon" name="content_admin">[{{shop_name}}] {{user_name}}님에게 [{{coupon_name}}]이 지급 되었습니다. 감사합니다.</textarea>
+					                    	<textarea class="coupon_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="coupon" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
-					                    	<button type="button" onclick="getDefaultTemplate('sms', 'coupon', 'admin');" class="btn btn-primary btn-xs">가져오기</button>
+					                    	<button type="button" onclick="getDefaultTemplate('coupon_admin');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>		
 					                    <td align="left">
 											<ul>
-												<li>{{shop_name}} : 사이트명</li> <li>{{user_name}} : 회원명</li> <li>{{coupon_name}} : 쿠폰명</li> 
+												<li>##shop_name## : 사이트명</li> <li>##user_name## : 회원명</li> <li>##coupon_name## : 쿠폰명</li> 
 											</ul>
 										</td>      
 									</tr>				
@@ -409,8 +420,7 @@ textarea {
 						</form>	
 		
 		                <div style="text-align:center;"><button type="button" onclick="register()" class="btn btn-primary">확인</button></div>
-		                <div style="text-align:center;"><button type="button" onclick="getToken()" class="btn btn-primary">토큰 내놔</button></div>
-	                
+	                	
 	                </div><!-- /.box-body -->
 	            </div><!-- /.box -->
 	        </div><!-- /.col-xs-12 -->
@@ -419,69 +429,73 @@ textarea {
 </div><!-- /.content-wrapper -->
 
 <script>
-	// 사용자 토큰 발급 
-	function getToken() {
-		/*
-			rest key : 692e25c8b6965b6470b9429719b4e5e7
-			redirect uri : http://localhost:8080/mir9/comm/sms 
-			인증코드 발급 : https://kauth.kakao.com/oauth/authorize?client_id={restKey}&response_type=code&redirect_uri={redirectURI}
-		*/
-		$.ajax({
-		    type: "POST",
-		    url: "https://kauth.kakao.com/oauth/token",
-		    header: {
-		        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-		    },
-		    data: { 
-		    	grant_type: "authorization_code", 
-		    	client_id: "692e25c8b6965b6470b9429719b4e5e7", 
-		    	redirect_uri: "http://localhost:8080/mir9/comm/sms", 
-		    	code: "h63Hff8Su9uQKyRYqvk4PnxZ8o_JadJ6I9PWU3qb0BqyevH7JufUg9_MHTUtUDXydYR6TgopcFAAAAGAPuOvcw"
-		    },
-		    success: function(data) {
-				console.log("=====토큰=====");
-				console.log(data);
-		    },
-		    error: function(textStatus, errorThrown){
-				console.log(textStatus);
-			}
+	// 25일 월요일 목표 : sms api 기능 구현 + smslist 어떻게 할 건지 생각  
+	// SENS API => sms_list 조회
+	// 1. 저장 양식 불러오기 -> 완료 / 일치하는 textarea에 접근해야 함 -> attr("class") 해결
+	// 2. 기존 양식 불러오기 -> 완료 / 템플릿 전체 목록이 안 뜸 -> pageSize 쿼리스트링으로 넘겨서 해결
+	// 3. 양식 및 체크 박스 값 저장 -> 수정중 / 이클립스에서는 되는데 얘는 왜 안 됨...?? -> Service에서 -9997 invalid API parameters 뜸...
+	// 4. 포인트 값 -> 미완료 / 포인트 형식이 아님 그냥 건당 금액 차감식 
+	
+	// 저장된 양식 조회
+	$(function(){
+		
+		// savedTemplateId, savedContent, textarea 선언
+		var savedTemplateId = [];
+		var savedContent = [];
+		var textarea = [];
+		
+		// savedTemplateId 값 담기
+		$.each($("input[name='savedTemplateId']"), function(index, value) { 
+			savedTemplateId.push($(value).val());
 		});
+		
+		// savedContent 값 담기
+		$.each($("input[name='savedContent']"), function(index, value) { 
+			savedContent.push($(value).val());
+		});
+		
+		// textarea의 class 값 담기 
+		$("textarea").each(function() { 
+			textarea.push($(this).attr("class"));
+		});	
+
+		// class와 일치하는 textarea에 문구 적용
+		for(var i = 0; i < savedTemplateId.length; i++) {
+			for(var j = 0; j < textarea.length; j++) {
+				if(savedTemplateId[i] == textarea[j].concat("_mod")) { 
+					$("textarea[class='" + textarea[j] + "']").val(savedContent[i]);	
+				}	
+			}
+		}
+	});
 	
-	};	
-	
-	// 기본 양식 불러오기
-	function getDefaultTemplate(type, action, is_admin) { 
-		$.ajax({
-			url:'http://demoshop.mir9.kr/api/process.php', 
-			type:'post',
-			dataType:'json',
-			data:{
-				method:'UtilNotice.getCommunityTemplate',
-				type: type,
-				action: action,
-	            is_admin: is_admin
-			},
-			success:function(data, textStatus, jqXHR){
+	// 기본 양식 불러오기 
+	function getDefaultTemplate(action) { 
+		
+		// templateId, content 선언
+		var templateId = [];
+		var content = [];
+		
+		// templateId 값 담기
+		$.each($("input[name='templateId']"), function(index, value) { 
+			templateId.push($(value).val());
+		});
+		
+		// bodyContent 값 담기
+		$.each($("input[name='bodyContent']"), function(index, value) { 
+			content.push($(value).val());
+		});
 				
-				console.log("===== 기본 data =====");
-	            console.log(data);
-	            
-				if(data.data.length > 0){
-					if(confirm(data.data + '\n\n해당 문구로 적용하시겠습니까?')){
-						if(is_admin == 'admin'){
-							$("textarea[class='" + action + "']").val(data.data);
-						}else{
-							$("textarea[class='" + action + "']").val(data.data);
-						}
-					}
+		// action과 일치하는 textarea에 문구 적용
+		for(var i = 0; i < templateId.length; i++) {
+			if(templateId[i] == action) { 
+				if(confirm(content[i] + "\n\n해당 문구로 적용하시겠습니까?")) {
+					$("textarea[class='" + action + "']").val(content[i]);		
 				}
-			},
-			error:function(jqXHR, textStatus, errorThrown){
-				console.log(textStatus);
 			}
-		});
-	}	
-	
+		}
+	}		
+		
 	// 전체 변경 확인 버튼 
 	function register() { 
 		// 체크박스 값 설정
@@ -502,118 +516,126 @@ textarea {
         		$(this).attr("value", "n");
         	}
         });
+				
+		// code, is_send, cotent 선언
+		var code = []; // textarea의 class 값
+		var is_send = []; // checkbox 값
+		var content = []; // textarea 값
 		
-		// 폼 정보 불러오기 
-		const formData = new FormData(document["form_register"]);
-		var obj = {};
-		for(const [k, v] of formData) {
-			obj[k] = v; // key, value로 담기
-		}
-		
-		// code, checkbox, textarea 선언
-		obj.code = [];
-		obj.is_send = [];
-		obj.content = [];
-		obj.is_send_admin = [];
-		obj.content_admin = [];
-		
-		// obj에 각각의 값 담기
-		$.each($("input[name='code']"), function(index, value) { 
-			obj.code.push($(value).val());
+		// 값 담기
+		$("textarea").each(function() {
+			code.push($(this).attr("class"));
 		});
-		$.each($("input[name='is_send']"), function(index, value) {
-			obj.is_send.push($(value).val());
+		$.each($("input[name='is_send'], input[name='is_send_admin']"), function(index, value) {
+			is_send.push($(value).val());
 		});
-		$.each($("textarea[name='content']"), function(index, value) {
-			obj.content.push($(value).val());
-		});
-		$.each($("input[name='is_send_admin']"), function(index, value) {
-			obj.is_send_admin.push($(value).val());
-		});
-		$.each($("textarea[name='content_admin']"), function(index, value) {
-			obj.content_admin.push($(value).val());
+		$.each($("textarea[name='content'], textarea[name='content_admin']"), function(index, value) {
+			content.push($(value).val());
 		});
 		
-		console.log("=====obj=====");
-		console.log(obj);
-	
-		for(var i=0 ; i< obj.is_send.length ; i++ ){
-			if(obj.is_send[i] == "y"){ // 회원 자동 발송이 체크
-				if(obj.content[i].length < 10){ // 회원 문구가 10글자 미만일 때
-					alert("자동발송을 하려면 '" + category_txt(obj.code[i]) + "' 안내메시지가 최소 10자 이상 입력되어야 합니다."); 
-					return;
-				}
-			}
-			if(obj.is_send_admin[i] == "y"){ // 관리자 자동 발송이 체크 
-				if(obj.content_admin[i].length < 10){
-					alert("자동발송을 하려면 '" + category_txt(obj.code[i]) + "' 안내메시지가 최소 10자 이상 입력되어야 합니다.");
-					return;
-				}
-			}
-		}
-		
-		const jsonStr = JSON.stringify(obj);
-
-		/*
-		form_register.target = 'iframe_process';
-	    form_register.submit();
+		/* 확인
+		console.log("=====code=====");
+		console.log(code);
+		console.log("=====is_send=====");
+		console.log(is_send);
+		console.log("=====content=====");
+		console.log(content);
 		*/
-	}
+		
+		// 자동발송 문구 조건
+		for(var i = 0; i < is_send.length; i++) {
+			if(is_send[i] == "y" && content[i].length < 10) {
+				alert("자동발송을 하려면 '" + category_txt(code[i]) + "' 안내메시지가 최소 10자 이상 입력되어야 합니다."); 
+				return;
+			}
+		}
+		
+		// data -> json
+		var data = { code : code, is_send : is_send, content : content }		
+		var jsonStr = JSON.stringify(data);
+		
+		/* 확인
+		console.log("=====jsonStr=====");
+		console.log(jsonStr);
+		*/
+		
+		// ajax로 값 넘기기
+		$.ajax({
+			url:"${pageContext.request.contextPath}/comm/sms",
+			method:"POST",
+			contentType: "application/json; charset=utf-8",
+			headers: {
+				"${_csrf.headerName}" : "${_csrf.token}"
+			},
+			data: jsonStr,
+			success: function(result) {
+				if(result > 0) {
+					alert("SMS 설정이 수정되었습니다.");
+				}
+			},
+			error: function(textStatus, errorThrown) {
+				console.log("SMS 설정 수정에 실패했습니다.");
+				// console.log(textStatus);
+				// console.log(errorThrown);
+			}
+		});
+	}	
 	
+	// alert code 값 치환
 	function category_txt(t_name){
 		var return_txt = "";
 		
-			if(t_name == "join"){
+		if(t_name.includes("join")){
 				return_txt = "회원가입";
 			}
 		else
-			if(t_name == "findid"){
+			if(t_name.includes("findid")){
 				return_txt = "아이디 찾기 [아이디 찾기시]";
 			}
 		else
-			if(t_name == "findpw"){
+			if(t_name.includes("findpw")){
 				return_txt = "임시비밀번호 발급알림 [비밀번호 찾기시]";
 			}
 		else
-			if(t_name == "order"){
+			if(t_name.includes("order")){
 				return_txt = "주문접수 [무통장/카드 결제시]";
 			}
 		else
-			if(t_name == "pay_done"){
+			if(t_name.includes("pay_done")){
 				return_txt = "입금확인 [무통장 입금 완료시]";
 			}
 		else
-			if(t_name == "delivery_ready"){
+			if(t_name.includes("delivery_ready")){
 				return_txt = "상품 배송 준비중 [주문상태 배송준비중으로 변경시]";
 			}
 		else
-			if(t_name == "delivery_ing"){
+			if(t_name.includes("delivery_ing")){
 				return_txt = "상품 배송중 [주문상태 배송중으로 변경시]";
 			}
 		else
-			if(t_name == "delivery_done"){
+			if(t_name.includes("delivery_done")){
 				return_txt = "상품 배송 완료 [주문상태 배송완료로 변경시]";
 			}
 		else
-			if(t_name == "order_cancel"){
+			if(t_name.includes("order_cancel")){
 				return_txt = "주문취소 [주문 취소시]";
 			}
 		else
-			if(t_name == "refund"){
+			if(t_name.includes("refund")){
 				return_txt = "환불완료 [주문상태 환불완료로 변경시]";
 			}
 		else
-			if(t_name == "point"){
+			if(t_name.includes("point")){
 				return_txt = "적립금 적립 [개별 적립금 적립시]";
 			}
 		else
-			if(t_name == "coupon"){
+			if(t_name.includes("coupon")){
 				return_txt = "쿠폰 지급 [개별 쿠폰 지급시]";
 			}
 		
 		return return_txt;
 	}
-
+	
 </script>
 
 

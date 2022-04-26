@@ -23,6 +23,7 @@ public class ProductDetail implements Serializable {
 	private String imgUrl;
 	private String categoryName;
 	private String productName;
+	private String modelName;
 	private String listTitle;
 	private int salePrice;
 	private Date regDate;

@@ -40,6 +40,8 @@ public interface OrderService {
 
 	int selectMonthOrderCnt();
 
+	List<OrderDetail> selectOrderDetailList();
+
 
 
 	

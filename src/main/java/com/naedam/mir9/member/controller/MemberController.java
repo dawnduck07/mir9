@@ -4,6 +4,7 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
@@ -84,7 +85,7 @@ public class MemberController {
 		Member member = (Member) authentication.getPrincipal();
 		log.debug("[principal] member = {}", member);
 		int memberNo = member.getMemberNo();
-		// 주소록 조회
+		// 주소 조회
 		Address address = memberService.selectOneAddress(memberNo);
 		int addressNo = address.getAddressNo();
 		String id = member.getId();
@@ -103,15 +104,15 @@ public class MemberController {
 				// 주소록 삭제
 				int resultDeleteAddressBook = memberService.deleteAddressBook(addressBookNo);
 				log.debug("resultDeleteAddressBook = {}", resultDeleteAddressBook);
-				
+
 				// 주소 삭제
 				int resultDeleteAddress = memberService.deleteAddress(addressNo);
 				log.debug("resultDeleteAddress = {}", resultDeleteAddress);
-				
+
 				// 권한 삭제
 				int resultDeleteAuthorities = memberService.deleteAuthorties(memberNo);
 				log.debug("resultDeleteAuthorities = {}", resultDeleteAuthorities);
-
+				
 				// 회원 삭제
 				int resultMemberWithdrawal = memberService.memberWithdrawal(id);
 				log.debug("resultMemberWithdrawal = {}", resultMemberWithdrawal);
@@ -264,8 +265,6 @@ public class MemberController {
 		int resultInsertAuthorities = memberService.insertAuthorities(paramAuthorities);
 		log.debug("resultInsertAuthorities = {}", resultInsertAuthorities);
 		
-		
-		
 		String msg = "";
 		
 		if(resultRegisterMember > 0 
@@ -380,7 +379,6 @@ public class MemberController {
 			updateDate = dateFormat.format(member.getUpdateDate());
 		}
 		
-		
 		// 2. 주소(Address) 조회
 		Address address = memberService.selectOneAddress(memberNo);
 		log.debug("address = {}", address);
@@ -421,6 +419,7 @@ public class MemberController {
 		
 		return map;
 	}
+	
 	
 	// 회원 상세보기 저장(update)
 	@SuppressWarnings("unchecked")
@@ -543,6 +542,55 @@ public class MemberController {
 		return resultMap;
 	}
 	
+	// 탈퇴회원 선택 삭제
+	@PostMapping("/withdrawalDelete.do")
+	public String withdrawalDelete(
+				@RequestParam int[] memberNo,
+				RedirectAttributes redirectAttr,
+				HttpServletRequest request) throws Exception {
+		log.debug("{}", "withdrawalDelete.do 시작");
+		log.debug("memberNo = {}", memberNo);
+		Map<String, Object> param = new HashMap<>();
+		
+
+		try {
+			
+			// 주소 번호 조회
+			List<Address> addressList = memberService.findAddressNo(memberNo);
+			log.debug("addressNo = {}", addressList);
+			for(int i = 0; i < addressList.size(); i++) {
+				
+				int addressNo = addressList.get(i).getAddressNo();
+				log.debug("addressNo = {}", addressNo);
+				
+				// 주소 삭제
+				int resultDeleteAddress = memberService.deleteWithdrawalAddress(addressNo);
+				log.debug("resultDeleteAddress = {}", resultDeleteAddress);
+			}
+			
+			// 주소록 삭제
+			int resultDeleteBook = memberService.deleteWithdrawalAddressBook(memberNo);
+			log.debug("resultDeleteBook = {}", resultDeleteBook);
+			
+					
+			// 권한 삭제
+			int resultDeleteAuthority = memberService.deleteWithdrawalAuthority(memberNo);
+			log.debug("resultDeleteAuthority = {}", resultDeleteAuthority);
+			
+			// 회원 삭제
+			int resultDeleteMember = memberService.deleteWithdrawal(memberNo);
+			log.debug("result = {}", resultDeleteMember);			
+						
+			redirectAttr.addFlashAttribute("msg", "해당 회원이 삭제되었습니다.");
+		} catch (Exception e) {
+			log.error("회원 삭제 실패", e);
+			throw e; // spring container에게 예외상황 알림
+		}
+		
+		String referer = request.getHeader("Referer");
+		log.debug("referer = {}", referer);
+		return "redirect:" + referer;
+	}
 	
 	// 회원 접속이력 관리
 	@GetMapping("/log")

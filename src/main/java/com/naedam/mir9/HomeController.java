@@ -15,7 +15,10 @@ import com.naedam.mir9.board.model.service.BoardService;
 import com.naedam.mir9.board.model.vo.Board;
 import com.naedam.mir9.member.model.service.MemberService;
 import com.naedam.mir9.order.model.service.OrderService;
+import com.naedam.mir9.order.model.vo.OrderDetail;
 import com.naedam.mir9.payment.model.service.PaymentService;
+import com.naedam.mir9.product.model.service.ProductService;
+import com.naedam.mir9.product.model.vo.ProductDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +36,8 @@ public class HomeController {
 	private MemberService memberService;
 	@Autowired
 	private BoardService boardService;
-	
+	@Autowired
+	private ProductService productService;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -56,11 +60,15 @@ public class HomeController {
 		counts.put("monthOrderCnt", orderService.selectMonthOrderCnt());
 		counts.put("totalCancelAmountMonth", paymentService.selectTotalCancelAmountMonth());
 		counts.put("monthCancelCnt", paymentService.selectMonthCancelCnt());
-		List<Board> boardList = boardService.getBoardTitle();
-		
-		
+
+		List<Board> boardList = boardService.getBoardTitle();		
+		List<OrderDetail> orderList = orderService.selectOrderDetailList();
+		List<ProductDetail> productList = productService.selectAllProductList();
 		model.addAttribute("counts", counts);
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("orderList",orderList);
+		model.addAttribute("productList",productList);
+
 		
 		return "forward:/dashBoard.jsp";
 	}

@@ -103,6 +103,12 @@ public class OrderDaoImpl implements OrderDao {
 		return session.selectOne("order.selectMonthOrderCnt");
 	}
 
+	@Override
+	public List<OrderDetail> selectOrderDetailList() {
+		// TODO Auto-generated method stub
+		return session.selectList("order.selectOrderDetailList");
+	}
+
 
 	
 

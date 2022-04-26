@@ -24,7 +24,7 @@
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css" />
 <script>
-<!-- redirect Msg 처리 : deliveryController 참조 -->
+<!-- redirect Msg 처리 -->
 <c:if test="${not empty msg}">
 		alert("${msg}");
 		location.reload();

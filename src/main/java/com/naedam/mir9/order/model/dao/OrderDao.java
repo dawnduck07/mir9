@@ -40,6 +40,8 @@ public interface OrderDao {
 
 	int selectMonthOrderCnt();
 
+	List<OrderDetail> selectOrderDetailList();
+
 
 
 }

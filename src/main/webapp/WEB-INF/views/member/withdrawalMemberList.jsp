@@ -21,6 +21,13 @@
 	width: 400px;
 }
 </style>
+<script>
+<!-- redirect Msg 처리 -->
+<c:if test="${not empty msg}">
+		alert("${msg}");
+		location.reload();
+</c:if>
+</script>
 
 	<section class="content-header">
 	<h1>
@@ -62,12 +69,13 @@
 							</div>
 						</div>
 					</form>
+					<form:form id="withdrawalDeleteFrm" name="withdrawalDeleteFrm" action="${pageContext.request.contextPath}/member/withdrawalDelete.do" method="POST">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<table class="table table-bordered table-hover checkbox-group">
 						<thead>
 							<tr>
 								<td style="width: 30px;">
 									<input type="checkbox" name="select_all" id="checkAll" /> 
-									<input type="hidden" id="memberNo" name="memberNo" value="" />
 								</td>
 								<td style="width: 110px;">아이디</td>
 								<td style="width: 110px;">이름</td>
@@ -79,10 +87,11 @@
 							</tr>
 						</thead>
 						<tbody id="tbody">
+						<c:if test="${not empty withdrawalMemberList}">
 							<c:forEach items="${withdrawalMemberList}" var="withdrawal">
 								<tr>
 									<td style="width: 30px;">
-										<input type="checkbox" class="member-is-checked" name="list[]" value="${withdrawal.memberNo}" data-target="${withdrawal.memberNo}" />
+										<input type="checkbox" name="" class="member-is-checked" data-target="${withdrawal.memberNo}"/>
 									</td>
 									<td style="width: 110px;">${withdrawal.id}</td>
 									<td style="width: 110px;">${withdrawal.name}</td>
@@ -99,15 +108,20 @@
 									</td>
 								</tr>
 							</c:forEach>
+							</c:if>
+							<c:if test="${empty withdrawalMemberList}">
+								<tr><td colspan="10"><br>등록된 자료가 없습니다.<br><br></td></tr>  
+							</c:if>
 						</tbody>
 						<!-- <tr>
 							<td colspan="10"><br>등록된 자료가 없습니다.<br>
 							<br></td>
 						</tr> -->
 					</table>
+					</form:form>
 					<br>
 					<button type="button"
-						onclick="selectDelete('delete','선택된 회원을 삭제하시겠습니까?');"
+						id="withdrawalDeleteBtn"
 						class="btn btn-danger">
 						<i class="fa fa-minus-square"></i> 선택삭제
 					</button>
@@ -340,6 +354,57 @@ $(document).ready(function(){
 			});
 		}
 	});
+});
+
+// 체크박스 전체 선택
+$(".checkbox-group").on("click", "#checkAll", ((e)=>{
+	let checked = $(e.target).is(":checked");
+	console.log("전체 선택 : " + checked);
+	
+	if(checked){
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", true);
+	} else {
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", false);
+	}
+}));
+
+// 체크박스 개별 선택
+$(document).on("click", ".member-is-checked", function(){
+	let isChecked = true;
+	console.log("개별 선택 : " + isChecked);
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked && $(item).is(":checked");
+		console.log("i : " + i);
+		console.log($(item).is(":checked"));
+	});
+	
+	$("#checkAll").prop("checked", isChecked);
+});
+
+// 선택 삭제
+$(document).on("click", "#withdrawalDeleteBtn", function(){
+	let isChecked = false;
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked || $(item).is(":checked");
+        let target = $(item).data("target");
+		console.log("target = ", target); // target = memberNo
+		
+		if($(item).is(":checked")){
+        	$(item).after(`<input type="hidden" name="memberNo" value="\${target}"/>`);
+        }
+	});
+	
+	if(!isChecked){
+		alert("선택된 목록이 없습니다.");
+		return;
+	}
+	
+	console.log("클릭");
+	console.log($(document.withdrawalDeleteFrm));
+    if(confirm("선택된 회원을 삭제하시겠습니까?"))
+		$(document.withdrawalDeleteFrm).submit();
 });
 
 </script>
