@@ -15,7 +15,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(callSuper = true)
 public class WithdrawalMember extends Member {
 
 	/**

@@ -62,7 +62,7 @@
 						<table class="table table-bordered table-hover checkbox-group">
 							<thead>
 								<tr>
-									<td style="width: 30px;"><input type="checkbox" name="select_all" id="checkAll" /> <input type="hidden" id="memberNo" name="memberNo" value="" /></td>
+									<td style="width: 30px;"><input type="checkbox" name="select_all" id="checkAll" /></td>
 									<td style="width: 110px;">아이디</td>
 									<td style="width: 110px;">이름</td>
 									<td style="width: 110px;">휴대폰</td>
@@ -432,7 +432,7 @@ $("button[id^='detail_']").on('click', function(e){
 	$.ajax({
 		url : `${pageContext.request.contextPath}/member/memberDetail.do/\${memberNo}`,
 		data : data,
-		contentType : "application/json ; charset=utf-8",
+		contentType : "application/json; charset=utf-8",
 		method : "GET",
 		success : function(res) {
 			console.log("ajaxData = " + JSON.stringify(res));
