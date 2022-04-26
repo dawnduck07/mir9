@@ -20,21 +20,16 @@ public class PeriodStatisticVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Date paidAt;
-	private double amount;
-	private double cancelAmont;
-	private int salePrice;
-	private int basicDeliveryFee;
-	private int FreeShippingSettings;
-	private String ExtraDeliFeeYn;
-	private int couponNo;
-	private String couponName;
-	private String provideType;
-	private String bebefitType;
-	private String discountType;
-	private int discount;
-	private int useLimit;
-	private int useMax;
-	private int point;
 	private double totalAmount;
 	private double totalCancelAmount;
+	private int totalSalePrice;
+	private int totalDeliFee;
+	private int totalCouponAmount;
+	private int totalPointAmount;
+	private int totalOptionCost;
+	private int totalSalePriceCancel;
+	private int totalDeliFeeCancel;
+	private int totalCouponAmountCancel;
+	private int totalPointAmountCancel;
+	private int totalOptionCostCancel;
 }

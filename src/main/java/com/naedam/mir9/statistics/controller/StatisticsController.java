@@ -33,7 +33,7 @@ public class StatisticsController {
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
 		for(int i = 0; i < 7; i++) {
 			Calendar cal = new GregorianCalendar();
-			cal.add(GregorianCalendar.DATE, i);
+			cal.add(GregorianCalendar.DATE, -i);
 			param.put("date", cal.getTime());
 			PeriodStatisticVo statistic = new PeriodStatisticVo();
 			
@@ -49,7 +49,8 @@ public class StatisticsController {
 			
 			result.add(statistic);
 		}
-
+		
+		Collections.reverse(result);
 		model.addAttribute("result", result);
 		
 
