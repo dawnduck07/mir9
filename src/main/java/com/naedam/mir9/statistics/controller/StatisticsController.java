@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,15 +31,10 @@ public class StatisticsController {
 	public String statisticsPeriod_day(Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
-		Calendar today = Calendar.getInstance();
-		today.setTime(new Date());
-		today.add(Calendar.DATE, 6);
-		
 		for(int i = 0; i < 7; i++) {
-			today.add(Calendar.DATE, -i);
-			Date date = new Date(today.getTimeInMillis());
-			param.put("date", date);
-			
+			Calendar cal = new GregorianCalendar();
+			cal.add(GregorianCalendar.DATE, i);
+			param.put("date", cal.getTime());
 			PeriodStatisticVo statistic = new PeriodStatisticVo();
 			
 			try {
@@ -48,7 +44,7 @@ public class StatisticsController {
 			
 			if(statistic == null) {
 				statistic = new PeriodStatisticVo();
-				statistic.setPaidAt(date);
+				statistic.setPaidAt(cal.getTime());
 			}
 			
 			result.add(statistic);
