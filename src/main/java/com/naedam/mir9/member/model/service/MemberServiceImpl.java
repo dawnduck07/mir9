@@ -17,6 +17,7 @@ import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
 import com.naedam.mir9.member.model.vo.WithdrawalMember;
+import com.naedam.mir9.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 @Service
@@ -321,6 +322,17 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int deleteWithdrawalMemo(int[] memberNo) {
 		return memberDao.deleteWithdrawalMemo(memberNo);
+	}
+
+	// 탈퇴회원 상세조회
+	@Override
+	public WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo) {
+		return memberDao.selectOneWithdrawalMemberEntity(memberNo);
+	}
+
+	@Override
+	public int deleteMemberMemo(int memberNo) {
+		return memberDao.deleteMemberMemo(memberNo);
 	}
 
 	
