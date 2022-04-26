@@ -1,6 +1,7 @@
 package com.naedam.mir9.community.model.service;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -240,21 +241,23 @@ public class CommunityServiceImpl implements CommunityService {
 		String codeMod = code.concat("_mod");
 		
 		// 쿼리스트링 : categoryId=78520 
-		String postUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + appKey + "/templates/" + codeMod;
+		String put = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + appKey + "/templates/" + codeMod;
+		String get = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + appKey + "/templates/" + codeMod;
 
 		try {
-			URL url = new URL(postUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			// PUT 요청
+			URL putUrl = new URL(put);
+			HttpURLConnection putConn = (HttpURLConnection) putUrl.openConnection();
 			
 			// method
-			conn.setRequestMethod("PUT");
+			putConn.setRequestMethod("PUT");
 			
 			// header
-			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			conn.setRequestProperty("X-Secret-Key", secretKey);
+			putConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			putConn.setRequestProperty("X-Secret-Key", secretKey);
 			
 			// doOutput : OutputStream으로 POST 데이터를 넘겨주겠다는 옵션
-			conn.setDoOutput(true);
+			putConn.setDoOutput(true);
 			
 			// data
 			JsonObject json = new JsonObject();
@@ -265,53 +268,78 @@ public class CommunityServiceImpl implements CommunityService {
 			json.addProperty("useYn", "Y"); // 사용 유무
 			
 			// 데이터 전송 준비
-			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+			OutputStreamWriter os = new OutputStreamWriter(putConn.getOutputStream());
 			os.write(json.toString());
 			os.flush();
+			os.close();
 			
-			// 확인
+			/* 확인
 			System.out.println("=====Service:json.toString()=====");
 			System.out.println(json.toString());
+			*/
 			
+			int responseCode = putConn.getResponseCode();
+			String responseMsg = putConn.getResponseMessage();
 			
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			/* 확인
+			System.out.println("=====Service:responseCode=====");
+			System.out.println(responseCode); // 200		
+			*/
+			
+			// PUT 요청에 대한 응답 GET 요청
+			URL getUrl = new URL(get);
+			HttpURLConnection getConn = (HttpURLConnection) getUrl.openConnection();
+			
+			// method
+			getConn.setRequestMethod("GET");
+			
+			// header
+			getConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			getConn.setRequestProperty("X-Secret-Key", secretKey);			
+			
+			// 응답 받기
+			BufferedReader br = new BufferedReader(new InputStreamReader(getConn.getInputStream(), "UTF-8"));
+			StringBuilder sb = new StringBuilder();
 			
 			String line = "";
 			String response = "";
 			
 			while((line = br.readLine()) != null) {
-				response += line;
+				sb.append(line);
 			}
 			
-			// 확인
+			response = sb.toString();
+			br.close();
+			
+			/* 확인
 			System.out.println("=====Service:response=====");
 			System.out.println(response);
+			*/
 			
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(response);
 			
-			// JSON>body>data에 접근
+			// JSON>header>resultMessage에 접근
 			JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
 			String str = header.getAsJsonObject().get("resultMessage").getAsString();
 			
-			// 확인
+			/* 확인
 			System.out.println("=====Service:header=====");
 			System.out.println(header);
 			System.out.println("=====Service:str=====");
 			System.out.println(str);
-
+			*/
 			
 			// 성공 시
 			if(str.equals("success")) {
 				result = 1;
 			}
 			
-			// 확인
+			/* 확인
 			System.out.println("=====Service:result=====");
 			System.out.println(result);
-			
-			br.close();
+			*/
 			
 		} catch (IOException e) {
 			e.printStackTrace();
