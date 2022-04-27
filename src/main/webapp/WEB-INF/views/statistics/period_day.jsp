@@ -10,6 +10,7 @@
 </jsp:include>
 
 
+
 <!-- content-wrapper -->
 <div class="content-wrapper">
 	<section class="content-header">
@@ -40,7 +41,7 @@
 									</tr>
 									<tr>
 										<td class="menu">기간 검색</td>
-										<td align="left"><input type="text" name="start_date" id="start_date" value="" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" /> ~ <input type="text" name="end_date" id="end_date" value="" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" />
+										<td align="left"><input type="text" name="start_date" id="start_date" value="${startDateStr == null ? '' : startDateStr }" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" /> ~ <input type="text" name="end_date" id="end_date" value="${endDateStr == null ? '' : endDateStr }" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" />
 
 											<button type="button" onclick="setSearchDate('D0');" class="btn btn-primary btn-xs">오늘</button>
 											<button type="button" onclick="setSearchDate('D6');" class="btn btn-primary btn-xs">7일</button>
@@ -200,7 +201,6 @@
 	}
 	
 	/* 기간 검색 디폴트 및 기능 */
-	setSearchDate("D6");
 	function setSearchDate(type){
 		$("input[name=start_date]").val(dateStr(type));
 		$("input[name=end_date]").val(dateStr('D0'));
@@ -298,5 +298,9 @@ $(document).ready(function(){
 	
 });	
 </script>
-
+<c:if test="${startDateStr == null }">
+	<script>
+		setSearchDate('D6');
+	</script>
+</c:if>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

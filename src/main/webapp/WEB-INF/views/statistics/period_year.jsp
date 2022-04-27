@@ -9,6 +9,8 @@
 	<jsp:param value="기간별 통계" name="title" />
 </jsp:include>
 
+<c:set var="now" value="<%= new java.util.Date() %>"/>
+<c:set var="nowYear"><fmt:formatDate value="${now }" pattern="yyyy"/></c:set>
 
 <!-- content-wrapper -->
 <div class="content-wrapper">
@@ -41,17 +43,24 @@
 									<tr>
 										<td class="menu">기간 검색</td>
 										<td align="left"><select name="start_date" id="start_date" class="form-control input-sm " style="width: 100px; display: inline-block;">
-												<option value="2018" selected>2018</option>
-												<option value="2019">2019</option>
-												<option value="2020">2020</option>
-												<option value="2021">2021</option>
-												<option value="2022">2022</option>
+												<c:forEach var="year" begin="2018" end="${nowYear }">
+													<c:if test="${startDateStr != null }">
+														<option value="${year }" ${year == startDateStr ? 'selected' : '' }>${year }</option>
+													</c:if>
+													<c:if test="${startDateStr == null }">
+														<option value="${year }" ${year == '2018' ? 'selected' : '' }>${year }</option>
+													</c:if>
+												</c:forEach>
+												
 										</select> ~ <select name="end_date" id="end_date" class="form-control input-sm " style="width: 100px; display: inline-block;">
-												<option value="2018">2018</option>
-												<option value="2019">2019</option>
-												<option value="2020">2020</option>
-												<option value="2021">2021</option>
-												<option value="2022" selected>2022</option>
+												<c:forEach var="year" begin="2018" end="${nowYear }">
+													<c:if test="${endDateStr != null }">
+														<option value="${year }" ${year == endDateStr ? 'selected' : '' }>${year }</option>
+													</c:if>
+													<c:if test="${endDateStr == null }">
+														<option value="${year }" ${year == nowYear ? 'selected' : '' }>${year }</option>
+													</c:if>
+												</c:forEach>
 										</select></td>
 									</tr>
 								</tbody>

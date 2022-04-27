@@ -181,6 +181,8 @@ public class StatisticsController {
 		
 		Collections.reverse(result);
 		model.addAttribute("result", result);
+		model.addAttribute("startDateStr", startDateStr);
+		model.addAttribute("endDateStr", endDateStr);
 		
 		if(type.equals("date")) {
 			return "statistics/period_day";
