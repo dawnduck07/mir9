@@ -134,7 +134,7 @@ public class StatisticsController {
 		String endDateStr = request.getParameter("end_date");
 		GregorianCalendar startDate = strToIntDate(startDateStr, type);
 		GregorianCalendar endDate = strToIntDate(endDateStr, type);
-		
+		log.debug("type = {}", type);
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
 		int length = 0;
@@ -143,19 +143,26 @@ public class StatisticsController {
 			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60) + 1);
 			param.put("type", "D");
 		}else if(type.equals("month")) {
-			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/30 + 1);
+			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/30);
 			param.put("type", "M");
+		}else if(type.equals("year")) {
+			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/365 + 1);
+			param.put("type", "Y");
 		}
 		
 		
 		
 		for(int i = 0; i < length; i++) {
 			Calendar cal = endDate;
+			
 			if(type.equals("date")) {
 				cal.add(GregorianCalendar.DATE, -1);				
 			}else if(type.equals("month")) {
 				cal.add(GregorianCalendar.MONTH, -1);				
+			}else if(type.equals("year")) {
+				cal.add(GregorianCalendar.YEAR, -1);
 			}
+			
 			param.put("date", cal.getTime());
 			PeriodStatisticVo statistic = new PeriodStatisticVo();
 			
@@ -181,19 +188,28 @@ public class StatisticsController {
 			return "statistics/period_month";
 		}
 		
-		return "";
+		return "statistics/period_year";
 	}
 	
 	private GregorianCalendar strToIntDate(String dateStr, String type){
-		
-		int year = Integer.parseInt((dateStr.substring(0, 4)));
-		int month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
-		if(type.equals("date")) {
-			int day = Integer.parseInt((dateStr.substring(8, 10)));
+		int year=0; int month=0; int day = 0;
+		if(type.equals("year")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			return new GregorianCalendar(year+2, 0, 0);
+			
+		}else if(type.equals("month")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+			
+			return new GregorianCalendar(year, month +2, 0);
+		}else if(type.equals("date")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+			day = Integer.parseInt((dateStr.substring(8, 10)));
 			return new GregorianCalendar(year, month, day+1);			
 		}
 		
-		return new GregorianCalendar(year, month +2, 0);
+		return null;
 		
 	}
 	
