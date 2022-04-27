@@ -34,6 +34,7 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 
 import lombok.extern.slf4j.Slf4j;
@@ -238,7 +239,9 @@ public class SettingController {
 	public void seo() {}
 	
 	@GetMapping("/paymentpg")
-	public void paymentpg() {}
+	public void paymentpg(Model model) {
+		
+	}
 	
 	@GetMapping("/snslogin")
 	public void snsLogin() {}
