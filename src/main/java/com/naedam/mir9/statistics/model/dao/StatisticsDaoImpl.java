@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
 
@@ -24,6 +25,12 @@ public class StatisticsDaoImpl implements StatisticsDao {
 	@Override
 	public List<ProductStatisticVo> selectProductStatistics(Map<String, Object> map) throws Exception {
 		return session.selectList("statistics.selectProductStatistics", map);
+	}
+
+	@Override
+	public List<MemberStatisticVo> selectMemberStatisticsList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.selectList("statistics.selectMemberStatisticsList", param);
 	}
 
 	
