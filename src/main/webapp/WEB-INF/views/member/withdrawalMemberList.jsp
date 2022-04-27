@@ -193,7 +193,7 @@
 							</tr>
 							<tr>
 								<td class="menu">휴대폰</td>
-								<td align="left"><select name="mobile1"
+								<td align="left"><select name="mobile1" id="mobile1"
 									class="form-control input-sm" style="width: 15%; float: left;">
 										<option value="010">010</option>
 										<option value="011">011</option>
@@ -202,17 +202,17 @@
 										<option value="018">018</option>
 										<option value="019">019</option>
 								</select> <span style="float: left;">-</span> <input type="text"
-									name="mobile2" onkeyup="this.value=checkNum(this.value)"
+									name="mobile2" id="mobile2" onkeyup="this.value=checkNum(this.value)"
 									class="form-control input-sm" style="width: 15%; float: left;"
 									maxlength="4" /> <span style="float: left;">-</span> <input
-									type="text" name="mobile3"
+									type="text" name="mobile3" id="mobile3"
 									onkeyup="this.value=checkNum(this.value)"
 									class="form-control input-sm" style="width: 15%; float: left;"
 									maxlength="4" /></td>
 							</tr>
 							<tr>
 								<td class="menu">이메일</td>
-								<td align="left"><input type="text" name="email"
+								<td align="left"><input type="text" name="email" id="email"
 									class="form-control input-sm" style="width: 60%;" /></td>
 							</tr>
 							<tr>
@@ -533,6 +533,112 @@ function update(){
 	console.log("status = " + status);
 	var reason = $("#reason").val();
 	console.log("reason = " + reason);
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	if(password != ''){
+		// 비밀번호 유효성 검사
+		if(!/^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{8,15}$/.test(password)){
+			alert("비밀번호는 8 ~ 15 글자 이내로 공백 없이 영문자, 숫자, 특수문자를 혼합하여 입력해주세요.");
+			$("#password").focus();
+			return false;
+		}
+		// 비밀번호 확인 공란 확인
+		if(passwordCheck == ''){
+			alert("비밀번호가 확인이 입력되지 않았습니다.");
+			$("#passwordCheck").focus();
+			return false;	
+		}
+	}
+	
+	// 비밀번호 일치 확인
+	if(password != passwordCheck){
+		alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+		$("#passwordCheck").focus();
+		return false;
+	}
+	
+	// 이름 공란 확인
+	if(firstName == ''){
+		alert("이름이 입력되지 않았습니다.");
+		$("#firstName").focus();
+		return false;
+	}
+	// 성 공란 확인
+	if(lastName == ''){
+		alert("성이 입력되지 않았습니다.");
+		$("#lastName").focus();
+		return false;
+	}
+	
+	// 휴대폰 번호 유효성 검사
+	var mobile1 = $("#mobile1").val();
+	var mobile2 = $("#mobile2").val();
+	var mobile3 = $("#mobile3").val();
+	
+	if(mobile2 == '' || mobile3 == ''){
+		alert("휴대폰 번호가 입력되지 않았습니다.");
+		$("#mobile1").focus();
+		return false;
+	}
+	
+	if(!/^([0-9]{3,4})$/.test(mobile2) || !/^([0-9]{4})$/.test(mobile3)){
+		alert("휴대폰 번호를 정확하게 입력해주세요.");
+		$("#mobile1").focus();
+		return false;
+	}
+
+	// 이메일 유효성 검사
+	var email = $("#email").val();
+	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+	
+	if(!regEmail.test(email)){
+		alert("이메일을 정확하게 입력해주세요.");
+		$("#email").focus();
+		return false;
+	}
+	
+	const result = {
+			memberNo : memberNo,
+			id : id,
+			password : password,
+			firstName : firstName,
+			lastName : lastName,
+			mobile1 : mobile1,
+			mobile2 : mobile2,
+			mobile3 : mobile3,
+			email : email,
+			addressNo : addressNo,
+			addressZipcode : addressZipcode,
+			addressMain : addressMain,
+			addressSub : addressSub,
+			memberMemoContent : memberMemoContent,
+			status : status,
+			authority : authority,
+			reason : reason
+	};
+	
+	const data = JSON.stringify(result);
+	console.log(data);
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/withdrawalMemberUpdate.do`,
+		method : "POST",
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success(data){
+			console.log(data);
+			alert("해당 회원이 수정 되었습니다.");
+			location.reload();
+		}, 
+		error : console.log
+	});
+	
+		$(window).unbind("beforeunload");
 }
 
 

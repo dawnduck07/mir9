@@ -330,6 +330,9 @@
 			<if test="password != null and password != ''">
 				password = #{password},
 		 	</if>
+		 	<if test="reason != null and reason != ''">
+				password = #{reason},
+		 	</if>
 		update_date = NOW()
 	WHERE
 		member_no = #{memberNo}

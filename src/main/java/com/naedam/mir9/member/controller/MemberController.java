@@ -44,7 +44,6 @@ import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
-import com.naedam.mir9.member.model.vo.WithdrawalMember;
 import com.naedam.mir9.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.mir9.point.model.service.PointService;
 import com.naedam.mir9.point.model.vo.MemberPoint;
@@ -741,7 +740,82 @@ public class MemberController {
 		
 		return map;
 	}
- 	
+	
+	// 탈퇴회원 상세보기 등록(update)
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+ 	@PostMapping("/withdrawalMemberUpdate.do")
+	public String withdrawalMemberUpdate(@RequestBody String data, RedirectAttributes redirectAttribute) {
+		log.debug("{}", "withdrawalMemberUpdate.do 요청!");
+		log.debug("param = {}", data);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			Map<String, String> map = mapper.readValue(data, Map.class);
+			log.debug("map = {}", map);
+			
+			String phone = map.get("mobile1") + map.get("mobile2") + map.get("mobile3");
+			
+			// 탈퇴회원(Member) 수정
+			WithdrawalMemberEntity paramWithdrawal = new WithdrawalMemberEntity();
+			paramWithdrawal.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			paramWithdrawal.setFirstName(map.get("firstName"));
+			paramWithdrawal.setLastName(map.get("lastName"));
+			paramWithdrawal.setEmail(map.get("email"));
+			paramWithdrawal.setPhone(phone);
+			paramWithdrawal.setStatus(map.get("status"));
+			paramWithdrawal.setReason(map.get("reason"));
+			
+			if(map.get("password").isEmpty()) {
+				paramWithdrawal.setPassword(map.get("password"));
+			} else {
+				// 비밀번호 암호화 처리
+				log.debug("{}", passwordEncoder);
+				String rawPassword = map.get("password");
+				String encryptedPassword = passwordEncoder.encode(rawPassword);
+				paramWithdrawal.setPassword(encryptedPassword);
+				log.debug("{} -> {}", rawPassword, encryptedPassword);
+			}
+			
+			int resultWithdrawalMember = memberService.memberUpdate(paramWithdrawal);
+			log.debug("resultWithdrawalMember = {}", resultWithdrawalMember);
+			
+			// 주소(Address) 수정
+			Address paramAddress = new Address();
+			paramAddress.setAddressNo(Integer.parseInt(map.get("addressNo")));
+			paramAddress.setAddressMain(map.get("addressMain"));
+			paramAddress.setAddressSub(map.get("addressSub"));
+			paramAddress.setAddressZipcode(Integer.parseInt(map.get("addressZipcode")));
+			
+			int resultAddressUpdate = memberService.addressUpdate(paramAddress);
+			log.debug("resultAddressUpdate = {}", resultAddressUpdate);
+			
+			// 메모(MemberMemo) 수정
+			MemberMemo paramMemberMemo = new MemberMemo();
+			paramMemberMemo.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			paramMemberMemo.setMemberMemoContent(map.get("memberMemoContent"));
+			
+			int resultMemberMemo = memberService.memberMemoUpdate(paramMemberMemo);
+			log.debug("resultMemberMemo = {}", resultMemberMemo);
+			
+			// 권한(Authorities) 수정
+			Authorities paramAuthorities = new Authorities();
+			paramAuthorities.setAuthority(map.get("authority"));
+			paramAuthorities.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			
+			int resultAuthorities = memberService.authoritiesUpdate(paramAuthorities);
+			log.debug("resultAuthorities = {}", resultAuthorities);
+			
+			
+		} catch (IOException e) {}
+		
+	
+		
+		return "redirect:/member/withdrawalList.do";
+	}
+	
+	
 	// 회원 접속이력 관리
 	@GetMapping("/log")
 	public String memberAccessHistory() {
