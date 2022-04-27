@@ -66,59 +66,6 @@ public class StatisticsController {
 		return "statistics/period_day";
 	}
 	
-	@PostMapping("/period_day")
-	public String statisticsPeriod_day(Model model, HttpServletRequest request) {
-		String type = request.getParameter("statistics_type");
-		String startDateStr = request.getParameter("start_date");
-		String endDateStr = request.getParameter("end_date");
-		GregorianCalendar startDate = strToIntDate(startDateStr);
-		GregorianCalendar endDate = strToIntDate(endDateStr);
-		
-		int length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60) + 1);
-		
-		
-		
-		Map<String, Object> param = new HashMap<String, Object>();
-		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
-		param.put("type", "D");
-		
-		for(int i = 0; i < length; i++) {
-			Calendar cal = endDate;
-			cal.add(GregorianCalendar.DATE, -1);
-			param.put("date", cal.getTime());
-			PeriodStatisticVo statistic = new PeriodStatisticVo();
-			
-			try {
-				statistic = statisticsService.selectPeriodStatistics(param);
-			
-			} catch (Exception e) {}
-			
-			if(statistic == null) {
-				statistic = new PeriodStatisticVo();
-				statistic.setPaidAt(cal.getTime());
-			}
-			
-			result.add(statistic);
-		}
-		
-		Collections.reverse(result);
-		model.addAttribute("result", result);
-		
-		if(type.equals("date")) {
-			return "statistics/period_day";
-		}
-		
-		return "";
-	}
-	
-	private GregorianCalendar strToIntDate(String dateStr){
-		int year = Integer.parseInt((dateStr.substring(0, 4)));
-		int month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
-		int day = Integer.parseInt((dateStr.substring(8, 10)));
-		
-		return new GregorianCalendar(year, month, day+1);
-	}
-	
 	@GetMapping("/period_month")
 	public String statisticsPeriod_month(Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -145,17 +92,85 @@ public class StatisticsController {
 		
 		Collections.reverse(result);
 		model.addAttribute("result", result);
-		
-		
-		
-		
+
 		return "statistics/period_month";
 	}
+
 	
 	@GetMapping("/period_year")
 	public String statisticsPeriod_year() {
 		
 		return "statistics/period_year";
+	}
+	
+	@PostMapping("/period_process")
+	public String statisticsPeriod_day(Model model, HttpServletRequest request) {
+		String type = request.getParameter("statistics_type");
+		String startDateStr = request.getParameter("start_date");
+		String endDateStr = request.getParameter("end_date");
+		GregorianCalendar startDate = strToIntDate(startDateStr, type);
+		GregorianCalendar endDate = strToIntDate(endDateStr, type);
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		int length = 0;
+		
+		if(type.equals("date")) {
+			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60) + 1);
+			param.put("type", "D");
+		}else if(type.equals("month")) {
+			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/30 + 1);
+			param.put("type", "M");
+		}
+		
+		
+		
+		for(int i = 0; i < length; i++) {
+			Calendar cal = endDate;
+			if(type.equals("date")) {
+				cal.add(GregorianCalendar.DATE, -1);				
+			}else if(type.equals("month")) {
+				cal.add(GregorianCalendar.MONTH, -1);				
+			}
+			param.put("date", cal.getTime());
+			PeriodStatisticVo statistic = new PeriodStatisticVo();
+			
+			try {
+				statistic = statisticsService.selectPeriodStatistics(param);
+			
+			} catch (Exception e) {}
+			
+			if(statistic == null) {
+				statistic = new PeriodStatisticVo();
+				statistic.setPaidAt(cal.getTime());
+			}
+			
+			result.add(statistic);
+		}
+		
+		Collections.reverse(result);
+		model.addAttribute("result", result);
+		
+		if(type.equals("date")) {
+			return "statistics/period_day";
+		}else if(type.endsWith("month")) {
+			return "statistics/period_month";
+		}
+		
+		return "";
+	}
+	
+	private GregorianCalendar strToIntDate(String dateStr, String type){
+		
+		int year = Integer.parseInt((dateStr.substring(0, 4)));
+		int month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+		if(type.equals("date")) {
+			int day = Integer.parseInt((dateStr.substring(8, 10)));
+			return new GregorianCalendar(year, month, day+1);			
+		}
+		
+		return new GregorianCalendar(year, month +2, 0);
+		
 	}
 	
 	@RequestMapping(value="/product")
