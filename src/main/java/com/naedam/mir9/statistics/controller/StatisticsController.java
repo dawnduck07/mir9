@@ -67,18 +67,21 @@ public class StatisticsController {
 	@PostMapping("/period_day")
 	public String statisticsPeriod_day(Model model, HttpServletRequest request) {
 		String type = request.getParameter("statistics_type");
-		String endDateStr = request.getParameter("emd_date");
-		String dateLengthCode = request.getParameter("dateLength");
+		String startDateStr = request.getParameter("start_date");
+		String endDateStr = request.getParameter("end_date");
+		GregorianCalendar startDate = strToIntDate(startDateStr);
+		GregorianCalendar endDate = strToIntDate(endDateStr);
+		
+		int length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60) + 1);
 		
 		
-		log.debug("endDateStr = {}", endDateStr);
-		log.debug("dateLengthCode = {}", dateLengthCode);
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
-		for(int i = 0; i < 7; i++) {
-			Calendar cal = new GregorianCalendar();
-			cal.add(GregorianCalendar.DATE, -i);
+		
+		for(int i = 0; i < length; i++) {
+			Calendar cal = endDate;
+			cal.add(GregorianCalendar.DATE, -1);
 			param.put("date", cal.getTime());
 			PeriodStatisticVo statistic = new PeriodStatisticVo();
 			
@@ -104,7 +107,14 @@ public class StatisticsController {
 		
 		return "";
 	}
-
+	
+	private GregorianCalendar strToIntDate(String dateStr){
+		int year = Integer.parseInt((dateStr.substring(0, 4)));
+		int month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+		int day = Integer.parseInt((dateStr.substring(8, 10)));
+		
+		return new GregorianCalendar(year, month, day+1);
+	}
 	
 	@GetMapping("/period_month")
 	public String statisticsPeriod_month() {
