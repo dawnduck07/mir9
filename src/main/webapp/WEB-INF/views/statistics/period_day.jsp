@@ -36,7 +36,7 @@
 								<tbody>
 									<tr>
 										<td class="menu">통계종류</td>
-										<td align="left"><input type="radio" name="statistics_type" id="statistics_type_1" value="date" checked /> <label for="statistics_type_1">일별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_2" value="month" onclick="location.href='/index.php?tpf=admin/statistics/sales_month';" /> <label for="statistics_type_2">월별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_3" value="yesr" onclick="location.href='/index.php?tpf=admin/statistics/sales_year';" /> <label for="statistics_type_3">연도별통계</label></td>
+										<td align="left"><input type="radio" name="statistics_type" id="statistics_type_1" value="date" checked /> <label for="statistics_type_1">일별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_2" value="month" onclick="location.href='${pageContext.request.contextPath}/statistics/period_month';" /> <label for="statistics_type_2">월별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_3" value="yesr" onclick="location.href='${pageContext.request.contextPath}/statistics/period_year';" /> <label for="statistics_type_3">연도별통계</label></td>
 									</tr>
 									<tr>
 										<td class="menu">기간 검색</td>
@@ -286,7 +286,7 @@
 	});
 	
 $(document).ready(function(){
-	for(var i = 1; i <= $(".total1").length; i++){
+	for(var i = 1; i <= 11; i++){
 		var target = ".total"+ i;
 		var result = 0*1;
 		$.each($(target), (k, v)=>{
