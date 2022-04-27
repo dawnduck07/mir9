@@ -98,8 +98,32 @@ public class StatisticsController {
 
 	
 	@GetMapping("/period_year")
-	public String statisticsPeriod_year() {
+	public String statisticsPeriod_year(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		param.put("type", "Y");
+		for(int i = 0; i < 5; i++) {
+			Calendar cal = new GregorianCalendar();
+			cal.add(GregorianCalendar.YEAR, -i);
+			param.put("date", cal.getTime());
+			PeriodStatisticVo statistic = new PeriodStatisticVo();
+			
+			try {
+				statistic = statisticsService.selectPeriodStatistics(param);
+			
+			} catch (Exception e) {}
+			
+			if(statistic == null) {
+				statistic = new PeriodStatisticVo();
+				statistic.setPaidAt(cal.getTime());
+			}
+			
+			result.add(statistic);
+		}
 		
+		Collections.reverse(result);
+		model.addAttribute("result", result);
+
 		return "statistics/period_year";
 	}
 	
