@@ -68,16 +68,18 @@
 						} ];
 						chart_data.push(dataRow);
 					</script>
-					
+
 					<c:forEach var="r" items="${result }">
-						<c:set var="dateStr"><fmt:formatDate value="${r.paidAt}" pattern="yyyy-MM" /></c:set>
+						<c:set var="dateStr">
+							<fmt:formatDate value="${r.paidAt}" pattern="yyyy-MM" />
+						</c:set>
 						<c:set var="tAmount">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount}</c:set>
 						<script>
 							dataRow = ['${dateStr}', ${tAmount} , '#76A7FA' ];
 							chart_data.push(dataRow);
 						</script>
 					</c:forEach>
-					
+
 					<div id="chard_div" style="border: 1px solid #cdcdcd; width: 100%; margin-bottom: 10px;">
 						<div id="columnchart_values" style="width: 100%; height: 370px;"></div>
 					</div>
@@ -119,32 +121,32 @@
 							</tr>
 						</thead>
 						<tbody>
-								<c:forEach var="r" items="${result }">
+							<c:forEach var="r" items="${result }">
 								<tr>
 									<td><fmt:formatDate value="${r.paidAt}" pattern="yyyy-MM" /></td>
 									<td class="total1" align="right">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount }</td>
-									
+
 									<td class="total2" align="right">${r.totalSalePrice == null ? '0' : r.totalSalePrice + r.totalOptionCost }</td>
-									
+
 									<td class="total3" align="right">${r.totalDeliFee }</td>
-									
-									<td class="total4" align="right">${r.totalCouponAmount }</td>											
+
+									<td class="total4" align="right">${r.totalCouponAmount }</td>
 
 									<td class="total5" align="right">${r.totalPointAmount }</td>
 									<td class="total6" align="right">${r.totalAmount == null ? '0' : r.totalAmount }</td>
-									
-									
-										
-										
-											<td class="total7" align="right">${r.totalSalePriceCancel == null ? '0' : r.totalSalePriceCancel + r.totalOptionCostCancel }</td>
-											<td class="total8" align="right">${r.totalDeliFeeCancel == null ? '0' : r.totalDeliFeeCancel }</td>
-											<td class="total9" align="right">${r.totalCouponAmountCancel == null ? '0' : r.totalCouponAmountCancel }</td>
-											
-											<td class="total10" align="right">${r.totalPointAmountCancel == null ? '0' : r.totalPointAmountCancel }</td>
-											<td class="total11" align="right">${r.totalCancelAmount == null ? '0' : r.totalCancelAmount }</td>
-																	
+
+
+
+
+									<td class="total7" align="right">${r.totalSalePriceCancel == null ? '0' : r.totalSalePriceCancel + r.totalOptionCostCancel }</td>
+									<td class="total8" align="right">${r.totalDeliFeeCancel == null ? '0' : r.totalDeliFeeCancel }</td>
+									<td class="total9" align="right">${r.totalCouponAmountCancel == null ? '0' : r.totalCouponAmountCancel }</td>
+
+									<td class="total10" align="right">${r.totalPointAmountCancel == null ? '0' : r.totalPointAmountCancel }</td>
+									<td class="total11" align="right">${r.totalCancelAmount == null ? '0' : r.totalCancelAmount }</td>
+
 								</tr>
-							</c:forEach>							
+							</c:forEach>
 						</tbody>
 						<tfoot>
 							<tr>
