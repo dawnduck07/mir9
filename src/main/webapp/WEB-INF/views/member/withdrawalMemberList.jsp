@@ -87,12 +87,10 @@
 							</tr>
 						</thead>
 						<tbody id="tbody">
-							<c:forEach items="${memberList}" var="withdrawal">
+							<c:forEach items="${withdrawalMemberList}" var="withdrawal">
 								<c:if test="${withdrawal.status eq 'N'}">
 									<tr>
-										<td style="width: 30px;">
-											<input type="checkbox" name="" class="member-is-checked" data-target="${withdrawal.memberNo}"/>
-										</td>
+										<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="${withdrawal.memberNo}" data-target="${withdrawal.memberNo}" /></td>
 										<td style="width: 110px;">${withdrawal.id}</td>
 										<td style="width: 110px;">${withdrawal.lastName}${withdrawal.firstName}</td>
 										<td style="width: 110px;">${withdrawal.phone}</td>
@@ -104,7 +102,7 @@
 											<span class="label label-default" style="font-size:12px;">탈퇴</span>
 										</td>
 										<td style="width: 60px;">
-											<button type="button" id="detail_${withdrawal.memberNo}" value="${withdrawal.memberNo}" class="btn btn-primary btn-xs">상세보기</button>
+											<button type="button" value="${withdrawal.memberNo}" class="btn btn-primary btn-xs detailWithdrawalBtn">상세보기</button>
 										</td>
 									</tr>
 								</c:if>
@@ -150,6 +148,8 @@
 		aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
+				<input type="hidden" id="addressNo" name="addressNo" value="" />
+				<input type="hidden" id="memberNo" name="memberNo" value="" />
 				<form name="form" method="post" onsubmit="return false;"
 					action="?tpf=admin/member/process">
 					<input type="hidden" name="mode"> <input type="hidden"
@@ -169,7 +169,7 @@
 						<table class="table table-bordered">
 							<tr>
 								<td class="menu">아이디</td>
-								<td align="left"><input type="text" name="id"
+								<td align="left"><input type="text" name="id" id="id"
 									class="form-control input-sm" style="width: 30%; float: left;" />&nbsp;
 									<button type="button" id="btn_check_id"
 										class="btn btn-sm btn-default" onclick="onclickCheckId();">아이디
@@ -177,14 +177,14 @@
 							</tr>
 							<tr>
 								<td class="menu">비밀번호</td>
-								<td align="left"><input type="password" name="password"
+								<td align="left"><input type="password" name="password" id="password"
 									placeholder="" class="form-control input-sm"
 									style="width: 30%; float: left;" /> 대소문자와 숫자 포함 8~15자로 입력하세요</td>
 							</tr>
 							<tr>
 								<td class="menu">비밀번호 확인</td>
 								<td align="left"><input type="password"
-									name="password_confirm" placeholder=""
+									name="passwordCheck" id="passwordCheck" placeholder=""
 									class="form-control input-sm" style="width: 30%;" /></td>
 							</tr>
 							<tr>
@@ -237,10 +237,8 @@
 										rows="4" class="form-control input-sm" style="width: 100%;"></textarea></td>
 							</tr>
 							<tr id="display_level">
-								<td class="menu">등급 <span class="text-light-blue"><i
-										class="fa fa-check"></i></span></td>
-								<td><select name="authority" id="memberGradeChk"
-									class="form-control input-sm" style="width: 120px;">
+								<td class="menu">등급 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
+								<td><select name="authority" id="memberGradeChk" class="form-control input-sm" style="width: 120px;">
 										<c:forEach items="${memberGradeList}" var="memberGrade">
 											<option value="${memberGrade.authority}">${memberGrade.memberGradeName}</option>
 										</c:forEach>
@@ -251,8 +249,8 @@
 										class="fa fa-check"></i></span></td>
 								<td><select name="status" id="status"
 									class="form-control input-sm" style="width: 120px;">
-										<option value="Y">정상</option>
 										<option value="N">대기</option>
+										<option value="Y">정상</option>
 								</select></td>
 							</tr>
 							<tr id="display_last_login_date">
@@ -271,17 +269,19 @@
 								<td class="menu">탈퇴일</td>
 								<td align="left"><span id="withdraw_date"></span></td>
 							</tr>
+							<%-- 
 							<tr id="display_reg_date">
 								<td class="menu">탈퇴사유</td>
 								<td align="left"><span id="reason"></span></td>
 							</tr>
+							--%>
 						</table>
 				</form>
 			</div>
 
 		</div>
 		<div class="modal-footer">
-			<button type="button" onclick="register();" class="btn btn-primary">저장</button>
+			<button type="button" onclick="update()" class="btn btn-primary">저장</button>
 			<!--<button type="button" onclick="deleteMember();" class="btn btn-danger">삭제</button>-->
 		</div>
 	</div>
@@ -328,9 +328,9 @@ $(document).ready(function(){
 									<input type="checkbox" class="member-is-checked" name="" data-target="\${v.memberNo}"/>
 								</td>
 								<td style="width: 110px;">\${v.id}</td>
-								<td style="width: 110px;">\${v.name}</td>
+								<td style="width: 110px;">\${v.lastName}\${v.firstName}</td>
 								<td style="width: 110px;">\${v.phone}</td>
-								<td>\${v.address}</td>
+								<td>\${v.addressMain} \${v.addressSub}</td>
 								<td style="width: 120px;">\${v.regDate}</td>
 								<td style="width: 50px;">
 									<span class="label label-default" style="font-size:12px;">탈퇴</span>
@@ -401,11 +401,10 @@ $(document).on("click", "#withdrawalDeleteBtn", function(){
 });
 
 // 상세보기 모달
-$("button[id^='detail_']").on('click', function(e){
-	console.log(e.target);
+$(document).on("click", ".detailWithdrawalBtn", function(e){
 	console.log("해당 no = " + $(e.target).val());
-	e.preventDefault();
 	var memberNo = $(e.target).val();
+	console.log("memberNo = " + memberNo);
 	
 	$("[name=id]").prop("readonly", true);
 	$("#modalRegister").modal();
@@ -422,10 +421,18 @@ $("button[id^='detail_']").on('click', function(e){
 		success : function(res){
 			console.log("ajaxData = " + JSON.stringify(res));
 			var withdrawalMemberEntity = res.withdrawalMemberEntity;
+			var authorities = res.authorities;
 			var mobile1 = res.mobile1;
 			var mobile2 = res.mobile2;
 			var mobile3 = res.mobile3;
+			var address = res.address;
+			var memberMemo = res.memberMemo;
+			var regDate = res.regDate;
+			var loginDate = res.loginDate;
+			var updateDate = res.updateDate;
+			var withdrawalDate = res.withdrawalDate;
 			
+			$("[name=memberNo]").val(withdrawalMemberEntity.memberNo);
 			$("[name=id]").val(withdrawalMemberEntity.id);
 			$("[name=lastName]").val(withdrawalMemberEntity.lastName);
 			$("[name=firstName]").val(withdrawalMemberEntity.firstName);
@@ -433,16 +440,22 @@ $("button[id^='detail_']").on('click', function(e){
 			$("[name=mobile2]").val(mobile2);
 			$("[name=mobile3]").val(mobile3);
 			$("[name=email]").val(withdrawalMemberEntity.email);
+			$("[name=addressNo]").val(address.addressNo);
 			$("[name=addressZipcode]").val(withdrawalMemberEntity.addressZipcode);
 			$("[name=addressMain]").val(withdrawalMemberEntity.addressMain);
 			$("[name=addressSub]").val(withdrawalMemberEntity.addressSub);
 			$("[name=memberMemoContent]").val(withdrawalMemberEntity.memberMemoContent);
 			$("[name=reason]").val(withdrawalMemberEntity.reason);
 			$("[name=authority]").val(authorities.authority);
+			$("#last_login_date").text(loginDate);
+			$("#update_date").text(updateDate);
+			$("#withdraw_date").text(withdrawalDate);
+			$("#reg_date").text(regDate);
 		},
 		error : console.log
 	});
 });
+
 
 //주소 입력
 function callAddress() {
@@ -488,6 +501,41 @@ function callAddress() {
         }
     }).open();
 }
+
+//상세보기 저장
+function update(){
+	console.log("상세보기 저장(update()) 작동");
+	var id = $("#id").val();
+	console.log("id = " + id);
+	var password = $("#password").val();
+	console.log("password = " + password);
+	var passwordCheck = $("#passwordCheck").val();
+	console.log("passwordCheck = " + passwordCheck);
+	var firstName = $("#firstName").val();
+	console.log("firstName = " + firstName);
+	var lastName = $("#lastName").val();
+	console.log("lastName = " + lastName);
+	var memberMemoContent = $("#memberMemoContent").val();
+	console.log("memberMemoContent = " + memberMemoContent);
+	var authority = $("#memberGradeChk option:selected").val();
+	console.log("authority = " + authority);
+	var addressNo = $("#addressNo").val();
+	console.log("addressNo = " + addressNo);
+	var addressMain = $("#address_main").val();
+	console.log("addressMain = " + addressMain);
+	var addressSub = $("#address_sub").val();
+	console.log("addressSub = " + addressSub);
+	var addressZipcode = $("#address_zipcode").val();
+	console.log("addressZipcode = " + addressZipcode);
+	var memberNo = $("#memberNo").val();
+	console.log("memberNo = " + memberNo);
+	var status = $("#status").val();
+	console.log("status = " + status);
+	var reason = $("#reason").val();
+	console.log("reason = " + reason);
+}
+
+
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

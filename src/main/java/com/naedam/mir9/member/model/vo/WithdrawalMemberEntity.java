@@ -25,8 +25,6 @@ public class WithdrawalMemberEntity extends Member {
 	private String addressMain;
 	private String addressSub;
 	private String memberMemoContent;
-	private String reason;
-	private Date withdrawalDate;
 	
 	public WithdrawalMemberEntity(int memberNo, String firstName, String lastName, String email, String phone,
 			Date regDate, String status, String id, String password, String profileImg, Date updateDate, Date loginDate,
@@ -38,14 +36,12 @@ public class WithdrawalMemberEntity extends Member {
 			String reason,
 			Date withdrawalDate) {
 		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
-				authorities);
+				withdrawalDate, reason, authorities);
 		
 		this.addressZipcode = addressZipcode;
 		this.addressMain = addressMain;
 		this.addressSub = addressSub;
 		this.memberMemoContent = memberMemoContent;
-		this.reason = reason;
-		this.withdrawalDate = withdrawalDate;
 	}
 	
 	
