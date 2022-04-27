@@ -3,8 +3,6 @@ package com.naedam.mir9.statistics.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Enumeration;
-
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.board.model.vo.Search;
+import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.statistics.model.service.StatisticsService;
+import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
 
@@ -150,8 +150,6 @@ public class StatisticsController {
 			param.put("type", "Y");
 		}
 		
-		
-		
 		for(int i = 0; i < length; i++) {
 			Calendar cal = endDate;
 			
@@ -231,7 +229,38 @@ public class StatisticsController {
 	}
 	
 	@GetMapping("/member")
-	public String statisticsMember() {
+	public String statisticsMember(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		Calendar cal = new GregorianCalendar();
+		
+		param.put("endDate", cal.getTime());
+		cal.add(GregorianCalendar.MONTH, -3);
+		param.put("startDate", cal.getTime());
+		
+		List<MemberStatisticVo> memberStatisticsList = statisticsService.selectMemberStatisticsList(param);
+		
+		model.addAttribute("result", memberStatisticsList);
+		
+		return "statistics/member";
+	}
+	
+	@PostMapping("/member")
+	public String statisticsMember(Model model, HttpServletRequest request) {
+		String type = "date";		
+		String startDateStr = request.getParameter("start_date");
+		String endDateStr = request.getParameter("end_date");
+		GregorianCalendar startDate = strToIntDate(startDateStr, type);
+		GregorianCalendar endDate = strToIntDate(endDateStr, type);
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("startDate", startDate.getTime());
+		param.put("endDate", endDate.getTime());
+		
+		List<MemberStatisticVo> memberStatisticsList = statisticsService.selectMemberStatisticsList(param);
+		
+		model.addAttribute("result", memberStatisticsList);
+		model.addAttribute("startDateStr", startDateStr);
+		model.addAttribute("endDateStr", endDateStr);
 		
 		return "statistics/member";
 	}

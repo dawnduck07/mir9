@@ -43,4 +43,18 @@
 	 ORDER BY productRank ASC
   </select>  
   
+  <select id="selectMemberStatisticsList" resultType="MemberStatisticVo">
+  SELECT NAME, id, SUM(amount) AS total_amount, SUM(cancel_amount) AS total_amount_cancel, (sum(amount) - sum(ifnull(cancel_amount,0))) AS total, RANK() over(ORDER BY total DESC) AS ranking, COUNT(amount) AS order_cnt, COUNT(cancel_amount) AS cancel_cnt
+	FROM v_member_statistics_paid 
+		LEFT JOIN v_member_statistics_cancel USING(member_no)
+	
+	WHERE paid_at <![CDATA[ <=]]> #{endDate} and paid_at <![CDATA[ >=]]> #{startDate}
+	
+		OR cancel_at <![CDATA[ <=]]> #{endDate} and cancel_at <![CDATA[ >=]]> #{startDate}
+	
+	GROUP BY member_no
+	
+	ORDER BY ranking LIMIT 10
+  </select>
+  
 </mapper>
