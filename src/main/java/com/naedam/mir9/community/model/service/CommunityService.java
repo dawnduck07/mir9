@@ -9,6 +9,7 @@ import com.naedam.mir9.community.model.vo.ReviewImg;
 
 public interface CommunityService {
 
+	// review
 	List<Review> reviewList(Map<Object, String> param);
 	
 	List<Review> reviewModal(int reviewCode);
@@ -21,10 +22,18 @@ public interface CommunityService {
 	
 	int selectDelete(String reviewCode);
 
-	HashMap<String, Object> originSms(String appKey, String secretKey);
+	// sms
+	HashMap<String, Object> originSms(String smsKey, String smsSecret);
 
-	HashMap<String, Object> savedSms(String appKey, String secretKey);
+	HashMap<String, Object> savedSms(String smsKey, String smsSecret);
 
-	int updateSms(String appKey, String secretKey, String code, String is_send, String content);
+	int updateSms(String smsKey, String smsSecret, String code, String content);
+
+	// mail
+	HashMap<String, Object> savedMail(String mailKey, String mailSecret, String templateId);
+
+	HashMap<String, Object> originMail(String mailKey, String mailSecret, String templateId);
+
+	int modifyMail(String mailKey, String mailSecret, String templateId, String title, String content);
 
 }

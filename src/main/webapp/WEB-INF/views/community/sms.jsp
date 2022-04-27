@@ -14,6 +14,7 @@
 textarea {
     width:180px;
     height:100px;
+    resize:none;
 }
 </style>
 	<section class="content-header">
@@ -429,10 +430,12 @@ textarea {
 </div><!-- /.content-wrapper -->
 
 <script>
+	
 	// 1. 저장 양식 불러오기 -> 완료 / 일치하는 textarea에 접근해야 함 -> attr("class") 해결
 	// 2. 기존 양식 불러오기 -> 완료 / 템플릿 전체 목록이 안 뜸 -> pageSize 쿼리스트링으로 넘겨서 해결
-	// 3. 양식 및 체크 값 저장 -> 완료 / 오류코드 -9997 -> 응답 get 요청 추가로 해결 
+	// 3. 양식 및 체크 박스 값 저장 -> 완료 / 오류코드 -9997 -> 응답 get 요청 추가로 해결 
 	// 4. 포인트 값 -> 미완료 / 포인트 형식이 아님 그냥 건당 차감 금액 보이게 하는 방식
+	// DB 생성 후 자동 발송 항목 여부 저장하기
 	
 	// 보완 : 발신번호별 카테고리 추가 + 수정 템플릿 추가(수정 템플릿명에 '_발신번호') + 해당 수정 템플릿에 저장
 	
@@ -444,17 +447,13 @@ textarea {
 		var savedContent = [];
 		var textarea = [];
 		
-		// savedTemplateId 값 담기
+		// 값 담기
 		$.each($("input[name='savedTemplateId']"), function(index, value) { 
 			savedTemplateId.push($(value).val());
 		});
-		
-		// savedContent 값 담기
 		$.each($("input[name='savedContent']"), function(index, value) { 
 			savedContent.push($(value).val());
 		});
-		
-		// textarea의 class 값 담기 
 		$("textarea").each(function() { 
 			textarea.push($(this).attr("class"));
 		});	
@@ -476,12 +475,10 @@ textarea {
 		var templateId = [];
 		var content = [];
 		
-		// templateId 값 담기
+		// 값 담기
 		$.each($("input[name='templateId']"), function(index, value) { 
 			templateId.push($(value).val());
 		});
-		
-		// bodyContent 값 담기
 		$.each($("input[name='bodyContent']"), function(index, value) { 
 			content.push($(value).val());
 		});
@@ -563,10 +560,10 @@ textarea {
 		$.ajax({
 			url:"${pageContext.request.contextPath}/comm/sms",
 			method:"POST",
-			contentType: "application/json; charset=utf-8",
 			headers: {
 				"${_csrf.headerName}" : "${_csrf.token}"
 			},
+			contentType: "application/json; charset=utf-8",
 			data: jsonStr,
 			success: function(result) {
 				if(result > 0) {

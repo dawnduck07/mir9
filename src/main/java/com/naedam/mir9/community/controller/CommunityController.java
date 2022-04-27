@@ -3,6 +3,7 @@ package com.naedam.mir9.community.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
@@ -28,56 +29,24 @@ import com.naedam.mir9.community.model.vo.Review;
 @Controller
 @RequestMapping("/comm")
 public class CommunityController {
-
+	
 	@Autowired
 	private CommunityService communityService;
 	
 	// MAIL 인증키
-	private String access = "40cnTtyIUldTMRjjpSYu";
-	private String secret = "zjDqLElCNgwzMUBrqBso3nLvLGLD2Kh6wOljQQjF";
+	private static String mailKey = "s3b1XpsH6BR8yT4S";
+	private static String mailSecret = "phiu4e0M";
 	
 	// SMS 인증키
-	private String appKey = "pDjJmaKLu6bg9i9j";
-	private String secretKey = "YRs5WbpK";	
+	private static String smsKey = "pDjJmaKLu6bg9i9j";
+	private static String smsSecret = "YRs5WbpK";
 	
-	// 시그니처 키값 가져오기	
+	// mail 설정 조회
 	@GetMapping("/email")
-	public String commEmail(Model model) 
-			throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-		
-		long time = System.currentTimeMillis();
-		String space = " "; // 공백
-		String method = "POST"; // 메소드
-	    String newLine = "\n"; // 줄바꿈
-	    String url = "/api/v1/mails"; // 도메인을 제외한 "/" 아래 전체 url (쿼리스트링 포함)
-	    String timestamp = String.valueOf(time); // 현재 타임스탬프 
-	    String accessKey = access; // access 
-	    String secretKey = secret; // secret
-	    
-	    String message = new StringBuilder()
-	        .append(method)
-	        .append(space)
-	        .append(url)
-	        .append(newLine)
-	        .append(timestamp)
-	        .append(newLine)
-	        .append(accessKey)
-	        .toString();
-
-	    SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
-	    Mac mac = Mac.getInstance("HmacSHA256");
-	    mac.init(signingKey);
-	    
-	    // POST
-	    byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-	    String postSig = Base64.getEncoder().encodeToString(rawHmac);
-	    
-	    model.addAttribute("postSig", postSig);
-	    model.addAttribute("timestamp", timestamp);
-	    
+	public String commEmail() {
 		return "community/email";
 	}
-	
+		
 	@GetMapping("/email_list")
 	public String commEmailList() {
 		return "community/emailList";
@@ -89,7 +58,7 @@ public class CommunityController {
 	
 		// CORS 문제 해결
 		// 기본 문구 (categodyId : 78519)
-		HashMap<String, Object> originSms = communityService.originSms(appKey, secretKey); // 기존 양식
+		HashMap<String, Object> originSms = communityService.originSms(smsKey, smsSecret); 
 		
 		// list에 담기
 		List<String> templateId = (List<String>) originSms.get("templateId");
@@ -100,12 +69,12 @@ public class CommunityController {
 		
 		/* 확인
 		System.out.println("=====Controller:originSms=====");
-		System.out.println("templateId : " + templateId);
-		System.out.println("content : " + content);		
+		System.out.println(templateId);
+		System.out.println(content);		
 		*/
 		
 		// 저장 문구(categodyId : 78520)
-		HashMap<String, Object> savedSms = communityService.savedSms(appKey, secretKey); // 저장 양식
+		HashMap<String, Object> savedSms = communityService.savedSms(smsKey, smsSecret); 
 		
 		// list에 담기
 		List<String> savedTemplateId = (List<String>) savedSms.get("savedTemplateId");
@@ -116,13 +85,14 @@ public class CommunityController {
 		
 		/* 확인
 		System.out.println("=====Controller:savedSms=====");
-		System.out.println("savedTemlateId : " + savedTemplateId);
-		System.out.println("savedContent : " + savedContent);
+		System.out.println(savedTemplateId);
+		System.out.println(savedContent);
 		*/
 		
 		return "community/sms";
 	}
 	
+	// sms 조회 + 검색
 	@GetMapping("/sms_list")
 	public String commSmsList() {
 		
