@@ -4,7 +4,6 @@ import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
@@ -46,6 +45,7 @@ import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
 import com.naedam.mir9.member.model.vo.WithdrawalMember;
+import com.naedam.mir9.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.mir9.point.model.service.PointService;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
@@ -112,6 +112,10 @@ public class MemberController {
 				// 권한 삭제
 				int resultDeleteAuthorities = memberService.deleteAuthorties(memberNo);
 				log.debug("resultDeleteAuthorities = {}", resultDeleteAuthorities);
+				
+				// 메모 삭제
+				int resultDeleteMemberMemo = memberService.deleteMemberMemo(memberNo);
+				log.debug("resultDeleteMemberMemo = {}", resultDeleteMemberMemo);
 				
 				// 회원 삭제
 				int resultMemberWithdrawal = memberService.memberWithdrawal(id);
@@ -540,15 +544,27 @@ public class MemberController {
 	public String withdarawalMemberList(Model model, HttpServletRequest request) {
 		log.debug("withdarawalMemberList = {}","withdarawalMemberList 시작");
 		
+		// 회원 리스트 전체 게시물 목록
+		List<MemberEntity> memberList = memberService.selectMemberList();
+		log.debug("memberList = {}", memberList);
+		model.addAttribute("memberList", memberList);
+		
+		// 탈퇴회원 전체 게시물 수
+		int totalwithdrawalCount = memberService.selectWithdrawalCount();
+		log.debug("totalwithdrawalCount = {}", totalwithdrawalCount);
+		model.addAttribute("totalwithdrawalCount", totalwithdrawalCount);
+		
+		/*
 		// 탈퇴 회원 리스트
 		List<WithdrawalMember> withdrawalMemberList = memberService.selectWithdrawalMemberList();
 		log.debug("withdrawalMember = {}", withdrawalMemberList);
 		model.addAttribute("withdrawalMemberList", withdrawalMemberList);
-		
+		*/
+				
 		// 탈퇴 회원 전체 게시물 수
-		int withdrawalCount = memberService.selectWithdrawalCount();
-		log.debug("withdrawalCount = {}", withdrawalCount);
-		model.addAttribute("withdrawalCount", withdrawalCount);
+		//int withdrawalCount = memberService.selectWithdrawalCount();
+		//log.debug("withdrawalCount = {}", withdrawalCount);
+		//model.addAttribute("withdrawalCount", withdrawalCount);
 		
 		return "member/withdrawalMemberList";
 	}
@@ -594,9 +610,7 @@ public class MemberController {
 		log.debug("memberNo = {}", memberNo);
 		Map<String, Object> param = new HashMap<>();
 		
-
-		try {
-			
+		try {		
 			// 주소 번호 조회
 			List<Address> addressList = memberService.findAddressNo(memberNo);
 			log.debug("addressNo = {}", addressList);
@@ -605,21 +619,25 @@ public class MemberController {
 				int addressNo = addressList.get(i).getAddressNo();
 				log.debug("addressNo = {}", addressNo);
 				
-				// 주소 삭제
+				// 주소 영구삭제
 				int resultDeleteAddress = memberService.deleteWithdrawalAddress(addressNo);
 				log.debug("resultDeleteAddress = {}", resultDeleteAddress);
 			}
 			
-			// 주소록 삭제
+			// 주소록 영구삭제
 			int resultDeleteBook = memberService.deleteWithdrawalAddressBook(memberNo);
 			log.debug("resultDeleteBook = {}", resultDeleteBook);
 			
 					
-			// 권한 삭제
+			// 권한 영구삭제
 			int resultDeleteAuthority = memberService.deleteWithdrawalAuthority(memberNo);
 			log.debug("resultDeleteAuthority = {}", resultDeleteAuthority);
 			
-			// 회원 삭제
+			// 메모 영구삭제
+			int resultDeleteMemo = memberService.deleteWithdrawalMemo(memberNo);
+			log.debug("resultDeleteMemo = {}", resultDeleteMemo);
+			
+			// 회원 영구삭제
 			int resultDeleteMember = memberService.deleteWithdrawal(memberNo);
 			log.debug("result = {}", resultDeleteMember);			
 						
@@ -643,24 +661,24 @@ public class MemberController {
 		log.debug("memberNo = {}", memberNo);
 		Map<String, Object> map = new HashMap<>();
 		
-		// 1. 탈퇴회원(WithdrawalMember) 조회
-		WithdrawalMember withdrawalMember = memberService.selectOneMemberByWithdrawalMemberNo(memberNo);
-		log.debug("withdrawalMember = {}", withdrawalMember);
-		model.addAttribute("withdrawalMember", withdrawalMember);
+		WithdrawalMemberEntity withdrawalMemberEntity = memberService.selectOneWithdrawalMemberEntity(memberNo);
+		log.debug("withdrawalMemberEntity = {}", withdrawalMemberEntity);
+		model.addAttribute("withdrawalMemberEntity", withdrawalMemberEntity);
 		// 휴대폰 번호 분기
-		String mobile1 = withdrawalMember.getPhone().substring(0, 3);
-		String mobile2 = withdrawalMember.getPhone().substring(3, 7);
-		String mobile3 = withdrawalMember.getPhone().substring(7, 11);
+		String mobile1 = withdrawalMemberEntity.getPhone().substring(0, 3);
+		String mobile2 = withdrawalMemberEntity.getPhone().substring(3, 7);
+		String mobile3 = withdrawalMemberEntity.getPhone().substring(7, 11);
 		
-		// 2. 주소(Address) 조회
-		//Address withdrawalAddress = memberService.selectOneAddressByWithdrawalMemberNo(memberNo);
-		//log.debug("withdrawalAddress = {}", withdrawalAddress);
-		//model.addAttribute("withdrawalAddress", withdrawalAddress);
-		
-		map.put("withdrawalMember", withdrawalMember);
+		// 회원 권한 조회
+		Authorities authorities = memberService.selectOneAuthorities(memberNo);
+		log.debug("authorities = {}", authorities);
+		model.addAttribute("authorities = {}", authorities);
+				
+		map.put("withdrawalMemberEntity", withdrawalMemberEntity);
 		map.put("mobile1", mobile1);
 		map.put("mobile2", mobile2);
 		map.put("mobile3", mobile3);
+		map.put("authorities", authorities);
 		
 		return map;
 	}

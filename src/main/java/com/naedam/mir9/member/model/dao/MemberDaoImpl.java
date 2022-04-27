@@ -16,6 +16,7 @@ import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberMemo;
 import com.naedam.mir9.member.model.vo.WithdrawalMember;
+import com.naedam.mir9.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.mir9.point.model.vo.MemberPoint;
 
 @Repository
@@ -318,6 +319,17 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public int deleteWithdrawalMemo(int[] memberNo) {
 		return session.delete("member.deleteWithdrawalMemo", memberNo);
+	}
+
+	// 탈퇴회원 상세조회
+	@Override
+	public WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo) {
+		return session.selectOne("member.selectOneWithdrawalMemberEntity", memberNo);
+	}
+
+	@Override
+	public int deleteMemberMemo(int memberNo) {
+		return session.delete("member.deleteMemberMemo", memberNo);
 	}
 
 
