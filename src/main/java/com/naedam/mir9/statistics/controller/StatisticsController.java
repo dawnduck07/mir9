@@ -3,8 +3,6 @@ package com.naedam.mir9.statistics.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Enumeration;
-
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.board.model.vo.Search;
+import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.statistics.model.service.StatisticsService;
+import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
 
@@ -38,6 +38,8 @@ public class StatisticsController {
 	public String statisticsPeriod_day(Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		param.put("type", "D");
+		
 		for(int i = 0; i < 7; i++) {
 			Calendar cal = new GregorianCalendar();
 			cal.add(GregorianCalendar.DATE, -i);
@@ -64,21 +66,14 @@ public class StatisticsController {
 		return "statistics/period_day";
 	}
 	
-	@PostMapping("/period_day")
-	public String statisticsPeriod_day(Model model, HttpServletRequest request) {
-		String type = request.getParameter("statistics_type");
-		String endDateStr = request.getParameter("emd_date");
-		String dateLengthCode = request.getParameter("dateLength");
-		
-		
-		log.debug("endDateStr = {}", endDateStr);
-		log.debug("dateLengthCode = {}", dateLengthCode);
-		
+	@GetMapping("/period_month")
+	public String statisticsPeriod_month(Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
-		for(int i = 0; i < 7; i++) {
+		param.put("type", "M");
+		for(int i = 0; i < 3; i++) {
 			Calendar cal = new GregorianCalendar();
-			cal.add(GregorianCalendar.DATE, -i);
+			cal.add(GregorianCalendar.MONTH, -i);
 			param.put("date", cal.getTime());
 			PeriodStatisticVo statistic = new PeriodStatisticVo();
 			
@@ -97,25 +92,125 @@ public class StatisticsController {
 		
 		Collections.reverse(result);
 		model.addAttribute("result", result);
-		
-		if(type.equals("date")) {
-			return "statistics/period_day";
-		}
-		
-		return "";
+
+		return "statistics/period_month";
 	}
 
 	
-	@GetMapping("/period_month")
-	public String statisticsPeriod_month() {
+	@GetMapping("/period_year")
+	public String statisticsPeriod_year(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		param.put("type", "Y");
+		for(int i = 0; i < 5; i++) {
+			Calendar cal = new GregorianCalendar();
+			cal.add(GregorianCalendar.YEAR, -i);
+			param.put("date", cal.getTime());
+			PeriodStatisticVo statistic = new PeriodStatisticVo();
+			
+			try {
+				statistic = statisticsService.selectPeriodStatistics(param);
+			
+			} catch (Exception e) {}
+			
+			if(statistic == null) {
+				statistic = new PeriodStatisticVo();
+				statistic.setPaidAt(cal.getTime());
+			}
+			
+			result.add(statistic);
+		}
 		
-		return "statistics/period_month";
+		Collections.reverse(result);
+		model.addAttribute("result", result);
+
+		return "statistics/period_year";
 	}
 	
-	@GetMapping("/period_year")
-	public String statisticsPeriod_year() {
+	@PostMapping("/period_process")
+	public String statisticsPeriod_day(Model model, HttpServletRequest request) {
+		String type = request.getParameter("statistics_type");
+		String startDateStr = request.getParameter("start_date");
+		String endDateStr = request.getParameter("end_date");
+		GregorianCalendar startDate = strToIntDate(startDateStr, type);
+		GregorianCalendar endDate = strToIntDate(endDateStr, type);
+		log.debug("type = {}", type);
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		int length = 0;
+		
+		if(type.equals("date")) {
+			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60) + 1);
+			param.put("type", "D");
+		}else if(type.equals("month")) {
+			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/30);
+			param.put("type", "M");
+		}else if(type.equals("year")) {
+			length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/365 + 1);
+			param.put("type", "Y");
+		}
+		
+		for(int i = 0; i < length; i++) {
+			Calendar cal = endDate;
+			
+			if(type.equals("date")) {
+				cal.add(GregorianCalendar.DATE, -1);				
+			}else if(type.equals("month")) {
+				cal.add(GregorianCalendar.MONTH, -1);				
+			}else if(type.equals("year")) {
+				cal.add(GregorianCalendar.YEAR, -1);
+			}
+			
+			param.put("date", cal.getTime());
+			PeriodStatisticVo statistic = new PeriodStatisticVo();
+			
+			try {
+				statistic = statisticsService.selectPeriodStatistics(param);
+			
+			} catch (Exception e) {}
+			
+			if(statistic == null) {
+				statistic = new PeriodStatisticVo();
+				statistic.setPaidAt(cal.getTime());
+			}
+			
+			result.add(statistic);
+		}
+		
+		Collections.reverse(result);
+		model.addAttribute("result", result);
+		model.addAttribute("startDateStr", startDateStr);
+		model.addAttribute("endDateStr", endDateStr);
+		
+		if(type.equals("date")) {
+			return "statistics/period_day";
+		}else if(type.endsWith("month")) {
+			return "statistics/period_month";
+		}
 		
 		return "statistics/period_year";
+	}
+	
+	private GregorianCalendar strToIntDate(String dateStr, String type){
+		int year=0; int month=0; int day = 0;
+		if(type.equals("year")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			return new GregorianCalendar(year+2, 0, 0);
+			
+		}else if(type.equals("month")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+			
+			return new GregorianCalendar(year, month +2, 0);
+		}else if(type.equals("date")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+			day = Integer.parseInt((dateStr.substring(8, 10)));
+			return new GregorianCalendar(year, month, day+1);			
+		}
+		
+		return null;
+		
 	}
 	
 	@RequestMapping(value="/product")
@@ -134,7 +229,38 @@ public class StatisticsController {
 	}
 	
 	@GetMapping("/member")
-	public String statisticsMember() {
+	public String statisticsMember(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		Calendar cal = new GregorianCalendar();
+		
+		param.put("endDate", cal.getTime());
+		cal.add(GregorianCalendar.MONTH, -3);
+		param.put("startDate", cal.getTime());
+		
+		List<MemberStatisticVo> memberStatisticsList = statisticsService.selectMemberStatisticsList(param);
+		
+		model.addAttribute("result", memberStatisticsList);
+		
+		return "statistics/member";
+	}
+	
+	@PostMapping("/member")
+	public String statisticsMember(Model model, HttpServletRequest request) {
+		String type = "date";		
+		String startDateStr = request.getParameter("start_date");
+		String endDateStr = request.getParameter("end_date");
+		GregorianCalendar startDate = strToIntDate(startDateStr, type);
+		GregorianCalendar endDate = strToIntDate(endDateStr, type);
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("startDate", startDate.getTime());
+		param.put("endDate", endDate.getTime());
+		
+		List<MemberStatisticVo> memberStatisticsList = statisticsService.selectMemberStatisticsList(param);
+		
+		model.addAttribute("result", memberStatisticsList);
+		model.addAttribute("startDateStr", startDateStr);
+		model.addAttribute("endDateStr", endDateStr);
 		
 		return "statistics/member";
 	}
