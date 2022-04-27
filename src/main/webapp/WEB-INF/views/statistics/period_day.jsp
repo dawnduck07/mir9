@@ -30,7 +30,7 @@
 			<div class="box">
 				<div class="box-body">
 
-					<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/period_day">
+					<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/period_process">
 						<div class="box-tools " style="margin-bottom: 5px;">
 							<table class="table table-bordered">
 								<tbody>

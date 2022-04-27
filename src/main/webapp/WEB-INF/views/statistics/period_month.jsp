@@ -30,7 +30,7 @@
 			<div class="box">
 				<div class="box-body">
 
-					<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/period_month">
+					<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/period_process">
 						<div class="box-tools " style="margin-bottom: 5px;">
 							<table class="table table-bordered">
 								<tbody>
@@ -51,7 +51,7 @@
 								<tfoot>
 									<tr>
 										<td colspan="2" style="text-align: center;">
-											<button type="button" onclick="selectAction();" class="btn btn-danger btn-sm">
+											<button type="submit" class="btn btn-danger btn-sm">
 												<i class="fa "></i>검색
 											</button>
 										</td>
