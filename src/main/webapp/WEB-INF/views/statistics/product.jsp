@@ -21,7 +21,52 @@
         <li class="active">제품별 매출 통계</li>
     </ol>
 </section>
-
+<script>
+	function select(){
+		$("select[id='category1_code']").attr("name", "categoryCode");
+		$("option[name='categoryOption1']").remove();
+		$("option[name='categoryOption2']").remove();
+		var langSelect = document.getElementById("category1_code"); 
+		// select element에서 선택된 option의 value가 저장된다. 
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		var categoryNo = Number(selectValue);
+		
+		<c:forEach var="category" items="${list2}" varStatus="status">
+			var parentNo = Number(${category.parentNo})
+			if(${category.level == 2}){
+				if(categoryNo == parentNo){
+					var display = '<option value="${category.categoryNo}" name="categoryOption1">${category.categoryName}</option>'
+					$("select[name='category2_code']").append(display);
+				}
+			}
+		</c:forEach>
+	}
+	
+	function select2(){
+		$("select[id='category1_code']").attr("name", "category1_code");
+		$("select[id='category2_code']").attr("name", "categoryCode");
+		$("option[name='categoryOption2']").remove();
+		var langSelect = document.getElementById("category2_code"); 
+		// select element에서 선택된 option의 value가 저장된다. 
+		var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		var categoryNo = Number(selectValue);
+		
+		<c:forEach var="category" items="${list2}" varStatus="status">
+			var parentNo = Number(${category.parentNo})
+			if(${category.level == 3}){
+				if(categoryNo == parentNo){
+					var display = '<option value="${category.categoryNo}" name="categoryOption2">${category.categoryName}</option>'
+					$("select[name='category3_code']").append(display);
+				}
+			}
+		</c:forEach>
+	}	
+	function select3(){
+		$("select[id='category2_code']").attr("name", "category2_code");
+		$("select[id='category3_code']").attr("name", "categoryCode");
+	}		
+	
+</script>
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -35,24 +80,19 @@
 						<tr>
 							<td class="menu">분류선택</td>
 							<td align="left">
-								<select name="category1_code" id="category1_code" class="form-control input-sm " style="width:100px;display:inline-block;" >
+								<select name="category1_code" id="category1_code" onchange="select()" class="form-control input-sm " style="width:100px;display:inline-block;" >
 									<option value="">1차 분류</option>
-									<option value="10" >a:5:{s:2:"ko";s:13:"Dental Treats";s:2:"en";N;s:2:"zh";N;s:2:"jp";N;s:2:"vn";s:14:"Dental Treats3";}</option>
-									<option value="12" >a:4:{s:2:"ko";s:14:"Healthy Treats";s:2:"en";N;s:2:"zh";N;s:2:"jp";N;}</option>
-									<option value="11" >a:4:{s:2:"ko";s:8:"Grooming";s:2:"en";N;s:2:"zh";N;s:2:"jp";N;}</option>
-								
+									<c:forEach var="category" items="${list2}" varStatus="status">
+										<c:if test="${category.level == 1}">
+											<option value="${category.categoryNo}" >${category.categoryName}</option>
+										</c:if>
+									</c:forEach>
 								</select>
-								<select name="category2_code" id="category2_code" class="form-control input-sm " style="width:100px;display:inline-block;" >
-									<option value="">2차 분류</option>
-<br />
-<b>Notice</b>:  Undefined variable: category2_arr in <b>/home/demoshop/public_html/html/admin/statistics/sales_product.html</b> on line <b>34</b><br />
-								
+								<select name="category2_code" id="category2_code" onchange="select2()" class="form-control input-sm " style="width:100px;display:inline-block;" >
+									<option value="" name="category2">2차 분류</option>
 								</select>
-								<select name="category3_code" id="category3_code" class="form-control input-sm " style="width:100px;display:inline-block;" >
-									<option value="">3차 분류</option>
-<br />
-<b>Notice</b>:  Undefined variable: category3_arr in <b>/home/demoshop/public_html/html/admin/statistics/sales_product.html</b> on line <b>34</b><br />
-								
+								<select name="category3_code" id="category3_code" onchange="select3()" class="form-control input-sm " style="width:100px;display:inline-block;" >
+									<option value="" name="category3">3차 분류</option>								
 								</select>
 								
 							</td>
@@ -124,7 +164,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						<c:forEach var="product" items="${list}" varStatus="status">
+						<c:forEach var="product" items="${list}" varStatus="status">|
      						 <tr>
      						 	<td>${product.productRank}</td>
      						 	<td>${product.categoryName}</td>

@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.board.model.vo.Search;
+import com.naedam.mir9.category.model.service.CategoryService;
+import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.statistics.model.service.StatisticsService;
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
@@ -33,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 public class StatisticsController {
 	@Autowired
 	private StatisticsService statisticsService;
+	@Autowired
+	private CategoryService categoryService;
 	
 	@GetMapping("/period_day")
 	public String statisticsPeriod_day(Model model) {
@@ -121,6 +125,8 @@ public class StatisticsController {
 	@RequestMapping(value="/product")
 	public String statisticsProduct(Model model, @ModelAttribute("search") Search search) throws Exception {
 		System.out.println("statistics/product 시작");
+		System.out.println("search 확인 ::: "+search);
+		String type = "product";
 		ProductStatisticVo product = new ProductStatisticVo();
 		product.setRegStartdate(search.getStart_date());
 		product.setRegEnddate(search.getEnd_date());
@@ -128,8 +134,9 @@ public class StatisticsController {
 		map.put("search", search);
 		map.put("product", product);
 		Map<String, Object> resultMap = statisticsService.selectProductStatistics(map);
-		System.out.println("데이터 확인 ::: "+resultMap.get("list"));
+		List<Category> categoryList = categoryService.selectProductCategory(type);
 		model.addAttribute("list", resultMap.get("list"));
+		model.addAttribute("list2", categoryList);
 		return "statistics/product";
 	}
 	

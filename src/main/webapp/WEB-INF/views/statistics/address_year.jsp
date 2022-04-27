@@ -37,8 +37,8 @@
 						<tr>
 							<td class="menu">통계종류</td>
 							<td align="left">
-								<input type="radio" name="statistics_type" id="statistics_type_1" value="date" onclick="location.href='/index.php?tpf=admin/statistics/sales_address_day';" /> <label for="statistics_type_1">일별통계</label>&nbsp;&nbsp;
-								<input type="radio" name="statistics_type" id="statistics_type_2" value="month" onclick="location.href='/index.php?tpf=admin/statistics/sales_address_month';" /> <label for="statistics_type_2">월별통계</label>&nbsp;&nbsp;
+								<input type="radio" name="statistics_type" id="statistics_type_1" value="date" onclick="location.href='${pageContext.request.contextPath}/statistics/address_day'" /> <label for="statistics_type_1">일별통계</label>&nbsp;&nbsp;
+								<input type="radio" name="statistics_type" id="statistics_type_2" value="month" onclick="location.href='${pageContext.request.contextPath}/statistics/address_month'" /> <label for="statistics_type_2">월별통계</label>&nbsp;&nbsp;
 								<input type="radio" name="statistics_type" id="statistics_type_3" value="yesr" checked/> <label for="statistics_type_3">연도별통계</label>
 							</td>
 						</tr>

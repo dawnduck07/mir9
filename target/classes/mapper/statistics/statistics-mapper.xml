@@ -27,8 +27,11 @@
 		 						   WHERE order_status_no >= 2
 		 						   AND   order_status_no != 7) DESC)) AS productRank
 	 FROM v_product_statistics
-	 <if test="search.start_date != null and search.end_date">
+	 <if test="search.start_date != null and search.end_date != '' ">
 	 	WHERE reg_date between #{search.start_date} and #{search.end_date}
+	 </if>
+	 <if test="search.categoryCode != null and search.categoryCode != '' ">
+	 	AND category_no = #{search.categoryCode}
 	 </if>
 	 ORDER BY productRank ASC
   </select>  

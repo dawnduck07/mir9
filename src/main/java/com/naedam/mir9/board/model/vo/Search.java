@@ -12,12 +12,8 @@ public class Search {
 	private String searchType;
 	private String start_date;
 	private String end_date;
-	private int studyInterest;
-	private int studyEndFlag;
-	private int searchSort;
+	private int categoryCode;
 	private int pageSize;
-	private int endRowNum;
-	private int startRowNum;
 	private int searchBoardNo;
 	
 	

@@ -19,7 +19,7 @@ public class ProductStatisticVo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Date paidAt;
+	private String paidAt;
 	private double amount;
 	private String modelName;
 	private String productName;
