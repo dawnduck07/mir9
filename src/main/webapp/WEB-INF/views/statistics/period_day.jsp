@@ -10,6 +10,7 @@
 </jsp:include>
 
 
+
 <!-- content-wrapper -->
 <div class="content-wrapper">
 	<section class="content-header">
@@ -30,17 +31,17 @@
 			<div class="box">
 				<div class="box-body">
 
-					<form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/period_day?${_csrf.parameterName}=${_csrf.token}">
+					<form:form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/period_process">
 						<div class="box-tools " style="margin-bottom: 5px;">
 							<table class="table table-bordered">
 								<tbody>
 									<tr>
 										<td class="menu">통계종류</td>
-										<td align="left"><input type="radio" name="statistics_type" id="statistics_type_1" value="date" checked /> <label for="statistics_type_1">일별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_2" value="month" onclick="location.href='/index.php?tpf=admin/statistics/sales_month';" /> <label for="statistics_type_2">월별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_3" value="yesr" onclick="location.href='/index.php?tpf=admin/statistics/sales_year';" /> <label for="statistics_type_3">연도별통계</label></td>
+										<td align="left"><input type="radio" name="statistics_type" id="statistics_type_1" value="date" checked /> <label for="statistics_type_1">일별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_2" value="month" onclick="location.href='${pageContext.request.contextPath}/statistics/period_month';" /> <label for="statistics_type_2">월별통계</label>&nbsp;&nbsp; <input type="radio" name="statistics_type" id="statistics_type_3" value="year" onclick="location.href='${pageContext.request.contextPath}/statistics/period_year';" /> <label for="statistics_type_3">연도별통계</label></td>
 									</tr>
 									<tr>
 										<td class="menu">기간 검색</td>
-										<td align="left"><input type="text" name="start_date" id="start_date" value="" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" /> ~ <input type="text" name="end_date" id="end_date" value="" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" />
+										<td align="left"><input type="text" name="start_date" id="start_date" value="${startDateStr == null ? '' : startDateStr }" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" /> ~ <input type="text" name="end_date" id="end_date" value="${endDateStr == null ? '' : endDateStr }" class="form-control input-sm txt_date1" style="width: 100px; display: inline-block;" />
 
 											<button type="button" onclick="setSearchDate('D0');" class="btn btn-primary btn-xs">오늘</button>
 											<button type="button" onclick="setSearchDate('D6');" class="btn btn-primary btn-xs">7일</button>
@@ -62,7 +63,7 @@
 							</table>
 						</div>
 						<input type="hidden" name="dateLength" />
-					</form>
+					</form:form>
 					
 					<script>
 						var chart_data = new Array();
@@ -200,7 +201,6 @@
 	}
 	
 	/* 기간 검색 디폴트 및 기능 */
-	setSearchDate("D6");
 	function setSearchDate(type){
 		$("input[name=start_date]").val(dateStr(type));
 		$("input[name=end_date]").val(dateStr('D0'));
@@ -286,7 +286,7 @@
 	});
 	
 $(document).ready(function(){
-	for(var i = 1; i <= $(".total1").length; i++){
+	for(var i = 1; i <= 11; i++){
 		var target = ".total"+ i;
 		var result = 0*1;
 		$.each($(target), (k, v)=>{
@@ -298,5 +298,9 @@ $(document).ready(function(){
 	
 });	
 </script>
-
+<c:if test="${startDateStr == null }">
+	<script>
+		setSearchDate('D6');
+	</script>
+</c:if>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

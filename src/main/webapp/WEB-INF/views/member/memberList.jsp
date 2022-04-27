@@ -76,30 +76,24 @@
 							</thead>
 							<tbody id="tbody">
 								<c:forEach items="${memberList}" var="memberEntity">
-									<tr>
-										<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="list[]" value="${memberEntity.memberNo}" data-target="${memberEntity.memberNo}" /></td>
-										<td style="width: 110px;">${memberEntity.id}</td>
-										<td style="width: 110px;">${memberEntity.lastName}${memberEntity.firstName}</td>
-										<td style="width: 110px;">${memberEntity.phone}</td>
-										<td>${memberEntity.addressMain}${memberEntity.addressSub}</td>
-										<td style="width: 100px;">${memberEntity.pointAmt}</td>
-										<td style="width: 120px;"><fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${memberEntity.regDate}" /></td>
-										<td>
-											<!-- 보임:Y / 숨김:N --> 
-											<c:if test="${memberEntity.status eq 'Y'}">
-												<span class="label label-success" style="font-size: 12px;">보임</span>
-											</c:if> 
-											<c:if test="${memberEntity.status eq 'N'}">
-												<span class="label label-default" style="font-size: 12px;">숨김</span>
-											</c:if>
-										</td>
-										<td>
-											<button type="button" id="btn_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">내역보기</button>
-										</td>
-										<td>
-											<button type="button" id="detail_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">상세보기</button>
-										</td>
-									</tr>
+									<c:if test="${memberEntity.status eq 'Y'}">
+										<tr>
+											<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="${memberEntity.memberNo}" data-target="${memberEntity.memberNo}" /></td>
+											<td style="width: 110px;">${memberEntity.id}</td>
+											<td style="width: 110px;">${memberEntity.lastName}${memberEntity.firstName}</td>
+											<td style="width: 110px;">${memberEntity.phone}</td>
+											<td>${memberEntity.addressMain}${memberEntity.addressSub}</td>
+											<td style="width: 100px;">${memberEntity.pointAmt}</td>
+											<td style="width: 120px;"><fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${memberEntity.regDate}" /></td>
+											<td><span class="label label-success" style="font-size:12px;">보임</span></td>
+											<td>
+												<button type="button" id="btn_${memberEntity.memberNo}" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs">내역보기</button>
+											</td>
+											<td>
+												<button type="button" value="${memberEntity.memberNo}" class="btn btn-primary btn-xs detailBtn">상세보기</button>
+											</td>
+										</tr>
+									</c:if>
 								</c:forEach>
 							</tbody>
 						</table>
@@ -155,6 +149,7 @@
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
 				<input type="hidden" id="addressNo" name="addressNo" value="" />
+				<input type="hidden" id="memberNo" name="memberNo" value="" />
 				<form:form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/member/memberInsertModalFrm.do">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -225,8 +220,8 @@
 								<td class="menu">상태 <span class="text-light-blue"><i class="fa fa-check"></i></span>
 								</td>
 								<td><select name="status" id="status" class="form-control input-sm" style="width: 120px;">
-										<option value="Y">보임</option>
-										<option value="N">숨김</option>
+										<option value="Y">정상</option>
+										<option value="N">대기</option>
 								</select></td>
 							</tr>
 							<tr id="display_last_login_date">
@@ -408,10 +403,16 @@ $("button[id^='btn_']").on('click', function(e){
 });
 
 // 상세보기 모달
+$(document).on("click", ".detailBtn", function(e){
+	console.log(e.target);
+	console.log("해당 no = " + $(e.target).val());
+	
+});
+
 $("button[id^='detail_']").on('click', function(e){
-	//console.log(e.target);
-	//console.log("해당 no = " + $(e.target).val());
-	e.preventDefault();
+	console.log(e.target);
+	console.log("해당 no = " + $(e.target).val());
+	
 	var memberNo = $(e.target).val();
 	console.log("memberNo = " + memberNo);
 	
@@ -422,8 +423,7 @@ $("button[id^='detail_']").on('click', function(e){
 	$("#display_update_date").show();
 	$("#display_reg_date").show();
 	$("#btnUpdate").show();
-	$("#btnRegister").hide();
-	
+	$("#btnRegister").hide();	
 	
 	const data = {
 			memberNo : memberNo
@@ -827,7 +827,6 @@ $(document).ready(function(){
 				"keyword" : keyword
 			};
 			
-			
 			$.ajax({
 				type : "GET",
 				url : `${pageContext.request.contextPath}/member/typeSearch.do`,
@@ -859,18 +858,17 @@ $(document).ready(function(){
 									</button>
 								</td>
 								<td>
-									<button type="button" onclick="onclickUpdate(18);" class="btn btn-primary btn-xs">
+									<button type="button" value="\${v.memberNo}" class="btn btn-primary btn-xs detailBtn">
 										상세보기
 									</button>
 								</td>
 							</tr>
 								`);
 					});
-					
 					$("#totalCountContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
 				},
 				error : console.log	
-			});
+			});		
 		}
 	});
 });

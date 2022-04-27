@@ -47,7 +47,7 @@
 			<div class="box">
 				<div class="box-body">
 					<div id="totalCountContainer">
-						<label style="margin-top: 5px;">총 ${withdrawalCount} 건</label>
+						<label style="margin-top: 5px;">총 ${totalwithdrawalCount} 건</label>
 					</div>
 					<!-- 타입별 검색 -->
 					<form name="search-form" onsubmit="return false">
@@ -87,31 +87,28 @@
 							</tr>
 						</thead>
 						<tbody id="tbody">
-						<c:if test="${not empty withdrawalMemberList}">
-							<c:forEach items="${withdrawalMemberList}" var="withdrawal">
-								<tr>
-									<td style="width: 30px;">
-										<input type="checkbox" name="" class="member-is-checked" data-target="${withdrawal.memberNo}"/>
-									</td>
-									<td style="width: 110px;">${withdrawal.id}</td>
-									<td style="width: 110px;">${withdrawal.name}</td>
-									<td style="width: 110px;">${withdrawal.phone}</td>
-									<td>${withdrawal.address}</td>
-									<td style="width: 120px;">
-										<fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${withdrawal.regDate}" />	
-									</td>
-									<td style="width: 50px;">
-										<span class="label label-default" style="font-size:12px;">탈퇴</span>
-									</td>
-									<td style="width: 60px;">
-										<button type="button" id="detail_${withdrawal.memberNo}" value="${withdrawal.memberNo}" class="btn btn-primary btn-xs">상세보기</button>
-									</td>
-								</tr>
+							<c:forEach items="${memberList}" var="withdrawal">
+								<c:if test="${withdrawal.status eq 'N'}">
+									<tr>
+										<td style="width: 30px;">
+											<input type="checkbox" name="" class="member-is-checked" data-target="${withdrawal.memberNo}"/>
+										</td>
+										<td style="width: 110px;">${withdrawal.id}</td>
+										<td style="width: 110px;">${withdrawal.lastName}${withdrawal.firstName}</td>
+										<td style="width: 110px;">${withdrawal.phone}</td>
+										<td>${withdrawal.addressMain}${withdrawal.addressSub}</td>
+										<td style="width: 120px;">
+											<fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${withdrawal.regDate}" />	
+										</td>
+										<td style="width: 50px;">
+											<span class="label label-default" style="font-size:12px;">탈퇴</span>
+										</td>
+										<td style="width: 60px;">
+											<button type="button" id="detail_${withdrawal.memberNo}" value="${withdrawal.memberNo}" class="btn btn-primary btn-xs">상세보기</button>
+										</td>
+									</tr>
+								</c:if>
 							</c:forEach>
-							</c:if>
-							<c:if test="${empty withdrawalMemberList}">
-								<tr><td colspan="10"><br>등록된 자료가 없습니다.<br><br></td></tr>  
-							</c:if>
 						</tbody>
 						<!-- <tr>
 							<td colspan="10"><br>등록된 자료가 없습니다.<br>
@@ -221,18 +218,17 @@
 							<tr>
 								<td class="menu">주소</td>
 								<td align="left">
-									<input type="text" name="addressZipcode" id="addressZipcode" readonly class="form-control input-sm" style="width: 15%; background-color: #dddddd; float: left;" />
+									<input type="text" name="addressZipcode" id="address_zipcode" readonly class="form-control input-sm" style="width: 15%; background-color: #dddddd; float: left;" />
 									&nbsp;
 									<button type="button" onclick="callAddress();" class="btn btn-sm btn-default">주소입력</button>
 									<br> 
-									<input type="text" class="input-addr" id="address" placeholder="주소입력 예) 느티마을4단, ㄱㄴㅍㅇㄴㅅ, 여의 메리츠, 행자부, 목동아파트, 테헤란로 152" style="display: none; margin: 5px 0; width: 100%;"> 
-									<input type="text" name="addrressMain" id="addrressMain" readonly class="form-control input-sm" style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
-									<input type="text" name="addressSub" id="addressSub" placeholder="상세주소" class="form-control input-sm" style="width: 100%;" />
+									<input type="text" name="addressMain" id="address_main" readonly class="form-control input-sm" style="margin: 5px 0; width: 100%; background-color: #dddddd;" />
+									<input type="text" name="addressSub" id="address_sub" placeholder="상세주소" class="form-control input-sm" style="width: 100%;" />
 								</td>
 							</tr>
 							<tr>
 								<td class="menu">메모</td>
-								<td align="left"><textarea name="memo" id="memo" rows="4"
+								<td align="left"><textarea name="memberMemoContent" id="memberMemoContent" rows="4"
 										class="form-control input-sm" style="width: 100%;"></textarea></td>
 							</tr>
 							<tr>
@@ -243,11 +239,11 @@
 							<tr id="display_level">
 								<td class="menu">등급 <span class="text-light-blue"><i
 										class="fa fa-check"></i></span></td>
-								<td><select name="level" id="level"
+								<td><select name="authority" id="memberGradeChk"
 									class="form-control input-sm" style="width: 120px;">
-										<option value="1">슈퍼관리자</option>
-										<option value="2">회원</option>
-										<option value="3">ㅈㅇㅇㅈ</option>
+										<c:forEach items="${memberGradeList}" var="memberGrade">
+											<option value="${memberGrade.authority}">${memberGrade.memberGradeName}</option>
+										</c:forEach>
 								</select></td>
 							</tr>
 							<tr id="display_status">
@@ -255,8 +251,8 @@
 										class="fa fa-check"></i></span></td>
 								<td><select name="status" id="status"
 									class="form-control input-sm" style="width: 120px;">
-										<option value="y">정상</option>
-										<option value="n">대기</option>
+										<option value="Y">정상</option>
+										<option value="N">대기</option>
 								</select></td>
 							</tr>
 							<tr id="display_last_login_date">
@@ -293,6 +289,9 @@
 </div>
 </div>
 <!-- /.content-wrapper -->
+<!-- 다음 주소 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 <script>
 //타입별 검색
 $(document).ready(function(){
@@ -422,22 +421,73 @@ $("button[id^='detail_']").on('click', function(e){
 		method : "GET",
 		success : function(res){
 			console.log("ajaxData = " + JSON.stringify(res));
-			var withdrawalMember = res.withdrawalMember;
+			var withdrawalMemberEntity = res.withdrawalMemberEntity;
 			var mobile1 = res.mobile1;
 			var mobile2 = res.mobile2;
 			var mobile3 = res.mobile3;
 			
-			$("[name=id]").val(withdrawalMember.id);
-			$("[name=lastName]").val(withdrawalMember.lastName);
-			$("[name=firstName]").val(withdrawalMember.firstName);
+			$("[name=id]").val(withdrawalMemberEntity.id);
+			$("[name=lastName]").val(withdrawalMemberEntity.lastName);
+			$("[name=firstName]").val(withdrawalMemberEntity.firstName);
 			$("[name=mobile1]").val(mobile1);
 			$("[name=mobile2]").val(mobile2);
 			$("[name=mobile3]").val(mobile3);
-			$("[name=email]").val(withdrawalMember.email);
+			$("[name=email]").val(withdrawalMemberEntity.email);
+			$("[name=addressZipcode]").val(withdrawalMemberEntity.addressZipcode);
+			$("[name=addressMain]").val(withdrawalMemberEntity.addressMain);
+			$("[name=addressSub]").val(withdrawalMemberEntity.addressSub);
+			$("[name=memberMemoContent]").val(withdrawalMemberEntity.memberMemoContent);
+			$("[name=reason]").val(withdrawalMemberEntity.reason);
+			$("[name=authority]").val(authorities.authority);
 		},
 		error : console.log
 	});
 });
+
+//주소 입력
+function callAddress() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+            
+            } 
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('address_zipcode').value = data.zonecode;
+            document.getElementById("address_main").value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("address_sub").focus();
+        }
+    }).open();
+}
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
