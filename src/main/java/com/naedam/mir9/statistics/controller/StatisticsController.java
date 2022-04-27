@@ -38,6 +38,8 @@ public class StatisticsController {
 	public String statisticsPeriod_day(Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		param.put("type", "D");
+		
 		for(int i = 0; i < 7; i++) {
 			Calendar cal = new GregorianCalendar();
 			cal.add(GregorianCalendar.DATE, -i);
@@ -78,6 +80,7 @@ public class StatisticsController {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		param.put("type", "D");
 		
 		for(int i = 0; i < length; i++) {
 			Calendar cal = endDate;
@@ -117,7 +120,34 @@ public class StatisticsController {
 	}
 	
 	@GetMapping("/period_month")
-	public String statisticsPeriod_month() {
+	public String statisticsPeriod_month(Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		param.put("type", "M");
+		for(int i = 0; i < 3; i++) {
+			Calendar cal = new GregorianCalendar();
+			cal.add(GregorianCalendar.MONTH, -i);
+			param.put("date", cal.getTime());
+			PeriodStatisticVo statistic = new PeriodStatisticVo();
+			
+			try {
+				statistic = statisticsService.selectPeriodStatistics(param);
+			
+			} catch (Exception e) {}
+			
+			if(statistic == null) {
+				statistic = new PeriodStatisticVo();
+				statistic.setPaidAt(cal.getTime());
+			}
+			
+			result.add(statistic);
+		}
+		
+		Collections.reverse(result);
+		model.addAttribute("result", result);
+		
+		
+		
 		
 		return "statistics/period_month";
 	}

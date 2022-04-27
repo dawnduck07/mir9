@@ -7,7 +7,17 @@
   	SELECT *
 	FROM v_period_statistics_paid
 		left JOIN v_period_statistics_cancel USING(paid_at)
-	WHERE DATE(paid_at) = DATE(#{date})
+	<where>
+		<if test='type == "D"'>
+			DATE(paid_at) = DATE(#{date})
+		</if>
+		<if test='type == "M"'>
+			MONTH(paid_at) = MONTH(#{date})
+		</if>
+		<if test='type == "Y"'>
+			YEAR(paid_at) = YEAR(#{date})
+		</if>
+	</where>	
   </select>
 
   <select id="selectProductStatistics" parameterType="hashmap" resultType="productStatisticVo">
