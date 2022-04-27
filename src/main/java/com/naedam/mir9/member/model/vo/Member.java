@@ -41,6 +41,9 @@ public class Member implements Serializable, UserDetails {
 	private Date updateDate;
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd HH:mm", timezone="Asia/Seoul")
 	private Date loginDate;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd HH:mm", timezone="Asia/Seoul")
+	private Date withdrawalDate;
+	private String reason;
 	
 	/**
 	 * 회원권한리스트

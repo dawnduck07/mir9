@@ -46,11 +46,12 @@
 		 m.id,
 		 m.last_name, 
 		 m.first_name,
-		 m.phone,
+		 CONCAT(SUBSTRING(m.phone FROM 1 FOR 3), '-', SUBSTRING(m.phone FROM 4 FOR 4), '-', SUBSTRING(m.phone FROM 8 FOR 4)) AS phone,
 		 a.address_main, 
 		 a.address_sub,
 		 m.reg_date,
-		 m.status
+		 m.status,
+		 SUM(mp.point_amount) AS pointAmount
 	FROM
 	    member m left join member_point mp
 	        on m.member_no = mp.member_no
@@ -58,7 +59,10 @@
 	                        on m.member_no = ab.member_no
 	                            left join address a
 	                                on ab.address_no = a.address_no
-	ORDER BY m.member_no DESC
+	GROUP BY 
+		m.member_no
+	ORDER BY
+		m.member_no DESC
 </select>
 
 <!-- 회원 리스트 전체 게시물 수 -->
@@ -88,7 +92,7 @@
 		m.id,
 		m.last_name,
 		m.first_name,
-		m.phone,
+		CONCAT(SUBSTRING(m.phone FROM 1 FOR 3), '-', SUBSTRING(m.phone FROM 4 FOR 4), '-', SUBSTRING(m.phone FROM 8 FOR 4)) AS phone,
 		a.address_main,
 		a.address_sub,
 		m.reg_date,
@@ -98,10 +102,13 @@
 			ON m.member_no = ab.member_no
 				JOIN address a
 					ON ab.address_no = a.address_no
-	WHERE
+	<where>
 		m.`status` = 'Y'	
-		and
-		${type} LIKE CONCAT('%', #{keyword}, '%')	
+		<if test="keyword != null and keyword != ''" >
+			and
+			${type} LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
 </select>
 
 <!-- 검색 게시물 수 -->
@@ -455,23 +462,29 @@
 </update>
 
 <!-- 탈퇴 회원 리스트 -->
-<select id="selectWithdrawalMemberList" resultType="withdrawalMember">
-	SELECT 
-		wm.member_no,
-		wm.id,
-		CONCAT(wm.last_name, wm.first_name) AS name,
-		CONCAT(SUBSTRING(wm.phone FROM 1 FOR 3), '-', SUBSTRING(wm.phone FROM 4 FOR 4), '-', SUBSTRING(wm.phone FROM 8 FOR 4)) AS phone,
-		CONCAT(wa.address_main, SPACE(1), wa.address_sub) AS address,
-		wm.reg_date
+<select id="selectWithdrawalMemberList" resultType="memberEntity">
+	SELECT distinct
+		 m.member_no,
+		 m.id,
+		 m.last_name, 
+		 m.first_name,
+		 CONCAT(SUBSTRING(m.phone FROM 1 FOR 3), '-', SUBSTRING(m.phone FROM 4 FOR 4), '-', SUBSTRING(m.phone FROM 8 FOR 4)) AS phone,
+		 a.address_main, 
+		 a.address_sub,
+		 m.reg_date,
+		 m.status,
+		 SUM(mp.point_amount) AS pointAmount
 	FROM
-		withdrawal_member wm JOIN withdrawal_address_book wab
-			ON wm.member_no = wab.member_no
-				JOIN withdrawal_address wa
-					ON wab.address_no = wa.address_no
-						JOIN withdrawal_authorities wau
-							ON wm.member_no = wau.member_no
+	    member m left join member_point mp
+	        on m.member_no = mp.member_no
+	                    left join address_book ab
+	                        on m.member_no = ab.member_no
+	                            left join address a
+	                                on ab.address_no = a.address_no
+	GROUP BY 
+		m.member_no
 	ORDER BY
-		wm.withdrawal_date DESC
+		m.withdrawal_date
 </select>
 
 
@@ -485,27 +498,35 @@
 		status = 'N'
 </select>
 
-<!-- 탈퇴회원 검색 게시물  -->
-<select id="selectSearchWithdrawalList" resultType="withdrawalMember">
-	SELECT 
-		wm.member_no,
-		wm.id,
-		CONCAT(wm.last_name, wm.first_name) AS name,
-		CONCAT(SUBSTRING(wm.phone FROM 1 FOR 3), '-', SUBSTRING(wm.phone FROM 4 FOR 4), '-', SUBSTRING(wm.phone FROM 8 FOR 4)) AS phone,
-		CONCAT(wa.address_main, SPACE(1), wa.address_sub) AS address,
-		wm.reg_date
+
+<!-- 탈퇴 회원 타입별 검색 -->
+<select id="selectSearchWithdrawalList" resultType="memberEntity">
+	SELECT
+		m.member_no,
+		m.id,
+		m.last_name,
+		m.first_name,
+		CONCAT(SUBSTRING(m.phone FROM 1 FOR 3), '-', SUBSTRING(m.phone FROM 4 FOR 4), '-', SUBSTRING(m.phone FROM 8 FOR 4)) AS phone,
+		a.address_main,
+		a.address_sub,
+		m.reg_date,
+		m.`status`
 	FROM
-		withdrawal_member wm JOIN withdrawal_address_book wab
-			ON wm.member_no = wab.member_no
-				JOIN withdrawal_address wa
-					ON wab.address_no = wa.address_no
-						JOIN withdrawal_authorities wau
-							ON wm.member_no = wau.member_no
-		WHERE
-		${type} LIKE CONCAT('%', #{keyword}, '%')
+		member m JOIN address_book ab
+			ON m.member_no = ab.member_no
+				JOIN address a
+					ON ab.address_no = a.address_no
+	<where>
+		m.`status` = 'N'	
+		<if test="keyword != null and keyword != ''" >
+			and
+			${type} LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
 </select>
 
-<!-- 탈퇴회원 검색 게시물 수 -->
+
+<!-- 탈퇴 회원 타입 별 검색 게시물 수 -->
 <select id="selectSearchWithdrawalListCount" resultType="_int">
 	SELECT 
 		count(*)
@@ -526,7 +547,6 @@ SELECT
 FROM member_point
 WHERE member_no = #{memberNo};
 </select>
-
 
 <!-- 회원 삭제 -->
 <delete id="deleteWithdrawal">
@@ -661,35 +681,37 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 </delete>
 
 
-<!-- 탈퇴회원 상세조회 -->
+<!-- 탈퇴회원 상세보기 -->
 <select id="selectOneWithdrawalMemberEntity" resultType="withdrawalMemberEntity">
 	SELECT 
-		wm.id,
-		wm.last_name,
-		wm.first_name,
-		wm.phone,
-		wm.email,
-		wa.address_zipcode,
-		wa.address_main,
-		wa.address_sub,
-		wmm.member_memo_content,
-		wm.reason,
-		wau.authority,
-		wm.`status`,
-		wm.login_date,
-		wm.reg_date,
-		wm.withdrawal_date
+		m.member_no,
+		m.id,
+		m.last_name,
+		m.first_name,
+		m.phone,
+		m.email,
+		a.address_zipcode,
+		a.address_main,
+		a.address_sub,
+		mm.member_memo_content,
+		m.reason,
+		au.authority,
+		m.`status`,
+		m.login_date,
+		m.reg_date,
+		m.withdrawal_date,
+		m.update_date
 	FROM
-		withdrawal_member wm JOIN withdrawal_address_book wab
-			ON wm.member_no = wab.member_no
-				JOIN withdrawal_address wa
-					ON wab.address_no = wa.address_no
-						JOIN withdrawal_authorities wau
-							ON wm.member_no = wau.member_no
-								JOIN withdrawal_member_memo wmm
-									ON wm.member_no = wmm.member_no
+		member m JOIN address_book ab
+			ON m.member_no = ab.member_no
+				JOIN address a
+					ON ab.address_no = a.address_no
+						JOIN authorities au
+							ON m.member_no = au.member_no
+								JOIN member_memo mm
+									ON m.member_no = mm.member_no
 	WHERE
-		wm.member_no = #{memberNo}
+		m.member_no = #{memberNo}
 </select>
 
 <delete id="deleteMemberMemo">
@@ -698,4 +720,16 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	WHERE
 		member_no = #{memberNo}
 </delete>
+
+<!-- 회원 탈퇴 변경 -->
+<update id="updateMemberToWithdrawal">
+	UPDATE
+		member
+	SET
+		`status` = 'N',
+		withdrawal_Date = NOW(),
+		reason = #{reason}
+	WHERE
+		member_no = #{memberNo}
+</update>
 </mapper>

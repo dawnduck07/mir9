@@ -115,13 +115,10 @@ public interface MemberService {
 	int updateReason(Map<String, Object> param);
 
 	// 탈퇴 회원 리스트
-	List<WithdrawalMember> selectWithdrawalMemberList();
+	List<MemberEntity> selectWithdrawalMemberList();
 
 	// 탈퇴 회원 전체 게시물 수
 	int selectWithdrawalCount();
-
-	// 탈퇴회원 검색 게시물 
-	List<WithdrawalMember> selectSearchWithdrawalList(Map<String, Object> param);
 
 	// 탈퇴회원 검색 게시물 수
 	int selectSearchWithdrawalListCount(Map<String, Object> param);
@@ -176,6 +173,13 @@ public interface MemberService {
 	WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo);
 
 	int deleteMemberMemo(int memberNo);
+
+	// 탈퇴회원 타입별 검색
+	List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param);
+
+	// 회원 탈퇴로 변경
+	int updateMemberToWithdrawal(Map<String, Object> param);
+
 
 	
 
