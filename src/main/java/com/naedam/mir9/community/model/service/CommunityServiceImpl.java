@@ -22,8 +22,6 @@ import com.naedam.mir9.community.model.dao.CommunityDao;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.ReviewImg;
 
-import net.sf.json.JSONObject;
-
 @Service
 public class CommunityServiceImpl implements CommunityService {
 	@Autowired
@@ -94,11 +92,6 @@ public class CommunityServiceImpl implements CommunityService {
 				result += line;
 			}
 			
-			/* 확인
-			System.out.println("=====Service:response=====");
-			System.out.println(result);
-			*/
-			
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
@@ -118,20 +111,8 @@ public class CommunityServiceImpl implements CommunityService {
 				body.add((data.getAsJsonArray().get(i).getAsJsonObject()).get("body").getAsString());			
 			}
 			
-			/* 확인
-			System.out.println("=====Service:templateId=====");
-			System.out.println(templateId); 
-			System.out.println("=====Service:body=====");
-			System.out.println(body);
-			*/
-			
 			originSms.put("templateId", templateId);
 			originSms.put("body", body);
-			
-			/* 확인
-			System.out.println("=====Service:originSms=====");
-			System.out.println(originSms); 
-			*/
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -169,11 +150,6 @@ public class CommunityServiceImpl implements CommunityService {
 				result += line;
 			}
 			
-			/* 확인
-			System.out.println("=====Service:response=====");
-			System.out.println(result);
-			*/
-			
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
@@ -192,21 +168,9 @@ public class CommunityServiceImpl implements CommunityService {
 			for(int i = 0; i < data.size(); i++) {
 				savedBody.add((data.getAsJsonArray().get(i).getAsJsonObject()).get("body").getAsString());			
 			}
-			
-			/* 확인
-			System.out.println("=====Service:savedTemplateId=====");
-			System.out.println(savedTemplateId); 
-			System.out.println("=====Service:body=====");
-			System.out.println(body);
-			*/
-			
+
 			savedSms.put("savedTemplateId", savedTemplateId);
 			savedSms.put("savedBody", savedBody);
-			
-			/* 확인
-			System.out.println("=====Service:originSms=====");
-			System.out.println(savedSms);
-			*/
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -258,12 +222,7 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			int responseCode = putConn.getResponseCode();
 			String responseMsg = putConn.getResponseMessage();
-			
-			/*
-			System.out.println("=====Service:responseCode=====");
-			System.out.println(responseCode); // 200	
-			*/
-			
+
 			// PUT 요청에 대한 응답 GET 요청
 			URL getUrl = new URL(get);
 			HttpURLConnection getConn = (HttpURLConnection) getUrl.openConnection();
@@ -278,8 +237,6 @@ public class CommunityServiceImpl implements CommunityService {
 			// 응답데이터 얻기
 			BufferedReader br = new BufferedReader(new InputStreamReader(getConn.getInputStream(), "UTF-8"));
 			StringBuffer sb = new StringBuffer();
-			// getInputStream() 메소드를 통해 응답 데이터를 읽을 수 있는 InputStream 객체를 얻을 수 있다
-			// 응답을 문자열 타입으로 얻기 위해 BufferedReader 객체를 사용할 수 있다
 			
 			String line = "";
 			String response = "";
@@ -298,14 +255,7 @@ public class CommunityServiceImpl implements CommunityService {
 			// JSON>header>resultMessage에 접근
 			JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
 			String str = header.getAsJsonObject().get("resultMessage").getAsString();
-			
-			/* 확인
-			System.out.println("=====Service:header=====");
-			System.out.println(header);
-			System.out.println("=====Service:str=====");
-			System.out.println(str);
-			*/
-			
+
 			// 성공 시
 			if(str.equals("success")) {
 				result = 1;
@@ -347,12 +297,7 @@ public class CommunityServiceImpl implements CommunityService {
 			while((line = br.readLine()) != null) {
 				result += line;
 			}
-			
-			/* 확인
-			System.out.println("=====Service:response=====");
-			System.out.println(result);
-			*/
-			
+
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
@@ -363,21 +308,9 @@ public class CommunityServiceImpl implements CommunityService {
 			 
 			String title = (data.getAsJsonObject().getAsJsonObject()).get("title").getAsString();
 			String body = (data.getAsJsonObject().getAsJsonObject()).get("body").getAsString();
-			
-			/* 확인
-			System.out.println("=====Service:title=====");
-			System.out.println(title); 
-			System.out.println("=====Service:body=====");
-			System.out.println(body);
-			*/
 
 			savedMail.put("title", title);
 			savedMail.put("content", body);
-			
-			/* 확인
-			System.out.println("=====Service:savedMail=====");
-			System.out.println(savedMail); 
-			*/
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -414,12 +347,7 @@ public class CommunityServiceImpl implements CommunityService {
 			while((line = br.readLine()) != null) {
 				result += line;
 			}
-			
-			/* 확인
-			System.out.println("=====Service:response=====");
-			System.out.println(result);
-			*/
-			
+
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
@@ -430,22 +358,10 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			String title = (data.getAsJsonObject().getAsJsonObject()).get("title").getAsString();
 			String body = (data.getAsJsonObject().getAsJsonObject()).get("body").getAsString();
-			
-			/* 확인
-			System.out.println("=====Service:title=====");
-			System.out.println(title); 
-			System.out.println("=====Service:body=====");
-			System.out.println(body);
-			*/
-			
+
 			originMail.put("title", title);
 			originMail.put("content", body);
-			
-			/* 확인
-			System.out.println("=====Service:originMail=====");
-			System.out.println(originMail); 
-			*/
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -460,7 +376,8 @@ public class CommunityServiceImpl implements CommunityService {
 		int result = 0;
 		String template = templateId.concat("_mod");
 		String putUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + template;
-		
+		String getUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + template;
+
 		try {
 			// url
 			URL url = new URL(putUrl);
@@ -483,11 +400,6 @@ public class CommunityServiceImpl implements CommunityService {
 			json.addProperty("title", title); // 발송 제목
 			json.addProperty("body", content); // 문구 내용
 			
-			// 확인
-			System.out.println("=====Service:json=====");
-			System.out.println(json);
-			//
-			
 			// 데이터 전송 준비
 			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
 			os.write(json.toString());
@@ -495,14 +407,20 @@ public class CommunityServiceImpl implements CommunityService {
 			os.close();
 			
 			int responseCode = conn.getResponseCode();
+
+			// PUT 요청에 대한 응답 GET 요청
+			URL get = new URL(getUrl);
+			HttpURLConnection getConn = (HttpURLConnection) get.openConnection();
 			
-			// 확인
-			System.out.println("=====Service:responseCode=====");
-			System.out.println(responseCode); // 200	
-			//
+			// method
+			getConn.setRequestMethod("GET");
+			
+			// header
+			getConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			getConn.setRequestProperty("X-Secret-Key", mailSecret);	
 			
 			// 응답데이터 얻기
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(getConn.getInputStream(), "UTF-8"));
 			StringBuffer sb = new StringBuffer();
 			
 			String line = "";
@@ -522,18 +440,11 @@ public class CommunityServiceImpl implements CommunityService {
 			// JSON>header>resultMessage에 접근
 			JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
 			String str = header.getAsJsonObject().get("resultMessage").getAsString();
-			
-			// 확인
-			System.out.println("=====Service:header=====");
-			System.out.println(header);
-			System.out.println("=====Service:str=====");
-			System.out.println(str);
-			//
-			
+
 			// 성공 시
 			if(str.equals("success")) {
 				result = 1;
-			}
+			}	
 			
 		} catch(IOException e) {
 			e.printStackTrace();
