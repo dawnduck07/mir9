@@ -735,4 +735,13 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	WHERE
 		member_no = #{memberNo}
 </update>
+
+<select id="seletHistoryList" resultType="memberAccessHistory">
+	SELECT 
+		* 
+	FROM 
+		member_access_history
+	ORDER BY
+		access_history_no DESC
+</select>
 </mapper>

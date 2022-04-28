@@ -12,6 +12,7 @@ import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
 import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
+import com.naedam.mir9.member.model.vo.MemberAccessHistory;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
@@ -340,6 +341,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int updateMemberToWithdrawal(Map<String, Object> param) {
 		return memberDao.updateMemberToWithdrawal(param);
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletHistoryList() {
+		return memberDao.seletHistoryList();
 	}
 
 

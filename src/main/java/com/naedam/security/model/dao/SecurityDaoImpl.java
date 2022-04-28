@@ -1,9 +1,13 @@
 package com.naedam.security.model.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
+
+import com.naedam.mir9.member.model.vo.MemberAccessHistory;
 
 @Repository
 public class SecurityDaoImpl implements SecurityDao {
@@ -17,7 +21,20 @@ public class SecurityDaoImpl implements SecurityDao {
 	}
 
 	@Override
-	public int insertLoginDate(Object name) {
-		return session.insert("security.insertLoginDate", name);
+	public int insertLoginDate(Map<String, Object> param) {
+		return session.update("security.insertLoginDate", param);
 	}
+
+	@Override
+	public int insertAccessHistoryByLogin(Map<String, Object> paramHistory) {
+		return session.insert("security.insertAccessHistoryByLogin", paramHistory);
+	}
+
+	@Override
+	public int insertAccessHistoryByLogout(Map<String, Object> paramHistory) {
+		return session.insert("security.insertAccessHistoryByLogout", paramHistory);
+	}
+
+
+
 }

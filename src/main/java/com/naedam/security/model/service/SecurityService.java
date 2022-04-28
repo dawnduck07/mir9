@@ -1,11 +1,14 @@
 package com.naedam.security.model.service;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.naedam.mir9.member.model.vo.MemberAccessHistory;
 import com.naedam.security.model.dao.SecurityDao;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +46,25 @@ public class SecurityService implements UserDetailsService {
 		return member;
 	}
 
-	public int insertLoginDate(Object name) {
-		return securityDao.insertLoginDate(name);
+	public int insertLoginDate(Map<String, Object> param) {
+		return securityDao.insertLoginDate(param);
+	}
+	
+
+
+	public void track(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 
+	public int insertAccessHistoryByLogin(Map<String, Object> paramHistory) {
+		return securityDao.insertAccessHistoryByLogin(paramHistory);
+	}
+
+	public int insertAccessHistoryByLogout(Map<String, Object> paramHistory) {
+		return securityDao.insertAccessHistoryByLogout(paramHistory);
+	}
+
+	
+	
 }
