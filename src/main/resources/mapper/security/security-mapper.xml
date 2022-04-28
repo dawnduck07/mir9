@@ -35,12 +35,56 @@
 		</collection>
 	</resultMap>
 	
-	<insert id="insertLoginDate">
+	<update id="insertLoginDate">
 		UPDATE 
 			member 
 		SET 
 			login_date = NOW() 
 		WHERE 
 			id = #{username}
+		<selectKey keyProperty="loginDate" resultType="date" order="AFTER">
+			SELECT
+				login_date
+			FROM
+				member
+			WHERE
+				id = #{username}
+		</selectKey>
+	</update>
+	
+	<insert id="insertAccessHistoryByLogin">
+		INSERT INTO 
+			member_access_history(
+				access_history_no,
+				access_history_id,
+				access_history_name,
+				access_history_ip,
+				access_history_status,
+				login_date)
+		VALUES
+			(NEXTVAL(seq_member_access_history),
+			#{accessHistoryId},
+			#{accessHistoryName},
+			#{accessHistoryIp},
+			#{accessHistoryStatus},
+			#{loginDate})
+	</insert>
+
+	<insert id="insertAccessHistoryByLogout">
+		INSERT INTO 
+			member_access_history(
+				access_history_no,
+				access_history_id,
+				access_history_name,
+				access_history_ip,
+				access_history_status,
+				login_date)
+		VALUES
+			(NEXTVAL(seq_member_access_history),
+			#{accessHistoryId},
+			#{accessHistoryName},
+			#{accessHistoryIp},
+			#{accessHistoryStatus},
+			NOW())
 	</insert>
 </mapper>

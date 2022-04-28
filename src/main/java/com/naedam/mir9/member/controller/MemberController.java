@@ -41,6 +41,7 @@ import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
 import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
+import com.naedam.mir9.member.model.vo.MemberAccessHistory;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
@@ -818,7 +819,11 @@ public class MemberController {
 	
 	// 회원 접속이력 관리
 	@GetMapping("/log")
-	public String memberAccessHistory() {
+	public String memberAccessHistory(Model model, HttpServletRequest request) {
+		
+		List<MemberAccessHistory> memberAccessHistoryList = memberService.seletHistoryList();
+		log.debug("memberAccessHistoryList = {}", memberAccessHistoryList);
+		model.addAttribute("memberAccessHistoryList", memberAccessHistoryList);
 		
 		return "member/memberAccessHistory";
 	}
