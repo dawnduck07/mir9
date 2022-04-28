@@ -1,17 +1,10 @@
 package com.naedam.mir9.community.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.naedam.mir9.community.model.service.CommunityService;
 import com.naedam.mir9.community.model.vo.Review;
+
 
 @Controller
 @RequestMapping("/comm")
@@ -66,13 +60,7 @@ public class CommunityController {
 		
 		model.addAttribute("templateId", templateId);
 		model.addAttribute("content", content);
-		
-		/* 확인
-		System.out.println("=====Controller:originSms=====");
-		System.out.println(templateId);
-		System.out.println(content);		
-		*/
-		
+
 		// 저장 문구(categodyId : 78520)
 		HashMap<String, Object> savedSms = communityService.savedSms(smsKey, smsSecret); 
 		
@@ -82,20 +70,13 @@ public class CommunityController {
 		
 		model.addAttribute("savedTemplateId", savedTemplateId);
 		model.addAttribute("savedContent", savedContent);
-		
-		/* 확인
-		System.out.println("=====Controller:savedSms=====");
-		System.out.println(savedTemplateId);
-		System.out.println(savedContent);
-		*/
-		
+
 		return "community/sms";
 	}
 	
 	// sms 조회 + 검색
 	@GetMapping("/sms_list")
 	public String commSmsList() {
-		
 		return "community/smsList";
 	}
 	
