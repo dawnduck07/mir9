@@ -3,7 +3,9 @@ package com.naedam.mir9.member;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,7 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Service;
 
-import com.naedam.mir9.member.model.service.MemberService;
+import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.security.model.service.SecurityService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,13 +52,35 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			grade.add(authority.getAuthority());
 		});
 		
-		Object name = authentication.getName();
-		log.debug("name = {}", name);
+		Map<String, Object> param = new HashMap<>();
+		Member principal = (Member) authentication.getPrincipal();
+		
+		Object username = authentication.getName();
+		param.put("username", username);
+		param.put("loginDate", principal.getLoginDate());
+		log.debug("name = {}", username);
 		log.debug("grade = {}", grade);
 		
 		// 최근 로그인 시간 입력
-		int resultLoginDate = securityService.insertLoginDate(name);
+		int resultLoginDate = securityService.insertLoginDate(param);
 		log.debug("resultLoginDate = {}", resultLoginDate);
+		
+		// 회원 접속이력 관리 - 로그인
+		Map<String, Object> paramHistory = new HashMap<>();
+		
+		log.debug("principalForHistory = {}", principal);
+		paramHistory.put("accessHistoryId", principal.getId());
+		paramHistory.put("accessHistoryName", principal.getLastName() + principal.getFirstName());
+		paramHistory.put("accessHistoryStatus", "login");
+		paramHistory.put("loginDate", param.get("loginDate"));
+		String ip = request.getRemoteAddr();
+		log.debug("ip = {}", ip);
+		paramHistory.put("accessHistoryIp", ip);
+		
+		int resultAccessHistoryByLogin = securityService.insertAccessHistoryByLogin(paramHistory);
+		log.debug("resultAccessHistoryByLogin = {}", resultAccessHistoryByLogin);
+		
+		//int resultloginAccessHistory = securityService.insertLoginAccessHistory(paramHistory);
 		
 		// ADMIN 이 포함되어 있으면 /dashBoard로 리다이렉트
 		if(grade.contains("ROLE_ADMIN")) {
