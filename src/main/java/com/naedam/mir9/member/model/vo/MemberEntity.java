@@ -27,20 +27,23 @@ public class MemberEntity extends Member {
 	private String addressMain;
 	private String addressSub;
 	private String addressZipcode;
-	private int pointAmt;
+	private int pointAmount;
 	
 	public MemberEntity(int memberNo, String firstName, String lastName, String address,
 			String email, String phone, Date regDate, String status, String id, String password, String profileImg,
-			Date updateDate, Date loginDate,
-			List<SimpleGrantedAuthority> authorities, String addressMain, String addressSub, int pointAmt,
+			Date updateDate, Date loginDate, Date withdrawalDate, String reason,
+			List<SimpleGrantedAuthority> authorities, 
+			String addressMain, 
+			String addressSub, 
+			int pointAmount,
 			String addressZipcode) {
 		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
-				authorities);
+				withdrawalDate, reason, authorities);
 		
 		this.addressMain = addressMain;
 		this.addressSub = addressSub;
 		this.addressZipcode = addressZipcode;
-		this.pointAmt = pointAmt;	
+		this.pointAmount = pointAmount;	
 	}
 
 }
