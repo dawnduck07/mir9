@@ -7,8 +7,12 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
 import com.naedam.mir9.statistics.model.vo.AddressStatisticVo;
 import com.naedam.mir9.statistics.model.vo.AreaVo;
+
+import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
+
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
 
@@ -44,6 +48,12 @@ public class StatisticsDaoImpl implements StatisticsDao {
 	public List<AreaVo> selectArea() {
 		// TODO Auto-generated method stub
 		return session.selectList("statistics.selectArea");
+	}
+
+	public List<MemberStatisticVo> selectMemberStatisticsList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.selectList("statistics.selectMemberStatisticsList", param);
+
 	}
 
 	

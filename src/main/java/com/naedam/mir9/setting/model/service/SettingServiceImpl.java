@@ -22,7 +22,9 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.dao.SettingDao;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
+import com.naedam.mir9.setting.model.vo.SeoSetting;
 
 @Service
 public class SettingServiceImpl implements SettingService {
@@ -166,6 +168,19 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.updateLocaleDefault(localeCode);
 	}
+
+	@Override
+	public SeoSetting selectSeoSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectSeoSetting();
+	}
+
+	@Override
+	public int updateSeoSetting(SeoSetting seo) {
+		// TODO Auto-generated method stub
+		return settingDao.updateSeoSetting(seo);
+	}
+
 	
 	
 	

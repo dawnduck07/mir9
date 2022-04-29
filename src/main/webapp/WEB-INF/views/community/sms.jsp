@@ -14,6 +14,7 @@
 textarea {
     width:180px;
     height:100px;
+    resize:none;
 }
 </style>
 	<section class="content-header">
@@ -429,32 +430,28 @@ textarea {
 </div><!-- /.content-wrapper -->
 
 <script>
-	// 1. 저장 양식 불러오기 -> 완료 / 일치하는 textarea에 접근해야 함 -> attr("class") 해결
-	// 2. 기존 양식 불러오기 -> 완료 / 템플릿 전체 목록이 안 뜸 -> pageSize 쿼리스트링으로 넘겨서 해결
-	// 3. 양식 및 체크 값 저장 -> 완료 / 오류코드 -9997 -> 응답 get 요청 추가로 해결 
-	// 4. 포인트 값 -> 미완료 / 포인트 형식이 아님 그냥 건당 차감 금액 보이게 하는 방식
+	// access key : pDjJmaKLu6bg9i9j
+	// secret key : YRs5WbpK
+	// SMS : 수신 1건당 9.9원
 	
-	// 보완 : 발신번호별 카테고리 추가 + 수정 템플릿 추가(수정 템플릿명에 '_발신번호') + 해당 수정 템플릿에 저장
+	// 보완 : 발신번호별 카테고리 추가 + 수정 템플릿 추가(수정 템플릿명에 '_발신번호') + 해당 수정 템플릿에 저장	/ 중복되는 코드 정리
+	
+	// SMS 발송 ajax
 	
 	// 저장된 양식 조회
 	$(function(){
-		
 		// savedTemplateId, savedContent, textarea 선언
 		var savedTemplateId = [];
 		var savedContent = [];
 		var textarea = [];
 		
-		// savedTemplateId 값 담기
+		// 값 담기
 		$.each($("input[name='savedTemplateId']"), function(index, value) { 
 			savedTemplateId.push($(value).val());
 		});
-		
-		// savedContent 값 담기
 		$.each($("input[name='savedContent']"), function(index, value) { 
 			savedContent.push($(value).val());
 		});
-		
-		// textarea의 class 값 담기 
 		$("textarea").each(function() { 
 			textarea.push($(this).attr("class"));
 		});	
@@ -471,17 +468,14 @@ textarea {
 	
 	// 기본 양식 불러오기 
 	function getDefaultTemplate(action) { 
-		
 		// templateId, content 선언
 		var templateId = [];
 		var content = [];
 		
-		// templateId 값 담기
+		// 값 담기
 		$.each($("input[name='templateId']"), function(index, value) { 
 			templateId.push($(value).val());
 		});
-		
-		// bodyContent 값 담기
 		$.each($("input[name='bodyContent']"), function(index, value) { 
 			content.push($(value).val());
 		});
@@ -507,7 +501,6 @@ textarea {
         		$(this).attr("value", "n");
         	}
         });
-		
         $("input:checkbox[name='is_send_admin']").each(function() { 
         	if($(this).is(":checked")) { // 관리자 자동 발송이 체크
         		$(this).attr("value", "y");
@@ -533,15 +526,6 @@ textarea {
 			content.push($(value).val());
 		});
 		
-		/* 확인
-		console.log("=====code=====");
-		console.log(code);
-		console.log("=====is_send=====");
-		console.log(is_send);
-		console.log("=====content=====");
-		console.log(content);
-		*/
-		
 		// 자동발송 문구 조건
 		for(var i = 0; i < is_send.length; i++) {
 			if(is_send[i] == "y" && content[i].length < 10) {
@@ -553,20 +537,15 @@ textarea {
 		// data -> json
 		var data = { code : code, is_send : is_send, content : content }		
 		var jsonStr = JSON.stringify(data);
-		
-		/* 확인
-		console.log("=====jsonStr=====");
-		console.log(jsonStr);
-		*/
-		
+
 		// ajax로 값 넘기기
 		$.ajax({
 			url:"${pageContext.request.contextPath}/comm/sms",
 			method:"POST",
-			contentType: "application/json; charset=utf-8",
 			headers: {
 				"${_csrf.headerName}" : "${_csrf.token}"
 			},
+			contentType: "application/json; charset=utf-8",
 			data: jsonStr,
 			success: function(result) {
 				if(result > 0) {
@@ -575,8 +554,6 @@ textarea {
 			},
 			error: function(textStatus, errorThrown) {
 				console.log("SMS 설정 수정에 실패했습니다.");
-				// console.log(textStatus);
-				// console.log(errorThrown);
 			}
 		});
 	}	
@@ -635,7 +612,6 @@ textarea {
 		
 		return return_txt;
 	}
-	
 </script>
 
 

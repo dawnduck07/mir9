@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.member.model.service.MemberService;
+import com.naedam.mir9.member.model.vo.MemberAccessHistoryListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
 import com.naedam.mir9.order.model.service.OrderService;
 import com.naedam.mir9.order.model.vo.OrderExcelForm;
@@ -52,6 +53,8 @@ public class ExcelController {
     private final String[] productHeader = {"카테고리", "모델명", "상품명", "소제목", "요약", "소비자 가격", "가격", "상품옵션", "상세설명", "new아이템", "best아이템", "event아이템", "언어", "품절여부", "표출상태", "등록일자"};
 	private final String[] memberPointHeader = {"아이디", "이름", "이메일", "포인트 사용내역", "사용 포인트", "일시"};
 	private final String[] memberListHeader = {"아이디", "이름", "휴대폰", "이메일", "주소", "메모", "등급", "상태", "최근 접속일", "수정일자", "등록일자"};
+	private final String[] memberAccessHistoryListHeader = {"아이디", "이름", "접속 IP", "상태", "일시"};
+	
 	
 	@PostMapping("/download.do")
 	public void excelDownload(HttpServletResponse response, HttpServletRequest request) throws IOException {
@@ -95,6 +98,14 @@ public class ExcelController {
 			fileName += "member_list_" + dateCode();
 			List<MemberListExcelForm> MemberListExcelFormList = memberService.selectMemberListExcelForm();
 			for(MemberListExcelForm p : MemberListExcelFormList) {
+				excelContentList2.add(p);
+			}
+		}else if(type.equals("memberAccessHistoryList")) {
+			excelHeader = Arrays.asList(memberAccessHistoryListHeader);
+			sheet = wb.createSheet("member_access_history_list");
+			fileName += "member_access_history_list_" + dateCode();
+			List<MemberAccessHistoryListExcelForm> MemberAccessHistoryListExcelFormList = memberService.selectMemberAccessHistoryListExcelForm();
+			for(MemberAccessHistoryListExcelForm p : MemberAccessHistoryListExcelFormList) {
 				excelContentList2.add(p);
 			}
 		}

@@ -110,6 +110,10 @@
   		select * from delivery_notice where locale = #{locale}
   	</select>
   	
+  	<select id="selectSeoSetting" resultType="seoSetting">
+  		select * from seo_setting
+  	</select>
+  	
   	<update id="updateAdminSetting">
   		update admin_setting set email = #{email}, phone = #{phone}, caller_id = #{callerId}, 
 			<if test="thumbnailImg != null and thumbnailImg != ''">
@@ -143,5 +147,9 @@
   	
   	<update id="updateLocaleDefault">
   		update locale set is_default = 'Y' where locale_code = #{localeCode}
+  	</update>
+  	
+  	<update id="updateSeoSetting">
+  		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}
   	</update>
 </mapper>

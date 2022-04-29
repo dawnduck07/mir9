@@ -83,7 +83,7 @@
 											<td style="width: 110px;">${memberEntity.lastName}${memberEntity.firstName}</td>
 											<td style="width: 110px;">${memberEntity.phone}</td>
 											<td>${memberEntity.addressMain}${memberEntity.addressSub}</td>
-											<td style="width: 100px;">${memberEntity.pointAmt}</td>
+											<td style="width: 100px;">${memberEntity.pointAmount}</td>
 											<td style="width: 120px;"><fmt:formatDate pattern="yyyy/MM/dd HH:mm" value="${memberEntity.regDate}" /></td>
 											<td><span class="label label-success" style="font-size:12px;">보임</span></td>
 											<td>
@@ -404,15 +404,7 @@ $("button[id^='btn_']").on('click', function(e){
 
 // 상세보기 모달
 $(document).on("click", ".detailBtn", function(e){
-	console.log(e.target);
 	console.log("해당 no = " + $(e.target).val());
-	
-});
-
-$("button[id^='detail_']").on('click', function(e){
-	console.log(e.target);
-	console.log("해당 no = " + $(e.target).val());
-	
 	var memberNo = $(e.target).val();
 	console.log("memberNo = " + memberNo);
 	
@@ -601,7 +593,7 @@ function update(){
 		error : console.log
 	});
 	
-		//$(window).unbind("beforeunload");
+		$(window).unbind("beforeunload");
 
 }
 
@@ -684,6 +676,8 @@ function register(){
 	var passwordCheck = $("#passwordCheck").val();
 	var firstName = $("#firstName").val();
 	var lastName = $("#lastName").val();
+	var authority = $("#memberGradeChk option:selected").val();
+	console.log("authority = " + authority);
 	
 	// 아이디 공란 확인
 	if(id == ''){

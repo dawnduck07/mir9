@@ -14,8 +14,13 @@
 	
 	<!-- 로그인 성공 후 커스텀을 위한 빈 생성 -->
 	<beans:bean 
-		id="successHandler"
+		id="loginSuccessHandler"
 		class="com.naedam.mir9.member.LoginSuccessHandler"></beans:bean>
+	 
+	 <!-- 로그아웃 성공 후 커스텀을 위한 빈 생성 -->
+	<beans:bean 
+		id="logoutSuccessHandler"
+		class="com.naedam.mir9.member.LogoutSuccessHandler"></beans:bean>
 	 
 	<!-- #8.3 인증/권한 검사 설정 -->
 	<!-- security에 의한 인증/권한 검사에서 제외 -->
@@ -71,12 +76,16 @@
 			username-parameter="id"
 			password-parameter="password"
 			default-target-url="/dashBoard"
-			authentication-success-handler-ref="successHandler"
+			authentication-success-handler-ref="loginSuccessHandler"
 			/>
+			
 		<!-- logout-url : 핸들러 작성 불필요 -->
 		<!-- logout-success-url : 로그아웃 이후 리다이렉트 url(기본값 : /login?logout)-->
-		<logout logout-url="/member/memberLogout.do"
-				logout-success-url="/"/>
+		<!-- logout-success-url과 success-handler-ref은 같이 쓸 수 없다. -->
+		<logout 
+			logout-url="/member/memberLogout.do"
+			success-handler-ref="logoutSuccessHandler"
+			/>
 		
 		<!-- csrf 공격대비 기능 -->
 		<!-- 

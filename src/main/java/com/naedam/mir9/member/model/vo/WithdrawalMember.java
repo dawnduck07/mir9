@@ -24,23 +24,16 @@ public class WithdrawalMember extends Member {
 	private static final long serialVersionUID = 1L;
 
 	private String address;	
-	private Date withdrawalDate;
-	private String reason;
 	private String name;
 	
 	public WithdrawalMember(int memberNo, String firstName, String lastName, String email, String phone, Date regDate,
 			String status, String id, String password, String profileImg, Date updateDate, Date loginDate,
-			List<SimpleGrantedAuthority> authorities,
+			List<SimpleGrantedAuthority> authorities, Date withdrawalDate, String reason,
 			String address,
-			Date withdrawalDate,
-			String reason,
 			String name) {
 		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
-				authorities);
-
+				withdrawalDate, reason, authorities);
 		this.address = address;
-		this.reason = reason;
-		this.withdrawalDate = withdrawalDate; 
 		this.name = name;
 	}
 

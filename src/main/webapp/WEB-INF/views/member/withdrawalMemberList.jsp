@@ -87,12 +87,10 @@
 							</tr>
 						</thead>
 						<tbody id="tbody">
-							<c:forEach items="${memberList}" var="withdrawal">
+							<c:forEach items="${withdrawalMemberList}" var="withdrawal">
 								<c:if test="${withdrawal.status eq 'N'}">
 									<tr>
-										<td style="width: 30px;">
-											<input type="checkbox" name="" class="member-is-checked" data-target="${withdrawal.memberNo}"/>
-										</td>
+										<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="${withdrawal.memberNo}" data-target="${withdrawal.memberNo}" /></td>
 										<td style="width: 110px;">${withdrawal.id}</td>
 										<td style="width: 110px;">${withdrawal.lastName}${withdrawal.firstName}</td>
 										<td style="width: 110px;">${withdrawal.phone}</td>
@@ -104,7 +102,7 @@
 											<span class="label label-default" style="font-size:12px;">탈퇴</span>
 										</td>
 										<td style="width: 60px;">
-											<button type="button" id="detail_${withdrawal.memberNo}" value="${withdrawal.memberNo}" class="btn btn-primary btn-xs">상세보기</button>
+											<button type="button" value="${withdrawal.memberNo}" class="btn btn-primary btn-xs detailWithdrawalBtn">상세보기</button>
 										</td>
 									</tr>
 								</c:if>
@@ -150,6 +148,8 @@
 		aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
+				<input type="hidden" id="addressNo" name="addressNo" value="" />
+				<input type="hidden" id="memberNo" name="memberNo" value="" />
 				<form name="form" method="post" onsubmit="return false;"
 					action="?tpf=admin/member/process">
 					<input type="hidden" name="mode"> <input type="hidden"
@@ -169,7 +169,7 @@
 						<table class="table table-bordered">
 							<tr>
 								<td class="menu">아이디</td>
-								<td align="left"><input type="text" name="id"
+								<td align="left"><input type="text" name="id" id="id"
 									class="form-control input-sm" style="width: 30%; float: left;" />&nbsp;
 									<button type="button" id="btn_check_id"
 										class="btn btn-sm btn-default" onclick="onclickCheckId();">아이디
@@ -177,14 +177,14 @@
 							</tr>
 							<tr>
 								<td class="menu">비밀번호</td>
-								<td align="left"><input type="password" name="password"
+								<td align="left"><input type="password" name="password" id="password"
 									placeholder="" class="form-control input-sm"
 									style="width: 30%; float: left;" /> 대소문자와 숫자 포함 8~15자로 입력하세요</td>
 							</tr>
 							<tr>
 								<td class="menu">비밀번호 확인</td>
 								<td align="left"><input type="password"
-									name="password_confirm" placeholder=""
+									name="passwordCheck" id="passwordCheck" placeholder=""
 									class="form-control input-sm" style="width: 30%;" /></td>
 							</tr>
 							<tr>
@@ -193,7 +193,7 @@
 							</tr>
 							<tr>
 								<td class="menu">휴대폰</td>
-								<td align="left"><select name="mobile1"
+								<td align="left"><select name="mobile1" id="mobile1"
 									class="form-control input-sm" style="width: 15%; float: left;">
 										<option value="010">010</option>
 										<option value="011">011</option>
@@ -202,17 +202,17 @@
 										<option value="018">018</option>
 										<option value="019">019</option>
 								</select> <span style="float: left;">-</span> <input type="text"
-									name="mobile2" onkeyup="this.value=checkNum(this.value)"
+									name="mobile2" id="mobile2" onkeyup="this.value=checkNum(this.value)"
 									class="form-control input-sm" style="width: 15%; float: left;"
 									maxlength="4" /> <span style="float: left;">-</span> <input
-									type="text" name="mobile3"
+									type="text" name="mobile3" id="mobile3"
 									onkeyup="this.value=checkNum(this.value)"
 									class="form-control input-sm" style="width: 15%; float: left;"
 									maxlength="4" /></td>
 							</tr>
 							<tr>
 								<td class="menu">이메일</td>
-								<td align="left"><input type="text" name="email"
+								<td align="left"><input type="text" name="email" id="email"
 									class="form-control input-sm" style="width: 60%;" /></td>
 							</tr>
 							<tr>
@@ -237,10 +237,8 @@
 										rows="4" class="form-control input-sm" style="width: 100%;"></textarea></td>
 							</tr>
 							<tr id="display_level">
-								<td class="menu">등급 <span class="text-light-blue"><i
-										class="fa fa-check"></i></span></td>
-								<td><select name="authority" id="memberGradeChk"
-									class="form-control input-sm" style="width: 120px;">
+								<td class="menu">등급 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
+								<td><select name="authority" id="memberGradeChk" class="form-control input-sm" style="width: 120px;">
 										<c:forEach items="${memberGradeList}" var="memberGrade">
 											<option value="${memberGrade.authority}">${memberGrade.memberGradeName}</option>
 										</c:forEach>
@@ -251,8 +249,8 @@
 										class="fa fa-check"></i></span></td>
 								<td><select name="status" id="status"
 									class="form-control input-sm" style="width: 120px;">
-										<option value="Y">정상</option>
 										<option value="N">대기</option>
+										<option value="Y">정상</option>
 								</select></td>
 							</tr>
 							<tr id="display_last_login_date">
@@ -271,17 +269,19 @@
 								<td class="menu">탈퇴일</td>
 								<td align="left"><span id="withdraw_date"></span></td>
 							</tr>
+							<%-- 
 							<tr id="display_reg_date">
 								<td class="menu">탈퇴사유</td>
 								<td align="left"><span id="reason"></span></td>
 							</tr>
+							--%>
 						</table>
 				</form>
 			</div>
 
 		</div>
 		<div class="modal-footer">
-			<button type="button" onclick="register();" class="btn btn-primary">저장</button>
+			<button type="button" onclick="update()" class="btn btn-primary">저장</button>
 			<!--<button type="button" onclick="deleteMember();" class="btn btn-danger">삭제</button>-->
 		</div>
 	</div>
@@ -328,9 +328,9 @@ $(document).ready(function(){
 									<input type="checkbox" class="member-is-checked" name="" data-target="\${v.memberNo}"/>
 								</td>
 								<td style="width: 110px;">\${v.id}</td>
-								<td style="width: 110px;">\${v.name}</td>
+								<td style="width: 110px;">\${v.lastName}\${v.firstName}</td>
 								<td style="width: 110px;">\${v.phone}</td>
-								<td>\${v.address}</td>
+								<td>\${v.addressMain} \${v.addressSub}</td>
 								<td style="width: 120px;">\${v.regDate}</td>
 								<td style="width: 50px;">
 									<span class="label label-default" style="font-size:12px;">탈퇴</span>
@@ -401,11 +401,10 @@ $(document).on("click", "#withdrawalDeleteBtn", function(){
 });
 
 // 상세보기 모달
-$("button[id^='detail_']").on('click', function(e){
-	console.log(e.target);
+$(document).on("click", ".detailWithdrawalBtn", function(e){
 	console.log("해당 no = " + $(e.target).val());
-	e.preventDefault();
 	var memberNo = $(e.target).val();
+	console.log("memberNo = " + memberNo);
 	
 	$("[name=id]").prop("readonly", true);
 	$("#modalRegister").modal();
@@ -422,10 +421,18 @@ $("button[id^='detail_']").on('click', function(e){
 		success : function(res){
 			console.log("ajaxData = " + JSON.stringify(res));
 			var withdrawalMemberEntity = res.withdrawalMemberEntity;
+			var authorities = res.authorities;
 			var mobile1 = res.mobile1;
 			var mobile2 = res.mobile2;
 			var mobile3 = res.mobile3;
+			var address = res.address;
+			var memberMemo = res.memberMemo;
+			var regDate = res.regDate;
+			var loginDate = res.loginDate;
+			var updateDate = res.updateDate;
+			var withdrawalDate = res.withdrawalDate;
 			
+			$("[name=memberNo]").val(withdrawalMemberEntity.memberNo);
 			$("[name=id]").val(withdrawalMemberEntity.id);
 			$("[name=lastName]").val(withdrawalMemberEntity.lastName);
 			$("[name=firstName]").val(withdrawalMemberEntity.firstName);
@@ -433,16 +440,22 @@ $("button[id^='detail_']").on('click', function(e){
 			$("[name=mobile2]").val(mobile2);
 			$("[name=mobile3]").val(mobile3);
 			$("[name=email]").val(withdrawalMemberEntity.email);
+			$("[name=addressNo]").val(address.addressNo);
 			$("[name=addressZipcode]").val(withdrawalMemberEntity.addressZipcode);
 			$("[name=addressMain]").val(withdrawalMemberEntity.addressMain);
 			$("[name=addressSub]").val(withdrawalMemberEntity.addressSub);
 			$("[name=memberMemoContent]").val(withdrawalMemberEntity.memberMemoContent);
 			$("[name=reason]").val(withdrawalMemberEntity.reason);
 			$("[name=authority]").val(authorities.authority);
+			$("#last_login_date").text(loginDate);
+			$("#update_date").text(updateDate);
+			$("#withdraw_date").text(withdrawalDate);
+			$("#reg_date").text(regDate);
 		},
 		error : console.log
 	});
 });
+
 
 //주소 입력
 function callAddress() {
@@ -488,6 +501,147 @@ function callAddress() {
         }
     }).open();
 }
+
+//상세보기 저장
+function update(){
+	console.log("상세보기 저장(update()) 작동");
+	var id = $("#id").val();
+	console.log("id = " + id);
+	var password = $("#password").val();
+	console.log("password = " + password);
+	var passwordCheck = $("#passwordCheck").val();
+	console.log("passwordCheck = " + passwordCheck);
+	var firstName = $("#firstName").val();
+	console.log("firstName = " + firstName);
+	var lastName = $("#lastName").val();
+	console.log("lastName = " + lastName);
+	var memberMemoContent = $("#memberMemoContent").val();
+	console.log("memberMemoContent = " + memberMemoContent);
+	var authority = $("#memberGradeChk option:selected").val();
+	console.log("authority = " + authority);
+	var addressNo = $("#addressNo").val();
+	console.log("addressNo = " + addressNo);
+	var addressMain = $("#address_main").val();
+	console.log("addressMain = " + addressMain);
+	var addressSub = $("#address_sub").val();
+	console.log("addressSub = " + addressSub);
+	var addressZipcode = $("#address_zipcode").val();
+	console.log("addressZipcode = " + addressZipcode);
+	var memberNo = $("#memberNo").val();
+	console.log("memberNo = " + memberNo);
+	var status = $("#status").val();
+	console.log("status = " + status);
+	var reason = $("#reason").val();
+	console.log("reason = " + reason);
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	if(password != ''){
+		// 비밀번호 유효성 검사
+		if(!/^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{8,15}$/.test(password)){
+			alert("비밀번호는 8 ~ 15 글자 이내로 공백 없이 영문자, 숫자, 특수문자를 혼합하여 입력해주세요.");
+			$("#password").focus();
+			return false;
+		}
+		// 비밀번호 확인 공란 확인
+		if(passwordCheck == ''){
+			alert("비밀번호가 확인이 입력되지 않았습니다.");
+			$("#passwordCheck").focus();
+			return false;	
+		}
+	}
+	
+	// 비밀번호 일치 확인
+	if(password != passwordCheck){
+		alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+		$("#passwordCheck").focus();
+		return false;
+	}
+	
+	// 이름 공란 확인
+	if(firstName == ''){
+		alert("이름이 입력되지 않았습니다.");
+		$("#firstName").focus();
+		return false;
+	}
+	// 성 공란 확인
+	if(lastName == ''){
+		alert("성이 입력되지 않았습니다.");
+		$("#lastName").focus();
+		return false;
+	}
+	
+	// 휴대폰 번호 유효성 검사
+	var mobile1 = $("#mobile1").val();
+	var mobile2 = $("#mobile2").val();
+	var mobile3 = $("#mobile3").val();
+	
+	if(mobile2 == '' || mobile3 == ''){
+		alert("휴대폰 번호가 입력되지 않았습니다.");
+		$("#mobile1").focus();
+		return false;
+	}
+	
+	if(!/^([0-9]{3,4})$/.test(mobile2) || !/^([0-9]{4})$/.test(mobile3)){
+		alert("휴대폰 번호를 정확하게 입력해주세요.");
+		$("#mobile1").focus();
+		return false;
+	}
+
+	// 이메일 유효성 검사
+	var email = $("#email").val();
+	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+	
+	if(!regEmail.test(email)){
+		alert("이메일을 정확하게 입력해주세요.");
+		$("#email").focus();
+		return false;
+	}
+	
+	const result = {
+			memberNo : memberNo,
+			id : id,
+			password : password,
+			firstName : firstName,
+			lastName : lastName,
+			mobile1 : mobile1,
+			mobile2 : mobile2,
+			mobile3 : mobile3,
+			email : email,
+			addressNo : addressNo,
+			addressZipcode : addressZipcode,
+			addressMain : addressMain,
+			addressSub : addressSub,
+			memberMemoContent : memberMemoContent,
+			status : status,
+			authority : authority,
+			reason : reason
+	};
+	
+	const data = JSON.stringify(result);
+	console.log(data);
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/member/withdrawalMemberUpdate.do`,
+		method : "POST",
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success(data){
+			console.log(data);
+			alert("해당 회원이 수정 되었습니다.");
+			location.reload();
+		}, 
+		error : console.log
+	});
+	
+		$(window).unbind("beforeunload");
+}
+
+
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

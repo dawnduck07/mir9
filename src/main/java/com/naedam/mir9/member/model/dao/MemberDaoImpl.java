@@ -11,6 +11,8 @@ import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
 import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
+import com.naedam.mir9.member.model.vo.MemberAccessHistory;
+import com.naedam.mir9.member.model.vo.MemberAccessHistoryListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
@@ -214,7 +216,7 @@ public class MemberDaoImpl implements MemberDao {
 
 	// 탈퇴 회원 리스트
 	@Override
-	public List<WithdrawalMember> selectWithdrawalMemberList() {
+	public List<MemberEntity> selectWithdrawalMemberList() {
 		return session.selectList("member.selectWithdrawalMemberList");
 	}
 
@@ -224,18 +226,11 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectWithdrawalCount");
 	}
 
-	// 탈퇴회원 검색 게시물 
-	@Override
-	public List<WithdrawalMember> selectSearchWithdrawalList(Map<String, Object> param) {
-		return session.selectList("member.selectSearchWithdrawalList", param);
-	}
-
 	// 탈퇴회원 검색 게시물 수
 	@Override
 	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
 		return session.selectOne("member.selectSearchWithdrawalListCount", param);
 	}
-
 	
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
@@ -332,6 +327,49 @@ public class MemberDaoImpl implements MemberDao {
 		return session.delete("member.deleteMemberMemo", memberNo);
 	}
 
+	// 탈퇴회원 타입별 검색
+	@Override
+	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param) {
+		return session.selectList("member.selectSearchWithdrawalList", param);
+	}
+
+	// 회원 탈퇴로 변경
+	@Override
+	public int updateMemberToWithdrawal(Map<String, Object> param) {
+		return session.update("member.updateMemberToWithdrawal", param);
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletHistoryList() {
+		return session.selectList("member.seletHistoryList");
+	}
+
+	@Override
+	public int totalAccessHistoryCount() {
+		return session.selectOne("member.totalAccessHistoryCount");
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
+		return session.selectList("member.seletSearchAccessHistory", param);
+	}
+
+	@Override
+	public int searchHistoryListCount(Map<String, Object> param) {
+		return session.selectOne("member.searchHistoryListCount", param);
+	}
+
+	@Override
+	public int deleteAccessHistory(int[] accessHistoryNo) {
+		return session.delete("member.deleteAccessHistory", accessHistoryNo);
+	}
+
+	@Override
+	public List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm() {
+		return session.selectList("member.selectMemberAccessHistoryListExcelForm");
+	}
+
+	
 
 
 

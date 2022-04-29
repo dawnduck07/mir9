@@ -41,10 +41,10 @@ import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
 import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
+import com.naedam.mir9.member.model.vo.MemberAccessHistory;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberMemo;
-import com.naedam.mir9.member.model.vo.WithdrawalMember;
 import com.naedam.mir9.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.mir9.point.model.service.PointService;
 import com.naedam.mir9.point.model.vo.MemberPoint;
@@ -86,46 +86,54 @@ public class MemberController {
 		log.debug("[principal] member = {}", member);
 		int memberNo = member.getMemberNo();
 		// 주소 조회
-		Address address = memberService.selectOneAddress(memberNo);
-		int addressNo = address.getAddressNo();
-		String id = member.getId();
+		//Address address = memberService.selectOneAddress(memberNo);
+		//int addressNo = address.getAddressNo();
+		//String id = member.getId();
 		param.put("memberNo", memberNo);
 		param.put("reason", reason);
 		
 		// 주소록 조회
-		AddressBook resultAddressBook = memberService.selectOneAddressBook(memberNo);
-		log.debug("resultAddressBook = {}", resultAddressBook);
-		int addressBookNo = resultAddressBook.getAddressBookNo();
+		//AddressBook resultAddressBook = memberService.selectOneAddressBook(memberNo);
+		//log.debug("resultAddressBook = {}", resultAddressBook);
+		//int addressBookNo = resultAddressBook.getAddressBookNo();
 		
 		// 비밀번호 비교
 		if(passwordEncoder.matches(password, member.getPassword())){
 			
 			try {
 				// 주소록 삭제
-				int resultDeleteAddressBook = memberService.deleteAddressBook(addressBookNo);
-				log.debug("resultDeleteAddressBook = {}", resultDeleteAddressBook);
+				//int resultDeleteAddressBook = memberService.deleteAddressBook(addressBookNo);
+				//log.debug("resultDeleteAddressBook = {}", resultDeleteAddressBook);
 
 				// 주소 삭제
-				int resultDeleteAddress = memberService.deleteAddress(addressNo);
-				log.debug("resultDeleteAddress = {}", resultDeleteAddress);
+				//int resultDeleteAddress = memberService.deleteAddress(addressNo);
+				//log.debug("resultDeleteAddress = {}", resultDeleteAddress);
 
 				// 권한 삭제
-				int resultDeleteAuthorities = memberService.deleteAuthorties(memberNo);
-				log.debug("resultDeleteAuthorities = {}", resultDeleteAuthorities);
+				//int resultDeleteAuthorities = memberService.deleteAuthorties(memberNo);
+				//log.debug("resultDeleteAuthorities = {}", resultDeleteAuthorities);
 				
 				// 메모 삭제
-				int resultDeleteMemberMemo = memberService.deleteMemberMemo(memberNo);
-				log.debug("resultDeleteMemberMemo = {}", resultDeleteMemberMemo);
+				//int resultDeleteMemberMemo = memberService.deleteMemberMemo(memberNo);
+				//log.debug("resultDeleteMemberMemo = {}", resultDeleteMemberMemo);
 				
-				// 회원 삭제
-				int resultMemberWithdrawal = memberService.memberWithdrawal(id);
-				log.debug("resultMemberWithdrawal = {}", resultMemberWithdrawal);
+				/*
+				 *  1) 회원 탈퇴로 변경 (status : Y -> N)(update)
+				 *  2) 탈퇴일 : (withdrawalDate : NOW(update)
+				 *  3) 탈퇴사유 : (reason : update)
+				 */
+				int resultMemberToWithdrawal = memberService.updateMemberToWithdrawal(param);
+				log.debug("resultMemberToWithdrawal = {}", resultMemberToWithdrawal);
+				
+				
+				//int resultMemberWithdrawal = memberService.memberWithdrawal(id);
+				//log.debug("resultMemberWithdrawal = {}", resultMemberWithdrawal);
 				
 				// 탈퇴 사유(update)
-				int resultUpdateReason = memberService.updateReason(param);
-				log.debug("resultUpdateReason = {}", resultUpdateReason);
+				//int resultUpdateReason = memberService.updateReason(param);
+				//log.debug("resultUpdateReason = {}", resultUpdateReason);
 				
-				String msg = resultUpdateReason > 0 ? "회원 탈퇴가 완료되었습니다." : "회원 탈퇴에 실패했습니다.";
+				String msg = resultMemberToWithdrawal > 0 ? "회원 탈퇴가 완료되었습니다." : "회원 탈퇴에 실패했습니다.";
 				redirectAttribute.addFlashAttribute("msg", msg);
 				
 			} catch (Exception e) {
@@ -388,7 +396,7 @@ public class MemberController {
 		return "redirect:" + referer;
 	}
 	
-	// 회원 상세 보기
+	// 회원 상세보기
 	@ResponseBody
 	@GetMapping("/memberDetail.do/{memberNo}")
 	public Map<String, Object> memberDetail(@PathVariable int memberNo, Model model,
@@ -544,15 +552,20 @@ public class MemberController {
 	public String withdarawalMemberList(Model model, HttpServletRequest request) {
 		log.debug("withdarawalMemberList = {}","withdarawalMemberList 시작");
 		
-		// 회원 리스트 전체 게시물 목록
-		List<MemberEntity> memberList = memberService.selectMemberList();
-		log.debug("memberList = {}", memberList);
-		model.addAttribute("memberList", memberList);
+		// 탈퇴 회원 리스트 전체 게시물 목록
+		List<MemberEntity> withdrawalMemberList = memberService.selectMemberList();
+		log.debug("withdrawalMemberList = {}", withdrawalMemberList);
+		model.addAttribute("withdrawalMemberList", withdrawalMemberList);
 		
 		// 탈퇴회원 전체 게시물 수
 		int totalwithdrawalCount = memberService.selectWithdrawalCount();
 		log.debug("totalwithdrawalCount = {}", totalwithdrawalCount);
 		model.addAttribute("totalwithdrawalCount", totalwithdrawalCount);
+		
+		// 명칭 가져오기
+		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
+		log.debug("memberGradeList = {}", memberGradeList);
+		model.addAttribute("memberGradeList", memberGradeList);
 		
 		/*
 		// 탈퇴 회원 리스트
@@ -586,7 +599,7 @@ public class MemberController {
 		log.debug("param = {}", param);
 		
 		// 탈퇴회원 검색 게시물 
-		List<WithdrawalMember> searchWithdrawalList = memberService.selectSearchWithdrawalList(param);
+		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(param);
 		log.debug("searchWithdrawalList = {}", searchWithdrawalList);
 
 		// 탈퇴회원 검색 게시물 수
@@ -669,6 +682,46 @@ public class MemberController {
 		String mobile2 = withdrawalMemberEntity.getPhone().substring(3, 7);
 		String mobile3 = withdrawalMemberEntity.getPhone().substring(7, 11);
 		
+		// 시간 양식 변경
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String regDate = dateFormat.format(withdrawalMemberEntity.getRegDate());
+		
+		String loginDate = "";
+		
+		if(withdrawalMemberEntity.getLoginDate() == null){
+			loginDate = "";
+		} else {
+			loginDate = dateFormat.format(withdrawalMemberEntity.getLoginDate());
+		}
+		
+		String updateDate = "";
+		if(withdrawalMemberEntity.getUpdateDate() == null) {
+			updateDate = "";
+		} else {
+			updateDate = dateFormat.format(withdrawalMemberEntity.getUpdateDate());
+		}
+		
+		String withdrawalDate = "";
+		if(withdrawalMemberEntity.getWithdrawalDate() == null) {
+			withdrawalDate = "";
+		} else {
+			withdrawalDate = dateFormat.format(withdrawalMemberEntity.getWithdrawalDate());
+		}
+		
+		// 주소(Address) 조회
+		Address address = memberService.selectOneAddress(memberNo);
+		log.debug("address = {}", address);
+		model.addAttribute("address", address);
+		
+		// 메모(MemberMemoContent) 조회
+		MemberMemo memberMemo = memberService.selectOneMemo(memberNo);
+		log.debug("memberMemo = {}", memberMemo);
+
+		if(memberMemo.getMemberMemoContent() == null) 
+			 memberMemo.setMemberMemoContent("");
+	
+		model.addAttribute("memberMemo = {}", memberMemo);
+		
 		// 회원 권한 조회
 		Authorities authorities = memberService.selectOneAuthorities(memberNo);
 		log.debug("authorities = {}", authorities);
@@ -678,17 +731,156 @@ public class MemberController {
 		map.put("mobile1", mobile1);
 		map.put("mobile2", mobile2);
 		map.put("mobile3", mobile3);
+		map.put("address", address);
+		map.put("memberMemo", memberMemo);
 		map.put("authorities", authorities);
+		map.put("regDate", regDate);
+		map.put("loginDate", loginDate);
+		map.put("withdrawalDate", withdrawalDate);
+		map.put("updateDate", updateDate);
 		
 		return map;
 	}
- 	
+	
+	// 탈퇴회원 상세보기 등록(update)
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+ 	@PostMapping("/withdrawalMemberUpdate.do")
+	public String withdrawalMemberUpdate(@RequestBody String data, RedirectAttributes redirectAttribute) {
+		log.debug("{}", "withdrawalMemberUpdate.do 요청!");
+		log.debug("param = {}", data);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			Map<String, String> map = mapper.readValue(data, Map.class);
+			log.debug("map = {}", map);
+			
+			String phone = map.get("mobile1") + map.get("mobile2") + map.get("mobile3");
+			
+			// 탈퇴회원(Member) 수정
+			WithdrawalMemberEntity paramWithdrawal = new WithdrawalMemberEntity();
+			paramWithdrawal.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			paramWithdrawal.setFirstName(map.get("firstName"));
+			paramWithdrawal.setLastName(map.get("lastName"));
+			paramWithdrawal.setEmail(map.get("email"));
+			paramWithdrawal.setPhone(phone);
+			paramWithdrawal.setStatus(map.get("status"));
+			paramWithdrawal.setReason(map.get("reason"));
+			
+			if(map.get("password").isEmpty()) {
+				paramWithdrawal.setPassword(map.get("password"));
+			} else {
+				// 비밀번호 암호화 처리
+				log.debug("{}", passwordEncoder);
+				String rawPassword = map.get("password");
+				String encryptedPassword = passwordEncoder.encode(rawPassword);
+				paramWithdrawal.setPassword(encryptedPassword);
+				log.debug("{} -> {}", rawPassword, encryptedPassword);
+			}
+			
+			int resultWithdrawalMember = memberService.memberUpdate(paramWithdrawal);
+			log.debug("resultWithdrawalMember = {}", resultWithdrawalMember);
+			
+			// 주소(Address) 수정
+			Address paramAddress = new Address();
+			paramAddress.setAddressNo(Integer.parseInt(map.get("addressNo")));
+			paramAddress.setAddressMain(map.get("addressMain"));
+			paramAddress.setAddressSub(map.get("addressSub"));
+			paramAddress.setAddressZipcode(Integer.parseInt(map.get("addressZipcode")));
+			
+			int resultAddressUpdate = memberService.addressUpdate(paramAddress);
+			log.debug("resultAddressUpdate = {}", resultAddressUpdate);
+			
+			// 메모(MemberMemo) 수정
+			MemberMemo paramMemberMemo = new MemberMemo();
+			paramMemberMemo.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			paramMemberMemo.setMemberMemoContent(map.get("memberMemoContent"));
+			
+			int resultMemberMemo = memberService.memberMemoUpdate(paramMemberMemo);
+			log.debug("resultMemberMemo = {}", resultMemberMemo);
+			
+			// 권한(Authorities) 수정
+			Authorities paramAuthorities = new Authorities();
+			paramAuthorities.setAuthority(map.get("authority"));
+			paramAuthorities.setMemberNo(Integer.parseInt(map.get("memberNo")));
+			
+			int resultAuthorities = memberService.authoritiesUpdate(paramAuthorities);
+			log.debug("resultAuthorities = {}", resultAuthorities);
+			
+			
+		} catch (IOException e) {}
+		
+	
+		
+		return "redirect:/member/withdrawalList.do";
+	}
+	
+	
 	// 회원 접속이력 관리
 	@GetMapping("/log")
-	public String memberAccessHistory() {
+	public String memberAccessHistory(Model model, HttpServletRequest request) {
+		
+		// 접속 이력 리스트
+		List<MemberAccessHistory> memberAccessHistoryList = memberService.seletHistoryList();
+		log.debug("memberAccessHistoryList = {}", memberAccessHistoryList);
+		model.addAttribute("memberAccessHistoryList", memberAccessHistoryList);
+		
+		// 접속 이력 게시글 수typeSearchByAcceessHistory.do
+		int totalAccessHistoryCount = memberService.selectAccessHistoryCount();
+		log.debug("totalAccessHistoryCount = {}", totalAccessHistoryCount);
+		model.addAttribute("totalAccessHistoryCount", totalAccessHistoryCount);
 		
 		return "member/memberAccessHistory";
 	}
+	
+	// 회원 접속이력 관리 타입별 검색
+	@ResponseBody
+	@GetMapping("/typeSearchByAcceessHistory.do")
+	public Map<String, Object> typeSearchByAcceessHistory(
+									@RequestParam String type,
+									@RequestParam String keyword,
+									HttpServletRequest request){
+		log.debug("{}", "타입별 검색 시작");
+		log.debug("type = {}", type);
+		log.debug("keyboard = {}", keyword);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
+		log.debug("param = {}", param);
+		
+		// 검색 게시물
+		List<MemberAccessHistory> searchAccessHistoryList = memberService.seletSearchAccessHistory(param);
+		log.debug("searchAccessHistoryList = {}", searchAccessHistoryList);
+		
+		// 검색 게시물 수
+		int searchHistoryListCount = memberService.selectSearchHistoryListCount(param);
+		log.debug("searchHistoryListCount = {}", searchHistoryListCount);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchAccessHistoryList", searchAccessHistoryList);
+		resultMap.put("searchHistoryListCount", searchHistoryListCount);
+		
+		return resultMap;
+	}
+	
+	// 회원 접속이력 관리 선택 삭제
+	@PostMapping("/accessHistoryDelete.do")
+	public String accessHistoryDelete(@RequestParam int[] accessHistoryNo,
+			RedirectAttributes redirectAttribute,
+			HttpServletRequest request) throws Exception {
+					
+		int resultAccessHistoryDelete = memberService.deleteAccessHistory(accessHistoryNo);
+		log.debug("resultAccessHistoryDelete = {}", resultAccessHistoryDelete);
+		
+		
+		String referer = request.getHeader("Referer");
+		log.debug("referer = {}", referer);
+		
+		return "redirect:" + referer;
+	}
+	
 	
 	// 등급 관리 조회(select)
 	@GetMapping("/memberGrade.do")

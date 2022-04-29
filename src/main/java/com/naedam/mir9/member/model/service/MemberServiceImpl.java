@@ -12,6 +12,8 @@ import com.naedam.mir9.member.model.vo.Address;
 import com.naedam.mir9.member.model.vo.AddressBook;
 import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
+import com.naedam.mir9.member.model.vo.MemberAccessHistory;
+import com.naedam.mir9.member.model.vo.MemberAccessHistoryListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
@@ -215,7 +217,7 @@ public class MemberServiceImpl implements MemberService {
 
 	// 탈퇴 회원 리스트
 	@Override
-	public List<WithdrawalMember> selectWithdrawalMemberList() {
+	public List<MemberEntity> selectWithdrawalMemberList() {
 		return memberDao.selectWithdrawalMemberList();
 	}
 
@@ -234,11 +236,6 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 
-	// 탈퇴회원 검색 게시물 
-	@Override
-	public List<WithdrawalMember> selectSearchWithdrawalList(Map<String, Object> param) {
-		return memberDao.selectSearchWithdrawalList(param);
-	}
 
 	// 탈퇴회원 검색 게시물 수
 	@Override
@@ -334,6 +331,49 @@ public class MemberServiceImpl implements MemberService {
 	public int deleteMemberMemo(int memberNo) {
 		return memberDao.deleteMemberMemo(memberNo);
 	}
+
+	// 탈퇴회원 타입별 검색
+	@Override
+	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param) {
+		return memberDao.selectSearchWithdrawalList(param);
+	}
+
+	// 회원 탈퇴로 변경
+	@Override
+	public int updateMemberToWithdrawal(Map<String, Object> param) {
+		return memberDao.updateMemberToWithdrawal(param);
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletHistoryList() {
+		return memberDao.seletHistoryList();
+	}
+
+	@Override
+	public int selectAccessHistoryCount() {
+		return memberDao.totalAccessHistoryCount();
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
+		return memberDao.seletSearchAccessHistory(param);
+	}
+
+	@Override
+	public int selectSearchHistoryListCount(Map<String, Object> param) {
+		return memberDao.searchHistoryListCount(param);
+	}
+
+	@Override
+	public int deleteAccessHistory(int[] accessHistoryNo) {
+		return memberDao.deleteAccessHistory(accessHistoryNo);
+	}
+
+	@Override
+	public List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm() {
+		return memberDao.selectMemberAccessHistoryListExcelForm();
+	}
+
 
 	
 

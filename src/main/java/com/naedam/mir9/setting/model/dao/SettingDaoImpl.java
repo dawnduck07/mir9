@@ -22,7 +22,9 @@ import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
+import com.naedam.mir9.setting.model.vo.SeoSetting;
 
 @Repository
 public class SettingDaoImpl implements SettingDao {
@@ -166,6 +168,20 @@ public class SettingDaoImpl implements SettingDao {
 		// TODO Auto-generated method stub
 		return session.update("setting.updateLocaleDefault", localeCode);
 	}
+
+	@Override
+	public SeoSetting selectSeoSetting() {
+		// TODO Auto-generated method stub
+		return session.selectOne("setting.selectSeoSetting");
+	}
+
+	@Override
+	public int updateSeoSetting(SeoSetting seo) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateSeoSetting", seo);
+	}
+
+
 	
 	
 	

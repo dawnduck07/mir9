@@ -8,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.naedam.mir9.statistics.model.dao.StatisticsDao;
+
 import com.naedam.mir9.statistics.model.vo.AddressStatisticVo;
 import com.naedam.mir9.statistics.model.vo.AreaVo;
+
+import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
+
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 
 @Service
@@ -47,6 +51,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 	public List<AreaVo> selectArea() throws Exception {
 		// TODO Auto-generated method stub
 		return statisticsDao.selectArea();
+	}
+	
+	public List<MemberStatisticVo> selectMemberStatisticsList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return statisticsDao.selectMemberStatisticsList(param);
 	}
 
 

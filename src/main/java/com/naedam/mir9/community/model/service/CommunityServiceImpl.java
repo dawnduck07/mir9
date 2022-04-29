@@ -1,7 +1,6 @@
 package com.naedam.mir9.community.model.service;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -66,11 +65,10 @@ public class CommunityServiceImpl implements CommunityService {
 
 	// sms 기본 문구(78519)
 	@Override
-	public HashMap<String, Object> originSms(String appKey, String secretKey) {
+	public HashMap<String, Object> originSms(String smsKey, String smsSecret) {
 		
-		// 쿼리스트링 : categoryId=78519 & pageSize=24
 		HashMap<String, Object> originSms = new HashMap<>();
-		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + appKey + "/templates?categoryId=78519&pageSize=24";
+		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates?categoryId=78519&pageSize=24";
 		
 		try {
 			// url
@@ -82,7 +80,7 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			// headers
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			conn.setRequestProperty("X-Secret-Key", secretKey);
+			conn.setRequestProperty("X-Secret-Key", smsSecret);
 			
 			// 결과값 받기
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
@@ -94,11 +92,6 @@ public class CommunityServiceImpl implements CommunityService {
 				result += line;
 			}
 			
-			/* 확인
-			System.out.println("=====response=====");
-			System.out.println("response : " + result);
-			*/
-			
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
@@ -107,13 +100,6 @@ public class CommunityServiceImpl implements CommunityService {
 			JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
 			JsonArray data = bodyElement.getAsJsonObject().get("data").getAsJsonArray();
 
-			/* 확인
-			System.out.println("=====Json.body=====");
-			System.out.println("bodyElement : " + bodyElement);
-			System.out.println("=====Json.body.data=====");
-			System.out.println("data : " + data);
-			*/
-			
 			// templateId, body 값을 담을 List 선언
 			List<String> templateId = new ArrayList<>();
 			List<String> body = new ArrayList<>();;
@@ -125,21 +111,8 @@ public class CommunityServiceImpl implements CommunityService {
 				body.add((data.getAsJsonArray().get(i).getAsJsonObject()).get("body").getAsString());			
 			}
 			
-			/* 확인
-			System.out.println("=====Json.body.data.templateId=====");
-			System.out.println("templateId : " + templateId); 
-			System.out.println("=====Json.body.data.body=====");
-			System.out.println("body : " + body);
-			*/
-			
-			// originSms에 key+value로 저장
 			originSms.put("templateId", templateId);
 			originSms.put("body", body);
-			
-			/* 확인
-			System.out.println("=====Service:originSms=====");
-			System.out.println("originSms : " + originSms); 
-			*/
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -150,11 +123,10 @@ public class CommunityServiceImpl implements CommunityService {
 
 	// sms 저장 문구(78520)
 	@Override
-	public HashMap<String, Object> savedSms(String appKey, String secretKey) {
+	public HashMap<String, Object> savedSms(String smsKey, String smsSecret) {
 		
-		// 쿼리스트링 : categoryId=78520 & pageSize=24
 		HashMap<String, Object> savedSms = new HashMap<>();
-		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + appKey + "/templates?categoryId=78520&pageSize=24";
+		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates?categoryId=78520&pageSize=24";
 		
 		try {
 			// url
@@ -166,7 +138,7 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			// headers
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			conn.setRequestProperty("X-Secret-Key", secretKey);
+			conn.setRequestProperty("X-Secret-Key", smsSecret);
 			
 			// 결과값 받기
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
@@ -178,11 +150,6 @@ public class CommunityServiceImpl implements CommunityService {
 				result += line;
 			}
 			
-			/* 확인
-			System.out.println("=====response=====");
-			System.out.println("response : " + result);
-			*/
-			
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
@@ -191,16 +158,9 @@ public class CommunityServiceImpl implements CommunityService {
 			JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
 			JsonArray data = bodyElement.getAsJsonObject().get("data").getAsJsonArray();
 			
-			/* 확인
-			System.out.println("=====Json.body=====");
-			System.out.println("bodyElement : " + bodyElement); 
-			System.out.println("=====Json.body.data=====");
-			System.out.println("data : " + data); 
-			*/
-			
 			// templateId, body 값을 담을 List 선언
 			List<String> savedTemplateId = new ArrayList<>();
-			List<String> savedBody = new ArrayList<>();;
+			List<String> savedBody = new ArrayList<>();
 			
 			for(int i = 0; i < data.size(); i++) {
 				savedTemplateId.add((data.getAsJsonArray().get(i).getAsJsonObject()).get("templateId").getAsString());
@@ -208,23 +168,9 @@ public class CommunityServiceImpl implements CommunityService {
 			for(int i = 0; i < data.size(); i++) {
 				savedBody.add((data.getAsJsonArray().get(i).getAsJsonObject()).get("body").getAsString());			
 			}
-			
-			/* 확인
-			System.out.println("=====Json.body.data.templateId=====");
-			System.out.println("savedTemplateId : " + savedTemplateId); 
 
-			System.out.println("=====Json.body.data.body=====");
-			System.out.println("body : " + body);
-			*/
-			
-			// originSms에 key+value로 저장
 			savedSms.put("savedTemplateId", savedTemplateId);
 			savedSms.put("savedBody", savedBody);
-			
-			/* 확인
-			System.out.println("=====Service:originSms=====");
-			System.out.println("savedSms : " + savedSms);
-			*/
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -235,28 +181,29 @@ public class CommunityServiceImpl implements CommunityService {
 
 	// sms 문구 수정
 	@Override
-	public int updateSms(String appKey, String secretKey, String code, String is_send, String content) {
+	public int updateSms(String smsKey, String smsSecret, String code, String content) {
 		
 		int result = 0;
 		String codeMod = code.concat("_mod");
 		
-		// 쿼리스트링 : categoryId=78520 
-		String put = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + appKey + "/templates/" + codeMod;
-		String get = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + appKey + "/templates/" + codeMod;
+		// 수정용
+		String put = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates/" + codeMod;
+		// 응답용
+		String get = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates/" + codeMod;
 
 		try {
-			// PUT 요청
-			URL putUrl = new URL(put);
-			HttpURLConnection putConn = (HttpURLConnection) putUrl.openConnection();
+			// url
+			URL putUrl = new URL(put); 
+			HttpURLConnection putConn = (HttpURLConnection) putUrl.openConnection(); 
 			
 			// method
 			putConn.setRequestMethod("PUT");
 			
 			// header
 			putConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			putConn.setRequestProperty("X-Secret-Key", secretKey);
+			putConn.setRequestProperty("X-Secret-Key", smsSecret);
 			
-			// doOutput : OutputStream으로 POST 데이터를 넘겨주겠다는 옵션
+			// doOutput : OutputStream으로 데이터를 넘겨주겠다
 			putConn.setDoOutput(true);
 			
 			// data
@@ -273,19 +220,9 @@ public class CommunityServiceImpl implements CommunityService {
 			os.flush();
 			os.close();
 			
-			/* 확인
-			System.out.println("=====Service:json.toString()=====");
-			System.out.println(json.toString());
-			*/
-			
 			int responseCode = putConn.getResponseCode();
 			String responseMsg = putConn.getResponseMessage();
-			
-			/* 확인
-			System.out.println("=====Service:responseCode=====");
-			System.out.println(responseCode); // 200		
-			*/
-			
+
 			// PUT 요청에 대한 응답 GET 요청
 			URL getUrl = new URL(get);
 			HttpURLConnection getConn = (HttpURLConnection) getUrl.openConnection();
@@ -295,11 +232,11 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			// header
 			getConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			getConn.setRequestProperty("X-Secret-Key", secretKey);			
+			getConn.setRequestProperty("X-Secret-Key", smsSecret);	
 			
-			// 응답 받기
+			// 응답데이터 얻기
 			BufferedReader br = new BufferedReader(new InputStreamReader(getConn.getInputStream(), "UTF-8"));
-			StringBuilder sb = new StringBuilder();
+			StringBuffer sb = new StringBuffer();
 			
 			String line = "";
 			String response = "";
@@ -307,15 +244,10 @@ public class CommunityServiceImpl implements CommunityService {
 			while((line = br.readLine()) != null) {
 				sb.append(line);
 			}
-			
+
 			response = sb.toString();
 			br.close();
-			
-			/* 확인
-			System.out.println("=====Service:response=====");
-			System.out.println(response);
-			*/
-			
+
 			// JsonParser
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(response);
@@ -323,25 +255,198 @@ public class CommunityServiceImpl implements CommunityService {
 			// JSON>header>resultMessage에 접근
 			JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
 			String str = header.getAsJsonObject().get("resultMessage").getAsString();
-			
-			/* 확인
-			System.out.println("=====Service:header=====");
-			System.out.println(header);
-			System.out.println("=====Service:str=====");
-			System.out.println(str);
-			*/
-			
+
 			// 성공 시
 			if(str.equals("success")) {
 				result = 1;
 			}
 			
-			/* 확인
-			System.out.println("=====Service:result=====");
-			System.out.println(result);
-			*/
-			
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	// mail 저장 문구 (49064)
+	@Override
+	public HashMap<String, Object> savedMail(String mailKey, String mailSecret, String templateId) {
+		
+		HashMap<String, Object> savedMail = new HashMap<>();
+		String template = templateId.concat("_mod"); // 저장 템플릿명
+		String getUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + template + "?categoryId=49064";
+
+		try {
+			// url
+			URL url = new URL(getUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();	
+			
+			// method
+			conn.setRequestMethod("GET");
+			
+			// headers
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setRequestProperty("X-Secret-Key", mailSecret);
+			
+			// 결과값 받기
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			
+			String line = "";
+			String result = "";
+			
+			while((line = br.readLine()) != null) {
+				result += line;
+			}
+
+			// JsonParser
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(result);
+			
+			// JSON>body>data>title, body에 접근
+			JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
+			JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();
+			 
+			String title = (data.getAsJsonObject().getAsJsonObject()).get("title").getAsString();
+			String body = (data.getAsJsonObject().getAsJsonObject()).get("body").getAsString();
+
+			savedMail.put("title", title);
+			savedMail.put("content", body);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+			
+		return savedMail;
+	}
+
+	// mail 기본 문구 (48300)
+	@Override
+	public HashMap<String, Object> originMail(String mailKey, String mailSecret, String templateId) {
+		
+		HashMap<String, Object> originMail = new HashMap<>();
+		String getUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + templateId + "?categoryId=48300";
+
+		try {
+			// url
+			URL url = new URL(getUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();	
+			
+			// method
+			conn.setRequestMethod("GET");
+			
+			// headers
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setRequestProperty("X-Secret-Key", mailSecret);
+			
+			// 결과값 받기
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			
+			String line = "";
+			String result = "";
+			
+			while((line = br.readLine()) != null) {
+				result += line;
+			}
+
+			// JsonParser
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(result);
+			
+			// JSON>body>data>title, body에 접근
+			JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
+			JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();
+			
+			String title = (data.getAsJsonObject().getAsJsonObject()).get("title").getAsString();
+			String body = (data.getAsJsonObject().getAsJsonObject()).get("body").getAsString();
+
+			originMail.put("title", title);
+			originMail.put("content", body);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return originMail;
+	}
+
+	// mail 문구 수정
+	@Override
+	public int modifyMail(String mailKey, String mailSecret, String templateId, String title, String content) {
+	
+		int result = 0;
+		String template = templateId.concat("_mod");
+		String putUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + template;
+		String getUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + template;
+
+		try {
+			// url
+			URL url = new URL(putUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			// method
+			conn.setRequestMethod("PUT");
+			
+			// header
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setRequestProperty("X-Secret-Key", mailSecret);
+			
+			// doOutput : OutputStream으로 데이터를 넘겨주겠다
+			conn.setDoOutput(true);
+			
+			// data
+			JsonObject json = new JsonObject();
+			json.addProperty("templateName", template); // 템플릿ID
+			json.addProperty("useYn", "Y"); // 사용 유무
+			json.addProperty("title", title); // 발송 제목
+			json.addProperty("body", content); // 문구 내용
+			
+			// 데이터 전송 준비
+			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+			os.write(json.toString());
+			os.flush();
+			os.close();
+			
+			int responseCode = conn.getResponseCode();
+
+			// PUT 요청에 대한 응답 GET 요청
+			URL get = new URL(getUrl);
+			HttpURLConnection getConn = (HttpURLConnection) get.openConnection();
+			
+			// method
+			getConn.setRequestMethod("GET");
+			
+			// header
+			getConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			getConn.setRequestProperty("X-Secret-Key", mailSecret);	
+			
+			// 응답데이터 얻기
+			BufferedReader br = new BufferedReader(new InputStreamReader(getConn.getInputStream(), "UTF-8"));
+			StringBuffer sb = new StringBuffer();
+			
+			String line = "";
+			String response = "";
+			
+			while((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			response = sb.toString();
+			br.close();
+
+			// JsonParser
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(response);
+			
+			// JSON>header>resultMessage에 접근
+			JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
+			String str = header.getAsJsonObject().get("resultMessage").getAsString();
+
+			// 성공 시
+			if(str.equals("success")) {
+				result = 1;
+			}	
+			
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		
