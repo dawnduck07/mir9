@@ -22,9 +22,15 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.dao.SettingDao;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
-import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
+import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
+import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
 
 @Service
 public class SettingServiceImpl implements SettingService {
@@ -179,6 +185,48 @@ public class SettingServiceImpl implements SettingService {
 	public int updateSeoSetting(SeoSetting seo) {
 		// TODO Auto-generated method stub
 		return settingDao.updateSeoSetting(seo);
+	}
+
+	@Override
+	public BillingPgSetting selectPgSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectPgSetting();
+	}
+
+	@Override
+	public KgIniSetting selectKgIniSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectKgIniSetting();
+	}
+
+	@Override
+	public EximbaySetting selectEximbaySetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectEximbaySetting();
+	}
+
+	@Override
+	public NaverShoppingSetting selectNaverShoppingSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectNaverShoppingSetting();
+	}
+
+	@Override
+	public NaverpaySetting selectNaverpaySetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectNaverpaySetting();
+	}
+
+	@Override
+	public XpaySetting selectXpaySetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectXpaySetting();
+	}
+
+	@Override
+	public KcpSetting selectKcpSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectKcpSetting();
 	}
 
 	
