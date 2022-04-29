@@ -34,6 +34,7 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
 
@@ -252,7 +253,9 @@ public class SettingController {
 	
 	@GetMapping("/paymentpg")
 	public void paymentpg(Model model) {
+		BillingPgSetting pg = settingService.selectPgSetting();
 		
+		model.addAttribute("pg",pg);
 	}
 	
 	@GetMapping("/snslogin")

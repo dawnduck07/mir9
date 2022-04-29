@@ -18,7 +18,7 @@ public class BillingPgSetting implements Serializable {/**
 	
 	private String isDomestic;
 	private String isForeigne;
-	private String tsvURl;
-	private String productDbUrl;
+	private String cardPg;
+	private String naverpayUse;
 
 }

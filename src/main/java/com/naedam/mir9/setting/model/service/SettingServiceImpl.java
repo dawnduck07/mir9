@@ -181,6 +181,12 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.updateSeoSetting(seo);
 	}
 
+	@Override
+	public BillingPgSetting selectPgSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectPgSetting();
+	}
+
 	
 	
 	

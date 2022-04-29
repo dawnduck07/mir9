@@ -74,4 +74,6 @@ public interface SettingDao {
 
 	int updateSeoSetting(SeoSetting seo);
 
+	BillingPgSetting selectPgSetting();
+
 }

@@ -181,6 +181,12 @@ public class SettingDaoImpl implements SettingDao {
 		return session.update("setting.updateSeoSetting", seo);
 	}
 
+	@Override
+	public BillingPgSetting selectPgSetting() {
+		// TODO Auto-generated method stub
+		return session.selectOne("setting.selectPgSetting");
+	}
+
 
 	
 	

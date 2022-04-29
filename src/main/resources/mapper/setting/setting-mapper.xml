@@ -114,6 +114,10 @@
   		select * from seo_setting
   	</select>
   	
+  	<select id="selectPgSetting" resultType="billingPgSetting">
+  		select * from billing_pg_setting
+  	</select>
+  	
   	<update id="updateAdminSetting">
   		update admin_setting set email = #{email}, phone = #{phone}, caller_id = #{callerId}, 
 			<if test="thumbnailImg != null and thumbnailImg != ''">

@@ -74,5 +74,7 @@ public interface SettingService {
 
 	int updateSeoSetting(SeoSetting seo);
 
+	BillingPgSetting selectPgSetting();
+
 
 }

@@ -35,22 +35,22 @@
                 <tr>
                     <td class="menu">국내/해외 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_gubun1" value='y' onchange="checkGubun(this.value);" checked=checked>국내&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_gubun2" value='y' onchange="checkGubun(this.value);" checked=checked>해외
+                    <input type="checkbox" name="chk_gubun1" value='Y' onchange="checkGubun(this.value);" ${pg.isDomestic == 'Y' ? 'checked' : '' }>국내&nbsp;&nbsp;
+                    <input type="checkbox" name="chk_gubun2" value='Y' onchange="checkGubun(this.value);" ${pg.isForeigne == 'Y' ? 'checked' : '' }>해외
                     </td>
                 </tr>
                 <tr id="display_pg" style="display:none;">
                     <td class="menu">국내 카드PG사</td>
                     <td align="left">
-                    <input type="radio" name="card_pg" value="ini" onchange="checkCardPGType(this.value);" checked=checked>KG 이니시스&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="card_pg" value="xpay" onchange="checkCardPGType(this.value);">LG 유플러스&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="card_pg" value="kcp" onchange="checkCardPGType(this.value);">NHN KCP
+                    <input type="radio" name="card_pg" value="ini" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'ini' ? 'checked' : '' }>KG 이니시스&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="card_pg" value="xpay" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'xpay' ? 'checked' : '' }>LG 유플러스&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="card_pg" value="kcp" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'kcp' ? 'checked' : '' }>NHN KCP
                     </td>
                 </tr>
 				<tr id="display_ease_pg" style="display:none;">
                     <td class="menu">국내 간편결제</td>
                     <td align="left">
-                    <input type="checkbox" name="naverpay_use" id="naverpay_use" value='y' onchange="checkEasyPGNaver(this.checked);" checked=checked> <label for="naverpay_use">네이버페이</label> &nbsp;&nbsp;
+                    <input type="checkbox" name="naverpay_use" id="naverpay_use" value='Y' onchange="checkEasyPGNaver(this.checked);" ${pg.naverpayUse == 'Y' ? 'checked' : '' }> <label for="naverpay_use">네이버페이</label> &nbsp;&nbsp;
 					<!-- <input type="checkbox" name="kakaopay_use" id="kakaopay_use" value='y' onchange="checkEasyPGKakao(this.checked);"> <label for="kakaopay_use">카카오페이</label> &nbsp;&nbsp; -->
                     </td>
                 </tr>
@@ -333,5 +333,261 @@
 </section>
 </div><!-- /.content-wrapper -->
 
+<script>
+function checkGubun() {
+
+    var form = document.form_register;
+	if ((form.chk_gubun1.checked == true) && (form.chk_gubun2.checked == true)) { // 국내/해외
+		$('#display_pg').show();
+
+		$('#display_exim_title').show();
+		$('#display_exim').show();
+
+		$('#display_ease_pg').show();
+    }else if (form.chk_gubun1.checked == true) {  // 국내
+		$('#display_pg').show();
+		$('#display_ease_pg').show();
+
+		$('#display_exim_title').hide();
+		$('#display_exim').hide();
+        $("input:checkbox[name='chk_use_eximbay']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay1']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay2']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay3']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay4']").prop("checked",false);
+        $("input[name='shop_id_eximbay']").prop("value",'');
+        $("input[name='shop_key_eximbay']").prop("value",'');
+	}else if (form.chk_gubun2.checked == true) { // 해외
+		$('#display_pg').hide();
+
+        $("input:radio[name='card_pg']:radio[value='ini']").prop("checked",false);
+        $("input:radio[name='card_pg']:radio[value='xpay']").prop("checked",false);
+        $("input:radio[name='card_pg']:radio[value='kcp']").prop("checked",false);
+
+		$('#display_ini_title').hide();
+		$('#display_ini').hide();
+		$('#display_xpay_title').hide();
+		$('#display_xpay').hide();
+		$('#display_kcp_title').hide();
+		$('#display_kcp').hide();
+		$('#display_exim_title').show();
+		$('#display_exim').show();
+
+		$('#display_ease_pg').hide();
+		hideNaverPay();
+		hideKakaoPay();
+    }else{
+		$('#display_pg').hide();
+		$('#display_ease_pg').hide();
+        $("input:radio[name='card_pg']:radio[value='ini']").prop("checked",false);
+        $("input:radio[name='card_pg']:radio[value='xpay']").prop("checked",false);
+        $("input:radio[name='card_pg']:radio[value='kcp']").prop("checked",false);
+
+		$('#display_ini_title').hide();
+		$('#display_ini').hide();
+		$('#display_xpay_title').hide();
+		$('#display_xpay').hide();
+		$('#display_kcp_title').hide();
+		$('#display_kcp').hide();
+		$('#display_exim_title').hide();
+		$('#display_exim').hide();
+        $("input:checkbox[name='chk_use_eximbay']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay1']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay2']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay3']").prop("checked",false);
+        $("input:checkbox[name='chk_eximbay4']").prop("checked",false);
+        $("input[name='shop_id_eximbay']").prop("value",'');
+        $("input[name='shop_key_eximbay']").prop("value",'');
+	}
+}
+
+function checkCardPGType(type) {
+    if (type == 'ini') { // KG 이니시스
+		$('#display_ini_title').show();
+		$('#display_ini').show();
+		$('#display_xpay_title').hide();
+		$('#display_xpay').hide();
+		$('#display_kcp_title').hide();
+		$('#display_kcp').hide();
+
+        $("input:checkbox[name='chk_use_xpay']").prop("checked",false);
+        $("input:checkbox[name='chk_xpay1']").prop("checked",false);
+        $("input:checkbox[name='chk_xpay2']").prop("checked",false);
+        $("input:checkbox[name='chk_xpay3']").prop("checked",false);
+        $("input[name='shop_id_xpay']").prop("value",'');
+        $("input[name='shop_key_xpay']").prop("value",'');
+        $("input:checkbox[name='chk_use_kcp']").prop("checked",false);
+        $("input:checkbox[name='chk_kcp1']").prop("checked",false);
+        $("input:checkbox[name='chk_kcp2']").prop("checked",false);
+        $("input:checkbox[name='chk_kcp3']").prop("checked",false);
+        $("input[name='shop_id_kcp']").prop("value",'');
+        $("input[name='shop_key_kcp']").prop("value",'');
+
+	}else if (type == 'xpay') {   // LG 유플러스
+		$('#display_ini_title').hide();
+		$('#display_ini').hide();
+		$('#display_xpay_title').show();
+		$('#display_xpay').show();
+		$('#display_kcp_title').hide();
+		$('#display_kcp').hide();
+
+        $("input:checkbox[name='chk_use_ini']").prop("checked",false);
+        $("input:checkbox[name='chk_ini1']").prop("checked",false);
+        $("input:checkbox[name='chk_ini2']").prop("checked",false);
+        $("input:checkbox[name='chk_ini3']").prop("checked",false);
+        $("input[name='shop_id_ini']").prop("value",'');
+        $("input[name='shop_key_ini']").prop("value",'');
+        $("input:checkbox[name='chk_use_kcp']").prop("checked",false);
+        $("input:checkbox[name='chk_kcp1']").prop("checked",false);
+        $("input:checkbox[name='chk_kcp2']").prop("checked",false);
+        $("input:checkbox[name='chk_kcp3']").prop("checked",false);
+        $("input[name='shop_id_kcp']").prop("value",'');
+        $("input[name='shop_key_kcp']").prop("value",'');
+
+    }else if (type == 'kcp') {  // NHN KCP
+		$('#display_ini_title').hide();
+		$('#display_ini').hide();
+        $('input[name=\'shop_id_ini\']').attr('value','');
+        $('input[name=\'shop_key_ini\']').attr('value','');
+		$('#display_xpay_title').hide();
+		$('#display_xpay').hide();
+		$('#display_kcp_title').show();
+		$('#display_kcp').show();
+
+        $("input:checkbox[name='chk_use_ini']").prop("checked",false);
+        $("input:checkbox[name='chk_ini1']").prop("checked",false);
+        $("input:checkbox[name='chk_ini2']").prop("checked",false);
+        $("input:checkbox[name='chk_ini3']").prop("checked",false);
+        $("input[name='shop_id_ini']").prop("value",'');
+        $("input[name='shop_key_ini']").prop("value",'');
+        $("input:checkbox[name='chk_use_xpay']").prop("checked",false);
+        $("input:checkbox[name='chk_xpay1']").prop("checked",false);
+        $("input:checkbox[name='chk_xpay2']").prop("checked",false);
+        $("input:checkbox[name='chk_xpay3']").prop("checked",false);
+        $("input[name='shop_id_xpay']").prop("value",'');
+        $("input[name='shop_key_xpay']").prop("value",'');
+
+	}
+}
+
+function checkEasyPGNaver(useYn){
+	if(useYn == true || useYn == 'y'){
+		$('#display_naverpay_title').show();
+		$('#display_naverpay').show();
+	}else{
+		hideNaverPay();
+	}
+}
+
+function hideNaverPay(){
+	$('#display_naverpay_title').hide();
+	$('#display_naverpay').hide();
+
+	//값 초기화
+	$("input:checkbox[name='naverpay_use']").prop("checked",false);
+	$("input[name='naverpay_shopid']").prop("value",'');
+	$("input[name='naverpay_certi_key']").prop("value",'');
+	$("input[name='naverpay_button_key']").prop("value",'');
+	$("input:checkbox[name='naverpay_mode']").prop("checked",false);
+}
+
+function checkEasyPGKakao(useYn){
+	if(useYn == true || useYn == 'y'){
+		$('#display_kakaopay_title').show();
+		$('#display_kakaopay').show();
+	}else{
+		hideKakaoPay();
+	}
+}
+
+function hideKakaoPay(){
+}
+
+function register() {
+
+    var form = document.form_register;
+	if ((form.chk_gubun1.checked == false) && (form.chk_gubun2.checked == false)) { alert('국내/해외 여부가 선택되지 않았습니다.'); form.chk_gubun1.focus(); return false;}
+    if (form.chk_gubun1.checked == true){
+        if(!$('input:radio[name=\'card_pg\']').is(':checked')) { alert('국내 카드PG사를 체크하세요.'); return false;}
+    }
+
+	if (form.chk_gubun1.checked == true) {   // 국내
+        var radioArr = $('input[name=card_pg]:radio');
+        if (radioArr[0].checked == true){       // KG 이니시스
+            if(!$('input:checkbox[name=\'chk_use_ini\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'chk_ini1\']').is(':checked') && !$('input:checkbox[name=\'chk_ini2\']').is(':checked') && !$('input:checkbox[name=\'chk_ini3\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+        }else if (radioArr[1].checked == true){     // LG 유플러스
+            if(!$('input:checkbox[name=\'chk_use_xpay\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'chk_xpay1\']').is(':checked') && !$('input:checkbox[name=\'chk_xpay2\']').is(':checked') && !$('input:checkbox[name=\'chk_xpay3\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+        }else if (radioArr[2].checked == true){     // NHN KCP
+            if(!$('input:checkbox[name=\'chk_use_kcp\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'chk_kcp1\']').is(':checked') && !$('input:checkbox[name=\'chk_kcp2\']').is(':checked') && !$('input:checkbox[name=\'chk_kcp3\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+        }
+        if(!$('input:radio[name=\'pg_mode\']').is(':checked')) { alert('사용모드를 체크하세요.'); return false;}
+    }
+
+	if (form.chk_gubun2.checked == true) {   //해외
+        if(!$('input:checkbox[name=\'chk_use_eximbay\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+        if(!$('input:checkbox[name=\'chk_eximbay1\']').is(':checked') && !$('input:checkbox[name=\'chk_eximbay2\']').is(':checked') && !$('input:checkbox[name=\'chk_eximbay3\']').is(':checked') && !$('input:checkbox[name=\'chk_eximbay4\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+        if(!$('input:radio[name=\'overseas_mode\']').is(':checked')) { alert('사용모드를 체크하세요.'); return false;}
+    }
+
+	if (form.naverpay_use.checked == true){
+        if(form.naverpay_shopid.value == '') { alert('네이버페이 가맹점 ID를 입력해주세요.');  form.naverpay_shopid.focus(); return false;}
+		if(form.naverpay_certi_key.value == '') { alert('네이버페이 가맹점 인증키를 입력해주세요.');  form.naverpay_certi_key.focus(); return false;}
+		if(form.naverpay_button_key.value == '') { alert('네이버페이 버튼 인증키를 입력해주세요.');  form.naverpay_button_key.focus(); return false;}
+    }
+
+	form_register.target = 'iframe_process';
+    form_register.submit();
+}
+
+$(document).ready(function(){
+    $.ajax({
+		url:'http://demoshop.mir9.kr/api/process.php',
+		type:'post',
+		dataType:'json',
+		data:{
+			method : 'Setting.infoPG'
+		},
+		success:function(data, textStatus, jqXHR){
+            var json_data = data.data;
+            //console.log(json_data);
+
+			if(json_data.pg_domestic=='y'){
+				checkGubun();
+                checkCardPGType(json_data.pg_company);
+
+				checkEasyPGNaver(json_data.naverpay_use);
+			}
+			if(json_data.pg_overseas=='y'){
+				checkGubun();
+			}
+            // 해외결제수단 설정
+            var arrOverseas = json_data.overseas_payment.split('|');
+			if(arrOverseas[0]=='card'){
+				form_register.chk_eximbay1.checked = true;
+			}
+			if (arrOverseas[1]=='paypal') {
+				form_register.chk_eximbay2.checked = true;
+			}
+			if (arrOverseas[2]=='unionpay') {
+				form_register.chk_eximbay3.checked = true;
+			}
+			if (arrOverseas[3]=='alipay') {
+				form_register.chk_eximbay4.checked = true;
+			}
+            //$('form[name="form_register"] #mode').val('update');
+            //$('[name=code]').val(code);
+            //$('[name=contents]').val(json_data.title);
+		},
+		error:function(jqXHR, textStatus, errorThrown){
+			console.log(textStatus);
+		}
+	});
+});
+
+
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
