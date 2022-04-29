@@ -31,8 +31,8 @@ public class CommunityRestController {
 	private static String mailSecret = "phiu4e0M";
 	
 	// SMS 인증키
-	private static String smsKey = "pDjJmaKLu6bg9i9j";
-	private static String smsSecret = "YRs5WbpK";
+	private static String smsKey = "cuyb2ATgfZrgb0LF";
+	private static String smsSecret = "3VxajYQb";
 	
 	// 리뷰 모달창 조회
 	@GetMapping("/review_modal")
@@ -55,7 +55,9 @@ public class CommunityRestController {
 
 		// code, is_send, content 선언
 		List<String> code = new ArrayList<>();
+		List<String> templateId = new ArrayList<>();
 		List<String> is_send = new ArrayList<>();
+		List<String> is_send_admin = new ArrayList<>();
 		List<String> content = new ArrayList<>();
 		
 		// JsonParser
@@ -64,20 +66,45 @@ public class CommunityRestController {
 		
 		JsonArray codeArr = element.getAsJsonObject().get("code").getAsJsonArray();
 		
+		System.out.println("Controller code");
 		for(int i = 0; i < codeArr.size(); i++) {
 			code.add((element.getAsJsonObject().get("code").getAsJsonArray()).get(i).getAsString());
-			is_send.add((element.getAsJsonObject().get("is_send").getAsJsonArray()).get(i).getAsString());
 			content.add((element.getAsJsonObject().get("content").getAsJsonArray()).get(i).getAsString());
+			
+			if(i == 0 || i%2 == 0) {
+				templateId.add((element.getAsJsonObject().get("code").getAsJsonArray()).get(i).getAsString());
+				is_send.add((element.getAsJsonObject().get("is_send").getAsJsonArray()).get(i).getAsString());
+			}
+			else {
+				is_send_admin.add((element.getAsJsonObject().get("is_send").getAsJsonArray()).get(i).getAsString());
+			}
 		}
 
-		int result = 0;
+		int result1 = 0;
 		
 		for(int i = 0; i < code.size(); i++) {
-			result += communityService.updateSms(smsKey, smsSecret, code.get(i), content.get(i));
+			result1 += communityService.updateSms(smsKey, smsSecret, code.get(i), content.get(i));
 		}
 		
-		// int result2 = communityService.updateSmsSetting(code, is_send);
-		// int result = result * result2
+		// sms 자동 발송 여부
+		int result2 = 0;
+		HashMap<String, String> param = new HashMap<>();
+		
+		for (int i = 0; i < is_send_admin.size(); i++) {
+			param.put("templateId", templateId.get(i));
+			param.put("send", is_send.get(i));
+			param.put("sendAdmin", is_send_admin.get(i));
+			
+			System.out.println("=====param=====");
+			System.out.println(templateId);
+			
+			result2 += communityService.smsAutoSend(param);
+		}
+		
+		System.out.println("=====Controller:result2=====");
+		System.out.println(result2);
+		
+		int result = result1 * result2;
 		
 		return result;
 	}
