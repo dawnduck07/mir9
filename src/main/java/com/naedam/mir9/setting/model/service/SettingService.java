@@ -20,6 +20,7 @@ import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
 import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
+import com.naedam.mir9.setting.model.vo.SeoSetting;
 
 public interface SettingService {
 
@@ -68,6 +69,10 @@ public interface SettingService {
 	int updateLocaleChoosen(String localeCode);
 
 	int updateLocaleDefault(String parameter);
+
+	SeoSetting selectSeoSetting();
+
+	int updateSeoSetting(SeoSetting seo);
 
 
 }

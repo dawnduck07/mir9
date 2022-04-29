@@ -34,8 +34,8 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
-import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
+import com.naedam.mir9.setting.model.vo.SeoSetting;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -236,7 +236,19 @@ public class SettingController {
 	}
 	
 	@GetMapping("/seo")
-	public void seo() {}
+	public void seo(Model model) {
+		
+		SeoSetting seo = settingService.selectSeoSetting();
+		
+		model.addAttribute("seo", seo);
+	}
+	
+	@PostMapping("/seo_process")
+	public String seo_process(HttpServletRequest request, SeoSetting seo) {
+		int result = settingService.updateSeoSetting(seo);
+		
+		return "redirect:/setting/seo";
+	}
 	
 	@GetMapping("/paymentpg")
 	public void paymentpg(Model model) {
