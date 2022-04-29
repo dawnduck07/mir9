@@ -61,15 +61,12 @@
 							</select>
 						</div>
 					</div>
-
-					<table class="table table-bordered table-hover">
-						<form name="form_list" method="post"
-							action="?tpf=admin/member/process">
-							<input type="hidden" name="mode" id="mode" value="delHistory">
+				<form:form id="accessHistoryDeleteFrm" name="accessHistoryDeleteFrm" action="${pageContext.request.contextPath}/member/accessHistoryDelete.do" method="POST">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<table class="table table-bordered table-hover checkbox-group">
 							<thead>
 								<tr>
-									<td style="width: 30px;"><input type="checkbox"
-										name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
+									<td style="width: 30px;"><input type="checkbox" name="select_all" id="checkAll" /></td>
 									<td style="width: 60px;">NO</td>
 									<td style="width: 110px;">아이디</td>
 									<td style="width: 110px;">이름</td>
@@ -81,7 +78,7 @@
 							<tbody id = "tbody">
 								<c:forEach items="${memberAccessHistoryList}" var="history" varStatus="status" >
 									<tr>
-										<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="${history.memberNo}" data-target="${history.memberNo}" /></td>
+										<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="${history.accessHistoryNo}" data-target="${history.accessHistoryNo}" /></td>
 										<td style="width: 60px;">${history.accessHistoryNo}</td>
 										<td style="width: 110px;">${history.accessHistoryId}</td>
 										<td style="width: 110px;">${history.accessHistoryName}</td>
@@ -91,11 +88,11 @@
 									</tr>
 								</c:forEach>
 							</tbody>		
-						</form>
 					</table>
+					</form:form>
 					<br>
 					<button type="button"
-						onclick="selectDelete('delHistory','선택된 회원을 삭제하시겠습니까?');"
+						id = "accessHistoryDeleteBtn"
 						class="btn btn-danger">
 						<i class="fa fa-minus-square"></i> 선택삭제
 					</button>
@@ -160,7 +157,7 @@ $(document).ready(function(){
 					$.each(data.searchAccessHistoryList, (k, v) => {
 						$("#tbody").append(`
 								<tr>
-								<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="\${v.memberNo}" data-target="\${v.memberNo}" /></td>
+								<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="\${v.accessHistoryNo}" data-target="\${v.accessHistoryNo}" /></td>
 								<td style="width: 60px;">\${v.accessHistoryNo}</td>
 								<td style="width: 110px;">\${v.accessHistoryId}</td>
 								<td style="width: 110px;">\${v.accessHistoryName}</td>
@@ -177,9 +174,54 @@ $(document).ready(function(){
 	});
 });
 	
-
+// 체크박스 전체 선택
+$(".checkbox-group").on("click", "#checkAll", ((e)=>{
+	let checked = $(e.target).is(":checked");
+	console.log("전체 선택 : " + checked);
+	if(checked){
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", true);
+	} else {
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", false);
+	}
+}));
+//체크박스 개별 선택
+$(document).on("click", ".member-is-checked", function(){
+	let isChecked = true;
+	console.log("개별 선택 : " + isChecked);
 	
-
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked && $(item).is(":checked");
+		console.log("i : " + i);
+		//console.log(item);
+		console.log($(item).is(":checked"));
+	});
+	
+	$("#checkAll").prop("checked", isChecked);	
+});
+//선택삭제
+$(document).on("click", "#accessHistoryDeleteBtn", function(){
+	let isChecked = false;
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked || $(item).is(":checked");
+		let target = $(item).data("target");
+		console.log("target = ", target); // target = accessHistoryNo
+		
+		if($(item).is(":checked")){
+			$(item).after(`<input type="hidden" name="accessHistoryNo" value="\${target}"/>`);
+		}
+	});
+	
+	if(!isChecked){
+		alert("선택된 목록이 없습니다.");
+		return;
+	}
+	
+	console.log("클릭");
+	console.log($(document.accessHistoryDeleteFrm));
+	if(confirm("선택된 회원을 삭제하시겠습니까?"))
+		$(document.accessHistoryDeleteFrm).submit();
+});
 
 </script>
 

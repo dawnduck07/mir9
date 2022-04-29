@@ -189,6 +189,8 @@ public interface MemberService {
 
 	int selectSearchHistoryListCount(Map<String, Object> param);
 
+	int deleteAccessHistory(int[] accessHistoryNo);
+
 
 	
 

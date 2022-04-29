@@ -363,6 +363,11 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.searchHistoryListCount(param);
 	}
 
+	@Override
+	public int deleteAccessHistory(int[] accessHistoryNo) {
+		return memberDao.deleteAccessHistory(accessHistoryNo);
+	}
+
 
 	
 

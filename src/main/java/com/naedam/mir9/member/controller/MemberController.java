@@ -865,6 +865,22 @@ public class MemberController {
 		return resultMap;
 	}
 	
+	// 회원 접속이력 관리 선택 삭제
+	@PostMapping("/accessHistoryDelete.do")
+	public String accessHistoryDelete(@RequestParam int[] accessHistoryNo,
+			RedirectAttributes redirectAttribute,
+			HttpServletRequest request) throws Exception {
+					
+		int resultAccessHistoryDelete = memberService.deleteAccessHistory(accessHistoryNo);
+		log.debug("resultAccessHistoryDelete = {}", resultAccessHistoryDelete);
+		
+		
+		String referer = request.getHeader("Referer");
+		log.debug("referer = {}", referer);
+		
+		return "redirect:" + referer;
+	}
+	
 	
 	// 등급 관리 조회(select)
 	@GetMapping("/memberGrade.do")

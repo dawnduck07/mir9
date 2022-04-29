@@ -358,6 +358,11 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.searchHistoryListCount", param);
 	}
 
+	@Override
+	public int deleteAccessHistory(int[] accessHistoryNo) {
+		return session.delete("member.deleteAccessHistory", accessHistoryNo);
+	}
+
 	
 
 

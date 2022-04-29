@@ -186,6 +186,8 @@ public interface MemberDao {
 
 	int searchHistoryListCount(Map<String, Object> param);
 
+	int deleteAccessHistory(int[] accessHistoryNo);
+
 
 
 
