@@ -180,6 +180,12 @@ public interface MemberDao {
 
 	List<MemberAccessHistory> seletHistoryList();
 
+	int totalAccessHistoryCount();
+
+	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param);
+
+	int searchHistoryListCount(Map<String, Object> param);
+
 
 
 

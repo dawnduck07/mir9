@@ -183,6 +183,12 @@ public interface MemberService {
 
 	List<MemberAccessHistory> seletHistoryList();
 
+	int selectAccessHistoryCount();
+
+	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param);
+
+	int selectSearchHistoryListCount(Map<String, Object> param);
+
 
 	
 

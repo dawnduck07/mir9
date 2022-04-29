@@ -343,6 +343,21 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.seletHistoryList");
 	}
 
+	@Override
+	public int totalAccessHistoryCount() {
+		return session.selectOne("member.totalAccessHistoryCount");
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
+		return session.selectList("member.seletSearchAccessHistory", param);
+	}
+
+	@Override
+	public int searchHistoryListCount(Map<String, Object> param) {
+		return session.selectOne("member.searchHistoryListCount", param);
+	}
+
 	
 
 

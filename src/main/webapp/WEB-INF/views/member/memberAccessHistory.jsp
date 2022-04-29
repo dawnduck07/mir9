@@ -41,10 +41,10 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-body">
-					<label style="margin-top: 5px;">총 722 건</label>
+					<div id="totalCountContainer">
+						<label style="margin-top: 5px;">총 ${totalAccessHistoryCount} 건</label>
+					</div>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-						<form name="form-search" method="post"
-							action="?tpf=admin/member/log">
 							<div class="has-feedback">
 								<span> <input type="text" name="keyword" id="keyword"
 									value="" class="form-control input-sm" placeholder="검색" /> <span
@@ -54,13 +54,12 @@
 					</div>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
-							<select name="field" id="field" class="form-control input-sm">
-								<option value="id">아이디</option>
-								<option value="name">이름</option>
-								<option value="IP">IP 주소</option>
+							<select name="type" class="form-control input-sm">
+								<option value="access_history_id">아이디</option>
+								<option value="access_history_name">이름</option>
+								<option value="access_history_ip">IP 주소</option>
 							</select>
 						</div>
-						</form>
 					</div>
 
 					<table class="table table-bordered table-hover">
@@ -82,13 +81,13 @@
 							<tbody id = "tbody">
 								<c:forEach items="${memberAccessHistoryList}" var="history" varStatus="status" >
 									<tr>
-										<td style="width: 30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox( 'form_list'); /></td>
+										<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="${history.memberNo}" data-target="${history.memberNo}" /></td>
 										<td style="width: 60px;">${history.accessHistoryNo}</td>
-										<td style="width: 110px;">${history.accesshistoryId}</td>
+										<td style="width: 110px;">${history.accessHistoryId}</td>
 										<td style="width: 110px;">${history.accessHistoryName}</td>
 										<td style="width: 110px;">${history.accessHistoryIp}</td>
 										<td style="width: 110px;">${history.accessHistoryStatus}</td>
-										<td style="width: 110px;">${history.loginDate}</td>
+										<td style="width: 110px;"><fmt:formatDate pattern="yyyy/MM/dd HH:mm:ss" value="${history.loginDate}" /></td>
 									</tr>
 								</c:forEach>
 							</tbody>		
@@ -129,6 +128,59 @@
 	</section>
 </div>
 <!-- /.content-wrapper -->
+<script>
+// 타입별 검색
+$(document).ready(function(){
+	// Enter Event
+	$("#keyword").keydown(function(keyNum){
+		var keyword = $('input[name=keyword]').val();
+		var type = $('select[name=type]').val();
+		
+		if(keyNum.keyCode == 13){
+			console.log("Enter Event! - 타입별 검색");
+			console.log("keyword = " + keyword);
+			console.log("type = " + type);
+			
+			const search = {
+				"type" : type,
+				"keyword" : keyword
+			};
+			
+		
+			$.ajax({
+				type : "GET",
+				url : `${pageContext.request.contextPath}/member/typeSearchByAcceessHistory.do`,
+				data : search,
+				contentType : "application/json; charset=utf-8",
+				success(data){
+					console.log("ajaxData = " + JSON.stringify(data));
+					
+					$("#tbody").html('');
+					
+					$.each(data.searchAccessHistoryList, (k, v) => {
+						$("#tbody").append(`
+								<tr>
+								<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="\${v.memberNo}" data-target="\${v.memberNo}" /></td>
+								<td style="width: 60px;">\${v.accessHistoryNo}</td>
+								<td style="width: 110px;">\${v.accessHistoryId}</td>
+								<td style="width: 110px;">\${v.accessHistoryName}</td>
+								<td style="width: 110px;">\${v.accessHistoryIp}</td>
+								<td style="width: 110px;">\${v.accessHistoryStatus}</td>
+								<td style="width: 110px;">\${v.loginDate}</td>
+							</tr>
+								`);
+					});
+					$("#totalCountContainer").html(`<label style="margin-top: 5px;">총 \${data["searchHistoryListCount"]} 건</label>`)
+				}
+			});
+		};
+	});
+});
+	
 
+	
+
+
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

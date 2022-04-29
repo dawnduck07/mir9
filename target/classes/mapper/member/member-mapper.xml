@@ -541,6 +541,8 @@
 						JOIN withdrawal_authorities wau
 							ON wm.member_no = wau.member_no
 		WHERE
+		m.`status` = 'N'
+		and
 		${type} LIKE CONCAT('%', #{keyword}, '%')
 </select>
 
@@ -738,10 +740,53 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 
 <select id="seletHistoryList" resultType="memberAccessHistory">
 	SELECT 
-		* 
+		mah.access_history_no,
+		mah.access_history_id,
+		mah.access_history_name,
+		mah.access_history_ip,
+		mah.access_history_status,
+		mah.login_date,
+		m.member_no
 	FROM 
-		member_access_history
+		member_access_history mah JOIN member m
+			ON mah.access_history_id = m.id
 	ORDER BY
 		access_history_no DESC
+</select>
+
+<select id="totalAccessHistoryCount" resultType="_int">
+	SELECT
+		COUNT(*)
+	FROM
+		member_access_history
+</select>
+
+<select id="seletSearchAccessHistory" resultType="memberAccessHistory">
+	SELECT
+		mah.access_history_no,
+		mah.access_history_id,
+		mah.access_history_name,
+		mah.access_history_ip,
+		mah.access_history_status,
+		mah.login_date,
+		m.member_no
+	FROM
+		member_access_history mah JOIN member m
+			ON mah.access_history_id = m.id
+	<where>	
+		<if test="keyword != null and keyword != ''" >
+			${type} LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
+</select>
+
+<select id="searchHistoryListCount" resultType="_int">
+	SELECT
+		COUNT(*)
+	FROM
+		member_access_history mah JOIN member m
+			ON mah.access_history_id = m.id
+	WHERE
+		${type} LIKE CONCAT('%', #{keyword}, '%')
 </select>
 </mapper>

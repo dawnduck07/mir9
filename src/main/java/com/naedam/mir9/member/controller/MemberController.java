@@ -821,12 +821,50 @@ public class MemberController {
 	@GetMapping("/log")
 	public String memberAccessHistory(Model model, HttpServletRequest request) {
 		
+		// 접속 이력 리스트
 		List<MemberAccessHistory> memberAccessHistoryList = memberService.seletHistoryList();
 		log.debug("memberAccessHistoryList = {}", memberAccessHistoryList);
 		model.addAttribute("memberAccessHistoryList", memberAccessHistoryList);
 		
+		// 접속 이력 게시글 수typeSearchByAcceessHistory.do
+		int totalAccessHistoryCount = memberService.selectAccessHistoryCount();
+		log.debug("totalAccessHistoryCount = {}", totalAccessHistoryCount);
+		model.addAttribute("totalAccessHistoryCount", totalAccessHistoryCount);
+		
 		return "member/memberAccessHistory";
 	}
+	
+	// 회원 접속이력 관리 타입별 검색
+	@ResponseBody
+	@GetMapping("/typeSearchByAcceessHistory.do")
+	public Map<String, Object> typeSearchByAcceessHistory(
+									@RequestParam String type,
+									@RequestParam String keyword,
+									HttpServletRequest request){
+		log.debug("{}", "타입별 검색 시작");
+		log.debug("type = {}", type);
+		log.debug("keyboard = {}", keyword);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
+		log.debug("param = {}", param);
+		
+		// 검색 게시물
+		List<MemberAccessHistory> searchAccessHistoryList = memberService.seletSearchAccessHistory(param);
+		log.debug("searchAccessHistoryList = {}", searchAccessHistoryList);
+		
+		// 검색 게시물 수
+		int searchHistoryListCount = memberService.selectSearchHistoryListCount(param);
+		log.debug("searchHistoryListCount = {}", searchHistoryListCount);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchAccessHistoryList", searchAccessHistoryList);
+		resultMap.put("searchHistoryListCount", searchHistoryListCount);
+		
+		return resultMap;
+	}
+	
 	
 	// 등급 관리 조회(select)
 	@GetMapping("/memberGrade.do")

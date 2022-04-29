@@ -348,6 +348,21 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.seletHistoryList();
 	}
 
+	@Override
+	public int selectAccessHistoryCount() {
+		return memberDao.totalAccessHistoryCount();
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
+		return memberDao.seletSearchAccessHistory(param);
+	}
+
+	@Override
+	public int selectSearchHistoryListCount(Map<String, Object> param) {
+		return memberDao.searchHistoryListCount(param);
+	}
+
 
 	
 
