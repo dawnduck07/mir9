@@ -12,6 +12,7 @@ import com.naedam.mir9.member.model.vo.AddressBook;
 import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberAccessHistory;
+import com.naedam.mir9.member.model.vo.MemberAccessHistoryListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
@@ -361,6 +362,11 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public int deleteAccessHistory(int[] accessHistoryNo) {
 		return session.delete("member.deleteAccessHistory", accessHistoryNo);
+	}
+
+	@Override
+	public List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm() {
+		return session.selectList("member.selectMemberAccessHistoryListExcelForm");
 	}
 
 	

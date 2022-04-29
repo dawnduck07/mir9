@@ -802,4 +802,17 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		 </foreach>
 	</where>
 </delete>
+
+<select id="selectMemberAccessHistoryListExcelForm" resultType="memberAccessHistoryListExcelForm">
+	SELECT
+		access_history_id AS id,
+		access_history_name AS `name`,
+		access_history_ip AS ip,
+		access_history_status AS `status`,
+		login_date AS legDate
+	FROM 
+		member_access_history
+	ORDER BY
+		legDate DESC
+</select>
 </mapper>
