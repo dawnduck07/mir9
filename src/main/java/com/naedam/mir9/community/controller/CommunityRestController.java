@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,9 +40,7 @@ public class CommunityRestController {
 		
 		List<Review> review = communityService.reviewModal(reviewCode);
 		List<ReviewImg> reviewImg  = communityService.reviewImgModal(reviewCode);
-		
-		// System.out.println(reviewImg);
-		
+
 		Map<Object, Object> result = new HashMap<>();
 		result.put("review", review);
 		result.put("reviewImg", reviewImg);
@@ -72,16 +69,7 @@ public class CommunityRestController {
 			is_send.add((element.getAsJsonObject().get("is_send").getAsJsonArray()).get(i).getAsString());
 			content.add((element.getAsJsonObject().get("content").getAsJsonArray()).get(i).getAsString());
 		}
-		
-		/* 확인
-		System.out.println("=====Controller:code=====");
-		System.out.println(code);
-		System.out.println("=====Controller:is_send=====");
-		System.out.println(is_send);
-		System.out.println("=====Controller:content=====");
-		System.out.println(content);
-		*/
-		
+
 		int result = 0;
 		
 		for(int i = 0; i < code.size(); i++) {
@@ -100,19 +88,11 @@ public class CommunityRestController {
 
 		// templateId 전달
 		HashMap<String, Object> savedMail = communityService.savedMail(mailKey, mailSecret, templateId);
-		
-		/* 확인
-		System.out.println("=====Controller:savedMail=====");
-		System.out.println(templateId);
-		System.out.println(savedMail.get("title"));
-		System.out.println(savedMail.get("content"));
-		*/
-		
+
 		return savedMail;
 	}
 	
 	// mail 모달창 문구 수정
-	// mail 모달창 저장 문구 조회
 	@PostMapping("/email_modal")
 	public int commEmailModify(@RequestBody String jsonStr) {
 		
@@ -123,15 +103,10 @@ public class CommunityRestController {
 		String templateId = element.getAsJsonObject().get("templateId").getAsString();
 		String title = element.getAsJsonObject().get("title").getAsString();
 		String content = element.getAsJsonObject().get("content").getAsString();
-
+		
 		// templateId 전달
 		int result = communityService.modifyMail(mailKey, mailSecret, templateId, title, content);
-				
-		// 확인
-		System.out.println("=====Controller:modifyMail=====");
-		System.out.println(result);
-		//
-		
+
 		return result;
 	}
 
@@ -142,13 +117,6 @@ public class CommunityRestController {
 		// templateId 전달
 		HashMap<String, Object> originMail = communityService.originMail(mailKey, mailSecret, templateId);
 
-		/* 확인
-		System.out.println("=====Controller:originMail=====");
-		System.out.println(templateId);
-		System.out.println(originMail.get("title"));
-		System.out.println(originMail.get("content"));
-		*/
-		
 		return originMail;
 	}
 	

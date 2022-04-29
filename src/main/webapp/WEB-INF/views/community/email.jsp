@@ -426,13 +426,17 @@ textarea {
 	// access key : s3b1XpsH6BR8yT4S
 	// secret key : phiu4e0M
 	// SMTP : 수신 1건당 0.5원
-
+	
+	// 보완 : 발신이메일별 카테고리 추가 + 수정 템플릿 추가(수정 템플릿명에 '_메일명') + 해당 수정 템플릿에 저장	/ 중복되는 코드 정리 / 메일 SPF 관련
+ 
+	// mail 발송 ajax
+	
 	// CHEDITOR
 	var objEditor = CKEDITOR.replace('content', {
 		height: 300,
 	    extraPlugins : 'tableresize',
-	    filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files', // 여기로 전송 됨 
-	    filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images', // 여기로 전송됨
+	    filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+	    filebrowserImageUploadUrl: '/daemon/ckeditor_upload.php?command=QuickUpload&type=Images',
 	    fillEmptyBlocks : true,
 	    line_height : '0px'
 	});
@@ -468,16 +472,9 @@ textarea {
 			success: function(result){	
 				$("#title").val(result.title); 
 				objEditor.setData(result.content); 
-				
-				/* 확인
-				console.log("=====saved result=====");
-				console.log(result);
-	            */
 			},
 			error:function(textStatus, errorThrown){
 				console.log("발송 문구를 조회 할 수 없습니다.")
-				// console.log(textStatus);
-				// console.log(textStatus);
 			}
 		});
 	}
@@ -488,15 +485,13 @@ textarea {
 		var title = $("#title").val();
 		var content = objEditor.getData();
 
-	    // 제목 입력 필수
-		if(title == "") { 
+		if(title == "") { // 제목 입력 필수
 	    	alert("제목이 입력되지 않았습니다."); 
 	    	$("#title").focus(); 
 	    	return false;
 	    }
-	    
-	    // 내용 입력 필수 
-	    if(content == "") {
+	    	     
+	    if(content == "") { // 내용 입력 필수
 	    	alert("내용이 입력되지 않았습니다.");
 	    	return false;
 	    }
@@ -507,6 +502,7 @@ textarea {
 			title : title,
 			content : content
 	    };
+	    
 	    var jsonStr = JSON.stringify(data);
 	
 	    $.ajax({
@@ -524,8 +520,6 @@ textarea {
 			}, 
 			error:function(textStatus, errorThrown){
 				console.log("발송 문구를 수정할 수 없습니다.");
-				// console.log(textStatus);
-				// console.log(textStatus);
 			}
 	    });
 
@@ -547,16 +541,9 @@ textarea {
 						objEditor.setData(result.content);
 					}
 				}
-				
-				/* 확인
-				console.log("=====origin result=====");
-				console.log(result);
-				*/
 			},
 			error:function(textStatus, errorThrown){
 				console.log("기본 문구를 불러올 수 없습니다.");
-				// console.log(textStatus);
-				// console.log(textStatus);
 			}
 		});
 	}	
@@ -572,7 +559,6 @@ textarea {
         		$(this).attr("value", "n");
         	}
         });
-		
 		$("input:checkbox[name='is_send_admin']").each(function() { 
         	if($(this).is(":checked")) { // 관리자 자동 발송이 체크
         		$(this).attr("value", "y");
@@ -598,7 +584,7 @@ textarea {
 		var data = { code : code, is_send : is_send }
 		var jsonStr = JSON.stringify(data);
 
-		// DB 생성 후 자동 발생 항목 여부 저장하기
+		// 자동발송 여부 저장하기
 		$.ajax({
 			url: "${pageContext.request.contextPath}/comm/email",
 			method: "POST",
@@ -614,8 +600,6 @@ textarea {
 			},
 			error:function(textStatus, errorThrown){
 				console.log("메일 설정 수정에 실패했습니다.");
-				// console.log(textStatus);
-				// console.log(textStatus);
 			}
 		});
 		
