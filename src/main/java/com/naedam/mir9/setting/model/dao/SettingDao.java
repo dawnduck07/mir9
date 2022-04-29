@@ -18,8 +18,15 @@ import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
-import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
+import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
+import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
+import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
 
 public interface SettingDao {
 
@@ -68,5 +75,23 @@ public interface SettingDao {
 	int updateLocaleChoosen(String localeCode);
 
 	int updateLocaleDefault(String localeCode);
+
+	SeoSetting selectSeoSetting();
+
+	int updateSeoSetting(SeoSetting seo);
+
+	BillingPgSetting selectPgSetting();
+
+	KgIniSetting selectKgIniSetting();
+
+	EximbaySetting selectEximbaySetting();
+
+	NaverShoppingSetting selectNaverShoppingSetting();
+
+	NaverpaySetting selectNaverpaySetting();
+
+	XpaySetting selectXpaySetting();
+
+	KcpSetting selectKcpSetting();
 
 }

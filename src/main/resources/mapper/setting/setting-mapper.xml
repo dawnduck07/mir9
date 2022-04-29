@@ -110,6 +110,37 @@
   		select * from delivery_notice where locale = #{locale}
   	</select>
   	
+  	<select id="selectSeoSetting" resultType="seoSetting">
+  		select * from seo_setting
+  	</select>
+  	
+  	<select id="selectPgSetting" resultType="billingPgSetting">
+  		select * from billing_pg_setting
+  	</select>
+  	
+  	<select id="selectKgIniSetting" resultType="kgIniSetting">
+  		select * from kg_ini_setting
+  	</select>
+  	
+  	<select id="selectEximbaySetting" resultType="eximbaySetting">
+  		select * from eximbay_setting
+  	</select>
+  	
+  	<select id="selectNaverShoppingSetting" resultType="naverShoppingSetting">
+  		select * from naver_shopping_setting
+  	</select>
+  	
+  	<select id="selectNaverpaySetting" resultType="naverpaySetting">
+  		select * from naverpay_setting
+  	</select>
+  	
+  	<select id="selectXpaySetting" resultType="xpaySetting">
+  		select * from xpay_setting
+  	</select>
+  	
+  	<select id="selectKcpSetting" resultType="kcpSetting">
+  		select * from kcp_setting
+  	</select>
   	<update id="updateAdminSetting">
   		update admin_setting set email = #{email}, phone = #{phone}, caller_id = #{callerId}, 
 			<if test="thumbnailImg != null and thumbnailImg != ''">
@@ -143,5 +174,9 @@
   	
   	<update id="updateLocaleDefault">
   		update locale set is_default = 'Y' where locale_code = #{localeCode}
+  	</update>
+  	
+  	<update id="updateSeoSetting">
+  		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}
   	</update>
 </mapper>
