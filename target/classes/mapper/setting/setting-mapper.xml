@@ -118,6 +118,22 @@
   		select * from billing_pg_setting
   	</select>
   	
+  	<select id="selectKgIniSetting" resultType="kgIniSetting">
+  		select * from kg_ini_setting
+  	</select>
+  	
+  	<select id="selectEximbaySetting" resultType="eximbaySetting">
+  		select * from eximbay_setting
+  	</select>
+  	
+  	<select id="selectNaverShoppingSetting" resultType="naverShoppingSetting">
+  		select * from naver_shopping_setting
+  	</select>
+  	
+  	<select id="selectNaverpaySetting" resultType="naverpaySetting">
+  		select * from naverpay_setting
+  	</select>
+  	
   	<update id="updateAdminSetting">
   		update admin_setting set email = #{email}, phone = #{phone}, caller_id = #{callerId}, 
 			<if test="thumbnailImg != null and thumbnailImg != ''">

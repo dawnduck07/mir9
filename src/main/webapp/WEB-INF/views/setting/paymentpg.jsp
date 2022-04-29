@@ -57,44 +57,45 @@
                 </tbody>
                 </table>
                 <br>
+                
                 <span id="display_ini_title" style="display:none;"><h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> KG 이니시스 일반결제 설정</p></h4></span>
                 <table class="table table-bordered" id="display_ini" style="display:none;">
                 <tbody>
                 <tr>
                     <td class="menu">사용 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_use_ini" value='y' checked=checked>사용함
+                    <input type="checkbox" name="chk_use_ini" value='Y' ${kgIni.useIni == 'Y' ? 'checked' : '' }>사용함
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">PG사 모듈 버전</td>
-                    <td align="left">INIpay Standard 웹표준 결제 (V 1.2.2 - 20160421) / INIpay Mobile WEB (V 4.08 - 20160322)</td>
+                    <td align="left">${kgIni.moduleVersion }</td>
                 </tr>
                 <tr>
                     <td class="menu">결제수단 설정</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_ini1" value='y' checked=checked>신용카드&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_ini2" value='y'>계좌이체&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_ini3" value='y'>가상계좌
+	                    <input type="checkbox" name="chk_ini1" value='Y' ${kgIni.useCredit == 'Y' ? 'checked' : '' }>신용카드&nbsp;&nbsp;
+	                    <input type="checkbox" name="chk_ini2" value='Y' ${kgIni.useBank == 'Y' ? 'checked' : '' }>계좌이체&nbsp;&nbsp;
+	                    <input type="checkbox" name="chk_ini3" value='Y' ${kgIni.useVBank == 'Y' ? 'checked' : '' }>가상계좌
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사용 모드</td>
                     <td align="left">
-                        <input type="radio" name="pg_mode" value="ini_dev"  checked=checked>TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="pg_mode" value="ini_real" >REAL 모드
+                        <input type="radio" name="pg_mode" value="1"  ${kgIni.pgMode == 1 ? 'checked' : '' }>TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="pg_mode" value="2" ${kgIni.pgMode == 2 ? 'checked' : '' }>REAL 모드
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">상점 ID</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_id_ini" value="INIpayTest" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="shop_id_ini" value="${kgIni.storeId == null ? '' : kgIni.storeId }" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">Sign Key</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_key_ini" value="SU5JTElURV9UUklQTEVERVNfS0VZU1RS" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="shop_key_ini" value="${kgIni.signKey == null ? '' : kgIni.signKey }" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
@@ -260,39 +261,39 @@
                 <tr>
                     <td class="menu">사용 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_use_eximbay" value='y' checked=checked>사용함
+                    <input type="checkbox" name="chk_use_eximbay" value='Y' checked=${eximbay.useEximbay == 'Y' ? 'checked' : '' }>사용함
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">PG사 모듈 버전</td>
-                    <td align="left">2.1</td>
+                    <td align="left">${eximbay.moduleVersion == null ? '' : eximbay.moduleVersion }</td>
                 </tr>
                 <tr>
                     <td class="menu">결제수단 설정</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_eximbay1" value='card'>CreditCard&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_eximbay2" value='paypal'>Paypal&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_eximbay3" value='unionpay'>UnionPay&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_eximbay4" value='alipay'>Alipay
+                    <input type="checkbox" name="chk_eximbay1" value='card' ${eximbay.useCredit == 'Y' ? 'checked' : '' }>CreditCard&nbsp;&nbsp;
+                    <input type="checkbox" name="chk_eximbay2" value='paypal' ${eximbay.usePaypal == 'Y' ? 'checked' : '' }>Paypal&nbsp;&nbsp;
+                    <input type="checkbox" name="chk_eximbay3" value='unionpay' ${eximbay.useUnion == 'Y' ? 'checked' : '' }>UnionPay&nbsp;&nbsp;
+                    <input type="checkbox" name="chk_eximbay4" value='alipay' ${eximbay.useAli == 'Y' ? 'checked' : '' }>Alipay
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사용 모드</td>
                     <td align="left">
-                        <input type="radio" name="overseas_mode" value="eximbay_dev"  checked=checked>TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="overseas_mode" value="eximbay_real" >REAL 모드
+                        <input type="radio" name="overseas_mode" value="1" ${eximbay.pgMode == 1 ? 'checked' : '' }>TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="overseas_mode" value="2" ${eximbay.pgMode == 2 ? 'checked' : '' }>REAL 모드
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">mid</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_id_eximbay" value="1849705C64" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="shop_id_eximbay" value="${eximbay.mid == null ? '' : eximbay.mid }" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">Secret Key</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_key_eximbay" value="289F40E6640124B2628640168C3C5464" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="shop_key_eximbay" value="${eximbay.secretKey == null ? '' : eximbay.secretKey }" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 </tbody>
@@ -304,13 +305,13 @@
                 <tr>
                     <td class="menu">tsv파일 실행주소</td>
                     <td align="left">
-                    http://demoshop.mir9.kr/index.php?tpf=shop/navershop/navershop_db
+                    ${naverShopping.tsvUrl == null ? '' : naverShopping.tsvUrl }
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">상품 DB URL</td>
                     <td align="left">
-                     http://demoshop.mir9.kr/shop/navershop/navershopping.tsv
+                     ${naverShopping.productDbUrl == null ? '' : naverShopping.productDbUrl }
                     </td>
                 </tr>
                 <tr>
@@ -335,7 +336,6 @@
 
 <script>
 function checkGubun() {
-
     var form = document.form_register;
 	if ((form.chk_gubun1.checked == true) && (form.chk_gubun2.checked == true)) { // 국내/해외
 		$('#display_pg').show();

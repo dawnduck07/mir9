@@ -34,9 +34,13 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
-import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
+import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -254,8 +258,25 @@ public class SettingController {
 	@GetMapping("/paymentpg")
 	public void paymentpg(Model model) {
 		BillingPgSetting pg = settingService.selectPgSetting();
+		NaverShoppingSetting naverShopping = settingService.selectNaverShoppingSetting();
+		
+		if(pg.getIsDomestic().equals("Y")) {
+			KgIniSetting kgIni = settingService.selectKgIniSetting();
+			model.addAttribute("kgIni",kgIni);
+		}
+		
+		if(pg.getIsForeigne().equals("Y")) {
+			EximbaySetting eximbay = settingService.selectEximbaySetting();
+			model.addAttribute("eximbay", eximbay);
+		}
+		
+		if(pg.getNaverpayUse().equals("Y")) {
+			NaverpaySetting naverpay = settingService.selectNaverpaySetting();
+			model.addAttribute("naverpay", naverpay);
+		}
 		
 		model.addAttribute("pg",pg);
+		model.addAttribute("naverShopping",naverShopping);
 	}
 	
 	@GetMapping("/snslogin")

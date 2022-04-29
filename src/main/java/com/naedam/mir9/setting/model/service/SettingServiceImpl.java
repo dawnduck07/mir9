@@ -22,9 +22,13 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.dao.SettingDao;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
-import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
+import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
+import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
 
 @Service
 public class SettingServiceImpl implements SettingService {
@@ -185,6 +189,30 @@ public class SettingServiceImpl implements SettingService {
 	public BillingPgSetting selectPgSetting() {
 		// TODO Auto-generated method stub
 		return settingDao.selectPgSetting();
+	}
+
+	@Override
+	public KgIniSetting selectKgIniSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectKgIniSetting();
+	}
+
+	@Override
+	public EximbaySetting selectEximbaySetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectEximbaySetting();
+	}
+
+	@Override
+	public NaverShoppingSetting selectNaverShoppingSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectNaverShoppingSetting();
+	}
+
+	@Override
+	public NaverpaySetting selectNaverpaySetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectNaverpaySetting();
 	}
 
 	
