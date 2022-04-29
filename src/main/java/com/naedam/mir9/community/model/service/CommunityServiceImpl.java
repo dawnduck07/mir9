@@ -63,12 +63,12 @@ public class CommunityServiceImpl implements CommunityService {
 		return communityDao.selectDelete(reviewCode);
 	}
 
-	// sms 기본 문구(78519)
+	// sms 기본 문구(81149)
 	@Override
 	public HashMap<String, Object> originSms(String smsKey, String smsSecret) {
 		
 		HashMap<String, Object> originSms = new HashMap<>();
-		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates?categoryId=78519&pageSize=24";
+		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates?categoryId=81149&pageSize=24";
 		
 		try {
 			// url
@@ -121,12 +121,12 @@ public class CommunityServiceImpl implements CommunityService {
 		return originSms;
 	}
 
-	// sms 저장 문구(78520)
+	// sms 저장 문구(81150)
 	@Override
 	public HashMap<String, Object> savedSms(String smsKey, String smsSecret) {
 		
 		HashMap<String, Object> savedSms = new HashMap<>();
-		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates?categoryId=78520&pageSize=24";
+		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/templates?categoryId=81150&pageSize=24";
 		
 		try {
 			// url
@@ -267,6 +267,12 @@ public class CommunityServiceImpl implements CommunityService {
 		
 		return result;
 	}
+	
+	// sms 자동 발송 여부
+	@Override
+	public int smsAutoSend(HashMap<String, String> param) {
+		return communityDao.smsAutoSend(param);
+	}	
 	
 	// mail 저장 문구 (49064)
 	@Override

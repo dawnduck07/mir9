@@ -29,11 +29,15 @@ public interface CommunityService {
 
 	int updateSms(String smsKey, String smsSecret, String code, String content);
 
+	int smsAutoSend(HashMap<String, String> param);	
+	
 	// mail
 	HashMap<String, Object> savedMail(String mailKey, String mailSecret, String templateId);
 
 	HashMap<String, Object> originMail(String mailKey, String mailSecret, String templateId);
 
 	int modifyMail(String mailKey, String mailSecret, String templateId, String title, String content);
+
+
 
 }

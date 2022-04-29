@@ -1,5 +1,6 @@
 package com.naedam.mir9.community.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,12 @@ public class CommunityDaoImpl implements CommunityDao {
 	@Override
 	public int selectDelete(String reviewCode) {
 		return session.delete("review.selectDelete", reviewCode);
+	}
+
+	// sms 자동 발송 여부
+	@Override
+	public int smsAutoSend(HashMap<String, String> param) {
+		return session.update("sms.autoSend", param);
 	}
 	
 }

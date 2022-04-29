@@ -32,8 +32,8 @@ public class CommunityController {
 	private static String mailSecret = "phiu4e0M";
 	
 	// SMS 인증키
-	private static String smsKey = "pDjJmaKLu6bg9i9j";
-	private static String smsSecret = "YRs5WbpK";
+	private static String smsKey = "cuyb2ATgfZrgb0LF";
+	private static String smsSecret = "3VxajYQb";
 	
 	// mail 설정 조회
 	@GetMapping("/email")
