@@ -309,20 +309,20 @@ textarea {
 									<tr>
 										<td class="content">주문취소<br>[주문 취소시]</td>
 					                    <td>
-					                        <input type="hidden" class="order_cancle" name="code" value="order_cancle" />
-					                        <textarea class="order_cancle" name="content" ></textarea>
+					                        <input type="hidden" class="order_cancel" name="code" value="order_cancel" />
+					                        <textarea class="order_cancel" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="order_cancle" name="is_send" checked/>
+					                    	<input type="checkbox" class="order_cancel" name="is_send" checked/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('order_cancel');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="order_cancle_admin" name="content_admin" ></textarea>
+					                    	<textarea class="order_cancel_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="order_cancle" name="is_send_admin" />
+					                    	<input type="checkbox" class="order_cancel" name="is_send_admin" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('order_cancel_admin');" class="btn btn-primary btn-xs">가져오기</button>
