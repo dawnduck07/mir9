@@ -100,11 +100,8 @@
 						class="btn btn-warning" style="margin-left: 20px;">
 						<i class="fa" aria-hidden="true"></i> Excel 다운로드
 					</button>
-					<form name="form_download" method="post"
-						action="?tpf=admin/member/process">
-						<input type="hidden" name="mode" value="downloadExcelAccessLog">
-						<input type="hidden" name="search_data" value=""> <input
-							type="hidden" name="search_type" value="">
+					<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
+						<input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data"> <input type="hidden" name="download_type" value="memberAccessHistoryList">
 					</form>
 					<div style="text-align: right;">
 						<ul class="pagination" style="margin: 0;">
@@ -222,6 +219,14 @@ $(document).on("click", "#accessHistoryDeleteBtn", function(){
 	if(confirm("선택된 회원을 삭제하시겠습니까?"))
 		$(document.accessHistoryDeleteFrm).submit();
 });
+
+//Excel 다운로드
+function downloadExcel() {  
+	console.log("엑셀 다운로드");
+    form_download.target = 'iframe_process';
+    form_download.search_data.value = $('#form_search :input').serialize();
+    form_download.submit();
+}
 
 </script>
 
