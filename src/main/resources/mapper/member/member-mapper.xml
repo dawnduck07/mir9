@@ -541,6 +541,8 @@
 						JOIN withdrawal_authorities wau
 							ON wm.member_no = wau.member_no
 		WHERE
+		m.`status` = 'N'
+		and
 		${type} LIKE CONCAT('%', #{keyword}, '%')
 </select>
 
@@ -738,10 +740,79 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 
 <select id="seletHistoryList" resultType="memberAccessHistory">
 	SELECT 
-		* 
+		ROW_NUMBER() OVER() AS `access_history_no`,
+		mah.access_history_no, 
+		mah.access_history_id,
+		mah.access_history_name,
+		mah.access_history_ip,
+		mah.access_history_status,
+		mah.login_date,
+		m.member_no
+	FROM 
+		member_access_history mah JOIN member m
+			ON mah.access_history_id = m.id
+	ORDER BY
+		`access_history_no` DESC
+</select>
+
+<select id="totalAccessHistoryCount" resultType="_int">
+	SELECT
+		COUNT(*)
+	FROM
+		member_access_history
+</select>
+
+<select id="seletSearchAccessHistory" resultType="memberAccessHistory">
+	SELECT
+		ROW_NUMBER() OVER() AS `access_history_no`,
+		mah.access_history_id,
+		mah.access_history_name,
+		mah.access_history_ip,
+		mah.access_history_status,
+		mah.login_date,
+		m.member_no
+	FROM
+		member_access_history mah JOIN member m
+			ON mah.access_history_id = m.id
+	<where>	
+		<if test="keyword != null and keyword != ''" >
+			${type} LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
+	ORDER BY
+		`access_history_no` DESC
+</select>
+
+<select id="searchHistoryListCount" resultType="_int">
+	SELECT
+		COUNT(*)
+	FROM
+		member_access_history mah JOIN member m
+			ON mah.access_history_id = m.id
+	WHERE
+		${type} LIKE CONCAT('%', #{keyword}, '%')
+</select>
+
+<delete id="deleteAccessHistory">
+	DELETE FROM
+		member_access_history
+	<where>
+		 <foreach collection="array" item="item" open="(" close=")" separator="or">
+		 	access_history_no = #{item}
+		 </foreach>
+	</where>
+</delete>
+
+<select id="selectMemberAccessHistoryListExcelForm" resultType="memberAccessHistoryListExcelForm">
+	SELECT
+		access_history_id AS id,
+		access_history_name AS `name`,
+		access_history_ip AS ip,
+		access_history_status AS `status`,
+		login_date AS legDate
 	FROM 
 		member_access_history
 	ORDER BY
-		access_history_no DESC
+		legDate DESC
 </select>
 </mapper>

@@ -13,6 +13,7 @@ import com.naedam.mir9.member.model.vo.AddressBook;
 import com.naedam.mir9.member.model.vo.Authorities;
 import com.naedam.mir9.member.model.vo.Member;
 import com.naedam.mir9.member.model.vo.MemberAccessHistory;
+import com.naedam.mir9.member.model.vo.MemberAccessHistoryListExcelForm;
 import com.naedam.mir9.member.model.vo.MemberEntity;
 import com.naedam.mir9.member.model.vo.MemberGrade;
 import com.naedam.mir9.member.model.vo.MemberListExcelForm;
@@ -346,6 +347,31 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MemberAccessHistory> seletHistoryList() {
 		return memberDao.seletHistoryList();
+	}
+
+	@Override
+	public int selectAccessHistoryCount() {
+		return memberDao.totalAccessHistoryCount();
+	}
+
+	@Override
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
+		return memberDao.seletSearchAccessHistory(param);
+	}
+
+	@Override
+	public int selectSearchHistoryListCount(Map<String, Object> param) {
+		return memberDao.searchHistoryListCount(param);
+	}
+
+	@Override
+	public int deleteAccessHistory(int[] accessHistoryNo) {
+		return memberDao.deleteAccessHistory(accessHistoryNo);
+	}
+
+	@Override
+	public List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm() {
+		return memberDao.selectMemberAccessHistoryListExcelForm();
 	}
 
 
