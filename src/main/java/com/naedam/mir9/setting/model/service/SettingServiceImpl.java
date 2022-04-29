@@ -26,9 +26,11 @@ import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
 import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
 
 @Service
 public class SettingServiceImpl implements SettingService {
@@ -213,6 +215,18 @@ public class SettingServiceImpl implements SettingService {
 	public NaverpaySetting selectNaverpaySetting() {
 		// TODO Auto-generated method stub
 		return settingDao.selectNaverpaySetting();
+	}
+
+	@Override
+	public XpaySetting selectXpaySetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectXpaySetting();
+	}
+
+	@Override
+	public KcpSetting selectKcpSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectKcpSetting();
 	}
 
 	

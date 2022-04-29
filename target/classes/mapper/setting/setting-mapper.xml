@@ -134,6 +134,13 @@
   		select * from naverpay_setting
   	</select>
   	
+  	<select id="selectXpaySetting" resultType="xpaySetting">
+  		select * from xpay_setting
+  	</select>
+  	
+  	<select id="selectKcpSetting" resultType="kcpSetting">
+  		select * from kcp_setting
+  	</select>
   	<update id="updateAdminSetting">
   		update admin_setting set email = #{email}, phone = #{phone}, caller_id = #{callerId}, 
 			<if test="thumbnailImg != null and thumbnailImg != ''">

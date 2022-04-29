@@ -38,9 +38,11 @@ import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
 import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -278,6 +280,37 @@ public class SettingController {
 		model.addAttribute("pg",pg);
 		model.addAttribute("naverShopping",naverShopping);
 	}
+	
+	@PostMapping("/pg_process")
+	@ResponseBody
+	public Object pg_process(String method, HttpServletRequest request){
+		Map<String, String> result = new HashMap<String, String>();
+		log.debug("method = {}", method);
+		
+		if(method.equals("billing_pg_info")) {
+			BillingPgSetting pgSetting = settingService.selectPgSetting();
+			
+			return pgSetting;
+		}else if(method.equals("getCardPgInfo")) {
+			String type = request.getParameter("type");
+			log.debug("type = {}", type);
+			if(type.equals("ini")) {
+				KgIniSetting kg = settingService.selectKgIniSetting();
+				return kg;
+			}else if(type.equals("xpay")) {
+				XpaySetting xpay = settingService.selectXpaySetting();
+				return xpay;
+			}else if(type.equals("kcp")) {
+				KcpSetting kcp = settingService.selectKcpSetting();
+				return kcp;
+			}
+		}
+		
+		
+		return result;
+	}
+	
+	
 	
 	@GetMapping("/snslogin")
 	public void snsLogin() {}

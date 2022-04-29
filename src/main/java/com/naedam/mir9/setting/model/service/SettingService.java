@@ -22,9 +22,11 @@ import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
 import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
+import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
 
 public interface SettingService {
 
@@ -87,6 +89,10 @@ public interface SettingService {
 	NaverShoppingSetting selectNaverShoppingSetting();
 
 	NaverpaySetting selectNaverpaySetting();
+
+	XpaySetting selectXpaySetting();
+
+	KcpSetting selectKcpSetting();
 
 
 }
