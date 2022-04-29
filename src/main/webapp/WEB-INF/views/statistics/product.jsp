@@ -164,7 +164,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						<c:forEach var="product" items="${list}" varStatus="status">|
+						<c:forEach var="product" items="${list}" varStatus="status">
      						 <tr>
      						 	<td>${product.productRank}</td>
      						 	<td>${product.categoryName}</td>

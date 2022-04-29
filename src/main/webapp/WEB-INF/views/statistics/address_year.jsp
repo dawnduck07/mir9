@@ -1,10 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="date" value="<%= new java.util.Date() %>"/>
+<c:set var="nowYear">
+	<fmt:formatDate value="${date}" pattern="yyyy"/>
+</c:set>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="지역별 통계" name="title"/>
 </jsp:include>
-
 
 <!-- content-wrapper -->
 <div class="content-wrapper">
@@ -31,7 +39,7 @@
                 <div class="box-body">
 
                     <div class="box-tools " style="margin-bottom:5px;" >
-                    <form name="form_search" id="form_search" method="post" action="?tpf=admin/statistics/sales_address_year">
+                    <form name="form_search" id="form_search" method="post" action="${pageContext.request.contextPath }/statistics/address_year?${_csrf.parameterName}=${_csrf.token}">
                         <table class="table table-bordered">
 						<tbody>
 						<tr>
@@ -46,9 +54,15 @@
 							<td class="menu">기간 검색</td>
 							<td align="left">
 								<select name="start_date" id="start_date" class="form-control input-sm " style="width:100px;display:inline-block;" >
-<option value="2018"  selected>2018</option><option value="2019" >2019</option><option value="2020" >2020</option><option value="2021" >2021</option><option value="2022" >2022</option>								</select> ~ 
+									<c:forEach var="startYear" begin="2018" end="${nowYear}">	
+										<option value="${startYear}">${startYear}</option>
+									</c:forEach>
+								</select> ~ 
 								<select name="end_date"  id="end_date" class="form-control input-sm " style="width:100px;display:inline-block;" >
-<option value="2018" >2018</option><option value="2019" >2019</option><option value="2020" >2020</option><option value="2021" >2021</option><option value="2022"  selected>2022</option>								</select>
+									<c:forEach var="endYear" begin="2018" end="${nowYear}">	
+										<option value="${endYear}" selected>${endYear}</option>
+									</c:forEach>
+								</select>
 							</td>
 						</tr>
 						</tbody>
@@ -120,161 +134,77 @@
 							</tr>
 						</thead>
 						<tbody>
-      
-					<tr>
-                        <td rowspan="3">2022</td>
-						<td>매출금액</td>
-						<td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr>
-						<td>환불금액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr class="sum_tr">
-						<td>총액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-			      
-					<tr>
-                        <td rowspan="3">2021</td>
-						<td>매출금액</td>
-						<td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr>
-						<td>환불금액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr class="sum_tr">
-						<td>총액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-			      
-					<tr>
-                        <td rowspan="3">2020</td>
-						<td>매출금액</td>
-						<td align="right">39,400</td>
-						<td align="right">39,400</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr>
-						<td>환불금액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr class="sum_tr">
-						<td>총액</td>
-                        <td align="right">39,400</td>
-						<td align="right">39,400</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-			      
-					<tr>
-                        <td rowspan="3">2019</td>
-						<td>매출금액</td>
-						<td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr>
-						<td>환불금액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr class="sum_tr">
-						<td>총액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-			      
-					<tr>
-                        <td rowspan="3">2018</td>
-						<td>매출금액</td>
-						<td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr>
-						<td>환불금액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-					<tr class="sum_tr">
-						<td>총액</td>
-                        <td align="right">0</td>
-						<td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0</td>
-                    </tr>
-									<tbody>
+						  <c:forEach var="address" items="${list}" varStatus="status">
+							<tr>
+		                        <td rowspan="3">
+		                        	<fmt:parseDate value="${address.paidAt}" pattern="yyyy" var="paidAt" type="both" />
+									<fmt:formatDate pattern="yyyy" value="${paidAt}" />
+								</td>
+								<td>매출금액</td>
+								<td align="right">${address.paymentSum}</td>
+								<td align="right">${address.seoul}</td>
+								<td align="right">${address.busan}</td>
+								<td align="right">${address.incheon}</td>
+								<td align="right">${address.daegu}</td>
+								<td align="right">${address.gwangju}</td>
+								<td align="right">${address.daejeon}</td>
+								<td align="right">${address.ulsan}</td>
+								<td align="right">${address.sejong}</td>
+								<td align="right">${address.gyeonggi}</td>
+								<td align="right">${address.gangwon}</td>
+								<td align="right">${address.chungbuk}</td>
+								<td align="right">${address.chungnam}</td>
+								<td align="right">${address.jeonbuk}</td>
+								<td align="right">${address.jeonnam}</td>
+								<td align="right">${address.gyeongbuk}</td>
+								<td align="right">${address.gyeongnam}</td>
+								<td align="right">${address.jeju}</td>
+		                    </tr>
+							<tr>
+								<td>환불금액</td>
+		                        <td align="right">${address.returnSum}</td>
+								<td align="right">${address.seoulReturn}</td>
+								<td align="right">${address.busanReturn}</td>
+								<td align="right">${address.incheonReturn}</td>
+								<td align="right">${address.daeguReturn}</td>
+								<td align="right">${address.gwangjuReturn}</td>
+								<td align="right">${address.daejeonReturn}</td>
+								<td align="right">${address.ulsanReturn}</td>
+								<td align="right">${address.sejongReturn}</td>
+								<td align="right">${address.gyeonggiReturn}</td>
+								<td align="right">${address.gangwonReturn}</td>
+								<td align="right">${address.chungbukReturn}</td>
+								<td align="right">${address.chungnamReturn}</td>
+								<td align="right">${address.jeonbukReturn}</td>
+								<td align="right">${address.jeonnamReturn}</td>
+								<td align="right">${address.gyeongbukReturn}</td>
+								<td align="right">${address.gyeongnamReturn}</td>
+								<td align="right">${address.jejuReturn}</td>
+		                    </tr>
+							<tr class="sum_tr">
+								<td>총액</td>
+								<td align="right">${address.paymentSum+address.returnSum}</td>
+		                        <td align="right">${address.seoul+address.seoulReturn}</td>
+								<td align="right">${address.busan+address.busanReturn}</td>
+								<td align="right">${address.incheon+address.incheonReturn}</td>
+								<td align="right">${address.daegu+address.daeguReturn}</td>
+								<td align="right">${address.gwangju+address.gwangjuReturn}</td>
+								<td align="right">${address.daejeon+address.daejeonReturn}</td>
+								<td align="right">${address.ulsan+address.ulsanReturn}</td>
+								<td align="right">${address.sejong+address.sejongReturn}</td>
+								<td align="right">${address.gyeonggi+address.gyeonggiReturn}</td>
+								<td align="right">${address.gangwon+address.gangwonReturn}</td>
+								<td align="right">${address.chungbuk+address.chungbukReturn}</td>
+								<td align="right">${address.chungnam+address.chungnamReturn}</td>
+								<td align="right">${address.jeonbuk+address.jeonbukReturn}</td>
+								<td align="right">${address.jeonnam+address.jeonnamReturn}</td>
+								<td align="right">${address.gyeongbuk+address.gyeongbukReturn}</td>
+								<td align="right">${address.gyeongnam+address.gyeongnamReturn}</td>
+								<td align="right">${address.jeju+address.jejuReturn}</td>
+		                    </tr>
+		                  </c:forEach>
+						<tbody>
                     </table>
-<script>
-		dataRow = ['서울', 39400, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['부산', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['인천', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['대구', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['광주', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['대전', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['울산', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['세종', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['경기', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['강원', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['충북', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['충남', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['전북', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['전남', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['경북', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['경남', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
-<script>
-		dataRow = ['제주', 0, '#76A7FA'];
-		chart_data.push(dataRow);
-</script>
                     <br />
 
                     <!-- <button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm"><i class="fa" aria-hidden="true"></i> Excel 다운로드</button>
@@ -290,5 +220,66 @@
 
 </div><!-- /.content-wrapper -->
 
+<script>
+        
+		function selectAction(){
+			if(sForm.start_date.value > sForm.end_date.value){
+				alert('검색 기간을 확인해주세요.');
+				return;
+			}
+			sForm.submit();
+		}
 
+        function downloadExcel() {  // Excel 다운로드
+            form_download.target = 'iframe_process';
+            form_download.search_data.value = $('#form_search').serialize();
+            form_download.submit();
+        }
+
+		function drawChart() {
+			var chartBarColor = '#76A7FA';
+
+			var data = google.visualization.arrayToDataTable([
+				['지역', '매출금액', { role: 'style' }],
+				<c:forEach var="area" items="${list2}" varStatus="status">
+				<c:if test="${!status.last}">
+					['${area.areaName}', ${area.areaPayment}, chartBarColor],
+				</c:if>
+				<c:if test="${status.last}">
+					['${area.areaName}', ${area.areaPayment}, chartBarColor]
+				</c:if>						
+			</c:forEach>				
+			]);
+
+			var chart_div_width = $('#columnchart_values').width();
+			console.log(chart_div_width); 
+			var view = new google.visualization.DataView(data);
+			view.setColumns([0, 1,
+						   { calc: "stringify",
+							 sourceColumn: 1,
+							 type: "string",
+							 role: "annotation" },
+						   2]);
+
+			var options = {
+				title: "지역별 매출금액",
+				width: chart_div_width,
+				height: 350,
+				bar: {groupWidth: "95%"},
+				legend: { position: "none" },
+			};
+			var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+			chart.draw(view, options);
+		}
+
+		var sForm = null;
+		
+		$(function() {
+			sForm = document.form_search;
+
+			google.charts.load("current", {packages:['corechart']});
+			google.charts.setOnLoadCallback(drawChart);
+		});
+		
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

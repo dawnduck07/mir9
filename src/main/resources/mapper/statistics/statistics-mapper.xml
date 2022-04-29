@@ -34,6 +34,46 @@
 	 	AND category_no = #{search.categoryCode}
 	 </if>
 	 ORDER BY productRank ASC
-  </select>  
+  </select>
+  
+  <select id="selectAddressStatistics" resultType="addressStatisticVo">
+  	SELECT *
+  	FROM v_address_statistics
+  	<if test="addressVo.addressCategory == 1">
+  		WHERE DATE(paid_at) = DATE(#{date})
+  	</if>
+  	<if test="addressVo.addressCategory == 2">
+  		WHERE MONTH(paid_at) = MONTH(#{date})
+  	</if>
+  	<if test="addressVo.addressCategory == 3">
+  		WHERE YEAR(paid_at) = YEAR(#{date})
+  	</if>
+  </select>
+  
+  <select id="selectAreaPayment" resultType="areaVo">
+		SELECT DISTINCT
+		b.AREA_NO,
+		b.AREA_NAME,
+		(SELECT
+		 SUM(a.amount)
+		 FROM payment_info a
+		 WHERE SUBSTRING(a.buyer_addr, 1, 3) = b.AREA_NAME
+		 AND   a.`status` != 'ready') AS AREA_PAYMENT
+		FROM  area b LEFT OUTER JOIN payment_info a ON(SUBSTRING(a.buyer_addr, 1, 3) = b.AREA_NAME)
+  	<if test="addressVo.addressCategory == 1">
+  		WHERE DATE(a.paid_at) BETWEEN DATE(#{search.start_date}) AND DATE(#{search.end_date})
+  	</if>
+  	<if test="addressVo.addressCategory == 2">
+  		WHERE MONTH(a.paid_at) BETWEEN MONTH(#{search.start_date}) AND MONTH(#{search.end_date})
+  	</if>
+  	<if test="addressVo.addressCategory == 3">
+  		WHERE YEAR(a.paid_at) BETWEEN YEAR(#{search.start_date}) AND YEAR(#{search.end_date})
+  	</if>
+  </select>
+  
+  <select id="selectArea" resultType="areaVo">
+  	SELECT *
+  	FROM area
+  </select>
   
 </mapper>
