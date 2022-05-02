@@ -242,4 +242,37 @@
   			   NOW())
   	</insert>
 
+ 
+ 	<insert id="insertStaff">
+ 		INSERT INTO
+ 			staff(staff_no,
+ 				  staff_name,
+ 				  staff_position,
+ 				  staff_career,
+ 				  staff_profile,
+ 				  img_url,
+ 				  reg_Date)	
+ 		VALUES(NEXTVAL(seq_staff_no),
+ 			   #{staffName},
+ 			   #{staffPosition},
+ 			   #{staffCareer},
+ 			   #{staffProfile},
+ 			   #{imgUrl},
+ 			   sysdate())
+ 	</insert>
+ 	
+ 	<select id="selectStaffList" resultType="staff">
+ 		SELECT
+			ROW_NUMBER() OVER(ORDER BY s.reg_date DESC) AS `rowNum`,
+			staff_no,
+			img_url,
+			staff_name,
+			staff_position,
+			reg_date
+		FROM
+			staff s
+		ORDER BY
+			s.reg_date DESC
+ 	</select>
+
 </mapper>

@@ -141,8 +141,10 @@ public class SettingController {
 	}
 	
 	@GetMapping("/staff.do")
-	public void staff() {
-		
+	public void staffList(Model model) {
+		List<Staff> resultStaffList = settingService.selectStaffList();
+		log.debug("resultStaffList = {}", resultStaffList);
+		model.addAttribute("resultStaffList", resultStaffList);
 	}
 	
 	@GetMapping("/history")
@@ -352,55 +354,21 @@ public class SettingController {
 	
 	
 	@PostMapping("/staffEnroll.do")
-	public String staffEnroll(
-				Staff staff,
-				MultipartFile upFile, 
-				RedirectAttributes redirectAttribute) {
+	public String staffEnroll(Staff staff, 
+							  RedirectAttributes redirectAttribute,
+							  HttpServletRequest request) {
 		log.debug("{}", "staffEnroll.do 실행!");
 		log.debug("staff = {}", staff);
 		
-	try {
-		Staff staffAttachment = new Staff();
+		int result = 0;
+		String msg = null;
+		String mode = request.getParameter("mode");
 		
-		// application 객체(ServeltContext)
-		String saveDirectory = application.getRealPath("/resources/upload/staff");
-		log.debug("saveDirectory = {}", saveDirectory);
-		
-		// 파일이 비어있을 수 있기 때문에 검사를 진행
-		if(!upFile.isEmpty() && upFile.getSize() != 0) {
-			log.debug("upFile = {}", upFile);
-			log.debug("upFile.name = {}", upFile.getOriginalFilename());
-			log.debug("upFile.size = {}", upFile.getSize());
-			
-			String originalFilename = upFile.getOriginalFilename();
-			String renamedFilename = Mir9Utils.getRenamedFilename(originalFilename);
-			
-			// 1. 서버 컴퓨터에 저장
-			File destination = new File(saveDirectory, renamedFilename);
-			log.debug("destination = {}", destination);
-			// transferTo 메소드 : 예외는 던진다. -> throws IllegalStateException, IOException
-				upFile.transferTo(destination);
-			
-			// 2.DB에 attachment 레코드 등록
-			// Attachment 객체 생성
-			Attachment attachment = new Attachment();
-			// renamedFilename 셋팅
-			attachment.setRenamedFilename(renamedFilename);
-			// originalFilename 셋팅
-			attachment.setOriginalFilename(originalFilename);
-			log.debug("attachment = {}", attachment);
-						
-			staff.setAttachment(attachment);
-			}
-		
-		log.debug("staff = {}", staff);
-		int resultStaffEnroll = settingService.insertStaffEnroll(staff);
-		String msg = resultStaffEnroll > 0 ? "등록 되었습니다." : "등록에 실패했습니다.";
-		redirectAttribute.addFlashAttribute("msg", msg);
-			
-	} catch (IOException e) {
-		log.error(e.getMessage(), e); // 로깅
-	}
+		if(mode.equals("insert")) {
+			int resultInsertStaff = settingService.insertStaff(staff);
+			log.debug("resultInsertStaff = {}", resultInsertStaff);
+		}
+	
 	return "redirect:/setting/staff.do";
 	}
 

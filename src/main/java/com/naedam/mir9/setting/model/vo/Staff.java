@@ -1,7 +1,7 @@
 package com.naedam.mir9.setting.model.vo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +22,7 @@ public class Staff implements Serializable {
 	private String staffPosition;
 	private String staffCareer;
 	private String staffProfile;
-	private Attachment attachment;
+	private String imgUrl;
+	private Date regDate;
+	private int rowNum;
 }

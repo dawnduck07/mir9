@@ -83,10 +83,6 @@ public interface SettingDao {
 
 	int updateSeoSetting(SeoSetting seo);
 
-	int insertStaffEnroll(Staff staff);
-
-	int insertAttachmentEnroll(Attachment attachment);
-
 	BillingPgSetting selectPgSetting();
 
 	KgIniSetting selectKgIniSetting();
@@ -104,5 +100,9 @@ public interface SettingDao {
 	SnsSetting selectSnsSetting();
 	
 	int updateSnsSetting(SnsSetting snsSetting);
+
+	int insertStaff(Staff staff);
+
+	List<Staff> selectStaffList();
 
 }

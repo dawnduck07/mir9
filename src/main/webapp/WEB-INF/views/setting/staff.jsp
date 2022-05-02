@@ -72,7 +72,25 @@
                         <td style="width:80px;">명령</td>
                     </tr>
                     </thead>
-      <tr>
+                    <tbody id="tbody">
+                    	<c:forEach items="${resultStaffList}" var="staff">
+							<tr>
+		                        <td style="width:30px;"><input type="checkbox" class="member-is-checked" name="" value="${staff.staffNo}" data-target="${staff.staffNo}" /></td>
+		                        <td style="width:60px;">${staff.rowNum}</td>
+		                        <td style="width:100px;"><img src="${staff.imgUrl}" width="144" height="72"></td>
+		                        <td style="width:146px;">${staff.staffName}</td>
+		                        <td>${staff.staffPosition}</td>
+		                        <td style="width:140px;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${staff.regDate}" /></td>
+		                        <td style="width:80px;">
+			                        <i onclick="changeOrder('down','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
+			                        <i onclick="changeOrder('up','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
+		                        </td>
+		                        <td style="width:80px;"><button type="button" value="${staff.staffNo}" class="btn btn-primary btn-xs">상세보기</button></td>
+		                    </tr>
+                    	</c:forEach>
+                    </tbody>
+                    <!-- 
+      				<tr>
                         <td><input type="checkbox" name="list[]" value="2" /></td>
                         <td>1</td>
                         <td></td>
@@ -81,25 +99,9 @@
                         <td>2017-03-13 18:22:03</td>
                         <td><input type="radio" name="order_code" value="-3" /></td>
                         <td><button type="button" onclick="onclickUpdate(2);" class="btn btn-primary btn-xs">상세보기</button></td>
-                    </tr>      <tr>
-                        <td><input type="checkbox" name="list[]" value="3" /></td>
-                        <td>2</td>
-                        <td><img src="http://demoshop.mir9.kr/user/staff/3" width="144"></td>
-                        <td>tttt</td>
-                        <td>ttt</td>
-                        <td>2019-04-03 11:14:53</td>
-                        <td><input type="radio" name="order_code" value="-2" /></td>
-                        <td><button type="button" onclick="onclickUpdate(3);" class="btn btn-primary btn-xs">상세보기</button></td>
-                    </tr>      <tr>
-                        <td><input type="checkbox" name="list[]" value="1" /></td>
-                        <td>3</td>
-                        <td></td>
-                        <td>홍길동</td>
-                        <td>사업본부장</td>
-                        <td>2017-03-13 18:13:12</td>
-                        <td><input type="radio" name="order_code" value="-1" /></td>
-                        <td><button type="button" onclick="onclickUpdate(1);" class="btn btn-primary btn-xs">상세보기</button></td>
-                    </tr>                    </form>
+                    </tr>
+                     -->
+                     </form>
                     </table>
                     <br>
                     <button type="button" onclick="selectDelete();" class="btn btn-danger btn-sm"><i class="fa fa-minus-square"></i> 선택삭제</button>
@@ -119,6 +121,8 @@
             	method="POST"
             	action="${pageContext.request.contextPath}/setting/staffEnroll.do?${_csrf.parameterName}=${_csrf.token}" 
             	enctype="multipart/form-data">
+            <input type="hidden" name="imgUrl" />
+            <input type="hidden" name="mode" id="mode" value="insert" />
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabelPortfolio">임원 관리</h4>
@@ -152,9 +156,9 @@
                     <tr>
                         <td class="menu">파일 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
                         <td align="left">
-                        <input type="file" name="upFile" id="upFile" class="form-control input-sm" style="width:80%; display:inline;">
+                        <input type="file" name="file" id="file" class="form-control input-sm" style="width:80%; display:inline;">
                         <span id="display_file" style="display:none;">
-                        <button type="button" onclick="winOpen('?tpf=common/image_view&file_name=staff/'+$('#code').val());" class="btn btn-success btn-xs">보기</button>
+                        <button type="button" onclick="" class="btn btn-success btn-xs">보기</button>
                         <button type="button" onclick="confirmIframeDelete('?tpf=common/image_delete&file_name=staff/'+$('#code').val()+'&code='+$('#code').val());" class="btn btn-danger btn-xs">삭제</button>
                         </span>
                         </td>
@@ -175,10 +179,7 @@
 // 등록 모달창
 function onclickInsert(){
 	console.log("등록(onclickInsert())");
-	$("#modalContent").modal();
-	
-	
-	
+	$("#modalContent").modal();	
 }
 
 // 등록(확인)
@@ -187,12 +188,12 @@ function register(){
 	var staffPosition = $("#staffPosition").val();
 	var staffCareer = $("#staffCareer").val();
 	var staffProfile = $("#staffProfile").val();
-	var upFile = $("#upFile").val();
+	var file = $("#file").val();
 	console.log("staffName = " + staffName);
 	console.log("staffPosition = " + staffPosition);
 	console.log("staffCareer = " + staffCareer);
 	console.log("staffProfile = " + staffProfile);
-	console.log("upFile = " + upFile);
+	console.log("file = " + file);
 	
 	// 이름 공란 확인
 	if(staffName == ''){
@@ -219,15 +220,54 @@ function register(){
 		return false;
 	}
 	// 첨부파일 확인
-	if(upFile == ''){
-		alert("이미지가 입력되지 않았습니다.");
-		$("#upFile").focus();
-		return false;
+	if(staffEnrollFrm.mode.value == 'insert') {
+		if(staffEnrollFrm.file.value == '') {
+			alert("파일이 입력되지 않았습니다.");
+			staffEnrollFrm.file.focus();
+		}
 	}
+	if($('[name=imgUrl]').val() == '')
+		return false;
 	
 	$(window).unbind("beforeunload");
 	$(document.staffEnrollFrm).submit();
 }
+
+// 이미지 업로드
+$("input[type=file]").change(function(e){
+	var file = e.target;
+	console.log("file = " + file);
+	var form = new FormData();
+	console.log("form = " + form);
+	form.append("image", file.files[0]);
+    var settings = {
+    "url": "https://api.imgbb.com/1/upload?key=f84bfb11eb3ee5eedb859de8b49fdff1",
+    "method": "POST",
+    "timeout": 0,
+    "processData": false,
+    "mimeType": "multipart/form-data",
+    "contentType": false,
+    "data": form
+   	};
+   
+	// 이미지 업로드 -> 확인
+	$.ajax(settings).done(function (response) {
+		console.log("response" + response);
+		  
+		var imgbb = JSON.parse(response);
+		console.log("imgbb : " + imgbb);
+		  
+		// 이미지 조회 및 다운로드
+		var url = imgbb.data.thumb.url;
+		var name = imgbb.data.thumb.filename;
+		console.log("url : " + url);
+		console.log("name : " + name);
+	
+		$('[name=imgUrl]').val(url);
+	
+		});
+});
+
 </script>
 
 

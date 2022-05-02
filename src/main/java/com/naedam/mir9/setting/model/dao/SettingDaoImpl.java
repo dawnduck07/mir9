@@ -2,11 +2,9 @@ package com.naedam.mir9.setting.model.dao;
 
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.coupon.model.vo.Coupon;
@@ -189,16 +187,6 @@ public class SettingDaoImpl implements SettingDao {
 		// TODO Auto-generated method stub
 		return session.update("setting.updateSeoSetting", seo);
 	}
-
-	@Override
-	public int insertStaffEnroll(Staff staff) {
-		return session.insert("setting.insertStaffEnroll", staff);
-	}
-
-	@Override
-	public int insertAttachmentEnroll(Attachment attachment) {
-		return session.insert("setting.insertAttachmentEnroll", attachment);
-	}
 	
 	public BillingPgSetting selectPgSetting() {
 		// TODO Auto-generated method stub
@@ -251,6 +239,15 @@ public class SettingDaoImpl implements SettingDao {
 	public int updateSnsSetting(SnsSetting snsSetting) {
 		// TODO Auto-generated method stub
 		return session.update("setting.updateSnsSetting", snsSetting);
+	}
+	
+	public int insertStaff(Staff staff) {
+		return session.insert("setting.insertStaff", staff);
+	}
+
+	@Override
+	public List<Staff> selectStaffList() {
+		return session.selectList("setting.selectStaffList");
 	}
 
 

@@ -62,7 +62,7 @@
 	
 	<!-- Application Loggers -->
 	<!-- additivity : 부모패키지의 Logger로 전파 -->
-	<logger name="com.naedam.mir9" additivity="true">
+	<logger name="com.naedam" additivity="true">
 		<level value="debug" />
 	</logger>
 	
