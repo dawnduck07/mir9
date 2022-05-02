@@ -17,12 +17,12 @@ public class KgIniSetting implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String useIni;
-	private String moduleVersion;
-	private String useCredit;
-	private String useBank;
-	private String useVBank;
-	private int pgMode;
-	private String storeId;
+	private String moduleVersionIni;
+	private String useCreditIni;
+	private String useBankIni;
+	private String useVBankIni;
+	private int pgModeIni;
+	private String storeIdIni;
 	private String signKey;
 	private String keyFile;
 

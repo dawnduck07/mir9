@@ -230,6 +230,42 @@ public class SettingDaoImpl implements SettingDao {
 	}
 
 	@Override
+	public int updateKgIniSetting(KgIniSetting kg) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateKgIniSetting", kg);
+	}
+
+	@Override
+	public int updateXpaySetting(XpaySetting xpay) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateXpaySetting", xpay);
+	}
+
+	@Override
+	public int updateKcpSetting(KcpSetting kcp) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateKcpSetting", kcp);
+	}
+
+	@Override
+	public int updateBillingPgSetting(BillingPgSetting pg) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateBillingPgSetting", pg);
+	}
+
+	@Override
+	public int updateNaverpaySetting(NaverpaySetting naverpay) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateNaverpaySetting", naverpay);
+	}
+
+	@Override
+	public int updateNaverShoppingSetting(NaverShoppingSetting naverShopping) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateNaverShoppingSetting", naverShopping);
+	}
+	
+	@Override
 	public SnsSetting selectSnsSetting() {
 		// TODO Auto-generated method stub
 		return session.selectOne("setting.selectSnsSetting");
