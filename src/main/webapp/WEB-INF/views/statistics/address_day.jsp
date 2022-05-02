@@ -229,6 +229,7 @@
 		
 		/* 날짜 포맷팅 */
 		function dateStr(type){
+			
 			var date = new Date();
 			i = type.slice(1,3) * 1;
 			if(type.slice(0,1) == 'D'){
@@ -242,6 +243,7 @@
 				var dateString = year + '-' + month  + '-' + day;	
 			return dateString;
 		}
+
 
         function downloadExcel() {  // Excel 다운로드
             form_download.target = 'iframe_process';
@@ -290,13 +292,13 @@
 		
 		$(function() {
 			sForm = document.form_search;
-
+			date = $("input[name='end_date']").val();
 			$( ".txt_date1" ).datepicker({
 					defaultDate: "+0d",
 					changeYear: true,
 					changeMonth: true,
 					dateFormat: "yy-mm-dd",
-					maxDate : '2022-04-28',
+					maxDate : date,
 					showMonthAfterYear: true , 
 					dayNamesMin: ['일', '월', '화', '수', '목', '금', '토' ],
 					monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']

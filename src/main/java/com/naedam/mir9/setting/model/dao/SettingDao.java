@@ -21,6 +21,7 @@ import com.naedam.mir9.setting.model.vo.AdminSetting;
 import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.SnsSetting;
 import com.naedam.mir9.setting.model.vo.Staff;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
@@ -95,6 +96,10 @@ public interface SettingDao {
 	XpaySetting selectXpaySetting();
 
 	KcpSetting selectKcpSetting();
+	
+	SnsSetting selectSnsSetting();
+	
+	int updateSnsSetting(SnsSetting snsSetting);
 
 	int insertStaff(Staff staff);
 
@@ -107,5 +112,18 @@ public interface SettingDao {
 	List<Staff> searchStaffList(Map<String, Object> param);
 
 	int selectsearchStaffListCount(Map<String, Object> param);
+
+	int updateKgIniSetting(KgIniSetting kg);
+
+	int updateXpaySetting(XpaySetting xpay);
+
+	int updateKcpSetting(KcpSetting kcp);
+
+	int updateBillingPgSetting(BillingPgSetting pg);
+
+	int updateNaverpaySetting(NaverpaySetting naverpay);
+
+	int updateNaverShoppingSetting(NaverShoppingSetting naverShopping);
+
 
 }

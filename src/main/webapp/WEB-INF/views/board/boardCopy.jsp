@@ -4,11 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script>
-	$(function(){		
-		$("#modalContent2").one("hidden.bs.modal", function(){
-			location.reload();
-		})	
-	})
+
 	
 	function fncBoardTitle2(){
 		
@@ -39,14 +35,15 @@
 				
 			var postArr = new Array();
 			var boardNo = $("select[name='boardNoCopy']").val();
-			alert(boardNo)
+			
 			
 			$("input[class='postNo']:checked").each(function(){
 				postArr.push($(this).val());
 			});
 			
+			
 	  		$.ajax({
-  			 	 url : "/mir9/board/addPostCopy",
+  			 	 url : "/mir9/board/addPostCopy?${_csrf.parameterName}=${_csrf.token}",
 	  		  	 type : "POST",
   		  	 	 data : { 
   		  	 		 postArr : postArr, 

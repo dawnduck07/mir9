@@ -2,25 +2,18 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sms">
-
-	<select id="msgInfo" resultType="msgInfo">
-		select * 
-		  from v_msg_info
-		 where order_no = #{orderNo}
-	</select>
-
+<mapper namespace="email">
 
 	<update id="autoSend" parameterType="hashmap">
-		update sms_setting
+		update email_setting
 		   set is_send = #{send}
 			 , is_send_admin = #{sendAdmin}
 		 where template_id = #{templateId}
 	</update>
 	
-	<select id="smsCheck" resultType="smsSetting">
+	<select id="emailCheck" resultType="emailSetting">
 		select *
-		  from sms_setting
+		  from email_setting
 		 where template_id = #{templateId}
 	</select>
   

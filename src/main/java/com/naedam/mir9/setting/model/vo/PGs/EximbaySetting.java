@@ -19,12 +19,12 @@ public class EximbaySetting implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String useEximbay;
-	private String moduleVersion;
-	private String useCredit;
+	private String moduleVersionEximbay;
+	private String useCreditEximbay;
 	private String usePaypal;
 	private String useUnion;
 	private String useAli;
-	private int pgMode;
+	private int pgModeEximbay;
 	private String mid;
 	private String secretKey;
 }
