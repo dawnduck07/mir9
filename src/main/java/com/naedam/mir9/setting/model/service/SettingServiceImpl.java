@@ -194,30 +194,6 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.updateSeoSetting(seo);
 	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED,
-				   isolation = Isolation.READ_COMMITTED,
-				   rollbackFor = Exception.class)
-	public int insertStaffEnroll(Staff staff) {
-		int result = 0;
-		
-		try {
-			// staff insert
-			result = settingDao.insertStaffEnroll(staff);
-			log.debug("staff.no = {}", staff.getStaffNo());
-			
-			// attachment insert
-			Attachment attachment = staff.getAttachment();
-			if(attachment != null) {
-				attachment.setStaffNo(staff.getStaffNo()); // FK컬럼값 세팅
-				result = settingDao.insertAttachmentEnroll(attachment);
-			}
-		} catch (Exception e) {
-			throw new StaffException("임원/첨부파일 등록 오류", e);
-		}
-		return result;
-	}
 	
 	public BillingPgSetting selectPgSetting() {
 		// TODO Auto-generated method stub
@@ -259,6 +235,17 @@ public class SettingServiceImpl implements SettingService {
 		// TODO Auto-generated method stub
 		return settingDao.selectKcpSetting();
 	}
+
+	@Override
+	public int insertStaff(Staff staff) {
+		return settingDao.insertStaff(staff);
+	}
+
+	@Override
+	public List<Staff> selectStaffList() {
+		return settingDao.selectStaffList();
+	}
+
 
 
 	

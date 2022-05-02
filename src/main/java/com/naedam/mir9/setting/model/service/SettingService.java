@@ -81,8 +81,6 @@ public interface SettingService {
 
 	int updateSeoSetting(SeoSetting seo);
 
-	int insertStaffEnroll(Staff staff);
-
 	BillingPgSetting selectPgSetting();
 
 	KgIniSetting selectKgIniSetting();
@@ -96,6 +94,10 @@ public interface SettingService {
 	XpaySetting selectXpaySetting();
 
 	KcpSetting selectKcpSetting();
+
+	int insertStaff(Staff staff);
+
+	List<Staff> selectStaffList();
 
 
 
