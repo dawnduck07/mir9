@@ -179,4 +179,28 @@
   	<update id="updateSeoSetting">
   		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}
   	</update>
+  	
+  	<update id="updateKgIniSetting">
+  		update kg_ini_setting set use_ini = #{useIni}, use_credit_ini = #{useCreditIni}, use_bank_ini = #{useBankIni}, use_v_bank_ini = #{useVBankIni}, pg_mode_ini = #{pgModeIni}, store_id_ini = #{storeIdIni}, sign_key = #{signKey}
+  	</update>
+  	
+  	<update id="updateXpaySetting">
+  		update xpay_setting set use_xpay = #{useXpay}, use_credit_xpay = #{useCreditXpay}, use_bank_xpay = #{useBankXpay}, use_v_bank_xpay = #{useVBankXpay}, pg_mode_xpay = #{pgModeXpay}, store_id_xpay = #{storeIdXpay}, mert_key = #{mertKey}
+  	</update>
+  	
+  	<update id="updateKcpSetting">
+  		update kcp_setting set use_kcp = #{useKcp}, use_credit_kcp = #{useCreditKcp}, use_bank_kcp = #{useBankKcp}, use_v_bank_kcp = #{useVBankKcp}, pg_mode_kcp = #{pgModeKcp}, site_cd = #{siteCd}, site_key = #{siteKey}
+  	</update>
+  	
+  	<update id="updateBillingPgSetting">
+  		update billing_pg_setting set is_domestic = #{isDomestic}, is_foreigne = #{isForeigne}, card_pg = #{cardPg}, naverpay_use = #{naverpayUse}
+  	</update>
+  	
+  	<update id="updateNaverpaySetting">
+  		update naverpay_setting set store_id_naver = #{storeIdNaver}, store_key_naver = #{storeKeyNaver}, btn_key = #{btnKey}, pg_mode_naver = #{pgModeNaver}
+  	</update>
+  	
+  	<update id="updateNaverShoppingSetting">
+  		update naver_shopping_setting set tsv_url = #{tsvUrl}, product_db_url = #{productDbUrl}
+  	</update>
 </mapper>

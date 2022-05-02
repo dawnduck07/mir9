@@ -94,4 +94,16 @@ public interface SettingDao {
 
 	KcpSetting selectKcpSetting();
 
+	int updateKgIniSetting(KgIniSetting kg);
+
+	int updateXpaySetting(XpaySetting xpay);
+
+	int updateKcpSetting(KcpSetting kcp);
+
+	int updateBillingPgSetting(BillingPgSetting pg);
+
+	int updateNaverpaySetting(NaverpaySetting naverpay);
+
+	int updateNaverShoppingSetting(NaverShoppingSetting naverShopping);
+
 }

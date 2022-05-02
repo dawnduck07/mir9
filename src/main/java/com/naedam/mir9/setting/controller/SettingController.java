@@ -262,20 +262,8 @@ public class SettingController {
 		BillingPgSetting pg = settingService.selectPgSetting();
 		NaverShoppingSetting naverShopping = settingService.selectNaverShoppingSetting();
 		
-		if(pg.getIsDomestic().equals("Y")) {
-			KgIniSetting kgIni = settingService.selectKgIniSetting();
-			model.addAttribute("kgIni",kgIni);
-		}
-		
-		if(pg.getIsForeigne().equals("Y")) {
-			EximbaySetting eximbay = settingService.selectEximbaySetting();
-			model.addAttribute("eximbay", eximbay);
-		}
-		
-		if(pg.getNaverpayUse().equals("Y")) {
-			NaverpaySetting naverpay = settingService.selectNaverpaySetting();
-			model.addAttribute("naverpay", naverpay);
-		}
+
+
 		
 		model.addAttribute("pg",pg);
 		model.addAttribute("naverShopping",naverShopping);
@@ -303,14 +291,63 @@ public class SettingController {
 			}else if(type.equals("kcp")) {
 				KcpSetting kcp = settingService.selectKcpSetting();
 				return kcp;
+			}else if(type.equals("naverpay")) {
+				NaverpaySetting naverpay = settingService.selectNaverpaySetting();
+				return naverpay;
+			}else if(type.equals("eximbay")) {
+				EximbaySetting eximbay = settingService.selectEximbaySetting();
+				return eximbay;
 			}
 		}
-		
-		
 		return result;
 	}
 	
-	
+	@PostMapping("/updatePaymentPG")
+	public String updatePaymentPG(HttpServletRequest request, BillingPgSetting pg, KgIniSetting kg, XpaySetting xpay, KcpSetting kcp, NaverpaySetting naverpay, EximbaySetting eximbay, NaverShoppingSetting naverShopping) {
+		int result = 0;
+		if(pg.getIsDomestic() == null) {pg.setIsDomestic("N");}
+		if(pg.getIsForeigne() == null) {pg.setIsForeigne("N");}
+		if(pg.getNaverpayUse() == null) {pg.setNaverpayUse("N");}
+		
+		if(kg.getUseIni() == null) {kg.setUseIni("N");}
+		if(kg.getUseCreditIni() == null) {kg.setUseCreditIni("N");}
+		if(kg.getUseBankIni() == null) {kg.setUseBankIni("N");}
+		if(kg.getUseVBankIni() == null) {kg.setUseVBankIni("N");}
+		
+		if(xpay.getUseXpay() == null) {xpay.setUseXpay("N");}
+		if(xpay.getUseCreditXpay() == null) {xpay.setUseCreditXpay("N");}
+		if(xpay.getUseBankXpay() == null) {xpay.setUseBankXpay("N");}
+		if(xpay.getUseVBankXpay() == null) {xpay.setUseVBankXpay("N");}
+		
+		if(kcp.getUseKcp() == null) {kcp.setUseKcp("N");}
+		if(kcp.getUseCredit() == null) {kcp.setUseCredit("N");}
+		if(kcp.getUseBank() == null) {kcp.setUseBank("N");}
+		if(kcp.getUseVBank() == null) {kcp.setUseVBank("N");}
+		
+		if(eximbay.getUseEximbay() == null) {eximbay.setUseEximbay("N");}
+		if(eximbay.getUseCreditEximbay() == null) {eximbay.setUseCreditEximbay("N");}
+		if(eximbay.getUsePaypal() == null) {eximbay.setUsePaypal("N");}
+		if(eximbay.getUseUnion() == null) {eximbay.setUseUnion("N");}
+		if(eximbay.getUseAli() == null) {eximbay.setUseAli("N");}
+		
+		
+		if(!(kg.getUseCreditIni().equals("N") && kg.getUseBankIni().equals("N") && kg.getUseVBankIni().equals("N"))) {
+			result = settingService.updateKgIniSetting(kg);
+		}
+		if(!(xpay.getUseCreditXpay().equals("N") && xpay.getUseBankXpay().equals("N") && xpay.getUseVBankXpay().equals("N"))) {
+			result = settingService.updateXpaySetting(xpay);
+		}
+		if(!(kcp.getUseCredit().equals("N") && kcp.getUseBank().equals("N") && kcp.getUseVBank().equals("N"))) {
+			result = settingService.updateKcpSetting(kcp);
+		}
+		
+		result = settingService.updateBillingPgSetting(pg);
+		result = settingService.updateNaverpaySetting(naverpay);
+		result = settingService.updateNaverShoppingSetting(naverShopping);
+		
+		
+		return "setting/paymentpg";
+	}
 	
 	@GetMapping("/snslogin")
 	public void snsLogin() {}

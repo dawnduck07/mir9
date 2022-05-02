@@ -30,8 +30,13 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-body">
-                <form name="form_register" method="post" action="/index.php?tpf=admin/setting/process">
-                <input type="hidden" name="mode" value="updatePaymentPG">
+                <form:form name="form_register" method="post" action="${pageContext.request.contextPath }/setting/updatePaymentPG">
+                <input type="hidden" name="method" value="updatePaymentPG">
+					<input type="hidden" name="moduleVersionIni" value="" />
+					<input type="hidden" name="moduleVersionXpay" value="" />
+					<input type="hidden" name="moduleVersionKcp" value="" />
+					<input type="hidden" name="tsvUrl" value="${naverShopping.tsvUrl == null ? '' : naverShopping.tsvUrl }" />
+					<input type="hidden" name="productDbUrl" value="${naverShopping.productDbUrl == null ? '' : naverShopping.productDbUrl }" />
 
                 <h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 기본 설정</p></h4>
                 <table class="table table-bordered">
@@ -39,22 +44,22 @@
                 <tr>
                     <td class="menu">국내/해외 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_gubun1" value='Y' onchange="checkGubun(this.value);" ${pg.isDomestic == 'Y' ? 'checked' : '' }>국내&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_gubun2" value='Y' onchange="checkGubun(this.value);" ${pg.isForeigne == 'Y' ? 'checked' : '' }>해외
+                    <input type="checkbox" name="isDomestic" value='Y' onchange="checkGubun(this.value);" ${pg.isDomestic == 'Y' ? 'checked' : '' }>국내&nbsp;&nbsp;
+                    <input type="checkbox" name="isForeigne" value='Y' onchange="checkGubun(this.value);" ${pg.isForeigne == 'Y' ? 'checked' : '' }>해외
                     </td>
                 </tr>
                 <tr id="display_pg" style="display:none;">
                     <td class="menu">국내 카드PG사</td>
                     <td align="left">
-                    <input type="radio" name="card_pg" value="ini" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'ini' ? 'checked' : '' }>KG 이니시스&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="card_pg" value="xpay" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'xpay' ? 'checked' : '' }>LG 유플러스&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="card_pg" value="kcp" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'kcp' ? 'checked' : '' }>NHN KCP
+                    <input type="radio" name="cardPg" value="ini" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'ini' ? 'checked' : '' }>KG 이니시스&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="cardPg" value="xpay" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'xpay' ? 'checked' : '' }>LG 유플러스&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="cardPg" value="kcp" onchange="checkCardPGType(this.value);" ${pg.cardPg == 'kcp' ? 'checked' : '' }>NHN KCP
                     </td>
                 </tr>
 				<tr id="display_ease_pg" style="display:none;">
                     <td class="menu">국내 간편결제</td>
                     <td align="left">
-                    <input type="checkbox" name="naverpay_use" id="naverpay_use" value='Y' onchange="checkEasyPGNaver(this.checked);" ${pg.naverpayUse == 'Y' ? 'checked' : '' }> <label for="naverpay_use">네이버페이</label> &nbsp;&nbsp;
+                    <input type="checkbox" name="naverpayUse" id="naverpay_use" value='Y' onchange="checkEasyPGNaver(this.checked);" ${pg.naverpayUse == 'Y' ? 'checked' : '' }> <label for="naverpay_use">네이버페이</label> &nbsp;&nbsp;
 					<!-- <input type="checkbox" name="kakaopay_use" id="kakaopay_use" value='y' onchange="checkEasyPGKakao(this.checked);"> <label for="kakaopay_use">카카오페이</label> &nbsp;&nbsp; -->
                     </td>
                 </tr>
@@ -68,7 +73,7 @@
                 <tr>
                     <td class="menu">사용 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_use_ini" value='Y' >사용함
+                    <input type="checkbox" name="useIni" value='Y' >사용함
                     </td>
                 </tr>
                 <tr>
@@ -78,28 +83,28 @@
                 <tr>
                     <td class="menu">결제수단 설정</td>
                     <td align="left">
-	                    <input type="checkbox" name="chk_ini1" value='Y'>신용카드&nbsp;&nbsp;
-	                    <input type="checkbox" name="chk_ini2" value='Y'>계좌이체&nbsp;&nbsp;
-	                    <input type="checkbox" name="chk_ini3" value='Y'>가상계좌
+	                    <input type="checkbox" name="useCreditIni" value='Y'>신용카드&nbsp;&nbsp;
+	                    <input type="checkbox" name="useBankIni" value='Y'>계좌이체&nbsp;&nbsp;
+	                    <input type="checkbox" name="useVBankIni" value='Y'>가상계좌
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사용 모드</td>
                     <td align="left">
-                        <input type="radio" id="pg_mode1_ini" name="pg_mode" value="1">TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="pg_mode2_ini" name="pg_mode" value="2">REAL 모드
+                        <input class="pgMode" type="radio" id="pg_mode1_ini" name="pgModeIni" value="1">TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input class="pgMode" type="radio" id="pg_mode2_ini" name="pgModeIni" value="2">REAL 모드
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">상점 ID</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_id_ini" value="" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="storeIdIni" value="" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">Sign Key</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_key_ini" value="" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="signKey" value="" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
@@ -118,7 +123,7 @@
                 <tr>
                     <td class="menu">사용 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_use_xpay" value='Y'>사용함
+                    <input type="checkbox" name="useXpay" value='Y'>사용함
                     </td>
                 </tr>
                 <tr>
@@ -128,29 +133,29 @@
                 <tr>
                     <td class="menu">결제수단 설정</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_xpay1" value='Y'>신용카드&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_xpay2" value='Y'>계좌이체&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_xpay3" value='Y'>가상계좌
+                    <input type="checkbox" name="useCreditXpay" value='Y'>신용카드&nbsp;&nbsp;
+                    <input type="checkbox" name="useBankXpay" value='Y'>계좌이체&nbsp;&nbsp;
+                    <input type="checkbox" name="useVBankXpay" value='Y'>가상계좌
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사용 모드</td>
                     <td align="left">
 
-                        <input type="radio" id="pg_mode1_xpay" name="pg_mode" value="1" >TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="pg_mode2_xpay" name="pg_mode" value="2" >REAL 모드
+                        <input type="radio" class="pgMode" id="pg_mode1_xpay" name="pgModeXpay" value="1" >TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="pgMode" id="pg_mode2_xpay" name="pgModeXpay" value="2" >REAL 모드
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">LG 유플러스 상점 ID</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_id_xpay" value="INIpayTest" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" id="storeIdXpay" name="storeId" value="INIpayTest" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">LG 유플러스 mertkey</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_key_xpay" value="SU5JTElURV9UUklQTEVERVNfS0VZU1RS" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="mertKey" value="SU5JTElURV9UUklQTEVERVNfS0VZU1RS" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 </tbody>
@@ -162,7 +167,7 @@
                 <tr>
                     <td class="menu">사용 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_use_kcp" value='Y'>사용함
+                    <input type="checkbox" name="useKcp" value='Y'>사용함
                     </td>
                 </tr>
                 <tr>
@@ -172,28 +177,28 @@
                 <tr>
                     <td class="menu">결제수단 설정</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_kcp1" value='Y'>신용카드&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_kcp2" value='Y'>계좌이체&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_kcp3" value='Y'>가상계좌
+                    <input type="checkbox" name="useCreditKcp" value='Y'>신용카드&nbsp;&nbsp;
+                    <input type="checkbox" name="useBankKcp" value='Y'>계좌이체&nbsp;&nbsp;
+                    <input type="checkbox" name="useVBankKcp" value='Y'>가상계좌
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사용 모드</td>
                     <td align="left">
-                        <input type="radio" id="pg_mode1_kcp" name="pg_mode" value="1" >TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="pg_mode2_kcp" name="pg_mode" value="2" >REAL 모드
+                        <input type="radio" class="pgMode" id="pg_mode1_kcp" name="pgModeKcp" value="1" >TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="pgMode" id="pg_mode2_kcp" name="pgModeKcp" value="2" >REAL 모드
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사이트코드(site_cd)</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_id_kcp" value="INIpayTest" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="siteCd" value="" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사이트키(site_key)</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_key_kcp" value="SU5JTElURV9UUklQTEVERVNfS0VZU1RS" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="siteKey" value="" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 </tbody>
@@ -205,27 +210,27 @@
                 <tr>
                     <td class="menu">가맹점 ID</td>
                     <td align="left">
-                        <input type="text" name="naverpay_shopid" value="yellowandsky" class="form-control input-sm" style="width:300px;" />
+                        <input type="text" name="storeIdNaver" value="" class="form-control input-sm" style="width:300px;" />
 						<a href="https://admin.pay.naver.com/" target="_blank">네이버페이 센터 바로가기 &gt;</a>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">가맹점 인증키</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="naverpay_certi_key" value="D2B73AA4-5FCE-4DA8-A7F1-1E7E37379B30" class="form-control input-sm" style="width:300px;" /></span>
+                        <span style="float:left;"><input type="text" name="storeKeyNaver" value="" class="form-control input-sm" style="width:300px;" /></span>
                     </td>
                 </tr>
 				<tr>
                     <td class="menu">버튼 인증키</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="naverpay_button_key" value="2DB98C5D-6939-49C9-B9FD-715537119256" class="form-control input-sm" style="width:300px;" /></span>
+                        <span style="float:left;"><input type="text" name="btnKey" value="" class="form-control input-sm" style="width:300px;" /></span>
                     </td>
                 </tr>
 				<tr>
                     <td class="menu">사용 모드</td>
                     <td align="left">
-                        <input type="radio" name="naverpay_mode" id="naverpay_mode1" value="t"  checked=checked> <label for="naverpay_mode1">TEST 모드</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="naverpay_mode" id="naverpay_mode2" value="s" > <label for="naverpay_mode2">REAL 모드</label>
+                        <input type="radio" name="pgModeNaver" id="naverpay_mode1" value="1" > <label for="naverpay_mode1">TEST 모드</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="pgModeNaver" id="naverpay_mode2" value="2" > <label for="naverpay_mode2">REAL 모드</label>
                     </td>
                 </tr>
 				</tbody>
@@ -265,39 +270,39 @@
                 <tr>
                     <td class="menu">사용 여부</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_use_eximbay" value='Y' checked=${eximbay.useEximbay == 'Y' ? 'checked' : '' }>사용함
+                    <input type="checkbox" name="useEximbay" value='Y' >사용함
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">PG사 모듈 버전</td>
-                    <td align="left">${eximbay.moduleVersion == null ? '' : eximbay.moduleVersion }</td>
+                    <td id="module_version_eximbay" align="left"></td>
                 </tr>
                 <tr>
                     <td class="menu">결제수단 설정</td>
                     <td align="left">
-                    <input type="checkbox" name="chk_eximbay1" value='card' ${eximbay.useCredit == 'Y' ? 'checked' : '' }>CreditCard&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_eximbay2" value='paypal' ${eximbay.usePaypal == 'Y' ? 'checked' : '' }>Paypal&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_eximbay3" value='unionpay' ${eximbay.useUnion == 'Y' ? 'checked' : '' }>UnionPay&nbsp;&nbsp;
-                    <input type="checkbox" name="chk_eximbay4" value='alipay' ${eximbay.useAli == 'Y' ? 'checked' : '' }>Alipay
+                    <input type="checkbox" name="useCreditEximbay" value='Y' >CreditCard&nbsp;&nbsp;
+                    <input type="checkbox" name="usePaypal" value='Y'>Paypal&nbsp;&nbsp;
+                    <input type="checkbox" name="useUnion" value='Y' >UnionPay&nbsp;&nbsp;
+                    <input type="checkbox" name="useAli" value='Y' >Alipay
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">사용 모드</td>
                     <td align="left">
-                        <input type="radio" name="overseas_mode" value="1" ${eximbay.pgMode == 1 ? 'checked' : '' }>TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="overseas_mode" value="2" ${eximbay.pgMode == 2 ? 'checked' : '' }>REAL 모드
+                        <input type="radio" id="pg_mode1_eximbay" name="pgModeEximbay" value="1" >TEST 모드&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="pg_mode2_eximbay" name="pgModeEximbay" value="2" >REAL 모드
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">mid</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_id_eximbay" value="${eximbay.mid == null ? '' : eximbay.mid }" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="mid" value="" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 <tr>
                     <td class="menu">Secret Key</td>
                     <td align="left">
-                        <span style="float:left;"><input type="text" name="shop_key_eximbay" value="${eximbay.secretKey == null ? '' : eximbay.secretKey }" class="form-control input-sm" style="width:300px;"></span>
+                        <span style="float:left;"><input type="text" name="secretKey" value="" class="form-control input-sm" style="width:300px;"></span>
                     </td>
                 </tr>
                 </tbody>
@@ -329,7 +334,7 @@
                 </table>
 
                 <div style="text-align:center; padding:20px 0px 0 0px"><button type="button" onclick="register()" class="btn btn-primary">확인</button></div>
-                </form>
+                </form:form>
 
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
@@ -341,32 +346,24 @@
 <script>
 function checkGubun() {
     var form = document.form_register;
-	if ((form.chk_gubun1.checked == true) && (form.chk_gubun2.checked == true)) { // 국내/해외
+	if ((form.isDomestic.checked == true) && (form.isForeigne.checked == true)) { // 국내/해외
+		getCardPgInfo('eximbay');
 		$('#display_pg').show();
 
 		$('#display_exim_title').show();
 		$('#display_exim').show();
 
 		$('#display_ease_pg').show();
-    }else if (form.chk_gubun1.checked == true) {  // 국내
+    }else if (form.isDomestic.checked == true) {  // 국내
 		$('#display_pg').show();
 		$('#display_ease_pg').show();
 
 		$('#display_exim_title').hide();
 		$('#display_exim').hide();
-/*         $("input:checkbox[name='chk_use_eximbay']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay1']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay2']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay3']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay4']").prop("checked",false);
-        $("input[name='shop_id_eximbay']").prop("value",'');
-        $("input[name='shop_key_eximbay']").prop("value",''); */
-	}else if (form.chk_gubun2.checked == true) { // 해외
-		$('#display_pg').hide();
 
-/*         $("input:radio[name='card_pg']:radio[value='ini']").prop("checked",false);
-        $("input:radio[name='card_pg']:radio[value='xpay']").prop("checked",false);
-        $("input:radio[name='card_pg']:radio[value='kcp']").prop("checked",false); */
+	}else if (form.isForeigne.checked == true) { // 해외
+		getCardPgInfo('eximbay');
+		$('#display_pg').hide();
 
 		$('#display_ini_title').hide();
 		$('#display_ini').hide();
@@ -383,9 +380,6 @@ function checkGubun() {
     }else{
 		$('#display_pg').hide();
 		$('#display_ease_pg').hide();
-/*         $("input:radio[name='card_pg']:radio[value='ini']").prop("checked",false);
-        $("input:radio[name='card_pg']:radio[value='xpay']").prop("checked",false);
-        $("input:radio[name='card_pg']:radio[value='kcp']").prop("checked",false); */
 
 		$('#display_ini_title').hide();
 		$('#display_ini').hide();
@@ -395,13 +389,6 @@ function checkGubun() {
 		$('#display_kcp').hide();
 		$('#display_exim_title').hide();
 		$('#display_exim').hide();
-/*         $("input:checkbox[name='chk_use_eximbay']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay1']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay2']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay3']").prop("checked",false);
-        $("input:checkbox[name='chk_eximbay4']").prop("checked",false);
-        $("input[name='shop_id_eximbay']").prop("value",'');
-        $("input[name='shop_key_eximbay']").prop("value",''); */
 	}
 }
 
@@ -445,6 +432,7 @@ function checkCardPGType(type) {
 
 function checkEasyPGNaver(useYn){
 	if(useYn == true || useYn == 'Y'){
+		getCardPgInfo('naverpay');
 		$('#display_naverpay_title').show();
 		$('#display_naverpay').show();
 	}else{
@@ -456,12 +444,6 @@ function hideNaverPay(){
 	$('#display_naverpay_title').hide();
 	$('#display_naverpay').hide();
 
-	//값 초기화
-/* 	$("input:checkbox[name='naverpay_use']").prop("checked",false);
-	$("input[name='naverpay_shopid']").prop("value",'');
-	$("input[name='naverpay_certi_key']").prop("value",'');
-	$("input[name='naverpay_button_key']").prop("value",'');
-	$("input:checkbox[name='naverpay_mode']").prop("checked",false); */
 }
 
 function checkEasyPGKakao(useYn){
@@ -479,36 +461,36 @@ function hideKakaoPay(){
 function register() {
 
     var form = document.form_register;
-	if ((form.chk_gubun1.checked == false) && (form.chk_gubun2.checked == false)) { alert('국내/해외 여부가 선택되지 않았습니다.'); form.chk_gubun1.focus(); return false;}
-    if (form.chk_gubun1.checked == true){
-        if(!$('input:radio[name=\'card_pg\']').is(':checked')) { alert('국내 카드PG사를 체크하세요.'); return false;}
+	if ((form.isDomestic.checked == false) && (form.isForeigne.checked == false)) { alert('국내/해외 여부가 선택되지 않았습니다.'); form.isDomestic.focus(); return false;}
+    if (form.isDomestic.checked == true){
+        if(!$('input:radio[name=\'cardPg\']').is(':checked')) { alert('국내 카드PG사를 체크하세요.'); return false;}
     }
 
-	if (form.chk_gubun1.checked == true) {   // 국내
-        var radioArr = $('input[name=card_pg]:radio');
+	if (form.isDomestic.checked == true) {   // 국내
+        var radioArr = $('input[name=cardPg]:radio');
         if (radioArr[0].checked == true){       // KG 이니시스
-            if(!$('input:checkbox[name=\'chk_use_ini\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
-            if(!$('input:checkbox[name=\'chk_ini1\']').is(':checked') && !$('input:checkbox[name=\'chk_ini2\']').is(':checked') && !$('input:checkbox[name=\'chk_ini3\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'useIni\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'useCreditIni\']').is(':checked') && !$('input:checkbox[name=\'useBankIni\']').is(':checked') && !$('input:checkbox[name=\'useVBankIni\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
         }else if (radioArr[1].checked == true){     // LG 유플러스
-            if(!$('input:checkbox[name=\'chk_use_xpay\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
-            if(!$('input:checkbox[name=\'chk_xpay1\']').is(':checked') && !$('input:checkbox[name=\'chk_xpay2\']').is(':checked') && !$('input:checkbox[name=\'chk_xpay3\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'useXpay\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'useCreditXpay\']').is(':checked') && !$('input:checkbox[name=\'useBankXpay\']').is(':checked') && !$('input:checkbox[name=\'useVBankXpay\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
         }else if (radioArr[2].checked == true){     // NHN KCP
-            if(!$('input:checkbox[name=\'chk_use_kcp\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
-            if(!$('input:checkbox[name=\'chk_kcp1\']').is(':checked') && !$('input:checkbox[name=\'chk_kcp2\']').is(':checked') && !$('input:checkbox[name=\'chk_kcp3\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'useKcp\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+            if(!$('input:checkbox[name=\'useCreditKcp\']').is(':checked') && !$('input:checkbox[name=\'useBankKcp\']').is(':checked') && !$('input:checkbox[name=\'useVBankKcp\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
         }
-        if(!$('input:radio[name=\'pg_mode\']').is(':checked')) { alert('사용모드를 체크하세요.'); return false;}
+        if(!$('.pgMode').is(':checked')) { alert('사용모드를 체크하세요.'); return false;}
     }
 
-	if (form.chk_gubun2.checked == true) {   //해외
-        if(!$('input:checkbox[name=\'chk_use_eximbay\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
-        if(!$('input:checkbox[name=\'chk_eximbay1\']').is(':checked') && !$('input:checkbox[name=\'chk_eximbay2\']').is(':checked') && !$('input:checkbox[name=\'chk_eximbay3\']').is(':checked') && !$('input:checkbox[name=\'chk_eximbay4\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
-        if(!$('input:radio[name=\'overseas_mode\']').is(':checked')) { alert('사용모드를 체크하세요.'); return false;}
+	if (form.isForeigne.checked == true) {   //해외
+        if(!$('input:checkbox[name=\'useEximbay\']').is(':checked')) { alert('사용여부를 선택하세요.'); return false;}
+        if(!$('input:checkbox[name=\'useCreditEximbay\']').is(':checked') && !$('input:checkbox[name=\'usePaypal\']').is(':checked') && !$('input:checkbox[name=\'useUnion\']').is(':checked') && !$('input:checkbox[name=\'useAli\']').is(':checked')) { alert('결제수단을 선택하세요.'); return false;}
+        if(!$('input:radio[name=\'pgModeEximbay\']').is(':checked')) { alert('사용모드를 체크하세요.'); return false;}
     }
 
-	if (form.naverpay_use.checked == true){
-        if(form.naverpay_shopid.value == '') { alert('네이버페이 가맹점 ID를 입력해주세요.');  form.naverpay_shopid.focus(); return false;}
-		if(form.naverpay_certi_key.value == '') { alert('네이버페이 가맹점 인증키를 입력해주세요.');  form.naverpay_certi_key.focus(); return false;}
-		if(form.naverpay_button_key.value == '') { alert('네이버페이 버튼 인증키를 입력해주세요.');  form.naverpay_button_key.focus(); return false;}
+	if (form.naverpayUse.checked == true){
+        if(form.storeIdNaver.value == '') { alert('네이버페이 가맹점 ID를 입력해주세요.');  form.storeIdNaver.focus(); return false;}
+		if(form.storeKeyNaver.value == '') { alert('네이버페이 가맹점 인증키를 입력해주세요.');  form.storeKeyNaver.focus(); return false;}
+		if(form.btnKey.value == '') { alert('네이버페이 버튼 인증키를 입력해주세요.');  form.btnKey.focus(); return false;}
     }
 
 	form_register.target = 'iframe_process';
@@ -532,11 +514,10 @@ $(document).ready(function(){
             //console.log(json_data);
 
 			if(json_data.isDomestic=='Y'){
-				checkGubun();
                 checkCardPGType(data.cardPg);
-
 				checkEasyPGNaver(data.naverpayUse);
 			}
+			
 			if(json_data.isForeigne=='Y'){
 				checkGubun();
 			}
@@ -563,35 +544,55 @@ function getCardPgInfo(type){
 		success(data){
 			console.log(data)
             if(type == 'ini'){
-            	if(data.useIni == 'Y') $("[name=chk_use_ini]").prop("checked",true);
-            	$('#module_version_ini').text(data.moduleVersion);
-            	if(data.useCredit == 'Y') $("[name=chk_ini1]").prop("checked",true);
-            	if(data.useBank == 'Y') $("[name=chk_ini2]").prop("checked",true);
-            	if(data.useVBank == 'Y') $("[name=chk_ini3]").prop("checked",true);
-            	if(data.pgMode == '1'){$('#pg_mode1_ini').prop("checked",true)}else{$('#pg_mode2_ini').prop("checked",true)}
-            	$("[name=shop_id_ini]").val(data.storeId);
-            	$("[name=shop_key_ini]").val(data.signKey);
-            	
+            	if(data.useIni == 'Y') $("[name=useIni]").prop("checked",true);
+            	$('#module_version_ini').text(data.moduleVersionIni);
+            	if(data.useCreditIni == 'Y') $("[name=useCreditIni]").prop("checked",true);
+            	if(data.useBankIni == 'Y') $("[name=useBankIni]").prop("checked",true);
+            	if(data.useVBankIni == 'Y') $("[name=useVBankIni]").prop("checked",true);
+            	if(data.pgModeIni == '1'){$('#pg_mode1_ini').prop("checked",true)}else{$('#pg_mode2_ini').prop("checked",true)}
+            	$("[name=storeIdIni]").val(data.storeIdIni);
+            	$("[name=signKey]").val(data.signKey);
+            	$("[name=moduleVersionIni]").val(data.moduleVersionIni);
             	
             }else if(type == 'xpay'){
-            	if(data.useXpay == 'Y') $("[name=chk_use_xpay]").prop("checked",true);
-            	$('#module_version_xpay').text(data.moduleVersion);
-            	if(data.useCredit == 'Y') $("[name=chk_xpay1]").prop("checked",true);
-            	if(data.useBank == 'Y') $("[name=chk_xpay2]").prop("checked",true);
-            	if(data.useVBank == 'Y') $("[name=chk_xpay3]").prop("checked",true);
-            	if(data.pgMode == '1'){$('#pg_mode1_xpay').prop("checked",true)}else{$('#pg_mode2_xpay').prop("checked",true)}
-            	$("[name=shop_id_xpay]").val(data.storeId);
-            	$("[name=shop_key_xpay]").val(data.mertKey);
+            	if(data.useXpay == 'Y') $("[name=useXpay]").prop("checked",true);
+            	$('#module_version_xpay').text(data.moduleVersionXpay);
+            	if(data.useCreditXpay == 'Y') $("[name=useCreditXpay]").prop("checked",true);
+            	if(data.useBankXpay == 'Y') $("[name=useBankXpay]").prop("checked",true);
+            	if(data.useVBankXpay == 'Y') $("[name=useVBankXpay]").prop("checked",true);
+            	if(data.pgModeXpay == '1'){$('#pg_mode1_xpay').prop("checked",true)}else{$('#pg_mode2_xpay').prop("checked",true)}
+            	$("[name=storeIdXpay]").val(data.storeIdXpay);
+            	$("[name=mertKey]").val(data.mertKey);
+            	$("[name=moduleVersionXPay]").val(data.moduleVersionXpay);
             	
             }else if(type == 'kcp'){
-            	if(data.useKcp == 'Y') $("[name=chk_use_kcp]").prop("checked",true);
-            	$('#module_version_kcp').text(data.moduleVersion);
-            	if(data.useCredit == 'Y') $("[name=chk_kcp1]").prop("checked",true);
-            	if(data.useBank == 'Y') $("[name=chk_kcp2]").prop("checked",true);
-            	if(data.useVBank == 'Y') $("[name=chk_kcp3]").prop("checked",true);
-            	if(data.pgMode == '1'){$('#pg_mode1_kcp').prop("checked",true)}else{$('#pg_mode2_kcp').prop("checked",true)}
-            	$("[name=shop_id_kcp]").val(data.siteCd);
-            	$("[name=shop_key_kcp]").val(data.siteKey);
+            	if(data.useKcp == 'Y') $("[name=useKcp]").prop("checked",true);
+            	$('#module_version_kcp').text(data.moduleVersionKcp);
+            	if(data.useCreditKcp == 'Y') $("[name=useCreditKcp]").prop("checked",true);
+            	if(data.useBankKcp == 'Y') $("[name=useBankKcp]").prop("checked",true);
+            	if(data.useVBankKcp == 'Y') $("[name=useVBankKcp]").prop("checked",true);
+            	if(data.pgModeKcp == '1'){$('#pg_mode1_kcp').prop("checked",true)}else{$('#pg_mode2_kcp').prop("checked",true)}
+            	$("[name=siteCd]").val(data.siteCd);
+            	$("[name=siteKey]").val(data.siteKey);
+            	$("[name=moduleVersionKcp]").val(data.moduleVersionKcp);
+            	
+            }else if(type == 'naverpay'){
+            	$('[name=storeIdNaver]').val(data.storeIdNaver);
+            	$('[name=storeKeyNaver]').val(data.storeKeyNaver);
+            	$('[name=btnKey]').val(data.btnKey);
+            	if(data.pgModeNaver == '1') $("#naverpay_mode1").prop("checked",true) 
+            	else $("#naverpay_mode2").prop("checked",true);
+            	
+            }else if(type == 'eximbay'){
+            	if(data.useEximbay == 'Y') $("[name=useEximbay]").prop("checked",true);
+            	$('#module_version_eximbay').text(data.moduleVersion);
+            	if(data.useCreditEximbay == 'Y') $("[name=useCreditEximbay]").prop("checked",true);
+            	if(data.usePaypal == 'Y') $("[name=usePaypal]").prop("checked",true);
+            	if(data.useUnion == 'Y') $("[name=useUnion]").prop("checked",true);
+            	if(data.useAli == 'Y') $("[name=useAli]").prop("checked",true);
+            	if(data.pgModeEximbay == '1'){$('#pg_mode1_eximbay').prop("checked",true)}else{$('#pg_mode2_eximbay').prop("checked",true)}
+            	$("[name=mid]").val(data.mid);
+            	$("[name=secretKey]").val(data.secretKey);
             }
 		},
 		error: console.log

@@ -17,12 +17,12 @@ public class XpaySetting implements Serializable {/**
 	private static final long serialVersionUID = 1L;
 	
 	private String useXpay;
-	private String moduleVersion;
-	private String useCredit;
-	private String useBank;
-	private String useVBank;
-	private int pgMode;
-	private String storeId;
+	private String moduleVersionXpay;
+	private String useCreditXpay;
+	private String useBankXpay;
+	private String useVBankXpay;
+	private int pgModeXpay;
+	private String storeIdXpay;
 	private String mertKey;
 	
 }

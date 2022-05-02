@@ -229,9 +229,42 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.selectKcpSetting();
 	}
 
-	
-	
-	
-	
+	@Override
+	public int updateKgIniSetting(KgIniSetting kg) {
+		// TODO Auto-generated method stub
+		return settingDao.updateKgIniSetting(kg);
+	}
+
+	@Override
+	public int updateXpaySetting(XpaySetting xpay) {
+		// TODO Auto-generated method stub
+		return settingDao.updateXpaySetting(xpay);
+	}
+
+	@Override
+	public int updateKcpSetting(KcpSetting kcp) {
+		// TODO Auto-generated method stub
+		return settingDao.updateKcpSetting(kcp);
+	}
+
+	@Override
+	public int updateBillingPgSetting(BillingPgSetting pg) {
+		// TODO Auto-generated method stub
+		return settingDao.updateBillingPgSetting(pg);
+	}
+
+	@Override
+	public int updateNaverpaySetting(NaverpaySetting naverpay) {
+		// TODO Auto-generated method stub
+		return settingDao.updateNaverpaySetting(naverpay);
+	}
+
+	@Override
+	public int updateNaverShoppingSetting(NaverShoppingSetting naverShopping) {
+		// TODO Auto-generated method stub
+		return settingDao.updateNaverShoppingSetting(naverShopping);
+	}
+
+
 	
 }
