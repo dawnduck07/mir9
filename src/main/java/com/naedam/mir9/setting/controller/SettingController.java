@@ -44,6 +44,7 @@ import com.naedam.mir9.setting.model.vo.AdminSetting;
 import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.SnsSetting;
 import com.naedam.mir9.setting.model.vo.Staff;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
@@ -326,7 +327,21 @@ public class SettingController {
 	
 	
 	@GetMapping("/snslogin")
-	public void snsLogin() {}
+	public String snsLogin(Model model, SnsSetting snsSetting) {
+		System.out.println("settingController/snsSetting 시작");
+		
+		snsSetting = settingService.selectSnsSetting();
+		model.addAttribute("snsSetting",snsSetting);
+		
+		return "setting/sns";
+	}
+	
+	@PostMapping("/updateSnsSetting")
+	public String updateSnsSetting(SnsSetting snsSetting) {
+		System.out.println("settingController/updateSnsSetting 시작");
+		settingService.updateSnsSetting(snsSetting);
+		return "redirect:/setting/snslogin";
+	}
 	
 	@GetMapping("/locale")
 	public void locale() {}
@@ -336,7 +351,6 @@ public class SettingController {
 	
 	@GetMapping("/test")
 	public void test() {}
-	
 	
 	
 	@PostMapping("/staffEnroll.do")
