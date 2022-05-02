@@ -5,11 +5,8 @@
 
 <script>
 	
-	$(function(){		
-		$("#modalContent3").one("hidden.bs.modal", function(){
-			location.reload();
-		})	
-	})
+	var postArr = new Array();
+	console.log(postArr)
 	
 	function fncBoardTitle(){
 			

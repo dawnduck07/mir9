@@ -1,11 +1,15 @@
 package com.naedam.mir9.setting.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
+import com.naedam.mir9.common.Mir9Utils;
 import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliveryNotice;
@@ -34,8 +41,11 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.SnsSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
@@ -43,7 +53,6 @@ import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -54,6 +63,9 @@ public class SettingController {
 	private SettingService settingService;
 	@Autowired
 	private MapService mapService;
+	// (설정-임원관리) : 첨부파일 업로드 
+	@Autowired
+	ServletContext application;
 	
 	@GetMapping("/point")
 	public void point(Model model) {
@@ -128,9 +140,11 @@ public class SettingController {
 		model.addAttribute("apiKey", "D914287C-19AA-31AD-B187-1532CEF93E7F");
 	}
 	
-	@GetMapping("/staff")
-	public void staff() {
-		
+	@GetMapping("/staff.do")
+	public void staffList(Model model) {
+		List<Staff> resultStaffList = settingService.selectStaffList();
+		log.debug("resultStaffList = {}", resultStaffList);
+		model.addAttribute("resultStaffList", resultStaffList);
 	}
 	
 	@GetMapping("/history")
@@ -350,7 +364,21 @@ public class SettingController {
 	}
 	
 	@GetMapping("/snslogin")
-	public void snsLogin() {}
+	public String snsLogin(Model model, SnsSetting snsSetting) {
+		System.out.println("settingController/snsSetting 시작");
+		
+		snsSetting = settingService.selectSnsSetting();
+		model.addAttribute("snsSetting",snsSetting);
+		
+		return "setting/sns";
+	}
+	
+	@PostMapping("/updateSnsSetting")
+	public String updateSnsSetting(SnsSetting snsSetting) {
+		System.out.println("settingController/updateSnsSetting 시작");
+		settingService.updateSnsSetting(snsSetting);
+		return "redirect:/setting/snslogin";
+	}
 	
 	@GetMapping("/locale")
 	public void locale() {}
@@ -360,4 +388,27 @@ public class SettingController {
 	
 	@GetMapping("/test")
 	public void test() {}
+	
+	
+	@PostMapping("/staffEnroll.do")
+	public String staffEnroll(Staff staff, 
+							  RedirectAttributes redirectAttribute,
+							  HttpServletRequest request) {
+		log.debug("{}", "staffEnroll.do 실행!");
+		log.debug("staff = {}", staff);
+		
+		int result = 0;
+		String msg = null;
+		String mode = request.getParameter("mode");
+		
+		if(mode.equals("insert")) {
+			int resultInsertStaff = settingService.insertStaff(staff);
+			log.debug("resultInsertStaff = {}", resultInsertStaff);
+		}
+	
+	return "redirect:/setting/staff.do";
+	}
+
+
 }
+
