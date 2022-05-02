@@ -10,7 +10,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,19 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.naedam.mir9.board.model.vo.Search;
-
 import com.naedam.mir9.category.model.service.CategoryService;
 import com.naedam.mir9.category.model.vo.Category;
-
-import com.naedam.mir9.setting.model.service.SettingService;
-
 import com.naedam.mir9.statistics.model.service.StatisticsService;
-
 import com.naedam.mir9.statistics.model.vo.AddressStatisticVo;
 import com.naedam.mir9.statistics.model.vo.AreaVo;
-
 import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
-
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
 

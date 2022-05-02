@@ -1,9 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="임원 관리" name="title"/>
 </jsp:include>
+
+<c:if test="${not empty msg}">
+	<script>
+		alert("${msg}");
+	</script>
+</c:if>
 
 <!-- content-wrapper -->
 <div class="content-wrapper">
@@ -103,9 +114,11 @@
 <div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
     <div class="modal-dialog" style="width:650px;">
         <div class="modal-content">
-            <form name="form_register" method="post" action="?tpf=admin/setting/staff_process" enctype="multipart/form-data">
-            <input type="hidden" name="mode" id="mode" value="insert">
-            <input type="hidden" name="code" id="code">
+            <form
+            	name="staffEnrollFrm" 
+            	method="POST"
+            	action="${pageContext.request.contextPath}/setting/staffEnroll.do?${_csrf.parameterName}=${_csrf.token}" 
+            	enctype="multipart/form-data">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabelPortfolio">임원 관리</h4>
@@ -116,30 +129,30 @@
                 <table class="table table-bordered">
                     <tr>
                         <td class="menu">이름 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-                        <td align="left"><input type="text" name="name" id="name" value="" class="form-control input-sm" style="width:50%;"></td>
+                        <td align="left"><input type="text" name="staffName" id="staffName" value="" class="form-control input-sm" style="width:50%;"></td>
                     </tr>
                     <tr>
                         <td class="menu">직책 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-                        <td align="left"><input type="text" name="position" id="position" value="" class="form-control input-sm" style="width:50%;"></td>
+                        <td align="left"><input type="text" name="staffPosition" id="staffPosition" value="" class="form-control input-sm" style="width:50%;"></td>
                     </tr>
                     <tr>
                         <td class="menu">Career <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
                         <td align="left">
-                        <textarea name="career" id="career" rows="4" class="form-control input-sm"></textarea>
+                        <textarea name="staffCareer" id="staffCareer" rows="4" class="form-control input-sm"></textarea>
                         <div style="font-weight:normal">※ 리스트는 Enter기준으로 구분됩니다.</div>
                         </td>
                     </tr>
                     <tr>
                         <td class="menu">Profile <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
                         <td align="left">
-                        <textarea name="profile" id="profile" rows="4" class="form-control input-sm"></textarea>
+                        <textarea name="staffProfile" id="staffProfile" rows="4" class="form-control input-sm"></textarea>
                         <div style="font-weight:normal">※ 리스트는 Enter기준으로 구분됩니다.</div>
                         </td>
                     </tr>
                     <tr>
                         <td class="menu">파일 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
                         <td align="left">
-                        <input type="file" name="file1" class="form-control input-sm" style="width:80%; display:inline;">
+                        <input type="file" name="upFile" id="upFile" class="form-control input-sm" style="width:80%; display:inline;">
                         <span id="display_file" style="display:none;">
                         <button type="button" onclick="winOpen('?tpf=common/image_view&file_name=staff/'+$('#code').val());" class="btn btn-success btn-xs">보기</button>
                         <button type="button" onclick="confirmIframeDelete('?tpf=common/image_delete&file_name=staff/'+$('#code').val()+'&code='+$('#code').val());" class="btn btn-danger btn-xs">삭제</button>
@@ -158,6 +171,64 @@
 </div>
 </div><!-- /.content-wrapper -->
 
+<script>
+// 등록 모달창
+function onclickInsert(){
+	console.log("등록(onclickInsert())");
+	$("#modalContent").modal();
+	
+	
+	
+}
+
+// 등록(확인)
+function register(){
+	var staffName = $("#staffName").val();
+	var staffPosition = $("#staffPosition").val();
+	var staffCareer = $("#staffCareer").val();
+	var staffProfile = $("#staffProfile").val();
+	var upFile = $("#upFile").val();
+	console.log("staffName = " + staffName);
+	console.log("staffPosition = " + staffPosition);
+	console.log("staffCareer = " + staffCareer);
+	console.log("staffProfile = " + staffProfile);
+	console.log("upFile = " + upFile);
+	
+	// 이름 공란 확인
+	if(staffName == ''){
+		alert("이름이 입력되지 않았습니다.");
+		$("#staffName").focus();
+		return false;
+	}
+	// 직책 공란 확인
+	if(staffPosition == ''){
+		alert("직책이 입력되지 않았습니다.");
+		$("#staffPosition").focus();
+		return false;
+	}
+	// Career 공란 확인
+	if(staffCareer == ''){
+		alert("Career가 입력되지 않았습니다.");
+		$("#staffCareer").focus();
+		return false;
+	}
+	// Profile 공란 확인
+	if(staffProfile == ''){
+		alert("Profile가 입력되지 않았습니다.");
+		$("#staffProfile").focus();
+		return false;
+	}
+	// 첨부파일 확인
+	if(upFile == ''){
+		alert("이미지가 입력되지 않았습니다.");
+		$("#upFile").focus();
+		return false;
+	}
+	
+	$(window).unbind("beforeunload");
+	$(document.staffEnrollFrm).submit();
+}
+</script>
 
 
 

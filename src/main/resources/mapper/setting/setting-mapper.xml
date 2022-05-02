@@ -207,4 +207,39 @@
   		</set>
   		WHERE SNS_SETTING_NO = 1
   	</update>
+
+  	<insert id="insertStaffEnroll">
+  		INSERT INTO
+  			staff(staff_no,
+  				  staff_name,
+  				  staff_position,
+  				  staff_career,
+  				  staff_profile)
+  		VALUES(NEXTVAL(seq_staff_no),
+  			   #{staffName},
+  			   #{staffPosition},
+  			   #{staffCareer},
+  			   #{staffProfile})   
+  		<selectKey keyProperty="staffNo" resultType="_int" order="AFTER">
+  			SELECT
+				LASTVAL(seq_staff_no)
+			FROM
+				DUAL
+  		</selectKey>
+  	</insert>
+  	
+  	<insert id="insertAttachmentEnroll">
+  		INSERT INTO
+  			attachment(no,
+  					   staff_no,
+  					   original_filename,
+  					   renamed_filename,
+  					   upload_date)
+  		VALUES(NEXTVAL(seq_attachment_no),
+  			   #{staffNo},
+  			   #{originalFilename},
+  			   #{renamedFilename},
+  			   NOW())
+  	</insert>
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 </mapper>
