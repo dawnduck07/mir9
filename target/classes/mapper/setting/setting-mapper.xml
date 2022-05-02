@@ -141,6 +141,11 @@
   	<select id="selectKcpSetting" resultType="kcpSetting">
   		select * from kcp_setting
   	</select>
+  	
+  	<select id="selectSnsSetting" resultType="snsSetting">
+  		select * from sns_setting
+  	</select>
+  	
   	<update id="updateAdminSetting">
   		update admin_setting set email = #{email}, phone = #{phone}, caller_id = #{callerId}, 
 			<if test="thumbnailImg != null and thumbnailImg != ''">
@@ -178,5 +183,28 @@
   	
   	<update id="updateSeoSetting">
   		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}
+  	</update>
+  	
+  	<update id="updateSnsSetting" parameterType="snsSetting">
+  		update sns_setting
+  		<set>
+  			mode = #{mode},
+  			NONE_MEMBER_USE = #{noneMemberUse},
+  			KAKAO_USE = #{kakaoUse},
+  			KAKAO_SNS_KEY = #{kakaoSnsKey},
+  			NAVER_USE = #{naverUse},
+  			NAVER_SNS_ID = #{naverSnsId},
+  			NAVER_SNS_KEY = #{naverSnsKey},
+  			GOOGLE_USE = #{googleUse},
+  			GOOGLE_SNS_ID = #{googleSnsId},
+  			GOOGLE_SNS_KEY = #{googleSnsKey},
+  			FACEBOOK_USE = #{facebookUse},
+  			FACEBOOK_SNS_ID = #{facebookSnsId},
+  			FACEBOOK_SNS_KEY = #{facebookSnsKey},
+  			TWITTER_USE = #{twitterUse},
+  			TWITTER_SNS_ID = #{twitterSnsId},
+  			TWITTER_SNS_KEY = #{twitterSnsKey}
+  		</set>
+  		WHERE SNS_SETTING_NO = 1
   	</update>
 </mapper>

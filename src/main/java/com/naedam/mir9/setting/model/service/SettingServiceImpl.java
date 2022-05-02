@@ -24,6 +24,7 @@ import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.SnsSetting;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
@@ -227,6 +228,18 @@ public class SettingServiceImpl implements SettingService {
 	public KcpSetting selectKcpSetting() {
 		// TODO Auto-generated method stub
 		return settingDao.selectKcpSetting();
+	}
+
+	@Override
+	public SnsSetting selectSnsSetting() {
+		// TODO Auto-generated method stub
+		return settingDao.selectSnsSetting();
+	}
+
+	@Override
+	public int updateSnsSetting(SnsSetting snsSetting) {
+		// TODO Auto-generated method stub
+		return settingDao.updateSnsSetting(snsSetting);
 	}
 
 	
