@@ -261,7 +261,6 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.selectKcpSetting();
 	}
 
-<<<<<<< HEAD
 	@Override
 	public SnsSetting selectSnsSetting() {
 		// TODO Auto-generated method stub
@@ -275,11 +274,6 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	
-	
-	
-	
-=======
 
->>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 	
 }
