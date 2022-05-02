@@ -286,6 +286,26 @@ public class SettingDaoImpl implements SettingDao {
 		return session.selectList("setting.selectStaffList");
 	}
 
+	@Override
+	public int totalStaffListCount() {
+		return session.selectOne("setting.totalStaffListCount");
+	}
+
+	@Override
+	public int deleteStaff(int[] staffNo) {
+		return session.delete("setting.deleteStaff", staffNo);
+	}
+
+	@Override
+	public List<Staff> searchStaffList(Map<String, Object> param) {
+		return session.selectList("setting.searchStaffList", param);
+	}
+
+	@Override
+	public int selectsearchStaffListCount(Map<String, Object> param) {
+		return session.selectOne("setting.selectsearchStaffListCount", param);
+	}
+
 
 	
 	

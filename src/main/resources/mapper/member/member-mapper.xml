@@ -541,7 +541,7 @@
 						JOIN withdrawal_authorities wau
 							ON wm.member_no = wau.member_no
 		WHERE
-		m.`status` = 'N'
+		wm.`status` = 'N'
 		and
 		${type} LIKE CONCAT('%', #{keyword}, '%')
 </select>

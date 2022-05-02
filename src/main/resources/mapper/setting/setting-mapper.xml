@@ -298,5 +298,52 @@
 		ORDER BY
 			s.reg_date DESC
  	</select>
+ 	
+ 	<select id="totalStaffListCount" resultType="_int">
+ 		SELECT
+ 			COUNT(*)
+ 		FROM
+ 			staff
+ 	</select>
+ 	
+ 	<delete id="deleteStaff">
+ 		DELETE FROM
+ 			staff
+ 		<where>
+			<foreach collection="array" item="item" open="(" close=")" separator="or">
+		 		staff_no = #{item}
+		 	</foreach>
+		</where>
+	</delete>
+	
+	<select id="searchStaffList" resultType="staff">
+		SELECT
+			ROW_NUMBER() OVER(ORDER BY s.reg_date DESC) AS `rowNum`,
+			staff_no,
+			img_url,
+			staff_name,
+			staff_position,
+			reg_date
+		FROM
+			staff s
+		<where>	
+			<if test="keyword != null and keyword != ''" >
+				${type} LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectsearchStaffListCount" resultType="_int">
+		SELECT
+			COUNT(*)
+		FROM
+			staff
+		<where>	
+			<if test="keyword != null and keyword != ''" >
+				${type} LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+
 
 </mapper>

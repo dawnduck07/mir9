@@ -104,6 +104,14 @@ public interface SettingService {
 
 	List<Staff> selectStaffList();
 
+	int selectStaffListCount();
+
+	int deleteStaff(int[] staffNo);
+
+	List<Staff> selectSearchStaffList(Map<String, Object> param);
+
+	int selectsearchStaffListCount(Map<String, Object> param);
+
 
 	int updateKgIniSetting(KgIniSetting kg);
 
