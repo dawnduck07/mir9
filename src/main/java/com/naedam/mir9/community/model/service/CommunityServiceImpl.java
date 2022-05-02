@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +20,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.naedam.mir9.community.model.dao.CommunityDao;
+import com.naedam.mir9.community.model.vo.EmailSetting;
+import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.ReviewImg;
+import com.naedam.mir9.community.model.vo.SmsSetting;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service
 public class CommunityServiceImpl implements CommunityService {
@@ -272,7 +279,7 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public int smsAutoSend(HashMap<String, String> param) {
 		return communityDao.smsAutoSend(param);
-	}	
+	}
 	
 	// mail 저장 문구 (49064)
 	@Override
@@ -451,6 +458,177 @@ public class CommunityServiceImpl implements CommunityService {
 			if(str.equals("success")) {
 				result = 1;
 			}	
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int mailAutoSend(HashMap<String, String> param) {
+		return communityDao.mailAutoSend(param);
+	}
+	
+
+
+	// sms 자동 발송 체크 여부 조회
+	@Override
+	public List<SmsSetting> smsCheck(String templateId) {
+		return communityDao.smsCheck(templateId);
+	}
+
+	// email 자동 발송 체크 여부 조회
+	@Override
+	public List<EmailSetting> emailCheck(String templateId) {
+		return communityDao.emailCheck(templateId);
+	}
+
+	// v_msg_info 조회
+	@Override
+	public MsgInfo selectMsgInfo(long orderNo) {
+		return communityDao.selectMsgInfo(orderNo);
+	}
+
+	// 조건별 메시지 발송
+	// 주문 관련 sms 발송
+	@Override
+	public int sendOrderSms(String smsKey, String smsSecret, HashMap<String, Object> param) {
+
+		int result = 0;
+		String postUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey +  "/sender/sms";
+		
+		try {
+			// url
+			URL url = new URL(postUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			// method
+			conn.setRequestMethod("POST");
+			
+			// header
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setRequestProperty("X-Secret-Key", smsSecret);
+			
+			// doOutput : OutputStream으로 데이터를 넘겨주겠다
+			conn.setDoOutput(true);
+			
+			// data
+			JSONObject templateParameter = new JSONObject(); // 치환문구 설정
+			templateParameter.put("shop_name", "ND이커머스"); 
+			templateParameter.put("order_name", (String) param.get("name")); 
+			templateParameter.put("order_number", (long) param.get("orderNo"));
+			
+			JSONObject recip = new JSONObject();
+			recip.put("recipientNo", "01042026201");
+			recip.put("templateParameter", templateParameter);
+			
+			JSONArray recipientList = new JSONArray(); // 수신자 정보 -> 배열 형태
+			recipientList.add(recip);
+			
+			JSONObject json = new JSONObject();
+			json.put("templateId", (String) param.get("templateId")); // 템플릿ID
+			json.put("sendNo", "01042026201"); // 발송 번호
+			json.put("recipientList", recipientList); // 수신자 정보
+			
+			// 데이터 전송 준비
+			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+			os.write(json.toString());
+			os.flush();
+			os.close();
+			
+			int responseCode = conn.getResponseCode();
+
+			if(responseCode == 200) {
+				result = 1;
+			}
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	// 주문 관련 mail 발송
+	@Override
+	public int sendOrderEmail(String mailKey, String mailSecret, HashMap<String, Object> param) {
+		
+		int result = 0;
+		String postUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey +  "/sender/mail";
+
+		try {
+			// url
+			URL url = new URL(postUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			// method
+			conn.setRequestMethod("POST");
+			
+			// header
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setRequestProperty("X-Secret-Key", mailSecret);
+			
+			// doOutput : OutputStream으로 데이터를 넘겨주겠다
+			conn.setDoOutput(true);
+			
+			// data
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			String orderDate = format.format(param.get("orderDate"));
+			String paidDate = format.format(param.get("paidAt"));
+			
+			String pay = param.get("payAmount") + " " + param.get("payType") + " " + param.get("account") + " ";
+			pay += param.get("bankName") + " " + param.get("owner") + " "; 
+			pay += param.get("buyerName") + " " + paidDate;
+			
+			System.out.println("=====Service pay=====");
+			System.out.println(pay);
+			
+			JSONObject templateParameter = new JSONObject(); // 치환문구 설정
+			templateParameter.put("shop_name", "ND이커머스"); 
+			templateParameter.put("payment_status", param.get("statusName")); 
+			templateParameter.put("order_number", param.get("orderNo")); 
+			templateParameter.put("order_date", orderDate); 
+			templateParameter.put("order_first_name", param.get("firstName")); 
+			templateParameter.put("order_name", param.get("lastName")); 
+			templateParameter.put("order_email", param.get("email")); 
+			templateParameter.put("order_mobile", param.get("phone")); 
+			templateParameter.put("order_list", param.get("productName")); // + 옵션 정보 추가 
+			templateParameter.put("receiver_first_name", param.get("receiver")); 
+			templateParameter.put("receiver_name", param.get("receiver")); 
+			templateParameter.put("receiver_email", param.get("email")); 
+			templateParameter.put("receiver_mobile", param.get("receiverPhone")); 
+			templateParameter.put("receiver_addr", param.get("shippingAddress")); 
+			templateParameter.put("request_message", param.get("memo")); 
+			templateParameter.put("payment_info", pay); 
+			
+			JSONObject recip = new JSONObject();
+			recip.put("receiveMailAddr", "lovefun33@naver.com");
+			recip.put("receiveType", "MRT0");
+			
+			JSONArray receiverList = new JSONArray(); // 수신자 정보 -> 배열 형태
+			receiverList.add(recip);
+			
+			JSONObject json = new JSONObject();
+			json.put("templateId", (String) param.get("templateId")); // 템플릿ID
+			json.put("templateParameter", templateParameter); // 치환
+			json.put("receiverList", receiverList); // 수신자 정보
+			
+			System.out.println("=====Service json=====");
+			System.out.println(json);
+			
+			// 데이터 전송 준비
+			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+			os.write(json.toString());
+			os.flush();
+			os.close();
+			
+			int responseCode = conn.getResponseCode();
+
+			if(responseCode == 200) {
+				result = 1;
+			}
 			
 		} catch(IOException e) {
 			e.printStackTrace();

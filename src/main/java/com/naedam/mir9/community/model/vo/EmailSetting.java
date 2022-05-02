@@ -19,8 +19,8 @@ public class EmailSetting implements Serializable {
 	private static final long serialVersionUID = 1L;	
 	
 	private int emailStCode; 
-	private String emailTemplateId;
-	private String emailTemplateName;
+	private String templateId;
+	private String templateName;
 	private String isSend; 
 	private String isSendAdmin;
 
