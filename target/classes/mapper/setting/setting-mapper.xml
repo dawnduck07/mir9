@@ -241,5 +241,5 @@
   			   #{renamedFilename},
   			   NOW())
   	</insert>
->>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
+
 </mapper>
