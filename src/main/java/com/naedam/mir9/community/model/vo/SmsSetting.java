@@ -19,8 +19,8 @@ public class SmsSetting implements Serializable {
 	private static final long serialVersionUID = 1L;	
 	
 	private int smsStCode; 
-	private String smsTemplateId;
-	private String smsTemplateName;
+	private String templateId;
+	private String templateName;
 	private String isSend; 
 	private String isSendAdmin;
 
