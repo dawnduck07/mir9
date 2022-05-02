@@ -20,6 +20,7 @@ import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
@@ -80,6 +81,8 @@ public interface SettingService {
 
 	int updateSeoSetting(SeoSetting seo);
 
+	int insertStaffEnroll(Staff staff);
+
 	BillingPgSetting selectPgSetting();
 
 	KgIniSetting selectKgIniSetting();
@@ -93,6 +96,7 @@ public interface SettingService {
 	XpaySetting selectXpaySetting();
 
 	KcpSetting selectKcpSetting();
+
 
 
 }

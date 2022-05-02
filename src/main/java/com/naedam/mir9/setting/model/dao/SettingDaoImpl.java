@@ -22,8 +22,10 @@ import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
@@ -188,6 +190,15 @@ public class SettingDaoImpl implements SettingDao {
 	}
 
 	@Override
+	public int insertStaffEnroll(Staff staff) {
+		return session.insert("setting.insertStaffEnroll", staff);
+	}
+
+	@Override
+	public int insertAttachmentEnroll(Attachment attachment) {
+		return session.insert("setting.insertAttachmentEnroll", attachment);
+	}
+	
 	public BillingPgSetting selectPgSetting() {
 		// TODO Auto-generated method stub
 		return session.selectOne("setting.selectPgSetting");

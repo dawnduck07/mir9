@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
@@ -20,10 +23,13 @@ import com.naedam.mir9.point.model.vo.PointSave;
 import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.dao.SettingDao;
+import com.naedam.mir9.setting.model.exception.StaffException;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
@@ -31,7 +37,9 @@ import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class SettingServiceImpl implements SettingService {
 	@Autowired
@@ -188,6 +196,29 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED,
+				   isolation = Isolation.READ_COMMITTED,
+				   rollbackFor = Exception.class)
+	public int insertStaffEnroll(Staff staff) {
+		int result = 0;
+		
+		try {
+			// staff insert
+			result = settingDao.insertStaffEnroll(staff);
+			log.debug("staff.no = {}", staff.getStaffNo());
+			
+			// attachment insert
+			Attachment attachment = staff.getAttachment();
+			if(attachment != null) {
+				attachment.setStaffNo(staff.getStaffNo()); // FK컬럼값 세팅
+				result = settingDao.insertAttachmentEnroll(attachment);
+			}
+		} catch (Exception e) {
+			throw new StaffException("임원/첨부파일 등록 오류", e);
+		}
+		return result;
+	}
+	
 	public BillingPgSetting selectPgSetting() {
 		// TODO Auto-generated method stub
 		return settingDao.selectPgSetting();
@@ -229,9 +260,6 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.selectKcpSetting();
 	}
 
-	
-	
-	
-	
+
 	
 }
