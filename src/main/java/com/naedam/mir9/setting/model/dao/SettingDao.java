@@ -100,4 +100,12 @@ public interface SettingDao {
 
 	List<Staff> selectStaffList();
 
+	int totalStaffListCount();
+
+	int deleteStaff(int[] staffNo);
+
+	List<Staff> searchStaffList(Map<String, Object> param);
+
+	int selectsearchStaffListCount(Map<String, Object> param);
+
 }

@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -141,9 +142,15 @@ public class SettingController {
 	
 	@GetMapping("/staff.do")
 	public void staffList(Model model) {
+		// 임원 리스트 게시물
 		List<Staff> resultStaffList = settingService.selectStaffList();
 		log.debug("resultStaffList = {}", resultStaffList);
 		model.addAttribute("resultStaffList", resultStaffList);
+		
+		// 전체 게시물 수
+		int totalStaffListCount = settingService.selectStaffListCount();
+		log.debug("totalStaffListCount = {}", totalStaffListCount);
+		model.addAttribute("totalStaffListCount", totalStaffListCount);
 	}
 	
 	@GetMapping("/history")
@@ -339,11 +346,12 @@ public class SettingController {
 	
 	
 	
-	@PostMapping("/staffEnroll.do")
+	@PostMapping("/staff_process.do")
 	public String staffEnroll(Staff staff, 
 							  RedirectAttributes redirectAttribute,
-							  HttpServletRequest request) {
-		log.debug("{}", "staffEnroll.do 실행!");
+							  HttpServletRequest request,
+							  @RequestParam int[] staffNo) {
+		log.debug("{}", "staff_process.do 실행!");
 		log.debug("staff = {}", staff);
 		
 		int result = 0;
@@ -353,11 +361,47 @@ public class SettingController {
 		if(mode.equals("insert")) {
 			int resultInsertStaff = settingService.insertStaff(staff);
 			log.debug("resultInsertStaff = {}", resultInsertStaff);
+		} else if(mode.equals("delete")) {
+			int resultDeleteStaff = settingService.deleteStaff(staffNo);
+			log.debug("resultDeleteStaff = {}", resultDeleteStaff);
+			if(resultDeleteStaff > 0) {
+				msg = "삭제 되었습니다.";
+			}
 		}
 	
 	return "redirect:/setting/staff.do";
 	}
 
+	// 임원 관리 타입별 검색
+	@ResponseBody
+	@GetMapping("/staffTypeSearch.do")
+	public Map<String, Object> staffTypeSearch(
+				@RequestParam String type,
+				@RequestParam String keyword,
+				HttpServletRequest request){
+		log.debug("{}", "타입별 검색 시작");
+		log.debug("type = {}", type);
+		log.debug("keyboard = {}", keyword);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
+		log.debug("param = {}", param);
+		
+		// 임원 검색 게시물
+		List<Staff> searchStaffList = settingService.selectSearchStaffList(param);
+		log.debug("searchStaffList = {}", searchStaffList);
+		
+		// 임원 검색 게시물 수
+		int searchStaffCount = settingService.selectsearchStaffListCount(param);
+		log.debug("searchStaffCount = {}", searchStaffCount);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchStaffList", searchStaffList);
+		resultMap.put("searchStaffCount", searchStaffCount);
+		
+		return resultMap;
+	}
 
 }
 
