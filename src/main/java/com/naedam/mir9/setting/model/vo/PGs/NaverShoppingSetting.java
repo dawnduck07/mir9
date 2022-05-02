@@ -1,4 +1,4 @@
-package com.naedam.mir9.setting.model.vo;
+package com.naedam.mir9.setting.model.vo.PGs;
 
 import java.io.Serializable;
 
@@ -11,14 +11,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class BillingPgSetting implements Serializable {/**
+public class NaverShoppingSetting implements Serializable {
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String isDomestic;
-	private String isForeigne;
-	private String tsvURl;
+	private String tsvUrl;
 	private String productDbUrl;
 
 }

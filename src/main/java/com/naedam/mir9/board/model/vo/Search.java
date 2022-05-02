@@ -1,5 +1,7 @@
 package com.naedam.mir9.board.model.vo;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -10,14 +12,13 @@ public class Search {
 	private String searchCondition;
 	private String searchKeyword;
 	private String searchType;
+	private String searchDate;
 	private String start_date;
 	private String end_date;
-	private int studyInterest;
-	private int studyEndFlag;
-	private int searchSort;
+	private Date startDate;
+	private Date endDate;
+	private int categoryCode;
 	private int pageSize;
-	private int endRowNum;
-	private int startRowNum;
 	private int searchBoardNo;
 	
 	
