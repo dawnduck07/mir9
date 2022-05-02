@@ -146,20 +146,25 @@ public class Mir9Utils {
 		return pagebar.toString();
 	}
 
+	// 파일 업로드 유틸
 	public static String getRenamedFilename(String originalFilename) {
-		// ?��?��?�� �??��?���?
-		String ext = "";
-
+		// 확장자 가져오기
+		// 확장자 문자열 변수를 하나 만들어 놓는다.
+		String ext = ""; 
+		
+		// 매개변수로 넘어온 originalFilename에서 마지막 "." index를 찾는다.
 		int dot = originalFilename.lastIndexOf(".");
+		
+		// 확장자가 있다면, "." index 이후로 잘라내기를 한다. 
 		if(dot > -1)
 			ext = originalFilename.substring(dot); // .txt
 		
-		// ?��?���??��
+		// 형식지정
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_");
+		// 난수 생성(무조건 세자리)
 		DecimalFormat df = new DecimalFormat("000"); // 30 -> 030
 		
-		// ?��?��?���?
-		
+		// 새 파일명
 		return sdf.format(new Date()) + df.format(Math.random() * 999) + ext;
 	}
 	

@@ -1,11 +1,15 @@
 package com.naedam.mir9.setting.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
+import com.naedam.mir9.common.Mir9Utils;
 import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliveryNotice;
@@ -34,8 +41,10 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,6 +56,9 @@ public class SettingController {
 	private SettingService settingService;
 	@Autowired
 	private MapService mapService;
+	// (설정-임원관리) : 첨부파일 업로드 
+	@Autowired
+	ServletContext application;
 	
 	@GetMapping("/point")
 	public void point(Model model) {
@@ -121,7 +133,7 @@ public class SettingController {
 		model.addAttribute("apiKey", "D914287C-19AA-31AD-B187-1532CEF93E7F");
 	}
 	
-	@GetMapping("/staff")
+	@GetMapping("/staff.do")
 	public void staff() {
 		
 	}
@@ -266,4 +278,62 @@ public class SettingController {
 	
 	@GetMapping("/test")
 	public void test() {}
+	
+	
+	
+	@PostMapping("/staffEnroll.do")
+	public String staffEnroll(
+				Staff staff,
+				MultipartFile upFile, 
+				RedirectAttributes redirectAttribute) {
+		log.debug("{}", "staffEnroll.do 실행!");
+		log.debug("staff = {}", staff);
+		
+	try {
+		Staff staffAttachment = new Staff();
+		
+		// application 객체(ServeltContext)
+		String saveDirectory = application.getRealPath("/resources/upload/staff");
+		log.debug("saveDirectory = {}", saveDirectory);
+		
+		// 파일이 비어있을 수 있기 때문에 검사를 진행
+		if(!upFile.isEmpty() && upFile.getSize() != 0) {
+			log.debug("upFile = {}", upFile);
+			log.debug("upFile.name = {}", upFile.getOriginalFilename());
+			log.debug("upFile.size = {}", upFile.getSize());
+			
+			String originalFilename = upFile.getOriginalFilename();
+			String renamedFilename = Mir9Utils.getRenamedFilename(originalFilename);
+			
+			// 1. 서버 컴퓨터에 저장
+			File destination = new File(saveDirectory, renamedFilename);
+			log.debug("destination = {}", destination);
+			// transferTo 메소드 : 예외는 던진다. -> throws IllegalStateException, IOException
+				upFile.transferTo(destination);
+			
+			// 2.DB에 attachment 레코드 등록
+			// Attachment 객체 생성
+			Attachment attachment = new Attachment();
+			// renamedFilename 셋팅
+			attachment.setRenamedFilename(renamedFilename);
+			// originalFilename 셋팅
+			attachment.setOriginalFilename(originalFilename);
+			log.debug("attachment = {}", attachment);
+						
+			staff.setAttachment(attachment);
+			}
+		
+		log.debug("staff = {}", staff);
+		int resultStaffEnroll = settingService.insertStaffEnroll(staff);
+		String msg = resultStaffEnroll > 0 ? "등록 되었습니다." : "등록에 실패했습니다.";
+		redirectAttribute.addFlashAttribute("msg", msg);
+			
+	} catch (IOException e) {
+		log.error(e.getMessage(), e); // 로깅
+	}
+	return "redirect:/setting/staff.do";
+	}
+
+
 }
+

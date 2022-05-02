@@ -21,6 +21,7 @@ import com.naedam.mir9.setting.model.vo.AdminSetting;
 import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 
 public interface SettingService {
 
@@ -73,6 +74,8 @@ public interface SettingService {
 	SeoSetting selectSeoSetting();
 
 	int updateSeoSetting(SeoSetting seo);
+
+	int insertStaffEnroll(Staff staff);
 
 
 }

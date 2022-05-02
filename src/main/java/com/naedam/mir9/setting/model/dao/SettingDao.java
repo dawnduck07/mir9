@@ -18,9 +18,11 @@ import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 
 public interface SettingDao {
 
@@ -73,5 +75,9 @@ public interface SettingDao {
 	SeoSetting selectSeoSetting();
 
 	int updateSeoSetting(SeoSetting seo);
+
+	int insertStaffEnroll(Staff staff);
+
+	int insertAttachmentEnroll(Attachment attachment);
 
 }
