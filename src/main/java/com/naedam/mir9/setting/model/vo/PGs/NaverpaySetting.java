@@ -18,8 +18,8 @@ public class NaverpaySetting implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String storeId;
-	private String storeKey;
+	private String storeIdNaver;
+	private String storeKeyNaver;
 	private String btnKey;
-	private int pgMode;
+	private int pgModeNaver;
 }

@@ -69,6 +69,10 @@
 			var postArr = new Array();
 			var boardNo = $("input[name='boardNo']").val();
 			
+			if(postArr.length == 0){
+				alert("항목을 선택하셔야 합니다.");
+				return;
+			}
 			
 			$("input[class='postNo']:checked").each(function(){
 				postArr.push($(this).val());

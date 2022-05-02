@@ -19,7 +19,7 @@ public class KcpSetting implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String useKcp;
-	private String moduleVersion;
+	private String moduleVersionKcp;
 	private String useCredit;
 	private String useBank;
 	private String useVBank;

@@ -603,7 +603,10 @@
 		var date = new Date();
 		i = type.slice(1,3) * 1;
 		if(type.slice(0,1) == 'D'){
-			date = new Date(date-(60 * 60 * 24 * i));
+			console.log(date)
+			date = new Date(date - (60 * 60 * 24 * 1000 * i)/2);
+			console.log(date)
+			
 		}else if(type.slice(0,1) == 'M'){
 			date.setMonth(date.getMonth() - i);
 		}

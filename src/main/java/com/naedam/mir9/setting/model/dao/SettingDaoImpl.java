@@ -2,11 +2,9 @@ package com.naedam.mir9.setting.model.dao;
 
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.coupon.model.vo.Coupon;
@@ -22,8 +20,11 @@ import com.naedam.mir9.point.model.vo.PointUse;
 import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
+import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
+import com.naedam.mir9.setting.model.vo.SnsSetting;
+import com.naedam.mir9.setting.model.vo.Staff;
 import com.naedam.mir9.setting.model.vo.PGs.BillingPgSetting;
 import com.naedam.mir9.setting.model.vo.PGs.EximbaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.KcpSetting;
@@ -186,8 +187,7 @@ public class SettingDaoImpl implements SettingDao {
 		// TODO Auto-generated method stub
 		return session.update("setting.updateSeoSetting", seo);
 	}
-
-	@Override
+	
 	public BillingPgSetting selectPgSetting() {
 		// TODO Auto-generated method stub
 		return session.selectOne("setting.selectPgSetting");
@@ -227,6 +227,63 @@ public class SettingDaoImpl implements SettingDao {
 	public KcpSetting selectKcpSetting() {
 		// TODO Auto-generated method stub
 		return session.selectOne("setting.selectKcpSetting");
+	}
+
+	@Override
+	public int updateKgIniSetting(KgIniSetting kg) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateKgIniSetting", kg);
+	}
+
+	@Override
+	public int updateXpaySetting(XpaySetting xpay) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateXpaySetting", xpay);
+	}
+
+	@Override
+	public int updateKcpSetting(KcpSetting kcp) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateKcpSetting", kcp);
+	}
+
+	@Override
+	public int updateBillingPgSetting(BillingPgSetting pg) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateBillingPgSetting", pg);
+	}
+
+	@Override
+	public int updateNaverpaySetting(NaverpaySetting naverpay) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateNaverpaySetting", naverpay);
+	}
+
+	@Override
+	public int updateNaverShoppingSetting(NaverShoppingSetting naverShopping) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateNaverShoppingSetting", naverShopping);
+	}
+	
+	@Override
+	public SnsSetting selectSnsSetting() {
+		// TODO Auto-generated method stub
+		return session.selectOne("setting.selectSnsSetting");
+	}
+
+	@Override
+	public int updateSnsSetting(SnsSetting snsSetting) {
+		// TODO Auto-generated method stub
+		return session.update("setting.updateSnsSetting", snsSetting);
+	}
+	
+	public int insertStaff(Staff staff) {
+		return session.insert("setting.insertStaff", staff);
+	}
+
+	@Override
+	public List<Staff> selectStaffList() {
+		return session.selectList("setting.selectStaffList");
 	}
 
 

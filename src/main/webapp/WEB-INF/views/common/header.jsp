@@ -12,6 +12,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="_csrf_header" id="_csrf_header" content="${_csrf.headerName}">
 <meta name="_csrf" id="_scrf" content="${_csrf.token}">
+<meta name="naver-site-verification" content="b08b53e0660f883a76f509d68079560f01abf7bf" />
 <title>AdminLTE 2 | ${param.title}</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
@@ -348,7 +349,7 @@
 									class="fa fa-circle-o"></i> 팝업 관리</a></li>
 							<li id="mapManage"><a href="${pageContext.request.contextPath }/setting/map"><i
 									class="fa fa-circle-o"></i> 약도 관리</a></li>
-							<li id="staffManage"><a href="${pageContext.request.contextPath}/setting/staff"><i
+							<li id="staffManage"><a href="${pageContext.request.contextPath}/setting/staff.do"><i
 									class="fa fa-circle-o"></i> 임원 관리</a></li>
 							<li id="historyManage"><a href="${pageContext.request.contextPath }/setting/history"><i
 									class="fa fa-circle-o"></i> 연혁 관리</a></li>
