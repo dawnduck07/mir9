@@ -20,11 +20,14 @@ public class Sms implements Serializable {
 	private static final long serialVersionUID = 1L;	
 	
 	private int smsCode;
-	private int memberNo;
-	private int smsStCode;
-	private int orderNo;
-	private int receiveCode;
-	private int smsPoint;
+	private String receiveCode;
+	private String requestId;
+	private String receivePhone; 
+	private String receiveTitle;
+	private String receiveContent;
+	private float smsPoint; // default 9.9
 	private Date receiveDate;
+	
+	private String reDate;
 
 }

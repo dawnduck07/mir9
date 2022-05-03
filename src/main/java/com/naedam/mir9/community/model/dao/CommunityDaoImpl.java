@@ -13,6 +13,7 @@ import com.naedam.mir9.community.model.vo.EmailSetting;
 import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.ReviewImg;
+import com.naedam.mir9.community.model.vo.Sms;
 import com.naedam.mir9.community.model.vo.SmsSetting;
 
 @Repository
@@ -84,6 +85,18 @@ public class CommunityDaoImpl implements CommunityDao {
 	@Override
 	public List<EmailSetting> emailCheck(String templateId) {
 		return session.selectList("email.emailCheck", templateId);
+	}
+
+	// sms 등록
+	@Override
+	public int insertSms(HashMap<String, Object> param) {
+		return session.insert("sms.insertSms", param);
+	}
+
+	// sms list 조회
+	@Override
+	public List<Sms> selectSmsList(HashMap<String, Object> param) {
+		return session.selectList("sms.selectSmsList", param);
 	}
 
 
