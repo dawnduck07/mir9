@@ -46,9 +46,7 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-body">
-					<div id="totalCountContainer">
-						<label style="margin-top: 5px;">총 ${totalwithdrawalCount} 건</label>
-					</div>
+					<label id="countContainer" style="margin-top: 5px;">총 ${totalwithdrawalCount} 건</label>
 					<!-- 타입별 검색 -->
 					<form name="search-form" onsubmit="return false">
 						<div class="box-tools pull-right" style="margin-bottom: 5px;">
@@ -341,7 +339,8 @@ $(document).ready(function(){
 							</tr>
 								`);
 					});
-					$("#totalCountContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
+					$("#countContainer").html('');
+					$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
 				},
 				error : console.log
 			});

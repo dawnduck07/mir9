@@ -35,9 +35,8 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <label style="margin-top:5px;">총 3 건</label>
+                    <label style="margin-top:5px;" id="countContainer">총 ${resultStaffList.size()} 건</label>
                     <div class="box-tools pull-right" style="margin-bottom:5px;">
-                    <form name="form_search" method="post" action="?tpf=admin/setting/staff">
                     <input type="hidden" name="tpf" value="admin/setting/staff">
                         <div class="has-feedback">
                         <span>
@@ -48,63 +47,48 @@
                     </div>
                     <div class="box-tools pull-right" style="margin-bottom:5px;">
                         <div class="has-feedback">
-                        <select name="field" class="form-control input-sm">
-      <option value="name">이름</option>      <option value="position">직책</option>                        </select>
+                        <select name="type" class="form-control input-sm">
+	     					<option value="staff_name">이름</option>      
+	     					<option value="staff_position">직책</option>                        
+     					</select>
                         </div>
-                    </form>
                     </div>
-
-                    <table class="table table-bordered table-hover">
-                    <form name="form_list" method="post" action="?tpf=admin/setting/staff_process">
-		            <input type="hidden" name="mode" id="mode">
-		            <thead>
-                    <tr>
-                        <td style="width:30px;"><input type="checkbox" name="select_all" onclick=selectAllCheckBox('form_list'); /></td>
-                        <td style="width:60px;">NO</td>
-                        <td style="width:100px;">이미지</td>
-                        <td style="width:146px;">이름</td>
-                        <td>직책</td>
-                        <td style="width:140px;">등록일</td>
-                        <td style="width:80px;">
-                        <i onclick="changeOrder('down','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
-                        <i onclick="changeOrder('up','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
-                        </td>
-                        <td style="width:80px;">명령</td>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    	<c:forEach items="${resultStaffList}" var="staff">
-							<tr>
-		                        <td style="width:30px;"><input type="checkbox" class="member-is-checked" name="" value="${staff.staffNo}" data-target="${staff.staffNo}" /></td>
-		                        <td style="width:60px;">${staff.rowNum}</td>
-		                        <td style="width:100px;"><img src="${staff.imgUrl}" width="144" height="72"></td>
-		                        <td style="width:146px;">${staff.staffName}</td>
-		                        <td>${staff.staffPosition}</td>
-		                        <td style="width:140px;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${staff.regDate}" /></td>
-		                        <td style="width:80px;">
+                    <form name="form_list" method="POST" action="${pageContext.request.contextPath}/setting/staff_delete.do?${_csrf.parameterName}=${_csrf.token}">
+			            <input type="hidden" name="mode" id="mode">
+	                    <table class="table table-bordered table-hover checkbox-group">
+				            <thead>
+			                    <tr>
+			                        <td style="width: 30px;"><input type="checkbox" name="select_all" id="checkAll" /></td>
+			                        <td style="width:60px;">NO</td>
+			                        <td style="width:100px;">이미지</td>
+			                        <td style="width:146px;">이름</td>
+			                        <td>직책</td>
+			                        <td style="width:140px;">등록일</td>
+			                        <td style="width:80px;">
 			                        <i onclick="changeOrder('down','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
 			                        <i onclick="changeOrder('up','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
-		                        </td>
-		                        <td style="width:80px;"><button type="button" value="${staff.staffNo}" class="btn btn-primary btn-xs">상세보기</button></td>
-		                    </tr>
-                    	</c:forEach>
-                    </tbody>
-                    <!-- 
-      				<tr>
-                        <td><input type="checkbox" name="list[]" value="2" /></td>
-                        <td>1</td>
-                        <td></td>
-                        <td>김길동</td>
-                        <td>관리부장</td>
-                        <td>2017-03-13 18:22:03</td>
-                        <td><input type="radio" name="order_code" value="-3" /></td>
-                        <td><button type="button" onclick="onclickUpdate(2);" class="btn btn-primary btn-xs">상세보기</button></td>
-                    </tr>
-                     -->
-                     </form>
-                    </table>
+			                        </td>
+			                        <td style="width:80px;">명령</td>
+			                    </tr>
+		                    </thead>
+		                    <tbody id="tbody">
+		                    	<c:forEach items="${resultStaffList}" var="staff">
+									<tr>
+				                        <td style="width:30px;"><input type="checkbox" class="member-is-checked" name="" value="${staff.staffNo}" data-target="${staff.staffNo}" /></td>
+				                        <td style="width:60px;">${staff.rowNum}</td>
+				                        <td style="width:100px;"><img src="${staff.imgUrl}" width="144"></td>
+				                        <td style="width:146px;">${staff.staffName}</td>
+				                        <td>${staff.staffPosition}</td>
+				                        <td style="width:140px;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${staff.regDate}" /></td>
+				                        <td><input type="radio" name="order_code" value="-3" /></td>
+				                        <td style="width:80px;"><button type="button" value="${staff.staffNo}" class="btn btn-primary btn-xs detailBtn">상세보기</button></td>
+				                    </tr>
+		                    	</c:forEach>
+		                    </tbody>
+	                    </table>
+                    </form>
                     <br>
-                    <button type="button" onclick="selectDelete();" class="btn btn-danger btn-sm"><i class="fa fa-minus-square"></i> 선택삭제</button>
+                    <button type="button" id="staffListDeleteBtn" class="btn btn-danger btn-sm"><i class="fa fa-minus-square"></i> 선택삭제</button>
                     <button type="button" onclick="onclickInsert()"  class="btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> 임원 등록</button>
 
                 </div><!-- /.box-body -->
@@ -119,10 +103,11 @@
             <form
             	name="staffEnrollFrm" 
             	method="POST"
-            	action="${pageContext.request.contextPath}/setting/staffEnroll.do?${_csrf.parameterName}=${_csrf.token}" 
+            	action="${pageContext.request.contextPath}/setting/staff_process.do?${_csrf.parameterName}=${_csrf.token}" 
             	enctype="multipart/form-data">
             <input type="hidden" name="imgUrl" />
             <input type="hidden" name="mode" id="mode" value="insert" />
+            <input type="hidden" name="staffNo" id="staffNo">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabelPortfolio">임원 관리</h4>
@@ -158,8 +143,8 @@
                         <td align="left">
                         <input type="file" name="file" id="file" class="form-control input-sm" style="width:80%; display:inline;">
                         <span id="display_file" style="display:none;">
-                        <button type="button" onclick="" class="btn btn-success btn-xs">보기</button>
-                        <button type="button" onclick="confirmIframeDelete('?tpf=common/image_delete&file_name=staff/'+$('#code').val()+'&code='+$('#code').val());" class="btn btn-danger btn-xs">삭제</button>
+	                        <button type="button" id="windowBtn" onclick="" class="btn btn-success btn-xs">보기</button>
+	                        <button type="button" id="deleteBtn" onclick="" class="btn btn-danger btn-xs">삭제</button>
                         </span>
                         </td>
                     </tr>
@@ -167,7 +152,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="register()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+                    <button type="button" id="btnRegister" onclick="register()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
+                    <button type="button" id="btnUpdate" onclick="update()" class="btn btn-primary">확인</button>&nbsp;&nbsp;&nbsp;
                 </div>
             </form>
         </div>
@@ -179,6 +165,9 @@
 // 등록 모달창
 function onclickInsert(){
 	console.log("등록(onclickInsert())");
+	$("#btnUpdate").hide();
+	$("#btnRegister").show();
+	staffEnrollFrm.reset();
 	$("#modalContent").modal();	
 }
 
@@ -268,6 +257,227 @@ $("input[type=file]").change(function(e){
 		});
 });
 
+//체크박스 전체 선택
+$(".checkbox-group").on("click", "#checkAll", ((e)=>{
+	let checked = $(e.target).is(":checked");
+	console.log("전체 선택 : " + checked);
+	
+	if(checked){
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", true);
+	} else {
+		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", false);
+	}
+}));
+//체크박스 개별 선택
+$(document).on("click", ".member-is-checked", function(){
+	let isChecked = true;
+	console.log("개별 선택 : " + isChecked);
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked && $(item).is(":checked");
+		console.log("i : " + i);
+		//console.log(item);
+		console.log($(item).is(":checked"));
+	});
+	
+	$("#checkAll").prop("checked", isChecked);	
+});
+//선택삭제
+$(document).on("click", "#staffListDeleteBtn", function(){
+	let isChecked = false;
+	
+	$(".member-is-checked").each((i, item)=>{
+		isChecked = isChecked || $(item).is(":checked");
+		let target = $(item).data("target");
+		console.log("target = ", target); // target = memberNo
+		
+		if($(item).is(":checked")){
+			$(item).after(`<input type="hidden" name="staffNo" value="\${target}"/>`);
+		}
+	});
+	
+	var mode = "delete";
+	$('[name=mode]').val(mode);
+	console.log("mode = " + mode);
+	
+	if(!isChecked){
+		alert("선택된 목록이 없습니다.");
+		return;
+	}
+	
+	console.log("클릭");
+	console.log($(document.form_list));
+	if(confirm("해당 자료를 정말 삭제하시겠습니까?"))
+		$(document.form_list).submit();
+});
+//타입별 검색
+$(document).ready(function(){
+	// Enter Event
+	$("#keyword").keydown(function(keyNum){
+		
+		var keyword = $('input[name=keyword]').val(); // 검색어
+		var type = $('select[name=type]').val(); // 검색 타입
+	
+		if(keyNum.keyCode == 13){
+			console.log("Enter Event! - 타입별 검색");
+			console.log("keyword = " + keyword);
+			console.log("type = " + type);
+			
+			const search = {
+				"type" : type,
+				"keyword" : keyword
+			};
+			
+			$.ajax({
+				type : "GET",
+				url : `${pageContext.request.contextPath}/setting/staffTypeSearch.do`,
+				data : search,
+				contentType: "application/json; charset=utf-8",
+				success(data){
+					console.log("ajaxData = " + JSON.stringify(data));
+					
+					$("#tbody").html('');
+					
+					$.each(data.searchStaffList, (k, v) => {
+						$("#tbody").append(`
+								<tr>
+		                        <td style="width:30px;"><input type="checkbox" class="member-is-checked" name="" value="\${v.staffNo}" data-target="\${v.staffNo}" /></td>
+		                        <td style="width:60px;">\${v.rowNum}</td>
+		                        <td style="width:100px;"><img src="\${v.imgUrl}" width="144"></td>
+		                        <td style="width:146px;">\${v.staffName}</td>
+		                        <td>\${v.staffPosition}</td>
+		                        <td style="width:140px;">\${v.regDate}</td>
+		                        <td><input type="radio" name="order_code" value="-3" /></td>
+		                        <td style="width:80px;"><button type="button" value="\${v.staffNo}" class="btn btn-primary btn-xs">상세보기</button></td>
+		                    </tr>
+								`);
+					});
+					$("#countContainer").html('');
+					$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchStaffCount"]} 건</label>`)
+				},
+				error : console.log	
+			});		
+		}
+	});
+});
+// 상세보기
+$(document).on("click", ".detailBtn", function(e){
+	console.log("해당 no = " + $(e.target).val());
+	var staffNo = $(e.target).val();
+	console.log("staffNo = " + staffNo);
+	$("#btnRegister").hide();
+	$("#btnUpdate").show();
+	$("#display_file").show();
+	$("#modalContent").modal();
+	
+	const data = {
+		staffNo : staffNo	
+	};
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/setting/staffDetail.do/\${staffNo}`,
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		method : "GET",
+		success : function(res) {
+			console.log("ajaxData = " + JSON.stringify(res));
+			var staff = res.staff;
+			
+			$("[name=staffName]").val(staff.staffName);
+			$("[name=staffPosition]").val(staff.staffPosition);
+			$("[name=staffCareer]").val(staff.staffCareer);
+			$("[name=staffProfile]").val(staff.staffProfile);
+			//$("[name=imgUrl]").val(staff.imgUrl);
+			$("[name=staffNo]").val(staff.staffNo);
+			$('#windowBtn').attr('onclick', 'openWindow('+ staff.staffNo +');');
+			$('#deleteBtn').attr('onclick', 'deleteImg(' + staff.staffNo +');');
+			if(staff.imgUrl != null){
+				$("#display_file").css("display", "");				
+			}
+			else {
+				$("#display_file").css("display", "none");				
+			};
+		},
+		error : console.log
+	});
+});
+// 이미지 팝업
+function openWindow(staffNo){
+	var win;
+	win = window.open('${pageContext.request.contextPath}/setting/imgView?staffNo='+staffNo, 'imgView', 'scrollbars=no, width=10, height=10, status=no, resizable=no');
+}
+// 이미지 사이즈 조정
+function resizeWindow(win) {
+	var wid = win.document.body.offsetWidth + 30;
+	var hei = win.document.body.offsetHeight + 40;        //30 과 40은 넉넉하게 하려는 임의의 값임
+	win.resizeTo(wid,hei);
+}
+// 이미지 삭제
+function deleteImg(staffNo){
+	console.log("staffNo = " + staffNo);
+	var result = confirm("정말 삭제하시겠습니까?");
+	if(result){
+		
+		const data = {
+				staffNo : staffNo
+		}
+		
+		$.ajax({
+			url : `${pageContext.request.contextPath}/setting/deleteImg.do/\${staffNo}`,
+			data : data,
+			contentType : "application/json; charset=utf-8",
+			method : "POST",
+			headers: {
+	            "${_csrf.headerName}" : "${_csrf.token}"
+	        },
+			success(data){
+				console.log(data);
+				alert("해당 파일이 삭제되었습니다.");
+				location.reload();
+			},
+			error : console.log
+		});
+		$(window).unbind("beforeunload");
+	}
+		
+}
+// 상세보기 - 확인(수정)
+function update(){
+	console.log("상세보기 - 확인");
+	var staffName = $("#staffName").val();
+	var staffPosition = $("#staffPosition").val();
+	var staffCareer = $("#staffCareer").val();
+	var staffProfile = $("#staffProfile").val();
+	var file = $("#file").val();
+	
+	// 이름 공란 확인
+	if(staffName == ''){
+		alert("이름이 입력되지 않았습니다.");
+		$("#staffName").focus();
+		return false;
+	}
+	// 직책 공란 확인
+	if(staffPosition == ''){
+		alert("직책이 입력되지 않았습니다.");
+		$("#staffPosition").focus();
+		return false;
+	}
+	// Career 공란 확인
+	if(staffCareer == ''){
+		alert("Career가 입력되지 않았습니다.");
+		$("#staffCareer").focus();
+		return false;
+	}
+	// Profile 공란 확인
+	if(staffProfile == ''){
+		alert("Profile가 입력되지 않았습니다.");
+		$("#staffProfile").focus();
+		return false;
+	}
+	$('form[name="staffEnrollFrm"] #mode').val('update');
+	$(window).unbind("beforeunload");
+	$(document.staffEnrollFrm).submit();
+}
 </script>
 
 

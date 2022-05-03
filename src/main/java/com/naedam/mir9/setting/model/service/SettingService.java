@@ -104,6 +104,14 @@ public interface SettingService {
 
 	List<Staff> selectStaffList();
 
+	int selectStaffListCount();
+
+	int deleteStaff(int[] staffNo);
+
+	List<Staff> selectSearchStaffList(Map<String, Object> param);
+
+	int selectsearchStaffListCount(Map<String, Object> param);
+
 
 	int updateKgIniSetting(KgIniSetting kg);
 
@@ -116,6 +124,14 @@ public interface SettingService {
 	int updateNaverpaySetting(NaverpaySetting naverpay);
 
 	int updateNaverShoppingSetting(NaverShoppingSetting naverShopping);
+
+	Staff selectOneStaffByStaffNo(int staffNo);
+
+	Staff selectOneimgUrlBystaffNo(int staffNo);
+
+	int deleteStaffImg(int staffNo);
+
+	int updateStaff(Staff staff);
 
 
 }

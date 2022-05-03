@@ -105,6 +105,14 @@ public interface SettingDao {
 
 	List<Staff> selectStaffList();
 
+	int totalStaffListCount();
+
+	int deleteStaff(int[] staffNo);
+
+	List<Staff> searchStaffList(Map<String, Object> param);
+
+	int selectsearchStaffListCount(Map<String, Object> param);
+
 	int updateKgIniSetting(KgIniSetting kg);
 
 	int updateXpaySetting(XpaySetting xpay);
@@ -116,5 +124,14 @@ public interface SettingDao {
 	int updateNaverpaySetting(NaverpaySetting naverpay);
 
 	int updateNaverShoppingSetting(NaverShoppingSetting naverShopping);
+
+	Staff selectOneStaffByStaffNo(int staffNo);
+
+	Staff selectOneimgUrlBystaffNo(int staffNo);
+
+	int deleteStaffImg(int staffNo);
+
+	int updateStaff(Staff staff);
+
 
 }
