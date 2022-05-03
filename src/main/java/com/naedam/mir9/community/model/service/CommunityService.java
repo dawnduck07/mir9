@@ -37,7 +37,7 @@ public interface CommunityService {
 
 	List<SmsSetting> smsCheck(String templateId);
 	
-	List<Sms> selectSmsList();	
+	List<Sms> selectSmsList(HashMap<String, Object> param);	
 	
 	// mail
 	HashMap<String, Object> savedMail(String mailKey, String mailSecret, String templateId);

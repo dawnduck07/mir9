@@ -733,8 +733,8 @@ public class CommunityServiceImpl implements CommunityService {
 
 	// sms list 조회
 	@Override
-	public List<Sms> selectSmsList() {
-		return communityDao.selectSmsList();
+	public List<Sms> selectSmsList(HashMap<String, Object> param) {
+		return communityDao.selectSmsList(param);
 	}
 
 }

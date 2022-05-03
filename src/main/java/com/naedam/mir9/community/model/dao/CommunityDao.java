@@ -31,7 +31,7 @@ public interface CommunityDao {
 	
 	List<SmsSetting> smsCheck(String templateId);	
 	
-	List<Sms> selectSmsList();
+	List<Sms> selectSmsList(HashMap<String, Object> param);
 	
 	// mail
 	int mailAutoSend(HashMap<String, String> param);

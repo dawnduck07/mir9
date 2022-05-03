@@ -95,8 +95,8 @@ public class CommunityDaoImpl implements CommunityDao {
 
 	// sms list 조회
 	@Override
-	public List<Sms> selectSmsList() {
-		return session.selectList("sms.selectSmsList");
+	public List<Sms> selectSmsList(HashMap<String, Object> param) {
+		return session.selectList("sms.selectSmsList", param);
 	}
 
 

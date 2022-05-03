@@ -75,17 +75,21 @@ public class CommunityController {
 	}
 	
 	// sms 조회 + 검색
-	@GetMapping("/sms_list")
-	public String commSmsList(Model model) {
+	@RequestMapping(value="/sms_list", method= {RequestMethod.GET, RequestMethod.POST})
+	public String commSmsList(
+			@RequestParam(required=false) String field,
+			@RequestParam(required=false) String keyword,			
+			Model model) {
+		
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("field", field);
+		param.put("keyword", keyword);
 		
 		// 총 건 수 => 전체 조회 건의 길이
-		List<Sms> smsList = communityService.selectSmsList();
+		List<Sms> smsList = communityService.selectSmsList(param);
 		int total = smsList.size();
 		model.addAttribute("smsList", smsList);
 		model.addAttribute("total", total);
-		
-		System.out.println("=====Controller smsList=====");
-		System.out.println(smsList);
 
 		return "community/smsList";
 	}

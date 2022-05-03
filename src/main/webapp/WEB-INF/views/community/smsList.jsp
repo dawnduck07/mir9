@@ -43,9 +43,9 @@
 	                        <div class="has-feedback">
 	                            <select name="field" class="form-control input-sm" style="float:left; width:130px;">
 	      							<option value="total">전체</option>      
-	      							<option value="title">제목</option>      
-	      							<option value="content">내용</option>      
-	      							<option value="receive">수신번호</option>                            
+	      							<option value="receive_title">제목</option>      
+	      							<option value="receive_content">내용</option>      
+	      							<option value="receive_phone">수신번호</option>                            
 	      						</select>
 	                        </div>
 	                        </form>
@@ -115,11 +115,5 @@
 	    </div><!-- /.row -->
 	</section>
 </div><!-- /.content-wrapper -->
-
-<script>
-	// 키워드 검색 시
-	// 전체, 제목, 내용, 수신번호
-	
-</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
