@@ -37,12 +37,12 @@
 								<tr>
 									<td class="menu">Webmaster 파일</td>
 									<td align="left"><span style="display: inline-block; margin-bottom: 10px; width: 50px;">Naver</span> <input type="file" name="webmaster_naver" class="form-control input-sm" style="width: 75%; display: inline;"> <br> <span style="display: inline-block; margin-bottom: 10px; width: 50px;">Google</span> <input type="file" name="webmaster_google" class="form-control input-sm" style="width: 75%; display: inline;"> <br> <span style="display: inline-block; width: 50px;">Bing</span> <input type="file" name="webmaster_bing" class="form-control input-sm" style="width: 75%; display: inline;"> 
-										<br> ※ 파일명 : <span style="color: red">${seo.googleFileName == null ? '' : seo.googleFileName + '/' } ${seo.naverFileName == null ? '' : seo.naverFileName + '/' } ${seo.bingFileName == null ? '' : seo.bingFileName } </span></td>
+										<br> ※ 파일명 : <span style="color: red">${seo.googleFileName == null ? '' : seo.googleFileName + '/' } ${seo.naverFileName == null ? '' : seo.naverFileName}/${seo.bingFileName == null ? '' : seo.bingFileName } </span></td>
 								</tr>
 								<tr>
 									<td class="menu">Sitemap</td>
 									<td align="left"><input type="file" name="sitemap" class="form-control input-sm" style="width: 80%; display: inline;"> 
-										<br> ※ 파일명 : <span style="color: red">${seo.siteMapFileName == null ? '' : seo.siteMapFileName} <a href="http://www.web-site-map.com" target="_new">[사이트맵 추출하기 바로가기]</a></span></td>
+										<br> ※ 파일명 : <span style="color: red">${seo.siteMapFileName == null ? '' : seo.siteMapFileName} <a href="http://localhost:8080/mir9/sitemap.xml" target="_new">[사이트맵 추출하기 바로가기]</a></span></td>
 								</tr>
 								<tr>
 									<td class="menu">Robots</td>

@@ -1,8 +1,8 @@
 package com.naedam.mir9.setting.controller;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -18,13 +18,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
-import com.naedam.mir9.common.Mir9Utils;
 import com.naedam.mir9.coupon.model.vo.Coupon;
 import com.naedam.mir9.delivery.model.vo.DeliveryCompany;
 import com.naedam.mir9.delivery.model.vo.DeliveryNotice;
@@ -41,7 +41,6 @@ import com.naedam.mir9.popup.model.vo.Popup;
 import com.naedam.mir9.setting.model.service.SettingService;
 import com.naedam.mir9.setting.model.vo.AdminMenu;
 import com.naedam.mir9.setting.model.vo.AdminSetting;
-import com.naedam.mir9.setting.model.vo.Attachment;
 import com.naedam.mir9.setting.model.vo.Locale;
 import com.naedam.mir9.setting.model.vo.SeoSetting;
 import com.naedam.mir9.setting.model.vo.SnsSetting;
@@ -53,6 +52,7 @@ import com.naedam.mir9.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.mir9.setting.model.vo.PGs.NaverpaySetting;
 import com.naedam.mir9.setting.model.vo.PGs.XpaySetting;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -257,17 +257,43 @@ public class SettingController {
 	}
 	
 	@GetMapping("/seo")
-	public void seo(Model model) {
-		
+	public void seo(Model model) throws Exception {
 		SeoSetting seo = settingService.selectSeoSetting();
-		
 		model.addAttribute("seo", seo);
 	}
 	
 	@PostMapping("/seo_process")
-	public String seo_process(HttpServletRequest request, SeoSetting seo) {
-		int result = settingService.updateSeoSetting(seo);
+	public String seo_process(HttpServletRequest request, SeoSetting seo,
+							  @RequestParam("webmaster_naver") MultipartFile naverFileName,
+							  @RequestParam("webmaster_google") MultipartFile googleFileName,
+							  @RequestParam("webmaster_bing") MultipartFile bingFileName) throws Exception {
+		SeoSetting seoSetting = settingService.selectSeoSetting();
 		
+		String filePath = request.getServletContext().getRealPath("/");
+		if(seoSetting.getNaverFileName() == null && naverFileName.getOriginalFilename() != "") {
+			System.out.println("확인 ::: "+naverFileName);
+			File naver = new File(filePath+naverFileName.getOriginalFilename());
+			naverFileName.transferTo(naver);
+			seo.setNaverFileName(naverFileName.getOriginalFilename());
+		}
+		if(seoSetting.getGoogleFileName() == null && googleFileName.getOriginalFilename() != "") {
+			File google = new File(filePath+googleFileName.getOriginalFilename());
+			googleFileName.transferTo(google);
+			seo.setGoogleFileName(googleFileName.getOriginalFilename());
+		}		
+		if(seoSetting.getBingFileName() == null && bingFileName.getOriginalFilename() != "") {
+			File bing = new File(filePath+bingFileName.getOriginalFilename());
+			bingFileName.transferTo(bing);
+			seo.setBingFileName(bingFileName.getOriginalFilename());
+		}				
+			
+		
+		int result = settingService.updateSeoSetting(seo);
+		System.out.println("여기 확인 ::: "+seo);
+		String imagePath = request.getServletContext().getRealPath("robots.txt");
+		BufferedWriter bw = new BufferedWriter(new FileWriter(imagePath));
+		bw.write(seo.getRobots());
+		bw.close();
 		return "redirect:/setting/seo";
 	}
 	

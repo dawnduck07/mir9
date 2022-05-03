@@ -182,7 +182,7 @@
   	</update>
   	
   	<update id="updateSeoSetting">
-  		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}
+  		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}, naver_file_name = #{naverFileName}, google_file_name = #{googleFileName}, bing_file_name = #{bingFileName}
   	</update>
   	
   	<update id="updateSnsSetting" parameterType="snsSetting">
