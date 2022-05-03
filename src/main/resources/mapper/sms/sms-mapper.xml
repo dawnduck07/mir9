@@ -10,7 +10,6 @@
 		 where order_no = #{orderNo}
 	</select>
 
-
 	<update id="autoSend" parameterType="hashmap">
 		update sms_setting
 		   set is_send = #{send}
@@ -22,6 +21,39 @@
 		select *
 		  from sms_setting
 		 where template_id = #{templateId}
+	</select>
+	
+	<insert id="insertSms" parameterType="hashmap">
+		insert into tb_sms (
+							sms_code,
+							receive_code,
+							request_id,
+							receive_phone,
+							receive_title,
+							receive_content,
+							sms_point,
+							receive_date)
+		values(
+				NEXTVAL(seq_sms_code),
+				#{type},
+				#{requestId},
+				#{phone},
+				#{title},
+				#{content},
+				default,
+				#{date})
+	</insert>	
+	
+	<select id="selectSmsList" resultType="sms">
+		select sms_code,
+			   receive_code,
+			   request_id,
+			   receive_phone,
+			   receive_title,
+			   receive_content,
+			   sms_point,
+			   date_format(receive_date, '%Y-%m-%d %T') as reDate
+		  from tb_sms;
 	</select>
   
 </mapper>

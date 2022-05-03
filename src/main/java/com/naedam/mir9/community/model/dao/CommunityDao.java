@@ -8,6 +8,7 @@ import com.naedam.mir9.community.model.vo.EmailSetting;
 import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.ReviewImg;
+import com.naedam.mir9.community.model.vo.Sms;
 import com.naedam.mir9.community.model.vo.SmsSetting;
 
 public interface CommunityDao {
@@ -30,11 +31,16 @@ public interface CommunityDao {
 	
 	List<SmsSetting> smsCheck(String templateId);	
 	
+	List<Sms> selectSmsList();
+	
 	// mail
 	int mailAutoSend(HashMap<String, String> param);
 
 	List<EmailSetting> emailCheck(String templateId);
 
 	MsgInfo selectMsgInfo(long orderNo);
-	
+
+	int insertSms(HashMap<String, Object> param);
+
+
 }
