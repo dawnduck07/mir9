@@ -315,6 +315,26 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.selectsearchStaffListCount(param);
 	}
 
+	@Override
+	public Staff selectOneStaffByStaffNo(int staffNo) {
+		return settingDao.selectOneStaffByStaffNo(staffNo);
+	}
+
+	@Override
+	public Staff selectOneimgUrlBystaffNo(int staffNo) {
+		return settingDao.selectOneimgUrlBystaffNo(staffNo);
+	}
+
+	@Override
+	public int deleteStaffImg(int staffNo) {
+		return settingDao.deleteStaffImg(staffNo);
+	}
+
+	@Override
+	public int updateStaff(Staff staff) {
+		return settingDao.updateStaff(staff);
+	}
+
 
 
 

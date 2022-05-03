@@ -125,5 +125,13 @@ public interface SettingDao {
 
 	int updateNaverShoppingSetting(NaverShoppingSetting naverShopping);
 
+	Staff selectOneStaffByStaffNo(int staffNo);
+
+	Staff selectOneimgUrlBystaffNo(int staffNo);
+
+	int deleteStaffImg(int staffNo);
+
+	int updateStaff(Staff staff);
+
 
 }
