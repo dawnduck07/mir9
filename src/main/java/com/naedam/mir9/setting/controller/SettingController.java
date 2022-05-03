@@ -275,9 +275,8 @@ public class SettingController {
 							  @RequestParam("webmaster_bing") MultipartFile bingFileName) throws Exception {
 		SeoSetting seoSetting = settingService.selectSeoSetting();
 		
-		String filePath = request.getServletContext().getRealPath("/");
+		String filePath = request.getServletContext().getRealPath("webapp/");
 		if(seoSetting.getNaverFileName() == null && naverFileName.getOriginalFilename() != "") {
-			System.out.println("확인 ::: "+naverFileName);
 			File naver = new File(filePath+naverFileName.getOriginalFilename());
 			naverFileName.transferTo(naver);
 			seo.setNaverFileName(naverFileName.getOriginalFilename());
