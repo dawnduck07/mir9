@@ -1,5 +1,6 @@
 package com.naedam.mir9.community.model.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.naedam.mir9.community.model.vo.EmailSetting;
+import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.ReviewImg;
+import com.naedam.mir9.community.model.vo.SmsSetting;
 
 @Repository
 public class CommunityDaoImpl implements CommunityDao {
@@ -57,5 +61,33 @@ public class CommunityDaoImpl implements CommunityDao {
 	public int smsAutoSend(HashMap<String, String> param) {
 		return session.update("sms.autoSend", param);
 	}
+	
+	// mail 자동 발송 여부
+	@Override
+	public int mailAutoSend(HashMap<String, String> param) {
+		return session.update("email.autoSend", param);
+	}
+	
+	// v_msg_info 조회
+	@Override
+	public MsgInfo selectMsgInfo(long orderNo) {
+		return session.selectOne("sms.msgInfo", orderNo);
+	}	
+
+	// sms 자동 발송 체크 여부 조회
+	@Override
+	public List<SmsSetting> smsCheck(String templateId) {
+		return session.selectList("sms.smsCheck", templateId);
+	}
+
+	// email 자동 발송 체크 여부 조회
+	@Override
+	public List<EmailSetting> emailCheck(String templateId) {
+		return session.selectList("email.emailCheck", templateId);
+	}
+
+
+
+
 	
 }

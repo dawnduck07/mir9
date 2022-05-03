@@ -238,6 +238,42 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
+	public int updateKgIniSetting(KgIniSetting kg) {
+		// TODO Auto-generated method stub
+		return settingDao.updateKgIniSetting(kg);
+	}
+
+	@Override
+	public int updateXpaySetting(XpaySetting xpay) {
+		// TODO Auto-generated method stub
+		return settingDao.updateXpaySetting(xpay);
+	}
+
+	@Override
+	public int updateKcpSetting(KcpSetting kcp) {
+		// TODO Auto-generated method stub
+		return settingDao.updateKcpSetting(kcp);
+	}
+
+	@Override
+	public int updateBillingPgSetting(BillingPgSetting pg) {
+		// TODO Auto-generated method stub
+		return settingDao.updateBillingPgSetting(pg);
+	}
+
+	@Override
+	public int updateNaverpaySetting(NaverpaySetting naverpay) {
+		// TODO Auto-generated method stub
+		return settingDao.updateNaverpaySetting(naverpay);
+	}
+
+	@Override
+	public int updateNaverShoppingSetting(NaverShoppingSetting naverShopping) {
+		// TODO Auto-generated method stub
+		return settingDao.updateNaverShoppingSetting(naverShopping);
+	}
+
+	@Override
 	public SnsSetting selectSnsSetting() {
 		// TODO Auto-generated method stub
 		return settingDao.selectSnsSetting();
@@ -258,6 +294,27 @@ public class SettingServiceImpl implements SettingService {
 	public List<Staff> selectStaffList() {
 		return settingDao.selectStaffList();
 	}
+
+	@Override
+	public int selectStaffListCount() {
+		return settingDao.totalStaffListCount();
+	}
+
+	@Override
+	public int deleteStaff(int[] staffNo) {
+		return settingDao.deleteStaff(staffNo);
+	}
+
+	@Override
+	public List<Staff> selectSearchStaffList(Map<String, Object> param) {
+		return settingDao.searchStaffList(param);
+	}
+
+	@Override
+	public int selectsearchStaffListCount(Map<String, Object> param) {
+		return settingDao.selectsearchStaffListCount(param);
+	}
+
 
 
 

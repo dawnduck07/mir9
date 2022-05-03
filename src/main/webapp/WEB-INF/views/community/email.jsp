@@ -429,7 +429,9 @@ textarea {
 	
 	// 보완 : 발신이메일별 카테고리 추가 + 수정 템플릿 추가(수정 템플릿명에 '_메일명') + 해당 수정 템플릿에 저장	/ 중복되는 코드 정리 / 메일 SPF 관련
  
-	// mail 발송 ajax
+	// 체크 저장 -> 확인
+	// 조건별 email 발송 ajax -> 진행중
+	// 발송 목록 리스트로 조회 -> 대기중
 	
 	// CHEDITOR
 	var objEditor = CKEDITOR.replace('content', {

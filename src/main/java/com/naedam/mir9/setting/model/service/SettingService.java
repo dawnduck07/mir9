@@ -104,6 +104,26 @@ public interface SettingService {
 
 	List<Staff> selectStaffList();
 
+	int selectStaffListCount();
+
+	int deleteStaff(int[] staffNo);
+
+	List<Staff> selectSearchStaffList(Map<String, Object> param);
+
+	int selectsearchStaffListCount(Map<String, Object> param);
+
+
+	int updateKgIniSetting(KgIniSetting kg);
+
+	int updateXpaySetting(XpaySetting xpay);
+
+	int updateKcpSetting(KcpSetting kcp);
+
+	int updateBillingPgSetting(BillingPgSetting pg);
+
+	int updateNaverpaySetting(NaverpaySetting naverpay);
+
+	int updateNaverShoppingSetting(NaverShoppingSetting naverShopping);
 
 
 }

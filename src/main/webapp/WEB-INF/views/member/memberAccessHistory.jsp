@@ -41,16 +41,14 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-body">
-					<div id="totalCountContainer">
-						<label style="margin-top: 5px;">총 ${totalAccessHistoryCount} 건</label>
-					</div>
+					<label id="countContainer" style="margin-top: 5px;">총 ${totalAccessHistoryCount} 건</label>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-							<div class="has-feedback">
-								<span> <input type="text" name="keyword" id="keyword"
-									value="" class="form-control input-sm" placeholder="검색" /> <span
-									class="glyphicon glyphicon-search form-control-feedback"></span>
-								</span>
-							</div>
+						<div class="has-feedback">
+							<span> <input type="text" name="keyword" id="keyword"
+								value="" class="form-control input-sm" placeholder="검색" /> <span
+								class="glyphicon glyphicon-search form-control-feedback"></span>
+							</span>
+						</div>
 					</div>
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
@@ -164,7 +162,8 @@ $(document).ready(function(){
 							</tr>
 								`);
 					});
-					$("#totalCountContainer").html(`<label style="margin-top: 5px;">총 \${data["searchHistoryListCount"]} 건</label>`)
+					$("#countContainer").html('');
+					$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchHistoryListCount"]} 건</label>`)
 				}
 			});
 		};

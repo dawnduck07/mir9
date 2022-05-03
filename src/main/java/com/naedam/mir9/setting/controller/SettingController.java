@@ -142,9 +142,15 @@ public class SettingController {
 	
 	@GetMapping("/staff.do")
 	public void staffList(Model model) {
+		// 임원 리스트 게시물
 		List<Staff> resultStaffList = settingService.selectStaffList();
 		log.debug("resultStaffList = {}", resultStaffList);
 		model.addAttribute("resultStaffList", resultStaffList);
+		
+		// 전체 게시물 수
+		int totalStaffListCount = settingService.selectStaffListCount();
+		log.debug("totalStaffListCount = {}", totalStaffListCount);
+		model.addAttribute("totalStaffListCount", totalStaffListCount);
 	}
 	
 	@GetMapping("/history")
@@ -302,20 +308,8 @@ public class SettingController {
 		BillingPgSetting pg = settingService.selectPgSetting();
 		NaverShoppingSetting naverShopping = settingService.selectNaverShoppingSetting();
 		
-		if(pg.getIsDomestic().equals("Y")) {
-			KgIniSetting kgIni = settingService.selectKgIniSetting();
-			model.addAttribute("kgIni",kgIni);
-		}
-		
-		if(pg.getIsForeigne().equals("Y")) {
-			EximbaySetting eximbay = settingService.selectEximbaySetting();
-			model.addAttribute("eximbay", eximbay);
-		}
-		
-		if(pg.getNaverpayUse().equals("Y")) {
-			NaverpaySetting naverpay = settingService.selectNaverpaySetting();
-			model.addAttribute("naverpay", naverpay);
-		}
+
+
 		
 		model.addAttribute("pg",pg);
 		model.addAttribute("naverShopping",naverShopping);
@@ -343,14 +337,63 @@ public class SettingController {
 			}else if(type.equals("kcp")) {
 				KcpSetting kcp = settingService.selectKcpSetting();
 				return kcp;
+			}else if(type.equals("naverpay")) {
+				NaverpaySetting naverpay = settingService.selectNaverpaySetting();
+				return naverpay;
+			}else if(type.equals("eximbay")) {
+				EximbaySetting eximbay = settingService.selectEximbaySetting();
+				return eximbay;
 			}
 		}
-		
-		
 		return result;
 	}
 	
-	
+	@PostMapping("/updatePaymentPG")
+	public String updatePaymentPG(HttpServletRequest request, BillingPgSetting pg, KgIniSetting kg, XpaySetting xpay, KcpSetting kcp, NaverpaySetting naverpay, EximbaySetting eximbay, NaverShoppingSetting naverShopping) {
+		int result = 0;
+		if(pg.getIsDomestic() == null) {pg.setIsDomestic("N");}
+		if(pg.getIsForeigne() == null) {pg.setIsForeigne("N");}
+		if(pg.getNaverpayUse() == null) {pg.setNaverpayUse("N");}
+		
+		if(kg.getUseIni() == null) {kg.setUseIni("N");}
+		if(kg.getUseCreditIni() == null) {kg.setUseCreditIni("N");}
+		if(kg.getUseBankIni() == null) {kg.setUseBankIni("N");}
+		if(kg.getUseVBankIni() == null) {kg.setUseVBankIni("N");}
+		
+		if(xpay.getUseXpay() == null) {xpay.setUseXpay("N");}
+		if(xpay.getUseCreditXpay() == null) {xpay.setUseCreditXpay("N");}
+		if(xpay.getUseBankXpay() == null) {xpay.setUseBankXpay("N");}
+		if(xpay.getUseVBankXpay() == null) {xpay.setUseVBankXpay("N");}
+		
+		if(kcp.getUseKcp() == null) {kcp.setUseKcp("N");}
+		if(kcp.getUseCredit() == null) {kcp.setUseCredit("N");}
+		if(kcp.getUseBank() == null) {kcp.setUseBank("N");}
+		if(kcp.getUseVBank() == null) {kcp.setUseVBank("N");}
+		
+		if(eximbay.getUseEximbay() == null) {eximbay.setUseEximbay("N");}
+		if(eximbay.getUseCreditEximbay() == null) {eximbay.setUseCreditEximbay("N");}
+		if(eximbay.getUsePaypal() == null) {eximbay.setUsePaypal("N");}
+		if(eximbay.getUseUnion() == null) {eximbay.setUseUnion("N");}
+		if(eximbay.getUseAli() == null) {eximbay.setUseAli("N");}
+		
+		
+		if(!(kg.getUseCreditIni().equals("N") && kg.getUseBankIni().equals("N") && kg.getUseVBankIni().equals("N"))) {
+			result = settingService.updateKgIniSetting(kg);
+		}
+		if(!(xpay.getUseCreditXpay().equals("N") && xpay.getUseBankXpay().equals("N") && xpay.getUseVBankXpay().equals("N"))) {
+			result = settingService.updateXpaySetting(xpay);
+		}
+		if(!(kcp.getUseCredit().equals("N") && kcp.getUseBank().equals("N") && kcp.getUseVBank().equals("N"))) {
+			result = settingService.updateKcpSetting(kcp);
+		}
+		
+		result = settingService.updateBillingPgSetting(pg);
+		result = settingService.updateNaverpaySetting(naverpay);
+		result = settingService.updateNaverShoppingSetting(naverShopping);
+		
+		
+		return "setting/paymentpg";
+	}
 	
 	@GetMapping("/snslogin")
 	public String snsLogin(Model model, SnsSetting snsSetting) {
@@ -379,11 +422,13 @@ public class SettingController {
 	public void test() {}
 	
 	
-	@PostMapping("/staffEnroll.do")
+	
+	@PostMapping("/staff_process.do")
 	public String staffEnroll(Staff staff, 
 							  RedirectAttributes redirectAttribute,
-							  HttpServletRequest request) {
-		log.debug("{}", "staffEnroll.do 실행!");
+							  HttpServletRequest request,
+							  @RequestParam int[] staffNo) {
+		log.debug("{}", "staff_process.do 실행!");
 		log.debug("staff = {}", staff);
 		
 		int result = 0;
@@ -393,11 +438,47 @@ public class SettingController {
 		if(mode.equals("insert")) {
 			int resultInsertStaff = settingService.insertStaff(staff);
 			log.debug("resultInsertStaff = {}", resultInsertStaff);
+		} else if(mode.equals("delete")) {
+			int resultDeleteStaff = settingService.deleteStaff(staffNo);
+			log.debug("resultDeleteStaff = {}", resultDeleteStaff);
+			if(resultDeleteStaff > 0) {
+				msg = "삭제 되었습니다.";
+			}
 		}
 	
 	return "redirect:/setting/staff.do";
 	}
 
+	// 임원 관리 타입별 검색
+	@ResponseBody
+	@GetMapping("/staffTypeSearch.do")
+	public Map<String, Object> staffTypeSearch(
+				@RequestParam String type,
+				@RequestParam String keyword,
+				HttpServletRequest request){
+		log.debug("{}", "타입별 검색 시작");
+		log.debug("type = {}", type);
+		log.debug("keyboard = {}", keyword);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
+		log.debug("param = {}", param);
+		
+		// 임원 검색 게시물
+		List<Staff> searchStaffList = settingService.selectSearchStaffList(param);
+		log.debug("searchStaffList = {}", searchStaffList);
+		
+		// 임원 검색 게시물 수
+		int searchStaffCount = settingService.selectsearchStaffListCount(param);
+		log.debug("searchStaffCount = {}", searchStaffCount);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchStaffList", searchStaffList);
+		resultMap.put("searchStaffCount", searchStaffCount);
+		
+		return resultMap;
+	}
 
 }
 

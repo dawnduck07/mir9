@@ -515,23 +515,53 @@
 	
 	<!-- 모달창 -> 상태 업데이트 -->
 	function updateOrderStatus(orderNo){
+		
+		var statusNo = $("#payment_status").val();
+		
 		$.ajax({
 			//url: `\${restServerUrl}/menus`,
 			url:`${pageContext.request.contextPath}/order/updateOrderStatus`,
 			data:{
 				orderNo : orderNo,
-				statusNo : $("#payment_status").val()
+				statusNo : statusNo
 			},
 			method: "GET",
 			success(data){
 				if(data > 0){
 					alert('주문 상태가 변경되었습니다.');
 					location.reload();
+	
+					sendAutoMsg(orderNo, statusNo); // 성공시 메시지 자동발송 실행
 				}
 			},
 			error: console.log
 		});  
 	}
+	
+	<!-- 자동발송msg -->
+	function sendAutoMsg(orderNo, statusNo) {
+		
+		console.log("======자동발송msg 함수 실행되나?======");
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/comm/sendMsg",
+			headers: {
+				"${_csrf.headerName}" : "${_csrf.token}"
+			},
+			method: "POST",
+			data: {
+				orderNo : orderNo,
+				statusNo : statusNo
+			},
+			success: function(data){
+				if(data > 0) {
+					console.log("메시지 자동 발송 성공");
+				}
+			},
+			error: console.log
+		});
+	}
+	
 	/* 모달창 --> 관리자 메모 업데이트 */
 	function updateAdminMemo(orderInfoNo){
 		$.ajax({
@@ -573,7 +603,10 @@
 		var date = new Date();
 		i = type.slice(1,3) * 1;
 		if(type.slice(0,1) == 'D'){
-			date = new Date(date-(60 * 60 * 24 * i));
+			console.log(date)
+			date = new Date(date - (60 * 60 * 24 * 1000 * i)/2);
+			console.log(date)
+			
 		}else if(type.slice(0,1) == 'M'){
 			date.setMonth(date.getMonth() - i);
 		}
