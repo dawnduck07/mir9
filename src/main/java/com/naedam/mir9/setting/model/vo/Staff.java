@@ -3,6 +3,8 @@ package com.naedam.mir9.setting.model.vo;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class Staff implements Serializable {
 	private String staffCareer;
 	private String staffProfile;
 	private String imgUrl;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
 	private Date regDate;
 	private int rowNum;
 }
