@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmins="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>http://localhost:8080/mir9/dashBoard</loc>
+	</url>	
+	<url>
+		<loc>http://localhost:8080/mir9/order/list</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/menu/menu</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/board/listBoard</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/product/list</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/member/list.do</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/schedule/schedule</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/schedule/index.php/mir9/form/manage</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/statistics/period_day</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/comm/email</loc>
+	</url>
+	<url>
+		<loc>http://localhost:8080/mir9/setting/seo</loc>
+	</url>
+</urlset>

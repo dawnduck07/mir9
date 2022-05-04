@@ -73,7 +73,7 @@ public class BoardController {
 	public String addPost(@ModelAttribute("post") Post post,
 						  @ModelAttribute("board") Board board,
 					      @RequestParam(value="postName") MultipartFile[] postName,
-					      @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception {
+					      @RequestParam("ThombnailName") MultipartFile ThombnailName,HttpServletRequest request) throws Exception {
 		
 		System.out.println("addPost 시작");
 		
@@ -83,20 +83,17 @@ public class BoardController {
 		Member member2 = boardService.getMemberData(1);
 		post.setPostMember(member2);
 		post.setPostMemberName(member2.getLastName()+member2.getFirstName());
-		System.out.println("이거 확인 ::: === "+ postName.length);
 		
 		//파일 업로드
-		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
 		ThombnailName.transferTo(file);
 		boardService.addPost(post);
 		
-		System.out.println("post데이터 확인 ::: ==="+post);
 		
 		for(int i = 0; i < postName.length; i++) {
-			System.out.println("파일 확인 ::: === "+postName[i]);
 			File file2 = new File(filePath+postName[i].getOriginalFilename());
 			boardFile.setFilePost(post);
 			boardFile.setFileName(postName[i].getOriginalFilename());
@@ -116,7 +113,8 @@ public class BoardController {
 	public String addPost2(@ModelAttribute("post") Post post,
 						  @ModelAttribute("board") Board board,
 					      @RequestParam(value="postName") String[] postName,
-					      @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception {
+					      @RequestParam("ThombnailName") MultipartFile ThombnailName,
+					      HttpServletRequest request) throws Exception {
 		
 		System.out.println("addPost 시작");
 		
@@ -129,7 +127,7 @@ public class BoardController {
 		System.out.println("이거 확인 ::: === "+ postName.length);
 		
 		//파일 업로드
-		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
@@ -157,7 +155,7 @@ public class BoardController {
 	public String addAnswerPost(@ModelAttribute("post") Post post,
 								@ModelAttribute("board") Board board,
 								@RequestParam(value="postName") MultipartFile[] postName,
-								@RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception {
+								@RequestParam("ThombnailName") MultipartFile ThombnailName, HttpServletRequest request) throws Exception {
 		
 		System.out.println("addAnswerPost 시작");
 		System.out.println("post 데이터 확인 ::: "+post);
@@ -169,7 +167,7 @@ public class BoardController {
 		System.out.println("memeberData ==== "+member2);
 		
 		//파일 업로드
-		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
@@ -186,7 +184,6 @@ public class BoardController {
 		
 		
 		Post post2 = boardService.getPostData(post.getPostNo());
-		System.out.println("post2의 데이터 === "+post2);
 		post.setPostOriginNo(post.getPostOriginNo()); // 이건 해결
 		post.setPostOrd(post2.getPostAsc());
 		post.setPostLayer(post2.getPostLayer());
@@ -197,7 +194,6 @@ public class BoardController {
 		boardService.addAnswerPost(post);
 		
 		
-		System.out.println("board 데이터 확인 ::: "+board);
 		
 		return "redirect:/board/postList?boardNo="+board.getBoardNo();
 	}
@@ -215,10 +211,7 @@ public class BoardController {
 			   @ModelAttribute("boardAuthority") BoardAuthority boardAuthority,
 			   @ModelAttribute("boardOption") BoardOption boardOption) throws Exception{
 		
-		System.out.println("updateBoard 시작"); 
-		System.out.println("board 확인 :: "+board);
-		System.out.println("boardAuthority 확인 :: "+boardAuthority);
-		System.out.println("boardOption 확인 :: "+boardOption);		
+		System.out.println("updateBoard 시작"); 	
 		
 		boardService.updateBoard(board);
 		boardAuthority.setAuthorityBoard(board);
@@ -234,15 +227,14 @@ public class BoardController {
 	public String updataPost(@ModelAttribute("post") Post post,
 							 @RequestParam("boardNo") int boardNo,
 							 @RequestParam(value="postName") MultipartFile[] postName,
-						     @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception{
+						     @RequestParam("ThombnailName") MultipartFile ThombnailName, HttpServletRequest request) throws Exception{
 		System.out.println("updatePost 시작");
-		System.out.println("file의 길이를 보자 ::: === "+postName.length);
 		Board board = new Board();
 		BoardFile boardFile = new BoardFile();
 		board.setBoardNo(boardNo);
 		
 		//파일 업로드
-		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
@@ -265,15 +257,15 @@ public class BoardController {
 	public String updataPost2(@ModelAttribute("post") Post post,
 							 @RequestParam("boardNo") int boardNo,
 							 @RequestParam(value="postName") String[] postName,
-						     @RequestParam("ThombnailName") MultipartFile ThombnailName) throws Exception{
+						     @RequestParam("ThombnailName") MultipartFile ThombnailName, HttpServletRequest request) throws Exception{
 		System.out.println("updatePost 시작");
-		System.out.println("file의 길이를 보자 ::: === "+postName.length);
+		
 		Board board = new Board();
 		BoardFile boardFile = new BoardFile();
 		board.setBoardNo(boardNo);
 		
 		//파일 업로드
-		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
 		post.setPostThombnail(ThombnailName.getOriginalFilename());
@@ -307,7 +299,6 @@ public class BoardController {
 			int a = boardService.getTotalCount3(board2.get(i).getBoardNo());
 			postCount.add(a);
 		}
-		System.out.println("count 확인 ::: " + postCount);
 		
 		
 		
@@ -318,7 +309,7 @@ public class BoardController {
 		Map<String, Object> resultMap = boardService.getBoardList(map);
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println("resultMap 확인 === "+resultMap);
+
 		model.addAttribute("list", resultMap.get("list"));
 		model.addAttribute("postCount", postCount);
 		model.addAttribute("resultPage", resultPage);
@@ -463,7 +454,7 @@ public class BoardController {
 			String fileName = upload.getOriginalFilename(); 
 			byte[] bytes = upload.getBytes(); 
 			//이미지 경로 생성 
-			String path = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\";
+			String path = request.getServletContext().getRealPath("resources/imgs/imageBoard/ckeditorImg/");
 			// fileDir는 전역 변수라 그냥 이미지 경로 설정해주면 된다. 
 			String ckUploadPath = path + uid + "_" + fileName; 
 			File folder = new File(path); 
@@ -505,7 +496,7 @@ public class BoardController {
 						 @RequestParam(value="fileName") String fileName , 
 						 HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{ 
 		//서버에 저장된 이미지 경로 
-		String path = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\ckeditorImg\\"; 
+		String path = request.getServletContext().getRealPath("resources/imgs/imageBoard/ckeditorImg/");
 		
 		String sDirPath = path + uid + "_" + fileName; 
 		

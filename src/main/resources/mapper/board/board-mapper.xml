@@ -156,10 +156,10 @@
 			   #{postBoard.boardNo},
 			   #{postTitle : VARCHAR},
 			   #{postContents : VARCHAR},
-			   <if test="postDate == 'null'">
+			   <if test="postDate == null or postDate == ''">
 			   	sysdate(),
 			   </if>
-			   <if test="postDate != 'null'">
+			   <if test="postDate != null">
 			   #{postDate : VARCHAR},
 			   </if>
 			   #{postThombnail : VARCHAR},			   
