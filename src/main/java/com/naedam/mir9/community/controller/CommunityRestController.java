@@ -271,13 +271,4 @@ public class CommunityRestController {
 		return result;
 	}
 	
-	// 회원가입, 아이디 찾기, 비밀번호 찾기는 프론트단 구현 후
-	
-	// 적립금 관련 msg 발송
-	
-	
-	// 쿠폰 관련 msg 발송
-
-	
-	
 }

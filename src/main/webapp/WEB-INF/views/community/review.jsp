@@ -153,7 +153,6 @@
 </div><!-- /.content-wrapper -->
 
 <script>
-
 	// 모달 띄우기
 	function review_detail(reviewCode){
 		$("#modalContent").modal({backdrop:"static", show:true}); // backdrop : 모달 영역 밖 클릭 시 닫힘 방지 
@@ -168,10 +167,6 @@
 			type: 'get',
 			data: { reviewCode : reviewCode },
 			success: function(result){
-				// 해당 회원의 리뷰 정보 조회하기
-				// console.log(result.review);
-				// console.log(result.reviewImg.length);
-				
 				// 작성자, 한줄 후기, 구매 후기
 				$("#name").val(result.review[0].writer);
 				$("#title").val(result.review[0].reviewTitle);
