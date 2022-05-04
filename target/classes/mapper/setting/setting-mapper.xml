@@ -345,5 +345,53 @@
 		</where>
 	</select>
 
+<<<<<<< HEAD
 
+=======
+	<select id="selectOneStaffByStaffNo" resultType="staff">
+		SELECT
+			staff_no,
+			staff_name,
+			staff_position,
+			staff_career,
+			staff_profile,
+			img_url,
+			reg_date
+		FROM
+			staff
+		WHERE
+			staff_no = #{staffNo}
+	</select>
+	
+	<select id="selectOneimgUrlBystaffNo" resultType="staff">
+		SELECT
+			img_url
+		FROM
+			staff
+		WHERE
+			staff_no = #{staffNo}
+	</select>
+	
+	<update id="deleteStaffImg">
+		UPDATE
+			staff
+		SET
+			img_url = NULL 
+		WHERE
+			staff_no = #{staffNo} 
+	</update>
+	
+	<update id="updateStaff">
+		UPDATE
+			staff
+		SET
+			staff_name = #{staffName},
+			staff_position = #{staffPosition},
+			staff_career = #{staffCareer},
+			staff_profile = #{staffProfile},
+			img_url = #{imgUrl}
+		WHERE
+			staff_no = #{staffNo}
+	</update>
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 </mapper>

@@ -1,8 +1,13 @@
 package com.naedam.mir9.setting.controller;
 
+<<<<<<< HEAD
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+=======
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -11,16 +16,17 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.banner.model.vo.Banner;
@@ -141,16 +147,22 @@ public class SettingController {
 	}
 	
 	@GetMapping("/staff.do")
-	public void staffList(Model model) {
-		// 임원 리스트 게시물
-		List<Staff> resultStaffList = settingService.selectStaffList();
-		log.debug("resultStaffList = {}", resultStaffList);
-		model.addAttribute("resultStaffList", resultStaffList);
+	public void staffList(Model model) {	
+		try {
+			
+			// 임원 리스트 게시물
+			List<Staff> resultStaffList = settingService.selectStaffList();
+			log.debug("resultStaffList = {}", resultStaffList);
+			model.addAttribute("resultStaffList", resultStaffList);
 		
-		// 전체 게시물 수
-		int totalStaffListCount = settingService.selectStaffListCount();
-		log.debug("totalStaffListCount = {}", totalStaffListCount);
-		model.addAttribute("totalStaffListCount", totalStaffListCount);
+			// 전체 게시물 수
+			int totalStaffListCount = settingService.selectStaffListCount();
+			log.debug("totalStaffListCount = {}", totalStaffListCount);
+			model.addAttribute("totalStaffListCount", totalStaffListCount);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@GetMapping("/history")
@@ -421,56 +433,65 @@ public class SettingController {
 	public void test() {}
 	
 	
-	
+	// 임원관리
 	@PostMapping("/staff_process.do")
-	public String staffEnroll(Staff staff, 
-							  RedirectAttributes redirectAttribute,
-							  HttpServletRequest request,
-							  @RequestParam int[] staffNo) {
-		log.debug("{}", "staff_process.do 실행!");
-		log.debug("staff = {}", staff);
-		
+	public String staffProcess(Staff staff, RedirectAttributes redirectAttribute, HttpServletRequest request) {
+
 		int result = 0;
 		String msg = null;
 		String mode = request.getParameter("mode");
 		
-		if(mode.equals("insert")) {
-			int resultInsertStaff = settingService.insertStaff(staff);
-			log.debug("resultInsertStaff = {}", resultInsertStaff);
-		} else if(mode.equals("delete")) {
-			int resultDeleteStaff = settingService.deleteStaff(staffNo);
-			log.debug("resultDeleteStaff = {}", resultDeleteStaff);
-			if(resultDeleteStaff > 0) {
-				msg = "삭제 되었습니다.";
+		try {
+			if(mode.equals("insert")) {
+				int resultInsertStaff = settingService.insertStaff(staff);
+				log.debug("resultInsertStaff = {}", resultInsertStaff);
+			} else if(mode.equals("update")) {
+				int resultUpdateStaff = settingService.updateStaff(staff);
+				if(resultUpdateStaff > 0) {
+					msg = "수정 되었습니다.";
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return "redirect:/setting/staff.do";
+	}
 	
-	return "redirect:/setting/staff.do";
+	@PostMapping("/staff_delete.do")
+	public String staffDelete(@RequestParam int[] staffNo, RedirectAttributes redirectAttribute, HttpServletRequest request) {
+
+		int result = 0;
+		String msg = null;
+		String mode = request.getParameter("mode");
+		
+		try {
+			if(mode.equals("delete")) {
+				int resultDeleteStaff = settingService.deleteStaff(staffNo);
+				log.debug("resultDeleteStaff = {}", resultDeleteStaff);
+				if(resultDeleteStaff > 0) {
+					msg = "삭제 되었습니다.";
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return "redirect:/setting/staff.do";
 	}
 
 	// 임원 관리 타입별 검색
 	@ResponseBody
 	@GetMapping("/staffTypeSearch.do")
-	public Map<String, Object> staffTypeSearch(
-				@RequestParam String type,
-				@RequestParam String keyword,
-				HttpServletRequest request){
-		log.debug("{}", "타입별 검색 시작");
-		log.debug("type = {}", type);
-		log.debug("keyboard = {}", keyword);
+	public Map<String, Object> staffTypeSearch(@RequestParam String type, @RequestParam String keyword, HttpServletRequest request){
 		
 		Map<String, Object> param = new HashMap<>();
 		param.put("type", type);
 		param.put("keyword", keyword);
-		log.debug("param = {}", param);
 		
 		// 임원 검색 게시물
 		List<Staff> searchStaffList = settingService.selectSearchStaffList(param);
-		log.debug("searchStaffList = {}", searchStaffList);
 		
 		// 임원 검색 게시물 수
 		int searchStaffCount = settingService.selectsearchStaffListCount(param);
-		log.debug("searchStaffCount = {}", searchStaffCount);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("searchStaffList", searchStaffList);
@@ -478,6 +499,52 @@ public class SettingController {
 		
 		return resultMap;
 	}
+	
+	// 임원관리 상세보기
+	@ResponseBody
+	@GetMapping("/staffDetail.do/{staffNo}")
+	public Map<String, Object> staffDetail(@PathVariable int staffNo, Model model, HttpServletRequest request, HttpServletResponse response){
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		Staff staff = settingService.selectOneStaffByStaffNo(staffNo);
+		resultMap.put("staff", staff);
+		
+		return resultMap;
+	}
 
+	// 임원 관리 - 팝업 이미지
+	@GetMapping("/imgView")
+	public String imgView(@RequestParam(defaultValue = "0") int staffNo, Model model) {
+		
+		String url = "";
+		
+		try {
+			if(staffNo == 0) {
+				url = "http://fs.joycity.com/web/images/common/fs1_er.png";
+			}else {
+				url = settingService.selectOneimgUrlBystaffNo(staffNo).getImgUrl();
+			}
+			model.addAttribute("url",url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "/setting/imgView";
+	}
+	
+	// 임원 관리 - 이미지 삭제
+	@PostMapping("/deleteImg.do/{staffNo}")
+	public String deleteImg(@PathVariable int staffNo, RedirectAttributes redirectAttribute, HttpServletRequest request) {
+		
+		try {
+			int resultDeleteImg = settingService.deleteStaffImg(staffNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+	
 }
 

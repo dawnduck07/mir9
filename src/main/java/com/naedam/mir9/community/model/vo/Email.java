@@ -20,11 +20,12 @@ public class Email implements Serializable {
 	private static final long serialVersionUID = 1L;	
 	
 	private int emailCode;
-	private int memberNo;
-	private int emailStCode;
-	private int orderNo;
-	private int receiveCode;
-	private int emailPoint;
+	private String receiveCode; 
+	private String requestId;
+	private String receiveEmail; 
+	private String receiveTitle;
+	private String receiveContent;
+	private float emailPoint; // default 0.5
 	private Date receiveDate;
 
 }

@@ -28,7 +28,7 @@
 	        <div class="col-xs-12">
 	            <div class="box">
 	                <div class="box-body">
-	                    <label style="margin-top:5px;">총 86건</label>
+	                    <label style="margin-top:5px;">총 ${ total }건</label>
 	                    <div class="box-tools pull-right" style="margin-bottom:5px;">
 	                        <form name="form_search" method="post" action="${pageContext.request.contextPath }/comm/sms_list?${_csrf.parameterName}=${_csrf.token}">
 	                        <div class="has-feedback">
@@ -43,9 +43,9 @@
 	                        <div class="has-feedback">
 	                            <select name="field" class="form-control input-sm" style="float:left; width:130px;">
 	      							<option value="total">전체</option>      
-	      							<option value="title">제목</option>      
-	      							<option value="content">내용</option>      
-	      							<option value="receive">수신번호</option>                            
+	      							<option value="receive_title">제목</option>      
+	      							<option value="receive_content">내용</option>      
+	      							<option value="receive_phone">수신번호</option>                            
 	      						</select>
 	                        </div>
 	                        </form>
@@ -73,17 +73,26 @@
 	                            </tr>
 							</thead>
 							<tbody>
-	              				<tr>
-	                                <td>86</td>
-	                                <td></td>
-									<td>010-4177-2690</td>
-	                                <td align="left">주문 접수</td>
-	                                <td align="left">
-	                                	[MIR9 SHOP]<br>길동이님의 주문(200221_100335502)이 접수되었습니다.<br>감사합니다.<br><br>
-									</td>
-									<td>-13</td>
-									<td>2020-02-21 10:03:44</td>
-	                            </tr>          					
+								<c:choose>
+									<c:when test="${ empty smsList }">
+										<tr>
+											<td colspan="7">발송한 sms가 없습니다.</td>
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<c:forEach var="s" items="${ smsList }">
+											<tr>
+				                                <td>${ s.smsCode }</td>
+				                                <td>${ s.receiveCode }</td>
+												<td>${ s.receivePhone }</td>
+				                                <td align="left">${ s.receiveTitle }</td>
+				                                <td align="left">${ s.receiveContent }</td>
+												<td>${ s.smsPoint }</td>
+												<td>${ s.reDate }</td>
+				                            </tr>
+										</c:forEach>
+									</c:otherwise>
+								</c:choose>         					
 	                    	</tbody>
 	                    </table>
 	                    <br>
