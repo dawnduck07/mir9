@@ -60,7 +60,7 @@
 <style>
 .modal-body {
     background-color: #fff;
-}	
+}	  
 </style>
 <script type="text/javascript">
 	
