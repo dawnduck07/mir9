@@ -18,10 +18,6 @@ public class SeoSetting implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String naverFileUrl;
-	private String googleFileUrl;
-	private String bingFileUrl;
-	private String siteMapUrl;
 	private String naverFileName;
 	private String googleFileName;
 	private String bingFileName;

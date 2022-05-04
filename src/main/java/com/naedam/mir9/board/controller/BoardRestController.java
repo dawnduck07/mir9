@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,15 +61,12 @@ public class BoardRestController {
 	}
 	
 	@PostMapping(value="json/plupload")
-	public String plupload(@RequestParam("file") MultipartFile file)throws Exception{
+	public String plupload(@RequestParam("file") MultipartFile file, HttpServletRequest request)throws Exception{
 		System.out.println("/json/plupload 시작");
-		System.out.println("확인합시다. === "+file);
 		String a = file.getOriginalFilename();
-		System.out.println("확인합시다2 === "+a);
-		String filePath = "C:\\Users\\user\\git\\mir9\\src\\main\\webapp\\resources\\imgs\\imageBoard\\board";
+		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file2 = new File(filePath+file.getOriginalFilename());
 		file.transferTo(file2);
-		
 		return a;
 	}	
 	
@@ -141,7 +139,6 @@ public class BoardRestController {
 		
 		System.out.println("json/postViewCount 시작");
 		Post post = boardService.getPostData(postNo);
-		System.out.println("viewCOunt 확인 ::: "+post.getPostViewCount()+1);
 		post.setPostViewCount(post.getPostViewCount()+1);
 		boardService.postViewCount(post);
 	}

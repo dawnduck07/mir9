@@ -17,19 +17,16 @@
 <!-- Font Awesome -->
 <link rel="stylesheet" href="/html/css/font-awesome.min.css">
 <!-- Ionicons -->
-<link rel="stylesheet" href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/Ionicons/css/ionicons.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ionicons.min.css">
 <!-- jvectormap -->
-<link rel="stylesheet" href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/jvectormap/jquery-jvectormap.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-jvectormap.css">
 <!-- Theme style -->
-<link rel="stylesheet" href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet" href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/dist/css/skins/_all-skins.min.css">
-<link href="//mir9.co.kr/resource/css/admin.css" rel="stylesheet" type="text/css">
-<link href="//mir9.co.kr/resource/css/jquery-ui.css" rel="stylesheet">
-<!-- fullcalendar -->
-<link href="//mir9.co.kr/resource/css/bootstrap-colorselector.css" rel="stylesheet">
-<link href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet" type="text/css">
-<link href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.print.css" rel="stylesheet" type="text/css" media="print">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
+<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
+
 
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">

@@ -1,7 +1,13 @@
 package com.naedam.mir9.setting.controller;
 
+<<<<<<< HEAD
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+=======
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -269,17 +275,42 @@ public class SettingController {
 	}
 	
 	@GetMapping("/seo")
-	public void seo(Model model) {
-		
+	public void seo(Model model) throws Exception {
 		SeoSetting seo = settingService.selectSeoSetting();
-		
 		model.addAttribute("seo", seo);
 	}
 	
 	@PostMapping("/seo_process")
-	public String seo_process(HttpServletRequest request, SeoSetting seo) {
-		int result = settingService.updateSeoSetting(seo);
+	public String seo_process(HttpServletRequest request, SeoSetting seo,
+							  @RequestParam("webmaster_naver") MultipartFile naverFileName,
+							  @RequestParam("webmaster_google") MultipartFile googleFileName,
+							  @RequestParam("webmaster_bing") MultipartFile bingFileName) throws Exception {
+		SeoSetting seoSetting = settingService.selectSeoSetting();
 		
+		String filePath = request.getServletContext().getRealPath("webapp/");
+		if(seoSetting.getNaverFileName() == null && naverFileName.getOriginalFilename() != "") {
+			File naver = new File(filePath+naverFileName.getOriginalFilename());
+			naverFileName.transferTo(naver);
+			seo.setNaverFileName(naverFileName.getOriginalFilename());
+		}
+		if(seoSetting.getGoogleFileName() == null && googleFileName.getOriginalFilename() != "") {
+			File google = new File(filePath+googleFileName.getOriginalFilename());
+			googleFileName.transferTo(google);
+			seo.setGoogleFileName(googleFileName.getOriginalFilename());
+		}		
+		if(seoSetting.getBingFileName() == null && bingFileName.getOriginalFilename() != "") {
+			File bing = new File(filePath+bingFileName.getOriginalFilename());
+			bingFileName.transferTo(bing);
+			seo.setBingFileName(bingFileName.getOriginalFilename());
+		}				
+			
+		
+		int result = settingService.updateSeoSetting(seo);
+		System.out.println("여기 확인 ::: "+seo);
+		String imagePath = request.getServletContext().getRealPath("robots.txt");
+		BufferedWriter bw = new BufferedWriter(new FileWriter(imagePath));
+		bw.write(seo.getRobots());
+		bw.close();
 		return "redirect:/setting/seo";
 	}
 	
