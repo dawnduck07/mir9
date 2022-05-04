@@ -430,16 +430,6 @@ textarea {
 </div><!-- /.content-wrapper -->
 
 <script>
-	// access key : pDjJmaKLu6bg9i9j
-	// secret key : YRs5WbpK
-	// SMS : 수신 1건당 9.9원
-	
-	// 보완 : 발신번호별 카테고리 추가 + 수정 템플릿 추가(수정 템플릿명에 '_발신번호') + 해당 수정 템플릿에 저장	/ 중복되는 코드 정리
-	
-	// 체크 저장 -> 확인
-	// 조건별 SMS 발송 ajax -> 진행중
-	// 발송 목록 리스트로 조회 -> 대기중
-	
 	// 저장된 양식 조회
 	$(function(){
 		// savedTemplateId, savedContent, textarea 선언

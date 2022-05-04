@@ -16,5 +16,52 @@
 		  from email_setting
 		 where template_id = #{templateId}
 	</select>
+	
+	<insert id="insertEmail" parameterType="hashmap">
+		insert into tb_email (
+							email_code,
+							receive_code,
+							request_id,
+							receive_email,
+							receive_title,
+							receive_content,
+							email_point,
+							receive_date)
+		values(
+				NEXTVAL(seq_email_code),
+				default,
+				#{requestId},
+				#{email},
+				#{title},
+				#{content},
+				default,
+				#{date})
+	</insert>	
+	
+	<select id="selectEmailList" parameterType="hashmap" resultType="email">
+		select email_code,
+			   receive_code,
+			   request_id,
+			   receive_email,
+			   receive_title,
+			   receive_content,
+			   email_point,
+			   date_format(receive_date, '%Y-%m-%d %T') as reDate
+		  from tb_email
+		 <where>
+			<if test="keyword != '' and keyword != null">
+				<choose>
+					<when test="field eq 'total'">
+						receive_title LIKE CONCAT('%', #{keyword}, '%') || 
+						receive_content LIKE CONCAT('%', #{keyword}, '%') || 
+						receive_email LIKE CONCAT('%', #{keyword}, '%')
+					</when>
+					<otherwise>
+						${field} LIKE CONCAT('%', #{keyword}, '%')
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</select>	
   
 </mapper>

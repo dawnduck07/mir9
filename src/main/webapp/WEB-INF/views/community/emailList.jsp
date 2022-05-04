@@ -28,7 +28,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-body">
-                        <label style="margin-top:5px;">총 202건</label>
+                        <label style="margin-top:5px;">총 ${ total }건</label>
                         <div class="box-tools pull-right" style="margin-bottom:5px;">
                             <form name="form_search" method="post" action="${pageContext.request.contextPath }/comm/email_list?${_csrf.parameterName}=${_csrf.token}">
                             <div class="has-feedback">
@@ -43,9 +43,9 @@
                             <div class="has-feedback">
                                 <select name="field" class="form-control input-sm" style="float:left; width:130px;">
                                     <option value="total">전체</option>
-                                    <option value="title">제목</option>
-                                    <option value="content">내용</option>
-                                    <option value="receive">수신이메일</option>
+                                    <option value="receive_title">제목</option>
+                                    <option value="receive_content">내용</option>
+                                    <option value="receive_email">수신이메일</option>
                                 </select>
                             </div>
                             </form>
@@ -73,29 +73,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>202</td>
-                                    <td>email</td>
-                                    <td>parkjongseo07@gmail.com</td>
-                                    <td align="left">[MIR9 SHOP] 주문하신 상품이 취소처리 되었습니다.</td>
-                                    <td align="left">                                        
-                                    	&nbsp;[MIR9 SHOP] 주문 취소 안내
-                                        &nbsp;&nbsp;주문하신 상품이 취소처리 되었습니다.
-										&nbsp;&nbsp;주문 정보 <!-- 주문 정보 : 상태, 주문번호, 주문일자 -->
-                                        &nbsp;&nbsp;상태 주문취소 주문번호 220302_121817885 주문일자 2022-03-02 12:18:44 
-										&nbsp;&nbsp;주문자 정보 <!-- 주문자 정보 : 이름, 이메일, 휴대폰 번호 -->
-                                        &nbsp;&nbsp;이름 JONGSEO PARK 이메일 parkjongseo07@gmail.com 휴대폰 번호 010-4814-0719
-										&nbsp;&nbsp;주문 상품 <!-- 주문 상품 : 제품 이미지, 제품명, 옵션, 가격,  수량, 합계, 총 상품 금액, 배송비, 총 결제 금액 -->
-                                        &nbsp;&nbsp;제품 이미지 제품명 가격 수량 합계 로즈플라워캔들 사이즈 : S ( +1,000원) 색상 : 빨강 1,000원 1개 2,000원 총 상품 금액 2,000원 배송비  0원  총 결제 금액 2,000원
-										&nbsp;&nbsp;받는사람 정보 <!-- 받는 사람 정보 : 이름, 이메일, 휴대폰 번호, 주소, 배송 메시지 -->
-                                        &nbsp;&nbsp;이름 JONGSEO PARK 이메일 parkjongseo07@gmail.com 휴대폰 번호 010-4814-0719 주소 서울 중랑구 용마산로115길 127(망우동, 한일써너스빌리젠시1단지) 102동 2301호 배송메시지
-										&nbsp;&nbsp;결제 정보 <!-- 결제 정보 : 결제 금액, 결제 방법, 계좌번호, 입금 은행명, 예금주명, 입금자명, 입금 만료일 -->
-                                        &nbsp;&nbsp;결제금액 2,000원 결제방법 무통장 입금 계좌번호 1005-102-xxxxxx 입금 은행명 은행명 예금주명 미르나인 입금자명 박종서 입금 만료일 2022년 3월 03일 12시 18분
-										&nbsp;&nbsp;&nbsp; 본 메일은 발신전용이므로 회신이 되지 않습니다.&nbsp;
-                                    </td>
-                                    <td>100</td>
-                                    <td>2022-03-02 12:21:56</td>
-                                </tr>
+								<c:choose>
+									<c:when test="${ empty emailList }">
+										<tr>
+											<td colspan="7">발송한 email이 없습니다.</td>
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<c:forEach var="e" items="${ emailList }">
+											<tr>
+				                                <td>${ e.emailCode }</td>
+				                                <td>${ e.receiveCode }</td>
+												<td>${ e.receiveEmail }</td>
+				                                <td align="left">${ e.receiveTitle }</td>
+				                                <td align="left">${ e.receiveContent }</td>
+												<td>${ e.emailPoint }</td>
+												<td>${ e.reDate }</td>
+				                            </tr>
+										</c:forEach>
+									</c:otherwise>
+								</c:choose>      
                             </tbody>
                         </table>
                         <br>

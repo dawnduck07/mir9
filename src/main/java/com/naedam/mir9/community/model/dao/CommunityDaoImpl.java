@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.naedam.mir9.community.model.vo.Email;
 import com.naedam.mir9.community.model.vo.EmailSetting;
 import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
@@ -89,8 +90,8 @@ public class CommunityDaoImpl implements CommunityDao {
 
 	// sms 등록
 	@Override
-	public int insertSms(HashMap<String, Object> param) {
-		return session.insert("sms.insertSms", param);
+	public int insertSms(HashMap<String, Object> param2) {
+		return session.insert("sms.insertSms", param2);
 	}
 
 	// sms list 조회
@@ -99,8 +100,16 @@ public class CommunityDaoImpl implements CommunityDao {
 		return session.selectList("sms.selectSmsList", param);
 	}
 
-
-
-
+	// email 등록
+	@Override
+	public int insertEmail(HashMap<String, Object> param2) {
+		return session.insert("email.insertEmail", param2);
+	}	
 	
+	// email list 조회
+	@Override
+	public List<Email> selectEmailList(HashMap<String, Object> param) {
+		return session.selectList("email.selectEmailList", param);
+	}
+
 }

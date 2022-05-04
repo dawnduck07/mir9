@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.naedam.mir9.community.model.vo.Email;
 import com.naedam.mir9.community.model.vo.EmailSetting;
 import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
@@ -31,6 +32,8 @@ public interface CommunityDao {
 	
 	List<SmsSetting> smsCheck(String templateId);	
 	
+	int insertSms(HashMap<String, Object> param2);
+	
 	List<Sms> selectSmsList(HashMap<String, Object> param);
 	
 	// mail
@@ -40,7 +43,8 @@ public interface CommunityDao {
 
 	MsgInfo selectMsgInfo(long orderNo);
 
-	int insertSms(HashMap<String, Object> param);
+	int insertEmail(HashMap<String, Object> param2);
 
+	List<Email> selectEmailList(HashMap<String, Object> param);
 
 }
