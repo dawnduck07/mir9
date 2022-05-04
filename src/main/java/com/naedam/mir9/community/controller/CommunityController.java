@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.naedam.mir9.community.model.service.CommunityService;
 import com.naedam.mir9.community.model.vo.Email;
+import com.naedam.mir9.community.model.vo.EmailSetting;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.Sms;
+import com.naedam.mir9.community.model.vo.SmsSetting;
 
 @Controller
 @RequestMapping("/comm")
@@ -36,12 +38,18 @@ public class CommunityController {
 	private static String smsKey = "cuyb2ATgfZrgb0LF";
 	private static String smsSecret = "3VxajYQb";
 	
-	// mail 설정 조회
+	// mail 설정
 	@GetMapping("/email")
-	public String commEmail() {
+	public String commEmail(Model model) {
+		
+		// sms 설정 정보 조회
+		List<EmailSetting> emailSetting = communityService.selectEmailSetting();
+		model.addAttribute("emailSetting", emailSetting);
+		
 		return "community/email";
 	}
-		
+	
+	// mail 조회 + 검색
 	@RequestMapping(value="/email_list", method= {RequestMethod.GET, RequestMethod.POST})
 	public String commEmailList(
 			@RequestParam(required=false) String field,
@@ -65,6 +73,10 @@ public class CommunityController {
 	@GetMapping("/sms")
 	public String commSms(Model model) {
 	
+		// sms 설정 정보 조회
+		List<SmsSetting> smsSetting = communityService.selectSmsSetting();
+		model.addAttribute("smsSetting", smsSetting);
+		
 		// CORS 문제 해결
 		// 기본 문구 (categodyId : 78519)
 		HashMap<String, Object> originSms = communityService.originSms(smsKey, smsSecret); 

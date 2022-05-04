@@ -805,12 +805,6 @@ public class CommunityServiceImpl implements CommunityService {
 					param2.put("content", content.get(i));
 					param2.put("date", requestDate.get(i));
 					
-					System.out.println("=====Service param2=====");
-					System.out.println(param2.get("requestId"));
-					System.out.println(param2.get("title"));
-					System.out.println(param2.get("content"));
-					System.out.println(param2.get("date"));
-					
 					insert += communityDao.insertEmail(param2);
 				}
 				
@@ -835,6 +829,18 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public List<Email> selectEmailList(HashMap<String, Object> param) {
 		return communityDao.selectEmailList(param);
+	}
+
+	// sms setting 조회
+	@Override
+	public List<SmsSetting> selectSmsSetting() {
+		return communityDao.selectSmsSetting();
+	}
+
+	// email setting 조회
+	@Override
+	public List<EmailSetting> selectEmailSetting() {
+		return communityDao.selectEmailSetting();
 	}
 
 }

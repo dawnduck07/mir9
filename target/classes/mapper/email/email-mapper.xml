@@ -10,6 +10,11 @@
 			 , is_send_admin = #{sendAdmin}
 		 where template_id = #{templateId}
 	</update>
+
+	<select id="selectEmailSetting" resultType="emailSetting">
+		select *
+		  from email_setting
+	</select>	
 	
 	<select id="emailCheck" resultType="emailSetting">
 		select *

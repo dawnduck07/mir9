@@ -112,4 +112,16 @@ public class CommunityDaoImpl implements CommunityDao {
 		return session.selectList("email.selectEmailList", param);
 	}
 
+	// sms setting 조회
+	@Override
+	public List<SmsSetting> selectSmsSetting() {
+		return session.selectList("sms.selectSmsSetting");
+	}
+
+	// email setting 조회
+	@Override
+	public List<EmailSetting> selectEmailSetting() {
+		return session.selectList("email.selectEmailSetting");
+	}
+
 }

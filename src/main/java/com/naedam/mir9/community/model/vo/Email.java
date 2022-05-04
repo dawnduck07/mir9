@@ -28,4 +28,5 @@ public class Email implements Serializable {
 	private float emailPoint; // default 0.5
 	private Date receiveDate;
 
+	private String reDate;
 }

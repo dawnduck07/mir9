@@ -36,6 +36,8 @@ public interface CommunityDao {
 	
 	List<Sms> selectSmsList(HashMap<String, Object> param);
 	
+	List<SmsSetting> selectSmsSetting();
+	
 	// mail
 	int mailAutoSend(HashMap<String, String> param);
 
@@ -46,5 +48,7 @@ public interface CommunityDao {
 	int insertEmail(HashMap<String, Object> param2);
 
 	List<Email> selectEmailList(HashMap<String, Object> param);
+
+	List<EmailSetting> selectEmailSetting();
 
 }

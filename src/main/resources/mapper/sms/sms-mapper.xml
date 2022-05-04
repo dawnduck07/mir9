@@ -17,6 +17,11 @@
 		 where template_id = #{templateId}
 	</update>
 	
+	<select id="selectSmsSetting" resultType="smsSetting">
+		select *
+		  from sms_setting
+	</select>
+	
 	<select id="smsCheck" resultType="smsSetting">
 		select *
 		  from sms_setting
