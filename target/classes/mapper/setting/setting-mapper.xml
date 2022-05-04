@@ -345,9 +345,6 @@
 		</where>
 	</select>
 
-<<<<<<< HEAD
-
-=======
 	<select id="selectOneStaffByStaffNo" resultType="staff">
 		SELECT
 			staff_no,
@@ -393,5 +390,4 @@
 		WHERE
 			staff_no = #{staffNo}
 	</update>
->>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 </mapper>

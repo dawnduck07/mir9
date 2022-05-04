@@ -1,13 +1,11 @@
 package com.naedam.mir9.setting.controller;
 
-<<<<<<< HEAD
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-=======
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
->>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.mir9.banner.model.vo.Banner;
