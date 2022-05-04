@@ -603,7 +603,11 @@ public class CommunityServiceImpl implements CommunityService {
 			List<String> requestDate = new ArrayList<>();
 			
 			for(int i = 0; i < total; i++) {
-				phone.add(i, (data2.get(i).getAsJsonObject()).get("recipientNo").getAsString());
+				
+				String pStr = (data2.get(i).getAsJsonObject()).get("recipientNo").getAsString();
+				String pForm = pStr.substring(0, 3) + "-" + pStr.substring(3, 7) + "-" + pStr.substring(7);
+
+				phone.add(i, pForm);
 				content.add(i, (data2.get(i).getAsJsonObject()).get("body").getAsString());
 				requestDate.add(i, (data2.get(i).getAsJsonObject()).get("requestDate").getAsString());
 				
@@ -619,9 +623,13 @@ public class CommunityServiceImpl implements CommunityService {
 			List<Sms> smsList = null;
 			
 			HashMap<String, Object> param2 = new HashMap<String, Object>();
-			
+		
+			String pStr = json.getString("sendNo");
+			String pForm = pStr.substring(0, 3) + "-" + pStr.substring(3, 7) + "-" + pStr.substring(7);
+
 			for(int i = 0; i < total; i++) {
 				param2.put("type", type);
+				param2.put("send", pForm);
 				param2.put("requestId", requestId);
 				param2.put("phone", phone.get(i));
 				param2.put("title", title.get(i));
@@ -731,7 +739,7 @@ public class CommunityServiceImpl implements CommunityService {
 					
 			// element>body>data>requestId
 			JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
-			JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();	
+			JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();
 			String requestId = data.getAsJsonObject().get("requestId").getAsString();
 			JsonArray arr = data.getAsJsonObject().get("results").getAsJsonArray();
 			
@@ -770,6 +778,7 @@ public class CommunityServiceImpl implements CommunityService {
 				// JSON>body>data>mailStatusCode, title, body, requestDate
 				JsonObject bodyElement2 = element2.getAsJsonObject().get("body").getAsJsonObject();
 				JsonObject data2 = bodyElement2.getAsJsonObject().get("data").getAsJsonObject();
+				String sendEmail = data2.getAsJsonObject().get("senderAddress").getAsString();
 				
 				// JSON>body>data>receiverList>receiveMailAddr
 				JsonArray receiver = data2.getAsJsonObject().get("receiverList").getAsJsonArray();
@@ -799,6 +808,7 @@ public class CommunityServiceImpl implements CommunityService {
 				HashMap<String, Object> param2 = new HashMap<String, Object>();
 				
 				for(int i = 0; i < receiver.size(); i++) {
+					param2.put("send", sendEmail);
 					param2.put("requestId", requestId);
 					param2.put("email", email.get(i));
 					param2.put("title", title.get(i));

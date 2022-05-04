@@ -26,6 +26,7 @@
 		insert into tb_email (
 							email_code,
 							receive_code,
+							send_email,
 							request_id,
 							receive_email,
 							receive_title,
@@ -35,6 +36,7 @@
 		values(
 				NEXTVAL(seq_email_code),
 				default,
+				#{send},
 				#{requestId},
 				#{email},
 				#{title},
