@@ -65,8 +65,9 @@
 			                        <td>직책</td>
 			                        <td style="width:140px;">등록일</td>
 			                        <td style="width:80px;">
-			                        <i onclick="changeOrder('down','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
-			                        <i onclick="changeOrder('up','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
+			                        <i onclick="change();" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
+			                        <!-- <i onclick="changeOrder('down','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i> -->
+			                        <i onclick="change();" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
 			                        </td>
 			                        <td style="width:80px;">명령</td>
 			                    </tr>
@@ -80,7 +81,7 @@
 				                        <td style="width:146px;">${staff.staffName}</td>
 				                        <td>${staff.staffPosition}</td>
 				                        <td style="width:140px;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${staff.regDate}" /></td>
-				                        <td><input type="radio" name="order_code" value="-3" /></td>
+				                        <td><input type="radio" name="order_code" value="" /></td>
 				                        <td style="width:80px;"><button type="button" value="${staff.staffNo}" class="btn btn-primary btn-xs detailBtn">상세보기</button></td>
 				                    </tr>
 		                    	</c:forEach>
@@ -478,6 +479,10 @@ function update(){
 	$(window).unbind("beforeunload");
 	$(document.staffEnrollFrm).submit();
 }
+// 순서 변경
+function change(){
+	console.log("순서변경(changeOrder)");
+};
 </script>
 
 

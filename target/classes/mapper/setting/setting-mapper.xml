@@ -282,7 +282,7 @@
  			   #{staffCareer},
  			   #{staffProfile},
  			   #{imgUrl},
- 			   sysdate())
+ 			   SYSDATE())
  	</insert>
  	
  	<select id="selectStaffList" resultType="staff">
