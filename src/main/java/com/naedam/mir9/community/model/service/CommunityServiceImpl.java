@@ -20,10 +20,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.naedam.mir9.community.model.dao.CommunityDao;
+import com.naedam.mir9.community.model.vo.Email;
 import com.naedam.mir9.community.model.vo.EmailSetting;
 import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.ReviewImg;
+import com.naedam.mir9.community.model.vo.Sms;
 import com.naedam.mir9.community.model.vo.SmsSetting;
 
 import net.sf.json.JSONArray;
@@ -470,8 +472,6 @@ public class CommunityServiceImpl implements CommunityService {
 	public int mailAutoSend(HashMap<String, String> param) {
 		return communityDao.mailAutoSend(param);
 	}
-	
-
 
 	// sms 자동 발송 체크 여부 조회
 	@Override
@@ -538,9 +538,100 @@ public class CommunityServiceImpl implements CommunityService {
 			os.flush();
 			os.close();
 			
-			int responseCode = conn.getResponseCode();
+			// 응답 데이터 반환
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			
+			String line = "";
+			String str = "";
+			
+			while((line = br.readLine()) != null) {
+				str += line;
+			}
+			
+			br.close();
+			
+			// JsonParser
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(str);
+			
+			// element>body>data>requestId
+			JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
+			JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();	
+			String requestId = data.getAsJsonObject().get("requestId").getAsString();
+			
+			// requestId를 이용해서 전달한 내용 조회 및 DB에 저장
+			// 발송 메시지 상세 조회
+			String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/sender/sms?pageSize=1000&requestId=" + requestId;
+			
+			// url
+			URL get = new URL(getUrl);
+			HttpURLConnection getConn = (HttpURLConnection) get.openConnection();	
+			
+			// method
+			getConn.setRequestMethod("GET");
+			
+			// headers
+			getConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			getConn.setRequestProperty("X-Secret-Key", smsSecret);
+			
+			// 결과값 받기
+			BufferedReader br2 = new BufferedReader(new InputStreamReader(getConn.getInputStream(), "UTF-8"));
+			
+			String line2 = "";
+			String result2 = "";
+			
+			while((line2 = br2.readLine()) != null) {
+				result2 += line2;
+			}
 
-			if(responseCode == 200) {
+			br2.close();
+			
+			// JsonParser
+			JsonElement element2 = parser.parse(result2);
+					
+			// JSON>body>data>messageType, recipientNo, templateId, body, requestDate
+			JsonObject bodyElement2 = element2.getAsJsonObject().get("body").getAsJsonObject();
+			int total = bodyElement2.getAsJsonObject().get("totalCount").getAsInt(); // 총 개수
+			
+			JsonArray data2 = bodyElement2.getAsJsonObject().get("data").getAsJsonArray();
+			String type = (data2.get(0).getAsJsonObject()).get("messageType").getAsString(); // 발송 타입
+
+			// 수정 보완 : 테이블 조인해서 이름값으로 조회해오기
+			List<String> phone = new ArrayList<>();
+			List<String> title = new ArrayList<>();
+			List<String> content = new ArrayList<>();
+			List<String> requestDate = new ArrayList<>();
+			
+			for(int i = 0; i < total; i++) {
+				phone.add(i, (data2.get(i).getAsJsonObject()).get("recipientNo").getAsString());
+				content.add(i, (data2.get(i).getAsJsonObject()).get("body").getAsString());
+				requestDate.add(i, (data2.get(i).getAsJsonObject()).get("requestDate").getAsString());
+				
+				String template = (data2.get(i).getAsJsonObject()).get("templateId").getAsString();
+				String templateId = template.substring(0, template.lastIndexOf("_"));
+
+				List<SmsSetting> smsSet = communityDao.smsCheck(templateId);
+				title.add(i, smsSet.get(i).getTemplateName());
+			}
+
+			// 조회한 데이터 넘겨서 db에 저장하기
+			int insert = 0;
+			List<Sms> smsList = null;
+			
+			HashMap<String, Object> param2 = new HashMap<String, Object>();
+			
+			for(int i = 0; i < total; i++) {
+				param2.put("type", type);
+				param2.put("requestId", requestId);
+				param2.put("phone", phone.get(i));
+				param2.put("title", title.get(i));
+				param2.put("content", content.get(i));
+				param2.put("date", requestDate.get(i));
+				
+				insert += communityDao.insertSms(param2);
+			}
+			
+			if(insert > 0) {
 				result = 1;
 			}
 			
@@ -577,31 +668,32 @@ public class CommunityServiceImpl implements CommunityService {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			String orderDate = format.format(param.get("orderDate"));
 			String paidDate = format.format(param.get("paidAt"));
+			String memo = (String) param.get("memo");
+			if(memo == null) { // memo 값이 null일 경우
+				memo = " ";
+			}
 			
-			String pay = param.get("payAmount") + " " + param.get("payType") + " " + param.get("account") + " ";
-			pay += param.get("bankName") + " " + param.get("owner") + " "; 
-			pay += param.get("buyerName") + " " + paidDate;
-			
-			System.out.println("=====Service pay=====");
-			System.out.println(pay);
-			
-			JSONObject templateParameter = new JSONObject(); // 치환문구 설정
-			templateParameter.put("shop_name", "ND이커머스"); 
-			templateParameter.put("payment_status", param.get("statusName")); 
-			templateParameter.put("order_number", param.get("orderNo")); 
-			templateParameter.put("order_date", orderDate); 
-			templateParameter.put("order_first_name", param.get("firstName")); 
-			templateParameter.put("order_name", param.get("lastName")); 
-			templateParameter.put("order_email", param.get("email")); 
-			templateParameter.put("order_mobile", param.get("phone")); 
-			templateParameter.put("order_list", param.get("productName")); // + 옵션 정보 추가 
-			templateParameter.put("receiver_first_name", param.get("receiver")); 
-			templateParameter.put("receiver_name", param.get("receiver")); 
-			templateParameter.put("receiver_email", param.get("email")); 
-			templateParameter.put("receiver_mobile", param.get("receiverPhone")); 
-			templateParameter.put("receiver_addr", param.get("shippingAddress")); 
-			templateParameter.put("request_message", param.get("memo")); 
-			templateParameter.put("payment_info", pay); 
+			String pay = "결제 금액 " + param.get("payAmount") + "원, 결제 방법 " + param.get("payType");
+			pay += ", 계좌번호 " + param.get("account") + ", 은행명 " + param.get("bankName");
+			pay += ", 예금주 " + param.get("owner") + ", 입금자명 " + param.get("buyerName") + ", 입금일 " + paidDate;
+
+			JSONObject tem = new JSONObject(); // 치환문구 설정
+			tem.put("shop_name", "ND이커머스"); 
+			tem.put("payment_status", param.get("statusName")); 
+			tem.put("order_number", param.get("orderNo")); 
+			tem.put("order_date", orderDate); 
+			tem.put("order_first_name", param.get("firstName")); 
+			tem.put("order_name", param.get("lastName")); 
+			tem.put("order_email", param.get("email")); 
+			tem.put("order_mobile", param.get("phone")); 
+			tem.put("order_list", param.get("productName")); // + 옵션 정보 추가 
+			tem.put("receiver_first_name", ((String) param.get("receiver")).substring(1)); 
+			tem.put("receiver_name", ((String) param.get("receiver")).substring(0, 1)); 
+			tem.put("receiver_email", param.get("email")); 
+			tem.put("receiver_mobile", param.get("receiverPhone")); 
+			tem.put("receiver_addr", param.get("shippingAddress")); 
+			tem.put("request_message", memo); 
+			tem.put("payment_info", pay); 
 			
 			JSONObject recip = new JSONObject();
 			recip.put("receiveMailAddr", "lovefun33@naver.com");
@@ -612,11 +704,8 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			JSONObject json = new JSONObject();
 			json.put("templateId", (String) param.get("templateId")); // 템플릿ID
-			json.put("templateParameter", templateParameter); // 치환
+			json.put("templateParameter", tem); // 치환
 			json.put("receiverList", receiverList); // 수신자 정보
-			
-			System.out.println("=====Service json=====");
-			System.out.println(json);
 			
 			// 데이터 전송 준비
 			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
@@ -624,17 +713,128 @@ public class CommunityServiceImpl implements CommunityService {
 			os.flush();
 			os.close();
 			
-			int responseCode = conn.getResponseCode();
-
-			if(responseCode == 200) {
-				result = 1;
+			// 응답 데이터 반환
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			
+			String line = "";
+			String str = "";
+			
+			while((line = br.readLine()) != null) {
+				str += line;
 			}
 			
+			br.close();
+			
+			// JsonParser
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(str);
+					
+			// element>body>data>requestId
+			JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
+			JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();	
+			String requestId = data.getAsJsonObject().get("requestId").getAsString();
+			JsonArray arr = data.getAsJsonObject().get("results").getAsJsonArray();
+			
+			// requestId를 이용해서 전달한 내용 조회 및 DB에 저장
+			// 발송 메시지 상세 조회
+			for(int j = 0; j < arr.size(); j++) {
+				int mailSeq = j;
+				String getUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/sender/mail/" + requestId + "/" + mailSeq + "?pageSize=1000";
+				
+				// url
+				URL get = new URL(getUrl);
+				HttpURLConnection getConn = (HttpURLConnection) get.openConnection();	
+				
+				// method
+				getConn.setRequestMethod("GET");
+				
+				// headers
+				getConn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+				getConn.setRequestProperty("X-Secret-Key", mailSecret);
+				
+				// 결과값 받기
+				BufferedReader br2 = new BufferedReader(new InputStreamReader(getConn.getInputStream(), "UTF-8"));
+				
+				String line2 = "";
+				String result2 = "";
+				
+				while((line2 = br2.readLine()) != null) {
+					result2 += line2;
+				}
+	
+				br2.close();
+				
+				// JsonParser
+				JsonElement element2 = parser.parse(result2);
+						
+				// JSON>body>data>mailStatusCode, title, body, requestDate
+				JsonObject bodyElement2 = element2.getAsJsonObject().get("body").getAsJsonObject();
+				JsonObject data2 = bodyElement2.getAsJsonObject().get("data").getAsJsonObject();
+				
+				// JSON>body>data>receiverList>receiveMailAddr
+				JsonArray receiver = data2.getAsJsonObject().get("receiverList").getAsJsonArray();
+				
+				// 수정 보완 : 테이블 조인해서 이름값으로 조회해오기
+				List<String> email = new ArrayList<>();
+				List<String> title = new ArrayList<>();
+				List<String> content = new ArrayList<>();
+				List<String> requestDate = new ArrayList<>();
+				
+				// content 값 위에서 받은 파라미터 값을 조함
+				String contentStr = "주문 정보 : 상태 " + tem.get("payment_status") + ", 주문 번호 " + tem.get("order_number") + ", 주문 일자 " + tem.get("order_date") + "\n";
+				contentStr += "주문자 정보 : 이름 " + tem.get("order_name") + tem.get("order_first_name")  + ", 이메일 " + tem.get("order_email")  + ", 휴대폰 번호 " + tem.get("order_mobile") + ", 주문 상품 " + tem.get("order_list") + "\n";
+				contentStr += "받는사람 정보 : 이름 " + param.get("receiver") + ", 이메일 " + tem.get("receiver_email") + ", 휴대폰 번호 " + tem.get("receiver_mobile") + ", 주소 " + tem.get("receiver_addr") + ", 배송 메시지 " + tem.get("request_message") + "\n";
+				contentStr += "결제 정보 : " + tem.get("payment_info");
+					
+				for(int i = 0; i < receiver.size(); i++) {
+					email.add(i, (receiver.get(i).getAsJsonObject()).get("receiveMailAddr").getAsString());
+					title.add(i, data2.getAsJsonObject().get("title").getAsString());
+					content.add(i, contentStr);
+					requestDate.add(i, data2.getAsJsonObject().get("requestDate").getAsString());
+				}
+				
+				// 조회한 데이터 넘겨서 db에 저장하기
+				int insert = 0;
+				
+				HashMap<String, Object> param2 = new HashMap<String, Object>();
+				
+				for(int i = 0; i < receiver.size(); i++) {
+					param2.put("requestId", requestId);
+					param2.put("email", email.get(i));
+					param2.put("title", title.get(i));
+					param2.put("content", content.get(i));
+					param2.put("date", requestDate.get(i));
+					
+					System.out.println("=====Service param2=====");
+					System.out.println(param2.get("requestId"));
+					System.out.println(param2.get("title"));
+					System.out.println(param2.get("content"));
+					System.out.println(param2.get("date"));
+					
+					insert += communityDao.insertEmail(param2);
+				}
+				
+				if(insert > 0) {
+					result = 1;
+				}
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		
 		return result;
+	}
+
+	// sms list 조회
+	@Override
+	public List<Sms> selectSmsList(HashMap<String, Object> param) {
+		return communityDao.selectSmsList(param);
+	}
+
+	// email list 조회
+	@Override
+	public List<Email> selectEmailList(HashMap<String, Object> param) {
+		return communityDao.selectEmailList(param);
 	}
 
 }

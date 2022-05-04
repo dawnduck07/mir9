@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.naedam.mir9.community.model.service.CommunityService;
+import com.naedam.mir9.community.model.vo.Email;
 import com.naedam.mir9.community.model.vo.Review;
-
+import com.naedam.mir9.community.model.vo.Sms;
 
 @Controller
 @RequestMapping("/comm")
@@ -41,8 +42,22 @@ public class CommunityController {
 		return "community/email";
 	}
 		
-	@GetMapping("/email_list")
-	public String commEmailList() {
+	@RequestMapping(value="/email_list", method= {RequestMethod.GET, RequestMethod.POST})
+	public String commEmailList(
+			@RequestParam(required=false) String field,
+			@RequestParam(required=false) String keyword,			
+			Model model) {
+		
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("field", field);
+		param.put("keyword", keyword);
+		
+		// 총 건 수 => 전체 조회 건의 길이
+		List<Email> emailList = communityService.selectEmailList(param);
+		int total = emailList.size();
+		model.addAttribute("emailList", emailList);
+		model.addAttribute("total", total);		
+		
 		return "community/emailList";
 	}
 	
@@ -57,7 +72,7 @@ public class CommunityController {
 		// list에 담기
 		List<String> templateId = (List<String>) originSms.get("templateId");
 		List<String> content = (List<String>) originSms.get("body");
-		
+
 		model.addAttribute("templateId", templateId);
 		model.addAttribute("content", content);
 
@@ -75,8 +90,22 @@ public class CommunityController {
 	}
 	
 	// sms 조회 + 검색
-	@GetMapping("/sms_list")
-	public String commSmsList() {
+	@RequestMapping(value="/sms_list", method= {RequestMethod.GET, RequestMethod.POST})
+	public String commSmsList(
+			@RequestParam(required=false) String field,
+			@RequestParam(required=false) String keyword,			
+			Model model) {
+		
+		HashMap<String, Object> param = new HashMap<>();
+		param.put("field", field);
+		param.put("keyword", keyword);
+		
+		// 총 건 수 => 전체 조회 건의 길이
+		List<Sms> smsList = communityService.selectSmsList(param);
+		int total = smsList.size();
+		model.addAttribute("smsList", smsList);
+		model.addAttribute("total", total);
+
 		return "community/smsList";
 	}
 	

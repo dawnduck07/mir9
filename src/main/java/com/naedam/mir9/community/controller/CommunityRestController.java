@@ -207,12 +207,11 @@ public class CommunityRestController {
 			case 7 : templateId="refund"; break; 
 		}
 		
+		// 자동 발송 여부 조회
 		List<SmsSetting> smsCheck = communityService.smsCheck(templateId);
 		List<EmailSetting> emailCheck = communityService.emailCheck(templateId);
-		
-		System.out.println("=====Controller msg 발송 테스트=====");
-		
-		// orderNo 값으로 정보 조회해서 필요한 값들 map에 담기
+
+		// 주문 정보 조회
 		MsgInfo msgInfo = communityService.selectMsgInfo(Long.parseLong(orderNo));	
 
 		HashMap<String, Object> param = new HashMap<String, Object>();
@@ -242,39 +241,32 @@ public class CommunityRestController {
 		param.put("paidAt", msgInfo.getPaidAt());
 		param.put("templateId", templateId);
 
-		// map, templateId, appKey, secretKey 값 같이 넘기기
-		// 서비스단에서 post 실행 -> statusNo에 따라 전달하는 치환 파라미터값 변경하기
 		// 자동 발송 체크된 경우만 메시지 보내기
 		if(smsCheck.get(0).getTemplateId().equals(templateId)) {
 			if(smsCheck.get(0).getIsSend().equals("y")) {
+				param.put("templateId", templateId.concat("_mod"));
 				sms += communityService.sendOrderSms(smsKey, smsSecret, param);
 			}
 			else if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
+				param.put("templateId", templateId.concat("_admin_mod"));
 				sms += communityService.sendOrderSms(smsKey, smsSecret, param);
 			}
 		}
 		
 		if(emailCheck.get(0).getTemplateId().equals(templateId)) {
 			if(emailCheck.get(0).getIsSend().equals("y")) {
+				param.put("templateId", templateId.concat("_mod"));
 				email += communityService.sendOrderEmail(mailKey, mailSecret, param);
 			}
 			else if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
+				param.put("templateId", templateId.concat("_admin_mod"));
 				email += communityService.sendOrderEmail(mailKey, mailSecret, param);
 			}
 		}
 		
-		System.out.println("=====Controller param/sms/email=====");
-		System.out.println(param);
-		System.out.println(sms);
-		System.out.println(email);
-		
-		if(sms > 0) {
+		if(sms > 0 || email > 0) {
 			result += 1;
 		}
-		
-		if(email > 0) {
-		 	result += 1;
-		} 
 
 		return result;
 	}

@@ -13,7 +13,7 @@
 <meta name="_csrf_header" id="_csrf_header" content="${_csrf.headerName}">
 <meta name="_csrf" id="_scrf" content="${_csrf.token}">
 <meta name="naver-site-verification" content="b08b53e0660f883a76f509d68079560f01abf7bf" />
-<title>AdminLTE 2 | ${param.title}</title>
+<title>ND C&C | ${param.title}</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -43,14 +43,9 @@
 <link href="${pageContext.request.contextPath }/resources/css/admin.css" rel="stylesheet" type="text/css" />
 
 <!-- fullcalendar -->
-<link href="//mir9.co.kr/resource/css/bootstrap-colorselector.css"
-	rel="stylesheet" />
-<link
-	href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.min.css"
-	rel="stylesheet" type="text/css" />
-<link
-	href="//mir9.co.kr/resource/js/AdminLTE-2.4.2/bower_components/fullcalendar/dist/fullcalendar.print.css"
-	rel="stylesheet" type="text/css" media='print' />
+<link href="${pageContext.request.contextPath }/resources/fullcalendar/css/bootstrap-colorselector.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath }/resources/fullcalendar/css/fullcalendar.min.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath }/resources/fullcalendar/css/fullcalendar.print.css" rel="stylesheet" type="text/css" media='print' />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,6 +57,11 @@
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <link href="${pageContext.request.contextPath }/resources/css/jquery-ui.css" rel="stylesheet" />
+<style>
+.modal-body {
+    background-color: #fff;
+}	  
+</style>
 <script type="text/javascript">
 	
 	$(function(){
@@ -170,7 +170,7 @@
 		<header class="main-header">
 			<a href="/admin" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
 				<span class="logo-mini"><b>A</b></span> <!-- logo for regular state and mobile devices -->
-				<span class="logo-lg"><b>MIR9 SHOP Admin</b></span>
+				<span class="logo-lg"><b><img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/neadam_logo.png"></b></span>
 			</a>
 
 			<nav class="navbar navbar-static-top">
@@ -228,7 +228,7 @@
 		<aside class="main-sidebar">
 			<section class="sidebar">
 				<ul class="sidebar-menu" data-widget="tree">
-					<li class="header">MAIN NAVIGATION</li>
+					<li class="header">NaeDam Admin</li>
 					<li><a href="${pageContext.request.contextPath}/dashBoard"> <i
 							class="fa fa-dashboard"></i> <span>Dashboard</span>
 					</a></li>
