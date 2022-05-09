@@ -19,4 +19,5 @@ public interface CouponDao {
 
 	int insertMemberCoupon(MemberCoupon memberCoupon);
 
+	List<Coupon> getCoupon(String code);
 }

@@ -1,6 +1,8 @@
 package com.naedam.mir9.community.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,10 @@ import com.naedam.mir9.community.model.vo.MsgInfo;
 import com.naedam.mir9.community.model.vo.Review;
 import com.naedam.mir9.community.model.vo.ReviewImg;
 import com.naedam.mir9.community.model.vo.SmsSetting;
+import com.naedam.mir9.coupon.model.service.CouponService;
+import com.naedam.mir9.coupon.model.vo.Coupon;
+import com.naedam.mir9.member.model.service.MemberService;
+import com.naedam.mir9.member.model.vo.Member;
 
 @RestController
 @RequestMapping("/comm")
@@ -28,7 +34,13 @@ public class CommunityRestController {
 	
 	@Autowired
 	private CommunityService communityService;
+	
+	@Autowired
+	private MemberService memberService;
 
+	@Autowired
+	private CouponService couponService;
+	
 	// MAIL 인증키
 	private static String mailKey = "s3b1XpsH6BR8yT4S";
 	private static String mailSecret = "phiu4e0M";
@@ -36,6 +48,8 @@ public class CommunityRestController {
 	// SMS 인증키
 	private static String smsKey = "cuyb2ATgfZrgb0LF";
 	private static String smsSecret = "3VxajYQb";
+	
+	private JsonParser parser = new JsonParser();
 	
 	// 리뷰 모달창 조회
 	@GetMapping("/review_modal")
@@ -64,7 +78,6 @@ public class CommunityRestController {
 		List<String> content = new ArrayList<>();
 		
 		// JsonParser
-		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(jsonStr);
 		
 		JsonArray codeArr = element.getAsJsonObject().get("code").getAsJsonArray();
@@ -121,7 +134,6 @@ public class CommunityRestController {
 	public int commEmailModify(@RequestBody String jsonStr) {
 		
 		// JsonParser
-		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(jsonStr);
 		
 		String templateId = element.getAsJsonObject().get("templateId").getAsString();
@@ -155,7 +167,6 @@ public class CommunityRestController {
 		List<String> is_send_admin = new ArrayList<>();
 		
 		// JsonParser
-		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(jsonStr);
 		
 		// list에 담기
@@ -271,4 +282,183 @@ public class CommunityRestController {
 		return result;
 	}
 	
+	// 회원가입, 아이디 찾기, 비밀번호 찾기 => 프론트단 구현 후
+	@PostMapping("/sendRegistMsg")
+	public int sendRegistMsg(
+			@RequestBody String jsonStr) {
+		int result = 0;
+		// sms
+		// shop_name, user_name
+		
+		// email
+		// shop_name, user_name, user_id
+		// + tmp_password
+		return result;
+	}
+	
+	// 적립금 관련 msg 발송 
+	@PostMapping("/sendPointMsg")
+	public int sendPointMsg(
+			@RequestBody String jsonStr) {
+		
+		int result = 0;
+		int sms = 0;
+		int email = 0;
+		
+		// JsonParser
+		JsonElement element = parser.parse(jsonStr);
+		
+		// memberCode 값 분리
+		String str = element.getAsJsonObject().get("memberCode").getAsString();
+		List<String> codeList = Arrays.asList(str.split(","));
+		
+		// type 설정
+		String type = element.getAsJsonObject().get("type").getAsString();
+		if(type.equals("+")) {
+			type = "지급";
+		}
+		else if(type.equals("-")) {
+			type = "차감";
+		}
+		
+		// 발송 선택 여부
+		String smsSend = element.getAsJsonObject().get("smsCheck").getAsString();
+		String emailSend = element.getAsJsonObject().get("emailCheck").getAsString();
+
+		// 자동 발송 여부 조회
+		String templateId = "point";
+		List<SmsSetting> smsCheck = communityService.smsCheck(templateId);
+		List<EmailSetting> emailCheck = communityService.emailCheck(templateId);
+		
+		// memberCode로 회원 이름 조회
+		List<Member> member = new ArrayList<>(); 
+		for(int i = 0; i < codeList.size(); i++) {
+			member.addAll(memberService.selectMemberInfo(codeList.get(i)));
+		}
+
+		// param 넘겨서 sms 및 email 발송
+		for(int i = 0; i < codeList.size(); i++) {
+			HashMap<String, Object> param = new HashMap<String, Object>();
+			param.put("userName", member.get(i).getName());
+			param.put("phone", member.get(i).getPhone());
+			param.put("email", member.get(i).getEmail());
+			param.put("point", element.getAsJsonObject().get("point").getAsString());
+			param.put("pointType", type);
+
+			// 자동 발송 체크된 경우만 메시지 보내기
+			if(smsSend.equals("y")) {
+				if(smsCheck.get(0).getIsSend().equals("y")) {
+					param.put("templateId", templateId.concat("_mod"));
+					sms += communityService.sendPointSms(smsKey, smsSecret, param);
+				}
+				else if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
+					param.put("templateId", templateId.concat("_admin_mod"));
+					sms += communityService.sendPointSms(smsKey, smsSecret, param);
+				}
+			}
+			
+			if(emailSend.equals("y")) {
+				if(emailCheck.get(0).getIsSend().equals("y")) {
+					param.put("templateId", templateId.concat("_mod"));
+					email += communityService.sendPointEmail(mailKey, mailSecret, param);
+				}
+				else if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
+					param.put("templateId", templateId.concat("_admin_mod"));
+					email += communityService.sendPointEmail(mailKey, mailSecret, param);
+				}
+			}
+		
+		}
+		
+		if(sms > 0 || email > 0) {
+			result += 1;
+		}
+		
+		return result;
+	}
+
+	// 쿠폰 관련 msg 발송
+	@PostMapping("/sendCouponMsg")
+	public int sendCouponMsg(
+			@RequestBody String jsonStr) {
+
+		int result = 0;
+		int sms = 0;
+		int email = 0;
+		
+		// JsonParser
+		JsonElement element = parser.parse(jsonStr);
+		
+		// memberCode 값 분리
+		String str = element.getAsJsonObject().get("memberCode").getAsString();
+		List<String> codeList = Arrays.asList(str.split(","));
+		
+		// couponCode 넘겨서 쿠폰명, 유효기간 조회해오기
+		String code = element.getAsJsonObject().get("couponCode").getAsString();
+		List<Coupon> coupon = couponService.getCoupon(code);
+		String couponName = coupon.get(0).getCouponName();
+		String expirDate = "";
+		if(coupon.get(0).getExpiryType().equals("unlimited")) {
+			expirDate = "제한 없음";
+		}
+		else {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			expirDate = format.format(coupon.get(0).getExpiryEndDate());
+		}
+
+		// 발송 선택 여부
+		String smsSend = element.getAsJsonObject().get("smsCheck").getAsString();
+		String emailSend = element.getAsJsonObject().get("emailCheck").getAsString();
+
+		// 자동 발송 여부 조회
+		String templateId = "coupon";
+		List<SmsSetting> smsCheck = communityService.smsCheck(templateId);
+		List<EmailSetting> emailCheck = communityService.emailCheck(templateId);
+		
+		// memberCode로 회원 이름 조회
+		List<Member> member = new ArrayList<>(); 
+		for(int i = 0; i < codeList.size(); i++) {
+			member.addAll(memberService.selectMemberInfo(codeList.get(i)));
+		}
+
+		// param 넘겨서 sms 및 email 발송
+		for(int i = 0; i < codeList.size(); i++) {
+			HashMap<String, Object> param = new HashMap<String, Object>();
+			param.put("userName", member.get(i).getName());
+			param.put("phone", member.get(i).getPhone());
+			param.put("email", member.get(i).getEmail());
+			param.put("couponName", couponName);
+			param.put("date", expirDate);
+
+			// 자동 발송 체크된 경우만 메시지 보내기
+			if(smsSend.equals("y")) {
+				if(smsCheck.get(0).getIsSend().equals("y")) {
+					param.put("templateId", templateId.concat("_mod"));
+					sms += communityService.sendCouponSms(smsKey, smsSecret, param);
+				}
+				else if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
+					param.put("templateId", templateId.concat("_admin_mod"));
+					sms += communityService.sendCouponSms(smsKey, smsSecret, param);
+				}
+			}
+			
+			if(emailSend.equals("y")) {
+				if(emailCheck.get(0).getIsSend().equals("y")) {
+					param.put("templateId", templateId.concat("_mod"));
+					email += communityService.sendCouponEmail(mailKey, mailSecret, param);
+				}
+				else if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
+					param.put("templateId", templateId.concat("_admin_mod"));
+					email += communityService.sendCouponEmail(mailKey, mailSecret, param);
+				}
+			}
+		}
+		
+		if(sms > 0 || email > 0) {
+			result += 1;
+		}
+		
+		return result;
+	}
+
 }

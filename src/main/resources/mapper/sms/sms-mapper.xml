@@ -75,6 +75,7 @@
 				</choose>
 			</if>
 		</where>
+		order by reDate DESC, sms_code DESC
 	</select>
   
 </mapper>

@@ -374,7 +374,11 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectMemberAccessHistoryListExcelForm();
 	}
 
-
+	// 회원 정보 조회
+	@Override
+	public List<Member> selectMemberInfo(String code) {
+		return memberDao.selectMemberInfo(code);
+	}
 	
 
 	

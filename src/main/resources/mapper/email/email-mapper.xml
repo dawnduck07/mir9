@@ -69,6 +69,7 @@
 				</choose>
 			</if>
 		</where>
+		order by reDate DESC, email_code DESC
 	</select>	
   
 </mapper>
