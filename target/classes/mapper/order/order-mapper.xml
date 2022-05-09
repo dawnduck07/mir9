@@ -110,6 +110,22 @@
   	select * from v_order_detail ORDER BY paid_at DESC LIMIT 10
   </select>
   
+  <select id="selectDashBoardOrderList" resultType="orderStatus">
+	SELECT DISTINCT
+	(SELECT a.STATUS_NAME
+	FROM order_status_list a
+	WHERE a.order_status_no = #{code}) statusName,
+	(SELECT COUNT(a.ORDER_STATUS_NO)
+	FROM order_status_list a, tb_order b, payment_info c
+	WHERE a.order_status_no = #{code}
+	AND a.ORDER_STATUS_NO = b.ORDER_STATUS_NO
+	AND c.merchant_uid = b.ORDER_NO
+	AND c.paid_at BETWEEN #{startDate} AND #{endDate}) statusCount
+	from payment_info a
+	JOIN tb_order b ON(a.merchant_uid = b.ORDER_NO)
+	JOIN order_status_list c on(c.ORDER_STATUS_NO = b.ORDER_STATUS_NO) 
+  </select>
+  
   <update id="updateOrderStaus">
   	update tb_order set order_status_no = #{statusNo}, order_status_update = sysdate()  where order_no = #{orderNo}
   </update>

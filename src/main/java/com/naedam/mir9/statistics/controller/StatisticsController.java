@@ -321,9 +321,9 @@ public class StatisticsController {
 			}
 			resultList.add(address);
 		}
-		System.out.println("list 체크 === "+resultList);
-		System.out.println("list 체크 === "+area);
-		System.out.println("startDate 체크 === "+search.getStart_date());
+		
+		
+		
 		model.addAttribute("list", resultList);
 		model.addAttribute("list2", area);
 		return "statistics/address_day";
@@ -389,9 +389,9 @@ public class StatisticsController {
 		search.setEnd_date(endDate);
 		Map<String, Object> map = new HashMap<String, Object>();
 		AddressStatisticVo addressVo = new AddressStatisticVo();
+		addressVo.setAddressCategory(2);
 		map.put("search", search);
 		map.put("addressVo", addressVo);
-		addressVo.setAddressCategory(2);
 		List<AddressStatisticVo> resultList = new ArrayList<AddressStatisticVo>();
 		List<AreaVo> areaAddress = new ArrayList<AreaVo>(); 
 		areaAddress = statisticsService.selectAreaPayment(map);

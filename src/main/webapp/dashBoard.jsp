@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="today" value="<%=new java.util.Date()%>" />
+<!-- 현재년도 -->
+<c:set var="year"><fmt:formatDate value="${today}" pattern="yyyy" /></c:set> 
+<!-- 현재월 -->
+<c:set var="month"><fmt:formatDate value="${today}" pattern="MM" /></c:set>
+<!-- 현재일 -->
+<c:set var="day"><fmt:formatDate value="${today}" pattern="dd"/></c:set>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>  
@@ -120,7 +127,7 @@ ul {
 				<div class="box">
 					<br>
 					<div class="box-header with-border">
-						<h3 class="box-title">금일 매출 현황 (2022년 02월 25일)</h3>
+						<h3 class="box-title">금일 매출 현황 (<c:out value="${year}"/>년 <c:out value="${month}"/>월 <c:out value="${day}"/>일)</h3>
 					</div>
 					<div class="col-lg-3 col-xs-6">
 						<!-- small box -->
@@ -133,7 +140,7 @@ ul {
 								<i class="fa fa-shopping-cart"></i>
 							</div>
 							<a class="small-box-footer"
-								href="/index.php?tpf=admin/order/list">더보기 <i
+								href="/mir9/order/list">더보기 <i
 								class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
@@ -149,7 +156,7 @@ ul {
 								<i class="fa fa-pie-chart"></i>
 							</div>
 							<a class="small-box-footer"
-								href="/index.php?tpf=admin/order/list&payment_status=pay_done">더보기
+								href="/mir9/order/dashBoardOrderList?order_status=2">더보기
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
 						</div>
@@ -166,7 +173,7 @@ ul {
 								<i class="fa fa-files-o"></i>
 							</div>
 							<a class="small-box-footer"
-								href="/index.php?tpf=admin/order/list&payment_status=pay_ready">더보기
+								href="/mir9/order/dashBoardOrderList?order_status=1">더보기
 								<i class="fa fa-arrow-circle-right"></i>
 							</a>
 						</div>
@@ -184,7 +191,7 @@ ul {
 								<i class="fa fa-user"></i>
 							</div>
 							<a class="small-box-footer"
-								href="/index.php?tpf=admin/member/list">더보기 <i
+								href="/mir9/member/list.do">더보기 <i
 								class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
@@ -198,7 +205,7 @@ ul {
 						<div class="row">
 							<div class="col-md-8">
 								<p class="text-center">
-									<strong>2022년</strong>
+									<strong><c:out value="${year}"/>년</strong>
 								</p>
 
 								<div class="chart">
@@ -208,54 +215,16 @@ ul {
 										dataRow = [ 'Month', '판매금액' ];
 										chart_data.push(dataRow);
 									</script>
-									<script>
-										dataRow = [ '1월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '2월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '3월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '4월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '5월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '6월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '7월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '8월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '9월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '10월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '11월', 0 ];
-										chart_data.push(dataRow);
-									</script>
-									<script>
-										dataRow = [ '12월', 0 ];
-										chart_data.push(dataRow);
-									</script>
+									<c:forEach var="r" items="${periodMonthList }">
+										<c:set var="dateStr">
+											<fmt:formatDate value="${r.paidAt}" pattern="M월" />
+										</c:set>
+										<c:set var="tAmount">${r.totalAmount == null ? '0' : r.totalAmount - r.totalCancelAmount}</c:set>
+										<script>
+											dataRow = ['${dateStr}', ${tAmount}];
+											chart_data.push(dataRow);
+										</script>
+									</c:forEach>									
 									<div id="chart_div" style="width: 100%; height: 100%;"></div>
 
 									<!-- Sales Chart Canvas -->
@@ -267,7 +236,7 @@ ul {
 							<div class="col-md-4">
 
 								<p class="text-center">
-									<strong>주문상태별 비율</strong>(최근 1개월)
+									<strong>주문상태별 비율</strong>(<c:out value="${month}"/>월)
 									<!-- Goal Completion -->
 								</p>
 								<div class="chart">
@@ -277,34 +246,12 @@ ul {
 										dataRow2 = [ '진행상태', '건수' ];
 										chart_data2.push(dataRow2);
 									</script>
-									<script>
-										dataRow2 = [ '입금대기', 0 ];
-										chart_data2.push(dataRow2);
-									</script>
-									<script>
-										dataRow2 = [ '입금확인', 0 ];
-										chart_data2.push(dataRow2);
-									</script>
-									<script>
-										dataRow2 = [ '배송준비중', 0 ];
-										chart_data2.push(dataRow2);
-									</script>
-									<script>
-										dataRow2 = [ '배송중', 0 ];
-										chart_data2.push(dataRow2);
-									</script>
-									<script>
-										dataRow2 = [ '배송완료', 0 ];
-										chart_data2.push(dataRow2);
-									</script>
-									<script>
-										dataRow2 = [ '주문취소', 0 ];
-										chart_data2.push(dataRow2);
-									</script>
-									<script>
-										dataRow2 = [ '환불', 0 ];
-										chart_data2.push(dataRow2);
-									</script>
+									<c:forEach var="s" items="${orderStatusList }">
+										<script>
+											dataRow2 = ['${s.statusName}', ${s.statusCount}];
+											chart_data2.push(dataRow2);
+										</script>
+									</c:forEach>									
 									<div id="chart_div2" style="width: 100%; height: 100%;"></div>
 
 									<!-- Sales Chart Canvas -->
@@ -482,7 +429,7 @@ ul {
 											<td><a href="${pageContext.request.contextPath }/product/list">${product.modelName }</a></td>
 											<td>${product.productName }</td>
 											<td>${product.categoryName }</td>
-											<td><td><fmt:formatDate value="${product.regDate}" pattern="yyyy-MM-dd" /></td>
+											<td><fmt:formatDate value="${product.regDate}" pattern="yyyy-MM-dd" /></td>
 										</tr>
 									</c:forEach>
 									
@@ -514,7 +461,7 @@ ul {
 						<i class="fa fa-credit-card"></i>
 					</div>
 					<a class="small-box-footer"
-						href="/index.php?tpf=admin/setting/paymentpg">신청하기 <i
+						href="/mir9/setting/paymentpg">신청하기 <i
 						class="fa fa-arrow-circle-right"></i></a>
 				</div>
 
@@ -570,5 +517,39 @@ ul {
 	</section>
 </div>
 <!-- /.content-wrapper -->
+
+<script>
+			function drawChart() {
+				var data = google.visualization.arrayToDataTable(chart_data);
+
+				var options = {
+				  title: '(금액:천단위)',
+				  legend: {textStyle: {bold: false, color: 'black', fontSize: 13}},
+				  hAxis: {title: '',  titleTextStyle: {color: '#333'}},
+				  vAxis: {minValue: 0}
+				};
+
+				var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+				chart.draw(data, options);
+			}
+
+			function drawChart2() {
+
+				var data = google.visualization.arrayToDataTable(chart_data2);
+				var options = {
+					title: "",
+					pieHole : 0.4,
+				};
+
+				var chart = new google.visualization.PieChart(document.getElementById("chart_div2"));
+				chart.draw(data, options);
+			}
+			$(function() {
+				google.charts.load("current", {packages:['corechart']});
+				google.charts.setOnLoadCallback(drawChart);
+				google.charts.setOnLoadCallback(drawChart2);
+			});
+		
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
