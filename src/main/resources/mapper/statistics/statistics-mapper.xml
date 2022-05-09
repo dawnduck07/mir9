@@ -21,7 +21,8 @@
   </select>
 
   <select id="selectProductStatistics" parameterType="hashmap" resultType="productStatisticVo">
-	SELECT *,
+	SELECT DISTINCT
+	*,
 	(SELECT count(amount)
 	 FROM v_product_statistics
 	 WHERE order_status_no >= 2) paymentCount,

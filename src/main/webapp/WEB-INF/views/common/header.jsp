@@ -168,7 +168,7 @@
 
 		<!-- header -->
 		<header class="main-header">
-			<a href="/admin" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
+			<a href="${pageContext.request.contextPath}/dashBoard" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
 				<span class="logo-mini"><b>A</b></span> <!-- logo for regular state and mobile devices -->
 				<span class="logo-lg"><b><img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/neadam_logo.png"></b></span>
 			</a>
@@ -196,7 +196,7 @@
 									<p>
 										<sec:authentication property="principal.username" />
 										${loginMember.lastName}${loginMember.firstName}님 - Web
-										Administrator <small>MIR9 SHOP 관리자</small>
+										Administrator <small>NaeDam 관리자</small>
 									</p></li>
 								<li class="user-footer">
 									<div class="pull-left">
