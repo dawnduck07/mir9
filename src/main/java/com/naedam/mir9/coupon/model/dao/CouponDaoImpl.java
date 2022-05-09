@@ -50,5 +50,9 @@ public class CouponDaoImpl implements CouponDao {
 		return session.insert("coupon.insertMemberCoupon", memberCoupon);
 	}
 	
+	@Override
+	public List<Coupon> getCoupon(String code) {
+		return session.selectList("coupon.getCoupon", code);
+	}
 	
 }

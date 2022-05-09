@@ -75,7 +75,7 @@
 								<c:forEach items="${memberList}" var="memberEntity">
 									<c:if test="${memberEntity.status eq 'Y'}">
 										<tr>
-											<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="${memberEntity.memberNo}" data-target="${memberEntity.memberNo}" /></td>
+											<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="list[]" value="${memberEntity.memberNo}" data-target="${memberEntity.memberNo}" /></td>
 											<td style="width: 110px;">${memberEntity.id}</td>
 											<td style="width: 110px;">${memberEntity.lastName}${memberEntity.firstName}</td>
 											<td style="width: 110px;">${memberEntity.phone}</td>
@@ -250,8 +250,9 @@
 <div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	<div class="modal-dialog" style="width: 500px;">
 		<div class="modal-content">
-			<form name="formPoint" method="post" onsubmit="return false;" action="${pageContext.request.contextPath }/member/process.do?${_csrf.parameterName}=${_csrf.token}">
-				<input type="hidden" name="mode" value="point"> <input type="hidden" name="member_code">
+			<form name="formPoint" method="post" onsubmit="return false;" >
+				<input type="hidden" name="mode" value="point"> 
+				<input type="hidden" name="member_code">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabelPortfolio">적립금 지급</h4>
@@ -265,10 +266,12 @@
 						</tr>
 						<tr>
 							<td class="menu">지급 형태</td>
-							<td align="left"><select name="plus_minus_type" class="form-control input-sm" style="width: 120px;">
+							<td align="left">
+								<select name="plus_minus_type" class="form-control input-sm" style="width: 120px;">
 									<option value="+">지급</option>
 									<option value="-">차감</option>
-							</select></td>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td class="menu">적립금</td>
@@ -280,7 +283,10 @@
 						</tr>
 						<tr>
 							<td class="menu">알림 설정</td>
-							<td align="left"><input type="checkbox" name="is_send_sms" value="y" /> SMS 알림 (설정된 SMS 발송)<br> <input type="checkbox" name="is_send_email" value="y" /> 메일 알림 (설정된 메일 발송)<br></td>
+							<td align="left">
+								<input type="checkbox" name="pointSms" value="y" /> SMS 알림 (설정된 SMS 발송)<br> 
+								<input type="checkbox" name="pointEmail" value="y" /> 메일 알림 (설정된 메일 발송)<br>
+							</td>
 						</tr>
 					</table>
 			</form>
@@ -298,7 +304,7 @@
 <div class="modal fade" id="modalCoupon" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	<div class="modal-dialog" style="width: 500px;">
 		<div class="modal-content">
-			<form name="formCoupon" method="post" onsubmit="return false;" action="${pageContext.request.contextPath }/member/process.do?${_csrf.parameterName}=${_csrf.token}">
+			<form name="formCoupon" method="post" onsubmit="return false;" >
 				<input type="hidden" name="mode" value="coupon"> 
 				<input type="hidden" name="member_code">
 				<div class="modal-header">
@@ -314,20 +320,21 @@
 						</tr>
 						<tr>
 							<td class="menu">쿠폰 선택</td>
-							<td align="left"><select name="coupon_code" class="form-control input-sm">
+							<td align="left">
+								<select name="coupon_code" class="form-control input-sm">
 									<option value="">선택</option>
 									<c:forEach var="coupon" items="${couponList }">
 										<option value="${coupon.couponNo }">${coupon.couponName }</option>
 									</c:forEach>
-							</select> ※ 쿠폰은 회원당 한번씩만 발급 할수 있습니다.</td>
+								</select> ※ 쿠폰은 회원당 한번씩만 발급 할수 있습니다.
+							</td>
 						</tr>
 						<tr>
-							<!-- 
-								TODO
-								email, sms 발송 처리 연동 
-							-->
 							<td class="menu">알림 설정</td>
-							<td align="left"><input type="checkbox" name="is_send_sms" value="Y" /> SMS 알림 (설정된 SMS 발송)<br> <input type="checkbox" name="is_send_email" value="Y" /> 메일 알림 (설정된 메일 발송)<br></td>
+							<td align="left">
+								<input type="checkbox" name="couponSms" value="y" /> SMS 알림 (설정된 SMS 발송)<br> 
+								<input type="checkbox" name="couponEmail" value="y" /> 메일 알림 (설정된 메일 발송)<br>
+							</td>
 						</tr>
 					</table>
 			</form>
@@ -921,83 +928,173 @@ $(document).on("click", "#memberListDeleteBtn", function(){
 });
 
 
-//쿠폰 지급
+//쿠폰 모달
 function onclickCoupon() {
-    var f = eval('memberDeleteFrm');
-    var chkBox = f.elements['list[]'];
-    var chkLen = chkBox.length;
-    if (chkLen > 0) {
-        var member_code = '';
-        var member_count = '';
+	
+	var check = [];
+	
+	$("input[name='list[]']").each(function(){
+		if($(this).prop("checked")) { // 체크된 memberNo
+			check.push($(this).val()); 
+		}
+	});
+	
+	if(check.length > 0) {
+		for(var i = 0; i < check.length; i++) {
+			$("input[name='member_code']").val(check);
+            $("#sendCountCoupon").text(check.length);
+		}	
+	}
+	else {
+		alert('항목이 없습니다.');
+        return false;
+	}
+	
+    $('#modalCoupon').modal({backdrop:'static', show:true});
+	
+}
 
-        // 선택된 파일이 있는지 체크
-        for (i = 0; i < chkLen; i++) {
-            if (chkBox[i].checked) {
-                member_count++;
-                member_code += chkBox[i].value+',';
-            }
-        }
-        if (member_code == '') {
-            alert('항목이 선택되지 않았습니다.');
-            return false;
-        }
-        else {
-            member_code = member_code.substr(0, member_code.length -1);
-            $('[name=member_code]').val(member_code);
-            $('#sendCountCoupon').text(member_count);
-            console.log(member_code);
-        }
+// 쿠폰 지급
+function registerCoupon() {
+    if(formCoupon.coupon_code.value == '') { 
+    	alert('쿠폰이 선택되지 않았습니다.'); 
+    	formCoupon.coupon_code.focus(); 
+    	return false;
+    }
+    
+    // 발송 체크 여부
+    var smsCheck = "";
+    var emailCheck = "";
+    
+    if($("input[name='couponSms']").prop("checked")) {
+    	smsCheck = "y";
     }
     else {
-        alert('항목이 없습니다.');
-        return false;
+    	smsCheck = "n";
     }
-    $('#modalCoupon').modal({backdrop:'static', show:true});
+    
+    if($("input[name='couponEmail']").prop("checked")) {
+    	emailCheck = "y";
+    }
+    else {
+    	emailCheck = "n";
+    }
+    
+    // data = 회원 번호 + 쿠폰 + 체크 
+    var data = {
+    	memberCode : $("input[name='member_code']").val(),
+    	couponCode : $("select[name='coupon_code']").val(),
+    	smsCheck : smsCheck,
+    	emailCheck : emailCheck
+    };
+    
+    var jsonStr = JSON.stringify(data);
+    
+    $.ajax({
+    	url: "${pageContext.request.contextPath}/comm/sendCouponMsg",
+    	method: "POST",
+		contentType : "application/json; charset=utf-8",
+		headers: {
+			"${_csrf.headerName}" : "${_csrf.token}"
+		},
+		data: jsonStr,
+    	success: function(result) {
+    		if(result > 0) {
+    			alert("쿠폰을 지급했습니다.");
+    		}
+    	},
+    	error: function(textStatus, errorThrown) {
+    		alert("쿠폰을 지급할 수 없습니다. 관리자에게 문의해주세요.");
+    	}
+    });
 }
-function registerCoupon() {
-    if(formCoupon.coupon_code.value == '') { alert('쿠폰이 선택되지 않았습니다.'); formCoupon.coupon_code.focus(); return false;}
-    formCoupon.target = 'iframe_process';
-    formCoupon.submit();
+
+// 적립금 모달
+function onclickPoint() {
+	
+	var check = [];
+	
+	$("input[name='list[]']").each(function(){
+		if($(this).prop("checked")) { // 체크된 memberNo
+			check.push($(this).val()); 
+		}
+	});
+	
+	if(check.length > 0) {
+		for(var i = 0; i < check.length; i++) {
+			$("input[name='member_code']").val(check);
+            $("#sendCount").text(check.length);
+		}	
+	}
+	else {
+		alert('항목이 없습니다.');
+        return false;
+	}
+	
+    $('#modalPoint').modal({backdrop:'static', show:true});
 }
 
 // 적립금 지급
-function onclickPoint() {
-    var f = eval('memberDeleteFrm');
-    var chkBox = f.elements['list[]'];
-    var chkLen = chkBox.length;
-    if (chkLen > 0) {
-        var member_code = '';
-        var member_count = '';
-
-        // 선택된 파일이 있는지 체크
-        for (i = 0; i < chkLen; i++) {
-            if (chkBox[i].checked) {
-                member_count++;
-                member_code += chkBox[i].value+',';
-            }
-        }
-        if (member_code == '') {
-            alert('항목이 선택되지 않았습니다.');
-            return false;
-        }
-        else {
-            member_code = member_code.substr(0, member_code.length -1);
-            $('[name=member_code]').val(member_code);
-            $('#sendCount').text(member_count);
-            console.log(member_code);
-        }
+function registerPoint() {
+    if(formPoint.point.value == '') { 
+    	alert('적립금이 입력되지 않았습니다.'); 
+    	formPoint.point.focus(); 
+    	return false;
+    }
+    if(formPoint.content.value == '') { 
+    	alert('메모가 입력되지 않았습니다.'); 
+    	formPoint.content.focus(); 
+    	return false;
+    }
+   
+    // 발송 체크 여부
+    var smsCheck = "";
+    var emailCheck = "";
+    
+    if($("input[name='pointSms']").prop("checked")) {
+    	smsCheck = "y";
     }
     else {
-        alert('항목이 없습니다.');
-        return false;
+    	smsCheck = "n";
     }
-    $('#modalPoint').modal({backdrop:'static', show:true});
-}
-function registerPoint() {
-    if(formPoint.point.value == '') { alert('적립금이 입력되지 않았습니다.'); formPoint.point.focus(); return false;}
-    if(formPoint.content.value == '') { alert('메모가 입력되지 않았습니다.'); formPoint.content.focus(); return false;}
-    formPoint.target = 'iframe_process';
-    formPoint.submit();
+    
+    if($("input[name='pointEmail']").prop("checked")) {
+    	emailCheck = "y";
+    }
+    else {
+    	emailCheck = "n";
+    }
+
+    // data = 회원 번호 + 지급 형태 + 적립금 + 메모 + 체크 
+    var data = {
+    	memberCode : $("input[name='member_code']").val(),
+    	type : $("select[name='plus_minus_type']").val(),
+    	point : $("input[name='point']").val(),
+    	content : $("input[name='content']").val(),
+    	smsCheck : smsCheck,
+    	emailCheck : emailCheck
+    };
+    
+    var jsonStr = JSON.stringify(data);
+    
+    $.ajax({
+    	url: "${pageContext.request.contextPath}/comm/sendPointMsg",
+    	method: "POST",
+		contentType : "application/json; charset=utf-8",
+		headers: {
+			"${_csrf.headerName}" : "${_csrf.token}"
+		},
+		data: jsonStr,
+    	success: function(result) {
+    		if(result > 0) {
+    			alert("적립금을 지급했습니다.");
+    		}
+    	},
+    	error: function(textStatus, errorThrown) {
+    		alert("적립금을 지급할 수 없습니다. 관리자에게 문의해주세요.");
+    	}
+    });
+
 }
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

@@ -21,6 +21,7 @@ public class Sms implements Serializable {
 	
 	private int smsCode;
 	private String receiveCode;
+	private String sendPhone;
 	private String requestId;
 	private String receivePhone; 
 	private String receiveTitle;

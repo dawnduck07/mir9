@@ -4,7 +4,10 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 <jsp:param value="메일 설정" name="title"/>
 </jsp:include>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!-- content-wrapper -->
 <div class="content-wrapper">
 <style>
@@ -36,6 +39,12 @@ textarea {
 		                <form name="form_register" method="post" action="${pageContext.request.contextPath}/comm/email?${_csrf.parameterName}=${_csrf.token}">
 			                <input type="hidden" name="mode" value="updateEmail">
 			                <input type="hidden" name="locale" value="ko">
+			                
+			                <c:forEach var="setting" items="${ emailSetting }">
+			                	<input type="hidden" name="setTemplateId" value="${ setting.templateId }" >
+			                	<input type="hidden" name="setIsSend" value="${ setting.isSend }" >
+			                	<input type="hidden" name="setIsSendAdmin" value="${ setting.isSendAdmin }" >
+			                </c:forEach>
 			
 							<h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 메일 발송 문구 설정 </p></h4>
 			                <div style="text-align:right;">
@@ -71,7 +80,7 @@ textarea {
 					                    <input type="hidden" class="join" name="code" value="join_admin" />
 										<td class="content">회원가입</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="join" name="is_send" checked/>
+					                    	<input type="checkbox" class="join" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<!-- onclickUpdate(code, action, is_admin) -->
@@ -94,7 +103,7 @@ textarea {
 					                    <input type="hidden" class="findid" name="code" value="findid_admin" />
 										<td class="content">아이디 찾기<br>[아이디 찾기시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="findid" name="is_send" checked/>
+					                    	<input type="checkbox" class="findid" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('findid');" class="btn btn-primary btn-xs">편집</button>
@@ -116,7 +125,7 @@ textarea {
 					                    <input type="hidden" class="findpw" name="code" value="findpw_admin" />
 										<td class="content">임시비밀번호 발급알림<br>[비밀번호 찾기시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="findpw" name="is_send" checked/>
+					                    	<input type="checkbox" class="findpw" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('findpw');" class="btn btn-primary btn-xs">편집</button>
@@ -138,7 +147,7 @@ textarea {
 					                    <input type="hidden" class="order" name="code" value="order_admin" />
 										<td class="content">주문접수<br>[무통장/카드 결제시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="order" name="is_send" checked/>
+					                    	<input type="checkbox" class="order" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('order');" class="btn btn-primary btn-xs">편집</button>
@@ -165,7 +174,7 @@ textarea {
 					                    <input type="hidden" class="pay_done" name="code" value="pay_done_admin" />
 										<td class="content">입금확인<br>[무통장 입금 완료시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="pay_done" name="is_send" checked/>
+					                    	<input type="checkbox" class="pay_done" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('pay_done');" class="btn btn-primary btn-xs">편집</button>
@@ -192,7 +201,7 @@ textarea {
 					                    <input type="hidden" class="delivery_ready" name="code" value="delivery_ready_admin" />
 										<td class="content">상품 배송 준비중<br>[주문상태 배송준비중으로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="delivery_ready" name="is_send" checked/>
+					                    	<input type="checkbox" class="delivery_ready" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('delivery_ready');" class="btn btn-primary btn-xs">편집</button>
@@ -219,7 +228,7 @@ textarea {
 					                    <input type="hidden" class="delivery_ing" name="code" value="delivery_ing_admin" />
 										<td class="content">상품 배송중<br>[주문상태 배송중으로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="delivery_ing" name="is_send" checked/>
+					                    	<input type="checkbox" class="delivery_ing" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('delivery_ing');" class="btn btn-primary btn-xs">편집</button>
@@ -246,7 +255,7 @@ textarea {
 					                    <input type="hidden" class="delivery_done" name="code" value="delivery_done_admin" />
 										<td class="content">상품 배송 완료<br>[주문상태 배송완료로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="delivery_done" name="is_send" checked/>
+					                    	<input type="checkbox" class="delivery_done" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('delivery_done');" class="btn btn-primary btn-xs">편집</button>
@@ -273,7 +282,7 @@ textarea {
 					                    <input type="hidden" class="order_cancel" name="code" value="order_cancel_admin" />
 										<td class="content">주문취소<br>[주문 취소시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="order_cancel" name="is_send" checked/>
+					                    	<input type="checkbox" class="order_cancel" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('order_cancel');" class="btn btn-primary btn-xs">편집</button>
@@ -300,7 +309,7 @@ textarea {
 					                    <input type="hidden" class="refund" name="code" value="refund_admin" />
 										<td class="content">환불완료<br>[주문상태 환불완료로 변경시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="refund" name="is_send" checked/>
+					                    	<input type="checkbox" class="refund" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('refund');" class="btn btn-primary btn-xs">편집</button>
@@ -327,7 +336,7 @@ textarea {
 					                    <input type="hidden" class="point" name="code" value="point_admin" />
 										<td class="content">적립금 적립<br>[개별 적립금 적립시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="point" name="is_send" checked/>
+					                    	<input type="checkbox" class="point" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('point');" class="btn btn-primary btn-xs">편집</button>
@@ -349,7 +358,7 @@ textarea {
 					                    <input type="hidden" class="coupon" name="code" value="coupon_admin" />
 										<td class="content">쿠폰 지급<br>[개별 쿠폰 지급시]</td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="coupon" name="is_send" checked/>
+					                    	<input type="checkbox" class="coupon" name="is_send"/>
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="onclickUpdate('coupon');" class="btn btn-primary btn-xs">편집</button>
@@ -422,7 +431,7 @@ textarea {
 
 <script src="//mir9.co.kr/resource/js/ckeditor4.7.2/ckeditor.js"></script>
 
-<script type="text/javascript">
+<script type="text/javascript">	
 	// CHEDITOR
 	var objEditor = CKEDITOR.replace('content', {
 		height: 300,
@@ -449,6 +458,33 @@ textarea {
 	
 	CKEDITOR.config.allowedContent = true;
 			
+	// 체크박스 값 확인
+	$(function() {
+		var setTemplateId = [];
+		var setIsSend = [];
+		var setIsSendAdmin = [];		
+		
+		$("input[name='setTemplateId']").each(function() { 
+			setTemplateId.push($(this).val());
+		});
+		$("input[name='setIsSend']").each(function() { 
+			setIsSend.push($(this).val());
+		});
+		$("input[name='setIsSendAdmin']").each(function() { 
+			setIsSendAdmin.push($(this).val());
+		});
+		
+		// is_send, is_send_admin 값이 y일 때 checked 속성 부여
+		for(var i = 0; i < setTemplateId.length; i++) {
+			if(setIsSend[i] == "y") {
+				$("input[class='" + setTemplateId[i] + "'][name='is_send']").attr("checked", true);
+			}
+			else if(setIsSendAdmin[i] == "y") {
+				$("input[class='" + setTemplateId[i] + "'][name='is_send_admin']").attr("checked", true);
+			}
+		}
+	});
+	
 	// 문구 편집 버튼 -> 저장 양식 불러오기
 	function onclickUpdate(action) {
 		// 모달 히든에 각각의 값 전달

@@ -21,6 +21,7 @@ public class Email implements Serializable {
 	
 	private int emailCode;
 	private String receiveCode; 
+	private String sendEmail;
 	private String requestId;
 	private String receiveEmail; 
 	private String receiveTitle;
@@ -28,4 +29,5 @@ public class Email implements Serializable {
 	private float emailPoint; // default 0.5
 	private Date receiveDate;
 
+	private String reDate;
 }

@@ -50,6 +50,9 @@ public class CouponServiceImpl implements CouponService {
 		return couponDao.insertMemberCoupon(memberCoupon);
 	}
 	
-	
+	@Override
+	public List<Coupon> getCoupon(String code) {
+		return couponDao.getCoupon(code);
+	}	
 	
 }

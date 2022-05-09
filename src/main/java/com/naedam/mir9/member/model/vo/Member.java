@@ -45,6 +45,8 @@ public class Member implements Serializable, UserDetails {
 	private Date withdrawalDate;
 	private String reason;
 	
+	private String name;
+	
 	/**
 	 * 회원권한리스트
 	 * SimpleGrantedAuthority
