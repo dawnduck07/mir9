@@ -174,4 +174,14 @@ public class OrderController {
 		model.addAttribute("deliSet",deliSet);
 		
 	}
+	
+	@GetMapping("/dashBoardOrderList")
+	private String dashBoardOrderList(Model model, HttpServletRequest request) throws Exception{
+
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("order_status", request.getParameter("order_status"));
+		orderListSetting(model, param);
+		
+		return "order/orderList";
+	}
 }

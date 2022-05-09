@@ -42,7 +42,7 @@ public interface OrderService {
 
 	List<OrderDetail> selectOrderDetailList();
 
-
+	OrderStatus selectDashBoardOrderList(Map<String, Object> map);
 
 	
 
