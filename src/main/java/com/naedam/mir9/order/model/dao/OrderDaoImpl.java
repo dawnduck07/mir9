@@ -109,14 +109,14 @@ public class OrderDaoImpl implements OrderDao {
 		return session.selectList("order.selectOrderDetailList");
 	}
 
+	@Override
+	public OrderStatus selectDashBoardOrderList(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return session.selectOne("order.selectDashBoardOrderList", map);
+	}
+
 
 	
 
-	
-
-
-	
-	
-	
 	
 }

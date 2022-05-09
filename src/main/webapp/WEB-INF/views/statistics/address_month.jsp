@@ -264,7 +264,7 @@
 				<c:if test="${status.last}">
 					['${area.areaName}', ${area.areaPayment}, chartBarColor]
 				</c:if>						
-			</c:forEach>				
+				</c:forEach>				
 			]);
 
 			var chart_div_width = $('#columnchart_values').width();

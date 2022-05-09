@@ -42,6 +42,6 @@ public interface OrderDao {
 
 	List<OrderDetail> selectOrderDetailList();
 
-
+	OrderStatus selectDashBoardOrderList(Map<String, Object> map);
 
 }
