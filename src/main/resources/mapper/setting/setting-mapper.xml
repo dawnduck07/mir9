@@ -231,26 +231,6 @@
   		</set>
   		WHERE SNS_SETTING_NO = 1
   	</update>
-
-  	<insert id="insertStaffEnroll">
-  		INSERT INTO
-  			staff(staff_no,
-  				  staff_name,
-  				  staff_position,
-  				  staff_career,
-  				  staff_profile)
-  		VALUES(NEXTVAL(seq_staff_no),
-  			   #{staffName},
-  			   #{staffPosition},
-  			   #{staffCareer},
-  			   #{staffProfile})   
-  		<selectKey keyProperty="staffNo" resultType="_int" order="AFTER">
-  			SELECT
-				LASTVAL(seq_staff_no)
-			FROM
-				DUAL
-  		</selectKey>
-  	</insert>
   	
   	<insert id="insertAttachmentEnroll">
   		INSERT INTO
@@ -266,23 +246,35 @@
   			   NOW())
   	</insert>
 
- 
  	<insert id="insertStaff">
- 		INSERT INTO
- 			staff(staff_no,
- 				  staff_name,
- 				  staff_position,
- 				  staff_career,
- 				  staff_profile,
- 				  img_url,
- 				  reg_Date)	
- 		VALUES(NEXTVAL(seq_staff_no),
- 			   #{staffName},
- 			   #{staffPosition},
- 			   #{staffCareer},
- 			   #{staffProfile},
- 			   #{imgUrl},
- 			   SYSDATE())
+ 		 <selectKey keyProperty="rowOrder" resultType="_int" order="BEFORE">
+ 		 	SELECT
+				IFNULL(MAX(row_order), 0) + 1
+			FROM 
+				staff
+ 		 </selectKey>
+ 		 
+ 		INSERT INTO 
+			staff(
+				staff_no, 
+				staff_name, 
+				staff_position, 
+				staff_career, 
+				staff_profile, 
+				img_url, 
+				reg_date, 
+				row_order
+				)
+		VALUES(
+				NEXTVAL(seq_staff_no), 
+				#{staffName}, 
+				#{staffPosition}, 
+				#{staffCareer}, 
+				#{staffProfile}, 
+				#{imgUrl}, 
+				SYSDATE(),
+				#{rowOrder}
+				)
  	</insert>
  	
  	<select id="selectStaffList" resultType="staff">
@@ -292,7 +284,8 @@
 			img_url,
 			staff_name,
 			staff_position,
-			reg_date
+			reg_date,
+			row_order
 		FROM
 			staff s
 		ORDER BY

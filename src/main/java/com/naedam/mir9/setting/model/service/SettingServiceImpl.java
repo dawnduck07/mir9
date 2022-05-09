@@ -335,6 +335,11 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.updateStaff(staff);
 	}
 
+	@Override
+	public int updateChangeOrder(int rowOrder) {
+		return settingDao.updateChangeOrder(rowOrder);
+	}
+
 
 
 
