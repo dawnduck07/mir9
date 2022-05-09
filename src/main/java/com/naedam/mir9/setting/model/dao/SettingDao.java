@@ -133,5 +133,7 @@ public interface SettingDao {
 
 	int updateStaff(Staff staff);
 
+	int updateChangeOrder(int rowOrder);
+
 
 }

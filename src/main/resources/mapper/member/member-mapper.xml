@@ -815,4 +815,5 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	ORDER BY
 		legDate DESC
 </select>
+
 </mapper>
