@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,9 +57,7 @@ public class BoardController {
 						   @ModelAttribute("boardOption") BoardOption boardOption) throws Exception{
 		
 		System.out.println("board/addBoard 시작");
-		System.out.println("boardNo 1 확인 ::: "+board);
 		boardService.addBoard(board);
-		System.out.println("boardNo 2 확인 ::: "+board);
 		System.out.println("boardAuthority 확인 ::: "+boardAuthority);
 		boardAuthority.setAuthorityBoard(board);
 		boardService.addAuthority(boardAuthority);
@@ -72,6 +71,7 @@ public class BoardController {
 	@PostMapping("addPost")
 	public String addPost(@ModelAttribute("post") Post post,
 						  @ModelAttribute("board") Board board,
+						  HttpSession session,
 					      @RequestParam(value="postName") MultipartFile[] postName,
 					      @RequestParam("ThombnailName") MultipartFile ThombnailName,HttpServletRequest request) throws Exception {
 		

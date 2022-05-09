@@ -40,6 +40,11 @@ textarea {
 						<form name="form_register">
 			                <input type="hidden" name="mode" value="updateSMS">
 			                
+			                <c:forEach var="setting" items="${ smsSetting }">
+			                	<input type="hidden" name="setTemplateId" value="${ setting.templateId }">
+			                	<input type="hidden" name="setIsSend" value="${ setting.isSend }">
+			                	<input type="hidden" name="setIsSendAdmin" value="${ setting.isSendAdmin }">
+			                </c:forEach>
 			                <c:forEach var="templateId" items="${ templateId }">
 			                	<input type="hidden" name="templateId" value="${ templateId }">
 			                </c:forEach>
@@ -97,7 +102,7 @@ textarea {
 					                        <textarea class="join" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="join" name="is_send" checked/>
+					                    	<input type="checkbox" class="join" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<!-- getDefaultTemplate(type, action, is_admin) -->
@@ -125,7 +130,7 @@ textarea {
 					                        <textarea class="findid" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="findid" name="is_send" checked/>
+					                    	<input type="checkbox" class="findid" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('findid');" class="btn btn-primary btn-xs">가져오기</button>
@@ -152,7 +157,7 @@ textarea {
 					                        <textarea class="findpw" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="findpw" name="is_send" checked/>
+					                    	<input type="checkbox" class="findpw" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('findpw');" class="btn btn-primary btn-xs">가져오기</button>
@@ -179,7 +184,7 @@ textarea {
 					                        <textarea class="order" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="order" name="is_send" checked/>
+					                    	<input type="checkbox" class="order" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('order');" class="btn btn-primary btn-xs">가져오기</button>
@@ -206,7 +211,7 @@ textarea {
 					                        <textarea class="pay_done" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="pay_done" name="is_send" checked/>
+					                    	<input type="checkbox" class="pay_done" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('pay_done');" class="btn btn-primary btn-xs">가져오기</button>
@@ -233,7 +238,7 @@ textarea {
 					                        <textarea class="delivery_ready" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="delivery_ready" name="is_send" checked/>
+					                    	<input type="checkbox" class="delivery_ready" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('delivery_ready');" class="btn btn-primary btn-xs">가져오기</button>
@@ -260,13 +265,13 @@ textarea {
 					                        <textarea class="delivery_ing" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="delivery_ing" name="is_send" checked/>
+					                    	<input type="checkbox" class="delivery_ing" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('delivery_ing');" class="btn btn-primary btn-xs">가져오기</button>
 					                    </td>
 					                    <td>
-					                    	<textarea class="delivery_ing_admin" name="content_admin"  ></textarea>
+					                    	<textarea class="delivery_ing_admin" name="content_admin" ></textarea>
 					                    </td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_ing" name="is_send_admin" />
@@ -287,7 +292,7 @@ textarea {
 					                        <textarea class="delivery_done" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="delivery_done" name="is_send" checked/>
+					                    	<input type="checkbox" class="delivery_done" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('delivery_done');" class="btn btn-primary btn-xs">가져오기</button>
@@ -313,7 +318,7 @@ textarea {
 					                        <textarea class="order_cancel" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="order_cancel" name="is_send" checked/>
+					                    	<input type="checkbox" class="order_cancel" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('order_cancel');" class="btn btn-primary btn-xs">가져오기</button>
@@ -340,7 +345,7 @@ textarea {
 					                        <textarea class="refund" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="refund" name="is_send" checked/>
+					                    	<input type="checkbox" class="refund" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('refund');" class="btn btn-primary btn-xs">가져오기</button>
@@ -367,7 +372,7 @@ textarea {
 					                        <textarea class="point" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="point" name="is_send" checked>
+					                    	<input type="checkbox" class="point" name="is_send">
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('point');" class="btn btn-primary btn-xs">가져오기</button>
@@ -394,7 +399,7 @@ textarea {
 					                        <textarea class="coupon" name="content" ></textarea>
 					                    </td>
 					                    <td class="content">
-					                    	<input type="checkbox" class="coupon" name="is_send" checked />
+					                    	<input type="checkbox" class="coupon" name="is_send" />
 					                    </td>
 					                    <td class="content">
 					                    	<button type="button" onclick="getDefaultTemplate('coupon');" class="btn btn-primary btn-xs">가져오기</button>
@@ -419,7 +424,7 @@ textarea {
 			                <br>
 		
 						</form>	
-		
+					
 		                <div style="text-align:center;"><button type="button" onclick="register()" class="btn btn-primary">확인</button></div>
 	                	
 	                </div><!-- /.box-body -->
@@ -430,12 +435,17 @@ textarea {
 </div><!-- /.content-wrapper -->
 
 <script>
+
 	// 저장된 양식 조회
 	$(function(){
 		// savedTemplateId, savedContent, textarea 선언
 		var savedTemplateId = [];
 		var savedContent = [];
 		var textarea = [];
+		
+		var setTemplateId = [];
+		var setIsSend = [];
+		var setIsSendAdmin = [];
 		
 		// 값 담기
 		$.each($("input[name='savedTemplateId']"), function(index, value) { 
@@ -447,6 +457,27 @@ textarea {
 		$("textarea").each(function() { 
 			textarea.push($(this).attr("class"));
 		});	
+		
+		// 체크박스 조회 데이터 담기
+		$("input[name='setTemplateId']").each(function() { 
+			setTemplateId.push($(this).val());
+		});
+		$("input[name='setIsSend']").each(function() { 
+			setIsSend.push($(this).val());
+		});
+		$("input[name='setIsSendAdmin']").each(function() { 
+			setIsSendAdmin.push($(this).val());
+		});
+		
+		// is_send, is_send_admin 값이 y일 때 checked 속성 부여
+		for(var i = 0; i < setTemplateId.length; i++) {
+			if(setIsSend[i] == "y") {
+				$("input[class='" + setTemplateId[i] + "'][name='is_send']").attr("checked", true);
+			}
+			else if(setIsSendAdmin[i] == "y") {
+				$("input[class='" + setTemplateId[i] + "'][name='is_send_admin']").attr("checked", true);
+			}
+		}
 
 		// class와 일치하는 textarea에 문구 적용
 		for(var i = 0; i < savedTemplateId.length; i++) {

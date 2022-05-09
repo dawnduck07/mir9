@@ -1,6 +1,5 @@
 package com.naedam.mir9.community.model.dao;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +109,18 @@ public class CommunityDaoImpl implements CommunityDao {
 	@Override
 	public List<Email> selectEmailList(HashMap<String, Object> param) {
 		return session.selectList("email.selectEmailList", param);
+	}
+
+	// sms setting 조회
+	@Override
+	public List<SmsSetting> selectSmsSetting() {
+		return session.selectList("sms.selectSmsSetting");
+	}
+
+	// email setting 조회
+	@Override
+	public List<EmailSetting> selectEmailSetting() {
+		return session.selectList("email.selectEmailSetting");
 	}
 
 }

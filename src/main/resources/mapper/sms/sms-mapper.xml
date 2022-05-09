@@ -17,6 +17,11 @@
 		 where template_id = #{templateId}
 	</update>
 	
+	<select id="selectSmsSetting" resultType="smsSetting">
+		select *
+		  from sms_setting
+	</select>
+	
 	<select id="smsCheck" resultType="smsSetting">
 		select *
 		  from sms_setting
@@ -27,6 +32,7 @@
 		insert into tb_sms (
 							sms_code,
 							receive_code,
+							send_phone,
 							request_id,
 							receive_phone,
 							receive_title,
@@ -36,6 +42,7 @@
 		values(
 				NEXTVAL(seq_sms_code),
 				#{type},
+				#{send},
 				#{requestId},
 				#{phone},
 				#{title},
@@ -68,6 +75,7 @@
 				</choose>
 			</if>
 		</where>
+		order by reDate DESC, sms_code DESC
 	</select>
   
 </mapper>

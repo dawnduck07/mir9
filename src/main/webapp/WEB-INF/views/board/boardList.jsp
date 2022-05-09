@@ -142,6 +142,10 @@
 		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/mir9/board/updateBoard?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
 	
+	function onclickView(boardNo){
+		location.href ="/mir9/board/postList?boardNo="+boardNo
+	}
+	
 	window.copyURL = function(boardNo){
 		prompt("이 게시판의 URL 입니다. Ctrl+C를 눌러 복사하세요", "http://localhost:8080/mir9/board/postList?boardNo="+boardNo)
 	}
@@ -254,7 +258,7 @@
 							  </td>
 							  <td>${postCount[i-1]}</td>
 							  <td>
-		                        <button type="button" onclick="_onclickView('board',1);" class="btn btn-success btn-xs">바로가기</button>
+		                        <button type="button" onclick="onclickView(${board.boardNo});" class="btn btn-success btn-xs">바로가기</button>
 		                        <button type="button" onclick="copyURL(${board.boardNo});" class="btn btn-warning btn-xs" value="${board.boardNo}">
 		                        	<input type="hidden" name="hiddenBoardNo2" value="${board.boardNo}" />링크복사</button>
 		                        <button type="button" class="btn btn-primary btn-xs" name="updateBoard" data-toggle="modal" data-target="#updateBoardModal">

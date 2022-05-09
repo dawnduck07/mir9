@@ -191,8 +191,8 @@ public interface MemberDao {
 
 	List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm();
 
-
-
+	List<Member> selectMemberInfo(String code);
+	
 
 
 	

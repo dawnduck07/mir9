@@ -110,14 +110,14 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.selectOrderDetailList();
 	}
 
+	@Override
+	public OrderStatus selectDashBoardOrderList(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return orderDao.selectDashBoardOrderList(map);
+	}
+
 
 	
 	
-	
 
-	
-	
-	
-	
-	
 }
