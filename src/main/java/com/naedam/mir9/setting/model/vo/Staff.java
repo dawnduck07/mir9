@@ -28,4 +28,5 @@ public class Staff implements Serializable {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
 	private Date regDate;
 	private int rowNum;
+	private int rowOrder;
 }

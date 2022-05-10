@@ -65,9 +65,9 @@
 			                        <td>직책</td>
 			                        <td style="width:140px;">등록일</td>
 			                        <td style="width:80px;">
-			                        <i onclick="change();" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
+			                        <i onclick="change('down');" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
 			                        <!-- <i onclick="changeOrder('down','staff','?tpf=admin/setting/staff');" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i> -->
-			                        <i onclick="change();" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
+			                        <i onclick="change('up');" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
 			                        </td>
 			                        <td style="width:80px;">명령</td>
 			                    </tr>
@@ -81,7 +81,7 @@
 				                        <td style="width:146px;">${staff.staffName}</td>
 				                        <td>${staff.staffPosition}</td>
 				                        <td style="width:140px;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${staff.regDate}" /></td>
-				                        <td><input type="radio" name="order_code" value="" /></td>
+				                        <td><input type="radio" class="radio-is-checked" name="order_code" value="${staff.rowOrder}" data-target="${staff.rowOrder}" /></td>
 				                        <td style="width:80px;"><button type="button" value="${staff.staffNo}" class="btn btn-primary btn-xs detailBtn">상세보기</button></td>
 				                    </tr>
 		                    	</c:forEach>
@@ -108,7 +108,7 @@
             	enctype="multipart/form-data">
             <input type="hidden" name="imgUrl" />
             <input type="hidden" name="mode" id="mode" value="insert" />
-            <input type="hidden" name="staffNo" id="staffNo">
+            <input type="hidden" name="staffNo" id="staffNo" value="0">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabelPortfolio">임원 관리</h4>
@@ -479,10 +479,65 @@ function update(){
 	$(window).unbind("beforeunload");
 	$(document.staffEnrollFrm).submit();
 }
-// 순서 변경
-function change(){
-	console.log("순서변경(changeOrder)");
-};
+
+
+function change(direction, form_name){
+	console.log("direction = " + direction);
+	var direction = direction;
+	if(!form_name)
+		form_name = 'form_list';
+	
+	var f = eval(form_name);
+	console.log("f = " + f);
+	var chkRadio = f.order_code;
+	console.log("chkRadio = " + chkRadio);
+	
+	if (!chkRadio) {
+		alert('항목이 없습니다.');
+		return;
+	}
+	
+	var chkLen = chkRadio.length;
+	console.log("chkLen = " + chkLen);
+	if (chkLen == undefined) {
+		alert('2개 이상의 항목이 있어야만 위치 변경이 가능합니다.');
+		return false;
+	}
+	
+	var order_code = $('input[name=order_code]:checked').val();
+	console.log("order_code = " + order_code);
+	
+	
+	
+	const result = {
+		direction : direction,
+		rowOrder : order_code
+	}
+	
+	const data = JSON.stringify(result);
+	
+	if(order_code != undefined){
+		$.ajax({
+			url : `${pageContext.request.contextPath}/setting/changeOrder.do`,
+			data : data,
+			contentType : "application/json; charset=utf-8",
+			method : "POST",
+			headers: {
+	            "${_csrf.headerName}" : "${_csrf.token}"
+	        },
+			success(data){
+				console.log(data);
+
+			},
+			error : console.log
+		});
+	} else {
+		alert("1개의 항목을 선택하여야 합니다.");
+		return false;
+	}
+}
+
+
 </script>
 
 
