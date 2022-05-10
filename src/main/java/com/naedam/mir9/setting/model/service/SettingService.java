@@ -133,5 +133,7 @@ public interface SettingService {
 
 	int updateStaff(Staff staff);
 
+	int updateChangeOrder(int rowOrder);
+
 
 }

@@ -326,6 +326,11 @@ public class SettingDaoImpl implements SettingDao {
 		return session.update("setting.updateStaff", staff);
 	}
 
+	@Override
+	public int updateChangeOrder(int rowOrder) {
+		return session.update("setting.updateChangeOrder", rowOrder);
+	}
+
 
 	
 	

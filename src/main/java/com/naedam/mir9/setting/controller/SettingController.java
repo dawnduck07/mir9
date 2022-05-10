@@ -4,8 +4,6 @@ package com.naedam.mir9.setting.controller;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -22,12 +20,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naedam.mir9.banner.model.vo.Banner;
 import com.naedam.mir9.category.model.vo.Category;
 import com.naedam.mir9.coupon.model.vo.Coupon;
@@ -436,6 +436,7 @@ public class SettingController {
 	@PostMapping("/staff_process.do")
 	public String staffProcess(Staff staff, RedirectAttributes redirectAttribute, HttpServletRequest request) {
 
+		log.debug("staff = {}", staff);
 		int result = 0;
 		String msg = null;
 		String mode = request.getParameter("mode");
@@ -543,6 +544,36 @@ public class SettingController {
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@PostMapping("/changeOrder.do")
+	public void changeOrder(@RequestBody String data, 
+							HttpServletRequest request){
+		log.debug("{}", "changeOrder.do 시작");
+		log.debug("data = {}", data);
+
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			Map<String, String> map = mapper.readValue(data, Map.class);
+			String direction = map.get("direction");
+			int rowOrder = Integer.parseInt(map.get("rowOrder"));
+			if(direction.equals("up")) {
+				int resultChangeOrder = settingService.updateChangeOrder(rowOrder);
+			} else if(direction.equals("down")) {
+				
+			}
+				
+				
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 	
 }

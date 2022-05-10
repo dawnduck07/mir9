@@ -19,4 +19,5 @@ public interface CouponService {
 
 	int insertMemberCoupon(MemberCoupon memberCoupon);
 
+	List<Coupon> getCoupon(String code);
 }

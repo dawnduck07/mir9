@@ -369,7 +369,11 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.selectMemberAccessHistoryListExcelForm");
 	}
 
-	
+	// 회원 정보 조회
+	@Override
+	public List<Member> selectMemberInfo(String code) {
+		return session.selectList("member.selectMemberInfo", code);
+	}
 
 
 

@@ -40,6 +40,12 @@ public interface CommunityService {
 	
 	List<Sms> selectSmsList(HashMap<String, Object> param);	
 	
+	List<SmsSetting> selectSmsSetting();
+	
+	int sendPointSms(String smsKey, String smsSecret, HashMap<String, Object> param);
+
+	int sendCouponSms(String smsKey, String smsSecret, HashMap<String, Object> param);	
+	
 	// mail
 	HashMap<String, Object> savedMail(String mailKey, String mailSecret, String templateId);
 
@@ -58,5 +64,13 @@ public interface CommunityService {
 	int sendOrderEmail(String mailKey, String mailSecret, HashMap<String, Object> param);
 
 	List<Email> selectEmailList(HashMap<String, Object> param);
+
+	List<EmailSetting> selectEmailSetting();
+
+	int sendPointEmail(String mailKey, String mailSecret, HashMap<String, Object> param);
+
+	int sendCouponEmail(String mailKey, String mailSecret, HashMap<String, Object> param);
+
+
 
 }

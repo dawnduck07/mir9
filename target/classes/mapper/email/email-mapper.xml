@@ -10,6 +10,11 @@
 			 , is_send_admin = #{sendAdmin}
 		 where template_id = #{templateId}
 	</update>
+
+	<select id="selectEmailSetting" resultType="emailSetting">
+		select *
+		  from email_setting
+	</select>	
 	
 	<select id="emailCheck" resultType="emailSetting">
 		select *
@@ -21,6 +26,7 @@
 		insert into tb_email (
 							email_code,
 							receive_code,
+							send_email,
 							request_id,
 							receive_email,
 							receive_title,
@@ -30,6 +36,7 @@
 		values(
 				NEXTVAL(seq_email_code),
 				default,
+				#{send},
 				#{requestId},
 				#{email},
 				#{title},
@@ -62,6 +69,7 @@
 				</choose>
 			</if>
 		</where>
+		order by reDate DESC, email_code DESC
 	</select>	
   
 </mapper>
