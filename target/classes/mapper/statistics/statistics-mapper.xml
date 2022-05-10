@@ -61,6 +61,50 @@
   	</if>
   </select>
   
+  <select id="selectAddressStatistics2" resultType="addressStatisticVo">
+		SELECT
+		COALESCE(a.paid_at, #{date}) AS paid_at,
+		a.amount AS paymentSum,
+		sum(a.cancel_amount) AS returnSum,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 서울' AND g.paid_at = #{date}) AS `seoul`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 부산' AND g.paid_at = #{date}) AS `busan`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 인천' AND g.paid_at = #{date}) AS `incheon`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 대구' AND g.paid_at = #{date}) AS `daegu`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 광주' AND g.paid_at = #{date}) AS `gwangju`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 대전' AND g.paid_at = #{date}) AS `daejeon`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 울산' AND g.paid_at = #{date}) AS `ulsan`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 세종' AND g.paid_at = #{date}) AS `sejong`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 경기' AND g.paid_at = #{date}) AS `gyeonggi`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 강원' AND g.paid_at = #{date}) AS `gangwon`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 충청북도' AND g.paid_at = #{date}) AS `chungbuk`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 충청남도' AND g.paid_at = #{date}) AS `chungnam`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 전라북도' AND g.paid_at = #{date}) AS `jeonbuk`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 전라남도' AND g.paid_at = #{date}) AS `jeonnam`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 경상북도' AND g.paid_at = #{date}) AS `gyeongbuk`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 경상남도' AND g.paid_at = #{date}) AS `gyeongnam`,
+		(select sum(g.amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 제주' AND g.paid_at = #{date}) AS `jeju`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 서울' AND g.paid_at = #{date}) AS `seoulReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 부산' AND g.paid_at = #{date}) AS `busanReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 인천' AND g.paid_at = #{date}) AS `incheonReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 대구' AND g.paid_at = #{date}) AS `daeguReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 광주' AND g.paid_at = #{date}) AS `gwangjuReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 대전' AND g.paid_at = #{date}) AS `daejeonReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 울산' AND g.paid_at = #{date}) AS `ulsanReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 세종' AND g.paid_at = #{date}) AS `sejongReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 경기' AND g.paid_at = #{date}) AS `gyeonggiReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 강원' AND g.paid_at = #{date}) AS `gangwonReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 충청북도' AND g.paid_at = #{date}) AS `chungbukReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 충청남도' AND g.paid_at = #{date}) AS `chungnamReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 전라북도' AND g.paid_at = #{date}) AS `jeonbukReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 전라남도' AND g.paid_at = #{date}) AS `jeonnamReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 경상북도' AND g.paid_at = #{date}) AS `gyeongbukReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 경상남도' AND g.paid_at = #{date}) AS `gyeongnamReturn`,
+		(select sum(g.cancel_amount) from payment_info g where substr(g.buyer_addr,1,3) = ' 제주' AND g.paid_at = #{date}) AS `jejuReturn` 
+		FROM payment_info a
+		WHERE a.status = 'ready'
+		AND a.paid_at = #{date}
+  </select>  
+  
   <select id="selectAreaPayment" resultType="areaVo">
 		SELECT DISTINCT
 		b.AREA_NO,

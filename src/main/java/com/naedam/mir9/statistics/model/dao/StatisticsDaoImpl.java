@@ -37,6 +37,12 @@ public class StatisticsDaoImpl implements StatisticsDao {
 		// TODO Auto-generated method stub
 		return session.selectOne("statistics.selectAddressStatistics", map);
 	}
+	
+	@Override
+	public AddressStatisticVo selectAddressStatistics2(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return session.selectOne("statistics.selectAddressStatistics2", map);
+	}
 
 	@Override
 	public List<AreaVo> selectAreaPayment(Map<String, Object> map) {

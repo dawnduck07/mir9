@@ -19,6 +19,8 @@ public interface StatisticsService {
 	
 	AddressStatisticVo selectAddressStatistics(Map<String, Object> map) throws Exception;
 	
+	AddressStatisticVo selectAddressStatistics2(Map<String, Object> map) throws Exception;
+	
 	List<AreaVo> selectAreaPayment(Map<String, Object> map) throws Exception;
 	
 	List<AreaVo> selectArea() throws Exception;

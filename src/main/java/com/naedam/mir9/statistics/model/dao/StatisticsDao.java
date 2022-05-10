@@ -19,6 +19,8 @@ public interface StatisticsDao {
 	
 	AddressStatisticVo selectAddressStatistics(Map<String, Object> map);
 	
+	AddressStatisticVo selectAddressStatistics2(Map<String, Object> map);
+	
 	List<AreaVo> selectAreaPayment(Map<String, Object> map);
 	
 	List<AreaVo> selectArea();

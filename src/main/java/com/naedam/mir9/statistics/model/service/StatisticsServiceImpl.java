@@ -40,6 +40,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 		// TODO Auto-generated method stub selectAddressStatistics
 		return statisticsDao.selectAddressStatistics(map);
 	}
+	
+	@Override
+	public AddressStatisticVo selectAddressStatistics2(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub selectAddressStatistics
+		return statisticsDao.selectAddressStatistics2(map);
+	}
 
 	@Override
 	public List<AreaVo> selectAreaPayment(Map<String, Object> map) throws Exception {
