@@ -544,6 +544,7 @@ textarea {
 			success: function(result) {
 				if(result > 0) {
 					alert("'" + category_txt(templateId) + "' 발송 문구를 수정했습니다.");
+					location.reload();
 				}
 			}, 
 			error:function(textStatus, errorThrown){
