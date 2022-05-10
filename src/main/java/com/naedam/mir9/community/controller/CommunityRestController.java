@@ -49,6 +49,7 @@ public class CommunityRestController {
 	private static String smsKey = "cuyb2ATgfZrgb0LF";
 	private static String smsSecret = "3VxajYQb";
 	
+	// JsonParser
 	private JsonParser parser = new JsonParser();
 	
 	// 리뷰 모달창 조회
@@ -70,19 +71,20 @@ public class CommunityRestController {
 	public int modifySms(
 			@RequestBody String jsonStr) {
 
-		// code, is_send, content 선언
+		// 필요 변수 선언
 		List<String> code = new ArrayList<>();
 		List<String> templateId = new ArrayList<>();
 		List<String> is_send = new ArrayList<>();
 		List<String> is_send_admin = new ArrayList<>();
 		List<String> content = new ArrayList<>();
+		int result1 = 0;
+		int result2 = 0;
 		
 		// JsonParser
 		JsonElement element = parser.parse(jsonStr);
-		
 		JsonArray codeArr = element.getAsJsonObject().get("code").getAsJsonArray();
 		
-		System.out.println("Controller code");
+		// 값 담기
 		for(int i = 0; i < codeArr.size(); i++) {
 			code.add((element.getAsJsonObject().get("code").getAsJsonArray()).get(i).getAsString());
 			content.add((element.getAsJsonObject().get("content").getAsJsonArray()).get(i).getAsString());
@@ -95,15 +97,13 @@ public class CommunityRestController {
 				is_send_admin.add((element.getAsJsonObject().get("is_send").getAsJsonArray()).get(i).getAsString());
 			}
 		}
-
-		int result1 = 0;
 		
+		// sms 정보 업데이트
 		for(int i = 0; i < code.size(); i++) {
-			result1 += communityService.updateSms(smsKey, smsSecret, code.get(i), content.get(i));
+			result1 += communityService.modifySms(smsKey, smsSecret, code.get(i), content.get(i));
 		}
 
 		// sms 자동 발송 여부
-		int result2 = 0;
 		HashMap<String, String> param = new HashMap<>();
 		
 		for (int i = 0; i < is_send_admin.size(); i++) {
@@ -113,18 +113,28 @@ public class CommunityRestController {
 
 			result2 += communityService.smsAutoSend(param);
 		}
-		
-		int result = result1 * result2;
 
-		return result;
+		return (result1 * result2);
 	}
+	
+	// mail 모달창 기본 문구 조회
+	@GetMapping("/email_origin")
+	public HashMap<String, Object> commEmailOrigin(String templateId) {
+
+		// templateId 전달
+		int category = 48300;
+		HashMap<String, Object> originMail = communityService.loadEmail(mailKey, mailSecret, templateId, category);
+
+		return originMail;
+	}	
 	
 	// mail 모달창 저장 문구 조회
 	@GetMapping("/email_modal")
 	public HashMap<String, Object> commEmailModal(String templateId) {
 
 		// templateId 전달
-		HashMap<String, Object> savedMail = communityService.savedMail(mailKey, mailSecret, templateId);
+		int category = 49064;
+		HashMap<String, Object> savedMail = communityService.loadEmail(mailKey, mailSecret, templateId, category);
 
 		return savedMail;
 	}
@@ -145,33 +155,23 @@ public class CommunityRestController {
 
 		return result;
 	}
-
-	// mail 모달창 기본 문구 조회
-	@GetMapping("/email_origin")
-	public HashMap<String, Object> commEmailOrigin(String templateId) {
-
-		// templateId 전달
-		HashMap<String, Object> originMail = communityService.originMail(mailKey, mailSecret, templateId);
-
-		return originMail;
-	}
 	
 	// mail 설정 수정
 	@PostMapping("/email")
 	public int commEmail(
 			@RequestBody String jsonStr) {
 		
-		// templateId, is_send, is_send_admin 선언
+		// 필요 변수 선언
 		List<String> templateId = new ArrayList<>();
 		List<String> is_send = new ArrayList<>();
 		List<String> is_send_admin = new ArrayList<>();
+		int result = 0;
 		
 		// JsonParser
 		JsonElement element = parser.parse(jsonStr);
-		
-		// list에 담기
 		JsonArray codeArr = element.getAsJsonObject().get("code").getAsJsonArray();
 		
+		// 값 담기
 		for(int i = 0; i < codeArr.size(); i++) {
 			if(i == 0 || i%2 == 0) {
 				templateId.add((element.getAsJsonObject().get("code").getAsJsonArray()).get(i).getAsString());
@@ -183,8 +183,6 @@ public class CommunityRestController {
 		}
 
 		// mail 자동 발송 여부
-		int result = 0;
-		
 		HashMap<String, String> param = new HashMap<>();
 		
 		for (int i = 0; i < is_send_admin.size(); i++) {
@@ -225,10 +223,22 @@ public class CommunityRestController {
 		// 주문 정보 조회
 		MsgInfo msgInfo = communityService.selectMsgInfo(Long.parseLong(orderNo));	
 
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String orderDate = format.format(msgInfo.getOrderDate());
+		String paidAt = format.format(msgInfo.getPaidAt());
+		String memo = msgInfo.getMemo();
+		if(memo == null) { // memo 값이 null일 경우
+			memo = " ";
+		}
+		
+		String pay = "결제 금액 " + msgInfo.getPayAmount() + "원, 결제 방법 " + msgInfo.getPayType();
+		pay += ", 계좌번호 " + msgInfo.getAccount() + ", 은행명 " + msgInfo.getBankName();
+		pay += ", 예금주 " + msgInfo.getOwner() + ", 입금자명 " + msgInfo.getBuyerName() + ", 입금일 " + paidAt;
+		
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("orderNo", msgInfo.getOrderNo());
 		param.put("statusName", msgInfo.getStatusName());
-		param.put("orderDate", msgInfo.getOrderDate());
+		param.put("orderDate", orderDate);
 		param.put("firstName", msgInfo.getFirstName());
 		param.put("lastName", msgInfo.getLastName());
 		param.put("name", msgInfo.getLastName().concat(msgInfo.getFirstName()));
@@ -242,36 +252,36 @@ public class CommunityRestController {
 		param.put("receiverEmail", msgInfo.getReceiverEmail());
 		param.put("receiverPhone", msgInfo.getReceiverPhone());
 		param.put("shippingAddress", msgInfo.getShippingAddress());
-		param.put("memo", msgInfo.getMemo());
+		param.put("memo", memo);
 		param.put("payType", msgInfo.getPayType());
 		param.put("payMethod", msgInfo.getPayMethod());
 		param.put("account", msgInfo.getAccount());
 		param.put("bankName", msgInfo.getBankName());
 		param.put("owner", msgInfo.getOwner());
 		param.put("buyerName", msgInfo.getBuyerName());
-		param.put("paidAt", msgInfo.getPaidAt());
-		param.put("templateId", templateId);
+		param.put("paidAt", paidAt);
+		param.put("payInfo", pay);
 
 		// 자동 발송 체크된 경우만 메시지 보내기
 		if(smsCheck.get(0).getTemplateId().equals(templateId)) {
 			if(smsCheck.get(0).getIsSend().equals("y")) {
 				param.put("templateId", templateId.concat("_mod"));
-				sms += communityService.sendOrderSms(smsKey, smsSecret, param);
+				sms += communityService.sendSms(smsKey, smsSecret, param);
 			}
 			else if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
 				param.put("templateId", templateId.concat("_admin_mod"));
-				sms += communityService.sendOrderSms(smsKey, smsSecret, param);
+				sms += communityService.sendSms(smsKey, smsSecret, param);
 			}
 		}
 		
 		if(emailCheck.get(0).getTemplateId().equals(templateId)) {
 			if(emailCheck.get(0).getIsSend().equals("y")) {
 				param.put("templateId", templateId.concat("_mod"));
-				email += communityService.sendOrderEmail(mailKey, mailSecret, param);
+				email += communityService.sendEmail(mailKey, mailSecret, param);
 			}
 			else if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
 				param.put("templateId", templateId.concat("_admin_mod"));
-				email += communityService.sendOrderEmail(mailKey, mailSecret, param);
+				email += communityService.sendEmail(mailKey, mailSecret, param);
 			}
 		}
 		
@@ -349,25 +359,24 @@ public class CommunityRestController {
 			if(smsSend.equals("y")) {
 				if(smsCheck.get(0).getIsSend().equals("y")) {
 					param.put("templateId", templateId.concat("_mod"));
-					sms += communityService.sendPointSms(smsKey, smsSecret, param);
+					sms += communityService.sendSms(smsKey, smsSecret, param);
 				}
 				else if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
 					param.put("templateId", templateId.concat("_admin_mod"));
-					sms += communityService.sendPointSms(smsKey, smsSecret, param);
+					sms += communityService.sendSms(smsKey, smsSecret, param);
 				}
 			}
 			
 			if(emailSend.equals("y")) {
 				if(emailCheck.get(0).getIsSend().equals("y")) {
 					param.put("templateId", templateId.concat("_mod"));
-					email += communityService.sendPointEmail(mailKey, mailSecret, param);
+					email += communityService.sendEmail(mailKey, mailSecret, param);
 				}
 				else if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
 					param.put("templateId", templateId.concat("_admin_mod"));
-					email += communityService.sendPointEmail(mailKey, mailSecret, param);
+					email += communityService.sendEmail(mailKey, mailSecret, param);
 				}
 			}
-		
 		}
 		
 		if(sms > 0 || email > 0) {
@@ -434,22 +443,22 @@ public class CommunityRestController {
 			if(smsSend.equals("y")) {
 				if(smsCheck.get(0).getIsSend().equals("y")) {
 					param.put("templateId", templateId.concat("_mod"));
-					sms += communityService.sendCouponSms(smsKey, smsSecret, param);
+					sms += communityService.sendSms(smsKey, smsSecret, param);
 				}
 				else if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
 					param.put("templateId", templateId.concat("_admin_mod"));
-					sms += communityService.sendCouponSms(smsKey, smsSecret, param);
+					sms += communityService.sendSms(smsKey, smsSecret, param);
 				}
 			}
 			
 			if(emailSend.equals("y")) {
 				if(emailCheck.get(0).getIsSend().equals("y")) {
 					param.put("templateId", templateId.concat("_mod"));
-					email += communityService.sendCouponEmail(mailKey, mailSecret, param);
+					email += communityService.sendEmail(mailKey, mailSecret, param);
 				}
 				else if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
 					param.put("templateId", templateId.concat("_admin_mod"));
-					email += communityService.sendCouponEmail(mailKey, mailSecret, param);
+					email += communityService.sendEmail(mailKey, mailSecret, param);
 				}
 			}
 		}

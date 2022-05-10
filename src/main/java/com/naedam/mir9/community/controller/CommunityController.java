@@ -29,11 +29,7 @@ public class CommunityController {
 	
 	@Autowired
 	private CommunityService communityService;
-	
-	// MAIL 인증키
-	private static String mailKey = "s3b1XpsH6BR8yT4S";
-	private static String mailSecret = "phiu4e0M";
-	
+
 	// SMS 인증키
 	private static String smsKey = "cuyb2ATgfZrgb0LF";
 	private static String smsSecret = "3VxajYQb";
@@ -78,8 +74,9 @@ public class CommunityController {
 		model.addAttribute("smsSetting", smsSetting);
 		
 		// CORS 문제 해결
-		// 기본 문구 (categodyId : 78519)
-		HashMap<String, Object> originSms = communityService.originSms(smsKey, smsSecret); 
+		// 기본 문구
+		int category = 81149;
+		HashMap<String, Object> originSms = communityService.loadSms(smsKey, smsSecret, category); 
 		
 		// list에 담기
 		List<String> templateId = (List<String>) originSms.get("templateId");
@@ -88,12 +85,13 @@ public class CommunityController {
 		model.addAttribute("templateId", templateId);
 		model.addAttribute("content", content);
 
-		// 저장 문구(categodyId : 78520)
-		HashMap<String, Object> savedSms = communityService.savedSms(smsKey, smsSecret); 
+		// 저장 문구
+		category = 81150;
+		HashMap<String, Object> savedSms = communityService.loadSms(smsKey, smsSecret, category); 
 		
 		// list에 담기
-		List<String> savedTemplateId = (List<String>) savedSms.get("savedTemplateId");
-		List<String> savedContent = (List<String>) savedSms.get("savedBody");
+		List<String> savedTemplateId = (List<String>) savedSms.get("templateId");
+		List<String> savedContent = (List<String>) savedSms.get("body");
 		
 		model.addAttribute("savedTemplateId", savedTemplateId);
 		model.addAttribute("savedContent", savedContent);
