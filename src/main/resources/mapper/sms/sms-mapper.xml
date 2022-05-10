@@ -4,30 +4,29 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sms">
 
+	<!-- 주문 정보 조회 -->
 	<select id="msgInfo" resultType="msgInfo">
 		select * 
 		  from v_msg_info
 		 where order_no = #{orderNo}
 	</select>
-
-	<update id="autoSend" parameterType="hashmap">
-		update sms_setting
-		   set is_send = #{send}
-			 , is_send_admin = #{sendAdmin}
-		 where template_id = #{templateId}
-	</update>
 	
-	<select id="selectSmsSetting" resultType="smsSetting">
-		select *
-		  from sms_setting
-	</select>
-	
+	<!-- 특정 설정값 조회 -->
 	<select id="smsCheck" resultType="smsSetting">
 		select *
 		  from sms_setting
 		 where template_id = #{templateId}
 	</select>
 	
+	<!-- 자동 발송 여부 수정 -->	
+	<update id="autoSend" parameterType="hashmap">
+		update sms_setting
+		   set is_send = #{send}
+			 , is_send_admin = #{sendAdmin}
+		 where template_id = #{templateId}
+	</update>
+		
+	<!-- sms 저장 -->
 	<insert id="insertSms" parameterType="hashmap">
 		insert into tb_sms (
 							sms_code,
@@ -51,6 +50,11 @@
 				#{date})
 	</insert>	
 	
+	<!-- 설정 정보 조회 -->
+	<select id="selectSmsSetting" resultType="smsSetting">
+		select *
+		  from sms_setting
+	</select>
 	<select id="selectSmsList" parameterType="hashmap" resultType="sms">
 		select sms_code,
 			   receive_code,
@@ -76,6 +80,6 @@
 			</if>
 		</where>
 		order by reDate DESC, sms_code DESC
-	</select>
-  
+	</select>	
+	  
 </mapper>

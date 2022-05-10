@@ -63,9 +63,19 @@ textarea {
 					                <tr>
 					                    <td class="menu">SMS 잔여 포인트</td>
 					                    <td align="left">
-					                    	<span style="float:left;">검색된 회원정보가 없습니다.mir9 포인트</span><br> <!-- sms 발송 포인트 금액 : 이용하는 API측에서 가져오기 -->
+					                    	<span style="float:left;">
+						                    	<c:choose>
+							                    	<c:when test="">
+								                    	발신번호가 등록된 사용자가 아닙니다.
+							                    	</c:when>
+							                    	<c:otherwise>
+							                    		<!-- 로그인한 사용자의 발신번호와  DB에 저장된 발신번호가 일치할 때 -->
+							                    	</c:otherwise>
+						                    	</c:choose>
+					                    	</span>
+					                    	<br> 
 					                    	<span style="line-height:1.0;">
-					                    		<small class="text-red">※ 포인트가 부족하면 메시지를 발신 할 수 없습니다.<br>※ 발신번호 등록(관리자 > 설정 > 기본설정 > 발신자 번호)을 사전에 하여야 발송이 가능합니다. (발신번호를 미르나인 담당자에게 알려주기 바랍니다.)</small>
+					                    		<small class="text-red">※ 발신번호 등록(관리자 > 설정 > 기본설정 > 발신자 번호)을 사전에 하여야 발송이 가능합니다. (발신번호를 미르나인 담당자에게 알려주기 바랍니다.)</small>
 					                    	</span>
 					                    </td>
 					                </tr>
@@ -573,6 +583,7 @@ textarea {
 			success: function(result) {
 				if(result > 0) {
 					alert("SMS 설정이 수정되었습니다.");
+					location.reload();
 				}
 			},
 			error: function(textStatus, errorThrown) {

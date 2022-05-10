@@ -309,7 +309,7 @@ ul {
 									<script>
 										var chart_data3 = new Array();
 										var dataRow3 = [];
-										dataRow3 = [ '진행상태', '건수' ];
+										dataRow3 = [ '매출액', '건수' ];
 										chart_data3.push(dataRow3);
 									</script>
 									<c:forEach var="s" items="${orderStatusList }">
@@ -689,7 +689,6 @@ ul {
 				var options = {
 					title: "",
 					pieHole : 0.4,
-					is3D: true,
 				};
 
 				var chart = new google.visualization.ColumnChart(document.getElementById("chart_div3"));

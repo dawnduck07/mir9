@@ -4,6 +4,14 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="email">
 
+	<!-- 특정 설정값 조회 -->
+	<select id="emailCheck" resultType="emailSetting">
+		select *
+		  from email_setting
+		 where template_id = #{templateId}
+	</select>
+
+	<!-- 자동 발송 여부 수정 -->
 	<update id="autoSend" parameterType="hashmap">
 		update email_setting
 		   set is_send = #{send}
@@ -11,17 +19,7 @@
 		 where template_id = #{templateId}
 	</update>
 
-	<select id="selectEmailSetting" resultType="emailSetting">
-		select *
-		  from email_setting
-	</select>	
-	
-	<select id="emailCheck" resultType="emailSetting">
-		select *
-		  from email_setting
-		 where template_id = #{templateId}
-	</select>
-	
+	<!-- email 저장 -->
 	<insert id="insertEmail" parameterType="hashmap">
 		insert into tb_email (
 							email_code,
@@ -45,6 +43,11 @@
 				#{date})
 	</insert>	
 	
+	<!-- 설정 정보 조회 -->	
+	<select id="selectEmailSetting" resultType="emailSetting">
+		select *
+		  from email_setting
+	</select>	
 	<select id="selectEmailList" parameterType="hashmap" resultType="email">
 		select email_code,
 			   receive_code,
