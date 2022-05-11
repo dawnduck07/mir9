@@ -1,4 +1,4 @@
-package com.naedam.schedule.controller;
+package com.naedam.mir9.schedule.controller;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.naedam.schedule.model.service.ScheduleService;
-import com.naedam.schedule.model.vo.Schedule;
+import com.naedam.mir9.schedule.model.service.ScheduleService;
+import com.naedam.mir9.schedule.model.vo.Schedule;
 
 @RestController
 @RequestMapping("/schedule/*")
