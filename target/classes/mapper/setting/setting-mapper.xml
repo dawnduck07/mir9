@@ -289,7 +289,7 @@
 		FROM
 			staff s
 		ORDER BY
-			s.reg_date DESC
+			s.row_order DESC
  	</select>
  	
  	<select id="totalStaffListCount" resultType="_int">
@@ -383,4 +383,63 @@
 		WHERE
 			staff_no = #{staffNo}
 	</update>
+	
+	<update id="updateChangeOrderUp">
+		UPDATE
+			staff
+		SET
+			row_order =
+				CASE
+					WHEN row_order = (SELECT MAX(row_order) FROM staff AS row_order)
+					THEN row_order
+					ELSE row_order + 1
+				END
+		WHERE
+			staff_no = #{staffNo}
+			<selectKey keyProperty="rowOrder" resultType="_int" order="AFTER">
+				SELECT
+					row_order
+				FROM
+					staff
+				WHERE
+					staff_no = #{staffNo}
+			</selectKey>
+	</update>
+	<update id="updateChangeOrderUpNext">
+		UPDATE
+			staff
+		SET
+			row_order = row_order - 1
+		WHERE
+			staff_no = (SELECT MIN(staff_no) FROM staff WHERE staff_no > #{staffNo})
+	</update>
+	
+	<update id="updateChangeOrderDown">
+		UPDATE
+			staff
+		SET
+			row_order =
+				CASE
+					WHEN row_order = (SELECT MIN(row_order) FROM staff AS row_order)
+					THEN row_order
+					ELSE row_order - 1
+				END
+		WHERE
+			staff_no = #{staffNo}
+	</update>
+	<update id="updateChangeOrderDownNext">
+		UPDATE
+			staff
+		SET
+			row_order = row_order + 1
+		WHERE
+			staff_no = (SELECT MAX(staff_no) FROM staff WHERE #{staffNo} > staff_no)
+	</update>
+	
+	<select id="selectMaxOrder" resultType="staff">
+		SELECT 
+			MAX(row_order) AS `row_order`
+		FROM	
+			staff
+	</select>
 </mapper>

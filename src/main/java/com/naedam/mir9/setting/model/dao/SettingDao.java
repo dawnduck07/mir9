@@ -133,7 +133,16 @@ public interface SettingDao {
 
 	int updateStaff(Staff staff);
 
-	int updateChangeOrder(int rowOrder);
+	int updateChangeOrderUp(int staffNo);
+
+	int updateChangeOrderUpNext(int staffNo);
+
+	int updateChangeOrderDown(int staffNo);
+
+	int updateChangeOrderDownNext(int staffNo);
+
+	Staff selectMaxOrder();
+
 
 
 }

@@ -75,13 +75,13 @@
 		                    <tbody id="tbody">
 		                    	<c:forEach items="${resultStaffList}" var="staff">
 									<tr>
-				                        <td style="width:30px;"><input type="checkbox" class="member-is-checked" name="" value="${staff.staffNo}" data-target="${staff.staffNo}" /></td>
+				                        <td style="width:30px;"><input type="checkbox" class="member-is-checked" name="staffNo" value="${staff.staffNo}" data-target="${staff.staffNo}" /></td>
 				                        <td style="width:60px;">${staff.rowNum}</td>
 				                        <td style="width:100px;"><img src="${staff.imgUrl}" width="144"></td>
 				                        <td style="width:146px;">${staff.staffName}</td>
 				                        <td>${staff.staffPosition}</td>
 				                        <td style="width:140px;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${staff.regDate}" /></td>
-				                        <td><input type="radio" class="radio-is-checked" name="order_code" value="${staff.rowOrder}" data-target="${staff.rowOrder}" /></td>
+				                        <td><input type="radio" class="radio-is-checked" name="order_code" value="${staff.staffNo}" data-target="${staff.staffNo}" /></td>
 				                        <td style="width:80px;"><button type="button" value="${staff.staffNo}" class="btn btn-primary btn-xs detailBtn">상세보기</button></td>
 				                    </tr>
 		                    	</c:forEach>
@@ -348,7 +348,7 @@ $(document).ready(function(){
 		                        <td style="width:146px;">\${v.staffName}</td>
 		                        <td>\${v.staffPosition}</td>
 		                        <td style="width:140px;">\${v.regDate}</td>
-		                        <td><input type="radio" name="order_code" value="-3" /></td>
+		                        <td><input type="radio" name="order_code" value="\${v.staffNo}"/></td>
 		                        <td style="width:80px;"><button type="button" value="\${v.staffNo}" class="btn btn-primary btn-xs">상세보기</button></td>
 		                    </tr>
 								`);
@@ -481,6 +481,8 @@ function update(){
 }
 
 
+
+// 게시물 순서 변경
 function change(direction, form_name){
 	console.log("direction = " + direction);
 	var direction = direction;
@@ -504,19 +506,19 @@ function change(direction, form_name){
 		return false;
 	}
 	
-	var order_code = $('input[name=order_code]:checked').val();
-	console.log("order_code = " + order_code);
+	var staffNo = $('input[name=order_code]:checked').val();
+	console.log("staffNo = " + staffNo);
 	
 	
 	
 	const result = {
 		direction : direction,
-		rowOrder : order_code
-	}
+		staffNo : staffNo
+	};
 	
 	const data = JSON.stringify(result);
 	
-	if(order_code != undefined){
+	if(staffNo != undefined){
 		$.ajax({
 			url : `${pageContext.request.contextPath}/setting/changeOrder.do`,
 			data : data,
@@ -526,8 +528,24 @@ function change(direction, form_name){
 	            "${_csrf.headerName}" : "${_csrf.token}"
 	        },
 			success(data){
-				console.log(data);
-
+	        	console.log("ajaxData = " + JSON.stringify(data));
+	        	
+	        	$("#tbody").html('');
+				
+				$.each(data.staffList, (k, v) => {
+					$("#tbody").append(`
+							<tr>
+		                        <td style="width:30px;"><input type="checkbox" class="member-is-checked" name="staffNo" value="\${v.staffNo}" data-target="\${v.staffNo}" /></td>
+		                        <td style="width:60px;">\${v.rowNum}</td>
+		                        <td style="width:100px;"><img src="\${v.imgUrl}" width="144"></td>
+		                        <td style="width:146px;">\${v.staffName}</td>
+		                        <td>\${v.staffPosition}</td>
+		                        <td style="width:140px;">\${v.regDate}</td>
+		                        <td><input type="radio" class="radio-is-checked" name="order_code" value="\${v.staffNo}" data-target="\${v.staffNo}" /></td>
+		                        <td style="width:80px;"><button type="button" value="\${v.staffNo}" class="btn btn-primary btn-xs detailBtn">상세보기</button></td>
+		                    </tr>
+							`);
+				});
 			},
 			error : console.log
 		});

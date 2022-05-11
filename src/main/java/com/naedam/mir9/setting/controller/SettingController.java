@@ -549,8 +549,9 @@ public class SettingController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@PostMapping("/changeOrder.do")
-	public void changeOrder(@RequestBody String data, 
-							HttpServletRequest request){
+	public Map<String, Object> changeOrder(@RequestBody String data, 
+										   Staff staff,
+										   RedirectAttributes redirectAttribute){
 		log.debug("{}", "changeOrder.do 시작");
 		log.debug("data = {}", data);
 
@@ -559,21 +560,45 @@ public class SettingController {
 		try {
 			Map<String, String> map = mapper.readValue(data, Map.class);
 			String direction = map.get("direction");
-			int rowOrder = Integer.parseInt(map.get("rowOrder"));
+			int staffNo = Integer.parseInt(map.get("staffNo"));
+			log.debug("staffNo = {}", staffNo);
+			
 			if(direction.equals("up")) {
-				int resultChangeOrder = settingService.updateChangeOrder(rowOrder);
+				// row_order 최대값 찾기
+				Staff resultMaxOrder = settingService.selectMaxOrder();
+				log.debug("resultMaxOrder = {}", resultMaxOrder);
+				
+				// 선택 게시물 위로 올리기 row_order + 1
+				// Staff로 바꿔서 해야겠네.. 
+				//Staff resultChangeOrderUp = settingService.updateChangeOrderUp(staffNo);
+				//log.debug("resultChangeOrderUp = {}", resultChangeOrderUp);
+				
+				log.debug("staff.getRowOrder() = {}", staff.getRowOrder());
+				log.debug("resultMaxOrder.getRowOrder() = {}", resultMaxOrder.getRowOrder());
+				
+				// row_order 최대값 = row_order + 1 아닐 경우에만 실행
+				if(staff.getRowOrder() != resultMaxOrder.getRowOrder()) {
+					int resultChangeOrderUpNext = settingService.updateChangeOrderUpNext(staffNo);
+					log.debug("resultChangeOrderUpNext = {}", resultChangeOrderUpNext);
+				}
+			
 			} else if(direction.equals("down")) {
+				int resultChangeOrderDown = settingService.updateChangeOrderDown(staffNo);
+				log.debug("resultChangeOrderDown", resultChangeOrderDown);
 				
+				int resultChangeOrderDownNext = settingService.updateChangeOrderDownNext(staffNo);
+				log.debug("resultChangeOrderDownNext", resultChangeOrderDownNext);
 			}
-				
-				
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+						
+		} catch (Exception e) {}
 		
+		// 임원 리스트 게시물
+		List<Staff> staffList = settingService.selectStaffList();
+		log.debug("staffList = {}", staffList);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("staffList", staffList);
 		
-		
+		return resultMap;
 	}
 	
 }
