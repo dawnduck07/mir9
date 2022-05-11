@@ -1,4 +1,4 @@
-package com.naedam.mir9.form.model.dao;
+package com.naedam.mir9.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;

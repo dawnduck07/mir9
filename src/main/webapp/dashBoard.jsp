@@ -14,7 +14,16 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Dashboard" name="title" />
 </jsp:include>
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-colorselector@0.1.0/dist/bootstrap-colorselector.min.js">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel='stylesheet'  href='${pageContext.request.contextPath}/resources/fullcalendar/lib/main.css'/>
+<link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/colorselector.css">
+<script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/main.js'></script>
+<script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/locales/ko.js'></script>
+<script src='${pageContext.request.contextPath}/resources/js/moment.js'></script>
 <!-- content-wrapper test-->
 <div class="content-wrapper">
 	<style>
@@ -31,6 +40,52 @@ ul {
 	font-size: 14px;
 	color: #97989b;
 }
+</style>
+<style>
+	a { 
+		color: #333;
+		
+	}
+	.fc .fc-button-primary {
+	 	color: #444;
+	  	color: var(--fc-button-text-color, #2C3E50);
+	  	background-color: #f4f4f4;
+	  	background-color: var(--fc-button-bg-color, #f4f4f4);
+	  	border-color: #ddd;
+	  	border-color: var(--fc-button-border-color, #ddd);
+	}	
+	.fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
+    	color: #444;
+    	color: var(--fc-button-text-color, #2C3E50);
+    	background-color: #f4f4f4;
+    	background-color: var(--fc-button-active-bg-color, #f4f4f4);
+    	border-color: #ddd;
+    	border-color: var(--fc-button-active-border-color, #ddd);
+	}
+	.fc .fc-button-primary:disabled {
+	    color: #444;
+	    color: var(--fc-button-text-color, #2C3E50);
+	    background-color: #f4f4f4;
+	    background-color: var(--fc-button-bg-color, #f4f4f4);
+	    border-color: #ddd;
+	    border-color: var(--fc-button-border-color, #ddd);
+	}
+	.fc-day-sun {
+	    color: red;
+	}	
+	.fc-sat {
+	    color: blue;
+	}
+	.fc-event, .fc-event:hover {
+	    color: #fff;
+	    text-decoration: none;
+	}	
+	.fc-event {
+	    border: #fff;
+	}
+	h3, h4, strong{
+		font-weight : bolder;
+	}
 </style>
 <script>
 
@@ -108,6 +163,53 @@ ul {
 			}
 		});	
 	})
+	
+	document.addEventListener('DOMContentLoaded', function() {
+		
+        var calendarEl = document.getElementById('calendar');
+        var calendar;
+        
+		calendar = new FullCalendar.Calendar(calendarEl, {
+	          locale: 'ko',	//한국어 설정
+			  //헤더에 표시할 툴바
+			  headerToolbar: { 
+					left: 'prev,next today', 
+					center: 'title', 
+					right: 'dayGridMonth' 
+			  },
+	          events: 
+		      		$.ajax({
+		    			url : "/mir9/schedule/json/getScheduleList/",
+		    			method : "GET",
+		    			dataType : "JSON",	
+		    			headers : {
+		    				"Accept" : "application/json",
+		    				"Content-Type" : "application/json"	 						
+		    			} ,
+		    			success : function(JSONData, status){
+		    				//alert(JSONData[0].scheduleStartDate)
+		    				//alert(JSONData[0].scheduleNo)
+		    				
+		    				for(var i = 0; i < JSONData.length; i++){
+	    						calendar.addEvent({
+	    							title: JSONData[i].scheduleTitle,
+	    							start: JSONData[i].scheduleStartDate,
+	    							end: JSONData[i].scheduleEndDate,
+	    							backgroundColor: JSONData[i].scheduleColor,
+	    							contents: JSONData[i].scheduleContents,
+	    							id: JSONData[i].scheduleNo
+	    						});
+	    						
+		    				}
+		    			},
+	        			error:function(request, status, error){
+	        				alert("경고")
+	        			}
+		    			
+		    		})
+		});
+		calendar.render();
+	});
 </script>
 
 	<section class="content-header">
@@ -196,7 +298,42 @@ ul {
 						</div>
 					</div>
 					<!-- ./col -->
-
+					<div class="box-body">
+						<div class="row">
+							<div class="col-md-9" >
+								<p class="text-center">
+									<h4 style="text-align:center;"><c:out value="${year}"/>년 작년 대비 월매출</h4>
+								</p>
+								<div class="chart">
+									<script>
+										var chart_data3 = new Array();
+										var dataRow3 = [];
+										dataRow3 = [ '월', '<c:out value="${year}"/>년','<c:out value="${year-1}"/>년','<c:out value="${year-2}"/>년' ];
+										chart_data3.push(dataRow3);
+									</script>
+									<c:set var="i" value="0"/>
+									<c:forEach var="s" items="${byList }">
+									    <c:set var="i" value="${ i+1 }" />
+										<script>
+											dataRow3 = ['${i}월', ${s.year}, ${s.yearsAgo}, ${s.twoYearsAgo}];
+											chart_data3.push(dataRow3);
+										</script>
+									</c:forEach>										
+									<div id="chart_div3" style="width: 1150px; height: 400px;"></div>
+								</div>
+							</div>
+							<p class="text-center">
+								<h4 style="text-align:center;">일정</h4>
+								<!-- Goal Completion -->
+							</p>
+							<div>
+								<div style="float:center;width:400px" id="calendar" ></div>
+							</div>							
+							
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- ./box-body -->					
 					<div class="box-header with-border">
 						<h3 class="box-title">월별 요약표</h3>
 					</div>
@@ -205,14 +342,14 @@ ul {
 						<div class="row">
 							<div class="col-md-8">
 								<p class="text-center">
-									<strong><c:out value="${year}"/>년</strong>
+									<strong><c:out value="${year}"/>년 기준 월단위 매출</strong>
 								</p>
 
 								<div class="chart">
 									<script>
 										var chart_data = new Array();
 										var dataRow = [];
-										dataRow = [ 'Month', '판매금액' ];
+										dataRow = [ '월', '<c:out value="${year}"/>년' ];
 										chart_data.push(dataRow);
 									</script>
 									<c:forEach var="r" items="${periodMonthList }">
@@ -341,6 +478,8 @@ ul {
 						</div>
 						<!-- /.row -->
 					</div>
+					
+					
 					<!-- /.box-footer -->
 				</div>
 				<!-- /.box -->
@@ -523,13 +662,11 @@ ul {
 				var data = google.visualization.arrayToDataTable(chart_data);
 
 				var options = {
-				  title: '(금액:천단위)',
-				  legend: {textStyle: {bold: false, color: 'black', fontSize: 13}},
-				  hAxis: {title: '',  titleTextStyle: {color: '#333'}},
-				  vAxis: {minValue: 0}
+					title: "",
+					pieHole : 0.4,			
 				};
 
-				var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+				var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
 				chart.draw(data, options);
 			}
 
@@ -539,15 +676,33 @@ ul {
 				var options = {
 					title: "",
 					pieHole : 0.4,
+					is3D: true,
 				};
 
 				var chart = new google.visualization.PieChart(document.getElementById("chart_div2"));
 				chart.draw(data, options);
 			}
+			
+			function drawChart3() {
+
+				var data = google.visualization.arrayToDataTable(chart_data3);
+				var options = {
+					  title: '(금액:천단위)',
+			          curveType: 'function',
+			          legend: { position: 'bottom' }
+				};
+
+				var chart = new google.visualization.LineChart(document.getElementById("chart_div3"));
+				chart.draw(data, options);
+			}
+			
+
+			
 			$(function() {
 				google.charts.load("current", {packages:['corechart']});
 				google.charts.setOnLoadCallback(drawChart);
 				google.charts.setOnLoadCallback(drawChart2);
+				google.charts.setOnLoadCallback(drawChart3);
 			});
 		
 </script>
