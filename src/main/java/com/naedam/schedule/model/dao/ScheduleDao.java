@@ -1,10 +1,11 @@
-package com.naedam.mir9.schedule.model.service;
+package com.naedam.schedule.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
-import com.naedam.mir9.schedule.model.vo.Schedule;
+import com.naedam.schedule.model.vo.Schedule;
 
-public interface ScheduleService {
+public interface ScheduleDao {
 	
 	//일정 등록
 	public int addSchedule(Schedule schedule) throws Exception;
@@ -20,5 +21,7 @@ public interface ScheduleService {
 	
 	//일정 삭제
 	public void deleteSchedule(int scheduleNo) throws Exception;
+	
+	
 	
 }

@@ -1,4 +1,4 @@
-package com.naedam.mir9.schedule.model.service;
+package com.naedam.schedule.model.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.naedam.mir9.schedule.model.dao.ScheduleDao;
-import com.naedam.mir9.schedule.model.vo.Schedule;
+import com.naedam.schedule.model.dao.ScheduleDao;
+import com.naedam.schedule.model.vo.Schedule;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
