@@ -1,4 +1,4 @@
-package com.naedam.schedule.model.dao;
+package com.naedam.mir9.schedule.model.dao;
 
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.naedam.schedule.model.vo.Schedule;
+import com.naedam.mir9.schedule.model.vo.Schedule;
 
 @Repository
 public class ScheduleDaoImpl implements ScheduleDao {

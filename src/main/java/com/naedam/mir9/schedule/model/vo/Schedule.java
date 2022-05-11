@@ -1,4 +1,4 @@
-package com.naedam.schedule.model.vo;
+package com.naedam.mir9.schedule.model.vo;
 
 import java.io.Serializable;
 
