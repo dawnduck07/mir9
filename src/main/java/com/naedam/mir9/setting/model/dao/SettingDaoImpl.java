@@ -327,9 +327,30 @@ public class SettingDaoImpl implements SettingDao {
 	}
 
 	@Override
-	public int updateChangeOrder(int rowOrder) {
-		return session.update("setting.updateChangeOrder", rowOrder);
+	public int updateChangeOrderUp(int staffNo) {
+		return session.update("setting.updateChangeOrderUp", staffNo);
 	}
+
+	@Override
+	public int updateChangeOrderUpNext(int staffNo) {
+		return session.update("setting.updateChangeOrderUpNext", staffNo);
+	}
+
+	@Override
+	public int updateChangeOrderDown(int staffNo) {
+		return session.update("setting.updateChangeOrderDown", staffNo);
+	}
+
+	@Override
+	public int updateChangeOrderDownNext(int staffNo) {
+		return session.update("setting.updateChangeOrderDownNext", staffNo);
+	}
+
+	@Override
+	public Staff selectMaxOrder() {
+		return session.selectOne("setting.selectMaxOrder");
+	}
+
 
 
 	

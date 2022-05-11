@@ -37,6 +37,7 @@ public class MemberEntity extends Member {
 			String addressSub, 
 			int pointAmount,
 			String addressZipcode) {
+		
 		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
 				withdrawalDate, reason, authorities);
 		

@@ -35,6 +35,7 @@ public class WithdrawalMemberEntity extends Member {
 			String memberMemoContent,
 			String reason,
 			Date withdrawalDate) {
+		
 		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
 				withdrawalDate, reason, authorities);
 		
