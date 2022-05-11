@@ -310,7 +310,7 @@ public class StatisticsController {
 			
 			AddressStatisticVo address = new AddressStatisticVo();
 			try {
-				address = statisticsService.selectAddressStatistics(map);
+				address = statisticsService.selectAddressStatistics2(map);
 			} catch (Exception e) {
 				
 				e.printStackTrace();
@@ -363,7 +363,7 @@ public class StatisticsController {
 			
 			AddressStatisticVo address = new AddressStatisticVo();
 			try {
-				address = statisticsService.selectAddressStatistics(map);
+				address = statisticsService.selectAddressStatistics2(map);
 			} catch (Exception e) {
 				
 				e.printStackTrace();
@@ -416,7 +416,7 @@ public class StatisticsController {
 			map.put("date", localDate.get(i));
 			AddressStatisticVo address = new AddressStatisticVo();
 			try {
-				address = statisticsService.selectAddressStatistics(map);
+				address = statisticsService.selectAddressStatistics2(map);
 			} catch (Exception e) {	
 				e.printStackTrace();
 			}
@@ -472,7 +472,7 @@ public class StatisticsController {
 			map.put("date", localDate.get(i));
 			AddressStatisticVo address = new AddressStatisticVo();
 			try {
-				address = statisticsService.selectAddressStatistics(map);
+				address = statisticsService.selectAddressStatistics2(map);
 			} catch (Exception e) {	
 				e.printStackTrace();
 			}
@@ -523,7 +523,7 @@ public class StatisticsController {
 			map.put("date", localDate.get(i));
 			AddressStatisticVo address = new AddressStatisticVo();
 			try {
-				address = statisticsService.selectAddressStatistics(map);
+				address = statisticsService.selectAddressStatistics2(map);
 			} catch (Exception e) {
 				
 				e.printStackTrace();
@@ -582,7 +582,7 @@ public class StatisticsController {
 			map.put("date", localDate.get(i));
 			AddressStatisticVo address = new AddressStatisticVo();
 			try {
-				address = statisticsService.selectAddressStatistics(map);
+				address = statisticsService.selectAddressStatistics2(map);
 			} catch (Exception e) {
 				
 				e.printStackTrace();

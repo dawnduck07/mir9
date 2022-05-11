@@ -250,7 +250,7 @@
 <div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	<div class="modal-dialog" style="width: 500px;">
 		<div class="modal-content">
-			<form name="formPoint" method="post" onsubmit="return false;" >
+			<form name="formPoint" method="post" onsubmit="return false;">
 				<input type="hidden" name="mode" value="point"> 
 				<input type="hidden" name="member_code">
 				<div class="modal-header">
@@ -1001,6 +1001,7 @@ function registerCoupon() {
     	success: function(result) {
     		if(result > 0) {
     			alert("쿠폰을 지급했습니다.");
+    			location.reload();
     		}
     	},
     	error: function(textStatus, errorThrown) {
@@ -1088,6 +1089,7 @@ function registerPoint() {
     	success: function(result) {
     		if(result > 0) {
     			alert("적립금을 지급했습니다.");
+    			location.reload();
     		}
     	},
     	error: function(textStatus, errorThrown) {

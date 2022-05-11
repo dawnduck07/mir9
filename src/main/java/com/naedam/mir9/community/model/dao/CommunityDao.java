@@ -28,29 +28,25 @@ public interface CommunityDao {
 	int selectDelete(String reviewCode);
 
 	// sms
-	int smsAutoSend(HashMap<String, String> param);
+	MsgInfo selectMsgInfo(long orderNo);
 	
 	List<SmsSetting> smsCheck(String templateId);	
 	
+	int smsAutoSend(HashMap<String, String> param);
+	
 	int insertSms(HashMap<String, Object> param2);
 	
+	List<SmsSetting> selectSmsSetting();
 	List<Sms> selectSmsList(HashMap<String, Object> param);
 	
-	List<SmsSetting> selectSmsSetting();
-	
-	// mail
-	int mailAutoSend(HashMap<String, String> param);
-
+	// email
 	List<EmailSetting> emailCheck(String templateId);
-
-	MsgInfo selectMsgInfo(long orderNo);
+	
+	int mailAutoSend(HashMap<String, String> param);
 
 	int insertEmail(HashMap<String, Object> param2);
 
-	List<Email> selectEmailList(HashMap<String, Object> param);
-
 	List<EmailSetting> selectEmailSetting();
-
-
+	List<Email> selectEmailList(HashMap<String, Object> param);
 
 }
