@@ -26,6 +26,7 @@ import com.naedam.mir9.payment.model.service.PaymentService;
 import com.naedam.mir9.product.model.service.ProductService;
 import com.naedam.mir9.product.model.vo.ProductDetail;
 import com.naedam.mir9.statistics.model.service.StatisticsService;
+import com.naedam.mir9.statistics.model.vo.BeforeYearStatisticVo;
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -72,19 +73,45 @@ public class HomeController {
 		counts.put("monthCancelCnt", paymentService.selectMonthCancelCnt());
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<PeriodStatisticVo> periodMonthList = new ArrayList<PeriodStatisticVo>();
-		String now = LocalDate.now().toString().substring(0, 4);
-		String startDateStr = now+"-01-01";
-		String endDateStr = now+"-12-31";
+		List<BeforeYearStatisticVo> byList = new ArrayList<BeforeYearStatisticVo>();
+		BeforeYearStatisticVo by = new  BeforeYearStatisticVo();
+		by.setYear(LocalDate.now().toString());
+		by.setYearsAgo(LocalDate.now().minusYears(1).toString());
+		by.setTwoYearsAgo(LocalDate.now().minusYears(2).toString());
+		Calendar cal = Calendar.getInstance();
+		int year = LocalDate.now().getYear();
+		String month = LocalDate.now().toString().substring(5,7);
+		cal.set(year,Integer.parseInt(month),1);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startDate", year+"-"+month+"-0"+cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+		map.put("endDate", year+"-"+month+"-"+cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		map.put("by", by);
+		List<OrderStatus> orderStatusList = new ArrayList<OrderStatus>();
+		for(int i = 1; i <= 7; i++) {
+			map.put("code", i);
+			OrderStatus orderStatus = orderService.selectDashBoardOrderList(map);
+			orderStatusList.add(orderStatus);
+		}
+		String endDateStr = LocalDate.now().toString().substring(0, 4)+"-12-31";
+		String endDateStr2 = LocalDate.now().minusYears(1).toString().substring(0, 4)+"-12-31";
+		String endDateStr3 = LocalDate.now().minusYears(2).toString().substring(0, 4)+"-12-31";
 		String type = "month";
-		GregorianCalendar startDate = strToIntDate(startDateStr, type);
-		GregorianCalendar endDate = strToIntDate(endDateStr, type);
-		int length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/30);
-		param.put("type", "M");	
-		for(int i = 0; i < length+1; i++) {
-			Calendar cal = endDate;
-			cal.add(GregorianCalendar.MONTH, -1);				
-			param.put("date", cal.getTime());
+		GregorianCalendar endDate = strToIntDate(endDateStr, "1");
+		GregorianCalendar endDate2 = strToIntDate(endDateStr2, "2");
+		GregorianCalendar endDate3 = strToIntDate(endDateStr3, "3");
+		param.put("type", "M");
+		param.put("by", by);
+		for(int i = 0; i < 12; i++) {
+			endDate.add(GregorianCalendar.MONTH, -1);
+			endDate2.add(GregorianCalendar.MONTH, -1);
+			endDate3.add(GregorianCalendar.MONTH, -1);
+			param.put("date", endDate.getTime());
+			map.put("date",endDate.getTime());
+			map.put("date2",endDate2.getTime());
+			map.put("date3",endDate3.getTime());
 			PeriodStatisticVo statistic = new PeriodStatisticVo();
+			BeforeYearStatisticVo statistic2 = new BeforeYearStatisticVo();
+			statistic2 = statisticsService.selectBeforeStatisticsList(map);			
 			try {
 				statistic = statisticsService.selectPeriodStatistics(param);
 			} catch (Exception e) {}
@@ -92,22 +119,16 @@ public class HomeController {
 				statistic = new PeriodStatisticVo();
 				statistic.setPaidAt(cal.getTime());
 			}
+			if(statistic2 == null) {
+				statistic2 = new BeforeYearStatisticVo();
+				statistic2.setYear("0");
+				statistic2.setYearsAgo("0");
+				statistic2.setTwoYearsAgo("0");
+			}
 			periodMonthList.add(statistic);
+			byList.add(statistic2);
 		}
 		Collections.reverse(periodMonthList);
-		Calendar cal = Calendar.getInstance();
-		String year = LocalDate.now().toString().substring(0,4);
-		String month = LocalDate.now().toString().substring(5,7);
-		cal.set(Integer.parseInt(year),Integer.parseInt(month),1);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("startDate", year+"-"+month+"-0"+cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-		map.put("endDate", year+"-"+month+"-"+cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-		List<OrderStatus> orderStatusList = new ArrayList<OrderStatus>();
-		for(int i = 1; i <= 7; i++) {
-			map.put("code", i);
-			OrderStatus orderStatus = orderService.selectDashBoardOrderList(map);
-			orderStatusList.add(orderStatus);
-		}
 		List<Board> boardList = boardService.getBoardTitle();		
 		List<OrderDetail> orderList = orderService.selectOrderDetailList();
 		List<ProductDetail> productList = productService.selectAllProductList();
@@ -117,6 +138,7 @@ public class HomeController {
 		model.addAttribute("productList",productList);
 		model.addAttribute("periodMonthList", periodMonthList);
 		model.addAttribute("orderStatusList", orderStatusList);
+		model.addAttribute("byList", byList);
 		
 		
 		return "forward:/dashBoard.jsp";
@@ -124,20 +146,18 @@ public class HomeController {
 	
 	private GregorianCalendar strToIntDate(String dateStr, String type){
 		int year=0; int month=0; int day = 0;
-		if(type.equals("year")) {
-			year = Integer.parseInt((dateStr.substring(0, 4)));
-			return new GregorianCalendar(year+2, 0, 0);
-			
-		}else if(type.equals("month")) {
+		if(type.equals("1")) {
 			year = Integer.parseInt((dateStr.substring(0, 4)));
 			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
-			
 			return new GregorianCalendar(year, month +2, 0);
-		}else if(type.equals("date")) {
+		}else if(type.equals("2")) {
 			year = Integer.parseInt((dateStr.substring(0, 4)));
 			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
-			day = Integer.parseInt((dateStr.substring(8, 10)));
-			return new GregorianCalendar(year, month, day+1);			
+			return new GregorianCalendar(year, month +2, 0);
+		}else if(type.equals("3")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+			return new GregorianCalendar(year, month +2, 0);			
 		}
 		
 		return null;

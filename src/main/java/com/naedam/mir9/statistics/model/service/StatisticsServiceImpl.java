@@ -11,7 +11,7 @@ import com.naedam.mir9.statistics.model.dao.StatisticsDao;
 
 import com.naedam.mir9.statistics.model.vo.AddressStatisticVo;
 import com.naedam.mir9.statistics.model.vo.AreaVo;
-
+import com.naedam.mir9.statistics.model.vo.BeforeYearStatisticVo;
 import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
 
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
@@ -40,6 +40,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 		// TODO Auto-generated method stub selectAddressStatistics
 		return statisticsDao.selectAddressStatistics(map);
 	}
+	
+	@Override
+	public AddressStatisticVo selectAddressStatistics2(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub selectAddressStatistics
+		return statisticsDao.selectAddressStatistics2(map);
+	}
 
 	@Override
 	public List<AreaVo> selectAreaPayment(Map<String, Object> map) throws Exception {
@@ -56,6 +62,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 	public List<MemberStatisticVo> selectMemberStatisticsList(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return statisticsDao.selectMemberStatisticsList(param);
+	}
+
+	@Override
+	public BeforeYearStatisticVo selectBeforeStatisticsList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return statisticsDao.selectBeforeStatisticsList(param);
 	}
 
 
