@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.naedam.mir9.statistics.model.vo.AddressStatisticVo;
 import com.naedam.mir9.statistics.model.vo.AreaVo;
-
+import com.naedam.mir9.statistics.model.vo.BeforeYearStatisticVo;
 import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
 import com.naedam.mir9.statistics.model.vo.ProductStatisticVo;
@@ -26,5 +26,7 @@ public interface StatisticsDao {
 	List<AreaVo> selectArea();
 
 	List<MemberStatisticVo> selectMemberStatisticsList(Map<String, Object> param);
+	
+	BeforeYearStatisticVo selectBeforeStatisticsList(Map<String, Object> param);
 
 }

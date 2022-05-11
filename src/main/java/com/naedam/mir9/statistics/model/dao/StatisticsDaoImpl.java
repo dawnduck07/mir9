@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.naedam.mir9.statistics.model.vo.AddressStatisticVo;
 import com.naedam.mir9.statistics.model.vo.AreaVo;
-
+import com.naedam.mir9.statistics.model.vo.BeforeYearStatisticVo;
 import com.naedam.mir9.statistics.model.vo.MemberStatisticVo;
 
 import com.naedam.mir9.statistics.model.vo.PeriodStatisticVo;
@@ -60,6 +60,12 @@ public class StatisticsDaoImpl implements StatisticsDao {
 		// TODO Auto-generated method stub
 		return session.selectList("statistics.selectMemberStatisticsList", param);
 
+	}
+
+	@Override
+	public BeforeYearStatisticVo selectBeforeStatisticsList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.selectOne("statistics.selectBeforeStatisticsList", param );
 	}
 
 	

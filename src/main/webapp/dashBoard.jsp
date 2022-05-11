@@ -199,7 +199,6 @@ ul {
 	    							contents: JSONData[i].scheduleContents,
 	    							id: JSONData[i].scheduleNo
 	    						});
-	    						console.log($("div[class='fc-daygrid-event-harness']"))
 	    						
 		    				}
 		    			},
@@ -303,18 +302,20 @@ ul {
 						<div class="row">
 							<div class="col-md-9" >
 								<p class="text-center">
-									<h4 style="text-align:center;"><c:out value="${year}"/>년 작년 대비 매출</h4>
+									<h4 style="text-align:center;"><c:out value="${year}"/>년 작년 대비 월매출</h4>
 								</p>
 								<div class="chart">
 									<script>
 										var chart_data3 = new Array();
 										var dataRow3 = [];
-										dataRow3 = [ '매출액', '건수' ];
+										dataRow3 = [ '월', '<c:out value="${year}"/>년','<c:out value="${year-1}"/>년','<c:out value="${year-2}"/>년' ];
 										chart_data3.push(dataRow3);
 									</script>
-									<c:forEach var="s" items="${orderStatusList }">
+									<c:set var="i" value="0"/>
+									<c:forEach var="s" items="${byList }">
+									    <c:set var="i" value="${ i+1 }" />
 										<script>
-											dataRow3 = ['${s.statusName}', ${s.statusCount}];
+											dataRow3 = ['${i}월', ${s.year}, ${s.yearsAgo}, ${s.twoYearsAgo}];
 											chart_data3.push(dataRow3);
 										</script>
 									</c:forEach>										
@@ -348,7 +349,7 @@ ul {
 									<script>
 										var chart_data = new Array();
 										var dataRow = [];
-										dataRow = [ 'Month', '' ];
+										dataRow = [ '월', '<c:out value="${year}"/>년' ];
 										chart_data.push(dataRow);
 									</script>
 									<c:forEach var="r" items="${periodMonthList }">
@@ -661,12 +662,11 @@ ul {
 				var data = google.visualization.arrayToDataTable(chart_data);
 
 				var options = {
-				  title: '(금액:천단위)',
-		          curveType: 'function',
-		          legend: { position: 'bottom' }
+					title: "",
+					pieHole : 0.4,			
 				};
 
-				var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+				var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
 				chart.draw(data, options);
 			}
 
@@ -687,11 +687,12 @@ ul {
 
 				var data = google.visualization.arrayToDataTable(chart_data3);
 				var options = {
-					title: "",
-					pieHole : 0.4,
+					  title: '(금액:천단위)',
+			          curveType: 'function',
+			          legend: { position: 'bottom' }
 				};
 
-				var chart = new google.visualization.ColumnChart(document.getElementById("chart_div3"));
+				var chart = new google.visualization.LineChart(document.getElementById("chart_div3"));
 				chart.draw(data, options);
 			}
 			
