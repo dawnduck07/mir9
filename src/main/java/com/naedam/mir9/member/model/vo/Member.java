@@ -26,6 +26,7 @@ public class Member implements Serializable, UserDetails {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	private int memberNo;
 	private String firstName;
 	private String lastName;
@@ -44,8 +45,7 @@ public class Member implements Serializable, UserDetails {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd HH:mm", timezone="Asia/Seoul")
 	private Date withdrawalDate;
 	private String reason;
-	
-	private String name;
+	//private String name;
 	
 	/**
 	 * 회원권한리스트

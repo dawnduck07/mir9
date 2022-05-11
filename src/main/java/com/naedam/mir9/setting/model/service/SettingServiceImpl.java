@@ -336,9 +336,30 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
-	public int updateChangeOrder(int rowOrder) {
-		return settingDao.updateChangeOrder(rowOrder);
+	public int updateChangeOrderUp(int staffNo) {
+		return settingDao.updateChangeOrderUp(staffNo);
 	}
+
+	@Override
+	public int updateChangeOrderUpNext(int staffNo) {
+		return settingDao.updateChangeOrderUpNext(staffNo);
+	}
+
+	@Override
+	public int updateChangeOrderDown(int staffNo) {
+		return settingDao.updateChangeOrderDown(staffNo);
+	}
+
+	@Override
+	public int updateChangeOrderDownNext(int staffNo) {
+		return settingDao.updateChangeOrderDownNext(staffNo);
+	}
+
+	@Override
+	public Staff selectMaxOrder() {
+		return settingDao.selectMaxOrder();
+	}
+
 
 
 

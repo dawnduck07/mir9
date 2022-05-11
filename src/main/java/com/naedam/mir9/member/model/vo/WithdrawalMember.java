@@ -31,8 +31,10 @@ public class WithdrawalMember extends Member {
 			List<SimpleGrantedAuthority> authorities, Date withdrawalDate, String reason,
 			String address,
 			String name) {
+		
 		super(memberNo, firstName, lastName, email, phone, regDate, status, id, password, profileImg, updateDate, loginDate,
 				withdrawalDate, reason, authorities);
+		
 		this.address = address;
 		this.name = name;
 	}
