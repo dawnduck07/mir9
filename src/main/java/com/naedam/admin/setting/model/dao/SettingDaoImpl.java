@@ -2,6 +2,7 @@ package com.naedam.admin.setting.model.dao;
 
 import java.util.List;
 import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,6 @@ import com.naedam.admin.point.model.vo.PointUse;
 import com.naedam.admin.popup.model.vo.Popup;
 import com.naedam.admin.setting.model.vo.AdminMenu;
 import com.naedam.admin.setting.model.vo.AdminSetting;
-import com.naedam.admin.setting.model.vo.Attachment;
 import com.naedam.admin.setting.model.vo.Locale;
 import com.naedam.admin.setting.model.vo.SeoSetting;
 import com.naedam.admin.setting.model.vo.SnsSetting;
@@ -33,6 +33,7 @@ import com.naedam.admin.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.admin.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.admin.setting.model.vo.PGs.NaverpaySetting;
 import com.naedam.admin.setting.model.vo.PGs.XpaySetting;
+
 
 @Repository
 public class SettingDaoImpl implements SettingDao {
@@ -327,30 +328,50 @@ public class SettingDaoImpl implements SettingDao {
 		return session.update("setting.updateStaff", staff);
 	}
 
-	@Override
-	public int updateChangeOrderUp(int staffNo) {
-		return session.update("setting.updateChangeOrderUp", staffNo);
-	}
 
-	@Override
-	public int updateChangeOrderUpNext(int staffNo) {
-		return session.update("setting.updateChangeOrderUpNext", staffNo);
-	}
 
 	@Override
 	public int updateChangeOrderDown(int staffNo) {
 		return session.update("setting.updateChangeOrderDown", staffNo);
 	}
 
-	@Override
-	public int updateChangeOrderDownNext(int staffNo) {
-		return session.update("setting.updateChangeOrderDownNext", staffNo);
-	}
 
 	@Override
 	public Staff selectMaxOrder() {
 		return session.selectOne("setting.selectMaxOrder");
 	}
+
+	@Override
+	public int updateChangeOrderUp(Staff paramStaff) {
+		return session.update("setting.updateChangeOrderUp", paramStaff);
+	}
+
+	@Override
+	public int updateChangeOrderUpNext(Staff paramStaff) {
+		return session.update("setting.updateChangeOrderUpNext", paramStaff);
+	}
+
+	@Override
+	public Staff selectInputRowOrder(Staff paramStaff) {
+		return session.selectOne("setting.selectInputRowOrder", paramStaff);
+	}
+
+	@Override
+	public Staff selectMinOrder() {
+		return session.selectOne("setting.selectMinOrder");
+	}
+
+	@Override
+	public int updateChangeOrderDown(Staff paramStaff) {
+		return session.update("setting.updateChangeOrderDown", paramStaff);
+	}
+
+	@Override
+	public int updateChangeOrderDownNext(Staff paramStaff) {
+		return session.update("setting.updateChangeOrderDownNext", paramStaff);
+	}
+
+	
 
 
 

@@ -5,9 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.naedam.admin.banner.model.vo.Banner;
 import com.naedam.admin.category.model.vo.Category;
@@ -23,10 +20,8 @@ import com.naedam.admin.point.model.vo.PointSave;
 import com.naedam.admin.point.model.vo.PointUse;
 import com.naedam.admin.popup.model.vo.Popup;
 import com.naedam.admin.setting.model.dao.SettingDao;
-import com.naedam.admin.setting.model.exception.StaffException;
 import com.naedam.admin.setting.model.vo.AdminMenu;
 import com.naedam.admin.setting.model.vo.AdminSetting;
-import com.naedam.admin.setting.model.vo.Attachment;
 import com.naedam.admin.setting.model.vo.Locale;
 import com.naedam.admin.setting.model.vo.SeoSetting;
 import com.naedam.admin.setting.model.vo.SnsSetting;
@@ -336,30 +331,46 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.updateStaff(staff);
 	}
 
-	@Override
-	public int updateChangeOrderUp(int staffNo) {
-		return settingDao.updateChangeOrderUp(staffNo);
-	}
 
-	@Override
-	public int updateChangeOrderUpNext(int staffNo) {
-		return settingDao.updateChangeOrderUpNext(staffNo);
-	}
+	
 
-	@Override
-	public int updateChangeOrderDown(int staffNo) {
-		return settingDao.updateChangeOrderDown(staffNo);
-	}
-
-	@Override
-	public int updateChangeOrderDownNext(int staffNo) {
-		return settingDao.updateChangeOrderDownNext(staffNo);
-	}
 
 	@Override
 	public Staff selectMaxOrder() {
 		return settingDao.selectMaxOrder();
 	}
+
+	@Override
+	public int updateChangeOrderUp(Staff paramStaff) {
+		return settingDao.updateChangeOrderUp(paramStaff);
+	}
+
+	@Override
+	public int updateChangeOrderUpNext(Staff paramStaff) {
+		return settingDao.updateChangeOrderUpNext(paramStaff);
+	}
+
+	@Override
+	public Staff selectInputRowOrder(Staff paramStaff) {
+		return settingDao.selectInputRowOrder(paramStaff);
+	}
+
+	@Override
+	public Staff selectMinOrder() {
+		return settingDao.selectMinOrder();
+	}
+
+	@Override
+	public int updateChangeOrderDown(Staff paramStaff) {
+		return settingDao.updateChangeOrderDown(paramStaff);
+	}
+
+	@Override
+	public int updateChangeOrderDownNext(Staff paramStaff) {
+		return settingDao.updateChangeOrderDownNext(paramStaff);
+	}
+
+
 
 
 
