@@ -331,7 +331,7 @@ $(document).ready(function(){
 			
 			$.ajax({
 				type : "GET",
-				url : `${pageContext.request.contextPath}/setting/staffTypeSearch.do`,
+				url : `${pageContext.request.contextPath}/admin/setting/staffTypeSearch.do`,
 				data : search,
 				contentType: "application/json; charset=utf-8",
 				success(data){
@@ -376,7 +376,7 @@ $(document).on("click", ".detailBtn", function(e){
 	};
 	
 	$.ajax({
-		url : `${pageContext.request.contextPath}/setting/staffDetail.do/\${staffNo}`,
+		url : `${pageContext.request.contextPath}/admin/setting/staffDetail.do/\${staffNo}`,
 		data : data,
 		contentType : "application/json; charset=utf-8",
 		method : "GET",
@@ -405,7 +405,7 @@ $(document).on("click", ".detailBtn", function(e){
 // 이미지 팝업
 function openWindow(staffNo){
 	var win;
-	win = window.open('${pageContext.request.contextPath}/setting/imgView?staffNo='+staffNo, 'imgView', 'scrollbars=no, width=10, height=10, status=no, resizable=no');
+	win = window.open('${pageContext.request.contextPath}/admin/setting/imgView?staffNo='+staffNo, 'imgView', 'scrollbars=no, width=10, height=10, status=no, resizable=no');
 }
 // 이미지 사이즈 조정
 function resizeWindow(win) {
@@ -424,7 +424,7 @@ function deleteImg(staffNo){
 		}
 		
 		$.ajax({
-			url : `${pageContext.request.contextPath}/setting/deleteImg.do/\${staffNo}`,
+			url : `${pageContext.request.contextPath}/admin/setting/deleteImg.do/\${staffNo}`,
 			data : data,
 			contentType : "application/json; charset=utf-8",
 			method : "POST",
@@ -520,7 +520,7 @@ function change(direction, form_name){
 	
 	if(staffNo != undefined){
 		$.ajax({
-			url : `${pageContext.request.contextPath}/setting/changeOrder.do`,
+			url : `${pageContext.request.contextPath}/admin/setting/changeOrder.do`,
 			data : data,
 			contentType : "application/json; charset=utf-8",
 			method : "POST",
@@ -546,8 +546,15 @@ function change(direction, form_name){
 		                    </tr>
 							`);
 				});
+				
+				if(data.changeOrderUpBan == "ban"){ 
+					alert("더이상 상위로 위치 변경은 불가능합니다.");
+				} else if(data.changeOrderDownBan == "ban"){
+					alert("더이상 하위로의 위치 변경은 불가능합니다.");
+				}
+				
 			},
-			error : console.log
+			error : console.log 
 		});
 	} else {
 		alert("1개의 항목을 선택하여야 합니다.");

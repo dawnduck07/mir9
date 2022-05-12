@@ -29,4 +29,6 @@ public class Staff implements Serializable {
 	private Date regDate;
 	private int rowNum;
 	private int rowOrder;
+	
+	private String direction;
 }

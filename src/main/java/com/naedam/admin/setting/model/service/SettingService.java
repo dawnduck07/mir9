@@ -30,6 +30,8 @@ import com.naedam.admin.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.admin.setting.model.vo.PGs.NaverpaySetting;
 import com.naedam.admin.setting.model.vo.PGs.XpaySetting;
 
+
+
 public interface SettingService {
 
 	List<DeliveryCompany> selectDeliveryCompanyList();
@@ -133,15 +135,26 @@ public interface SettingService {
 
 	int updateStaff(Staff staff);
 
-	int updateChangeOrderUp(int staffNo);
+	
 
-	int updateChangeOrderUpNext(int staffNo);
 
-	int updateChangeOrderDown(int staffNo);
 
-	int updateChangeOrderDownNext(int staffNo);
 
 	Staff selectMaxOrder();
+
+	int updateChangeOrderUp(Staff paramStaff);
+
+	int updateChangeOrderUpNext(Staff paramStaff);
+
+	Staff selectInputRowOrder(Staff paramStaff);
+
+	Staff selectMinOrder();
+
+	int updateChangeOrderDown(Staff paramStaff);
+
+	int updateChangeOrderDownNext(Staff paramStaff);
+
+
 
 
 

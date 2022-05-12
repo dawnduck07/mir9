@@ -18,7 +18,6 @@ import com.naedam.admin.point.model.vo.PointUse;
 import com.naedam.admin.popup.model.vo.Popup;
 import com.naedam.admin.setting.model.vo.AdminMenu;
 import com.naedam.admin.setting.model.vo.AdminSetting;
-import com.naedam.admin.setting.model.vo.Attachment;
 import com.naedam.admin.setting.model.vo.Locale;
 import com.naedam.admin.setting.model.vo.SeoSetting;
 import com.naedam.admin.setting.model.vo.SnsSetting;
@@ -30,6 +29,8 @@ import com.naedam.admin.setting.model.vo.PGs.KgIniSetting;
 import com.naedam.admin.setting.model.vo.PGs.NaverShoppingSetting;
 import com.naedam.admin.setting.model.vo.PGs.NaverpaySetting;
 import com.naedam.admin.setting.model.vo.PGs.XpaySetting;
+
+
 
 public interface SettingDao {
 
@@ -133,15 +134,24 @@ public interface SettingDao {
 
 	int updateStaff(Staff staff);
 
-	int updateChangeOrderUp(int staffNo);
-
-	int updateChangeOrderUpNext(int staffNo);
 
 	int updateChangeOrderDown(int staffNo);
 
-	int updateChangeOrderDownNext(int staffNo);
 
 	Staff selectMaxOrder();
+
+	int updateChangeOrderUp(Staff paramStaff);
+
+	int updateChangeOrderUpNext(Staff paramStaff);
+
+	Staff selectInputRowOrder(Staff paramStaff);
+
+	Staff selectMinOrder();
+
+	int updateChangeOrderDown(Staff paramStaff);
+
+	int updateChangeOrderDownNext(Staff paramStaff);
+
 
 
 

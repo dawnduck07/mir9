@@ -384,7 +384,7 @@
 			staff_no = #{staffNo}
 	</update>
 	
-	<update id="updateChangeOrderUp">
+	<update id="updateChangeOrderUp" parameterType="staff">
 		UPDATE
 			staff
 		SET
@@ -409,12 +409,17 @@
 		UPDATE
 			staff
 		SET
-			row_order = row_order - 1
+			row_order = 
+				CASE
+					WHEN #{rowOrder} > row_order
+					THEN row_order
+					ELSE row_order - 1
+				END
 		WHERE
 			staff_no = (SELECT MIN(staff_no) FROM staff WHERE staff_no > #{staffNo})
 	</update>
 	
-	<update id="updateChangeOrderDown">
+	<update id="updateChangeOrderDown" parameterType="staff">
 		UPDATE
 			staff
 		SET
@@ -426,12 +431,25 @@
 				END
 		WHERE
 			staff_no = #{staffNo}
+			<selectKey keyProperty="rowOrder" resultType="_int" order="AFTER">
+				SELECT
+					row_order
+				FROM
+					staff
+				WHERE
+					staff_no = #{staffNo}
+			</selectKey>
 	</update>
 	<update id="updateChangeOrderDownNext">
 		UPDATE
 			staff
 		SET
-			row_order = row_order + 1
+			row_order = 
+				CASE
+					WHEN row_order > #{rowOrder}
+					THEN row_order
+					ELSE row_order + 1
+				END
 		WHERE
 			staff_no = (SELECT MAX(staff_no) FROM staff WHERE #{staffNo} > staff_no)
 	</update>
@@ -442,4 +460,20 @@
 		FROM	
 			staff
 	</select>
+	<select id="selectMinOrder" resultType="staff">
+		SELECT 
+			MIN(row_order) AS `row_order`
+		FROM	
+			staff
+	</select>
+	
+	<select id="selectInputRowOrder" resultType="staff">
+		SELECT
+			row_order
+		FROM
+			staff
+		WHERE
+			staff_no = #{staffNo}
+	</select>
+	
 </mapper>
