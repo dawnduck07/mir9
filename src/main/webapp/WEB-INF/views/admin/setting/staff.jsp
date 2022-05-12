@@ -554,7 +554,7 @@ function change(direction, form_name){
 				}
 				
 			},
-			error : console.log
+			error : console.log 
 		});
 	} else {
 		alert("1개의 항목을 선택하여야 합니다.");
