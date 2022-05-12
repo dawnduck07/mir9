@@ -59,7 +59,7 @@
 			                        <td>2019/06/17 16:25</td>
 			                        <td>
 			                        	<button type="button" onclick="_onclickView('form',1);" class="btn btn-success btn-xs">바로가기</button>
-			                        	<button type="button" onclick="location.href='/index.php?tpf=admin/form/item&amp;form_code=1'" class="btn btn-warning btn-xs">문항관리</button>
+			                        	<button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/form/researchDetail'" class="btn btn-warning btn-xs">문항관리</button>
 			                        	<button type="button" onclick="onclickUpdate(1);" class="btn btn-primary btn-xs">상세보기</button>
 			                        </td>
 			                    </tr>      

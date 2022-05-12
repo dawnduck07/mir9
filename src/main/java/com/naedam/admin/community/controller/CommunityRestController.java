@@ -114,6 +114,17 @@ public class CommunityRestController {
 			result2 += communityService.smsAutoSend(param);
 		}
 
+
+		
+		System.out.println("=====Controller sms 내용 수정=====");
+		System.out.println(element);
+		System.out.println(result1);
+		System.out.println("=====Controller sms 자동발송 수정=====");
+		System.out.println(param);
+		System.out.println(result2);
+		
+		
+		
 		return (result1 * result2);
 	}
 	
@@ -153,6 +164,12 @@ public class CommunityRestController {
 		// templateId 전달
 		int result = communityService.modifyMail(mailKey, mailSecret, templateId, title, content);
 
+		
+		System.out.println("=====Controller email 모달 수정=====");
+		System.out.println(element);
+		System.out.println(result);
+		
+		
 		return result;
 	}
 	

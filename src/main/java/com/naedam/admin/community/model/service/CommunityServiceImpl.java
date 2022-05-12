@@ -186,7 +186,17 @@ public class CommunityServiceImpl implements CommunityService {
 		if(str.equals("success")) {
 			result = 1;
 		}
-			
+		
+		
+		
+		System.out.println("=====Service sms 수정=====");	
+		System.out.println(json);
+		System.out.println(result2);
+		System.out.println(result);
+		
+		
+		
+		
 		return result;
 	}
 	
@@ -244,6 +254,16 @@ public class CommunityServiceImpl implements CommunityService {
 			result = 1;
 		}	
 		
+		
+		
+		System.out.println("=====Service mail 수정=====");	
+		System.out.println(json);
+		System.out.println(result2);
+		System.out.println(result);
+		
+		
+		
+				
 		return result;
 	}
 
