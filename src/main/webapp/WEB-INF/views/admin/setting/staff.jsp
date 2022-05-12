@@ -547,7 +547,7 @@ function change(direction, form_name){
 							`);
 				});
 				
-				if(data.changeOrderUpBan == "ban"){
+				if(data.changeOrderUpBan == "ban"){ 
 					alert("더이상 상위로 위치 변경은 불가능합니다.");
 				} else if(data.changeOrderDownBan == "ban"){
 					alert("더이상 하위로의 위치 변경은 불가능합니다.");
