@@ -600,12 +600,23 @@ public class CommunityServiceImpl implements CommunityService {
 			os.flush();
 			os.close();
 			
+			
+			System.out.println("=====Post=====");
+			System.out.println(json.toString());
+			
+			
 			// 응답 데이터 반환
 			BufferedReader br = new BufferedReader(new InputStreamReader(postConn.getInputStream(), "UTF-8"));
 			while((line = br.readLine()) != null) {
 				result += line;
 			}
 			br.close();
+			
+			
+			System.out.println("=====Post=====");
+			System.out.println(result);
+			
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
