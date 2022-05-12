@@ -306,8 +306,8 @@
   		  	 	 
 	  		});		
 				alert("해당 자료가 삭제 되었습니다.")
-				$('#iframe_tree').attr('src', '${pageContext.request.contextPath}/menu/tree');
-				$('#iframe_list').attr('src', '${pageContext.request.contextPath}/menu/menuList');
+				$('#iframe_tree').attr('src', '${pageContext.request.contextPath}/admin/menu/tree');
+				$('#iframe_list').attr('src', '${pageContext.request.contextPath}/admin/menu/menuList');
 			}
         }
         
