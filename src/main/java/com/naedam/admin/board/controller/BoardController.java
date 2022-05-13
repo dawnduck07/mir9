@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,7 +117,7 @@ public class BoardController {
 					      @RequestParam("ThombnailName") MultipartFile ThombnailName,
 					      HttpServletRequest request) throws Exception {
 		
-		System.out.println("addPost 시작");
+		System.out.println("addPost2 시작");
 		
 		BoardFile boardFile = new BoardFile();
 		
@@ -134,19 +135,13 @@ public class BoardController {
 		ThombnailName.transferTo(file);
 		boardService.addPost(post);
 		
-		System.out.println("post데이터 확인 ::: ==="+post);
-		
 		for(int i = 0; i < postName.length; i++) {
-			System.out.println("파일 확인 ::: === "+postName[i]);
-			boardFile.setFilePost(post);
-			boardFile.setFileName(postName[i]);
-			boardService.addFile(boardFile);
+			if(i >= 1) {
+				boardFile.setFilePost(post);
+				boardFile.setFileName(postName[i]);
+				boardService.addFile(boardFile);
+			}
 		}
-		
-		
-		
-		System.out.println("post 데이터 확인 ::: "+post);
-		System.out.println("board 데이터 확인 ::: "+board);
 		
 		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
 	}
@@ -237,8 +232,14 @@ public class BoardController {
 		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
-		post.setPostThombnail(ThombnailName.getOriginalFilename());
-		ThombnailName.transferTo(file);
+		if(ThombnailName.isEmpty() == false) {
+			post.setPostThombnail(ThombnailName.getOriginalFilename());
+			ThombnailName.transferTo(file);
+		}else if(ThombnailName.isEmpty() == true) {
+			Post postData = boardService.getPostData(post.getPostNo());
+			post.setPostThombnail(postData.getPostThombnail());
+			ThombnailName.transferTo(file);
+		}
 		for(int i = 0; i < postName.length; i++) {
 			File file2 = new File(filePath+postName[i].getOriginalFilename());
 			boardFile.setFilePost(post);;
@@ -258,7 +259,7 @@ public class BoardController {
 							 @RequestParam("boardNo") int boardNo,
 							 @RequestParam(value="postName") String[] postName,
 						     @RequestParam("ThombnailName") MultipartFile ThombnailName, HttpServletRequest request) throws Exception{
-		System.out.println("updatePost 시작");
+		System.out.println("updatePost2 시작");
 		
 		Board board = new Board();
 		BoardFile boardFile = new BoardFile();
@@ -268,12 +269,20 @@ public class BoardController {
 		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
 		File file = new File(filePath+ThombnailName.getOriginalFilename());
 		post.setPostBoard(board);
-		post.setPostThombnail(ThombnailName.getOriginalFilename());
-		ThombnailName.transferTo(file);
+		if(ThombnailName.isEmpty() == false) {
+			post.setPostThombnail(ThombnailName.getOriginalFilename());
+			ThombnailName.transferTo(file);
+		}else if(ThombnailName.isEmpty() == true) {
+			Post postData = boardService.getPostData(post.getPostNo());
+			post.setPostThombnail(postData.getPostThombnail());
+			ThombnailName.transferTo(file);
+		}
 		for(int i = 0; i < postName.length; i++) {
-			boardFile.setFilePost(post);;
-			boardFile.setFileName(postName[i]);
-			boardService.addFile(boardFile);
+			if(i >= 1) {
+				boardFile.setFilePost(post);;
+				boardFile.setFileName(postName[i]);
+				boardService.addFile(boardFile);
+			}
 		}
 		//파일 업로드 끝
 		
@@ -470,7 +479,7 @@ public class BoardController {
 			out.flush(); // outputStram에 저장된 데이터를 전송하고 초기화 
 			String callback = request.getParameter("CKEditorFuncNum"); 
 			printWriter = response.getWriter(); 
-			String fileUrl = "/mir9/board/ckImgSubmit?uid=" + uid + "&fileName=" + fileName; // 작성화면 
+			String fileUrl = "/admin/board/ckImgSubmit?uid=" + uid + "&fileName=" + fileName; // 작성화면 
 			// 업로드시 메시지 출력 
 			printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}"); 
 			printWriter.flush(); 

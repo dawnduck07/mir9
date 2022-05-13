@@ -463,10 +463,10 @@
 		AND		b.board_no = #{board.boardNo}
 		<if test="search.searchType != null">
 			<if test="search.searchType == 1 and search.searchKeyword !='' ">
-			AND		(p.post_title like '%'||#{search.searchKeyword}||'%')
+			AND		p.post_title like concat ('%',#{search.searchKeyword},'%')
 			</if>
 			<if test="search.searchType == 2 and search.searchKeyword !='' ">
-			AND		(p.member_name like '%'||#{search.searchKeyword}||'%')
+			AND		p.member_name like concat ('%',#{search.searchKeyword},'%')
 			</if>
 		</if>
 		ORDER BY p.post_origin_no ASC, p.post_ord ASC, p.post_layer ASC
