@@ -592,7 +592,6 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			System.out.println("=====Service getRequest 요청=====");
 			System.out.println(getConn.getResponseCode());
-			System.out.println(getConn.getResponseMessage());
 			System.out.println(result);
 			
 		} catch (IOException e) {
@@ -641,7 +640,6 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			System.out.println("=====Service postRequest 전송=====");
 			System.out.println(postConn.getResponseCode()); 
-			System.out.println(postConn.getResponseMessage()); // 왜 전송이 안 되니...ㅠㅠ
 			System.out.println(json.toString());
 			
 			
@@ -654,7 +652,6 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			System.out.println("=====Service postRequest 요청=====");
 			System.out.println(postConn.getResponseCode());
-			System.out.println(postConn.getResponseMessage());
 			System.out.println(result);
 			
 			
@@ -697,7 +694,6 @@ public class CommunityServiceImpl implements CommunityService {
 			
 			System.out.println("=====Service putRequest 요청=====");
 			System.out.println(putConn.getResponseCode());
-			System.out.println(putConn.getResponseMessage());
 			System.out.println(result);
 			
 		}
