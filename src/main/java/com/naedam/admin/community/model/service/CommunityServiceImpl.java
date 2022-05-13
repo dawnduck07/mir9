@@ -1,6 +1,7 @@
 package com.naedam.admin.community.model.service;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -136,7 +138,7 @@ public class CommunityServiceImpl implements CommunityService {
 
 		// get 요청
 		String result = getRequest(getUrl, smsSecret);
-				
+
 		// JSON>body>data
 		JsonElement element = parser.parse(result);
 		JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
@@ -177,7 +179,7 @@ public class CommunityServiceImpl implements CommunityService {
 
 		// put 요청
 		String result2 = putRequest(putUrl, smsSecret, json);
-		
+
 		// JSON>header>resultMessage
 		JsonElement element = parser.parse(result2);
 		JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
@@ -186,17 +188,7 @@ public class CommunityServiceImpl implements CommunityService {
 		if(str.equals("success")) {
 			result = 1;
 		}
-		
-		
-		
-		System.out.println("=====Service sms 수정=====");	
-		System.out.println(json);
-		System.out.println(result2);
-		System.out.println(result);
-		
-		
-		
-		
+
 		return result;
 	}
 	
@@ -204,7 +196,7 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public HashMap<String, Object> loadEmail(String mailKey, String mailSecret, String templateId, int category) {
 		
-		HashMap<String, Object> loadEail = new HashMap<>();
+		HashMap<String, Object> loadEmail = new HashMap<>();
 		if(category != 48300) { // 수정 문구
 			templateId = templateId.concat("_mod");
 		}
@@ -221,10 +213,10 @@ public class CommunityServiceImpl implements CommunityService {
 		String title = (data.getAsJsonObject().getAsJsonObject()).get("title").getAsString();
 		String body = (data.getAsJsonObject().getAsJsonObject()).get("body").getAsString();
 
-		loadEail.put("title", title);
-		loadEail.put("content", body);
+		loadEmail.put("title", title);
+		loadEmail.put("content", body);
 
-		return loadEail;
+		return loadEmail;
 	}
 
 	// mail 문구 수정
@@ -241,10 +233,10 @@ public class CommunityServiceImpl implements CommunityService {
 		json.addProperty("useYn", "Y"); // 사용 유무
 		json.addProperty("title", title); // 발송 제목
 		json.addProperty("body", content); // 문구 내용
-		
+
 		// put 요청
 		String result2 = putRequest(putUrl, mailSecret, json);
-		
+
 		// JSON>header>resultMessage
 		JsonElement element = parser.parse(result2);
 		JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
@@ -253,17 +245,7 @@ public class CommunityServiceImpl implements CommunityService {
 		if(str.equals("success")) {
 			result = 1;
 		}	
-		
-		
-		
-		System.out.println("=====Service mail 수정=====");	
-		System.out.println(json);
-		System.out.println(result2);
-		System.out.println(result);
-		
-		
-		
-				
+
 		return result;
 	}
 
@@ -319,10 +301,20 @@ public class CommunityServiceImpl implements CommunityService {
 		json.put("templateId", template); // 템플릿ID
 		json.put("sendNo", "01042026201"); // 발송 번호 => 등록한 발신 번호로 수정 필요
 		json.put("recipientList", recipientList); // 수신자 정보
-			
+		
+		
+		System.out.println("=====Service sms 발신 : post 요청으로 넘길 json=====");
+		System.out.println(json);
+		
+		
 		// post 요청
 		String str = postRequest(postUrl, smsSecret, json);
-
+		
+		
+		System.out.println("=====Service sms 발신 : post 요청으로 받은 str=====");
+		System.out.println(str);
+		
+		
 		// JSON>body>data>requestId
 		JsonElement element = parser.parse(str);
 		JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
@@ -335,6 +327,11 @@ public class CommunityServiceImpl implements CommunityService {
 		
 		String result2 = getRequest(getUrl, smsSecret);
 		
+		
+		System.out.println("=====Service sms 발신 : get 요청으로 받은 result2=====");
+		System.out.println(result2);
+		
+		
 		// JSON>body>data>messageType, recipientNo, templateId, body, requestDate
 		JsonElement element2 = parser.parse(result2);
 		JsonObject bodyElement2 = element2.getAsJsonObject().get("body").getAsJsonObject();
@@ -342,6 +339,7 @@ public class CommunityServiceImpl implements CommunityService {
 		JsonArray data2 = bodyElement2.getAsJsonObject().get("data").getAsJsonArray();
 		String type = (data2.get(0).getAsJsonObject()).get("messageType").getAsString(); // 발송 타입
 
+		List<String> send = new ArrayList<>();
 		List<String> phone = new ArrayList<>();
 		List<String> title = new ArrayList<>();
 		List<String> content = new ArrayList<>();
@@ -349,10 +347,13 @@ public class CommunityServiceImpl implements CommunityService {
 		
 		// 데이터 가공
 		for(int i = 0; i < total; i++) {
-			String pStr = (data2.get(i).getAsJsonObject()).get("recipientNo").getAsString();
-			String pForm = pStr.substring(0, 3) + "-" + pStr.substring(3, 7) + "-" + pStr.substring(7);
+			String sendStr = (data2.get(i).getAsJsonObject()).get("sendNo").getAsString();
+			String recipStr = (data2.get(i).getAsJsonObject()).get("recipientNo").getAsString();
+			String sendForm = sendStr.substring(0, 3) + "-" + sendStr.substring(3, 7) + "-" + sendStr.substring(7);
+			String recipForm = recipStr.substring(0, 3) + "-" + recipStr.substring(3, 7) + "-" + recipStr.substring(7);
 
-			phone.add(i, pForm);
+			send.add(i, sendForm);
+			phone.add(i, recipForm);
 			content.add(i, (data2.get(i).getAsJsonObject()).get("body").getAsString());
 			requestDate.add(i, (data2.get(i).getAsJsonObject()).get("requestDate").getAsString());
 
@@ -367,17 +368,20 @@ public class CommunityServiceImpl implements CommunityService {
 		int insert = 0;
 		
 		HashMap<String, Object> param2 = new HashMap<String, Object>();
-		String pStr = json.getString("sendNo");
-		String pForm = pStr.substring(0, 3) + "-" + pStr.substring(3, 7) + "-" + pStr.substring(7);
 
 		for(int i = 0; i < total; i++) {
 			param2.put("type", type);
-			param2.put("send", pForm);
+			param2.put("send", send.get(i));
 			param2.put("requestId", requestId);
 			param2.put("phone", phone.get(i));
 			param2.put("title", title.get(i));
 			param2.put("content", content.get(i));
 			param2.put("date", requestDate.get(i));
+			
+			
+			System.out.println("=====Service sms 발신 : 저장 param2=====");
+			System.out.println(param2);
+			
 			
 			insert += communityDao.insertSms(param2);
 		}
@@ -457,8 +461,18 @@ public class CommunityServiceImpl implements CommunityService {
 		json.put("templateParameter", templateParameter); // 치환
 		json.put("receiverList", receiverList); // 수신자 정보
 		
+		
+		System.out.println("=====Service mail 발신 : post 요청으로 넘길 json=====");
+		System.out.println(json);
+		
+		
 		// post 요청
 		String str = postRequest(postUrl, mailSecret, json);
+		
+		
+		System.out.println("=====Service mail 발신 : post 요청으로 받은 str=====");
+		System.out.println(str);
+		
 		
 		// Json>element>body>data>requestId
 		JsonElement element = parser.parse(str);
@@ -474,6 +488,11 @@ public class CommunityServiceImpl implements CommunityService {
 			String getUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/sender/mail/" + requestId + "/" + mailSeq + "?pageSize=1000";
 			
 			String result2 = getRequest(getUrl, mailSecret);
+			
+			
+			System.out.println("=====Service mail 발신 : get 요청으로 받은 result2=====");
+			System.out.println(result2);
+			
 			
 			// JSON>body>data>mailStatusCode, title, body, requestDate
 			JsonElement element2 = parser.parse(result2);
@@ -530,6 +549,11 @@ public class CommunityServiceImpl implements CommunityService {
 				param2.put("content", content.get(i));
 				param2.put("date", requestDate.get(i));
 				
+				
+				System.out.println("=====Service mail 발신 : 저장 param2=====");
+				System.out.println(param2);
+				
+				
 				insert += communityDao.insertEmail(param2);
 			}
 			
@@ -566,6 +590,11 @@ public class CommunityServiceImpl implements CommunityService {
 			}
 			br.close();
 			
+			System.out.println("=====Service getRequest 요청=====");
+			System.out.println(getConn.getResponseCode());
+			System.out.println(getConn.getResponseMessage());
+			System.out.println(result);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
@@ -574,10 +603,16 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	// post 요청
-	public String postRequest(String url, String secret, JSONObject json) {
+	public String postRequest(String url, String secret, JSONObject json) { 
 		
 		String line = "";
 		String result = "";
+		
+		
+		System.out.println("=====Service postRequest 요청 : 전달 요소들 확인=====");
+		System.out.println(url);
+		System.out.println(secret);
+		System.out.println(json);
 		
 		try {
 			// url
@@ -594,34 +629,40 @@ public class CommunityServiceImpl implements CommunityService {
 			// doOutput : OutputStream으로 데이터를 넘겨주겠다
 			postConn.setDoOutput(true);
 			
-			// 데이터 전송
-			OutputStreamWriter os = new OutputStreamWriter(postConn.getOutputStream());
-			os.write(json.toString());
-			os.flush();
-			os.close();
+			// 데이터 전송 준비
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(postConn.getOutputStream()));
+			// OutputStreamWriter os = new OutputStreamWriter(postConn.getOutputStream());
+			// os.write(json.toString());
+			// os.flush();
+			// os.close();
+			bw.write(json.toString());
+			bw.flush();
+			bw.close();
 			
-			
-			System.out.println("=====Post=====");
+			System.out.println("=====Service postRequest 전송=====");
+			System.out.println(postConn.getResponseCode()); 
+			System.out.println(postConn.getResponseMessage()); // 왜 전송이 안 되니...ㅠㅠ
 			System.out.println(json.toString());
 			
 			
 			// 응답 데이터 반환
-			BufferedReader br = new BufferedReader(new InputStreamReader(postConn.getInputStream(), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(postConn.getInputStream()));
 			while((line = br.readLine()) != null) {
 				result += line;
 			}
 			br.close();
 			
-			
-			System.out.println("=====Post=====");
+			System.out.println("=====Service postRequest 요청=====");
+			System.out.println(postConn.getResponseCode());
+			System.out.println(postConn.getResponseMessage());
 			System.out.println(result);
-			
 			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+
 		return result;
 	}
 	
@@ -652,11 +693,12 @@ public class CommunityServiceImpl implements CommunityService {
 			os.close();
 
 			// 응답 데이터 반환
-			BufferedReader br = new BufferedReader(new InputStreamReader(putConn.getInputStream(), "UTF-8"));
-			while((line = br.readLine()) != null) {
-				result += line;
-			}
-			br.close();
+			result = getRequest(url, secret);
+			
+			System.out.println("=====Service putRequest 요청=====");
+			System.out.println(putConn.getResponseCode());
+			System.out.println(putConn.getResponseMessage());
+			System.out.println(result);
 			
 		}
 		catch(IOException e) {
