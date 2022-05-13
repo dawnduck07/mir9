@@ -15,12 +15,16 @@ public class FormController {
 	
 	@GetMapping("/list")
 	public String formList() {
-		
 		return "admin/form/formList";
 	}
 	
+	@GetMapping("/researchDetail")
+	public String researchDetail() {
+		return "admin/form/researchDetail";
+	}
+	
 	@GetMapping("/qna")
-	public void qna() {
-		
+	public String qna() {
+		return "admin/form/qna";
 	}
 }
