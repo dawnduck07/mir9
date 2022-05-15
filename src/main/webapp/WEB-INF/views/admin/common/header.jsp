@@ -348,12 +348,12 @@ function logoutSubmit(){
 						</a>
 						<ul class="treeview-menu">
 							<li>
-								<a href="${pageContext.request.contextPath}/admin/form/manage">
+								<a href="${pageContext.request.contextPath}/admin/form/list">
 									<i class="fa fa-circle-o"></i> 리스트
 								</a>
 							</li>
 							<li>
-								<a href="${pageContext.request.contextPath}/admin/form/list&form_code=1">
+								<a href="${pageContext.request.contextPath}/admin/form/qna">
 									<i class="fa fa-circle-o"></i> 문의사항
 								</a>
 							</li>
