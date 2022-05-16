@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="form">
+	<resultMap type="form" id="formSelectMap">
+		<result property="formNo"			column="FORM_NO"		jdbcType="NUMERIC"></result>
+		<result property="title"			column="TITLE"			jdbcType="VARCHAR"></result>
+		<result property="receive_email"	column="RECEIVE_EMAIL"	jdbcType="VARCHAR"></result>
+		<result property="is_captcha"		column="IS_CAPTCHA"		jdbcType="VARCHAR"></result>
+		<result property="is_agree"			column="IS_AGREE"		jdbcType="VARCHAR"></result>
+		<result property="agree_content"	column="AGREE_CONTENT"	jdbcType="VARCHAR"></result>
+		<result property="formDate"			column="FORM_DATE"		jdbcType="VARCHAR"></result>
+		<result property="html_design_list"	column="HTML_DESIGN_LIST"	jdbcType="VARCHAR"></result>
+		<result property="html_design_write" column="HTML_DESIGN_WRITE"	jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap type="formPost" id="formPostSelectMap">
+		<result property="code"				column="CODE"		jdbcType="NUMERIC"></result>
+		<result property="form.formNo"		column="FORM_NO"	jdbcType="NUMERIC"></result>
+		<result property="name"				column="NAME"		jdbcType="VARCHAR"></result>
+		<result property="email"			column="EMAIL"		jdbcType="VARCHAR"></result>
+		<result property="phone"			column="PHONE"		jdbcType="VARCHAR"></result>
+		<result property="subject"			column="SUBJECT"	jdbcType="VARCHAR"></result>
+		<result property="message"			column="MESSAGE"	jdbcType="VARCHAR"></result>
+		<result property="orderName"		column="ORDER_NAME"	jdbcType="VARCHAR"></result>
+		<result property="date"				column="DATE"		jdbcType="VARCHAR"></result>
+		<result property="sysdate"			column="SYSDATE"	jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap type="item" id="itemSelectMap">
+		<result property="itemNo"			column="ITEM_NO"		jdbcType="NUMERIC"></result>
+		<result property="form.formNo"		column="FORM_NO"	jdbcType="NUMERIC"></result>
+		<result property="label"			column="LABEL"			jdbcType="VARCHAR"></result>
+		<result property="input_type"		column="INPUT_TYPE"		jdbcType="VARCHAR"></result>
+		<result property="placeholder"		column="PLACEHOLDER"	jdbcType="VARCHAR"></result>
+		<result property="html_id"			column="HTML_ID"		jdbcType="VARCHAR"></result>
+		<result property="html_class"		column="HTML_CLASS"		jdbcType="VARCHAR"></result>
+		<result property="input_example"	column="INPUT_EXAMPLE"	jdbcType="VARCHAR"></result>
+		<result property="check_type"		column="CHECK_TYPE"		jdbcType="VARCHAR"></result>
+		<result property="is_show"			column="IS_SHOW"		jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="addForm" parameterType="form">
+		INSERT
+		INTO FORM(FORM_NO,
+				  TITLE,
+				  RECEIVE_EMAIL,
+				  IS_CAPTCHA,
+				  IS_AGREE,
+				  AGREE_CONTENT,
+				  FORM_DATE)
+		VALUES(NEXTVAL(form_seq),
+			   #{title},
+			   #{receive_email},
+			   #{is_captcha},
+			   #{is_agree},
+			   #{agree_content},
+			   sysdate())
+	</insert>
+	
+	<insert id="addFormPost" parameterType="formPost">
+		INSERT
+		INTO FORM_POST(CODE,
+				  FORM_NO,
+				  NAME,
+				  EMAIL,
+				  PHONE,
+				  SUBJECT,
+				  MESSAGE,
+				  ORDER_NAME,
+				  DATE,
+				  SYSDATE)
+		VALUES(NEXTVAL(form_post_seq),
+			   #{form.formNo},
+			   #{name},
+			   #{email},
+			   #{phone},
+			   #{subject},
+			   #{message},
+			   #{orderName},
+			   #{date},
+			   sysdate())
+	</insert>
+	
+	<insert id="addItem" parameterType="item">
+		INSERT
+		INTO ITEM(ITEM_NO,
+				  FORM_NO,
+				  LABEL,
+				  INPUT_TYPE,
+				  PLACEHOLDER,
+				  HTML_ID,
+				  HTML_CLASS,
+				  INPUT_EXAMPLE,
+				  CHECK_TYPE,
+				  IS_SHOW)
+		VALUES(NEXTVAL(item_seq),
+			   #{form.formNo},
+			   #{label},
+			   #{input_type},
+			   #{placeholder},
+			   #{html_id},
+			   #{html_class},
+			   #{input_example},
+			   #{check_type},
+			   #{is_show})
+	</insert>
+	
+	<select id="formList" resultMap="formSelectMap">
+		SELECT * FROM form ORDER BY form_no ASC
+	</select>
+	
+	<select id="formPostList" parameterType="int" resultMap="formPostSelectMap">
+		SELECT * FROM FORM_POST WHERE FORM_NO = #{form.formNo} ORDER BY code ASC
+	</select>
+	
+	<select id="itemList" parameterType="int" resultMap="itemSelectMap">
+		SELECT * FROM ITEM WHERE FORM_NO = #{form.formNo} ORDER BY ITEM_NO ASC
+	</select>
+	
+	<select id="getForm" parameterType="int" resultMap="formSelectMap">
+		SELECT * FROM FORM
+		WHERE form_no = #{value}
+	</select>
+	
+	<select id="getItem" parameterType="int" resultMap="itemSelectMap">
+		SELECT * FROM ITEM
+		WHERE item_no = #{value}
+	</select>
+	
+	<update id="updateForm" parameterType="form">
+		UPDATE FORM
+		<set>
+			TITLE = #{title},
+			RECEIVE_EMAIL = #{receive_email},
+			IS_CAPTCHA = #{is_captcha},
+			IS_AGREE = #{is_agree},
+			AGREE_CONTENT = #{agree_content}
+		</set>
+		WHERE form_no = #{formNo}
+	</update>
+	
+	<update id="updateItem" parameterType="item">
+		UPDATE ITEM
+		<set>
+			LABEL = #{label},
+			INPUT_TYPE = #{input_type},
+			PLACEHOLDER = #{placeholder},
+			HTML_ID = #{html_id},
+			HTML_CLASS = #{html_class},
+			INPUT_EXAMPLE = #{input_example},
+			CHECK_TYPE = #{check_type},
+			IS_SHOW= #{is_show}
+		</set>
+		WHERE ITEM_NO = #{itemNo}
+	</update>
+	
+	<update id="updateFormDesign" parameterType="form">
+		UPDATE FORM
+		<set>
+			HTML_DESIGN_LIST = #{html_design_list},
+			HTML_DESIGN_WRITE = #{html_design_write}
+		</set>
+		WHERE form_no = #{formNo}
+	</update>
+	
+	<delete id="deleteChoiceForm" parameterType="int">
+		DELETE
+		FROM form
+		WHERE form_no = #{value}
+	</delete>
+	
+	<delete id="deleteChoiceItem" parameterType="int">
+		DELETE
+		FROM ITEM
+		WHERE ITEM_NO = #{value}
+	</delete>
+</mapper>
