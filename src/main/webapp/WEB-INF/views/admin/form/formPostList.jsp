@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/admin/common/header.jsp">
 <jsp:param value="문의사항 관리" name="title"/>
@@ -27,58 +32,33 @@
 				            <input type="hidden" name="mode" id="mode">
 				            <input type="hidden" name="form_code" value="1">
 		                    <thead>
-			                    <tr>
-			                        <td style="width:30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');"></td>
-			                        <td style="width:60px;">NO</td>
-			                        <!-- ==목록 표시 선택 사항== -->
-			      					<td>Name</td>      
-			      					<td>E-mail</td>
-			      					<!-- ================ -->                        
-			      					<td style="width:120px;">등록일</td>
-			                        <td style="width:80px;">
-			                            <i onclick="changeOrder('down','form_reply','?tpf=admin/form/list&amp;form_code=1',1,'ko','',);" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
-			                            <i onclick="changeOrder('up','form_reply','?tpf=admin/form/list&amp;form_code=1',1,'ko','',);" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
-			                        </td>
-			                        <td style="width:60px;">명령</td>
-			                    </tr>
+		                    <tr>
+		                        <td style="width:30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');"></td>
+		                        <td style="width:60px;">NO</td>
+		      					<td>Name</td>      
+		      					<td>date</td>                        
+		      					<td style="width:200px;">등록일</td>
+		                        <td style="width:80px;">
+		                            <i onclick="changeOrder('down','form_reply','?tpf=admin/form/list&amp;form_code=1',1,'ko','',);" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
+		                            <i onclick="changeOrder('up','form_reply','?tpf=admin/form/list&amp;form_code=1',1,'ko','',);" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
+		                        </td>
+		                        <td style="width:60px;">명령</td>
+		                    </tr>
 		                    </thead>
 			      			<tbody>
+			      			  <c:set var="i" value="0"/>
+		      				  <c:forEach var="formPost" items="${list}" varStatus="status" >
+		      				  <c:set var="i" value="${ i+1 }" />
 			      				<tr>
 			                        <td><input type="checkbox" name="list[]" value="11"></td>
-			                        <td>4</td>  
-			                        <td style="text-align:left;">이게 뭐지</td>  
-			                        <td style="text-align:left;">jyan@naedamcnc.com</td>          
-			                        <td>2022/05/12 08:28</td>
+			                        <td>${i}</td>  
+			                        <td style="text-align:left;">${formPost.name}</td>
+			                        <td>?</td>          
+			                        <td>${formPost.date}</td>
 			                        <td><input type="radio" name="order_code" value="-5"></td>
 			                        <td><button type="button" onclick="onclickUpdate(11);" class="btn btn-primary btn-xs">수정하기</button></td>
-			                    </tr>      
-			                    <tr>
-			                        <td><input type="checkbox" name="list[]" value="7"></td>
-			                        <td>3</td>  
-			                        <td style="text-align:left;">이게 뭐지</td>  
-			                        <td style="text-align:left;">jyan@naedamcnc.com</td>          
-			                        <td>2022/02/28 13:12</td>
-			                        <td><input type="radio" name="order_code" value="-4"></td>
-			                        <td><button type="button" onclick="onclickUpdate(7);" class="btn btn-primary btn-xs">수정하기</button></td>
-			                    </tr>      
-			                    <tr>
-			                        <td><input type="checkbox" name="list[]" value="9"></td>
-			                        <td>2</td>  
-			                        <td style="text-align:left;">박종서</td>  
-			                        <td style="text-align:left;">parkjongseo07@gmail.com</td>          
-			                        <td>2022/02/28 13:24</td>
-			                        <td><input type="radio" name="order_code" value="-3"></td>
-			                        <td><button type="button" onclick="onclickUpdate(9);" class="btn btn-primary btn-xs">수정하기</button></td>
-			                    </tr>      
-			                    <tr>
-			                        <td><input type="checkbox" name="list[]" value="10"></td>
-			                        <td>1</td>  
-			                        <td style="text-align:left;">박종서</td>  
-			                        <td style="text-align:left;">parkjongse@gmail.com</td>          
-			                        <td>2022/02/28 15:56</td>
-			                        <td><input type="radio" name="order_code" value="-1"></td>
-			                        <td><button type="button" onclick="onclickUpdate(10);" class="btn btn-primary btn-xs">수정하기</button></td>
-			                    </tr>                    
+			                    </tr> 
+			                  </c:forEach>                         
 		                    </tbody>
 	                    </table>
 	                    <br>
@@ -109,10 +89,9 @@
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:800px;">
 	        <div class="modal-content">
-	            <form name="formRegister" method="post" onsubmit="return false;" action="?tpf=admin/form/process" enctype="multipart/form-data">
+	            <form name="formRegister" method="post" onsubmit="return false;" action="/admin/form/addFormPost?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
 		            <input type="hidden" name="mode" id="mode" value="insertReply">
-		            <input type="hidden" name="code" id="code">
-		            <input type="hidden" name="form_code" id="form_code">
+		            <input type="hidden" name="formNo" id="formNo" value="${formNo}">
 		            <input type="hidden" name="locale" id="locale">
 		            
 		            <div class="modal-header">
@@ -127,35 +106,35 @@
 			      				<tr>
 			                        <td class="menu">Name</td>
 			                        <td align="left">  
-			                        	<input type="text" name="data15" placeholder="" class="form-control input-sm">          
+			                        	<input type="text" name="name" placeholder="" class="form-control input-sm">          
 			                        </td>
 			                    </tr>      
 			                    <tr>
 			                        <td class="menu">E-mail</td>
 			                        <td align="left">  
-			                        	<input type="text" name="data16" placeholder="" class="form-control input-sm">          
+			                        	<input type="text" name="email" placeholder="" class="form-control input-sm">          
 			                        </td>
 			                    </tr>      
 			                    <tr>
 			                        <td class="menu">Phone</td>
 			                        <td align="left">  
-			                        	<input type="text" name="data17" placeholder="" class="form-control input-sm">          
+			                        	<input type="text" name="phone" placeholder="" class="form-control input-sm">          
 			                        </td>
 			                    </tr>      
 			                    <tr>
 			                        <td class="menu">Subject</td>
 			                        <td align="left">  
-			                        	<input type="text" name="data18" placeholder="" class="form-control input-sm">          
+			                        	<input type="text" name="subject" placeholder="" class="form-control input-sm">          
 			                        </td>
 			                    </tr>      
 			                    <tr>
 			                        <td class="menu">Message</td>
-			                        <td align="left">  <textarea name="data19" placeholder="" class="form-control input-sm" style="padding:5px; line-height:20px; width:100%; height:200px;"></textarea>          </td>
+			                        <td align="left">  <textarea name="message" placeholder="" class="form-control input-sm" style="padding:5px; line-height:20px; width:100%; height:200px;"></textarea>          </td>
 			                    </tr>      
 			                    <tr>
 			                        <td class="menu">주문자명</td>
 			                        <td align="left">  
-			                        	<input type="text" name="data35" placeholder="주문자명 입력" class="form-control input-sm">          
+			                        	<input type="text" name="orderName" placeholder="주문자명 입력" class="form-control input-sm">          
 			                        </td>
 			                    </tr>            
 		                    </tbody>
@@ -230,10 +209,10 @@
 	
     // 등록 모달 저장
     function registerForm() {
-        /*
+        
         formRegister.target = 'iframe_process';
         formRegister.submit();
-        */
+        
     }
     
     // 모달 데이터 셋팅
