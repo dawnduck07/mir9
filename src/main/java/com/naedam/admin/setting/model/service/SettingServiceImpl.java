@@ -370,6 +370,11 @@ public class SettingServiceImpl implements SettingService {
 		return settingDao.updateChangeOrderDownNext(paramStaff);
 	}
 
+	@Override
+	public int updateChangeOrderUpNext(int input_row_order) {
+		return settingDao.updateChangeOrderUpNext(input_row_order);
+	}
+
 
 
 
