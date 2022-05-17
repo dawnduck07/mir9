@@ -11,16 +11,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FormPost implements Serializable {
+public class ItemChoice implements Serializable {
 
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private int code;
-	private Form form;
+	private int itemChoiceNo;
 	private Item item;
-	private String itemData;
-	private String date;
+	private String name;
+	
 }

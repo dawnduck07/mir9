@@ -1,6 +1,9 @@
 package com.naedam.admin.form.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import com.naedam.admin.form.model.service.FormService;
 import com.naedam.admin.form.model.vo.Form;
 import com.naedam.admin.form.model.vo.FormPost;
 import com.naedam.admin.form.model.vo.Item;
+import com.naedam.admin.form.model.vo.ItemChoice;
 
 @Controller
 @RequestMapping("/admin/form/*")
@@ -29,24 +33,47 @@ public class FormController {
 		return "redirect:/admin/form/formList";
 	}
 	
-	@PostMapping("addFormPost")
-	public String addFormPost(@ModelAttribute("formPost") FormPost formPost, 
-			  				  @RequestParam("formNo") int formNo,
-			  				  Form form) throws Exception{
-		System.out.println("form/addFormPost 시작");
-		form.setFormNo(formNo);
-		formPost.setForm(form);
-		formService.addFormPost(formPost);
-		return "redirect:/admin/form/formPostList";
-	}
-	
 	@PostMapping("addItem")
 	public String addItem(@ModelAttribute("item") Item item, @RequestParam("formNo") int formNo, Form form) throws Exception{
 		System.out.println("form/addItem 시작");
 		form.setFormNo(formNo);
 		item.setForm(form);
 		formService.addItem(item);
+		if(item.getInput_example() != null) {
+			ItemChoice ic = new ItemChoice();
+			ic.setItem(item);
+			String[] exampleArr = item.getInput_example().split("\r\n"); 
+			for(int i = 0; i < exampleArr.length; i++) {
+				ic.setName(exampleArr[i]);
+				formService.addItemChoice(ic);
+			}
+		}
 		return "redirect:/admin/form/itemList?formNo="+formNo;
+	}
+	
+	@PostMapping("addFormPost")
+	public String addFormPost(HttpServletRequest request, 
+							  @RequestParam("formNo") int formNo, Item item, Form form)throws Exception{
+		System.out.println("form/addFormPost 시작");
+		FormPost formPost = new FormPost();
+		StringBuffer sb = new StringBuffer();
+		List<Item> trList = formService.formTr(formNo);
+		form.setFormNo(formNo);
+		for(int i = 0; i < trList.size(); i++) {
+			String data = request.getParameter("data"+trList.get(i).getItemNo());
+			if(i == 0) {
+				sb.append(data);
+			}else if(i != 0) {
+				sb.append("/"+data);
+			}
+			formPost.setItemData(sb.toString());
+			item.setItemNo(trList.get(i).getItemNo());
+			formPost.setItem(item);
+			formPost.setForm(form);
+		}
+		formService.addFormPost(formPost);
+		
+		return "redirect:/admin/form/formPostList?formNo="+formNo;
 	}
 	
 	@PostMapping("updateForm")
@@ -59,6 +86,9 @@ public class FormController {
 	@PostMapping("updateItem")
 	public String updateItem(@ModelAttribute("item") Item item, @RequestParam("formNo") int formNo) throws Exception{
 		System.out.println("form/updateItem 시작");
+		if(item.getInput_type() != "select" || item.getInput_type() != "radio" || item.getInput_type() != "checkbox") {
+			item.setInput_example("");
+		}
 		formService.updateItem(item);
 		return "redirect:/admin/form/itemList?formNo="+formNo;
 	}
@@ -66,7 +96,6 @@ public class FormController {
 	@PostMapping("updateFormDesign")
 	public void updateFormDesign(@ModelAttribute("form") Form form) throws Exception{
 		System.out.println("form/updateFormDesign 시작");
-		System.out.println("form 확인 ::: "+form);
 		formService.updateFormDesign(form);
 	}
 	
@@ -81,9 +110,21 @@ public class FormController {
 	@GetMapping("formPostList")
 	public String formPostList(@RequestParam("formNo") int formNo, Model model) throws Exception {
 		System.out.println("formPostList 시작");
-		List<FormPost> formPostList = formService.formPostList(formNo);
+		List<Item> td = formService.formTd(formNo);
+		List<Item> tr = formService.formTr(formNo);
+		List<FormPost> fp = formService.formPostList(formNo);
+		List<Integer> number = new ArrayList<>();
+		for(int i = 0; i < tr.size(); i++) {
+			tr.get(i).setInput_example(tr.get(i).getInput_example().replace("\r\n", "/"));
+			if(tr.get(i).getIs_show() == "y") {
+				number.add(i, i);
+			}
+		}
+		model.addAttribute("fp",fp);
+		model.addAttribute("td",td);
+		model.addAttribute("tr",tr);
 		model.addAttribute("formNo", formNo);
-		model.addAttribute("list", formPostList);
+		model.addAttribute("number",number);
 		return "admin/form/formPostList";
 	}
 	
@@ -92,6 +133,9 @@ public class FormController {
 		System.out.println("form/itemList 시작");
 		List<Item> itemList = formService.itemList(formNo);
 		Form form = formService.getForm(formNo);
+		for(int i = 0; i < itemList.size(); i++) {
+			itemList.get(i).setInput_example(itemList.get(i).getInput_example().replace("\r\n", "/"));
+		}
 		model.addAttribute("list",itemList);
 		model.addAttribute("formNo", formNo);
 		model.addAttribute("form", form);
