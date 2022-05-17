@@ -547,6 +547,9 @@ function change(direction, form_name){
 							`);
 				});
 				
+				console.log("staffNo = " + data.staffNo);
+				$("input:radio[name='order_code']:radio[value='" + data.staffNo + "']").prop("checked", true);
+				
 				if(data.changeOrderUpBan == "ban"){ 
 					alert("더이상 상위로 위치 변경은 불가능합니다.");
 				} else if(data.changeOrderDownBan == "ban"){
