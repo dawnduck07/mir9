@@ -409,14 +409,11 @@
 		UPDATE
 			staff
 		SET
-			row_order = 
-				CASE
-					WHEN #{rowOrder} > row_order
-					THEN row_order
-					ELSE row_order - 1
-				END
+			row_order = row_order - 1
 		WHERE
-			staff_no = (SELECT MIN(staff_no) FROM staff WHERE staff_no > #{staffNo})
+			row_order = (SELECT MIN(row_order) FROM staff WHERE row_order > #{rowOrder} - 1)
+			AND
+			NOT staff_no IN (#{staffNo})
 	</update>
 	
 	<update id="updateChangeOrderDown" parameterType="staff">

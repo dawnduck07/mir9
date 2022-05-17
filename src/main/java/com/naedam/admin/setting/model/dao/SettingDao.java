@@ -152,6 +152,8 @@ public interface SettingDao {
 
 	int updateChangeOrderDownNext(Staff paramStaff);
 
+	int updateChangeOrderUpNext(int input_row_order);
+
 
 
 

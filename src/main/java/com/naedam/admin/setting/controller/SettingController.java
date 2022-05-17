@@ -602,12 +602,15 @@ public class SettingController {
 			
 			Staff paramStaff = new Staff();
 			paramStaff.setStaffNo(Integer.parseInt(map.get("staffNo")));
-			
+			// ajax로 데이터를 받아온 후 radio 체크를 위해 설정
+			resultMap.put("staffNo", map.get("staffNo"));
+		
 			// 초기 row_order
 			Staff resultInputRowOrder = settingService.selectInputRowOrder(paramStaff);
 			log.debug("input_row_order = {}", resultInputRowOrder.getRowOrder());
 			log.debug("resultInputRowOrder = {}", resultInputRowOrder);
 			int input_row_order = resultInputRowOrder.getRowOrder();
+			paramStaff.setRowOrder(input_row_order);
 			
 			if (direction.equals("up")) {
 				// row_order 최대값 찾기
@@ -623,6 +626,7 @@ public class SettingController {
 				
 				// 선택한 row_order + 1 값이 기존 row_order 최대값보다 작다면 다음행 row_order - 1 진행
 				// 선택된 row_order + 1 값이 최대값보다 커질 경우 해당 메소드 미작동
+				log.debug("paramStaff = {}", paramStaff);
 				if(max_order > input_row_order && max_order >= changed_row_order) {
 					// 선택 게시물 위에 있던 게시물 내리기 row_order - 1
 					int resultChangeOrderUpNext = settingService.updateChangeOrderUpNext(paramStaff);
@@ -633,7 +637,7 @@ public class SettingController {
 				}
 
 			} else if (direction.equals("down")) {
-				// row_order 최대값 찾기
+				// row_order 최소값 찾기
 				Staff resultMinOrder = settingService.selectMinOrder();
 				log.debug("min_row_order = {}", resultMinOrder.getRowOrder());
 				int min_order = resultMinOrder.getRowOrder();
@@ -659,8 +663,7 @@ public class SettingController {
 
 		// 임원 리스트 게시물
 		List<Staff> staffList = settingService.selectStaffList();
-		log.debug("staffList = {}", staffList);
-		
+		log.debug("staffList = {}", staffList);	
 		resultMap.put("staffList", staffList);
 
 		return resultMap;

@@ -154,6 +154,8 @@ public interface SettingService {
 
 	int updateChangeOrderDownNext(Staff paramStaff);
 
+	int updateChangeOrderUpNext(int input_row_order);
+
 
 
 
