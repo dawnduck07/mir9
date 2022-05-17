@@ -396,14 +396,14 @@
 				END
 		WHERE
 			staff_no = #{staffNo}
-			<!-- <selectKey keyProperty="rowOrder" resultType="_int" order="AFTER">
+			<selectKey keyProperty="rowOrder" resultType="_int" order="AFTER">
 				SELECT
 					row_order
 				FROM
 					staff
 				WHERE
 					staff_no = #{staffNo}
-			</selectKey> -->
+			</selectKey>
 	</update>
 	<update id="updateChangeOrderUpNext">
 		UPDATE
@@ -411,7 +411,7 @@
 		SET
 			row_order = row_order - 1
 		WHERE
-			row_order = (SELECT MIN(row_order) FROM staff WHERE row_order > #{input_row_order})
+			row_order = (SELECT MIN(row_order) FROM staff WHERE row_order > #{rowOrder} - 1)
 			AND
 			NOT staff_no IN (#{staffNo})
 	</update>
