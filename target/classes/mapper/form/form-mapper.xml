@@ -112,6 +112,20 @@
 			   sysdate())
 	</insert>
 	
+	<insert id="addFormPostCopy" parameterType="formPost">
+		INSERT
+		INTO FORM_POST(code,
+					   form_no,
+					   item_no,
+					   item_data,
+					   date)
+		VALUES(NEXTVAL(form_post_seq),
+			   #{form.formNo},
+			   #{item.itemNo},
+			   #{itemData},
+			   #{date})
+	</insert>	
+	
 	<select id="formList" resultMap="formSelectMap">
 		SELECT * FROM form ORDER BY form_no ASC
 	</select>
@@ -140,6 +154,11 @@
 	<select id="getItemChoice" parameterType="int" resultMap="itemChoiceSelectMap">
 		SELECT * FROM ITEM_CHOICE
 		WHERE item_no = #{value}
+	</select>
+	
+	<select id="getFormPost" parameterType="int" resultMap="formPostSelectMap">
+		SELECT * FROM FORM_POST
+		WHERE code = #{value}
 	</select>
 	
 	<select id="formTd" parameterType="int" resultMap="itemSelectMap">
@@ -201,5 +220,11 @@
 		DELETE
 		FROM ITEM
 		WHERE ITEM_NO = #{value}
+	</delete>
+	
+	<delete id="deleteChoiceFormPost" parameterType="int">
+		DELETE
+		FROM FORM_POST
+		WHERE CODE = #{value}
 	</delete>
 </mapper>

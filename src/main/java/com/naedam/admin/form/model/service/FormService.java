@@ -21,6 +21,9 @@ public interface FormService {
 	//폼게시글 등록
 	public int addFormPost(FormPost formPost) throws Exception;
 	
+	//폼게시글 등록
+	public int addFormPostCopy(FormPost formPost) throws Exception;
+	
 	//폼메일 리스트
 	List<Form> formList() throws Exception;
 	
@@ -36,6 +39,9 @@ public interface FormService {
 	//문항 정보
 	Item getItem(int itemNo) throws Exception;
 	
+	//폼게시물 정보
+	FormPost getFormPost(int code) throws Exception;
+	
 	//예시 정보
 	List<ItemChoice> getItemChoice(int itemNo) throws Exception;
 	
@@ -50,6 +56,9 @@ public interface FormService {
 	
 	//문항 선택삭제
 	public void deleteChoiceItem(int itemNo) throws Exception;
+	
+	//문항 게시글 선택삭제
+	public void deleteChoiceFormPost(int code) throws Exception;
 	
 	//폼메일 수정
 	public int updateForm(Form form) throws Exception;
