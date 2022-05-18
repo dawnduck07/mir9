@@ -5,23 +5,33 @@ import java.util.List;
 import com.naedam.admin.form.model.vo.Form;
 import com.naedam.admin.form.model.vo.FormPost;
 import com.naedam.admin.form.model.vo.Item;
+import com.naedam.admin.form.model.vo.ItemChoice;
 
 public interface FormDao {
 	
 	//폼메일 등록
 	public int addForm(Form form) throws Exception;
 	
-	//폼메일 게시글 등록
-	public int addFormPost(FormPost formPost) throws Exception;
-	
 	//문항 등록
 	public int addItem(Item item) throws Exception;
+	
+	//문항 예시 등록
+	public int addItemChoice(ItemChoice itemChoice) throws Exception;
+	
+	//폼게시글 등록
+	public int addFormPost(FormPost formPost) throws Exception;
 	
 	//폼메일 리스트
 	public List<Form> formList() throws Exception;
 	
-	//폼메일 게시글 리스트
+	//폼게시물 리스트
 	public List<FormPost> formPostList(int formNo) throws Exception;
+	
+	//문항 td
+	public List<Item> formTd(int formNo) throws Exception;
+	
+	//문항 tr
+	public List<Item> formTr(int formNo) throws Exception;
 	
 	//문항관리 리스트
 	public List<Item> itemList(int formNo) throws Exception;
@@ -31,6 +41,9 @@ public interface FormDao {
 	
 	//문항 정보
 	public Item getItem(int itemNo) throws Exception;
+	
+	//예시 정보
+	public List<ItemChoice> getItemChoice(int itemNo) throws Exception;
 	
 	//폼메일 선택삭제
 	public void deleteChoiceForm(int code) throws Exception;

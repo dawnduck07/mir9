@@ -35,7 +35,7 @@ public class FormRestController {
 	public Item getItem(@RequestParam("itemNo") int itemNo) throws Exception{
 		System.out.println("/json/getItem 시작");
 		return formService.getItem(itemNo);
-	}	
+	}
 	
 	@PostMapping("json/formCopy")
 	public void formCopy(@RequestParam(value="formArr[]") List<String> formArr) throws Exception{

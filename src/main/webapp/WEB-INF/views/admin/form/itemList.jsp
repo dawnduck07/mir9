@@ -5,6 +5,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<% 
+pageContext.setAttribute("CR", "\r"); 
+pageContext.setAttribute("LF", "\n"); 
+pageContext.setAttribute("CRLF", "\r\n"); 
+pageContext.setAttribute("SP", "&nbsp;"); 
+pageContext.setAttribute("BR", "<br/>");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/admin/common/header.jsp">
 <jsp:param value="폼 문항 관리" name="title"/>
@@ -41,6 +48,8 @@
 				location.href = "/admin/form/itemList?formNo="+formNo+"";
 			}			
 	}
+	
+	
 
 </script>
 <!-- content-wrapper -->
@@ -115,7 +124,14 @@
 			                        <td align="left">${item.label}</td>
 			                        <td>${item.input_type}</td>
 			                        <td>${item.placeholder}</td>
-			                        <td align="left">${item.input_example}</td>
+			                        <td align="left">
+			                          <c:if test="${!empty item.input_example}">
+			                        	<c:set var="ex" value="${fn:split(item.input_example,'/')}"/>
+			                        	<c:forEach var="exNum" items="${ex}" varStatus="g">
+											<li style="margin-left:10px;">${exNum}</li>			                        		
+			                        	</c:forEach>
+			                          </c:if>
+			                        </td>
 			                        <td>${item.check_type}</td>
 			                        <td>
 			                          <c:if test="${item.is_show eq 'y'}">
@@ -218,7 +234,7 @@
 					            <tr id="displayInputExample" style="display:none;">
 					                <td class="menu">입력 예시</td>
 					                <td align="left">
-						                <textarea name="input_example" rows="5" style="width:100%;" class="form-control input-sm" placeholder="매우 좋음, 좋음, 나쁨, 아주 나쁨"></textarea> ※ radio, checkbox 의 경우 선택 항목
+										<textarea name="input_example" rows="5" style="width:100%;" class="form-control input-sm" placeholder="매우좋음&#13;&#10;좋음&#13;&#10;나쁨&#13;&#10;아주나쁨"></textarea>
 					                </td>
 					            </tr>
 					            <tr>
@@ -286,7 +302,7 @@
 					                <td class="menu">입력 종류</td>
 					                <td align="left">
 						                <span style="float:left">
-						                	<select name="input_type" onchange="if(this.value) checkInputType(this.value)" class="form-control input-sm" style="width:150px;">
+						                	<select name="input_type" onchange="if(this.value) checkInputType2(this.value)" class="form-control input-sm" style="width:150px;">
 						      					<option value="text">텍스트</option>      
 						      					<option value="tel">전화</option>      
 						      					<option value="email">이메일</option>      
@@ -304,28 +320,28 @@
 						                </span>
 					                </td>
 					            </tr>
-					            <tr id="displayPlaceholder">
+					            <tr id="displayPlaceholder2">
 					                <td class="menu">placeholder</td>
 					                <td align="left">
 					                	<input type="text" name="placeholder" class="form-control input-sm"> ※ 디폴트 표출 문구
 					                </td>
 					            </tr>
-								<tr id="displayHtmlId">
+								<tr id="displayHtmlId2">
 					                <td class="menu">HTML ID</td>
 					                <td align="left">
 					                	<input type="text" name="html_id" class="form-control input-sm"> ※ 라디오, 체크박스, 날짜, 파일에서는 ID 사용 불가
 					                </td>
 					            </tr>
-								<tr id="displayHtmlClass">
+								<tr id="displayHtmlClass2">
 					                <td class="menu">HTML CLASS</td>
 					                <td align="left">
 					                	<input type="text" name="html_class" class="form-control input-sm">
 					                </td>
 					            </tr>
-					            <tr id="displayInputExample" style="display:none;">
+					            <tr id="displayInputExample2" style="display:none;">
 					                <td class="menu">입력 예시</td>
 					                <td align="left">
-						                <textarea name="input_example" rows="5" style="width:100%;" class="form-control input-sm" placeholder="매우 좋음, 좋음, 나쁨, 아주 나쁨"></textarea> ※ radio, checkbox 의 경우 선택 항목
+										<textarea name="input_example" rows="5" style="width:100%;" class="form-control input-sm" placeholder="매우좋음&#13;&#10;좋음&#13;&#10;나쁨&#13;&#10;아주나쁨"></textarea>
 					                </td>
 					            </tr>
 					            <tr>
@@ -555,6 +571,18 @@
 	    	$("#displayInputExample").show();
 	    }
 	}
+	
+	// 문항 정보 입력 종류에 따라 정보 입력창 변경
+	function checkInputType2(value) {
+	    $("#displayPlaceholder2").hide(); // placeholder : text, textarea 일 경우 표시
+	    $("#displayInputExample2").hide(); // inputExample : select, radio, checkbox 일 경우 표시 
+	    if (value == "text" || value == "textarea") {
+	    	$("#displayPlaceholder2").show();
+	    }
+	    else if (value == "select" || value == "radio" || value == "checkbox") {
+	    	$("#displayInputExample2").show();
+	    }
+	}	
 	      
 	// 상세보기 데이터 셋팅
 	function setData(itemNo) {
@@ -583,6 +611,16 @@
 	            }
 	            $("[name=placeholder]").val(json_data.placeholder);
 	            $("[name=input_example]").val(json_data.input_example);
+	    	    if (json_data.input_type == "text" || json_data.input_type == "textarea") {
+	    		    $("#displayPlaceholder2").hide(); // placeholder : text, textarea 일 경우 표시
+	    		    $("#displayInputExample2").hide(); // inputExample : select, radio, checkbox 일 경우 표시	    	    	
+	    	    	$("#displayPlaceholder2").show();
+	    	    }
+	    	    else if (json_data.input_type == "select" || json_data.input_type == "radio" || json_data.input_type == "checkbox") {
+	    		    $("#displayPlaceholder2").hide(); // placeholder : text, textarea 일 경우 표시
+	    		    $("#displayInputExample2").hide(); // inputExample : select, radio, checkbox 일 경우 표시	    	    	
+	    	    	$("#displayInputExample2").show();
+	    	    }	            
 	            $("[name=check_type]").val(json_data.check_type);
 	            if(json_data.is_show == "y") {
 	         	   $("[name=is_show]").prop("checked", true);
@@ -608,6 +646,7 @@
 	    }
 	    form_register.target = "iframe_process";
 	    form_register.submit();
+	    location.reload();
 	}
 	
 	function register2() {
@@ -618,6 +657,7 @@
 	    }
 	    form_register2.target = "iframe_process";
 	    form_register2.submit();
+	    location.reload();
 	}	
 	      	
 	// 폼 HTML 디자인 리스트 및 쓰기 버튼
