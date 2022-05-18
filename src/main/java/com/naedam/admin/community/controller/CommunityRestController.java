@@ -26,8 +26,11 @@ import com.naedam.admin.community.model.vo.ReviewImg;
 import com.naedam.admin.community.model.vo.SmsSetting;
 import com.naedam.admin.coupon.model.service.CouponService;
 import com.naedam.admin.coupon.model.vo.Coupon;
+import com.naedam.admin.coupon.model.vo.MemberCoupon;
 import com.naedam.admin.member.model.service.MemberService;
 import com.naedam.admin.member.model.vo.Member;
+import com.naedam.admin.point.model.service.PointService;
+import com.naedam.admin.point.model.vo.MemberPoint;
 
 @RestController
 @RequestMapping("/admin/comm")
@@ -39,6 +42,9 @@ public class CommunityRestController {
 	@Autowired
 	private MemberService memberService;
 
+	@Autowired
+	private PointService pointService;
+	
 	@Autowired
 	private CouponService couponService;
 	
@@ -307,7 +313,7 @@ public class CommunityRestController {
 		int result = 0;
 		int sms = 0;
 		int email = 0;
-		
+
 		// JsonParser
 		JsonElement element = parser.parse(jsonStr);
 		
@@ -316,12 +322,15 @@ public class CommunityRestController {
 		List<String> codeList = Arrays.asList(str.split(","));
 		
 		// data 가공
-		String point = element.getAsJsonObject().get("point").getAsString();
-		String type = element.getAsJsonObject().get("type").getAsString();
-		if(type.equals("+")) {
+		String mode = element.getAsJsonObject().get("mode").getAsString();
+		String content = element.getAsJsonObject().get("content").getAsString();
+		String pointVal = element.getAsJsonObject().get("point").getAsString();
+		String typeCode = element.getAsJsonObject().get("type").getAsString();
+		String type = "";
+		if(typeCode.equals("+")) {
 			type = "지급";
 		}
-		else if(type.equals("-")) {
+		else if(typeCode.equals("-")) {
 			type = "차감";
 		}
 		
@@ -348,7 +357,7 @@ public class CommunityRestController {
 				JsonObject tem = new JsonObject();
 				tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
 				tem.addProperty("user_name", name.get(i));
-				tem.addProperty("point", point);
+				tem.addProperty("point", pointVal);
 				tem.addProperty("point_type", type);
 
 				JsonArray recipientList = new JsonArray();
@@ -376,7 +385,7 @@ public class CommunityRestController {
 				JsonObject tem = new JsonObject();
 				tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
 				tem.addProperty("user_name", name.get(i));
-				tem.addProperty("point", point);
+				tem.addProperty("point", pointVal);
 				tem.addProperty("point_type", type);
 
 				JsonArray receiverList = new JsonArray();
@@ -399,8 +408,27 @@ public class CommunityRestController {
 				}
 			}
 		}
+
+		// 회원 적립금 지급 및 차감 
+		if(mode.equals("point")) {
+			int point = Integer.parseInt(pointVal.replace(",", ""));
+			
+			// 차감일 경우, 음수로 변환
+			if(typeCode.equals("-")) {
+				point *= -1;
+			}
+			
+			MemberPoint memberPoint = new MemberPoint();
+			memberPoint.setPointAmount(point);
+			memberPoint.setPointTitle(content);
+			
+			for(String memberNo : codeList) {
+				memberPoint.setMemberNo(Integer.parseInt(memberNo));
+				result = pointService.insertMemberPoint(memberPoint);
+			}
+		}
 		
-		if(sms > 0 || email > 0) {
+		if((sms > 0 || email > 0) && result != 0) {
 			result = 1;
 		}
 		return result;
@@ -426,6 +454,7 @@ public class CommunityRestController {
 			name.add((member.get(i).getLastName()).concat(member.get(i).getFirstName()));
 		}
 		
+		String mode = element.getAsJsonObject().get("mode").getAsString();
 		String code = element.getAsJsonObject().get("couponCode").getAsString();
 		List<Coupon> coupon = couponService.getCoupon(code);
 		String couponName = coupon.get(0).getCouponName();
@@ -504,7 +533,15 @@ public class CommunityRestController {
 			}
 		}
 		
-		if(sms > 0 || email > 0) {
+		// 쿠폰 지급 등록
+		if(mode.equals("coupon")) {
+			for(String memberNo : codeList) {
+				MemberCoupon memberCoupon = new MemberCoupon(0, Integer.parseInt(memberNo), Integer.parseInt(code), null);
+				result = couponService.insertMemberCoupon(memberCoupon);
+			}
+		}
+				
+		if((sms > 0 || email > 0) && result != 0) {
 			result = 1;
 		}
 		return result;

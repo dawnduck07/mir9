@@ -61,7 +61,7 @@ textarea {
 			                <table class="table table-bordered">
 				                <tbody>
 					                <tr>
-					                    <td class="menu">SMS 잔여 포인트</td>
+					                    <td class="menu">SMS 이용 요금</td>
 					                    <td align="left">
 					                    	<span style="float:left;">
 						                    	<c:choose>
@@ -69,7 +69,7 @@ textarea {
 								                    	발신번호가 등록된 사용자가 아닙니다.
 							                    	</c:when>
 							                    	<c:otherwise>
-							                    		<!-- 로그인한 사용자의 발신번호와  DB에 저장된 발신번호가 일치할 때 -->
+							                    		<!-- 로그인한 사용자의 발신번호와 DB에 저장된 발신번호가 일치하는 경우 count * 건당 이용 요금 -->
 							                    	</c:otherwise>
 						                    	</c:choose>
 					                    	</span>
