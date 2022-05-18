@@ -3,6 +3,7 @@ package com.naedam.admin.member.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -339,26 +340,32 @@ public class MemberDaoImpl implements MemberDao {
 		return session.update("member.updateMemberToWithdrawal", param);
 	}
 
+	// 회원 접속 이력 관리
 	@Override
-	public List<MemberAccessHistory> seletHistoryList() {
-		return session.selectList("member.seletHistoryList");
+	public List<MemberAccessHistory> seletHistoryList(int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.seletHistoryList", null, rowBounds);
 	}
 
+	// 접속 이력 게시글 수
 	@Override
 	public int totalAccessHistoryCount() {
 		return session.selectOne("member.totalAccessHistoryCount");
 	}
 
+	// 접속 이력 검색 게시물
 	@Override
 	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
 		return session.selectList("member.seletSearchAccessHistory", param);
 	}
 
+	// 접속 이력 검색 게시물 수
 	@Override
 	public int searchHistoryListCount(Map<String, Object> param) {
 		return session.selectOne("member.searchHistoryListCount", param);
 	}
 
+	// 접속 이력 선택 삭제
 	@Override
 	public int deleteAccessHistory(int[] accessHistoryNo) {
 		return session.delete("member.deleteAccessHistory", accessHistoryNo);

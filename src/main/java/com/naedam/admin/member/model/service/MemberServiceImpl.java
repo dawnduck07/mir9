@@ -344,26 +344,31 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.updateMemberToWithdrawal(param);
 	}
 
+	// 회원 접속 이력 관리
 	@Override
-	public List<MemberAccessHistory> seletHistoryList() {
-		return memberDao.seletHistoryList();
+	public List<MemberAccessHistory> seletHistoryList(int offset, int limit) {
+		return memberDao.seletHistoryList(offset, limit);
 	}
 
+	// 접속 이력 게시글 수
 	@Override
 	public int selectAccessHistoryCount() {
 		return memberDao.totalAccessHistoryCount();
 	}
 
+	// 접속 이력 검색 게시물
 	@Override
 	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
 		return memberDao.seletSearchAccessHistory(param);
 	}
 
+	// 접속 이력 검색 게시물 수
 	@Override
 	public int selectSearchHistoryListCount(Map<String, Object> param) {
 		return memberDao.searchHistoryListCount(param);
 	}
 
+	// 접속 이력 선택 삭제
 	@Override
 	public int deleteAccessHistory(int[] accessHistoryNo) {
 		return memberDao.deleteAccessHistory(accessHistoryNo);
