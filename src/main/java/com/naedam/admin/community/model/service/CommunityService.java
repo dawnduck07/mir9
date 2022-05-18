@@ -57,5 +57,4 @@ public interface CommunityService {
 	int modifyMail(String templateId, String title, String content); // 템플릿 수정
 	
 	int sendEmail(JsonObject json); // email 발송 
-
 }

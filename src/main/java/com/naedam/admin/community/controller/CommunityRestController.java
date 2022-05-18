@@ -48,7 +48,6 @@ public class CommunityRestController {
 	// 리뷰 모달창 조회
 	@GetMapping("/review_modal")
 	public Map<Object, Object> commReviewModal(int reviewCode) {
-		
 		List<Review> review = communityService.reviewModal(reviewCode);
 		List<ReviewImg> reviewImg  = communityService.reviewImgModal(reviewCode);
 
@@ -62,7 +61,6 @@ public class CommunityRestController {
 	// sms 문구 수정
 	@PostMapping("/sms")
 	public int modifySms(@RequestBody String jsonStr) {
-
 		// 필요 변수 선언
 		List<String> code = new ArrayList<>();
 		List<String> templateId = new ArrayList<>();
@@ -112,7 +110,6 @@ public class CommunityRestController {
 	// mail 모달창 기본 문구 조회
 	@GetMapping("/email_origin")
 	public HashMap<String, Object> commEmailOrigin(String templateId) {
-
 		// templateId 전달
 		int category = 48300;
 		HashMap<String, Object> originMail = communityService.loadEmail(templateId, category);
@@ -123,7 +120,6 @@ public class CommunityRestController {
 	// mail 모달창 저장 문구 조회
 	@GetMapping("/email_modal")
 	public HashMap<String, Object> commEmailModal(String templateId) {
-
 		// templateId 전달
 		int category = 49064;
 		HashMap<String, Object> savedMail = communityService.loadEmail(templateId, category);
@@ -134,7 +130,6 @@ public class CommunityRestController {
 	// mail 모달창 문구 수정
 	@PostMapping("/email_modal")
 	public int commEmailModify(@RequestBody String jsonStr) {
-		
 		// JsonParser
 		JsonElement element = parser.parse(jsonStr);
 		
@@ -151,7 +146,6 @@ public class CommunityRestController {
 	// mail 설정 수정
 	@PostMapping("/email")
 	public int commEmail(@RequestBody String jsonStr) {
-		
 		// 필요 변수 선언
 		List<String> templateId = new ArrayList<>();
 		List<String> is_send = new ArrayList<>();
@@ -190,7 +184,6 @@ public class CommunityRestController {
 	// 주문 관련 msg 발송
 	@PostMapping("/sendMsg")
 	public int sendMsg(String orderNo, int statusNo) {
-	
 		int result = 0; 
 		int sms = 0;
 		int email = 0;
@@ -239,14 +232,12 @@ public class CommunityRestController {
 			
 			JsonObject json = new JsonObject();
 			json.addProperty("templateId", templateId.concat("_mod")); 
-			json.addProperty("sendNo", "01042026201"); // => 등록한 발신 번호로 수정 필요
 			json.add("recipientList", recipientList);
+			sms = communityService.sendSms(json);
 			
-			if(smsCheck.get(0).getIsSend().equals("y")) {
-				sms = communityService.sendSms(json);
-			}
-			else if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
+			if(smsCheck.get(0).getIsSendAdmin().equals("y")) {
 				json.addProperty("templateId", templateId.concat("_admin_mod"));
+				json.add("recipientList", recipientList);
 				sms = communityService.sendSms(json);
 			}
 		}
@@ -281,12 +272,12 @@ public class CommunityRestController {
 			json.addProperty("templateId", templateId.concat("_mod"));
 			json.add("templateParameter", tem); 
 			json.add("receiverList", receiverList);
+			email = communityService.sendEmail(json);
 
-			if(emailCheck.get(0).getIsSend().equals("y")) {
-				email = communityService.sendEmail(json);
-			}
-			else if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
+			if(emailCheck.get(0).getIsSendAdmin().equals("y")) {
 				json.addProperty("templateId", templateId.concat("_admin_mod"));
+				json.add("templateParameter", tem); 
+				json.add("receiverList", receiverList);
 				email = communityService.sendEmail(json);
 			}
 		}
@@ -294,7 +285,6 @@ public class CommunityRestController {
 		if(sms > 0 || email > 0) {
 			result = 1;
 		}
-
 		return result;
 	}
 	
@@ -314,7 +304,6 @@ public class CommunityRestController {
 	// 적립금 관련 msg 발송 
 	@PostMapping("/sendPointMsg")
 	public int sendPointMsg(@RequestBody String jsonStr) {
-		
 		int result = 0;
 		int sms = 0;
 		int email = 0;
@@ -354,8 +343,8 @@ public class CommunityRestController {
 		}
 
 		// 적립금 sms 발송
-		for(int i = 0; i < name.size(); i++) {
-			if(smsSend.equals("y")) {
+		if(smsSend.equals("y")) {
+			for(int i = 0; i < name.size(); i++) {
 				JsonObject tem = new JsonObject();
 				tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
 				tem.addProperty("user_name", name.get(i));
@@ -364,28 +353,26 @@ public class CommunityRestController {
 
 				JsonArray recipientList = new JsonArray();
 				JsonObject recip = new JsonObject();
-				recip.addProperty("recipientNo", "01042026201"); // member.get(i).getPhone()
+				recip.addProperty("recipientNo",  member.get(i).getPhone()); 
 				recip.add("templateParameter", tem);
 				recipientList.add(recip);
 				
 				JsonObject json = new JsonObject();
 				json.addProperty("templateId", templateId.concat("_mod"));
-				json.addProperty("sendNo", "01042026201"); // => 발신번호 수정 필요
 				json.add("recipientList", recipientList);
+				sms = communityService.sendSms(json);
 				
-				if((smsCheck.get(0).getIsSend()).equals("y")) {
-					sms = communityService.sendSms(json);
-				}
-				else if((smsCheck.get(0).getIsSendAdmin()).equals("y")) {
-					json.addProperty("templateId",templateId.concat("_admin_mod"));
+				if((smsCheck.get(0).getIsSendAdmin()).equals("y")) {
+					json.addProperty("templateId", templateId.concat("_admin_mod"));
+					json.add("recipientList", recipientList);
 					sms = communityService.sendSms(json);
 				}
 			}
 		}
 		
 		// 적립금 email 발송 
-		for(int i = 0; i < name.size(); i++) {
-			if(emailSend.equals("y")) {
+		if(emailSend.equals("y")) {
+			for(int i = 0; i < name.size(); i++) {
 				JsonObject tem = new JsonObject();
 				tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
 				tem.addProperty("user_name", name.get(i));
@@ -402,12 +389,12 @@ public class CommunityRestController {
 				json.addProperty("templateId", templateId.concat("_mod"));
 				json.add("templateParameter", tem);
 				json.add("receiverList", receiverList);
+				email = communityService.sendEmail(json);
 				
-				if((emailCheck.get(0).getIsSend()).equals("y")) {
-					email = communityService.sendEmail(json);
-				}
-				else if((emailCheck.get(0).getIsSendAdmin()).equals("y")) {
+				if((emailCheck.get(0).getIsSendAdmin()).equals("y")) {
 					json.addProperty("templateId", templateId.concat("_admin_mod"));
+					json.add("templateParameter", tem);
+					json.add("receiverList", receiverList);
 					email = communityService.sendEmail(json);
 				}
 			}
@@ -416,14 +403,12 @@ public class CommunityRestController {
 		if(sms > 0 || email > 0) {
 			result = 1;
 		}
-		
 		return result;
 	}
 
 	// 쿠폰 관련 msg 발송
 	@PostMapping("/sendCouponMsg")
 	public int sendCouponMsg(@RequestBody String jsonStr) {
-
 		int result = 0;
 		int sms = 0;
 		int email = 0;
@@ -461,65 +446,68 @@ public class CommunityRestController {
 		String templateId = "coupon";
 		List<SmsSetting> smsCheck = communityService.smsCheck(templateId);
 		List<EmailSetting> emailCheck = communityService.emailCheck(templateId);
-
+		
 		// 쿠폰 sms 발송 
-		for(int i = 0; i < name.size(); i++) {
-			JsonObject tem = new JsonObject();
-			tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
-			tem.addProperty("user_name", name.get(i));
-			
-			JsonArray recipientList = new JsonArray();
-			JsonObject recip = new JsonObject();
-			recip.addProperty("recipientNo", member.get(i).getPhone());
-			recip.add("templateParameter", tem);
-			recipientList.add(recip);
-			
-			JsonObject json = new JsonObject();
-			json.addProperty("templateId", templateId.concat("_mod"));
-			json.addProperty("sendNo", "01042026201"); // => 발신번호 수정 필요
-			json.add("recipientList", recipientList);
-			
-			if((emailCheck.get(0).getIsSend()).equals("y")) {
-				sms = communityService.sendSms(json);
-			}	
-			else if((emailCheck.get(0).getIsSendAdmin()).equals("y")) {
-				json.addProperty("templateId", templateId.concat("_admin_mod"));
-				sms = communityService.sendSms(json);
-			}
-		}
+		if(smsSend.equals("y")) {
+			for(int i = 0; i < name.size(); i++) {
+				JsonObject tem = new JsonObject();
+				tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
+				tem.addProperty("user_name", name.get(i));
+				tem.addProperty("coupon_name", couponName);
 				
+				JsonArray recipientList = new JsonArray();
+				JsonObject recip = new JsonObject();
+				recip.addProperty("recipientNo", member.get(i).getPhone());
+				recip.add("templateParameter", tem);
+				recipientList.add(recip);
+	
+				JsonObject json = new JsonObject();
+				json.addProperty("templateId", templateId.concat("_mod"));
+				json.add("recipientList", recipientList);
+				sms = communityService.sendSms(json);
+				
+				if((emailCheck.get(0).getIsSendAdmin()).equals("y")) {
+					json.addProperty("templateId", templateId.concat("_admin_mod"));
+					json.add("recipientList", recipientList);
+					sms = communityService.sendSms(json);
+				}
+			}
+		}	
+		
 		// 쿠폰 email 발송 
-		for(int i = 0; i < name.size(); i++) {
-			JsonObject tem = new JsonObject();
-			tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
-			tem.addProperty("user_name", name.get(i));
-			tem.addProperty("coupon_name", couponName);
-			tem.addProperty("date", expirDate);
-
-			JsonArray receiverList = new JsonArray();
-			JsonObject recip = new JsonObject();
-			recip.addProperty("receiveMailAddr", member.get(i).getEmail()); 
-			recip.addProperty("receiveType", "MRT0");
-			receiverList.add(recip);
-			
-			JsonObject json = new JsonObject();
-			json.addProperty("templateId", templateId.concat("_mod"));
-			json.add("templateParameter", tem);
-			json.add("receiverList", receiverList);
-			
-			if((emailCheck.get(0).getIsSend()).equals("y")) {
+		if(emailSend.equals("y")) {
+			for(int i = 0; i < name.size(); i++) {
+				JsonObject tem = new JsonObject();
+				tem.addProperty("shop_name", "ND이커머스"); // => 수정 필요
+				tem.addProperty("user_name", name.get(i));
+				tem.addProperty("coupon_name", couponName);
+				tem.addProperty("date", expirDate);
+	
+				JsonArray receiverList = new JsonArray();
+				JsonObject recip = new JsonObject();
+				recip.addProperty("receiveMailAddr", member.get(i).getEmail()); 
+				recip.addProperty("receiveType", "MRT0");
+				receiverList.add(recip);
+				
+				JsonObject json = new JsonObject();
+				json.addProperty("templateId", templateId.concat("_mod"));
+				json.add("templateParameter", tem);
+				json.add("receiverList", receiverList);
 				email = communityService.sendEmail(json);
-			}	
-			else if((emailCheck.get(0).getIsSendAdmin()).equals("y")) {
-				json.addProperty("templateId", templateId.concat("_admin_mod"));
-				email = communityService.sendEmail(json);
+				
+				if((emailCheck.get(0).getIsSendAdmin()).equals("y")) {
+					json.addProperty("templateId", templateId.concat("_admin_mod"));
+					json.add("templateParameter", tem);
+					json.add("receiverList", receiverList);
+					email = communityService.sendEmail(json);
+				}
 			}
 		}
 		
 		if(sms > 0 || email > 0) {
 			result = 1;
 		}
-		
 		return result;
 	}
+	
 }

@@ -380,7 +380,9 @@ textarea {
 				            <br>
 						</form>
 
-		            	<div style="text-align:center;"><button type="button" onclick="register()" class="btn btn-primary">확인</button></div>
+		            	<div style="text-align:center;">
+		            	<button type="button" onclick="sendTest()" class="btn btn-primary">test</button>
+		            	<button type="button" onclick="register()" class="btn btn-primary">확인</button></div>
 	                </div><!-- /.box-body -->
 	            </div><!-- /.box -->
 	        </div><!-- /.col-xs-12 -->
@@ -692,6 +694,22 @@ textarea {
 		return return_txt;
 	}
 
+	function sendTest(){
+		$.ajax({
+			url : "${pageContext.request.contextPath}/admin/comm/please",
+			method : "POST",
+			headers: {
+				"${_csrf.headerName}" : "${_csrf.token}"
+			},
+			success: function(result){
+				console.log(result);
+			},
+			error : function(result){
+				console.log(result);
+			}
+		});
+	}
+	
 </script>
 
 <jsp:include page="/WEB-INF/views/admin/common/footer.jsp"></jsp:include>
