@@ -29,6 +29,7 @@
     </ol>
 </section>
 
+<!-- content-wrapper -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
