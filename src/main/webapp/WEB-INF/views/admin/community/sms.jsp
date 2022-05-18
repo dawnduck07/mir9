@@ -63,19 +63,9 @@ textarea {
 					                <tr>
 					                    <td class="menu">SMS 이용 요금</td>
 					                    <td align="left">
-					                    	<span style="float:left;">
-						                    	<c:choose>
-							                    	<c:when test="">
-								                    	발신번호가 등록된 사용자가 아닙니다.
-							                    	</c:when>
-							                    	<c:otherwise>
-							                    		<!-- 로그인한 사용자의 발신번호와 DB에 저장된 발신번호가 일치하는 경우 count * 건당 이용 요금 -->
-							                    	</c:otherwise>
-						                    	</c:choose>
-					                    	</span>
-					                    	<br> 
-					                    	<span style="line-height:1.0;">
-					                    		<small class="text-red">※ 발신번호 등록(관리자 > 설정 > 기본설정 > 발신자 번호)을 사전에 하여야 발송이 가능합니다. (발신번호를 미르나인 담당자에게 알려주기 바랍니다.)</small>
+					                    	<span name="charge" style="float:left;">
+					                    		발신번호가 등록된 사용자가 아닙니다.<br> 
+					                    		<small class="text-red">※ 발신번호 등록(관리자 > 설정 > 기본설정 > 발신자 번호)을 사전에 하여야 발송이 가능합니다.</small>
 					                    	</span>
 					                    </td>
 					                </tr>
