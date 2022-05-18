@@ -43,6 +43,13 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.insert("form.addFormPost", formPost);
 	}
+	
+	//폼 게시글 등록
+	@Override
+	public int addFormPostCopy(FormPost formPost) throws Exception {
+		// TODO Auto-generated method stub
+		return session.insert("form.addFormPostCopy", formPost);
+	}	
 
 	//폼메일 리스트
 	@Override
@@ -78,6 +85,13 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.selectOne("form.getItem", itemNo);
 	}
+	
+	//폼 게시물 정보
+	@Override
+	public FormPost getFormPost(int code) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectOne("form.getFormPost", code);
+	}
 
 	//예시 정보
 	@Override
@@ -92,7 +106,8 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.selectList("form.formTd", formNo);
 	}
-
+	
+	//문항 tr
 	@Override
 	public List<Item> formTr(int formNo) throws Exception {
 		// TODO Auto-generated method stub
@@ -112,6 +127,13 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		session.delete("form.deleteChoiceItem", itemNo);
 	}
+	
+	//문항 게시글 선택삭제
+	@Override
+	public void deleteChoiceFormPost(int code) throws Exception {
+		// TODO Auto-generated method stub
+		session.delete("form.deleteChoiceFormPost", code);
+	}	
 	
 	//폼메일 수정
 	@Override
@@ -133,9 +155,6 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.update("form.updateFormDesign", form);
 	}
-
-
-
 
 
 }

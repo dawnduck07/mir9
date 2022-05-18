@@ -738,9 +738,10 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		member_no = #{memberNo}
 </update>
 
+<!-- 회원 접속 이력 관리-->
 <select id="seletHistoryList" resultType="memberAccessHistory">
 	SELECT 
-		ROW_NUMBER() OVER() AS `access_history_no`,
+		ROW_NUMBER() OVER(ORDER BY mah.login_date DESC) AS `access_history_no`,
 		mah.access_history_no, 
 		mah.access_history_id,
 		mah.access_history_name,
@@ -752,9 +753,10 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		member_access_history mah JOIN member m
 			ON mah.access_history_id = m.id
 	ORDER BY
-		`access_history_no` DESC
+		mah.login_date DESC
 </select>
 
+<!-- 접속 이력 게시글 수 -->
 <select id="totalAccessHistoryCount" resultType="_int">
 	SELECT
 		COUNT(*)
@@ -762,6 +764,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		member_access_history
 </select>
 
+<!-- 접속 이력 검색 게시물 -->
 <select id="seletSearchAccessHistory" resultType="memberAccessHistory">
 	SELECT
 		ROW_NUMBER() OVER() AS `access_history_no`,
@@ -783,6 +786,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		`access_history_no` DESC
 </select>
 
+<!-- 접속 이력 검색 게시물 수 -->
 <select id="searchHistoryListCount" resultType="_int">
 	SELECT
 		COUNT(*)
@@ -793,6 +797,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		${type} LIKE CONCAT('%', #{keyword}, '%')
 </select>
 
+<!-- 접속 이력 선택 삭제 -->
 <delete id="deleteAccessHistory">
 	DELETE FROM
 		member_access_history

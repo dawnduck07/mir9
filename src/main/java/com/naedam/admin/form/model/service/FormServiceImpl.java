@@ -46,6 +46,14 @@ public class FormServiceImpl implements FormService {
 		return formDao.addFormPost(formPost);
 	}
 	
+
+	//폼 게시글 등록
+	@Override
+	public int addFormPostCopy(FormPost formPost) throws Exception {
+		// TODO Auto-generated method stub
+		return formDao.addFormPostCopy(formPost);
+	}	
+	
 	//폼메일 리스트
 	@Override
 	public List<Form> formList() throws Exception {
@@ -79,6 +87,13 @@ public class FormServiceImpl implements FormService {
 	public Item getItem(int itemNo) throws Exception {
 		// TODO Auto-generated method stub
 		return formDao.getItem(itemNo);
+	}
+	
+	//폼 게시물 정보
+	@Override
+	public FormPost getFormPost(int code) throws Exception {
+		// TODO Auto-generated method stub
+		return formDao.getFormPost(code);
 	}
 	
 	//예시 정보
@@ -116,6 +131,13 @@ public class FormServiceImpl implements FormService {
 		formDao.deleteChoiceItem(itemNo);
 	}
 	
+	//문항 게시글 선택삭제
+	@Override
+	public void deleteChoiceFormPost(int code) throws Exception {
+		// TODO Auto-generated method stub
+		formDao.deleteChoiceFormPost(code);
+	}
+	
 	//폼메일 업데이트
 	@Override
 	public int updateForm(Form form) throws Exception {
@@ -136,6 +158,7 @@ public class FormServiceImpl implements FormService {
 		// TODO Auto-generated method stub
 		return formDao.updateFormDesign(form);
 	}
+
 
 	
 }

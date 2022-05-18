@@ -125,7 +125,6 @@ public interface MemberService {
 	// 탈퇴회원 검색 게시물 수
 	int selectSearchWithdrawalListCount(Map<String, Object> param);
 
-
 	// 탈퇴회원 삭제
 	int deleteWithdrawal(int[] memberNo);
 
@@ -182,14 +181,19 @@ public interface MemberService {
 	// 회원 탈퇴로 변경
 	int updateMemberToWithdrawal(Map<String, Object> param);
 
-	List<MemberAccessHistory> seletHistoryList();
-
+	// 회원 접속 이력 관리
+	List<MemberAccessHistory> seletHistoryList(int offset, int limit);
+	
+	// 접속 이력 게시글 수
 	int selectAccessHistoryCount();
 
+	// 접속 이력 검색 게시물
 	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param);
 
+	// 접속 이력 검색 게시물 수
 	int selectSearchHistoryListCount(Map<String, Object> param);
 
+	// 접속 이력 선택 삭제
 	int deleteAccessHistory(int[] accessHistoryNo);
 
 	List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm();

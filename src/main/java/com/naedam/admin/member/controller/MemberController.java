@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naedam.admin.common.Mir9Utils;
 import com.naedam.admin.coupon.model.service.CouponService;
 import com.naedam.admin.coupon.model.vo.Coupon;
 import com.naedam.admin.coupon.model.vo.MemberCoupon;
@@ -65,7 +66,6 @@ public class MemberController {
 	@Autowired
 	private CouponService couponService;
 	
-
 	// 회원 탈퇴
 	@GetMapping("/memberWithdrawal.do")
 	public void memberWithdrawal() {}
@@ -817,19 +817,28 @@ public class MemberController {
 	}
 	
 	
-	// 회원 접속이력 관리
+	// 회원 접속 이력 관리
 	@GetMapping("/log")
-	public String memberAccessHistory(Model model, HttpServletRequest request) {
+	public String memberAccessHistory(@RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request) {		
+		int limit = 20;
+		int offset = (cPage - 1) * limit;
 		
-		// 접속 이력 리스트
-		List<MemberAccessHistory> memberAccessHistoryList = memberService.seletHistoryList();
-		log.debug("memberAccessHistoryList = {}", memberAccessHistoryList);
-		model.addAttribute("memberAccessHistoryList", memberAccessHistoryList);
-		
-		// 접속 이력 게시글 수typeSearchByAcceessHistory.do
-		int totalAccessHistoryCount = memberService.selectAccessHistoryCount();
-		log.debug("totalAccessHistoryCount = {}", totalAccessHistoryCount);
-		model.addAttribute("totalAccessHistoryCount", totalAccessHistoryCount);
+		try {
+			// 접속 이력 리스트
+			List<MemberAccessHistory> memberAccessHistoryList = memberService.seletHistoryList(offset, limit);
+			model.addAttribute("memberAccessHistoryList", memberAccessHistoryList);
+			
+			// 접속 이력 게시글 수
+			int totalAccessHistoryCount = memberService.selectAccessHistoryCount();
+			model.addAttribute("totalAccessHistoryCount", totalAccessHistoryCount);
+			
+			// pagebar
+			String url = request.getRequestURI();
+			String pagebar = Mir9Utils.getPagebar(cPage, limit, totalAccessHistoryCount, url);
+			model.addAttribute("pagebar", pagebar);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return "admin/member/memberAccessHistory";
 	}
@@ -837,98 +846,74 @@ public class MemberController {
 	// 회원 접속이력 관리 타입별 검색
 	@ResponseBody
 	@GetMapping("/typeSearchByAcceessHistory.do")
-	public Map<String, Object> typeSearchByAcceessHistory(
-									@RequestParam String type,
-									@RequestParam String keyword,
-									HttpServletRequest request){
-		log.debug("{}", "타입별 검색 시작");
-		log.debug("type = {}", type);
-		log.debug("keyboard = {}", keyword);
+	public Map<String, Object> typeSearchByAcceessHistory(@RequestParam(defaultValue = "1") int cPage, @RequestParam String type, @RequestParam String keyword, HttpServletRequest request){		
+		int limit = 20;
+		int offset = (cPage - 1) * limit;
 		
 		Map<String, Object> param = new HashMap<>();
 		param.put("type", type);
 		param.put("keyword", keyword);
-		log.debug("param = {}", param);
 		
-		// 검색 게시물
+		// 접속 이력 검색 게시물
 		List<MemberAccessHistory> searchAccessHistoryList = memberService.seletSearchAccessHistory(param);
-		log.debug("searchAccessHistoryList = {}", searchAccessHistoryList);
 		
-		// 검색 게시물 수
+		// 접속 이력 검색 게시물 수
 		int searchHistoryListCount = memberService.selectSearchHistoryListCount(param);
-		log.debug("searchHistoryListCount = {}", searchHistoryListCount);
+		
+		// pagebar
+		String url = request.getRequestURI();
+		String pagebar = Mir9Utils.getPagebar(cPage, limit, searchHistoryListCount, url);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("searchAccessHistoryList", searchAccessHistoryList);
 		resultMap.put("searchHistoryListCount", searchHistoryListCount);
+		resultMap.put("pagebar", pagebar);
 		
 		return resultMap;
 	}
 	
 	// 회원 접속이력 관리 선택 삭제
 	@PostMapping("/accessHistoryDelete.do")
-	public String accessHistoryDelete(@RequestParam int[] accessHistoryNo,
-			RedirectAttributes redirectAttribute,
-			HttpServletRequest request) throws Exception {
-					
-		int resultAccessHistoryDelete = memberService.deleteAccessHistory(accessHistoryNo);
-		log.debug("resultAccessHistoryDelete = {}", resultAccessHistoryDelete);
-		
-		
+	public String accessHistoryDelete(@RequestParam int[] accessHistoryNo, RedirectAttributes redirectAttribute, HttpServletRequest request) throws Exception {
+		try {
+			int resultAccessHistoryDelete = memberService.deleteAccessHistory(accessHistoryNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String referer = request.getHeader("Referer");
-		log.debug("referer = {}", referer);
-		
 		return "redirect:" + referer;
 	}
 	
-	
-	// 등급 관리 조회(select)
+	// 등급 관리 조회
 	@GetMapping("/memberGrade.do")
 	public Map<String, Object> memberGrade(Model model, HttpServletRequest request) {
-		
 		// 명칭 가져오기
 		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
-		log.debug("memberGradeList = {}", memberGradeList);
-		//model.addAttribute("memberGardeList", memberGradeList);
-		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("memberGradeList", memberGradeList);
-
 		return resultMap;
 	}
 	
-	// 등급 수정(update)
+	// 등급 수정
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@PostMapping("/memberGradeUpdate.do")
-	public String memberGradeUpdate(
-				@RequestBody String data,
-				RedirectAttributes redirectAttributes) {
-		
-		log.debug("{}", "memberGradeUpdate.do 요청!");
-		log.debug("param = {}", data);
+	public String memberGradeUpdate(@RequestBody String data, RedirectAttributes redirectAttributes) {
 		ObjectMapper mapper = new ObjectMapper();
-		
 		try {
 			Map<String, String> map = mapper.readValue(data, Map.class);
-			log.debug("map = {}", map);
-			
 			MemberGrade paramGrade = new MemberGrade();
-			
 			Set<String> keySet = map.keySet();
-			for(String key : keySet) {
-				System.out.println(key + " : " + map.get(key));
-				
-				paramGrade.setMemberGradeNo(Integer.parseInt(key));
-				paramGrade.setMemberGradeName(map.get(key));
-				
-				int resultMemberGradeUpdate = memberService.memberGradeUpdate(paramGrade);
-				log.debug("resultMemberGradeUpdate = {}", resultMemberGradeUpdate);
-			}
-			
-		
-			} catch (IOException e) {}
 
+				for(String key : keySet) {
+					System.out.println(key + " : " + map.get(key));
+					paramGrade.setMemberGradeNo(Integer.parseInt(key));
+					paramGrade.setMemberGradeName(map.get(key));
+					int resultMemberGradeUpdate = memberService.memberGradeUpdate(paramGrade);
+				}
+				
+			} catch (IOException e) {}
+		
 		return "redirect:/admin/member/memberGrade.do";
 	}
 	
