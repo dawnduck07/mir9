@@ -179,14 +179,19 @@ public interface MemberDao {
 	// 회원 탈퇴로 변경
 	int updateMemberToWithdrawal(Map<String, Object> param);
 
-	List<MemberAccessHistory> seletHistoryList();
+	// 회원 접속 이력 관리
+	List<MemberAccessHistory> seletHistoryList(int offset, int limit);
 
+	// 접속 이력 게시글 수
 	int totalAccessHistoryCount();
 
+	// 접속 이력 검색 게시물
 	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param);
 
+	// 접속 이력 검색 게시물 수
 	int searchHistoryListCount(Map<String, Object> param);
 
+	// 접속 이력 선택 삭제
 	int deleteAccessHistory(int[] accessHistoryNo);
 
 	List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm();
