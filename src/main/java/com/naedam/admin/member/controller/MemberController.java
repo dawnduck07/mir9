@@ -917,19 +917,40 @@ public class MemberController {
 		return "redirect:/admin/member/memberGrade.do";
 	}
 	
-	// 회원 적립금 내역보기
+	// 선택 회원 적립금 내역보기
 	@GetMapping("/memberPointList/{memberNo}")
-	public String memberPointList(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String memberPointList(@PathVariable int memberNo, Model model) {
 		
 		log.debug("memberNo = {}", memberNo);
 		
-		// 업무로직
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("memberNo", memberNo);
+		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
 		
+		model.addAttribute("mPointList",mPointList);
 		
 		return "admin/member/memberPointList";
 	}
 	
-	// 회원 적립금 관리
+	@PostMapping("/memberPointList/{memberNo}")
+	@SuppressWarnings("rawtypes")
+	public String memberPointList(@PathVariable int memberNo, HttpServletRequest request, Model model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		Enumeration params = request.getParameterNames();
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    param.put(name, request.getParameter(name));
+		}
+		param.put("memberNo", memberNo);
+		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
+		
+		model.addAttribute("mPointList",mPointList);
+		model.addAttribute("param",param);
+		
+		return "admin/member/memberPointList";
+	}
+	
+	// 전체 회원 적립금 관리
 	@GetMapping("/point")
 	public String memberPointList(Model model, @RequestParam(defaultValue = "0") int mNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -955,55 +976,10 @@ public class MemberController {
 		
 		model.addAttribute("mPointList",mPointList);
 		model.addAttribute("param",param);
-		return "/admin/member/memberPointList";
+		
+		return "admin/member/memberPointList";
 	}
-	
-	//쿠폰 등록, 적립금 지급/차감
-	/* TODO
-	 * - email, sms 처리 미완.
-	 * */
-	@PostMapping("/process.do")
-	public String process(HttpServletRequest request, Model model, RedirectAttributes redirectAttr) {
-		String mode = request.getParameter("mode");
-		String msg = null;
-		int result = 0;
-		
-		// 쿠폰 등록
-		if(mode.equals("coupon")) {
-			String couponNo = request.getParameter("coupon_code");
-			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
-			
-			for(String memberNo : memberNoList) {
-				MemberCoupon memberCoupon = new MemberCoupon(0, Integer.parseInt(memberNo), Integer.parseInt(couponNo), null);
-				result = couponService.insertMemberCoupon(memberCoupon);
-			}
-			if(result > 0) msg = "쿠폰이 정상 지급되었습니다.";
-		// 적립금 지금
-		}else if(mode.equals("point")) {
-			int point = Integer.parseInt(request.getParameter("point").replace(",", ""));
-			
-			// 차감일 경우, 음수로 변환
-			if(request.getParameter("plus_minus_type").equals("-")) point *= -1;
-			
-			MemberPoint memberPoint = new MemberPoint();
-			memberPoint.setPointAmount(point);
-			memberPoint.setPointTitle(request.getParameter("content"));
-			
-			List<String> memberNoList = Arrays.asList(request.getParameter("member_code").split(","));
-			for(String memberNo : memberNoList) {
-				memberPoint.setMemberNo(Integer.parseInt(memberNo));
-				result = pointService.insertMemberPoint(memberPoint);
-			}
-			
-			if(result > 0) msg = "적립금이 정상 지급/차감되었습니다.";
-		}
-		
-		redirectAttr.addFlashAttribute("msg",msg);
-		
-		return "redirect:/admin/member/list.do";
-		
-	}
-	
+
 	// 회원가입
 	@GetMapping("/memberEnroll.do")
 	public String memberEnroll() {

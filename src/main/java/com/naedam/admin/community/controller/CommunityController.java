@@ -29,10 +29,6 @@ public class CommunityController {
 	
 	@Autowired
 	private CommunityService communityService;
-
-	// SMS 인증키
-	private static String smsKey = "cuyb2ATgfZrgb0LF";
-	private static String smsSecret = "3VxajYQb";
 	
 	// mail 설정
 	@GetMapping("/email")
@@ -76,7 +72,7 @@ public class CommunityController {
 		// CORS 문제 해결
 		// 기본 문구
 		int category = 81149;
-		HashMap<String, Object> originSms = communityService.loadSms(smsKey, smsSecret, category); 
+		HashMap<String, Object> originSms = communityService.loadSms(category); 
 		
 		// list에 담기
 		List<String> templateId = (List<String>) originSms.get("templateId");
@@ -87,7 +83,7 @@ public class CommunityController {
 
 		// 저장 문구
 		category = 81150;
-		HashMap<String, Object> savedSms = communityService.loadSms(smsKey, smsSecret, category); 
+		HashMap<String, Object> savedSms = communityService.loadSms(category); 
 		
 		// list에 담기
 		List<String> savedTemplateId = (List<String>) savedSms.get("templateId");
