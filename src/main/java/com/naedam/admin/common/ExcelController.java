@@ -1,10 +1,10 @@
 package com.naedam.admin.common;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.naedam.admin.form.model.service.FormService;
+import com.naedam.admin.form.model.vo.FormPost;
+import com.naedam.admin.form.model.vo.Item;
 import com.naedam.admin.member.model.service.MemberService;
 import com.naedam.admin.member.model.vo.MemberAccessHistoryListExcelForm;
 import com.naedam.admin.member.model.vo.MemberListExcelForm;
@@ -46,9 +49,11 @@ public class ExcelController {
 	private PointService pointService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private FormService formService;
 	
 	private static final int WIDTH = 2800;
-	
+
     private final String[] orderHeader = {"순번", "주문번호", "상품명", "주문자", "연락처", "결제금액", "결제방법", "입금은행명", "예금주명", "수취인 성명", "수취인 연락처", "배송지 주소", "고객요청 사항", "상태"};
     private final String[] productHeader = {"카테고리", "모델명", "상품명", "소제목", "요약", "소비자 가격", "가격", "상품옵션", "상세설명", "new아이템", "best아이템", "event아이템", "언어", "품절여부", "표출상태", "등록일자"};
 	private final String[] memberPointHeader = {"아이디", "이름", "이메일", "포인트 사용내역", "사용 포인트", "일시"};
@@ -57,7 +62,7 @@ public class ExcelController {
 	
 	
 	@PostMapping("/download.do")
-	public void excelDownload(HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public void excelDownload(HttpServletResponse response, HttpServletRequest request) throws Exception {
 		String type = request.getParameter("download_type");
 		List<String> excelHeader = null;
 		List<Object> excelContentList = new ArrayList<Object>(); 
@@ -108,6 +113,21 @@ public class ExcelController {
 			for(MemberAccessHistoryListExcelForm p : MemberAccessHistoryListExcelFormList) {
 				excelContentList2.add(p);
 			}
+		}else if(type.equals("formPost")) {
+			String formNo = request.getParameter("formNo");
+			List<String> formPostHeader = new ArrayList<>();
+			List<Item> itemList = formService.formTr(Integer.parseInt(formNo));
+			List<FormPost> fp = formService.formPostList(Integer.parseInt(formNo));
+			for(int i = 0; i < itemList.size(); i++) {				
+				formPostHeader.add(0,itemList.get(i).getLabel());
+			}
+			Collections.reverse(formPostHeader);
+			excelHeader = formPostHeader;
+			sheet = wb.createSheet("form_list");
+			fileName += "form_list" + dateCode();
+			String[] formPostList = null;
+			
+
 		}
 
 		Row row = null;

@@ -33,7 +33,21 @@
 				            <input type="hidden" name="form_code" value="1">
 		                    <thead>
 		                    <tr>
-		                    	<td style="width:30px;"><input type="checkbox" name="select_all" onclick="selectAllCheckBox('form_list');"></td>
+		                        <td style="width:30px;">
+		                      		<div class="allCheck">
+										<input type="checkbox" name="allCheck" id="allCheck" /><label for="allCheck"></label>
+											<script>
+												$("#allCheck").click(function() {
+													var chk = $("#allCheck").prop("checked");
+													if (chk) {
+														$('.formPostNo').prop("checked", true);
+													} else {
+														$('.formPostNo').prop("checked", false);
+													}
+												});
+											</script>
+									</div>
+		                        </td>
 		                        <td style="width:60px;">NO</td>
 		      				  <c:forEach var="item" items="${td}" varStatus="status" >
 		      					<td>${item.label}</td>   
@@ -48,17 +62,30 @@
 		                    </thead>
 			      			<tbody>
 			      			  <c:set var="i" value="0"/>
-			      			  
+			      			  <c:set var="num" value="${number}"/>
 		      				  <c:forEach var="formPost" items="${fp}" varStatus="status" >
 		      				  <c:set var="i" value="${ i+1 }" />
 			      				<tr>
-			                        <td><input type="checkbox" name="list[]" value="11"></td>
+			                        <td>
+				                        <div>
+				                        	<input type="checkbox" class="formPostNo" name="formPostNo"  value="${formPost.code}" />
+				                        	<script>
+												$(".formPostNo").click(function() {
+													$("#allCheck").prop("checked", false);
+												});
+											</script>
+										</div>
+			                        </td>
 			                        <td>${i}</td>
 			                        <c:set var="ex" value="${fn:split(formPost.itemData,'/')}"/>
-			                          <c:set var="j" value="-1"/>
+			                          <c:set var="j" value="0"/>
+			                          <c:set var="k" value="0"/>
 			                          <c:forEach var="exNum" items="${ex}" varStatus="g">
-			                          	<c:set var="j" value="${ j+1 }" />
+			                           <c:if test="${j == num[k]}">
 			                        	<td style="text-align:left;">${ex[j]}</td>
+			                        	<c:set var="k" value="${ k+1 }" />
+			                           </c:if>	
+			                          	<c:set var="j" value="${ j+1 }" />			                        		
 			                          </c:forEach>
 			                        <td>${formPost.date}</td>
 			                        <td><input type="radio" name="order_code" value="-5"></td>
@@ -72,15 +99,16 @@
 	                    </table>
 	                    <br>
 	
-	                    <button type="button" onclick="selectDelete('deleReply');" class="btn btn-danger btn-sm"><i class="fa fa-minus-square"></i> 선택삭제</button>
+	                    <button type="button" onclick="deleteChoiceFormPost(${formNo});" class="btn btn-danger btn-sm"><i class="fa fa-minus-square"></i> 선택삭제</button>
 	                    <button type="button" onclick="onclickInsert();" class="btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> 등록</button>
 	                    <button type="button" onclick="onclickCopyContent();" class="btn btn-warning btn-sm" style="margin-left:20px;"><i class="fa fa-copy"></i> 리스트 복사</button>
-	                    <button type="button" onclick="downloadExcel();" class="btn btn-warning btn-sm"><i class="fa fa-file-excel-o"></i> Excel 다운로드</button>
+	                    <button type="button" onclick="excelDownload();" class="btn btn-warning btn-sm"><i class="fa fa-file-excel-o"></i> Excel 다운로드</button>
 	                    
-	                    <form name="form_download" method="post" action="?tpf=admin/form/process">
+	                    <form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
 	                        <input type="hidden" name="mode" value="downloadExcel">
-	                        <input type="hidden" name="form_code" value="1">
+	                        <input type="hidden" name="formNo" value="${formNo}">
 	                        <input type="hidden" name="search_data">
+	                        <input type="hidden" name="download_type" value="formPost"/>
 	                    </form>
 	                    
 						<!-- page -->
@@ -115,7 +143,7 @@
 		      				  <c:forEach var="item" items="${tr}" varStatus="status" >
 			      				<tr>
 			                        <td class="menu">${item.label}</td>
-			                        <c:if test="${item.input_type == 'text' || item.input_type == 'phone' || item.input_type == 'email'}">
+			                        <c:if test="${item.input_type == 'text' || item.input_type == 'tel' || item.input_type == 'email'}">
 				                        <td align="left">
 											<input type="${item.input_type}" name="data${item.itemNo}" placeholder="${item.placeholder}" class="form-control input-sm">          
 				                        </td>
@@ -213,9 +241,8 @@
 	                            <tr>
 	                                <td class="menu">폼메일 선택</td>
 	                                <td align="left">
-	                                    <select name="to_form_code" class="form-control input-sm">
-	                                        <option value="">선택</option>
-	                          				<option value="10">폼메일이 뭐죠??</option>                                    
+	                                    <select name="formPostCopy" id="formPostCopy" class="form-control input-sm">
+	                                        <option value="">선택</option>                                   
 	                          			</select>
 	                                </td>
 	                            </tr>
@@ -224,7 +251,7 @@
 	                </div><!-- /.modal-body -->
 	                
 	                <div class="modal-footer">
-	                    <button type="button" onclick="registerCopyContent()" class="btn btn-primary">확인</button>
+	                    <button type="button" onclick="fncformPostCopy()" class="btn btn-primary">확인</button>
 		            </div><!-- /.modal-footer -->
 	            </form><!-- /.formCopyContent -->
 	        </div><!-- /.modal-content -->
@@ -279,7 +306,7 @@
 	        }
 	    })
 	}		
-	function downloadExcel() {  // Excel 다운로드
+	function excelDownload() {  // Excel 다운로드
 	    form_download.target = 'iframe_process';
 	    form_download.search_data.value = $('#form_search :input').serialize();
 	    form_download.submit();
@@ -382,31 +409,56 @@
     
     // 리스트 복사 체크버튼 및 모달창
     function onclickCopyContent() {
-        var count = $(":input[name = 'list[]']").length;
-        if(count > 0) {
-            if(isCheckedBox("form_list")) {
-                var f = eval("form_list");
-                var chkBox = document.getElementsByName("list[]");
-                var chkLen = chkBox.length;
-                var code = "";
-
-                for(i=0;i<chkLen;i++) {
-                    if(chkBox[i].checked) {
-                        code += chkBox[i].value + ",";
-                    }
-                }
-                $("#modalCopyList").modal({backdrop:"static", show:true});
-                formCopyContent.code.value = code.substr(0, code.lastIndexOf(","));
-            }
-            else {
-                alert("항목을 선택하여야 합니다.");
-                return false;
-            }
-        }
-        else {
-            alert("항목이 없습니다.");
-            return false;
-        }
+		var formPostArr = new Array();
+		
+		$("input[class='formPostNo']:checked").each(function(){
+			formPostArr.push($(this).val());
+		});
+		if(formPostArr.length == 0){
+			alert("항목을 선택하셔야 합니다.");
+			return;
+		}
+		$.ajax({
+			url : "/admin/form/json/formList",
+			method : "GET" ,
+			dataType : "json" ,
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+			success : function(Data, status){
+				var display = '';
+				if(Data.length > 0){
+					for(var i = 0; i < Data.length; i++){
+						display = "<option value="+Data[i].formNo+">"+Data[i].title+"</option>"
+						$('#formPostCopy').append(display);
+					}
+				}
+				
+			}
+		})		
+    	$("#modalCopyList").modal({backdrop:"static", show:true});
+    }
+    
+    function fncformPostCopy(){
+		var formPostArr = new Array();
+		var formNo = $("select[name='formPostCopy']").val();
+		$("input[class='formPostNo']:checked").each(function(){
+			formPostArr.push($(this).val());
+		});
+  		$.ajax({
+			 url : "/admin/form/addFormPostCopy?${_csrf.parameterName}=${_csrf.token}",
+ 		  	 type : "POST",
+		  	 data : { 
+		  		formPostArr : formPostArr, 
+		  	 	formNo
+		  	 },
+  		 	 success : function(result){
+ 		   	 		
+		  	 }	 
+ 		});
+  		alert("게시물 복사가 완료되었습니다.")
+  		location.href = "/admin/form/formPostList?formNo="+formNo;
     }
     
     // 리스트 복사 확인
@@ -430,6 +482,77 @@
         form_download.submit();
         */
     }    
+	
+	//선택삭제
+	function deleteChoiceFormPost(formNo) {
+		
+		var formNo = ${formNo};
+		var formPostArr = new Array();
+		
+		$("input[class='formPostNo']:checked").each(function(){
+			formPostArr.push($(this).val());
+			});
+		if(formPostArr.length == 0){
+			alert("항목을 선택하셔야 합니다.");
+			return;
+		}
+		if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
+			alert("취소 되었습니다.");
+			return;
+			
+		}else{
+  		$.ajax({
+		 	 url : "/admin/form/deleteChoiceFormPost?${_csrf.parameterName}=${_csrf.token}",
+ 		  		 type : "POST",
+	  	 	 data : { 
+	  	 		formPostArr : formPostArr 
+	  	 	 },
+	 		 success : function(result){
+	 		
+	  	 	 }
+		  	 	 
+  		});		
+			alert("해당 자료가 삭제 되었습니다.")
+			location.href = "/admin/form/formPostList?formNo="+formNo;
+		}		
+		
+	};
+	
+	//리스트 복사
+	function deleteChoiceFormPost(formNo) {
+		
+		var formNo = ${formNo};
+		var formPostArr = new Array();
+		
+		$("input[class='formPostNo']:checked").each(function(){
+			formPostArr.push($(this).val());
+			});
+		if(formPostArr.length == 0){
+			alert("항목을 선택하셔야 합니다.");
+			return;
+		}
+		if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
+			alert("취소 되었습니다.");
+			return;
+			
+		}else{
+  		$.ajax({
+		 	 url : "/admin/form/deleteChoiceFormPost?${_csrf.parameterName}=${_csrf.token}",
+ 		  		 type : "POST",
+	  	 	 data : { 
+	  	 		formPostArr : formPostArr 
+	  	 	 },
+	 		 success : function(result){
+	 		
+	  	 	 }
+		  	 	 
+  		});		
+			alert("해당 자료가 삭제 되었습니다.")
+			location.href = "/admin/form/formPostList?formNo="+formNo;
+		}		
+		
+	};
+
       
     /* 
     datepicker 

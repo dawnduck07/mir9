@@ -62,9 +62,17 @@ public class FormController {
 		for(int i = 0; i < trList.size(); i++) {
 			String data = request.getParameter("data"+trList.get(i).getItemNo());
 			if(i == 0) {
-				sb.append(data);
+				if("".equals(data)) {
+					sb.append(" ");
+				}else {
+					sb.append(data);
+				}
 			}else if(i != 0) {
-				sb.append("/"+data);
+				if("".equals(data)) {
+					sb.append("/ ");
+				}else {
+					sb.append("/"+data);
+				}
 			}
 			formPost.setItemData(sb.toString());
 			item.setItemNo(trList.get(i).getItemNo());
@@ -74,6 +82,24 @@ public class FormController {
 		formService.addFormPost(formPost);
 		
 		return "redirect:/admin/form/formPostList?formNo="+formNo;
+	}
+	
+	
+	@PostMapping("addFormPostCopy")
+	public void addFormPostCopy(@RequestParam(value="formPostArr[]") List<String> formPostArr,
+								@RequestParam("formNo") int formNo) throws Exception{
+		System.out.println("form/addFormPostCopy 시작");
+		int result = 0;
+		int formPostNo = 0;
+		Form form = new Form();
+		for(String i : formPostArr) {
+			formPostNo = Integer.parseInt(i);
+			FormPost formPost = formService.getFormPost(formPostNo);
+			form.setFormNo(formNo);
+			formPost.setForm(form);
+			formService.addFormPostCopy(formPost);
+		}
+		result = 1;
 	}
 	
 	@PostMapping("updateForm")
@@ -86,7 +112,8 @@ public class FormController {
 	@PostMapping("updateItem")
 	public String updateItem(@ModelAttribute("item") Item item, @RequestParam("formNo") int formNo) throws Exception{
 		System.out.println("form/updateItem 시작");
-		if(item.getInput_type() != "select" || item.getInput_type() != "radio" || item.getInput_type() != "checkbox") {
+		System.out.println("데이터 확인 +++ === "+item.getInput_type());
+		if(!"select".equals(item.getInput_type()) && !"checkbox".equals(item.getInput_type()) && !"radio".equals(item.getInput_type())) {
 			item.setInput_example("");
 		}
 		formService.updateItem(item);
@@ -114,11 +141,14 @@ public class FormController {
 		List<Item> tr = formService.formTr(formNo);
 		List<FormPost> fp = formService.formPostList(formNo);
 		List<Integer> number = new ArrayList<>();
+		int num = 0;
 		for(int i = 0; i < tr.size(); i++) {
 			tr.get(i).setInput_example(tr.get(i).getInput_example().replace("\r\n", "/"));
-			if(tr.get(i).getIs_show() == "y") {
-				number.add(i, i);
-			}
+			
+			if("y".equals(tr.get(i).getIs_show())) {
+				number.add(num, i);
+				num = num+1;
+			}else if(!"y".equals(tr.get(i).getIs_show())){}
 		}
 		model.addAttribute("fp",fp);
 		model.addAttribute("td",td);
@@ -164,6 +194,19 @@ public class FormController {
 			itemNo = Integer.parseInt(i);
 			item.setItemNo(itemNo);
 			formService.deleteChoiceItem(itemNo);
+		}
+
+	}
+	
+	@PostMapping("deleteChoiceFormPost")
+	public void deleteChoiceFormPost(@RequestParam(value="formPostArr[]") List<String> formPostArr, FormPost formPost)
+								 throws Exception{
+		System.out.println("form/deleteChoiceFormPost 시작");
+		int formPostNo = 0;
+		for(String i : formPostArr) {
+			formPostNo = Integer.parseInt(i);
+			formPost.setCode(formPostNo);
+			formService.deleteChoiceFormPost(formPostNo);
 		}
 
 	}	
