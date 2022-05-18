@@ -65,7 +65,6 @@ public class MemberController {
 	@Autowired
 	private CouponService couponService;
 	
-
 	// 회원 탈퇴
 	@GetMapping("/memberWithdrawal.do")
 	public void memberWithdrawal() {}
@@ -881,54 +880,36 @@ public class MemberController {
 		return "redirect:" + referer;
 	}
 	
-	
-	// 등급 관리 조회(select)
+	// 등급 관리 조회
 	@GetMapping("/memberGrade.do")
 	public Map<String, Object> memberGrade(Model model, HttpServletRequest request) {
-		
 		// 명칭 가져오기
 		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
-		log.debug("memberGradeList = {}", memberGradeList);
-		//model.addAttribute("memberGardeList", memberGradeList);
-		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("memberGradeList", memberGradeList);
-
 		return resultMap;
 	}
 	
-	// 등급 수정(update)
+	// 등급 수정
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@PostMapping("/memberGradeUpdate.do")
-	public String memberGradeUpdate(
-				@RequestBody String data,
-				RedirectAttributes redirectAttributes) {
-		
-		log.debug("{}", "memberGradeUpdate.do 요청!");
-		log.debug("param = {}", data);
+	public String memberGradeUpdate(@RequestBody String data, RedirectAttributes redirectAttributes) {
 		ObjectMapper mapper = new ObjectMapper();
-		
 		try {
 			Map<String, String> map = mapper.readValue(data, Map.class);
-			log.debug("map = {}", map);
-			
 			MemberGrade paramGrade = new MemberGrade();
-			
 			Set<String> keySet = map.keySet();
-			for(String key : keySet) {
-				System.out.println(key + " : " + map.get(key));
-				
-				paramGrade.setMemberGradeNo(Integer.parseInt(key));
-				paramGrade.setMemberGradeName(map.get(key));
-				
-				int resultMemberGradeUpdate = memberService.memberGradeUpdate(paramGrade);
-				log.debug("resultMemberGradeUpdate = {}", resultMemberGradeUpdate);
-			}
-			
-		
-			} catch (IOException e) {}
 
+				for(String key : keySet) {
+					System.out.println(key + " : " + map.get(key));
+					paramGrade.setMemberGradeNo(Integer.parseInt(key));
+					paramGrade.setMemberGradeName(map.get(key));
+					int resultMemberGradeUpdate = memberService.memberGradeUpdate(paramGrade);
+				}
+				
+			} catch (IOException e) {}
+		
 		return "redirect:/admin/member/memberGrade.do";
 	}
 	
