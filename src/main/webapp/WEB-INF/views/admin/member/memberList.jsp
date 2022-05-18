@@ -358,7 +358,7 @@
 function downloadExcel() {  // Excel 다운로드
 	console.log("엑셀 다운로드");
     form_download.target = 'iframe_process';
-    form_download.search_data.value = $('#form_search :input').serialize();
+    form_download.search_data.value = $('#form_search').serialize();
     form_download.submit();
 }
 

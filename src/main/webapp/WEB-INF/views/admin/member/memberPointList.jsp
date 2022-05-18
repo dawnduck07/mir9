@@ -125,16 +125,16 @@ $(function(){
 	var str = path.substring(path.lastIndexOf("/") + 1);
 	
 	if(str == "point") {
-		$("form[name='form_search']").attr("action", "${pageContext.request.contextPath }/member/" + str + "?${_csrf.parameterName}=${_csrf.token}");
+		$("form[name='form_search']").attr("action", "${pageContext.request.contextPath }/admin/member/point?${_csrf.parameterName}=${_csrf.token}");
 	}
 	else {
-		$("form[name='form_search']").attr("action", "${pageContext.request.contextPath }/member/memberPointList/" + str + "?${_csrf.parameterName}=${_csrf.token}");
+		$("form[name='form_search']").attr("action", "${pageContext.request.contextPath }/admin/member/memberPointList/" + str + "?${_csrf.parameterName}=${_csrf.token}");
 	}
 });
 
 function downloadExcel() {  // Excel 다운로드
     form_download.target = 'iframe_process';
-    form_download.search_data.value = $('#form_search :input').serialize();
+    form_download.search_data.value = $('#form_search').serialize();
     form_download.submit();
 }
 
