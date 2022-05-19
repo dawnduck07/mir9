@@ -97,7 +97,7 @@
 					<button type="button" onclick="downloadExcel();" class="btn btn-warning">
 						<i class="fa" aria-hidden="true"></i> Excel 다운로드
 					</button>
-					<button type="button" onclick="location.replace('${pageContext.request.contextPath}/admin/member/list.do')" class="btn btn-primary" style="float: right">
+					<button type="button" onclick="location.replace('${pageContext.request.contextPath}/admin/member/list.do')" class="btn btn-primary" style="margin-left: 20px;">
 						<i class="fa fa-minus-square" aria-hidden="true"></i> 회원 리스트 이동
 					</button>
 					<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
@@ -106,6 +106,7 @@
 						<input type="hidden" name="search_data" value=""> 
 						<input type="hidden" name="search_type" value="">
 					</form>
+					<!-- 위치 조정 필요 -->
 					<div style="text-align: right; margin-top: 20px;">
 						<ul class="pagination" style="margin: 0;">
 							<li class="active"><a href="?tpf=admin/member/point&page=1">1</a></li>
