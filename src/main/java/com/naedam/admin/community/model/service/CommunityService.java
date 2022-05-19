@@ -44,6 +44,8 @@ public interface CommunityService {
 	
 	int sendSms(JsonObject json); // sms 발송
 	
+	int countBySendPhone(String phone); // sms 이용 내역 조회
+	
 	// email
 	List<EmailSetting> emailCheck(String templateId); // 특정 설정값 조회
 	
@@ -57,4 +59,6 @@ public interface CommunityService {
 	int modifyMail(String templateId, String title, String content); // 템플릿 수정
 	
 	int sendEmail(JsonObject json); // email 발송 
+
+
 }

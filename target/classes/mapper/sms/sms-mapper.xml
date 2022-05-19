@@ -81,5 +81,12 @@
 		</where>
 		order by reDate DESC, sms_code DESC
 	</select>	
+	
+	<!-- sms 이용 요금 조회 -->
+	<select id="countBySendPhone" resultType="int">
+		select COUNT(*)
+		  from tb_sms
+		 where send_phone = #{phone}
+	</select>	
 	  
 </mapper>

@@ -122,4 +122,10 @@ public class CommunityDaoImpl implements CommunityDao {
 	public List<Email> selectEmailList(HashMap<String, Object> param) {
 		return session.selectList("email.selectEmailList", param);
 	}
+
+	// sms 이용 요금 조회
+	@Override
+	public int countBySendPhone(String phone) {
+		return session.selectOne("sms.countBySendPhone", phone);
+	}
 }

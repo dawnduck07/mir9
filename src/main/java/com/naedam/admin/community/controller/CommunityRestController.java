@@ -64,6 +64,21 @@ public class CommunityRestController {
 		return result;
 	}
 	
+	// sms 사용 요금
+	@PostMapping("/charge")
+	public int charge(String id) {
+		int result = 0;
+
+		// 해당  아이디 값의 핸드폰 번호를 조회
+		String memPhone = memberService.getPhoneById(id);
+
+		// 해당 핸드폰 번호와 일치하는 sms 발신 count
+		String phone = memPhone.substring(0, 3) + "-" + memPhone.substring(3, 7) + "-" + memPhone.substring(7);
+		result = communityService.countBySendPhone(phone);
+
+		return result;
+	}	
+	
 	// sms 문구 수정
 	@PostMapping("/sms")
 	public int modifySms(@RequestBody String jsonStr) {

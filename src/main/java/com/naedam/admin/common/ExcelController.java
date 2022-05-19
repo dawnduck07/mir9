@@ -64,6 +64,8 @@ public class ExcelController {
 	@PostMapping("/download.do")
 	public void excelDownload(HttpServletResponse response, HttpServletRequest request) throws Exception {
 		String type = request.getParameter("download_type");
+		String searchType = request.getParameter("search_type");
+		
 		List<String> excelHeader = null;
 		List<Object> excelContentList = new ArrayList<Object>(); 
 		List<Object> excelContentList2 = new ArrayList<Object>();
@@ -71,8 +73,14 @@ public class ExcelController {
 		Workbook wb = new XSSFWorkbook();
 		Sheet sheet = null;
 		String fileName = "";
+		
+		String memberId = "";
+		if(searchType != null && searchType != "") { // 특정 회원 조회
+			int memberNo = Integer.parseInt(searchType);
+			memberId = memberService.selectMemberIdByNo(memberNo);
+		}
+		
 		Object[] data = null;
-		// type에 따른 엑셀 헤더 세팅, dao 연결 세팅 ~> 밑에서 자동으로 씀
 		if(type.equals("order")) {
 			excelHeader = Arrays.asList(orderHeader);
 			sheet = wb.createSheet("order_list");
@@ -94,7 +102,8 @@ public class ExcelController {
 			excelHeader = Arrays.asList(memberPointHeader);
 			sheet = wb.createSheet("member_point_history");
 			fileName += "member_point_history_" + dateCode();
-			List<MemberPointExcelForm> MemberPointExcelFormList = pointService.selectMemberPointExcelForm();
+			// + 특정 회원 적립금 조회 가능
+			List<MemberPointExcelForm> MemberPointExcelFormList = pointService.selectMemberPointExcelForm(memberId);
 			for(MemberPointExcelForm p : MemberPointExcelFormList) {
 				excelContentList.add(p);
 			}
