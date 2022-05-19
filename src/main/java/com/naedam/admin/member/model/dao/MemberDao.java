@@ -197,6 +197,12 @@ public interface MemberDao {
 	List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm();
 
 	List<Member> selectMemberInfo(String code);
+
+	// sms 발신 번호 조회
+	String getPhoneById(String id);
+
+	// 회원 아이디 조회
+	String selectMemberIdByNo(int memberNo);
 	
 
 

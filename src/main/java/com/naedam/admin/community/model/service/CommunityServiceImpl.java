@@ -554,4 +554,10 @@ public class CommunityServiceImpl implements CommunityService {
 		return result;
 	}
 
+	// sms 이용 내역 조회
+	@Override
+	public int countBySendPhone(String phone) {
+		return communityDao.countBySendPhone(phone);
+	}
+
 }

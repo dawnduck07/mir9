@@ -39,6 +39,8 @@ public interface CommunityDao {
 	List<SmsSetting> selectSmsSetting();
 	List<Sms> selectSmsList(HashMap<String, Object> param);
 	
+	int countBySendPhone(String phone);
+	
 	// email
 	List<EmailSetting> emailCheck(String templateId);
 	
@@ -48,5 +50,7 @@ public interface CommunityDao {
 
 	List<EmailSetting> selectEmailSetting();
 	List<Email> selectEmailList(HashMap<String, Object> param);
+
+
 
 }
