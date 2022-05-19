@@ -37,23 +37,21 @@
 			<div class="box">
 				<div class="box-body">
 					<label id="countContainer" style="margin-top: 5px;">총 ${totalMemberListCount} 건</label>
-					<form name="search-form" onsubmit="return false">
-						<div class="box-tools pull-right" style="margin-bottom: 5px;">
-							<div class="has-feedback">
-								<span> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"> </span>
-								</span>
-							</div>
+					<div class="box-tools pull-right" style="margin-bottom: 5px;">
+						<div class="has-feedback">
+							<span> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"> </span>
+							</span>
 						</div>
-						<div class="box-tools pull-right" style="margin-bottom: 5px;">
-							<div class="has-feedback">
-								<select name="type" class="form-control input-sm">
-									<option value="last_name">성</option>
-									<option value="first_name">이름</option>
-									<option value="phone">휴대폰</option>
-								</select>
-							</div>
+					</div>
+					<div class="box-tools pull-right" style="margin-bottom: 5px;">
+						<div class="has-feedback">
+							<select name="type" class="form-control input-sm">
+								<option value="last_name">성</option>
+								<option value="first_name">이름</option>
+								<option value="phone">휴대폰</option>
+							</select>
 						</div>
-					</form>
+					</div>
 					<form:form id="memberDeleteFrm" name="memberDeleteFrm" action="${pageContext.request.contextPath}/admin/member/memberDelete.do" method="POST">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<table class="table table-bordered table-hover checkbox-group">
@@ -118,14 +116,8 @@
 					<form name="form_download" method="post" action="${pageContext.request.contextPath }/excel/download.do?${_csrf.parameterName}=${_csrf.token}">
 						<input type="hidden" name="mode" value="downloadExcel"> <input type="hidden" name="search_data"> <input type="hidden" name="download_type" value="memberList">
 					</form>
-					<!--    // 관리자단에서 회원가입 숨김
-                    <button type="button" onclick="onclickSMS();" class="btn btn-danger"><i class="fa fa-bell"></i> SMS발송</button>
-					-->
-
 					<div style="text-align: right;">
-						<ul class="pagination" style="margin: 0;">
-							<li class="active"><a href="?tpf=admin/member/list&status=y&page=1">1</a></li>
-						</ul>
+						${pagebar}
 					</div>
 				</div>
 				<!-- /.box-body -->
