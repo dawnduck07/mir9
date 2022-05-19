@@ -89,7 +89,7 @@
 			                          </c:forEach>
 			                        <td>${formPost.date}</td>
 			                        <td><input type="radio" name="order_code" value="-5"></td>
-			                        <td><button type="button" onclick="onclickUpdate(11);" class="btn btn-primary btn-xs">수정하기</button></td>
+			                        <td><button type="button" onclick="onclickUpdate(${formPost.code});" class="btn btn-primary btn-xs">수정하기</button></td>
 			                    </tr> 
 			                  </c:forEach>   
 			                  <c:if test="${empty fp}">
@@ -155,7 +155,7 @@
 			                        </c:if>
 			                        <c:if test="${item.input_type == 'webeditor'}">
 			                        	<td align="left">
-			                        		<textarea id="content18" name="data${item.itemNo}" placeholder="${item.placeholder}" style="padding: 5px; line-height: 20px; width: 100%; height: 200px;"></textarea>
+			                        		<textarea id="content18" name="data${item.itemNo}" id="ckEditor" placeholder="${item.placeholder}" style="padding: 5px; line-height: 20px; width: 100%; height: 200px;"></textarea>
 			                        	</td>
 			                        </c:if>
 			                        <c:if test="${item.input_type == 'select'}">
@@ -268,6 +268,9 @@
 
 <script>
 	
+	var a = $("input[id='ckEditor']").val();
+	console.log(a)
+	
 	if (window.CKEDITOR) {  // CKEDITOR loading 여부 체크 (Web 버젼에서만 사용)
 	    var objEditor18 = CKEDITOR.replace('content18', {
 	        height: 300,
@@ -349,7 +352,7 @@
     // 모달 데이터 셋팅
     function setData(code) {
         $.ajax({
-			url:"http://demoshop.mir9.kr/api/process.php",
+        	url:'/admin/form/json/getFormPost?${_csrf.parameterName}=${_csrf.token}',
 			type:"post",
 			dataType:"json",
 			data:{
@@ -357,12 +360,31 @@
 		                code:code
 			},
 			success:function(data, textStatus, jqXHR) {
-		                 var json_data = data.data;
+		                 var json_data = data;
+		                 var formData = new Array();
+		                 var itemNoArr = new Array();
+		                 var itemInputArr = new Array();
+		                 
+		                 formData = data.itemData.split("/");
+		                 itemNoArr = data.itemNo.split("/");
+		                 itemInputArr = data.itemInput.split("/");
+		                 for(var i = 0; i < formData.length; i++){
+		                	 
+		                	 if(itemInputArr[i] == "select" || itemInputArr[i] == "radio" || itemInputArr[i] == "checkbox"){
+		                		 $("input[name='data"+itemNoArr[i]+"'][value='"+formData[i]+"']").prop("checked", true);
+		                	 }else if(itemInputArr[i] == "webeditor"){
+		                		 var objEditor = eval("objEditor18");
+		                		 objEditor.setData(formData[i]);
+		                	 }
+		                	 
+		                	 $("input[name='data"+itemNoArr[i]+"']").val(formData[i]);
+		                 }
+		                 
 		                 $("form[name='formRegister'] #mode").val("updateReply");
 		                 $("#code").val(code);
 		                 $("#form_code").val(json_data.form_code);
 		                 var find_text = "";
-		                 $.each(json_data.arrData, function(index, value) {
+		                 $.each(formData, function(index, value) {
 		                     find_text = String(index);
 		                     if ($.inArray(find_text, json_data.arrRadio) >= 0) {
 		                         $("input[name=data" + index + "][value='" + value + "']").prop("checked", true);

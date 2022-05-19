@@ -57,17 +57,25 @@ public class FormController {
 		System.out.println("form/addFormPost 시작");
 		FormPost formPost = new FormPost();
 		StringBuffer sb = new StringBuffer();
+		StringBuffer sb2 = new StringBuffer();
+		StringBuffer sb3 = new StringBuffer();
 		List<Item> trList = formService.formTr(formNo);
 		form.setFormNo(formNo);
 		for(int i = 0; i < trList.size(); i++) {
 			String data = request.getParameter("data"+trList.get(i).getItemNo());
+			String data2 = Integer.toString(trList.get(i).getItemNo());
+			String data3 = trList.get(i).getInput_type();
 			if(i == 0) {
+				sb2.append(data2);
+				sb3.append(data3);
 				if("".equals(data)) {
 					sb.append(" ");
 				}else {
 					sb.append(data);
 				}
 			}else if(i != 0) {
+				sb2.append("/"+data2);
+				sb3.append("/"+data3);
 				if("".equals(data)) {
 					sb.append("/ ");
 				}else {
@@ -75,8 +83,8 @@ public class FormController {
 				}
 			}
 			formPost.setItemData(sb.toString());
-			item.setItemNo(trList.get(i).getItemNo());
-			formPost.setItem(item);
+			formPost.setItemNo(sb2.toString());
+			formPost.setItemInput(sb3.toString());
 			formPost.setForm(form);
 		}
 		formService.addFormPost(formPost);
