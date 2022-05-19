@@ -129,6 +129,7 @@ $(function(){
 	}
 	else {
 		$("form[name='form_search']").attr("action", "${pageContext.request.contextPath }/admin/member/memberPointList/" + str + "?${_csrf.parameterName}=${_csrf.token}");
+		$("input[name='search_type']").val(str); // 해당 멤버 번호
 	}
 });
 

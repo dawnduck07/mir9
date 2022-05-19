@@ -390,6 +390,12 @@ public class MemberServiceImpl implements MemberService {
 	public String getPhoneById(String id) {
 		return memberDao.getPhoneById(id);
 	}
+
+	// 회원 아이디 조회
+	@Override
+	public String selectMemberIdByNo(int memberNo) {
+		return memberDao.selectMemberIdByNo(memberNo);
+	}
 	
 
 	
