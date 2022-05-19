@@ -59,6 +59,36 @@
 	                        on m.member_no = ab.member_no
 	                            left join address a
 	                                on ab.address_no = a.address_no
+	WHERE
+		`status` = 'Y'                          
+	GROUP BY 
+		m.member_no
+	ORDER BY
+		m.member_no DESC
+</select>
+
+<!-- 탈퇴 회원 리스트 -->
+<select id="selectWithdrawalMemberListMemberList" resultType="memberEntity">
+	SELECT distinct
+		 m.member_no,
+		 m.id,
+		 m.last_name, 
+		 m.first_name,
+		 CONCAT(SUBSTRING(m.phone FROM 1 FOR 3), '-', SUBSTRING(m.phone FROM 4 FOR 4), '-', SUBSTRING(m.phone FROM 8 FOR 4)) AS phone,
+		 a.address_main, 
+		 a.address_sub,
+		 m.reg_date,
+		 m.status,
+		 SUM(mp.point_amount) AS pointAmount
+	FROM
+	    member m left join member_point mp
+	        on m.member_no = mp.member_no
+	                    left join address_book ab
+	                        on m.member_no = ab.member_no
+	                            left join address a
+	                                on ab.address_no = a.address_no
+	WHERE
+		`status` = 'N'                          
 	GROUP BY 
 		m.member_no
 	ORDER BY
@@ -235,7 +265,6 @@
 		#{id},
 		#{password},
 		NULL)
-
 	<selectKey keyProperty="memberNo" resultType="_int" order="AFTER">
 		SELECT
 			LASTVAL(seq_member_no)
@@ -243,7 +272,6 @@
 			DUAL
 	</selectKey>
 </insert>
-
 
 <!-- 메모 입력 -->
 <insert id="insertMemberMemo">
@@ -385,6 +413,7 @@
 	order by a.reg_date desc
 </select>
 
+<!-- 회원 관리 엑셀 다운로드 -->
 <select id="selectMemberListExcelForm" resultType="memberListExcelForm">
 	SELECT
 		m.id,
@@ -413,14 +442,6 @@
 		m.reg_date DESC
 </select>
 
-<!-- 회원 삭제 -->
-<delete id="memberWithdrawal">
-	DELETE FROM 
-		member 
-	WHERE 
-		id = #{id}
-</delete>
-
 <!-- 주소 삭제 -->
 <delete id="deleteAddress">
 	DELETE FROM 
@@ -439,22 +460,18 @@
 		member_no = #{memberNo}
 </select>
 
-<!-- 주소록 삭제 -->
-<delete id="deleteAddressBook">
-	DELETE FROM 
-		address_book
-	WHERE 
-		address_book_no = #{addressBookNo}
-</delete>
-
 <!-- 권한 삭제 -->
-<delete id="deleteAuthorties">
+<delete id="deleteAuthorities">
 	DELETE FROM 
 		authorities
-	WHERE 
-		member_no = #{memberNo}
+	<where>
+		<foreach collection="array" item="item" open="(" close=")" separator="or">
+			member_no = #{item}
+		</foreach>
+	</where>
 </delete>
 
+<!-- 탈퇴 사유 -->
 <update id="updateReason">
 	UPDATE 
 		withdrawal_member
@@ -463,32 +480,6 @@
 	WHERE
 		member_no = #{memberNo}
 </update>
-
-<!-- 탈퇴 회원 리스트 -->
-<select id="selectWithdrawalMemberList" resultType="memberEntity">
-	SELECT distinct
-		 m.member_no,
-		 m.id,
-		 m.last_name, 
-		 m.first_name,
-		 CONCAT(SUBSTRING(m.phone FROM 1 FOR 3), '-', SUBSTRING(m.phone FROM 4 FOR 4), '-', SUBSTRING(m.phone FROM 8 FOR 4)) AS phone,
-		 a.address_main, 
-		 a.address_sub,
-		 m.reg_date,
-		 m.status,
-		 SUM(mp.point_amount) AS pointAmount
-	FROM
-	    member m left join member_point mp
-	        on m.member_no = mp.member_no
-	                    left join address_book ab
-	                        on m.member_no = ab.member_no
-	                            left join address a
-	                                on ab.address_no = a.address_no
-	GROUP BY 
-		m.member_no
-	ORDER BY
-		m.withdrawal_date
-</select>
 
 
 <!-- 탈퇴 회원 전체 게시물 수 -->
@@ -534,17 +525,19 @@
 	SELECT 
 		count(*)
 	FROM
-		withdrawal_member wm JOIN withdrawal_address_book wab
-			ON wm.member_no = wab.member_no
-				JOIN withdrawal_address wa
-					ON wab.address_no = wa.address_no
-						JOIN withdrawal_authorities wau
-							ON wm.member_no = wau.member_no
-		WHERE
-		wm.`status` = 'N'
-		and
-		${type} LIKE CONCAT('%', #{keyword}, '%')
+		member m JOIN address_book ab
+			ON m.member_no = ab.member_no
+				JOIN address a
+					ON ab.address_no = a.address_no
+	<where>
+		status = 'N'	
+		<if test="keyword != null and keyword != ''" >
+			and
+			${type} LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
 </select>
+
 
 <select id="selectMemberTotalPoint" resultType="_int">
 SELECT 
@@ -553,30 +546,13 @@ FROM member_point
 WHERE member_no = #{memberNo};
 </select>
 
-<!-- 회원 삭제 -->
-<delete id="deleteWithdrawal">
-	DELETE FROM
-		withdrawal_member
-	<where>
-		<!-- 
-			collection = 전달받은 인자. List나 Array 형태만 가능
-			item = 전달받은 인자값을 alias 명으로 대체
-			open = 해당 구문이 시작될 때 삽입할 문자열
-			close = 해당 구문이 종료될 때 삽입할 문자열
-			separator = 반복되는 사이에 출력할 문자열
-		 -->
-		 <foreach collection="array" item="item" open="(" close=")" separator="or">
-		 	member_no = #{item}
-		 </foreach>
-	</where>
-</delete>
 
-<!-- 탈퇴회원 주소번호 조회 -->
+<!-- 주소 번호 조회 -->
 <select id="findAddressNo" resultType="address">
 	SELECT
 		address_no
 	FROM
-		withdrawal_address_book
+		address_book
 	<where>
 		 <foreach collection="array" item="item" open="(" close=")" separator="or">
 		 	member_no = #{item}
@@ -584,39 +560,11 @@ WHERE member_no = #{memberNo};
 	</where>
 </select>
 
-<!-- 주소 삭제 -->
-<delete id="deleteWithdrawalAddress">
-	DELETE FROM
-		withdrawal_address
-	WHERE
-		address_no = #{address_no}
-</delete>
-
-<!-- 주소록 삭제 -->
-<delete id="deleteWithdrawalAddressBook">
-	DELETE FROM
-		withdrawal_address_book
-	<where>
-		 <foreach collection="array" item="item" open="(" close=")" separator="or">
-		 	member_no = #{item}
-		 </foreach>
-	</where>
-</delete>
-
-<!-- 권한 삭제 -->
-<delete id="deleteWithdrawalAuthority">
-	DELETE FROM
-		withdrawal_authorities
-	<where>
-		 <foreach collection="array" item="item" open="(" close=")" separator="or">
-		 	member_no = #{item}
-		 </foreach>
-	</where>
-</delete>
 
 <select id="selectTodayRegMemberCnt" resultType="_int">
 SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 </select>
+
 
 <!-- 탈퇴회원 조회 -->
 <select id="selectOneMemberByWithdrawalMemberNo" resultType="withdrawalMember">
@@ -628,8 +576,9 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		member_no = #{memberNo}
 </select>
 
+
 <!-- 주소록 삭제 -->
-<delete id="deleteAddressBookByMemberNo">
+<delete id="deleteAddressBook">
 	DELETE FROM
 		address_book
 	<where>
@@ -639,19 +588,9 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	</where>
 </delete>
 
-<!-- 권한 삭제 -->
-<delete id="deleteAuthorityByMemberNo">
-	DELETE FROM
-		authorities
-	<where>
-		<foreach collection="array" item="item" open="(" close=")" separator="or">
-			member_no = #{item}
-		</foreach>
-	</where>
-</delete>
 
 <!-- 메모 삭제 -->
-<delete id="deleteMemoByMemberNo">
+<delete id="deleteMemberMemo">
 	DELETE FROM
 		member_memo
 	<where>
@@ -660,6 +599,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		</foreach>
 	</where>
 </delete>
+
 
 <!-- 회원 주소번호 조회 -->
 <select id="findMemberAddressList" resultType="address">
@@ -673,17 +613,6 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		 </foreach>
 	</where>
 </select>
-
-<!-- 메모 영구삭제 -->
-<delete id="deleteWithdrawalMemo">
-	DELETE FROM
-		withdrawal_member_memo
-	<where>
-		<foreach collection="array" item="item" open="(" close=")" separator="or">
-			member_no = #{item}
-		</foreach>
-	</where>
-</delete>
 
 
 <!-- 탈퇴회원 상세보기 -->
@@ -719,12 +648,6 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		m.member_no = #{memberNo}
 </select>
 
-<delete id="deleteMemberMemo">
-	DELETE FROM
-		member_memo
-	WHERE
-		member_no = #{memberNo}
-</delete>
 
 <!-- 회원 탈퇴 변경 -->
 <update id="updateMemberToWithdrawal">
@@ -737,6 +660,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	WHERE
 		member_no = #{memberNo}
 </update>
+
 
 <!-- 회원 접속 이력 관리-->
 <select id="seletHistoryList" resultType="memberAccessHistory">
@@ -756,6 +680,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		mah.login_date DESC
 </select>
 
+
 <!-- 접속 이력 게시글 수 -->
 <select id="totalAccessHistoryCount" resultType="_int">
 	SELECT
@@ -763,6 +688,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	FROM
 		member_access_history
 </select>
+
 
 <!-- 접속 이력 검색 게시물 -->
 <select id="seletSearchAccessHistory" resultType="memberAccessHistory">
@@ -786,6 +712,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		`access_history_no` DESC
 </select>
 
+
 <!-- 접속 이력 검색 게시물 수 -->
 <select id="searchHistoryListCount" resultType="_int">
 	SELECT
@@ -796,6 +723,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	WHERE
 		${type} LIKE CONCAT('%', #{keyword}, '%')
 </select>
+
 
 <!-- 접속 이력 선택 삭제 -->
 <delete id="deleteAccessHistory">
@@ -808,6 +736,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	</where>
 </delete>
 
+<!-- 접속 이력 엑셀 다운로드 -->
 <select id="selectMemberAccessHistoryListExcelForm" resultType="memberAccessHistoryListExcelForm">
 	SELECT
 		access_history_id AS id,
@@ -819,6 +748,14 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		member_access_history
 	ORDER BY
 		legDate DESC
+</select>
+
+
+<select id="selectMemberInfo" resultType="member"> 
+	select *
+		 , CONCAT(last_name, first_name) AS name
+	from member
+	where member_no = #{code}
 </select>
 
 	<!-- 회원 정보 조회 -->
