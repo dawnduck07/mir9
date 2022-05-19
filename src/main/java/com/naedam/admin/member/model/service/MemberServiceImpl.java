@@ -1,8 +1,8 @@
 package com.naedam.admin.member.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,13 +42,13 @@ public class MemberServiceImpl implements MemberService {
 
 	// 회원 리스트 전체 게시물 목록
 	@Override
-	public List<MemberEntity> selectMemberList() {
-		return memberDao.selectMemberList();
+	public List<MemberEntity> selectMemberList(int offset, int limit) {
+		return memberDao.selectMemberList(offset, limit);
 	}
 
 	// 회원 리스트 전체 게시물 수
 	@Override
-	public int selectMemerListCount() {
+	public int selectMemberListCount() {
 		return memberDao.selectMemberListCount();
 	}
 
@@ -179,12 +179,6 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectMemberListExcelForm();
 	}
 
-	// 회원 삭제
-	@Override
-	public int memberWithdrawal(String id) {
-		return memberDao.memberWithdrawal(id);
-	}
-
 	// 주소 삭제
 	@Override
 	public int deleteAddress(int addressNo) {
@@ -197,28 +191,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectOneAddressBook(memberNo);
 	}
 
-	// 주소록 삭제
-	@Override
-	public int deleteAddressBook(int addressBookNo) {
-		return memberDao.deleteAddressBook(addressBookNo);
-	}
-
-	// 권한 삭제
-	@Override
-	public int deleteAuthorties(int memberNo) {
-		return memberDao.deleteAuthorties(memberNo);
-	}
-
 	// 탈퇴 사유
 	@Override
 	public int updateReason(Map<String, Object> param) {
 		return memberDao.updateReason(param);
-	}
-
-	// 탈퇴 회원 리스트
-	@Override
-	public List<MemberEntity> selectWithdrawalMemberList() {
-		return memberDao.selectWithdrawalMemberList();
 	}
 
 	// 탈퇴 회원 전체 게시물 수
@@ -236,50 +212,17 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 
-
 	// 탈퇴회원 검색 게시물 수
 	@Override
-	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
-		return memberDao.selectSearchWithdrawalListCount(param);
-	}
- 
-	// 탈퇴회원 삭제
-	@Override
-	public int deleteWithdrawal(int[] memberNo) {
-		return memberDao.deleteWithdrawal(memberNo);
+	public int selectSearchWithdrawalListCount(HashMap<String, Object> map) {
+		return memberDao.selectSearchWithdrawalListCount(map);
 	}
 
-	// 주소번호 조회
+	// 주소 번호 조회
 	@Override
 	public List<Address> findAddressNo(int[] memberNo) {
 		return memberDao.findAddressNo(memberNo);
 	}
-
-	// 주소 삭제
-	@Override
-	public int deleteWithdrawalAddress(int addressNo) {
-		return memberDao.deleteWithdrawalAddress(addressNo);
-	}
-
-	// 주소록 삭제
-	@Override
-	public int deleteWithdrawalAddressBook(int[] memberNo) {
-		return memberDao.deleteWithdrawalAddressBook(memberNo);
-	}
-
-	// 권한 삭제
-	@Override
-	public int deleteWithdrawalAuthority(int[] memberNo) {
-		return memberDao.deleteWithdrawalAuthority(memberNo);
-	}
-
-	
-
-	
-
-
-
-	
 
 	@Override
 	public int selectTodayRegMemberCnt() {
@@ -293,16 +236,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectOneMemberByWithdrawalMemberNo(memberNo);
 	}
 
-	// 주소록 삭제
-	@Override
-	public int deleteAddressBookByMemberNo(int[] memberNo) {
-		return memberDao.deleteAddressBookByMemberNo(memberNo);
-	}
-
 	// 권한 삭제
 	@Override
-	public int deleteAuthorityByMemberNo(int[] memberNo) {
-		return memberDao.deleteAuthorityByMemberNo(memberNo);
+	public int deleteAuthorities(int[] memberNo) {
+		return memberDao.deleteAuthorities(memberNo);
 	}
 
 	@Override
@@ -310,15 +247,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.findMemberAddressList(memberNo);
 	}
 
+	// 메모 삭제
 	@Override
-	public int deleteMemoByMemberNo(int[] memberNo) {
-		return memberDao.deleteMemoByMemberNo(memberNo);
-	}
-
-	// 메모 영구삭제
-	@Override
-	public int deleteWithdrawalMemo(int[] memberNo) {
-		return memberDao.deleteWithdrawalMemo(memberNo);
+	public int deleteMemberMemo(int[] memberNo) {
+		return memberDao.deleteMemberMemo(memberNo);
 	}
 
 	// 탈퇴회원 상세조회
@@ -327,15 +259,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectOneWithdrawalMemberEntity(memberNo);
 	}
 
-	@Override
-	public int deleteMemberMemo(int memberNo) {
-		return memberDao.deleteMemberMemo(memberNo);
-	}
-
 	// 탈퇴회원 타입별 검색
 	@Override
-	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param) {
-		return memberDao.selectSearchWithdrawalList(param);
+	public List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit) {
+		return memberDao.selectSearchWithdrawalList(map, offset, limit);
 	}
 
 	// 회원 탈퇴로 변경
@@ -384,12 +311,18 @@ public class MemberServiceImpl implements MemberService {
 	public List<Member> selectMemberInfo(String code) {
 		return memberDao.selectMemberInfo(code);
 	}
-	
 
-	
+	// 주소록 삭제
+	@Override
+	public int deleteAddressBook(int[] memberNo) {
+		return memberDao.deleteAddressBook(memberNo);
+	}
 
-
-
+	// 탈퇴 회원 리스트
+	@Override
+	public List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit) {
+		return memberDao.selectWithdrawalMemberListMemberList(offset, limit);
+	}
 
 	
 }

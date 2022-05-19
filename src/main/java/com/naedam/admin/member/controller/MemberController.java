@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naedam.admin.common.Mir9Utils;
 import com.naedam.admin.coupon.model.service.CouponService;
@@ -51,6 +52,7 @@ import com.naedam.admin.point.model.service.PointService;
 import com.naedam.admin.point.model.vo.MemberPoint;
 
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/admin/member")
@@ -155,15 +157,18 @@ public class MemberController {
 	
 	// 회원 리스트
 	@RequestMapping("/list.do")
-	public String memberList(Model model, HttpServletRequest request) {
+	public String memberList(@RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request) {
+		
+		int limit = 5;
+		int offset = (cPage - 1) * limit;
 		
 		// 회원 리스트 전체 게시물 목록
-		List<MemberEntity> memberList = memberService.selectMemberList();
+		List<MemberEntity> memberList = memberService.selectMemberList(offset, limit);
 		log.debug("memberList = {}", memberList);
 		model.addAttribute("memberList", memberList);
 		
 		// 전체 게시물 수
-		int totalMemberListCount = memberService.selectMemerListCount();
+		int totalMemberListCount = memberService.selectMemberListCount();
 		log.debug("totalMemberListCount = {}", totalMemberListCount);
 		model.addAttribute("totalMemberListCount", totalMemberListCount);
 		
@@ -175,6 +180,12 @@ public class MemberController {
 		// 쿠폰 리스트
 		List<Coupon> couponList = couponService.selectCouponList();
 		model.addAttribute("couponList",couponList);
+		
+		// pagebar
+		String url = request.getRequestURI();
+		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalMemberListCount, url);
+		log.debug("pagebar = {}", pagebar);
+		model.addAttribute("pagebar", pagebar);
 		
 		return "admin/member/memberList";
 	}
@@ -325,90 +336,14 @@ public class MemberController {
 		return resultMap;
 	}
 	
-	// 회원 선택 삭제
-	@PostMapping("/memberDelete.do")
-	public String memberDelete(
-						@RequestParam int[] memberNo,
-						RedirectAttributes redirectAttr,
-						HttpServletRequest request) throws Exception {
-		log.debug("{}", "memberDelete.do 시작");
-		log.debug("memberNo = {}", memberNo);
-		
-		try {
-			// 주소 번호 조회
-			List<Address> MemberaddressList = memberService.findMemberAddressList(memberNo);
-			log.debug("MemberaddressList = {}", MemberaddressList);
-			for(int i = 0; i < MemberaddressList.size(); i++) {
-				
-				int addressNo = MemberaddressList.get(i).getAddressNo();
-				log.debug("addressNo = {}", addressNo);
-				
-				// 주소 삭제
-				int resultDeleteAddress = memberService.deleteAddress(addressNo);
-				log.debug("resultDeleteAddress = {}", resultDeleteAddress);
-				
-				// 주소 영구삭제
-				int resultWithdrawalAddress = memberService.deleteWithdrawalAddress(addressNo);
-				log.debug("resultWithdrawalAddress = {}", resultWithdrawalAddress);
-			}
-			
-			// 주소록 삭제
-			int resultDeleteBook = memberService.deleteAddressBookByMemberNo(memberNo);
-			log.debug("resultDeleteBook = {}", resultDeleteBook);
-			
-			// 권한 삭제
-			int resultDeleteAuthority = memberService.deleteAuthorityByMemberNo(memberNo);
-			log.debug("resultDeleteAuthority = {}", resultDeleteAuthority);
-			
-			// 메모 삭제
-			int resultDeleteMemo = memberService.deleteMemoByMemberNo(memberNo);
-			log.debug("resultDeleteMemo = {}", resultDeleteMemo);
-			
-			// 회원 삭제
-			int result = memberService.deleteMember(memberNo);
-			log.debug("result = {}", result);
-			
-			// 주소록 영구삭제
-			int resultWithdrawalAddressBook = memberService.deleteWithdrawalAddressBook(memberNo);
-			log.debug("resultWithdrawalAddressBook = {}", resultWithdrawalAddressBook);
-			
-			// 권한 영구삭제
-			int resultWithdrawalAuthority = memberService.deleteWithdrawalAuthority(memberNo);
-			log.debug("resultWithdrawalAuthority = {}", resultWithdrawalAuthority);
-			
-			// 메모 영구삭제
-			int resultWithdrawalMemo = memberService.deleteWithdrawalMemo(memberNo);
-			log.debug("resultWithdrawalMemo = {}", resultWithdrawalMemo);
-			
-			// 회원 영구삭제
-			int resultWithdrawalMember = memberService.deleteWithdrawal(memberNo);
-			log.debug("resultWithdrawalMember = {}", resultWithdrawalMember);
-			
-			redirectAttr.addFlashAttribute("msg", "해당 회원이 삭제되었습니다.");
-		} catch (Exception e) {
-			log.error("회원 삭제 실패", e);
-			throw e; // spring container에게 예외상황 알림
-		}
-		
-		String referer = request.getHeader("Referer");
-		log.debug("referer = {}", referer);
-		
-		return "redirect:" + referer;
-	}
-	
 	// 회원 상세보기
 	@ResponseBody
 	@GetMapping("/memberDetail.do/{memberNo}")
-	public Map<String, Object> memberDetail(@PathVariable int memberNo, Model model,
-								HttpServletRequest request,
-								HttpServletResponse response) {
-		
+	public Map<String, Object> memberDetail(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
 		log.debug("memberNo = {}", memberNo);
-		
 		Map<String, Object> map = new HashMap<>();
 		
-		// 업무로직
-		// 1. 회원(Member) 조회
+		// 1. 상세보기 -> 회원조회
 		Member member = memberService.selectOneMemberByMemberNo(memberNo);
 		log.debug("member = {}", member);
 		model.addAttribute("member", member);
@@ -546,137 +481,128 @@ public class MemberController {
 		return "redirect:/admin/member/list.do";
 	}
 	
-
+	
 	// 탈퇴회원 리스트
 	@GetMapping("/withdrawalList.do")
-	public String withdarawalMemberList(Model model, HttpServletRequest request) {
-		log.debug("withdarawalMemberList = {}","withdarawalMemberList 시작");
+	public String withdarawalMemberList(@RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request) {
 		
-		// 탈퇴 회원 리스트 전체 게시물 목록
-		List<MemberEntity> withdrawalMemberList = memberService.selectMemberList();
-		log.debug("withdrawalMemberList = {}", withdrawalMemberList);
-		model.addAttribute("withdrawalMemberList", withdrawalMemberList);
+		int limit = 5;
+		int offset = (cPage - 1) * limit;
 		
-		// 탈퇴회원 전체 게시물 수
-		int totalwithdrawalCount = memberService.selectWithdrawalCount();
-		log.debug("totalwithdrawalCount = {}", totalwithdrawalCount);
-		model.addAttribute("totalwithdrawalCount", totalwithdrawalCount);
-		
-		// 명칭 가져오기
-		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
-		log.debug("memberGradeList = {}", memberGradeList);
-		model.addAttribute("memberGradeList", memberGradeList);
-		
-		/*
-		// 탈퇴 회원 리스트
-		List<WithdrawalMember> withdrawalMemberList = memberService.selectWithdrawalMemberList();
-		log.debug("withdrawalMember = {}", withdrawalMemberList);
-		model.addAttribute("withdrawalMemberList", withdrawalMemberList);
-		*/
-				
-		// 탈퇴 회원 전체 게시물 수
-		//int withdrawalCount = memberService.selectWithdrawalCount();
-		//log.debug("withdrawalCount = {}", withdrawalCount);
-		//model.addAttribute("withdrawalCount", withdrawalCount);
+		try {
+			// 탈퇴 회원 리스트 전체 게시물 목록
+			// 일반 회원 리스트에서 status = 'N'인 상태만 jsp에 뿌리는 과정
+			List<MemberEntity> withdrawalMemberList = memberService.selectWithdrawalMemberListMemberList(offset, limit);
+			model.addAttribute("withdrawalMemberList", withdrawalMemberList);
+			
+			// 탈퇴회원 전체 게시물 수
+			int totalwithdrawalCount = memberService.selectWithdrawalCount();
+			model.addAttribute("totalwithdrawalCount", totalwithdrawalCount);
+			
+			// 명칭 가져오기
+			List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
+			model.addAttribute("memberGradeList", memberGradeList);
+
+			// pagebar
+			String url = request.getRequestURI();
+			String pagebar = Mir9Utils.getPagebar(cPage, limit, totalwithdrawalCount, url);
+			model.addAttribute("pagebar", pagebar);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return "admin/member/withdrawalMemberList";
 	}
 	
 	// 탈퇴회원 타입별 검색
 	@ResponseBody
-	@GetMapping("/withdrawalTypeSearch.do")
-	public Map<String, Object> withdrawalTypeSearch(
-			@RequestParam String type, 
-			@RequestParam String keyword,
-			HttpServletRequest request){
-		log.debug("{}", "타입별 검색 시작");
-		log.debug("type = {}", type);
-		log.debug("keyboard = {}", keyword);
+	@PostMapping("/withdrawalTypeSearch.do")
+	public JSONObject withdrawalTypeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestBody String jsonStr){
+		ObjectMapper mapper = new ObjectMapper();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		try {
+			map = mapper.readValue(jsonStr, 
+			        new TypeReference<HashMap<String, Object>>() {});
+		} catch (IOException e) {
+			
+		}
 		
-		Map<String, Object> param = new HashMap<>();
-		param.put("type", type);
-		param.put("keyword", keyword);
-		log.debug("param = {}", param);
+		int limit = 5;
+		int offset = (cPage - 1) * limit;
 		
 		// 탈퇴회원 검색 게시물 
-		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(param);
+		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(map, offset, limit);
 		log.debug("searchWithdrawalList = {}", searchWithdrawalList);
-
+		
 		// 탈퇴회원 검색 게시물 수
-		int searchListCount = memberService.selectSearchWithdrawalListCount(param);
-		log.debug("searchListCount = {}", searchListCount);
+		int searchListCount = memberService.selectSearchWithdrawalListCount(map);
 		
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("searchWithdrawalList", searchWithdrawalList);
-		resultMap.put("searchListCount", searchListCount);
+		// pagebar
+		//String url = request.getRequestURI();
+		String url = "#";
+		String pagebar = Mir9Utils.getPagebar(cPage, limit, searchListCount, url);
 		
-		return resultMap;
+		JSONObject jsonObject = new JSONObject();
+		
+		map.put("searchWithdrawalList", searchWithdrawalList);
+		map.put("searchListCount", searchListCount);
+		map.put("pagebar", pagebar);
+		
+		for( Map.Entry<String, Object> entry : map.entrySet() ) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            jsonObject.put(key, value);
+        }
+		
+		return jsonObject;
 	}
 	
-	// 탈퇴회원 선택 삭제
-	@PostMapping("/withdrawalDelete.do")
-	public String withdrawalDelete(
-				@RequestParam int[] memberNo,
-				RedirectAttributes redirectAttr,
-				HttpServletRequest request) throws Exception {
-		log.debug("{}", "withdrawalDelete.do 시작");
-		log.debug("memberNo = {}", memberNo);
+	// 회원&탈퇴회원 선택 삭제
+	@PostMapping("/memberDelete.do")
+	public String memberDelete(@RequestParam int[] memberNo, RedirectAttributes redirectAttribute, HttpServletRequest request) throws Exception {
 		Map<String, Object> param = new HashMap<>();
 		
 		try {		
 			// 주소 번호 조회
 			List<Address> addressList = memberService.findAddressNo(memberNo);
-			log.debug("addressNo = {}", addressList);
 			for(int i = 0; i < addressList.size(); i++) {
-				
-				int addressNo = addressList.get(i).getAddressNo();
-				log.debug("addressNo = {}", addressNo);
-				
-				// 주소 영구삭제
-				int resultDeleteAddress = memberService.deleteWithdrawalAddress(addressNo);
-				log.debug("resultDeleteAddress = {}", resultDeleteAddress);
+				int addressNo = addressList.get(i).getAddressNo();				
+				// 주소 삭제
+				int resultDeleteAddress = memberService.deleteAddress(addressNo);
 			}
 			
-			// 주소록 영구삭제
-			int resultDeleteBook = memberService.deleteWithdrawalAddressBook(memberNo);
-			log.debug("resultDeleteBook = {}", resultDeleteBook);
-			
+			// 주소록 삭제
+			int resultDeleteAddressBook = memberService.deleteAddressBook(memberNo);
 					
-			// 권한 영구삭제
-			int resultDeleteAuthority = memberService.deleteWithdrawalAuthority(memberNo);
-			log.debug("resultDeleteAuthority = {}", resultDeleteAuthority);
+			// 권한 삭제
+			int resultDeleteAuthorities = memberService.deleteAuthorities(memberNo);
 			
-			// 메모 영구삭제
-			int resultDeleteMemo = memberService.deleteWithdrawalMemo(memberNo);
-			log.debug("resultDeleteMemo = {}", resultDeleteMemo);
+			// 메모 삭제
+			int resultDeleteMemberMemo = memberService.deleteMemberMemo(memberNo);
 			
-			// 회원 영구삭제
-			int resultDeleteMember = memberService.deleteWithdrawal(memberNo);
-			log.debug("result = {}", resultDeleteMember);			
+			// 회원 삭제
+			int resultDeleteMember = memberService.deleteMember(memberNo);
 						
-			redirectAttr.addFlashAttribute("msg", "해당 회원이 삭제되었습니다.");
+			redirectAttribute.addFlashAttribute("msg", "해당 회원이 삭제되었습니다.");
 		} catch (Exception e) {
 			log.error("회원 삭제 실패", e);
 			throw e; // spring container에게 예외상황 알림
 		}
 		
 		String referer = request.getHeader("Referer");
-		log.debug("referer = {}", referer);
+
 		return "redirect:" + referer;
 	}
 	
 	// 탈퇴회원 상세보기
 	@ResponseBody
 	@GetMapping("/withdrawalMemberDetail.do/{memberNo}")
-	public Map<String, Object> withdrawalMemberDetail(@PathVariable int memberNo, Model model,
-				HttpServletRequest request,
-				HttpServletResponse response) {
-		log.debug("memberNo = {}", memberNo);
+	public Map<String, Object> withdrawalMemberDetail(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> map = new HashMap<>();
 		
 		WithdrawalMemberEntity withdrawalMemberEntity = memberService.selectOneWithdrawalMemberEntity(memberNo);
-		log.debug("withdrawalMemberEntity = {}", withdrawalMemberEntity);
 		model.addAttribute("withdrawalMemberEntity", withdrawalMemberEntity);
+		
 		// 휴대폰 번호 분기
 		String mobile1 = withdrawalMemberEntity.getPhone().substring(0, 3);
 		String mobile2 = withdrawalMemberEntity.getPhone().substring(3, 7);
@@ -710,12 +636,10 @@ public class MemberController {
 		
 		// 주소(Address) 조회
 		Address address = memberService.selectOneAddress(memberNo);
-		log.debug("address = {}", address);
 		model.addAttribute("address", address);
 		
 		// 메모(MemberMemoContent) 조회
 		MemberMemo memberMemo = memberService.selectOneMemo(memberNo);
-		log.debug("memberMemo = {}", memberMemo);
 
 		if(memberMemo.getMemberMemoContent() == null) 
 			 memberMemo.setMemberMemoContent("");
@@ -724,7 +648,6 @@ public class MemberController {
 		
 		// 회원 권한 조회
 		Authorities authorities = memberService.selectOneAuthorities(memberNo);
-		log.debug("authorities = {}", authorities);
 		model.addAttribute("authorities = {}", authorities);
 				
 		map.put("withdrawalMemberEntity", withdrawalMemberEntity);
@@ -747,14 +670,10 @@ public class MemberController {
 	@ResponseBody
  	@PostMapping("/withdrawalMemberUpdate.do")
 	public String withdrawalMemberUpdate(@RequestBody String data, RedirectAttributes redirectAttribute) {
-		log.debug("{}", "withdrawalMemberUpdate.do 요청!");
-		log.debug("param = {}", data);
-		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
 			Map<String, String> map = mapper.readValue(data, Map.class);
-			log.debug("map = {}", map);
 			
 			String phone = map.get("mobile1") + map.get("mobile2") + map.get("mobile3");
 			
@@ -772,15 +691,12 @@ public class MemberController {
 				paramWithdrawal.setPassword(map.get("password"));
 			} else {
 				// 비밀번호 암호화 처리
-				log.debug("{}", passwordEncoder);
 				String rawPassword = map.get("password");
 				String encryptedPassword = passwordEncoder.encode(rawPassword);
 				paramWithdrawal.setPassword(encryptedPassword);
-				log.debug("{} -> {}", rawPassword, encryptedPassword);
 			}
 			
 			int resultWithdrawalMember = memberService.memberUpdate(paramWithdrawal);
-			log.debug("resultWithdrawalMember = {}", resultWithdrawalMember);
 			
 			// 주소(Address) 수정
 			Address paramAddress = new Address();
@@ -790,7 +706,6 @@ public class MemberController {
 			paramAddress.setAddressZipcode(Integer.parseInt(map.get("addressZipcode")));
 			
 			int resultAddressUpdate = memberService.addressUpdate(paramAddress);
-			log.debug("resultAddressUpdate = {}", resultAddressUpdate);
 			
 			// 메모(MemberMemo) 수정
 			MemberMemo paramMemberMemo = new MemberMemo();
@@ -798,7 +713,6 @@ public class MemberController {
 			paramMemberMemo.setMemberMemoContent(map.get("memberMemoContent"));
 			
 			int resultMemberMemo = memberService.memberMemoUpdate(paramMemberMemo);
-			log.debug("resultMemberMemo = {}", resultMemberMemo);
 			
 			// 권한(Authorities) 수정
 			Authorities paramAuthorities = new Authorities();
@@ -806,13 +720,9 @@ public class MemberController {
 			paramAuthorities.setMemberNo(Integer.parseInt(map.get("memberNo")));
 			
 			int resultAuthorities = memberService.authoritiesUpdate(paramAuthorities);
-			log.debug("resultAuthorities = {}", resultAuthorities);
-			
-			
+
 		} catch (IOException e) {}
-		
-	
-		
+
 		return "redirect:/admin/member/withdrawalList.do";
 	}
 	

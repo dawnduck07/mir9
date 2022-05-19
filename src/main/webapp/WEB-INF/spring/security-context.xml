@@ -83,7 +83,7 @@
 		<!-- logout-success-url : 로그아웃 이후 리다이렉트 url(기본값 : /login?logout)-->
 		<!-- logout-success-url과 success-handler-ref은 같이 쓸 수 없다. -->
 		<logout 
-			logout-url="/member/memberLogout.do"
+			logout-url="/admin/member/memberLogout.do"
 			success-handler-ref="logoutSuccessHandler"
 			/>
 		

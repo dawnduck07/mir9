@@ -1,8 +1,8 @@
 package com.naedam.admin.member.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.naedam.admin.member.model.vo.Address;
 import com.naedam.admin.member.model.vo.AddressBook;
@@ -27,7 +27,7 @@ public interface MemberDao {
 	Member selectOneMember(String id);
 
 	// 회원 리스트 전체 게시물 목록
-	List<MemberEntity> selectMemberList();
+	List<MemberEntity> selectMemberList(int offset, int limit);
 
 	// 회원 리스트 전체 게시물 수
 	int selectMemberListCount();
@@ -98,83 +98,42 @@ public interface MemberDao {
 	// 포인트 총계
 	int selectMemberTotalPoint(int memberNo);
 
-	// 회원 삭제
-	int memberWithdrawal(String id);
-
 	// 주소 삭제
 	int deleteAddress(int addressNo);
 
 	// 주소록 조회
 	AddressBook selectOneAddressBook(int memberNo);
 
-	// 주소록 삭제
-	int deleteAddressBook(int addressBookNo);
-
 	// 권한 삭제
-	int deleteAuthorties(int memberNo);
+	int deleteAuthorities(int[] memberNo);
 
 	// 탈퇴 사유
 	int updateReason(Map<String, Object> param);
 
-	// 탈퇴 회원 리스트
-	List<MemberEntity> selectWithdrawalMemberList();
-
 	// 탈퇴 회원 전체 게시물 수
 	int selectWithdrawalCount();
 
-
 	// 탈퇴회원 검색 게시물 수
-	int selectSearchWithdrawalListCount(Map<String, Object> param);
+	int selectSearchWithdrawalListCount(HashMap<String, Object> map);
 
-
-	// 탈퇴회원 삭제
-	int deleteWithdrawal(int[] memberNo);
-
-	// 주소번호 조회
+	// 주소 번호 조회
 	List<Address> findAddressNo(int[] memberNo);
-
-	// 주소 삭제
-	int deleteWithdrawalAddress(int addressNo);
-
-	// 주소록 삭제
-	int deleteWithdrawalAddressBook(int[] memberNo);
-
-	// 권한 삭제
-	int deleteWithdrawalAuthority(int[] memberNo);
-
-	
-
-	
-
-
-
-	
 
 	int selectTodayRegMemberCnt();
 
 	// 탈퇴회원 조회
 	WithdrawalMember selectOneMemberByWithdrawalMemberNo(int memberNo);
-	
-	// 주소록 삭제
-	int deleteAddressBookByMemberNo(int[] memberNo);
-
-	// 권한 삭제
-	int deleteAuthorityByMemberNo(int[] memberNo);
 
 	List<Address> findMemberAddressList(int[] memberNo);
 
-	int deleteMemoByMemberNo(int[] memberNo);
-
-	// 메모 영구삭제
-	int deleteWithdrawalMemo(int[] memberNo);
-
+	// 메모 삭제
+	int deleteMemberMemo(int[] memberNo);
+	
 	// 탈퇴회원 상세조회
 	WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo);
 
-	int deleteMemberMemo(int memberNo);
-
 	// 탈퇴회원 타입별 검색
-	List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param);
+	List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit);
 
 	// 회원 탈퇴로 변경
 	int updateMemberToWithdrawal(Map<String, Object> param);
@@ -197,16 +156,11 @@ public interface MemberDao {
 	List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm();
 
 	List<Member> selectMemberInfo(String code);
-	
 
+	// 주소록 삭제 
+	int deleteAddressBook(int[] memberNo);
 
-	
-
-
-
-
-
-
-	
+	// 탈퇴 회원 리스트 
+	List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit);
 
 }
