@@ -157,6 +157,12 @@ public interface MemberDao {
 
 	List<Member> selectMemberInfo(String code);
 
+	// sms 발신 번호 조회
+	String getPhoneById(String id);
+
+	// 회원 아이디 조회
+	String selectMemberIdByNo(int memberNo);
+
 	// 주소록 삭제 
 	int deleteAddressBook(int[] memberNo);
 

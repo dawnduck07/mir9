@@ -64,14 +64,23 @@ public class ExcelController {
 	@PostMapping("/download.do")
 	public void excelDownload(HttpServletResponse response, HttpServletRequest request) throws Exception {
 		String type = request.getParameter("download_type");
+		String searchType = request.getParameter("search_type");
+		
 		List<String> excelHeader = null;
 		List<Object> excelContentList = new ArrayList<Object>(); 
-		List<Object> excelContentList2 = new ArrayList<Object>(); 
+		List<Object> excelContentList2 = new ArrayList<Object>();
+		List<Object> excelContentList3 = new ArrayList<Object>();
 		Workbook wb = new XSSFWorkbook();
 		Sheet sheet = null;
 		String fileName = "";
 		
-		// type에 따른 엑셀 헤더 세팅, dao 연결 세팅 ~> 밑에서 자동으로 씀
+		String memberId = "";
+		if(searchType != null && searchType != "") { // 특정 회원 조회
+			int memberNo = Integer.parseInt(searchType);
+			memberId = memberService.selectMemberIdByNo(memberNo);
+		}
+		
+		Object[] data = null;
 		if(type.equals("order")) {
 			excelHeader = Arrays.asList(orderHeader);
 			sheet = wb.createSheet("order_list");
@@ -93,7 +102,8 @@ public class ExcelController {
 			excelHeader = Arrays.asList(memberPointHeader);
 			sheet = wb.createSheet("member_point_history");
 			fileName += "member_point_history_" + dateCode();
-			List<MemberPointExcelForm> MemberPointExcelFormList = pointService.selectMemberPointExcelForm();
+			// + 특정 회원 적립금 조회 가능
+			List<MemberPointExcelForm> MemberPointExcelFormList = pointService.selectMemberPointExcelForm(memberId);
 			for(MemberPointExcelForm p : MemberPointExcelFormList) {
 				excelContentList.add(p);
 			}
@@ -125,7 +135,16 @@ public class ExcelController {
 			excelHeader = formPostHeader;
 			sheet = wb.createSheet("form_list");
 			fileName += "form_list" + dateCode();
-			String[] formPostList = null;
+			List<String> formPostList = new ArrayList<>();
+			for(int i = 0; i < fp.size(); i++) {
+				data = fp.get(i).getItemData().split("/");
+				if(data != null) {
+					formPostList.add(i,Arrays.toString(data));
+				}else if(data == null) {}
+			}
+			for(int i = 0; i < formPostList.size(); i++) {
+				excelContentList3.add(i,formPostList.get(i));
+			}
 			
 
 		}
@@ -133,7 +152,6 @@ public class ExcelController {
 		Row row = null;
 		Cell cell = null;
 		int rowNum = 0;
-		
 
 		
 		// header
@@ -205,6 +223,32 @@ public class ExcelController {
 			            cnt++;
 		            }
 		        }
+		    }catch (Exception e){
+		    	e.printStackTrace();
+		    }
+		}
+		
+		// body
+		int forInt = 0;
+		for(Object vo : excelContentList3) {
+			int cnt = 0;
+			row = sheet.createRow(rowNum++);
+		    try{
+		        Object obj = vo;
+	        	// 셀 너비 자동 조절
+    			sheet.autoSizeColumn(cnt);
+    		    sheet.setColumnWidth(cnt, (sheet.getColumnWidth(cnt))+(short)1024);
+    		    // 데이터 작성
+    		    String formNo = request.getParameter("formNo");
+    		    List<FormPost> fp = formService.formPostList(Integer.parseInt(formNo));
+    		    data = fp.get(forInt).getItemData().split("/");
+    		    for(int i = 0; i < data.length; i++) {
+    		    	cell = row.createCell(i);
+    		    	cell.setCellValue(data[i].toString());
+    		    }
+	            cnt++;
+	            forInt++;
+		        
 		    }catch (Exception e){
 		    	e.printStackTrace();
 		    }

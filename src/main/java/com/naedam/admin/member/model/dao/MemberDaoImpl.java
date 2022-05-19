@@ -325,6 +325,19 @@ public class MemberDaoImpl implements MemberDao {
 	public List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit) {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return session.selectList("member.selectWithdrawalMemberListMemberList", null, rowBounds);
+
+	}
+	
+	// sms 발신 번호 조회
+	@Override
+	public String getPhoneById(String id) {
+		return session.selectOne("member.getPhoneById", id);
+	}
+
+	// 회원 아이디 조회
+	@Override
+	public String selectMemberIdByNo(int memberNo) {
+		return session.selectOne("member.selectMemberIdByNo", memberNo);
 	}
 
 

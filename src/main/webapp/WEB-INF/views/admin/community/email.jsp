@@ -691,7 +691,6 @@ textarea {
 		
 		return return_txt;
 	}
-
 </script>
 
 <jsp:include page="/WEB-INF/views/admin/common/footer.jsp"></jsp:include>

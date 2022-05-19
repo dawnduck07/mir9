@@ -312,6 +312,20 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectMemberInfo(code);
 	}
 
+
+	// sms 발신 번호 조회
+	@Override
+	public String getPhoneById(String id) {
+		return memberDao.getPhoneById(id);
+	}
+
+	// 회원 아이디 조회
+	@Override
+	public String selectMemberIdByNo(int memberNo) {
+		return memberDao.selectMemberIdByNo(memberNo);
+	}
+	
+
 	// 주소록 삭제
 	@Override
 	public int deleteAddressBook(int[] memberNo) {
