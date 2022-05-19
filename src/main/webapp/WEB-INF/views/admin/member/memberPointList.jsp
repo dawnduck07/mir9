@@ -29,7 +29,7 @@
 			<div class="box">
 				<div class="box-body">
 					<label style="margin-top: 5px;">총 ${mPointList.size() } 건</label>
-					<form name="form_search" method="post" action="${pageContext.request.contextPath }/admin/member/point?${_csrf.parameterName}=${_csrf.token}">
+					<form name="form_search" method="post">
 						<div class="box-tools pull-right" style="margin-bottom: 5px;">
 							<div class="has-feedback">
 								<span> 
@@ -42,7 +42,7 @@
 							<div class="has-feedback">
 								<select name="field" id="field" class="form-control input-sm">
 									<option value="b.id" ${param.field == 'b.id' ? 'selected' : ''}>아이디</option>
-									<option value="member_name" ${param.field == 'member_name' ? 'selected' : ''}>이름</option>
+									<option value="CONCAT(b.LAST_NAME, b.FIRST_NAME)" ${param.field == 'member_name' ? 'selected' : ''}>이름</option>
 									<option value="a.point_title" ${param.field == 'a.point_title' ? 'selected' : ''}>사용내역</option>
 								</select>
 							</div>
@@ -65,21 +65,30 @@
 									<!-- <td style="width:60px;">명령</td>                 -->
 								</tr>
 							</thead>
-							
-							<c:forEach var="mPoint" items="${mPointList }" varStatus="vs">
-								<tr>
-									<td><input type="checkbox" name="list[]" value="${mPoint.memberPointNo }" /></td>
-									<td>${mPointList.size() - vs.index }</td>
-									<td>${mPoint.id }</td>
-									<td>${mPoint.memberName }</td>
-									<td>${mPoint.email }</td>
-									<td>${mPoint.pointTitle }</td>
-									<td><fmt:formatNumber value="${mPoint.pointAmount }" pattern="#,###" /></td>
-									<td><fmt:formatDate pattern = "yyyy-MM-dd HH:mm" value="${mPoint.regDate}"/></td>
-									<!-- <td><button type="button" onclick="viewDetail()" class="btn btn-primary btn-xs">상세보기</button></td> -->
-								</tr>
-							</c:forEach>
-							
+							<tbody>
+								<c:choose>
+									<c:when test="${empty mPointList}">
+										<tr>
+											<td colspan="8">조회 결과가 없습니다.</td> 
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<c:forEach var="mPoint" items="${mPointList }" varStatus="vs">
+											<tr>
+												<td><input type="checkbox" name="list[]" value="${mPoint.memberPointNo }" /></td>
+												<td>${mPointList.size() - vs.index }</td>
+												<td>${mPoint.id }</td>
+												<td>${mPoint.memberName }</td>
+												<td>${mPoint.email }</td>
+												<td>${mPoint.pointTitle }</td>
+												<td><fmt:formatNumber value="${mPoint.pointAmount }" pattern="#,###" /></td>
+												<td><fmt:formatDate pattern = "yyyy-MM-dd HH:mm" value="${mPoint.regDate}"/></td>
+												<!-- <td><button type="button" onclick="viewDetail()" class="btn btn-primary btn-xs">상세보기</button></td> -->
+											</tr>
+										</c:forEach>
+									</c:otherwise>
+								</c:choose>
+							</tbody>
 						</table>
 					</form>
 					<br>
@@ -111,9 +120,21 @@
 <!-- /.content-wrapper -->
 
 <script>
+$(function(){
+	var path = document.location.pathname;
+	var str = path.substring(path.lastIndexOf("/") + 1);
+	
+	if(str == "point") {
+		$("form[name='form_search']").attr("action", "${pageContext.request.contextPath }/admin/member/point?${_csrf.parameterName}=${_csrf.token}");
+	}
+	else {
+		$("form[name='form_search']").attr("action", "${pageContext.request.contextPath }/admin/member/memberPointList/" + str + "?${_csrf.parameterName}=${_csrf.token}");
+	}
+});
+
 function downloadExcel() {  // Excel 다운로드
     form_download.target = 'iframe_process';
-    form_download.search_data.value = $('#form_search :input').serialize();
+    form_download.search_data.value = $('#form_search').serialize();
     form_download.submit();
 }
 

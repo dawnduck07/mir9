@@ -347,39 +347,6 @@
 </div>
 </div>
 </div>
-
-<!-- // SMS 발송 폼 -->
-<div class="modal fade" id="modalSMS" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
-	<div class="modal-dialog" style="width: 500px;">
-		<div class="modal-content">
-			<form name="formSMS" method="post" onsubmit="return false;" action="?tpf=admin/member/process">
-				<input type="hidden" name="mode" value="sms"> <input type="hidden" name="field" value=""> <input type="hidden" name="keyword" value="">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabelPortfolio">SMS 발송</h4>
-				</div>
-				<div class="modal-body">
-
-					<table class="table table-bordered">
-						<tr>
-							<td class="menu">수신자</td>
-							<td align="left">5 명</td>
-						</tr>
-
-						<tr>
-							<td class="menu">메세지<br> (<span id="msg_count">0</span> / 90 byte)
-							</td>
-							<td align="left"><textarea name="msg" id="msg" rows="4" style="width: 100%;"></textarea></td>
-						</tr>
-					</table>
-			</form>
-		</div>
-
-	</div>
-	<div class="modal-footer">
-		<button type="button" onclick="registerSMS();" class="btn btn-primary">보내기</button>
-	</div>
-</div>
 </div>
 </div>
 </div>
@@ -391,7 +358,7 @@
 function downloadExcel() {  // Excel 다운로드
 	console.log("엑셀 다운로드");
     form_download.target = 'iframe_process';
-    form_download.search_data.value = $('#form_search :input').serialize();
+    form_download.search_data.value = $('#form_search').serialize();
     form_download.submit();
 }
 
@@ -403,7 +370,7 @@ $("button[id^='btn_']").on('click', function(e){
 	var memberNo = $(e.target).val();
 	console.log("memberNo = " + memberNo);
 	
-	location.href = `${pageContext.request.contextPath}/admin/member/point?mNo=\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
+	location.href = `${pageContext.request.contextPath}/admin/member/memberPointList/\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
 });
 
 // 상세보기 모달
@@ -982,6 +949,7 @@ function registerCoupon() {
     
     // data = 회원 번호 + 쿠폰 + 체크 
     var data = {
+    	mode : "coupon",
     	memberCode : $("input[name='member_code']").val(),
     	couponCode : $("select[name='coupon_code']").val(),
     	smsCheck : smsCheck,
@@ -1000,7 +968,7 @@ function registerCoupon() {
 		data: jsonStr,
     	success: function(result) {
     		if(result > 0) {
-    			alert("쿠폰을 지급했습니다.");
+    			alert("쿠폰이 정상 지급되었습니다.");
     			location.reload();
     		}
     	},
@@ -1068,6 +1036,7 @@ function registerPoint() {
 
     // data = 회원 번호 + 지급 형태 + 적립금 + 메모 + 체크 
     var data = {
+    	mode : "point",
     	memberCode : $("input[name='member_code']").val(),
     	type : $("select[name='plus_minus_type']").val(),
     	point : $("input[name='point']").val(),
@@ -1088,7 +1057,7 @@ function registerPoint() {
 		data: jsonStr,
     	success: function(result) {
     		if(result > 0) {
-    			alert("적립금을 지급했습니다.");
+    			alert("적립금이 정상 지급/차감되었습니다.");
     			location.reload();
     		}
     	},
