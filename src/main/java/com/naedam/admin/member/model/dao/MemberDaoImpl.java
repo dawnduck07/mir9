@@ -1,5 +1,6 @@
 package com.naedam.admin.member.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +43,9 @@ public class MemberDaoImpl implements MemberDao {
 
 	// 회원 리스트 전체 게시물 목록
 	@Override
-	public List<MemberEntity> selectMemberList() {
-		return session.selectList("member.selectMemberList");
+	public List<MemberEntity> selectMemberList(int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.selectMemberList", null, rowBounds);
 	}
 
 	// 회원 리스트 전체 게시물 수
@@ -179,12 +181,6 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.selectMemberListExcelForm");
 	}
 
-	// 회원 삭제
-	@Override
-	public int memberWithdrawal(String id) {
-		return session.delete("member.memberWithdrawal", id);
-	}
-
 	// 주소 삭제
 	@Override
 	public int deleteAddress(int addressNo) {
@@ -197,28 +193,16 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectOneAddressBook", memberNo);
 	}
 
-	// 주소록 삭제
-	@Override
-	public int deleteAddressBook(int addressBookNo) {
-		return session.delete("member.deleteAddressBook", addressBookNo);
-	}
-
 	// 권한 삭제
 	@Override
-	public int deleteAuthorties(int memberNo) {
-		return session.delete("member.deleteAuthorties", memberNo);
+	public int deleteAuthorities(int[] memberNo) {
+		return session.delete("member.deleteAuthorities", memberNo);
 	}
 
 	// 탈퇴 사유
 	@Override
 	public int updateReason(Map<String, Object> param) {
 		return session.update("member.updateReason", param);
-	}
-
-	// 탈퇴 회원 리스트
-	@Override
-	public List<MemberEntity> selectWithdrawalMemberList() {
-		return session.selectList("member.selectWithdrawalMemberList");
 	}
 
 	// 탈퇴 회원 전체 게시물 수
@@ -229,8 +213,8 @@ public class MemberDaoImpl implements MemberDao {
 
 	// 탈퇴회원 검색 게시물 수
 	@Override
-	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
-		return session.selectOne("member.selectSearchWithdrawalListCount", param);
+	public int selectSearchWithdrawalListCount(HashMap<String, Object> map) {
+		return session.selectOne("member.selectSearchWithdrawalListCount", map);
 	}
 	
 	@Override
@@ -239,43 +223,11 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectMemberTotalPoint", memberNo);
 	}
 
-
-	// 탈퇴회원 삭제
-	@Override
-	public int deleteWithdrawal(int[] memberNo) {
-		return session.delete("member.deleteWithdrawal", memberNo);
-	}
-
-	// 주소번호 조회
+	// 주소 번호 조회
 	@Override
 	public List<Address> findAddressNo(int[] memberNo) {
 		return session.selectList("member.findAddressNo", memberNo);
 	}
-
-	// 주소 삭제
-	@Override
-	public int deleteWithdrawalAddress(int addressNo) {
-		return session.delete("member.deleteWithdrawalAddress", addressNo);
-	}
-
-	// 주소록 삭제
-	@Override
-	public int deleteWithdrawalAddressBook(int[] memberNo) {
-		return session.delete("member.deleteWithdrawalAddressBook", memberNo);
-	}
-
-	// 권한 삭제
-	@Override
-	public int deleteWithdrawalAuthority(int[] memberNo) {
-		return session.delete("member.deleteWithdrawalAuthority", memberNo);
-	}
-
-	
-
-	
-
-
-
 
 	@Override
 	public int selectTodayRegMemberCnt() {
@@ -289,32 +241,15 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectOneMemberByWithdrawalMemberNo", memberNo);
 	}
 
-	// 주소록 삭제
-	@Override
-	public int deleteAddressBookByMemberNo(int[] memberNo) {
-		return session.delete("member.deleteAddressBookByMemberNo", memberNo);
-	}
-
-	// 권한 삭제
-	@Override
-	public int deleteAuthorityByMemberNo(int[] memberNo) {
-		return session.delete("member.deleteAuthorityByMemberNo", memberNo);
-	}
-
 	@Override
 	public List<Address> findMemberAddressList(int[] memberNo) {
 		return session.selectList("member.findMemberAddressList", memberNo);
 	}
 
+	// 메모 삭제 
 	@Override
-	public int deleteMemoByMemberNo(int[] memberNo) {
-		return session.delete("member.deleteMemoByMemberNo", memberNo);
-	}
-
-	// 메모 영구삭제
-	@Override
-	public int deleteWithdrawalMemo(int[] memberNo) {
-		return session.delete("member.deleteWithdrawalMemo", memberNo);
+	public int deleteMemberMemo(int[] memberNo) {
+		return session.delete("member.deleteMemberMemo", memberNo);
 	}
 
 	// 탈퇴회원 상세조회
@@ -323,15 +258,11 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectOneWithdrawalMemberEntity", memberNo);
 	}
 
-	@Override
-	public int deleteMemberMemo(int memberNo) {
-		return session.delete("member.deleteMemberMemo", memberNo);
-	}
-
 	// 탈퇴회원 타입별 검색
 	@Override
-	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param) {
-		return session.selectList("member.selectSearchWithdrawalList", param);
+	public List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.selectSearchWithdrawalList", map, rowBounds);
 	}
 
 	// 회원 탈퇴로 변경
@@ -371,6 +302,7 @@ public class MemberDaoImpl implements MemberDao {
 		return session.delete("member.deleteAccessHistory", accessHistoryNo);
 	}
 
+	// 접속 이력 엑셀 다운로드
 	@Override
 	public List<MemberAccessHistoryListExcelForm> selectMemberAccessHistoryListExcelForm() {
 		return session.selectList("member.selectMemberAccessHistoryListExcelForm");
@@ -382,6 +314,20 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.selectMemberInfo", code);
 	}
 
+	// 주소록 삭제
+	@Override
+	public int deleteAddressBook(int[] memberNo) {
+		return session.delete("member.deleteAddressBook", memberNo);
+	}
+
+	// 탈퇴 회원 리스트 
+	@Override
+	public List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.selectWithdrawalMemberListMemberList", null, rowBounds);
+
+	}
+	
 	// sms 발신 번호 조회
 	@Override
 	public String getPhoneById(String id) {
