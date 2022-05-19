@@ -120,7 +120,7 @@
 					</form>
 					<!--    // 관리자단에서 회원가입 숨김
                     <button type="button" onclick="onclickSMS();" class="btn btn-danger"><i class="fa fa-bell"></i> SMS발송</button>
--->
+					-->
 
 					<div style="text-align: right;">
 						<ul class="pagination" style="margin: 0;">
