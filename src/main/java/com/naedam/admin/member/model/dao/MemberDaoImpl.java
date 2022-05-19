@@ -382,6 +382,12 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectList("member.selectMemberInfo", code);
 	}
 
+	// sms 발신 번호 조회
+	@Override
+	public String getPhoneById(String id) {
+		return session.selectOne("member.getPhoneById", id);
+	}
+
 
 
 	
