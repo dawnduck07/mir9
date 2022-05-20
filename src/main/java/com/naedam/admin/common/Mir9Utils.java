@@ -36,7 +36,6 @@ public class Mir9Utils {
 		// 페이지번호를 클릭했을 때 링크
 		String delimeter = url.contains("?") ? "&" : "?";
 		url = url + delimeter + "cPage="; // /spring/board/boardList.do?cPage=
-		
 		// 페이지바 크기 
 		int pagebarSize = 5;
 		
@@ -171,15 +170,16 @@ public class Mir9Utils {
 					+ "		      </a>\r\n"
 					+ "		    </li>\n");
 		}
-		
-		pagebar.append("		  </ul>\r\n"
-				+ "		</nav>\r\n"
-				+ "		<script>\r\n"
-				+ "		const paging = (cPage) => {\r\n"
-				+ "			location.href = '" + url + "' + cPage;\r\n"
-				+ "		}\r\n"
-				+ "		</script>\n");
-		// '" + url + "' : 문자열로 처리되어야 하기때문
+		if(!url.substring(7,12).equals("board") && !url.substring(7,11).equals("form")) {
+			pagebar.append("		  </ul>\r\n"
+					+ "		</nav>\r\n"
+					+ "		<script>\r\n"
+					+ "		const paging = (cPage) => {\r\n"
+					+ "			location.href = '" + url + "' + cPage;\r\n"
+					+ "		}\r\n"
+					+ "		</script>\n");
+			// '" + url + "' : 문자열로 처리되어야 하기때문
+		}
 		return pagebar.toString();
 	}
 

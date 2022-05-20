@@ -146,6 +146,15 @@
 		AND fp.form_no = #{value}
 	</select>
 	
+	<select id="formPostListCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+	  	FROM(
+			SELECT fp.* FROM form_post fp, form f, item i 
+			WHERE fp.form_no = f.form_no 
+			AND i.item_no = fp.item_no 
+			AND fp.form_no = #{value}) countTable
+	</select>	
+	
 	<select id="getForm" parameterType="int" resultMap="formSelectMap">
 		SELECT * FROM FORM
 		WHERE form_no = #{value}
@@ -213,6 +222,16 @@
 			HTML_DESIGN_WRITE = #{html_design_write}
 		</set>
 		WHERE form_no = #{formNo}
+	</update>
+	
+	<update id="updateFormPost" parameterType="formPost">
+		UPDATE FORM_POST
+		<set>
+			ITEM_NO = #{itemNo},
+			ITEM_DATA = #{itemData},
+			ITEM_INPUT = #{itemInput}
+		</set>
+		WHERE CODE = #{code}
 	</update>
 	
 	<delete id="deleteChoiceForm" parameterType="int">

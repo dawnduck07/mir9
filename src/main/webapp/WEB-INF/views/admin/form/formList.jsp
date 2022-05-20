@@ -161,7 +161,7 @@
 			                        <td>0</td>
 			                        <td>${form.formDate}</td>
 			                        <td>
-			                        	<button type="button" onclick="_onclickView('form',${form.formNo});" class="btn btn-success btn-xs">바로가기</button>
+			                        	<button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/form/formPostList?formNo=${form.formNo}'" class="btn btn-success btn-xs">바로가기</button>
 			                        	<button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/form/itemList?formNo=${form.formNo}'" class="btn btn-warning btn-xs">문항관리</button>
 			                        	<button type="button" onclick="onclickUpdate(${form.formNo});" class="btn btn-primary btn-xs">상세보기</button>
 			                        </td>
@@ -394,7 +394,9 @@
 	    	return false;
 	    }
 	    form.target = 'iframe_process';
-	    form.submit();    
+	    form.submit();
+	    alert("등록 되었습니다.");
+	    location.reload();
 	}
 	
 	// 모달 내용 저장
@@ -410,7 +412,9 @@
 	    	return false;
 	    }
 	    form2.target = 'iframe_process';
-	    form2.submit();    
+	    form2.submit();
+	    alert("수정 되었습니다.");
+	    location.reload();
 	}	
 	
 	

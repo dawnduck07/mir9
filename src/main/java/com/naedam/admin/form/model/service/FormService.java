@@ -31,7 +31,10 @@ public interface FormService {
 	List<Item> itemList(int formNo) throws Exception;
 	
 	//폼게시물 리스트
-	List<FormPost> formPostList(int formNo) throws Exception;
+	List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception;
+	
+	//폼게시물 카운트
+	int formPostListCount(int code) throws Exception;
 	
 	//폼메일 정보
 	Form getForm(int code) throws Exception;
@@ -68,4 +71,7 @@ public interface FormService {
 	
 	//폼 디자인 수정
 	public int updateFormDesign(Form form) throws Exception;
+	
+	//폼 게시글 수정
+	public int updateFormPost(FormPost formPost) throws Exception;
 }
