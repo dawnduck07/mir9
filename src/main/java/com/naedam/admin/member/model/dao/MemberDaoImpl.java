@@ -62,8 +62,9 @@ public class MemberDaoImpl implements MemberDao {
 
 	// 타입별 검색 게시물
 	@Override
-	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param) {
-		return session.selectList("member.selectSearchMemberList", param);
+	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param, int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.selectSearchMemberList", param, rowBounds);
 	}
 
 	// 검색 게시물 수
@@ -273,8 +274,9 @@ public class MemberDaoImpl implements MemberDao {
 
 	// 접속 이력 검색 게시물
 	@Override
-	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
-		return session.selectList("member.seletSearchAccessHistory", param);
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param, int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.seletSearchAccessHistory", param, rowBounds);
 	}
 
 	// 접속 이력 검색 게시물 수

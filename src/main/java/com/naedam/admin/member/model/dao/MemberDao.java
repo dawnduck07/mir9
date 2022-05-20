@@ -36,7 +36,7 @@ public interface MemberDao {
 	Member selectOneMemberByMap(Map<String, Object> param);
 
 	// 타입별 검색 게시물
-	List<MemberEntity> selectSearchMemberList(Map<String, Object> param);
+	List<MemberEntity> selectSearchMemberList(Map<String, Object> param, int offset, int limit);
 
 	// 검색 게시물 수
 	int selectSearchListCount(Map<String, Object> param);
@@ -139,7 +139,7 @@ public interface MemberDao {
 	int totalAccessHistoryCount();
 
 	// 접속 이력 검색 게시물
-	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param);
+	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param, int offset, int limit);
 
 	// 접속 이력 검색 게시물 수
 	int searchHistoryListCount(Map<String, Object> param);

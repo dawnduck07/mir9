@@ -259,11 +259,12 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
+//타입별 검색
 $("#keyword").keydown(function(keyNum){
 	if(keyNum.keyCode == 13){
 		pagingWithdrawal();
 	}
-})
+});
 
 function pagingWithdrawal(cPage){
 	var keyword = $('input[name=keyword]').val(); // 검색어
@@ -286,7 +287,7 @@ function pagingWithdrawal(cPage){
 			$("#tbody").html('');
 			$("#tbody").html(data["searchWithdrawalListStr"]);
 			$("#countContainer").html('');
-			$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
+			$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`);
 			$("#pagebarContainer").html('');
 			$("#pagebarContainer").html(data["pagebar"]);
 		},

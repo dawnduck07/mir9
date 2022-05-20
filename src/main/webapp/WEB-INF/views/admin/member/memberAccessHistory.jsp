@@ -110,52 +110,43 @@
 <!-- /.content-wrapper -->
 
 <script>
-// 타입별 검색
-$(document).ready(function(){
-	// Enter Event
-	$("#keyword").keydown(function(keyNum){
-		var keyword = $('input[name=keyword]').val();
-		var type = $('select[name=type]').val();
-		
-		if(keyNum.keyCode == 13){			
-			const search = {
-				"type" : type,
-				"keyword" : keyword
-			};
-		
-			$.ajax({
-				type : "GET",
-				url : `${pageContext.request.contextPath}/admin/member/typeSearchByAcceessHistory.do`,
-				data : search,
-				contentType : "application/json; charset=utf-8",
-				success(data){
-					console.log("ajaxData = " + JSON.stringify(data));
-					
-					$("#tbody").html('');
-					
-					$.each(data.searchAccessHistoryList, (k, v) => {
-						$("#tbody").append(`
-								<tr>
-								<td style="width: 30px;"><input type="checkbox" class="member-is-checked" name="" value="\${v.accessHistoryNo}" data-target="\${v.accessHistoryNo}" /></td>
-								<td style="width: 60px;">\${v.accessHistoryNo}</td>
-								<td style="width: 110px;">\${v.accessHistoryId}</td>
-								<td style="width: 110px;">\${v.accessHistoryName}</td>
-								<td style="width: 110px;">\${v.accessHistoryIp}</td>
-								<td style="width: 110px;">\${v.accessHistoryStatus}</td>
-								<td style="width: 110px;">\${v.loginDate}</td>
-							</tr>
-								`);
-					});
-					$("#countContainer").html('');
-					$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchHistoryListCount"]} 건</label>`)
-					$("#pagebarContainer").html('');
-					$("#pagebarContainer").append(`\${data.pagebar}`);
-				}
-			});
-		};
-	});
+//타입별 검색
+$("#keyword").keydown(function(keyNum){
+	if(keyNum.keyCode == 13){
+		pagingAccessHistory();
+	}
 });
+
+function pagingAccessHistory(cPage){
+	var keyword = $('input[name=keyword]').val(); // 검색어
+	var type = $('select[name=type]').val(); // 검색 타입
+	var cPage;
 	
+	const search = {
+			"type" : type,
+			"keyword" : keyword,
+			"cPage" : cPage
+	};
+	
+	$.ajax({
+		type : "GET",
+		url : `${pageContext.request.contextPath}/admin/member/typeSearchByAcceessHistory.do`,
+		data : search,
+		contentType : "application/json; charset=utf-8",
+		success(data){
+			console.log("ajaxData = " + JSON.stringify(data));
+			
+			$("#tbody").html('');
+			$("#tbody").html(data["searchAccessHistoryListStr"]);
+			$("#countContainer").html('');
+			$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchHistoryListCount"]} 건</label>`)
+			$("#pagebarContainer").html('');
+			$("#pagebarContainer").html(data["pagebar"]);
+		}
+	});
+	
+}
+
 // 체크박스 전체 선택
 $(".checkbox-group").on("click", "#checkAll", ((e)=>{
 	let checked = $(e.target).is(":checked");

@@ -60,8 +60,8 @@ public class MemberServiceImpl implements MemberService {
 
 	// 타입별 검색 게시물
 	@Override
-	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param) {
-		return memberDao.selectSearchMemberList(param);
+	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param, int offset, int limit) {
+		return memberDao.selectSearchMemberList(param, offset, limit);
 	}
 
 	// 검색 게시물 수
@@ -273,8 +273,8 @@ public class MemberServiceImpl implements MemberService {
 
 	// 접속 이력 검색 게시물
 	@Override
-	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
-		return memberDao.seletSearchAccessHistory(param);
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param, int offset, int limit) {
+		return memberDao.seletSearchAccessHistory(param, offset, limit);
 	}
 
 	// 접속 이력 검색 게시물 수
