@@ -516,45 +516,36 @@ public class MemberController {
 	
 	// 탈퇴회원 타입별 검색
 	@ResponseBody
-	@PostMapping("/withdrawalTypeSearch.do")
-	public JSONObject withdrawalTypeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestBody String jsonStr){
-		ObjectMapper mapper = new ObjectMapper();
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		try {
-			map = mapper.readValue(jsonStr, 
-			        new TypeReference<HashMap<String, Object>>() {});
-		} catch (IOException e) {
-			
-		}
+	@GetMapping("/withdrawalTypeSearch.do")
+	public Map<String, Object> withdrawalTypeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestParam String type, @RequestParam String keyword, HttpServletRequest request){
 		
 		int limit = 5;
 		int offset = (cPage - 1) * limit;
 		
-		// 탈퇴회원 검색 게시물 
-		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(map, offset, limit);
-		log.debug("searchWithdrawalList = {}", searchWithdrawalList);
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
+		
+		// 탈퇴회원 검색 게시물
+		String url = request.getContextPath();
+		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(param, offset, limit);
+		String searchWithdrawalListStr = Mir9Utils.getSearchWithdrawalListStr(searchWithdrawalList, url);
 		
 		// 탈퇴회원 검색 게시물 수
-		int searchListCount = memberService.selectSearchWithdrawalListCount(map);
+		int searchListCount = memberService.selectSearchWithdrawalListCount(param);
+		log.debug("searchListCount = {}", searchListCount);
 		
 		// pagebar
-		//String url = request.getRequestURI();
-		String url = "#";
-		String pagebar = Mir9Utils.getPagebar(cPage, limit, searchListCount, url);
+		url = request.getRequestURI();
+		String pagebar = Mir9Utils.getPagebarWithdrawal(cPage, limit, searchListCount, url);
 		
-		JSONObject jsonObject = new JSONObject();
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchWithdrawalListStr", searchWithdrawalListStr);
+		resultMap.put("searchListCount", searchListCount);
+		resultMap.put("pagebar", pagebar);
 		
-		map.put("searchWithdrawalList", searchWithdrawalList);
-		map.put("searchListCount", searchListCount);
-		map.put("pagebar", pagebar);
-		
-		for( Map.Entry<String, Object> entry : map.entrySet() ) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            jsonObject.put(key, value);
-        }
-		
-		return jsonObject;
+		return resultMap;
+	
 	}
 	
 	// 회원&탈퇴회원 선택 삭제

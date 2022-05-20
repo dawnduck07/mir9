@@ -210,12 +210,6 @@ public class MemberDaoImpl implements MemberDao {
 	public int selectWithdrawalCount() {
 		return session.selectOne("member.selectWithdrawalCount");
 	}
-
-	// 탈퇴회원 검색 게시물 수
-	@Override
-	public int selectSearchWithdrawalListCount(HashMap<String, Object> map) {
-		return session.selectOne("member.selectSearchWithdrawalListCount", map);
-	}
 	
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
@@ -256,13 +250,6 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo) {
 		return session.selectOne("member.selectOneWithdrawalMemberEntity", memberNo);
-	}
-
-	// 탈퇴회원 타입별 검색
-	@Override
-	public List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit) {
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		return session.selectList("member.selectSearchWithdrawalList", map, rowBounds);
 	}
 
 	// 회원 탈퇴로 변경
@@ -338,6 +325,17 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public String selectMemberIdByNo(int memberNo) {
 		return session.selectOne("member.selectMemberIdByNo", memberNo);
+	}
+
+	@Override
+	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.selectSearchWithdrawalList", param, rowBounds);
+	}
+
+	@Override
+	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
+		return session.selectOne("member.selectSearchWithdrawalListCount", param);
 	}
 
 

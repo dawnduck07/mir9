@@ -113,9 +113,6 @@ public interface MemberDao {
 	// 탈퇴 회원 전체 게시물 수
 	int selectWithdrawalCount();
 
-	// 탈퇴회원 검색 게시물 수
-	int selectSearchWithdrawalListCount(HashMap<String, Object> map);
-
 	// 주소 번호 조회
 	List<Address> findAddressNo(int[] memberNo);
 
@@ -131,9 +128,6 @@ public interface MemberDao {
 	
 	// 탈퇴회원 상세조회
 	WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo);
-
-	// 탈퇴회원 타입별 검색
-	List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit);
 
 	// 회원 탈퇴로 변경
 	int updateMemberToWithdrawal(Map<String, Object> param);
@@ -168,5 +162,9 @@ public interface MemberDao {
 
 	// 탈퇴 회원 리스트 
 	List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit);
+
+	List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit);
+
+	int selectSearchWithdrawalListCount(Map<String, Object> param);
 
 }
