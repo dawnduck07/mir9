@@ -120,18 +120,6 @@ public interface MemberService {
 	// 주소 번호 조회
 	List<Address> findAddressNo(int[] memberNo);
 
-	
-
-	
-
-
-
-
-
-
-
-
-
 	int selectTodayRegMemberCnt();
 
 	// 탈퇴회원 조회

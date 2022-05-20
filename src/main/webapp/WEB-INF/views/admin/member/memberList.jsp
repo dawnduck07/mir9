@@ -177,8 +177,14 @@
 							</tr>
 							<tr>
 								<td class="menu">주소</td>
-								<td align="left"><input type="text" id="address_zipcode" name="addressZipcode" readonly class="form-control input-sm" style="width: 15%; background-color: #dddddd; float: left;" /> &nbsp;
-									<button type="button" onclick="callAddress()" class="btn btn-sm btn-default">주소입력</button> <br> <input type="text" id="address_main" name="addressMain" readonly class="form-control input-sm" style="margin: 5px 0; width: 100%; background-color: #dddddd;" /> <input type="text" id="address_sub" name="addressSub" placeholder="상세주소" class="form-control input-sm" style="width: 100%;" /></td>
+								<td align="left">
+									<input type="text" id="address_zipcode" name="addressZipcode" readonly class="form-control input-sm" style="width: 15%; background-color: #dddddd; float: left;" /> 
+									&nbsp;
+									<button type="button" onclick="callAddress()" class="btn btn-sm btn-default">주소입력</button> 
+									<br> 
+									<input type="text" id="address_main" name="addressMain" readonly class="form-control input-sm" style="margin: 5px 0; width: 100%; background-color: #dddddd;" /> 
+									<input type="text" id="address_sub" name="addressSub" placeholder="상세주소" class="form-control input-sm" style="width: 100%;" />
+								</td>
 							</tr>
 							<tr>
 								<td class="menu">메모</td>
