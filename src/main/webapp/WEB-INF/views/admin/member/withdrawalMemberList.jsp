@@ -49,8 +49,8 @@
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
 							<span> 
-							<input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> 
-							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+								<input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> 
+								<span class="glyphicon glyphicon-search form-control-feedback"> </span>
 							</span>
 						</div>
 					</div>
@@ -108,7 +108,6 @@
 					<button type="button" id="withdrawalDeleteBtn" class="btn btn-danger">
 						<i class="fa fa-minus-square"></i> 선택삭제
 					</button>
-
 					<div id="pagebarContainer" style="text-align: right;">
 						${pagebar}
 					</div>
@@ -143,8 +142,8 @@
 					<table class="table table-bordered">
 						<tr>
 							<td class="menu">아이디</td>
-							<td align="left"><input type="text" name="id" id="id"
-								class="form-control input-sm" style="width: 30%; float: left;" />&nbsp;
+							<td align="left">
+								<input type="text" name="id" id="id" class="form-control input-sm" style="width: 30%; float: left;" />&nbsp;
 								<button type="button" id="btn_check_id" class="btn btn-sm btn-default" onclick="onclickCheckId();">아이디 중복확인</button> 4~12자로 입력하세요.
 							</td>
 						</tr>
@@ -172,13 +171,10 @@
 									<option value="019">019</option>
 							</select> 
 							<span style="float: left;">-</span> 
-							<input type="text" name="mobile2" id="mobile2" 
-								class="form-control input-sm" style="width: 15%; float: left;"
+							<input type="text" name="mobile2" id="mobile2" class="form-control input-sm" style="width: 15%; float: left;"
 								maxlength="4" /> 
 							<span style="float: left;">-</span> 
-							<input type="text" name="mobile3" id="mobile3"
-								class="form-control input-sm" style="width: 15%; float: left;"
-								maxlength="4" /></td>
+							<input type="text" name="mobile3" id="mobile3" class="form-control input-sm" style="width: 15%; float: left;"maxlength="4" /></td>
 						</tr>
 						<tr>
 							<td class="menu">이메일</td>
@@ -264,62 +260,40 @@
 
 <script>
 //타입별 검색
-$(document).ready(function(){
-	// Enter Event
-	$("#keyword").keydown(function(keyNum){
-		
-		var keyword = $('input[name=keyword]').val(); // 검색어
-		var type = $('select[name=type]').val(); // 검색 타입
-		
-		if(keyNum.keyCode == 13){			
-			const search = {
-					"type" : type,
-					"keyword" : keyword
-			};
-			
-			var jsonStr = JSON.stringify(search);
-			
-			$.ajax({
-				type : "POST",
-				url : `${pageContext.request.contextPath}/admin/member/withdrawalTypeSearch.do`,
-				data : jsonStr,
-				contentType: "application/json; charset=utf-8",
-				headers: {
-					"${_csrf.headerName}" : "${_csrf.token}"
-				},
-				success(data){
-					
-					$("#tbody").html('');
-					
-					$.each(data.searchWithdrawalList, (k, v) => {
-						$("#tbody").append(`
-								<tr>
-								<td style="width: 30px;">
-									<input type="checkbox" class="member-is-checked" name="" data-target="\${v.memberNo}"/>
-								</td>
-								<td style="width: 110px;">\${v.id}</td>
-								<td style="width: 110px;">\${v.lastName}\${v.firstName}</td>
-								<td style="width: 110px;">\${v.phone}</td>
-								<td>\${v.addressMain} \${v.addressSub}</td>
-								<td style="width: 120px;">\${v.regDate}</td>
-								<td style="width: 50px;">
-									<span class="label label-default" style="font-size:12px;">탈퇴</span>
-								</td>
-								<td style="width: 60px;">
-									<button type="button" id="detail_\${v.memberNo}" value="\${v.memberNo}" class="btn btn-primary btn-xs detailWithdrawalBtn">상세보기</button>
-								</td>
-							</tr>
-								`);
-					});
-					$("#countContainer").html('');
-					$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
-					$("#pagebarContainer").html('').html(data.pagebar);
-				},
-				error : console.log
-			});
-		}
-	});
+$("#keyword").keydown(function(keyNum){
+	if(keyNum.keyCode == 13){
+		pagingWithdrawal();
+	}
 });
+
+function pagingWithdrawal(cPage){
+	var keyword = $('input[name=keyword]').val(); // 검색어
+	var type = $('select[name=type]').val(); // 검색 타입
+	var cPage;
+	
+	const search = {
+			"type" : type,
+			"keyword" : keyword,
+			"cPage" : cPage
+	};
+	
+	$.ajax({
+		type : "GET",
+		url : `${pageContext.request.contextPath}/admin/member/withdrawalTypeSearch.do`,
+		data : search,
+		contentType: "application/json; charset=utf-8",
+		success(data){
+			
+			$("#tbody").html('');
+			$("#tbody").html(data["searchWithdrawalListStr"]);
+			$("#countContainer").html('');
+			$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`);
+			$("#pagebarContainer").html('');
+			$("#pagebarContainer").html(data["pagebar"]);
+		},
+		error : console.log
+	});
+}
 
 // 체크박스 전체 선택
 $(".checkbox-group").on("click", "#checkAll", ((e)=>{
@@ -349,8 +323,8 @@ $(document).on("click", "#withdrawalDeleteBtn", function(){
 	
 	$(".member-is-checked").each((i, item)=>{
 		isChecked = isChecked || $(item).is(":checked");
+		// target = memberNo
         let target = $(item).data("target");
-		console.log("target = ", target); // target = memberNo
 		
 		if($(item).is(":checked")){
         	$(item).after(`<input type="hidden" name="memberNo" value="\${target}"/>`);
@@ -362,17 +336,13 @@ $(document).on("click", "#withdrawalDeleteBtn", function(){
 		return;
 	}
 	
-	console.log("클릭");
-	console.log($(document.withdrawalDeleteFrm));
     if(confirm("선택된 회원을 삭제하시겠습니까?"))
 		$(document.withdrawalDeleteFrm).submit();
 });
 
 // 상세보기 모달
 $(document).on("click", ".detailWithdrawalBtn", function(e){
-	console.log("해당 no = " + $(e.target).val());
 	var memberNo = $(e.target).val();
-	console.log("memberNo = " + memberNo);
 	
 	$("[name=id]").prop("readonly", true);
 	$("#modalRegister").modal();
@@ -472,36 +442,20 @@ function callAddress() {
 
 //상세보기 저장
 function update(){
-	console.log("상세보기 저장(update()) 작동");
 	var id = $("#id").val();
-	console.log("id = " + id);
 	var password = $("#password").val();
-	console.log("password = " + password);
 	var passwordCheck = $("#passwordCheck").val();
-	console.log("passwordCheck = " + passwordCheck);
 	var firstName = $("#firstName").val();
-	console.log("firstName = " + firstName);
 	var lastName = $("#lastName").val();
-	console.log("lastName = " + lastName);
 	var memberMemoContent = $("#memberMemoContent").val();
-	console.log("memberMemoContent = " + memberMemoContent);
 	var authority = $("#memberGradeChk option:selected").val();
-	console.log("authority = " + authority);
 	var addressNo = $("#addressNo").val();
-	console.log("addressNo = " + addressNo);
 	var addressMain = $("#address_main").val();
-	console.log("addressMain = " + addressMain);
 	var addressSub = $("#address_sub").val();
-	console.log("addressSub = " + addressSub);
 	var addressZipcode = $("#address_zipcode").val();
-	console.log("addressZipcode = " + addressZipcode);
 	var memberNo = $("#memberNo").val();
-	console.log("memberNo = " + memberNo);
 	var status = $("#status").val();
-	console.log("status = " + status);
 	var reason = $("#reason").val();
-	console.log("reason = " + reason);
-	
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	
@@ -588,7 +542,6 @@ function update(){
 	};
 	
 	const data = JSON.stringify(result);
-	console.log(data);
 	
 	$.ajax({
 		url : `${pageContext.request.contextPath}/admin/member/withdrawalMemberUpdate.do`,
@@ -599,7 +552,6 @@ function update(){
 			xhr.setRequestHeader(header, token);
 		},
 		success(data){
-			console.log(data);
 			alert("해당 회원이 수정 되었습니다.");
 			location.reload();
 		}, 
@@ -609,7 +561,5 @@ function update(){
 		$(window).unbind("beforeunload");
 }
 
-
 </script>
-
 <jsp:include page="/WEB-INF/views/admin/common/footer.jsp"></jsp:include>

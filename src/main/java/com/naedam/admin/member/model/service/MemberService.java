@@ -37,7 +37,7 @@ public interface MemberService {
 	Member selectOneMemberByMap(Map<String, Object> param);
 
 	// 타입별 검색 게시물
-	List<MemberEntity> selectSearchMemberList(Map<String, Object> param);
+	List<MemberEntity> selectSearchMemberList(Map<String, Object> param, int offset, int limit);
 
 	// 검색 게시물 수
 	int selectSearchListCount(Map<String, Object> param);
@@ -117,9 +117,6 @@ public interface MemberService {
 	// 탈퇴 회원 전체 게시물 수
 	int selectWithdrawalCount();
 
-	// 탈퇴회원 검색 게시물 수
-	int selectSearchWithdrawalListCount(HashMap<String, Object> map);
-
 	// 주소 번호 조회
 	List<Address> findAddressNo(int[] memberNo);
 
@@ -148,9 +145,6 @@ public interface MemberService {
 	// 탈퇴회원 상세조회
 	WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo);
 
-	// 탈퇴회원 타입별 검색
-	List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit);
-
 	// 회원 탈퇴로 변경
 	int updateMemberToWithdrawal(Map<String, Object> param);
 
@@ -161,7 +155,7 @@ public interface MemberService {
 	int selectAccessHistoryCount();
 
 	// 접속 이력 검색 게시물
-	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param);
+	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param, int offset, int limit);
 
 	// 접속 이력 검색 게시물 수
 	int selectSearchHistoryListCount(Map<String, Object> param);
@@ -178,9 +172,14 @@ public interface MemberService {
 
 	// 회원 아이디 조회
 	String selectMemberIdByNo(int memberNo);
-	
 
 	// 탈퇴 회원 리스트
 	List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit);
+
+	// 탈퇴 회원 전체 게시물 수
+	int selectSearchWithdrawalListCount(Map<String, Object> param);
+
+	// 탈퇴회원 검색 게시물
+	List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit);
 
 }

@@ -74,67 +74,26 @@ public class MemberController {
 	
 	// 회원 탈퇴 로직
 	@PostMapping("/memberWithdrawal.do")
-	public String memberWithdrawal(
-			@RequestParam String password,
-			@RequestParam String reason,
-			Authentication authentication,
-			RedirectAttributes redirectAttribute,
-			HttpServletRequest request) {
-		log.debug("password = {}", password);
-		log.debug("reason = {}", reason);
+	public String memberWithdrawal(@RequestParam String password, @RequestParam String reason,
+								   Authentication authentication, RedirectAttributes redirectAttribute,
+								   HttpServletRequest request) {
 		Map<String, Object> param = new HashMap<>();
 		// 회원 조회
 		Member member = (Member) authentication.getPrincipal();
 		log.debug("[principal] member = {}", member);
 		int memberNo = member.getMemberNo();
-		// 주소 조회
-		//Address address = memberService.selectOneAddress(memberNo);
-		//int addressNo = address.getAddressNo();
-		//String id = member.getId();
 		param.put("memberNo", memberNo);
 		param.put("reason", reason);
 		
-		// 주소록 조회
-		//AddressBook resultAddressBook = memberService.selectOneAddressBook(memberNo);
-		//log.debug("resultAddressBook = {}", resultAddressBook);
-		//int addressBookNo = resultAddressBook.getAddressBookNo();
-		
 		// 비밀번호 비교
 		if(passwordEncoder.matches(password, member.getPassword())){
-			
 			try {
-				// 주소록 삭제
-				//int resultDeleteAddressBook = memberService.deleteAddressBook(addressBookNo);
-				//log.debug("resultDeleteAddressBook = {}", resultDeleteAddressBook);
-
-				// 주소 삭제
-				//int resultDeleteAddress = memberService.deleteAddress(addressNo);
-				//log.debug("resultDeleteAddress = {}", resultDeleteAddress);
-
-				// 권한 삭제
-				//int resultDeleteAuthorities = memberService.deleteAuthorties(memberNo);
-				//log.debug("resultDeleteAuthorities = {}", resultDeleteAuthorities);
-				
-				// 메모 삭제
-				//int resultDeleteMemberMemo = memberService.deleteMemberMemo(memberNo);
-				//log.debug("resultDeleteMemberMemo = {}", resultDeleteMemberMemo);
-				
 				/*
 				 *  1) 회원 탈퇴로 변경 (status : Y -> N)(update)
 				 *  2) 탈퇴일 : (withdrawalDate : NOW(update)
 				 *  3) 탈퇴사유 : (reason : update)
 				 */
 				int resultMemberToWithdrawal = memberService.updateMemberToWithdrawal(param);
-				log.debug("resultMemberToWithdrawal = {}", resultMemberToWithdrawal);
-				
-				
-				//int resultMemberWithdrawal = memberService.memberWithdrawal(id);
-				//log.debug("resultMemberWithdrawal = {}", resultMemberWithdrawal);
-				
-				// 탈퇴 사유(update)
-				//int resultUpdateReason = memberService.updateReason(param);
-				//log.debug("resultUpdateReason = {}", resultUpdateReason);
-				
 				String msg = resultMemberToWithdrawal > 0 ? "회원 탈퇴가 완료되었습니다." : "회원 탈퇴에 실패했습니다.";
 				redirectAttribute.addFlashAttribute("msg", msg);
 				
@@ -153,39 +112,38 @@ public class MemberController {
 
 	@Autowired
 	private PointService pointService;
-
 	
 	// 회원 리스트
 	@RequestMapping("/list.do")
 	public String memberList(@RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request) {
 		
-		int limit = 5;
+		int limit = 10;
 		int offset = (cPage - 1) * limit;
 		
-		// 회원 리스트 전체 게시물 목록
-		List<MemberEntity> memberList = memberService.selectMemberList(offset, limit);
-		log.debug("memberList = {}", memberList);
-		model.addAttribute("memberList", memberList);
-		
-		// 전체 게시물 수
-		int totalMemberListCount = memberService.selectMemberListCount();
-		log.debug("totalMemberListCount = {}", totalMemberListCount);
-		model.addAttribute("totalMemberListCount", totalMemberListCount);
-		
-		// 명칭 가져오기
-		List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
-		log.debug("memberGradeList = {}", memberGradeList);
-		model.addAttribute("memberGradeList", memberGradeList);
-		
-		// 쿠폰 리스트
-		List<Coupon> couponList = couponService.selectCouponList();
-		model.addAttribute("couponList",couponList);
-		
-		// pagebar
-		String url = request.getRequestURI();
-		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalMemberListCount, url);
-		log.debug("pagebar = {}", pagebar);
-		model.addAttribute("pagebar", pagebar);
+		try {
+			// 회원 리스트 전체 게시물 목록
+			List<MemberEntity> memberList = memberService.selectMemberList(offset, limit);
+			model.addAttribute("memberList", memberList);
+			
+			// 전체 게시물 수
+			int totalMemberListCount = memberService.selectMemberListCount();
+			model.addAttribute("totalMemberListCount", totalMemberListCount);
+			
+			// 명칭 가져오기
+			List<MemberGrade> memberGradeList = memberService.selectMemberGradeList();
+			model.addAttribute("memberGradeList", memberGradeList);
+			
+			// 쿠폰 리스트
+			List<Coupon> couponList = couponService.selectCouponList();
+			model.addAttribute("couponList",couponList);
+			
+			// pagebar
+			String url = request.getRequestURI();
+			String pagebar = Mir9Utils.getPagebar(cPage, limit, totalMemberListCount, url);
+			model.addAttribute("pagebar", pagebar);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return "admin/member/memberList";
 	}
@@ -194,113 +152,85 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("/checkIdDuplicate.do")
 	public Map<String, Object> checkIdDuplicate(@RequestParam Map<String, Object> param) {
-		log.debug("id = {}", param);
 		Map<String, Object> map = new HashMap<>();
 		Member member = memberService.selectOneMemberByMap(param);
-		log.debug("member = {}", member);
-
 		map.put("available", member == null);
-		
 		return map;
 	}
 	
 	// 회원리스트 - 등록
 	@PostMapping("/memberInsertModalFrm.do")
-	public String memberInsertModalFrm(
-						Member member, 
-						Address address,
-						AddressBook addressBook,
-						MemberMemo memberMemo,
-						MemberGrade memberGradeNo,
-						@RequestParam String mobile1,
-						@RequestParam String mobile2,
-						@RequestParam String mobile3,
-						@RequestParam String authority,
-						RedirectAttributes redirectAttributes) {
-		log.debug("{}", "memberInsertModalFrm.do 요청!");
-		log.debug("member = {}", member);
-		log.debug("memberMemo = {}", memberMemo);
-		log.debug("memberGradeNo = {}", memberGradeNo);
-		log.debug("mobile = {}", mobile1);
-		log.debug("mobile = {}", mobile2);
-		log.debug("mobile = {}", mobile3);
-		log.debug("address = {}", address);
-		log.debug("authority = {}", authority);
+	public String memberInsertModalFrm(Member member, Address address, AddressBook addressBook, MemberMemo memberMemo, MemberGrade memberGradeNo,
+									   @RequestParam String mobile1, @RequestParam String mobile2, @RequestParam String mobile3, @RequestParam String authority, RedirectAttributes redirectAttributes) {
 		
-		String phone = mobile1 + mobile2 + mobile3;
-		
-		// 0. 비밀번호 암호화 처리
-		log.debug("{}", passwordEncoder);
-		String rawPassword = member.getPassword();
-		String encryptedPassword = passwordEncoder.encode(rawPassword);
-		member.setPassword(encryptedPassword);
-		log.debug("{} -> {}", rawPassword, encryptedPassword);
-		
-		// 1. 회원(Member) 등록
-		Member paramMember = new Member();
-		
-		paramMember.setFirstName(member.getFirstName());
-		paramMember.setLastName(member.getLastName());
-		paramMember.setEmail(member.getEmail());
-		paramMember.setPhone(phone);
-		paramMember.setStatus(member.getStatus());
-		paramMember.setId(member.getId());
-		paramMember.setPassword(member.getPassword());
-		paramMember.setProfileImg(member.getProfileImg());
-				
-		int resultRegisterMember = memberService.insertRegisterMember(paramMember);
-		log.debug("resultRegisterMember = {}", resultRegisterMember);
-		
-		// 2. 주소 입력
-		// 2.1. 주소 입력
-		int resultRegisterAddress = memberService.insertAddress(address);
-		log.debug("resultRegisterAddress = {}", resultRegisterAddress);
-		
-		// 2.2. 주소록 입력
-		AddressBook paramAddressBook = new AddressBook();
-		paramAddressBook.setAddressBookNo(addressBook.getAddressBookNo());
-		paramAddressBook.setAddressNo(address.getAddressNo());
-		paramAddressBook.setMemberNo(paramMember.getMemberNo());
-		
-		int resultRegisterAddressBook = memberService.insertAddressBook(paramAddressBook);
-		log.debug("resultRegisterAddress = {}", resultRegisterAddress);
-		
-		// 3. 메모 입력
-		// 3.1. 회원 입력 시 생성된 회원번호(MemberNo) 설정
-		MemberMemo paramMemberMemo = new MemberMemo();
-		paramMemberMemo.setMemberMemoNo(memberMemo.getMemberMemoNo());
-		paramMemberMemo.setMemberNo(paramMember.getMemberNo());
-		paramMemberMemo.setMemberMemoContent(memberMemo.getMemberMemoContent());
-		
-		int memberNo = paramMember.getMemberNo();
-		log.debug("memberNo = {}", memberNo);
-		
-		// 3.2. 메모 입력
-		int resultRegisterMemberMemo = memberService.insertMemberMemo(paramMemberMemo);
-		log.debug("resultRegisterMemberMemo = {}", resultRegisterMemberMemo);
-		
-		// 4. 등급 입력(update)
-		// 4.1. 권한 입력
-		Authorities paramAuthorities = new Authorities();
-		paramAuthorities.setAuthority(authority);
-		paramAuthorities.setMemberNo(paramMember.getMemberNo());
-		
-		int resultInsertAuthorities = memberService.insertAuthorities(paramAuthorities);
-		log.debug("resultInsertAuthorities = {}", resultInsertAuthorities);
-		
-		String msg = "";
-		
-		if(resultRegisterMember > 0 
-				&& resultRegisterAddress > 0 
-				&& resultRegisterAddressBook > 0
-				&& resultRegisterMemberMemo > 0
-				&& resultInsertAuthorities > 0) {
-			msg = "해당 회원이 등록 되었습니다.";
-		} else {
-			msg = "회원 등록이 실패했습니다.";
-		}
+		try {
+			String phone = mobile1 + mobile2 + mobile3;
+			
+			// 0. 비밀번호 암호화 처리
+			String rawPassword = member.getPassword();
+			String encryptedPassword = passwordEncoder.encode(rawPassword);
+			member.setPassword(encryptedPassword);
+			
+			// 1. 회원(Member) 등록
+			Member paramMember = new Member();
+			
+			paramMember.setFirstName(member.getFirstName());
+			paramMember.setLastName(member.getLastName());
+			paramMember.setEmail(member.getEmail());
+			paramMember.setPhone(phone);
+			paramMember.setStatus(member.getStatus());
+			paramMember.setId(member.getId());
+			paramMember.setPassword(member.getPassword());
+			paramMember.setProfileImg(member.getProfileImg());
+					
+			int resultRegisterMember = memberService.insertRegisterMember(paramMember);
+			
+			// 2. 주소 입력
+			// 2.1. 주소 입력
+			int resultRegisterAddress = memberService.insertAddress(address);
+			
+			// 2.2. 주소록 입력
+			AddressBook paramAddressBook = new AddressBook();
+			paramAddressBook.setAddressBookNo(addressBook.getAddressBookNo());
+			paramAddressBook.setAddressNo(address.getAddressNo());
+			paramAddressBook.setMemberNo(paramMember.getMemberNo());
+			
+			int resultRegisterAddressBook = memberService.insertAddressBook(paramAddressBook);
+			
+			// 3. 메모 입력
+			// 3.1. 회원 입력 시 생성된 회원번호(MemberNo) 설정
+			MemberMemo paramMemberMemo = new MemberMemo();
+			paramMemberMemo.setMemberMemoNo(memberMemo.getMemberMemoNo());
+			paramMemberMemo.setMemberNo(paramMember.getMemberNo());
+			paramMemberMemo.setMemberMemoContent(memberMemo.getMemberMemoContent());
+			
+			int memberNo = paramMember.getMemberNo();
+			
+			// 3.2. 메모 입력
+			int resultRegisterMemberMemo = memberService.insertMemberMemo(paramMemberMemo);
+			
+			// 4. 등급 입력(update)
+			// 4.1. 권한 입력
+			Authorities paramAuthorities = new Authorities();
+			paramAuthorities.setAuthority(authority);
+			paramAuthorities.setMemberNo(paramMember.getMemberNo());
+			
+			int resultInsertAuthorities = memberService.insertAuthorities(paramAuthorities);
+			
+			String msg = "";
+			
+			if(resultRegisterMember > 0 && resultRegisterAddress > 0 
+			   && resultRegisterAddressBook > 0 && resultRegisterMemberMemo > 0
+			   && resultInsertAuthorities > 0) {
+				msg = "해당 회원이 등록 되었습니다.";
+			} else {
+				msg = "회원 등록이 실패했습니다.";
+			}
 
-		redirectAttributes.addFlashAttribute("msg", msg);
+			redirectAttributes.addFlashAttribute("msg", msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return "redirect:/admin/member/list.do";
 	}
@@ -308,30 +238,31 @@ public class MemberController {
 	// 타입별 검색
 	@ResponseBody
 	@GetMapping("/typeSearch.do")
-	public Map<String, Object> typeSearch(
-			@RequestParam String type, 
-			@RequestParam String keyword,
-			HttpServletRequest request){
-		log.debug("{}", "타입별 검색 시작");
-		log.debug("type = {}", type);
-		log.debug("keyboard = {}", keyword);
+	public Map<String, Object> typeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestParam String type, @RequestParam String keyword, HttpServletRequest request){		
+		
+		int limit = 10;
+		int offset = (cPage - 1) * limit;
 		
 		Map<String, Object> param = new HashMap<>();
 		param.put("type", type);
 		param.put("keyword", keyword);
-		log.debug("param = {}", param);
 		
 		// 검색 게시물 
-		List<MemberEntity> searchMemberList = memberService.selectSearchMemberList(param);
-		log.debug("searchMemberList = {}", searchMemberList);
-
+		String url = request.getContextPath();
+		List<MemberEntity> searchMemberList = memberService.selectSearchMemberList(param, offset, limit);
+		String searchMemberListStr = Mir9Utils.getSearchMemberListStr(searchMemberList, url);
+		
 		// 검색 게시물 수
 		int searchListCount = memberService.selectSearchListCount(param);
-		log.debug("searchListCount = {}", searchListCount);
+		
+		// pagebar
+		url = request.getRequestURI();
+		String pagebar = Mir9Utils.getPagebarMember(cPage, limit, searchListCount, url);
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("searchMemberList", searchMemberList);
+		resultMap.put("searchMemberListStr", searchMemberListStr);
 		resultMap.put("searchListCount", searchListCount);
+		resultMap.put("pagebar", pagebar);
 		
 		return resultMap;
 	}
@@ -340,16 +271,16 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("/memberDetail.do/{memberNo}")
 	public Map<String, Object> memberDetail(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
-		log.debug("memberNo = {}", memberNo);
 		Map<String, Object> map = new HashMap<>();
 		
 		// 1. 상세보기 -> 회원조회
 		Member member = memberService.selectOneMemberByMemberNo(memberNo);
-		log.debug("member = {}", member);
 		model.addAttribute("member", member);
+		
 		// 휴대폰 번호 분기
 		String mobile2 = member.getPhone().substring(3, 7);
 		String mobile3 = member.getPhone().substring(7, 11);
+		
 		// 시간 양식 변경
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String regDate = dateFormat.format(member.getRegDate());
@@ -370,12 +301,10 @@ public class MemberController {
 		
 		// 2. 주소(Address) 조회
 		Address address = memberService.selectOneAddress(memberNo);
-		log.debug("address = {}", address);
 		model.addAttribute("address", address);
 		
 		// 3. 메모(MemberMemoContent) 조회
 		MemberMemo memberMemo = memberService.selectOneMemo(memberNo);
-		log.debug("memberMemo = {}", memberMemo);
 
 		if(memberMemo.getMemberMemoContent() == null) 
 			 memberMemo.setMemberMemoContent("");
@@ -384,7 +313,6 @@ public class MemberController {
 		
 		// 4. 회원 권한 조회
 		Authorities authorities = memberService.selectOneAuthorities(memberNo);
-		log.debug("authorities = {}", authorities);
 		model.addAttribute("authorities = {}", authorities);
 		
 		// 5. 회원 포인트 총계 조회
@@ -415,14 +343,10 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/memberUpdate.do")
 	public String memberUpdate(@RequestBody String data, RedirectAttributes redirectAttributes) {
-		log.debug("{}", "memberUpdate.do 요청!");
-		log.debug("param = {}", data);
-		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
 			Map<String, String> map = mapper.readValue(data, Map.class);
-			log.debug("map = {}", map);
 			
 			String phone = map.get("mobile1") + map.get("mobile2") + map.get("mobile3");
 			
@@ -439,15 +363,12 @@ public class MemberController {
 				paramMember.setPassword(map.get("password"));
 			} else {
 				// 비밀번호 암호화 처리
-				log.debug("{}", passwordEncoder);
 				String rawPassword = map.get("password"); 
 				String encryptedPassword = passwordEncoder.encode(rawPassword);
 				paramMember.setPassword(encryptedPassword);
-				log.debug("{} -> {}", rawPassword, encryptedPassword);
 			}
 
 			int resultMemberUpdate = memberService.memberUpdate(paramMember);
-			log.debug("resultMemberUpdate = {}", resultMemberUpdate);
 			
 			// 주소(Address) 수정
 			Address paramAddress = new Address();
@@ -457,7 +378,6 @@ public class MemberController {
 			paramAddress.setAddressZipcode(Integer.parseInt(map.get("addressZipcode")));
 			
 			int resultAddressUpdate = memberService.addressUpdate(paramAddress);
-			log.debug("resultAddressUpdate = {}", resultAddressUpdate);
 			
 			// 메모(MemberMemo) 수정
 			MemberMemo paramMemberMemo = new MemberMemo();
@@ -465,7 +385,6 @@ public class MemberController {
 			paramMemberMemo.setMemberMemoContent(map.get("memberMemoContent"));
 			
 			int resultMemberMemo = memberService.memberMemoUpdate(paramMemberMemo);
-			log.debug("resultMemberMemo = {}", resultMemberMemo);
 			
 			// 권한(Authorities) 수정
 			Authorities paramAuthorities = new Authorities();
@@ -473,8 +392,6 @@ public class MemberController {
 			paramAuthorities.setMemberNo(Integer.parseInt(map.get("memberNo")));
 			
 			int resultAuthorities = memberService.authoritiesUpdate(paramAuthorities);
-			log.debug("resultAuthorities = {}", resultAuthorities);
-			
 	
 		} catch(IOException e) {}
 
@@ -514,47 +431,38 @@ public class MemberController {
 		return "admin/member/withdrawalMemberList";
 	}
 	
-	// 탈퇴회원 타입별 검색
+	// 탈퇴 회원 타입별 검색
 	@ResponseBody
-	@PostMapping("/withdrawalTypeSearch.do")
-	public JSONObject withdrawalTypeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestBody String jsonStr){
-		ObjectMapper mapper = new ObjectMapper();
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		try {
-			map = mapper.readValue(jsonStr, 
-			        new TypeReference<HashMap<String, Object>>() {});
-		} catch (IOException e) {
-			
-		}
+	@GetMapping("/withdrawalTypeSearch.do")
+	public Map<String, Object> withdrawalTypeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestParam String type, @RequestParam String keyword, HttpServletRequest request){
 		
 		int limit = 5;
 		int offset = (cPage - 1) * limit;
 		
-		// 탈퇴회원 검색 게시물 
-		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(map, offset, limit);
-		log.debug("searchWithdrawalList = {}", searchWithdrawalList);
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("keyword", keyword);
 		
-		// 탈퇴회원 검색 게시물 수
-		int searchListCount = memberService.selectSearchWithdrawalListCount(map);
+		// 탈퇴회원 검색 게시물
+		String url = request.getContextPath();
+		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(param, offset, limit);
+		String searchWithdrawalListStr = Mir9Utils.getSearchWithdrawalListStr(searchWithdrawalList, url);
+		
+		// 탈퇴 회원 전체 게시물 수
+		int searchListCount = memberService.selectSearchWithdrawalListCount(param);
+		log.debug("searchListCount = {}", searchListCount);
 		
 		// pagebar
-		//String url = request.getRequestURI();
-		String url = "#";
-		String pagebar = Mir9Utils.getPagebar(cPage, limit, searchListCount, url);
+		url = request.getRequestURI();
+		String pagebar = Mir9Utils.getPagebarWithdrawal(cPage, limit, searchListCount, url);
 		
-		JSONObject jsonObject = new JSONObject();
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("searchWithdrawalListStr", searchWithdrawalListStr);
+		resultMap.put("searchListCount", searchListCount);
+		resultMap.put("pagebar", pagebar);
 		
-		map.put("searchWithdrawalList", searchWithdrawalList);
-		map.put("searchListCount", searchListCount);
-		map.put("pagebar", pagebar);
-		
-		for( Map.Entry<String, Object> entry : map.entrySet() ) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            jsonObject.put(key, value);
-        }
-		
-		return jsonObject;
+		return resultMap;
+	
 	}
 	
 	// 회원&탈퇴회원 선택 삭제
@@ -757,6 +665,7 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("/typeSearchByAcceessHistory.do")
 	public Map<String, Object> typeSearchByAcceessHistory(@RequestParam(defaultValue = "1") int cPage, @RequestParam String type, @RequestParam String keyword, HttpServletRequest request){		
+		
 		int limit = 20;
 		int offset = (cPage - 1) * limit;
 		
@@ -765,17 +674,19 @@ public class MemberController {
 		param.put("keyword", keyword);
 		
 		// 접속 이력 검색 게시물
-		List<MemberAccessHistory> searchAccessHistoryList = memberService.seletSearchAccessHistory(param);
+		String url = request.getContextPath();
+		List<MemberAccessHistory> searchAccessHistoryList = memberService.seletSearchAccessHistory(param, offset, limit);
+		String searchAccessHistoryListStr = Mir9Utils.getSearchAccessHistoryListStr(searchAccessHistoryList, url);
 		
 		// 접속 이력 검색 게시물 수
 		int searchHistoryListCount = memberService.selectSearchHistoryListCount(param);
 		
 		// pagebar
-		String url = request.getRequestURI();
-		String pagebar = Mir9Utils.getPagebar(cPage, limit, searchHistoryListCount, url);
+		url = request.getRequestURI();
+		String pagebar = Mir9Utils.getPagebarAccessHistory(cPage, limit, searchHistoryListCount, url);
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("searchAccessHistoryList", searchAccessHistoryList);
+		resultMap.put("searchAccessHistoryListStr", searchAccessHistoryListStr);
 		resultMap.put("searchHistoryListCount", searchHistoryListCount);
 		resultMap.put("pagebar", pagebar);
 		
