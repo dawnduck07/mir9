@@ -326,11 +326,13 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectWithdrawalMemberListMemberList(offset, limit);
 	}
 
+	// 탈퇴 회원 전체 게시물 수
 	@Override
 	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
 		return memberDao.selectSearchWithdrawalListCount(param);
 	}
 
+	// 탈퇴회원 검색 게시물
 	@Override
 	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit) {
 		return memberDao.selectSearchWithdrawalList(param, offset, limit);

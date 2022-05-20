@@ -514,7 +514,7 @@ public class MemberController {
 		return "admin/member/withdrawalMemberList";
 	}
 	
-	// 탈퇴회원 타입별 검색
+	// 탈퇴 회원 타입별 검색
 	@ResponseBody
 	@GetMapping("/withdrawalTypeSearch.do")
 	public Map<String, Object> withdrawalTypeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestParam String type, @RequestParam String keyword, HttpServletRequest request){
@@ -531,7 +531,7 @@ public class MemberController {
 		List<MemberEntity> searchWithdrawalList = memberService.selectSearchWithdrawalList(param, offset, limit);
 		String searchWithdrawalListStr = Mir9Utils.getSearchWithdrawalListStr(searchWithdrawalList, url);
 		
-		// 탈퇴회원 검색 게시물 수
+		// 탈퇴 회원 전체 게시물 수
 		int searchListCount = memberService.selectSearchWithdrawalListCount(param);
 		log.debug("searchListCount = {}", searchListCount);
 		

@@ -327,12 +327,14 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectMemberIdByNo", memberNo);
 	}
 
+	// 탈퇴회원 검색 게시물
 	@Override
 	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit) {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return session.selectList("member.selectSearchWithdrawalList", param, rowBounds);
 	}
 
+	// 탈퇴 회원 전체 게시물 수
 	@Override
 	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
 		return session.selectOne("member.selectSearchWithdrawalListCount", param);

@@ -163,8 +163,10 @@ public interface MemberDao {
 	// 탈퇴 회원 리스트 
 	List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit);
 
+	// 탈퇴회원 검색 게시물
 	List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit);
 
+	// 탈퇴 회원 전체 게시물 수 
 	int selectSearchWithdrawalListCount(Map<String, Object> param);
 
 }
