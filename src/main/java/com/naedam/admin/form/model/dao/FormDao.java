@@ -28,7 +28,7 @@ public interface FormDao {
 	public List<Form> formList() throws Exception;
 	
 	//폼게시물 리스트
-	public List<FormPost> formPostList(int formNo) throws Exception;
+	public List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception;
 	
 	//문항 td
 	public List<Item> formTd(int formNo) throws Exception;
@@ -47,6 +47,9 @@ public interface FormDao {
 	
 	//폼게시물 정보
 	public FormPost getFormPost(int code) throws Exception;
+	
+	//폼게시물 카운트
+	public int formPostListCount(int code) throws Exception;
 	
 	//예시 정보
 	public List<ItemChoice> getItemChoice(int itemNo) throws Exception;
@@ -68,4 +71,7 @@ public interface FormDao {
 	
 	//폼 디자인 수정
 	public int updateFormDesign(Form form) throws Exception;
+	
+	//폼 게시글 수정
+	public int updateFormPost(FormPost formPost) throws Exception;
 }

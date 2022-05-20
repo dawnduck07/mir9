@@ -20,7 +20,8 @@ public class FormPost implements Serializable {
 	
 	private int code;
 	private Form form;
-	private Item item;
+	private String itemNo;
 	private String itemData;
+	private String itemInput;
 	private String date;
 }

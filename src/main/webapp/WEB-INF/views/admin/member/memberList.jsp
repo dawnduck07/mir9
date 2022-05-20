@@ -235,7 +235,6 @@
 		</div>
 	</div>
 </div>
-</div>
 
 <!-- // 적립금 지급 폼 -->
 <div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
@@ -286,8 +285,6 @@
 		<button type="button" onclick="registerPoint();" class="btn btn-primary">지급하기</button>
 	</div>
 </div>
-</div>
-</div>
 
 <!-- // 쿠폰 지급 폼 -->
 <div class="modal fade" id="modalCoupon" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
@@ -333,11 +330,7 @@
 		<button type="button" onclick="registerCoupon();" class="btn btn-primary">지급하기</button>
 	</div>
 </div>
-</div>
-</div>
-</div>
-</div>
-</div>
+
 <!-- /.content-wrapper -->
 
 <!-- 다음 주소 API -->
