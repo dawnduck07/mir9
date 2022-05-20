@@ -212,12 +212,6 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 
-	// 탈퇴회원 검색 게시물 수
-	@Override
-	public int selectSearchWithdrawalListCount(HashMap<String, Object> map) {
-		return memberDao.selectSearchWithdrawalListCount(map);
-	}
-
 	// 주소 번호 조회
 	@Override
 	public List<Address> findAddressNo(int[] memberNo) {
@@ -257,12 +251,6 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo) {
 		return memberDao.selectOneWithdrawalMemberEntity(memberNo);
-	}
-
-	// 탈퇴회원 타입별 검색
-	@Override
-	public List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit) {
-		return memberDao.selectSearchWithdrawalList(map, offset, limit);
 	}
 
 	// 회원 탈퇴로 변경
@@ -336,6 +324,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit) {
 		return memberDao.selectWithdrawalMemberListMemberList(offset, limit);
+	}
+
+	@Override
+	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
+		return memberDao.selectSearchWithdrawalListCount(param);
+	}
+
+	@Override
+	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit) {
+		return memberDao.selectSearchWithdrawalList(param, offset, limit);
 	}
 
 	

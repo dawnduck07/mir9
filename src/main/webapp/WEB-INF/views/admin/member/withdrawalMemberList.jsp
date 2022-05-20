@@ -263,63 +263,41 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
-//타입별 검색
-$(document).ready(function(){
-	// Enter Event
-	$("#keyword").keydown(function(keyNum){
-		
-		var keyword = $('input[name=keyword]').val(); // 검색어
-		var type = $('select[name=type]').val(); // 검색 타입
-		
-		if(keyNum.keyCode == 13){			
-			const search = {
-					"type" : type,
-					"keyword" : keyword
-			};
+$("#keyword").keydown(function(keyNum){
+	if(keyNum.keyCode == 13){
+		pagingWithdrawal();
+	}
+})
+
+function pagingWithdrawal(cPage){
+	var keyword = $('input[name=keyword]').val(); // 검색어
+	var type = $('select[name=type]').val(); // 검색 타입
+	var cPage;
+	
+	const search = {
+			"type" : type,
+			"keyword" : keyword,
+			"cPage" : cPage
+	};
+	
+	$.ajax({
+		type : "GET",
+		url : `${pageContext.request.contextPath}/admin/member/withdrawalTypeSearch.do`,
+		data : search,
+		contentType: "application/json; charset=utf-8",
+		success(data){
 			
-			var jsonStr = JSON.stringify(search);
-			
-			$.ajax({
-				type : "POST",
-				url : `${pageContext.request.contextPath}/admin/member/withdrawalTypeSearch.do`,
-				data : jsonStr,
-				contentType: "application/json; charset=utf-8",
-				headers: {
-					"${_csrf.headerName}" : "${_csrf.token}"
-				},
-				success(data){
-					
-					$("#tbody").html('');
-					
-					$.each(data.searchWithdrawalList, (k, v) => {
-						$("#tbody").append(`
-								<tr>
-								<td style="width: 30px;">
-									<input type="checkbox" class="member-is-checked" name="" data-target="\${v.memberNo}"/>
-								</td>
-								<td style="width: 110px;">\${v.id}</td>
-								<td style="width: 110px;">\${v.lastName}\${v.firstName}</td>
-								<td style="width: 110px;">\${v.phone}</td>
-								<td>\${v.addressMain} \${v.addressSub}</td>
-								<td style="width: 120px;">\${v.regDate}</td>
-								<td style="width: 50px;">
-									<span class="label label-default" style="font-size:12px;">탈퇴</span>
-								</td>
-								<td style="width: 60px;">
-									<button type="button" id="detail_\${v.memberNo}" value="\${v.memberNo}" class="btn btn-primary btn-xs detailWithdrawalBtn">상세보기</button>
-								</td>
-							</tr>
-								`);
-					});
-					$("#countContainer").html('');
-					$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
-					$("#pagebarContainer").html('').html(data.pagebar);
-				},
-				error : console.log
-			});
-		}
+			$("#tbody").html('');
+			$("#tbody").html(data["searchWithdrawalListStr"]);
+			$("#countContainer").html('');
+			$("#countContainer").html(`<label style="margin-top: 5px;">총 \${data["searchListCount"]} 건</label>`)
+			$("#pagebarContainer").html('');
+			$("#pagebarContainer").html(data["pagebar"]);
+		},
+		error : console.log
 	});
-});
+}
+
 
 // 체크박스 전체 선택
 $(".checkbox-group").on("click", "#checkAll", ((e)=>{

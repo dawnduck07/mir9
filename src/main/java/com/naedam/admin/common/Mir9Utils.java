@@ -6,12 +6,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naedam.admin.member.model.vo.MemberEntity;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -258,34 +260,48 @@ public class Mir9Utils {
 
 	    return ip;
 	}
-	
-	public static String getPagebar2(int cPage, int numPerPage, int totalContents, String url) {
-		StringBuilder pagebar = new StringBuilder();
+
+	public static String getSearchWithdrawalListStr(List<MemberEntity> searchWithdrawalList, String url) {
+		StringBuilder sb = new StringBuilder();
+
+		for(MemberEntity withdrawalList : searchWithdrawalList) {
+			sb.append(
+					  "<tr>\n"
+					+ 	"<td style=\"width: 30px;\">\n"
+					+ 		"<input type=\"checkbox\" class=\"member-is-checked\" name=\"\" data-target=\"" + withdrawalList.getMemberNo() + "\"/>\n"
+					+ 	"</td>\n" 
+					+ 	"<td style=\"width: 110px;\">" + withdrawalList.getId() + "</td>\n"
+					+ 	"<td style=\"width: 110px;\">" + withdrawalList.getLastName() + withdrawalList.getFirstName() + "</td>\n"
+					+ 	"<td style=\"width: 110px;\">" + withdrawalList.getPhone() + "</td>\n"
+					+ 	"<td>" + withdrawalList.getAddressMain() + "&nbsp;" + withdrawalList.getAddressSub() + "</td>\n"
+					+ 	"<td style=\"width: 120px;\">" + withdrawalList.getRegDate() + "</td>\n"
+					+ 	"<td style=\"width: 50px;\">" 
+					+ 		"<span class=\"label label-default\" style=\"font-size:12px;\">탈퇴</span>\n" 
+					+ 	"</td>\n" 
+					+ 	"<td style=\"width: 60px;\">\n"
+					+ 		"<button type=\"button\" value=\"" + withdrawalList.getMemberNo() + "\" class=\"btn btn-primary btn-xs detailWithdrawalBtn\">상세보기</button>\n"
+					+ 	"</td>\n" 
+					+ "</tr>"	
+					);
+		}
+		return sb.toString();
+	}
+	public static String getPagebarWithdrawal(int cPage, int numPerPage, int totalContents, String url) {
+		StringBuilder pagebar = new StringBuilder();		
 		
-		// 전체페이지수
 		int totalPage = (int) Math.ceil((double) totalContents / numPerPage);
 		
-		// 페이지번호를 클릭했을 때 링크
 		String delimeter = url.contains("?") ? "&" : "?";
-		url = url + delimeter + "cPage="; // /spring/board/boardList.do?cPage=
+		url = url + delimeter + "cPage="; 		
 		
-		// 페이지바 크기 
 		int pagebarSize = 5;
-		
 		int pageStart = (cPage - 1) / pagebarSize * pagebarSize + 1;
 		int pageEnd = pageStart + pagebarSize - 1;
-		
 		int pageNo = pageStart;
 		
-		// \n : 마지막에 개행문자를 붙혀준다. --> 확인 용이.
 		pagebar.append("<nav aria-label=\"Page navigation example\">\n"
 				+ "		  <ul class=\"pagination justify-content-center\">\n");
 		
-		// 1. 이전
-		/*
-		 * ● pageNo == 1 이전 페이지가 없으므로,
-		 * ● disabled & tabindex="-1" 처리
-		 */
 		if(pageNo == 1) {
 			pagebar.append("<li class=\"page-item disabled\">\r\n"
 					+ "		      <a class=\"page-link\" href=\"#\" aria-label=\"Previous\" tabindex=\"-1\">\r\n"
@@ -294,31 +310,26 @@ public class Mir9Utils {
 					+ "		      </a>\r\n"
 					+ "		    </li>\n");
 		}
-		/*
-		 * ● 자바 스크립트 함수 호출 : href=\"javascript:paging(" + (pageNo - 1) + ") --> 이전 페이지로.
-		 */
 		else {
 			pagebar.append("<li class=\"page-item \">\r\n"
-					+ "		      <a class=\"page-link\" href=\"javascript:getPage(" + (pageNo - 1) + ")\" aria-label=\"Previous\" >\r\n"
+					+ "		      <a class=\"page-link\" href=\"javascript:pagingWithdrawal(" + (pageNo - 1) + ")\" aria-label=\"Previous\" >\r\n"
 					+ "		        <span aria-hidden=\"true\">&laquo;</span>\r\n"
 					+ "		        <span class=\"sr-only\">Previous</span>\r\n"
 					+ "		      </a>\r\n"
 					+ "		    </li>\n");
 		}
 		
-		// 2. pageNo
 		while(pageNo <= pageEnd && pageNo <= totalPage) {
 			if(pageNo == cPage) {
 				pagebar.append("<li class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + pageNo + "<span class=\"sr-only\">(current)</span></a></li>\n");
 			}
 			else {
-				pagebar.append("<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:getPage(" + pageNo + ")\">" + pageNo + "</a></li>\n");
+				pagebar.append("<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:pagingWithdrawal(" + pageNo + ")\">" + pageNo + "</a></li>\n");
 			}
 			
 			pageNo++;
 		}
 		
-		// 3. 다음
 		if(pageNo > totalPage) {
 			pagebar.append("<li class=\"page-item disabled\">\r\n"
 					+ "		      <a class=\"page-link\" href=\"#\" tabindex=\"-1\" aria-label=\"Next\">\r\n"
@@ -329,21 +340,15 @@ public class Mir9Utils {
 		}
 		else {
 			pagebar.append("<li class=\"page-item\">\r\n"
-					+ "		      <a class=\"page-link\" href=\"javascript:getPage(" + pageNo + ")\" aria-label=\"Next\">\r\n"
+					+ "		      <a class=\"page-link\" href=\"javascript:pagingWithdrawal(" + pageNo + ")\" aria-label=\"Next\">\r\n"
 					+ "		        <span aria-hidden=\"true\">&raquo;</span>\r\n"
 					+ "		        <span class=\"sr-only\">Next</span>\r\n"
 					+ "		      </a>\r\n"
 					+ "		    </li>\n");
 		}
 		
-		pagebar.append("		  </ul>\r\n"
-				+ "		</nav>\r\n"
-				+ "		<script>\r\n"
-				+ "		const getPage = (cPage) => {\r\n"
-				+ "			location.href = '" + url + "' + cPage;\r\n"
-				+ "		}\r\n"
-				+ "		</script>\n");
-		// '" + url + "' : 문자열로 처리되어야 하기때문
+		pagebar.append(" </ul>\r\n" + "</nav>\r\n" );
+		
 		return pagebar.toString();
 	}
 }

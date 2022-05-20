@@ -750,33 +750,25 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		legDate DESC
 </select>
 
-
+<!-- 회원 정보 조회 -->
 <select id="selectMemberInfo" resultType="member"> 
 	select *
-		 , CONCAT(last_name, first_name) AS name
 	from member
 	where member_no = #{code}
 </select>
 
-	<!-- 회원 정보 조회 -->
-	<select id="selectMemberInfo" resultType="member"> 
-		select *
-		from member
-		where member_no = #{code}
-	</select>
-	
-	<!-- sms 발신 번호 조회 -->
-	<select id="getPhoneById" resultType="string">
-		select phone
-		  from member
-		 where id = #{id}
-	</select>	
-	
-	<!-- 회원 아이디 조회 -->
-	<select id="selectMemberIdByNo" resultType="string">
-		select id
-		  from member
-		 where member_no = #{memberNo}
-	</select>
+<!-- sms 발신 번호 조회 -->
+<select id="getPhoneById" resultType="string">
+	select phone
+	  from member
+	 where id = #{id}
+</select>	
+
+<!-- 회원 아이디 조회 -->
+<select id="selectMemberIdByNo" resultType="string">
+	select id
+	  from member
+	 where member_no = #{memberNo}
+</select>
 
 </mapper>
