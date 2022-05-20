@@ -49,8 +49,8 @@
 					<div class="box-tools pull-right" style="margin-bottom: 5px;">
 						<div class="has-feedback">
 							<span> 
-							<input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> 
-							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+								<input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> 
+								<span class="glyphicon glyphicon-search form-control-feedback"> </span>
 							</span>
 						</div>
 					</div>

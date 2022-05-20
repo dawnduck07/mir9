@@ -74,67 +74,26 @@ public class MemberController {
 	
 	// 회원 탈퇴 로직
 	@PostMapping("/memberWithdrawal.do")
-	public String memberWithdrawal(
-			@RequestParam String password,
-			@RequestParam String reason,
-			Authentication authentication,
-			RedirectAttributes redirectAttribute,
-			HttpServletRequest request) {
-		log.debug("password = {}", password);
-		log.debug("reason = {}", reason);
+	public String memberWithdrawal(@RequestParam String password, @RequestParam String reason,
+								   Authentication authentication, RedirectAttributes redirectAttribute,
+								   HttpServletRequest request) {
 		Map<String, Object> param = new HashMap<>();
 		// 회원 조회
 		Member member = (Member) authentication.getPrincipal();
 		log.debug("[principal] member = {}", member);
 		int memberNo = member.getMemberNo();
-		// 주소 조회
-		//Address address = memberService.selectOneAddress(memberNo);
-		//int addressNo = address.getAddressNo();
-		//String id = member.getId();
 		param.put("memberNo", memberNo);
 		param.put("reason", reason);
 		
-		// 주소록 조회
-		//AddressBook resultAddressBook = memberService.selectOneAddressBook(memberNo);
-		//log.debug("resultAddressBook = {}", resultAddressBook);
-		//int addressBookNo = resultAddressBook.getAddressBookNo();
-		
 		// 비밀번호 비교
 		if(passwordEncoder.matches(password, member.getPassword())){
-			
 			try {
-				// 주소록 삭제
-				//int resultDeleteAddressBook = memberService.deleteAddressBook(addressBookNo);
-				//log.debug("resultDeleteAddressBook = {}", resultDeleteAddressBook);
-
-				// 주소 삭제
-				//int resultDeleteAddress = memberService.deleteAddress(addressNo);
-				//log.debug("resultDeleteAddress = {}", resultDeleteAddress);
-
-				// 권한 삭제
-				//int resultDeleteAuthorities = memberService.deleteAuthorties(memberNo);
-				//log.debug("resultDeleteAuthorities = {}", resultDeleteAuthorities);
-				
-				// 메모 삭제
-				//int resultDeleteMemberMemo = memberService.deleteMemberMemo(memberNo);
-				//log.debug("resultDeleteMemberMemo = {}", resultDeleteMemberMemo);
-				
 				/*
 				 *  1) 회원 탈퇴로 변경 (status : Y -> N)(update)
 				 *  2) 탈퇴일 : (withdrawalDate : NOW(update)
 				 *  3) 탈퇴사유 : (reason : update)
 				 */
 				int resultMemberToWithdrawal = memberService.updateMemberToWithdrawal(param);
-				log.debug("resultMemberToWithdrawal = {}", resultMemberToWithdrawal);
-				
-				
-				//int resultMemberWithdrawal = memberService.memberWithdrawal(id);
-				//log.debug("resultMemberWithdrawal = {}", resultMemberWithdrawal);
-				
-				// 탈퇴 사유(update)
-				//int resultUpdateReason = memberService.updateReason(param);
-				//log.debug("resultUpdateReason = {}", resultUpdateReason);
-				
 				String msg = resultMemberToWithdrawal > 0 ? "회원 탈퇴가 완료되었습니다." : "회원 탈퇴에 실패했습니다.";
 				redirectAttribute.addFlashAttribute("msg", msg);
 				
@@ -153,13 +112,12 @@ public class MemberController {
 
 	@Autowired
 	private PointService pointService;
-
 	
 	// 회원 리스트
 	@RequestMapping("/list.do")
 	public String memberList(@RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request) {
 		
-		int limit = 5;
+		int limit = 10;
 		int offset = (cPage - 1) * limit;
 		
 		try {
@@ -282,7 +240,7 @@ public class MemberController {
 	@GetMapping("/typeSearch.do")
 	public Map<String, Object> typeSearch(@RequestParam(defaultValue = "1") int cPage, @RequestParam String type, @RequestParam String keyword, HttpServletRequest request){		
 		
-		int limit = 5;
+		int limit = 10;
 		int offset = (cPage - 1) * limit;
 		
 		Map<String, Object> param = new HashMap<>();
@@ -313,16 +271,16 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("/memberDetail.do/{memberNo}")
 	public Map<String, Object> memberDetail(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
-		log.debug("memberNo = {}", memberNo);
 		Map<String, Object> map = new HashMap<>();
 		
 		// 1. 상세보기 -> 회원조회
 		Member member = memberService.selectOneMemberByMemberNo(memberNo);
-		log.debug("member = {}", member);
 		model.addAttribute("member", member);
+		
 		// 휴대폰 번호 분기
 		String mobile2 = member.getPhone().substring(3, 7);
 		String mobile3 = member.getPhone().substring(7, 11);
+		
 		// 시간 양식 변경
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String regDate = dateFormat.format(member.getRegDate());
@@ -343,12 +301,10 @@ public class MemberController {
 		
 		// 2. 주소(Address) 조회
 		Address address = memberService.selectOneAddress(memberNo);
-		log.debug("address = {}", address);
 		model.addAttribute("address", address);
 		
 		// 3. 메모(MemberMemoContent) 조회
 		MemberMemo memberMemo = memberService.selectOneMemo(memberNo);
-		log.debug("memberMemo = {}", memberMemo);
 
 		if(memberMemo.getMemberMemoContent() == null) 
 			 memberMemo.setMemberMemoContent("");
@@ -357,7 +313,6 @@ public class MemberController {
 		
 		// 4. 회원 권한 조회
 		Authorities authorities = memberService.selectOneAuthorities(memberNo);
-		log.debug("authorities = {}", authorities);
 		model.addAttribute("authorities = {}", authorities);
 		
 		// 5. 회원 포인트 총계 조회
@@ -388,14 +343,10 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/memberUpdate.do")
 	public String memberUpdate(@RequestBody String data, RedirectAttributes redirectAttributes) {
-		log.debug("{}", "memberUpdate.do 요청!");
-		log.debug("param = {}", data);
-		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
 			Map<String, String> map = mapper.readValue(data, Map.class);
-			log.debug("map = {}", map);
 			
 			String phone = map.get("mobile1") + map.get("mobile2") + map.get("mobile3");
 			
@@ -412,15 +363,12 @@ public class MemberController {
 				paramMember.setPassword(map.get("password"));
 			} else {
 				// 비밀번호 암호화 처리
-				log.debug("{}", passwordEncoder);
 				String rawPassword = map.get("password"); 
 				String encryptedPassword = passwordEncoder.encode(rawPassword);
 				paramMember.setPassword(encryptedPassword);
-				log.debug("{} -> {}", rawPassword, encryptedPassword);
 			}
 
 			int resultMemberUpdate = memberService.memberUpdate(paramMember);
-			log.debug("resultMemberUpdate = {}", resultMemberUpdate);
 			
 			// 주소(Address) 수정
 			Address paramAddress = new Address();
@@ -430,7 +378,6 @@ public class MemberController {
 			paramAddress.setAddressZipcode(Integer.parseInt(map.get("addressZipcode")));
 			
 			int resultAddressUpdate = memberService.addressUpdate(paramAddress);
-			log.debug("resultAddressUpdate = {}", resultAddressUpdate);
 			
 			// 메모(MemberMemo) 수정
 			MemberMemo paramMemberMemo = new MemberMemo();
@@ -438,7 +385,6 @@ public class MemberController {
 			paramMemberMemo.setMemberMemoContent(map.get("memberMemoContent"));
 			
 			int resultMemberMemo = memberService.memberMemoUpdate(paramMemberMemo);
-			log.debug("resultMemberMemo = {}", resultMemberMemo);
 			
 			// 권한(Authorities) 수정
 			Authorities paramAuthorities = new Authorities();
@@ -446,8 +392,6 @@ public class MemberController {
 			paramAuthorities.setMemberNo(Integer.parseInt(map.get("memberNo")));
 			
 			int resultAuthorities = memberService.authoritiesUpdate(paramAuthorities);
-			log.debug("resultAuthorities = {}", resultAuthorities);
-			
 	
 		} catch(IOException e) {}
 
