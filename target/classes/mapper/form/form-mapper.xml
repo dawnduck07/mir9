@@ -37,8 +37,9 @@
 	<resultMap type="formPost" id="formPostSelectMap">
 		<result property="code"				column="code"			jdbcType="NUMERIC"></result>
 		<result property="form.formNo"		column="form_np"		jdbcType="NUMERIC"></result>
-		<result property="item.itemNo"		column="item_no"		jdbcType="NUMERIC"></result>
+		<result property="itemNo"			column="item_no"		jdbcType="VARCHAR"></result>
 		<result property="itemData"			column="ITEM_DATA"		jdbcType="VARCHAR"></result>
+		<result property="itemInput"		column="ITEM_INPUT"		jdbcType="VARCHAR"></result>
 		<result property="date"				column="date"			jdbcType="VARCHAR"></result>		
 	</resultMap>
 	
@@ -104,11 +105,13 @@
 					   form_no,
 					   item_no,
 					   item_data,
+					   item_input,
 					   date)
 		VALUES(NEXTVAL(form_post_seq),
 			   #{form.formNo},
-			   #{item.itemNo},
+			   #{itemNo},
 			   #{itemData},
+			   #{itemInput},
 			   sysdate())
 	</insert>
 	
@@ -118,11 +121,13 @@
 					   form_no,
 					   item_no,
 					   item_data,
+					   item_input,
 					   date)
 		VALUES(NEXTVAL(form_post_seq),
 			   #{form.formNo},
-			   #{item.itemNo},
+			   #{itemNo},
 			   #{itemData},
+			   #{itemInput},
 			   #{date})
 	</insert>	
 	
@@ -140,6 +145,15 @@
 		AND i.item_no = fp.item_no 
 		AND fp.form_no = #{value}
 	</select>
+	
+	<select id="formPostListCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+	  	FROM(
+			SELECT fp.* FROM form_post fp, form f, item i 
+			WHERE fp.form_no = f.form_no 
+			AND i.item_no = fp.item_no 
+			AND fp.form_no = #{value}) countTable
+	</select>	
 	
 	<select id="getForm" parameterType="int" resultMap="formSelectMap">
 		SELECT * FROM FORM
@@ -208,6 +222,16 @@
 			HTML_DESIGN_WRITE = #{html_design_write}
 		</set>
 		WHERE form_no = #{formNo}
+	</update>
+	
+	<update id="updateFormPost" parameterType="formPost">
+		UPDATE FORM_POST
+		<set>
+			ITEM_NO = #{itemNo},
+			ITEM_DATA = #{itemData},
+			ITEM_INPUT = #{itemInput}
+		</set>
+		WHERE CODE = #{code}
 	</update>
 	
 	<delete id="deleteChoiceForm" parameterType="int">

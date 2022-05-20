@@ -60,8 +60,8 @@ public class MemberServiceImpl implements MemberService {
 
 	// 타입별 검색 게시물
 	@Override
-	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param) {
-		return memberDao.selectSearchMemberList(param);
+	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param, int offset, int limit) {
+		return memberDao.selectSearchMemberList(param, offset, limit);
 	}
 
 	// 검색 게시물 수
@@ -212,12 +212,6 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 
-	// 탈퇴회원 검색 게시물 수
-	@Override
-	public int selectSearchWithdrawalListCount(HashMap<String, Object> map) {
-		return memberDao.selectSearchWithdrawalListCount(map);
-	}
-
 	// 주소 번호 조회
 	@Override
 	public List<Address> findAddressNo(int[] memberNo) {
@@ -259,12 +253,6 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.selectOneWithdrawalMemberEntity(memberNo);
 	}
 
-	// 탈퇴회원 타입별 검색
-	@Override
-	public List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit) {
-		return memberDao.selectSearchWithdrawalList(map, offset, limit);
-	}
-
 	// 회원 탈퇴로 변경
 	@Override
 	public int updateMemberToWithdrawal(Map<String, Object> param) {
@@ -285,8 +273,8 @@ public class MemberServiceImpl implements MemberService {
 
 	// 접속 이력 검색 게시물
 	@Override
-	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
-		return memberDao.seletSearchAccessHistory(param);
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param, int offset, int limit) {
+		return memberDao.seletSearchAccessHistory(param, offset, limit);
 	}
 
 	// 접속 이력 검색 게시물 수
@@ -324,7 +312,6 @@ public class MemberServiceImpl implements MemberService {
 	public String selectMemberIdByNo(int memberNo) {
 		return memberDao.selectMemberIdByNo(memberNo);
 	}
-	
 
 	// 주소록 삭제
 	@Override
@@ -336,6 +323,18 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit) {
 		return memberDao.selectWithdrawalMemberListMemberList(offset, limit);
+	}
+
+	// 탈퇴 회원 전체 게시물 수
+	@Override
+	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
+		return memberDao.selectSearchWithdrawalListCount(param);
+	}
+
+	// 탈퇴회원 검색 게시물
+	@Override
+	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit) {
+		return memberDao.selectSearchWithdrawalList(param, offset, limit);
 	}
 
 	

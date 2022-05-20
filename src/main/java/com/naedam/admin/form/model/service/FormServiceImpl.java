@@ -70,9 +70,16 @@ public class FormServiceImpl implements FormService {
 	
 	//폼게시물 리스트
 	@Override
-	public List<FormPost> formPostList(int formNo) throws Exception {
+	public List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception {
 		// TODO Auto-generated method stub
-		return formDao.formPostList(formNo);
+		return formDao.formPostList(formNo,offset,limit);
+	}
+	
+	//폼게시물 카운트
+	@Override
+	public int formPostListCount(int code) throws Exception {
+		// TODO Auto-generated method stub
+		return formDao.formPostListCount(code);
 	}
 	
 	//폼메일 정보
@@ -159,6 +166,12 @@ public class FormServiceImpl implements FormService {
 		return formDao.updateFormDesign(form);
 	}
 
+	//폼 게시글 수정
+	@Override
+	public int updateFormPost(FormPost formPost) throws Exception {
+		// TODO Auto-generated method stub
+		return formDao.updateFormPost(formPost);
+	}
 
-	
+
 }

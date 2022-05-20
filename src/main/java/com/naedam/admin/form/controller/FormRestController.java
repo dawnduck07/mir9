@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.naedam.admin.form.model.service.FormService;
 import com.naedam.admin.form.model.vo.Form;
+import com.naedam.admin.form.model.vo.FormPost;
 import com.naedam.admin.form.model.vo.Item;
 
 @RestController
@@ -29,6 +30,13 @@ public class FormRestController {
 	public Form getForm(@RequestParam("code") int code) throws Exception{
 		System.out.println("/json/getForm 시작");
 		return formService.getForm(code);
+	}
+	
+	@PostMapping(value="json/getFormPost")
+	public FormPost getFormPost(@RequestParam("code") int code) throws Exception{
+		System.out.println("/json/getFormPost 시작");
+		FormPost formPost = formService.getFormPost(code);
+		return formPost;
 	}
 	
 	@PostMapping(value="json/getItem")

@@ -137,7 +137,7 @@ public class ExcelController {
 			fileName += "form_list" + dateCode();
 			List<String> formPostList = new ArrayList<>();
 			for(int i = 0; i < fp.size(); i++) {
-				data = fp.get(i).getItemData().split("/");
+				data = fp.get(i).getItemData().split("&");
 				if(data != null) {
 					formPostList.add(i,Arrays.toString(data));
 				}else if(data == null) {}
@@ -241,7 +241,7 @@ public class ExcelController {
     		    // 데이터 작성
     		    String formNo = request.getParameter("formNo");
     		    List<FormPost> fp = formService.formPostList(Integer.parseInt(formNo));
-    		    data = fp.get(forInt).getItemData().split("/");
+    		    data = fp.get(forInt).getItemData().split("&");
     		    for(int i = 0; i < data.length; i++) {
     		    	cell = row.createCell(i);
     		    	cell.setCellValue(data[i].toString());

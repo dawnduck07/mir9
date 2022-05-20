@@ -62,8 +62,9 @@ public class MemberDaoImpl implements MemberDao {
 
 	// 타입별 검색 게시물
 	@Override
-	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param) {
-		return session.selectList("member.selectSearchMemberList", param);
+	public List<MemberEntity> selectSearchMemberList(Map<String, Object> param, int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.selectSearchMemberList", param, rowBounds);
 	}
 
 	// 검색 게시물 수
@@ -210,12 +211,6 @@ public class MemberDaoImpl implements MemberDao {
 	public int selectWithdrawalCount() {
 		return session.selectOne("member.selectWithdrawalCount");
 	}
-
-	// 탈퇴회원 검색 게시물 수
-	@Override
-	public int selectSearchWithdrawalListCount(HashMap<String, Object> map) {
-		return session.selectOne("member.selectSearchWithdrawalListCount", map);
-	}
 	
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
@@ -258,13 +253,6 @@ public class MemberDaoImpl implements MemberDao {
 		return session.selectOne("member.selectOneWithdrawalMemberEntity", memberNo);
 	}
 
-	// 탈퇴회원 타입별 검색
-	@Override
-	public List<MemberEntity> selectSearchWithdrawalList(HashMap<String, Object> map, int offset, int limit) {
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		return session.selectList("member.selectSearchWithdrawalList", map, rowBounds);
-	}
-
 	// 회원 탈퇴로 변경
 	@Override
 	public int updateMemberToWithdrawal(Map<String, Object> param) {
@@ -286,8 +274,9 @@ public class MemberDaoImpl implements MemberDao {
 
 	// 접속 이력 검색 게시물
 	@Override
-	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param) {
-		return session.selectList("member.seletSearchAccessHistory", param);
+	public List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param, int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.seletSearchAccessHistory", param, rowBounds);
 	}
 
 	// 접속 이력 검색 게시물 수
@@ -338,6 +327,19 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public String selectMemberIdByNo(int memberNo) {
 		return session.selectOne("member.selectMemberIdByNo", memberNo);
+	}
+
+	// 탈퇴회원 검색 게시물
+	@Override
+	public List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("member.selectSearchWithdrawalList", param, rowBounds);
+	}
+
+	// 탈퇴 회원 전체 게시물 수
+	@Override
+	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
+		return session.selectOne("member.selectSearchWithdrawalListCount", param);
 	}
 
 
