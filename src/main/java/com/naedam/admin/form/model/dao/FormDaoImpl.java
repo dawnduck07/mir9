@@ -2,6 +2,7 @@ package com.naedam.admin.form.model.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -67,9 +68,17 @@ public class FormDaoImpl implements FormDao {
 	
 	//폼게시물 리스트
 	@Override
-	public List<FormPost> formPostList(int formNo) throws Exception {
+	public List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("form.formPostList", formNo);
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return session.selectList("form.formPostList", formNo, rowBounds);
+	}
+	
+	//폼게시물 카운트
+	@Override
+	public int formPostListCount(int code) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectOne("form.formPostListCount", code);
 	}
 
 	//폼메일 정보
@@ -155,6 +164,14 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.update("form.updateFormDesign", form);
 	}
+	
+	//폼 게시글 수정
+	@Override
+	public int updateFormPost(FormPost formPost) throws Exception {
+		// TODO Auto-generated method stub
+		return session.update("form.updateFormPost", formPost);
+	}
+
 
 
 }

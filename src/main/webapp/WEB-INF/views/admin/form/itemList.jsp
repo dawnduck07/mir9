@@ -263,7 +263,7 @@ pageContext.setAttribute("BR", "<br/>");
 		            
 		            <div class="modal-footer">
 		            	<!--<button type="button" onclick="" class="btn btn-danger">삭제</button>-->
-		            	<button type="button" onclick="register()" class="btn btn-primary">확인/수정</button>
+		            	<button type="button" onclick="register(${formNo})" class="btn btn-primary">확인/수정</button>
 		            </div><!-- /.modal-footer -->
 	            </form><!-- /.form_register -->
 	        </div><!-- /.modal-content -->
@@ -370,7 +370,7 @@ pageContext.setAttribute("BR", "<br/>");
 		            
 		            <div class="modal-footer">
 		            	<!--<button type="button" onclick="" class="btn btn-danger">삭제</button>-->
-		            	<button type="button" onclick="register2()" class="btn btn-primary">확인/수정</button>
+		            	<button type="button" onclick="register2(${formNo})" class="btn btn-primary">확인/수정</button>
 		            </div><!-- /.modal-footer -->
 	            </form><!-- /.form_register -->
 	        </div><!-- /.modal-content -->
@@ -638,7 +638,7 @@ pageContext.setAttribute("BR", "<br/>");
 	}
 	
 	// 문항 정보 확인 및 수정 버튼
-	function register() {
+	function register(formNo) {
 	    if(form_register.label.value == "") { 
 	    	alert("문항명이 입력되지 않았습니다."); 
 	    	form_register.label.focus(); 
@@ -646,10 +646,11 @@ pageContext.setAttribute("BR", "<br/>");
 	    }
 	    form_register.target = "iframe_process";
 	    form_register.submit();
-	    location.reload();
+	    alert("등록 되었습니다.");
+	    location.href = "/admin/form/itemList?formNo="+formNo;
 	}
 	
-	function register2() {
+	function register2(formNo) {
 	    if(form_register2.label.value == "") { 
 	    	alert("문항명이 입력되지 않았습니다."); 
 	    	form_register2.label.focus(); 
@@ -657,7 +658,8 @@ pageContext.setAttribute("BR", "<br/>");
 	    }
 	    form_register2.target = "iframe_process";
 	    form_register2.submit();
-	    location.reload();
+	    alert("수정 되었습니다.");
+	    location.href = "/admin/form/itemList?formNo="+formNo;
 	}	
 	      	
 	// 폼 HTML 디자인 리스트 및 쓰기 버튼

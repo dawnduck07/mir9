@@ -775,4 +775,5 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 	 where member_no = #{memberNo}
 </select>
 
+
 </mapper>
