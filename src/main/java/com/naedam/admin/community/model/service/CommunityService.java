@@ -16,7 +16,7 @@ import com.naedam.admin.community.model.vo.SmsSetting;
 public interface CommunityService {
 
 	// review
-	List<Review> reviewList(Map<Object, String> param); // 리뷰 목록 조회
+	List<Review> reviewList(Map<Object, Object> param); // 리뷰 목록 조회
 
 	List<Review> reviewModal(int reviewCode); // 모달 정보 조회
 
@@ -27,6 +27,8 @@ public interface CommunityService {
 	int imgDelete(String reviewCode); // 리뷰 이미지 삭제	
 	
 	int selectDelete(String reviewCode); // 선택된 리뷰 삭제
+	
+	int totalReviewCount(Map<Object, Object> param); // review 전체 목록 수
 
 	// sms
 	MsgInfo selectMsgInfo(long orderNo); // 주문 정보 조회
@@ -46,6 +48,8 @@ public interface CommunityService {
 	
 	int countBySendPhone(String phone); // sms 이용 내역 조회
 	
+	int totalSmsCount(HashMap<String, Object> param); // sms 전체 목록 수
+	
 	// email
 	List<EmailSetting> emailCheck(String templateId); // 특정 설정값 조회
 	
@@ -59,6 +63,7 @@ public interface CommunityService {
 	int modifyMail(String templateId, String title, String content); // 템플릿 수정
 	
 	int sendEmail(JsonObject json); // email 발송 
-
+	
+	int totalEmailCount(HashMap<String, Object> param); // email 전체 목록 수
 
 }

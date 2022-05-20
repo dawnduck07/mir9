@@ -47,7 +47,7 @@ public class CommunityServiceImpl implements CommunityService {
 
 	// 리뷰 조회 + 검색
 	@Override
-	public List<Review> reviewList(Map<Object, String> param) {
+	public List<Review> reviewList(Map<Object, Object> param) {
 		return communityDao.reviewList(param);
 	}
 
@@ -133,6 +133,30 @@ public class CommunityServiceImpl implements CommunityService {
 		return communityDao.selectEmailList(param);
 	}
 
+	// sms 이용 내역 조회
+	@Override
+	public int countBySendPhone(String phone) {
+		return communityDao.countBySendPhone(phone);
+	}
+	
+	// review 전체 목록 개수
+	@Override
+	public int totalReviewCount(Map<Object, Object> param) {
+		return communityDao.totalReviewCount(param);
+	}
+
+	// sms 전체 목록 개수
+	@Override
+	public int totalSmsCount(HashMap<String, Object> param) {
+		return communityDao.totalSmsCount(param);
+	}	
+	
+	// email 전체 목록 개수
+	@Override
+	public int totalEmailCount(HashMap<String, Object> param) {
+		return communityDao.totalEmailCount(param);
+	}	
+	
 	// sms 기본 문구 + 저장 문구
 	@Override
 	public HashMap<String, Object> loadSms(int category) {
@@ -552,12 +576,6 @@ public class CommunityServiceImpl implements CommunityService {
 		}
 		
 		return result;
-	}
-
-	// sms 이용 내역 조회
-	@Override
-	public int countBySendPhone(String phone) {
-		return communityDao.countBySendPhone(phone);
 	}
 
 }

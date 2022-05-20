@@ -828,8 +828,13 @@ public class MemberController {
 	}
 	
 	// 선택 회원 적립금 내역보기
+	// @RequestMapping(value="/memberPointList/{memberNo}", method= {RequestMethod.GET, RequestMethod.POST})
 	@GetMapping("/memberPointList/{memberNo}")
-	public String memberPointList(@PathVariable int memberNo, Model model) {
+	public String memberPointList(
+			@PathVariable int memberNo, 
+			@RequestParam(defaultValue="1") int cPage,
+			HttpServletRequest request,
+			Model model) {
 		
 		log.debug("memberNo = {}", memberNo);
 		

@@ -750,14 +750,6 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 		legDate DESC
 </select>
 
-
-<select id="selectMemberInfo" resultType="member"> 
-	select *
-		 , CONCAT(last_name, first_name) AS name
-	from member
-	where member_no = #{code}
-</select>
-
 	<!-- 회원 정보 조회 -->
 	<select id="selectMemberInfo" resultType="member"> 
 		select *
