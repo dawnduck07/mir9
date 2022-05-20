@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naedam.admin.member.model.vo.MemberAccessHistory;
 import com.naedam.admin.member.model.vo.MemberEntity;
 
 import lombok.extern.slf4j.Slf4j;
@@ -287,6 +288,7 @@ public class Mir9Utils {
 		}
 		return sb.toString();
 	}
+	
 	public static String getPagebarWithdrawal(int cPage, int numPerPage, int totalContents, String url) {
 		StringBuilder pagebar = new StringBuilder();		
 		
@@ -342,6 +344,190 @@ public class Mir9Utils {
 		else {
 			pagebar.append("<li class=\"page-item\">\r\n"
 					+ "		      <a class=\"page-link\" href=\"javascript:pagingWithdrawal(" + pageNo + ")\" aria-label=\"Next\">\r\n"
+					+ "		        <span aria-hidden=\"true\">&raquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Next</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		
+		pagebar.append(" </ul>\r\n" + "</nav>\r\n" );
+		
+		return pagebar.toString();
+	}
+
+	
+	public static String getSearchAccessHistoryListStr(List<MemberAccessHistory> searchAccessHistoryList, String url) {
+		StringBuilder sb = new StringBuilder();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		for(MemberAccessHistory accessHistoryList : searchAccessHistoryList) {
+			sb.append(
+					  "<tr>\n"
+					+ 	"<td style=\"width: 30px;\"><input type=\"checkbox\" class=\"member-is-checked\" name=\"\" value=\"" + accessHistoryList.getAccessHistoryNo() + "\" data-target=\"" + accessHistoryList.getAccessHistoryNo() + "\" /></td>\n"
+					+ 	"<td style=\"width: 60px;\">" + accessHistoryList.getAccessHistoryNo() + "</td>\n"
+					+ 	"<td style=\"width: 110px;\">" + accessHistoryList.getAccessHistoryId() + "</td>\n"
+					+ 	"<td style=\"width: 110px;\">" + accessHistoryList.getAccessHistoryName() + "</td>\n"
+					+ 	"<td style=\"width: 110px;\">" + accessHistoryList.getAccessHistoryIp() + "</td>\n"
+					+ 	"<td style=\"width: 110px;\">" + accessHistoryList.getAccessHistoryStatus() + "</td>\n"
+					+ 	"<td style=\"width: 110px;\">" + sdf.format(accessHistoryList.getLoginDate()) + "</td>\n"
+					+ "</tr>"
+					);
+		}
+		return sb.toString();
+	}
+	
+	public static String getPagebarAccessHistory(int cPage, int numPerPage, int totalContents, String url) {
+		StringBuilder pagebar = new StringBuilder();		
+		
+		int totalPage = (int) Math.ceil((double) totalContents / numPerPage);
+		
+		String delimeter = url.contains("?") ? "&" : "?";
+		url = url + delimeter + "cPage="; 		
+		
+		int pagebarSize = 5;
+		int pageStart = (cPage - 1) / pagebarSize * pagebarSize + 1;
+		int pageEnd = pageStart + pagebarSize - 1;
+		int pageNo = pageStart;
+		
+		pagebar.append("<nav aria-label=\"Page navigation example\">\n"
+				+ "		  <ul class=\"pagination justify-content-center\">\n");
+		
+		if(pageNo == 1) {
+			pagebar.append("<li class=\"page-item disabled\">\r\n"
+					+ "		      <a class=\"page-link\" href=\"#\" aria-label=\"Previous\" tabindex=\"-1\">\r\n"
+					+ "		        <span aria-hidden=\"true\">&laquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Previous</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		else {
+			pagebar.append("<li class=\"page-item \">\r\n"
+					+ "		      <a class=\"page-link\" href=\"javascript:pagingAccessHistory(" + (pageNo - 1) + ")\" aria-label=\"Previous\" >\r\n"
+					+ "		        <span aria-hidden=\"true\">&laquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Previous</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		
+		while(pageNo <= pageEnd && pageNo <= totalPage) {
+			if(pageNo == cPage) {
+				pagebar.append("<li class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + pageNo + "<span class=\"sr-only\">(current)</span></a></li>\n");
+			}
+			else {
+				pagebar.append("<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:pagingAccessHistory(" + pageNo + ")\">" + pageNo + "</a></li>\n");
+			}
+			
+			pageNo++;
+		}
+		
+		if(pageNo > totalPage) {
+			pagebar.append("<li class=\"page-item disabled\">\r\n"
+					+ "		      <a class=\"page-link\" href=\"#\" tabindex=\"-1\" aria-label=\"Next\">\r\n"
+					+ "		        <span aria-hidden=\"true\">&raquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Next</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		else {
+			pagebar.append("<li class=\"page-item\">\r\n"
+					+ "		      <a class=\"page-link\" href=\"javascript:pagingAccessHistory(" + pageNo + ")\" aria-label=\"Next\">\r\n"
+					+ "		        <span aria-hidden=\"true\">&raquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Next</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		
+		pagebar.append(" </ul>\r\n" + "</nav>\r\n" );
+		
+		return pagebar.toString();
+	}
+
+	public static String getSearchMemberListStr(List<MemberEntity> searchMemberList, String url) {
+		StringBuilder sb = new StringBuilder();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		for(MemberEntity memberList : searchMemberList) {
+			sb.append(
+					  "<tr>\n"
+					+	"<td style=\"width: 30px;\">\n"
+					+ 		"<input type=\"checkbox\" class=\"member-is-checked\" name=\"\" data-target=\"" + memberList.getMemberNo() + "\"/>\n"
+					+ 	"</td>\n"
+					+	"<td style=\"width: 110px;\">" + memberList.getId() + "</td>\n"	
+					+	"<td style=\"width: 110px;\">" + memberList.getLastName() + memberList.getFirstName() + "</td>\n"
+					+	"<td style=\"width: 110px;\">" + memberList.getPhone() + "</td>\n"
+					+	"<td>" + memberList.getAddressMain() + "&nbsp;" + memberList.getAddressSub() + "</td>\n"
+					+	"<td style=\"width: 100px;\">" + memberList.getPointAmount() + "</td>\n"
+					+	"<td style=\"width: 120px;\">" + sdf.format(memberList.getRegDate()) + "</td>\n"
+					+	"<td>\n"
+					+		"<span class=\"label label-success\" style=\"font-size: 12px;\">보임</span>\n"
+					+	"</td>\n"
+					+	"<td>\n"
+					+		"<button type=\"button\" id=\"btn_" + memberList.getMemberNo() + "\" value=\"" + memberList.getMemberNo() + "\" class=\"btn btn-primary btn-xs\">내역보기</button>\n"
+					+	"</td>\n"	
+					+	"<td>\n"
+					+		"<button type=\"button\" value=\"" + memberList.getMemberNo() + "\" class=\"btn btn-primary btn-xs detailBtn\">상세보기</button>\n"
+					+	"</td>\n"	
+					+ "</tr>"
+					);
+		}
+		return sb.toString();
+	}
+	
+	public static String getPagebarMember(int cPage, int numPerPage, int totalContents, String url) {
+		StringBuilder pagebar = new StringBuilder();		
+		
+		int totalPage = (int) Math.ceil((double) totalContents / numPerPage);
+		
+		String delimeter = url.contains("?") ? "&" : "?";
+		url = url + delimeter + "cPage="; 		
+		
+		int pagebarSize = 5;
+		int pageStart = (cPage - 1) / pagebarSize * pagebarSize + 1;
+		int pageEnd = pageStart + pagebarSize - 1;
+		int pageNo = pageStart;
+		
+		pagebar.append("<nav aria-label=\"Page navigation example\">\n"
+				+ "		  <ul class=\"pagination justify-content-center\">\n");
+		
+		if(pageNo == 1) {
+			pagebar.append("<li class=\"page-item disabled\">\r\n"
+					+ "		      <a class=\"page-link\" href=\"#\" aria-label=\"Previous\" tabindex=\"-1\">\r\n"
+					+ "		        <span aria-hidden=\"true\">&laquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Previous</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		else {
+			pagebar.append("<li class=\"page-item \">\r\n"
+					+ "		      <a class=\"page-link\" href=\"javascript:pagingMember(" + (pageNo - 1) + ")\" aria-label=\"Previous\" >\r\n"
+					+ "		        <span aria-hidden=\"true\">&laquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Previous</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		
+		while(pageNo <= pageEnd && pageNo <= totalPage) {
+			if(pageNo == cPage) {
+				pagebar.append("<li class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + pageNo + "<span class=\"sr-only\">(current)</span></a></li>\n");
+			}
+			else {
+				pagebar.append("<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:pagingMember(" + pageNo + ")\">" + pageNo + "</a></li>\n");
+			}
+			
+			pageNo++;
+		}
+		
+		if(pageNo > totalPage) {
+			pagebar.append("<li class=\"page-item disabled\">\r\n"
+					+ "		      <a class=\"page-link\" href=\"#\" tabindex=\"-1\" aria-label=\"Next\">\r\n"
+					+ "		        <span aria-hidden=\"true\">&raquo;</span>\r\n"
+					+ "		        <span class=\"sr-only\">Next</span>\r\n"
+					+ "		      </a>\r\n"
+					+ "		    </li>\n");
+		}
+		else {
+			pagebar.append("<li class=\"page-item\">\r\n"
+					+ "		      <a class=\"page-link\" href=\"javascript:pagingMember(" + pageNo + ")\" aria-label=\"Next\">\r\n"
 					+ "		        <span aria-hidden=\"true\">&raquo;</span>\r\n"
 					+ "		        <span class=\"sr-only\">Next</span>\r\n"
 					+ "		      </a>\r\n"
