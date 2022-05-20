@@ -312,7 +312,6 @@ public class MemberServiceImpl implements MemberService {
 	public String selectMemberIdByNo(int memberNo) {
 		return memberDao.selectMemberIdByNo(memberNo);
 	}
-	
 
 	// 주소록 삭제
 	@Override

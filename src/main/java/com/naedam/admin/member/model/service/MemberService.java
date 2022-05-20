@@ -117,7 +117,6 @@ public interface MemberService {
 	// 탈퇴 회원 전체 게시물 수
 	int selectWithdrawalCount();
 
-
 	// 주소 번호 조회
 	List<Address> findAddressNo(int[] memberNo);
 

@@ -18,17 +18,15 @@
 
 <!-- content-wrapper -->
 <div class="content-wrapper">
-	<!-- <link href="https://mir9.co.kr/resource/css/s9jss_single.css" rel="stylesheet"> -->
-
 	<section class="content-header">
-	<h1>
-		회원 관리 <small>member list</small>
-	</h1>
-	<ol class="breadcrumb">
-		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-		<li>회원 관리</li>
-		<li class="active">회원 리스트</li>
-	</ol>
+		<h1>
+			회원 관리 <small>member list</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li>회원 관리</li>
+			<li class="active">회원 리스트</li>
+		</ol>
 	</section>
 
 	<section class="content">
@@ -37,21 +35,23 @@
 			<div class="box">
 				<div class="box-body">
 					<label id="countContainer" style="margin-top: 5px;">총 ${totalMemberListCount} 건</label>
-					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-						<div class="has-feedback">
-							<span> <input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> <span class="glyphicon glyphicon-search form-control-feedback"> </span>
-							</span>
+						<div class="box-tools pull-right" style="margin-bottom: 5px;">
+							<div class="has-feedback">
+								<span> 
+									<input type="text" name="keyword" id="keyword" value="" class="form-control input-sm" placeholder="검색" /> 
+									<span class="glyphicon glyphicon-search form-control-feedback"> </span>
+								</span>
+							</div>
 						</div>
-					</div>
-					<div class="box-tools pull-right" style="margin-bottom: 5px;">
-						<div class="has-feedback">
-							<select name="type" class="form-control input-sm">
-								<option value="last_name">성</option>
-								<option value="first_name">이름</option>
-								<option value="phone">휴대폰</option>
-							</select>
+						<div class="box-tools pull-right" style="margin-bottom: 5px;">
+							<div class="has-feedback">
+								<select name="type" class="form-control input-sm">
+									<option value="last_name">성</option>
+									<option value="first_name">이름</option>
+									<option value="phone">휴대폰</option>
+								</select>
+							</div>
 						</div>
-					</div>
 					<form:form id="memberDeleteFrm" name="memberDeleteFrm" action="${pageContext.request.contextPath}/admin/member/memberDelete.do" method="POST">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<table class="table table-bordered table-hover checkbox-group">
@@ -94,16 +94,12 @@
 						</table>
 					</form:form>
 					<br>
-
 					<button type="button" id="memberListDeleteBtn" class="btn btn-danger">
 						<i class="fa fa-minus-square"></i> 선택삭제
 					</button>
-
-					<!-- 등록 -->
 					<button type="button" onclick="onclickInsert();" class="btn btn-primary">
 						<i class="fa fa-plus-square"></i> 등록
 					</button>
-
 					<button type="button" onclick="onclickPoint();" class="btn btn-warning" style="margin-left: 20px;">
 						<i class="fa fa-won"></i> 적립금 지급
 					</button>
@@ -123,17 +119,13 @@
 				<!-- /.box-body -->
 			</div>
 			<!-- /.box -->
-
 		</div>
 		<!-- /.col-xs-12 -->
 	</div>
-	<!-- /.row --> </section>
+	<!-- /.row --> 
+	</section>
 
-	<form name="formID" method="post" onsubmit="return false;" action="?tpf=admin/member/process">
-		<input type="hidden" name="mode" value="checkId"> <input type="hidden" name="id">
-	</form>
-
-	<!-- // 회원 등록 폼 -->
+	<!-- 회원 등록 폼 -->
 	<div class="modal fade" id="modalRegister" tabindex="-2" ; role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 620px;">
 			<div class="modal-content">
@@ -144,7 +136,6 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">회원 등록</h4>
 					</div>
-
 					<div class="modal-body">
 						<h4>
 							<p class="text-light-blue">
@@ -199,19 +190,22 @@
 							</tr>
 							<tr id="display_level">
 								<td class="menu">등급 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
-								<td><select name="authority" id="memberGradeChk" class="form-control input-sm" style="width: 120px;">
+								<td>
+									<select name="authority" id="memberGradeChk" class="form-control input-sm" style="width: 120px;">
 										<c:forEach items="${memberGradeList}" var="memberGrade">
 											<option value="${memberGrade.authority}">${memberGrade.memberGradeName}</option>
 										</c:forEach>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr id="display_status">
-								<td class="menu">상태 <span class="text-light-blue"><i class="fa fa-check"></i></span>
-								</td>
-								<td><select name="status" id="status" class="form-control input-sm" style="width: 120px;">
+								<td class="menu">상태 <span class="text-light-blue"><i class="fa fa-check"></i></span></td>
+								<td>
+									<select name="status" id="status" class="form-control input-sm" style="width: 120px;">
 										<option value="Y">정상</option>
 										<option value="N">대기</option>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 							<tr id="display_last_login_date">
 								<td class="menu">최근 접속일</td>
@@ -232,7 +226,6 @@
 		<div class="modal-footer">
 			<button type="button" id="btnRegister" onclick="register()" class="btn btn-primary">저장</button>
 			<button type="button" id="btnUpdate" onclick="update()" class="btn btn-primary">저장</button>
-			<!--<button type="button" onclick="deleteMember();" class="btn btn-danger">삭제</button>-->
 		</div>
 	</div>
 </div>
@@ -250,7 +243,6 @@
 					<h4 class="modal-title" id="myModalLabelPortfolio">적립금 지급</h4>
 				</div>
 				<div class="modal-body">
-
 					<table class="table table-bordered">
 						<tr>
 							<td class="menu">대상 회원</td>
@@ -283,7 +275,6 @@
 					</table>
 			</form>
 		</div>
-
 	</div>
 	<div class="modal-footer">
 		<button type="button" onclick="registerPoint();" class="btn btn-primary">지급하기</button>
@@ -304,7 +295,6 @@
 					<h4 class="modal-title" id="myModalLabelPortfolio">쿠폰 지급</h4>
 				</div>
 				<div class="modal-body">
-
 					<table class="table table-bordered">
 						<tr>
 							<td class="menu">대상 회원</td>
@@ -343,33 +333,27 @@
 </div>
 </div>
 <!-- /.content-wrapper -->
+
 <!-- 다음 주소 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
-function downloadExcel() {  // Excel 다운로드
-	console.log("엑셀 다운로드");
+//Excel 다운로드
+function downloadExcel() {  
     form_download.target = 'iframe_process';
     form_download.search_data.value = $('#form_search').serialize();
     form_download.submit();
 }
 
-
 // 내역보기
 $("button[id^='btn_']").on('click', function(e){
-	//console.log(e.target);
-	//console.log("해당 no = " + $(e.target).val());
 	var memberNo = $(e.target).val();
-	console.log("memberNo = " + memberNo);
-	
 	location.href = `${pageContext.request.contextPath}/admin/member/memberPointList/\${memberNo}`; // \$ : "EL이 아니라 JavaScript $다."를 표시
 });
 
 // 상세보기 모달
 $(document).on("click", ".detailBtn", function(e){
-	console.log("해당 no = " + $(e.target).val());
 	var memberNo = $(e.target).val();
-	console.log("memberNo = " + memberNo);
 	
 	$("[name=id]").prop("readonly", true);
 	$("#btnCheckId").hide();
@@ -390,7 +374,6 @@ $(document).on("click", ".detailBtn", function(e){
 		contentType : "application/json; charset=utf-8",
 		method : "GET",
 		success : function(res) {
-			console.log("ajaxData = " + JSON.stringify(res));
 			var member = res.member;
 			var mobile2 = res.mobile2;
 			var mobile3 = res.mobile3;
@@ -401,8 +384,6 @@ $(document).on("click", ".detailBtn", function(e){
 			var loginDate = res.loginDate;
 			var updateDate = res.updateDate;
 			var totalPoint = res.totalPoint + res.pointName;
-			
-			console.log(res.pointName)
 			
 			$("[name=memberNo]").val(member.memberNo);
 			$("[name=id]").val(member.id);
@@ -428,34 +409,24 @@ $(document).on("click", ".detailBtn", function(e){
 	});
 });
 
-
 // 상세보기 저장
 function update(){
-	console.log("상세보기 저장(update()) 작동");
 	var id = $("#id").val();
 	var password = $("#password").val();
 	var passwordCheck = $("#passwordCheck").val();
 	var firstName = $("#firstName").val();
 	var lastName = $("#lastName").val();
 	var memberMemoContent = $("#memberMemoContent").val();
-	console.log("memberMemoContent = " + memberMemoContent);
 	var authority = $("#memberGradeChk option:selected").val();
-	console.log("authority = " + authority);
 	var addressNo = $("#addressNo").val();
 	var addressMain = $("#address_main").val();
 	var addressSub = $("#address_sub").val();
 	var addressZipcode = $("#address_zipcode").val();
-	console.log("addressMain = " + addressMain);
-	console.log("addressSub = " + addressSub);
-	console.log("addressZipcode = " + addressZipcode);
 	var memberNo = $("#memberNo").val();
-	console.log("memberNo = " + memberNo);
 	var status = $("#status").val();
-	console.log("status = " + status);
-	
+
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
-	
 	
 	if(password != ''){
 		// 비밀번호 유효성 검사
@@ -538,7 +509,6 @@ function update(){
 	};
 	
 	const data = JSON.stringify(result);
-	console.log(data);
 	
 	$.ajax({
 		url : `${pageContext.request.contextPath}/admin/member/memberUpdate.do`,
@@ -549,7 +519,6 @@ function update(){
 			xhr.setRequestHeader(header, token);
 		},
 		success(data){
-			console.log(data);
 			alert("해당 회원이 수정 되었습니다.");
 			location.reload();
 		}, 
@@ -557,16 +526,11 @@ function update(){
 	});
 	
 		$(window).unbind("beforeunload");
-
 }
 
-$('#findList').each(function(){
-	console.log("들어오냐");
-});
 
 // 등록 모달창
 function onclickInsert(){
-	console.log("등록(onclickInsert())");
 	$("#modalRegister").modal();
 	$('[name=id]').prop('readonly', false);
 	$("#btnCheckId").show();
@@ -581,9 +545,7 @@ function onclickInsert(){
 
 // 아이디 중복 확인
 function onclickCheckId(){
-	console.log("아이디 중복 확인");
 	var id = $("#id").val();
-	console.log("id = " + id);
 	
 	// id 값을 입력하지 않았을 때
 	if(id == ""){
@@ -612,7 +574,6 @@ function onclickCheckId(){
 		contentType : "application/json ; charset=utf-8",
 		method : "GET",
 		success(data) {
-			console.log(data);
 			const {available} = data;
 			if(available){
 				alert("사용 가능한 아이디 입니다.");
@@ -629,18 +590,14 @@ function onclickCheckId(){
 };
 
 
-
 // 저장
 function register(){
-	
-	console.log("저장(register()) 실행");
 	var id = $("#id").val();
 	var password = $("#password").val();
 	var passwordCheck = $("#passwordCheck").val();
 	var firstName = $("#firstName").val();
 	var lastName = $("#lastName").val();
 	var authority = $("#memberGradeChk option:selected").val();
-	console.log("authority = " + authority);
 	
 	// 아이디 공란 확인
 	if(id == ''){
@@ -683,6 +640,7 @@ function register(){
 		$("#firstName").focus();
 		return false;
 	}
+
 	// 성 공란 확인
 	if(lastName == ''){
 		alert("성이 입력되지 않았습니다.");
@@ -806,7 +764,6 @@ function pagingMember(cPage){
 // 체크박스 전체 선택
 $(".checkbox-group").on("click", "#checkAll", ((e)=>{
 	let checked = $(e.target).is(":checked");
-	console.log("전체 선택 : " + checked);
 	
 	if(checked){
 		$(e.target).parents(".checkbox-group").find("input:checkbox").prop("checked", true);
@@ -819,13 +776,9 @@ $(".checkbox-group").on("click", "#checkAll", ((e)=>{
 // 체크박스 개별 선택
 $(document).on("click", ".member-is-checked", function(){
 	let isChecked = true;
-	console.log("개별 선택 : " + isChecked);
 	
 	$(".member-is-checked").each((i, item)=>{
 		isChecked = isChecked && $(item).is(":checked");
-		console.log("i : " + i);
-		//console.log(item);
-		console.log($(item).is(":checked"));
 	});
 	
 	$("#checkAll").prop("checked", isChecked);	
@@ -838,8 +791,8 @@ $(document).on("click", "#memberListDeleteBtn", function(){
 	
 	$(".member-is-checked").each((i, item)=>{
 		isChecked = isChecked || $(item).is(":checked");
+		// target = memberNo
 		let target = $(item).data("target");
-		console.log("target = ", target); // target = memberNo
 		
 		if($(item).is(":checked")){
 			$(item).after(`<input type="hidden" name="memberNo" value="\${target}"/>`);
@@ -851,8 +804,6 @@ $(document).on("click", "#memberListDeleteBtn", function(){
 		return;
 	}
 	
-	console.log("클릭");
-	console.log($(document.memberDeleteFrm));
 	if(confirm("선택된 회원을 삭제하시겠습니까?"))
 		$(document.memberDeleteFrm).submit();
 });
