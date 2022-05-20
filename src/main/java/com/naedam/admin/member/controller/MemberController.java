@@ -806,11 +806,6 @@ public class MemberController {
 		return "admin/member/memberPointList";
 	}
 
-	// 회원가입
-	@GetMapping("/memberEnroll.do")
-	public String memberEnroll() {
-		return "admin/member/memberEnroll";
-	}
 	
 	// 회원가입
 	@PostMapping("/memberEnroll.do")
