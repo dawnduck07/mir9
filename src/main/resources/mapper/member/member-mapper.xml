@@ -139,6 +139,8 @@
 			${type} LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 	</where>
+	ORDER BY
+		m.member_no DESC
 </select>
 
 <!-- 검색 게시물 수 -->
@@ -493,7 +495,7 @@
 </select>
 
 
-<!-- 탈퇴 회원 타입별 검색 -->
+<!-- 탈퇴회원 검색 게시물 -->
 <select id="selectSearchWithdrawalList" resultType="memberEntity">
 	SELECT
 		m.member_no,
@@ -517,6 +519,8 @@
 			${type} LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 	</where>
+	ORDER BY
+		m.member_no DESC
 </select>
 
 

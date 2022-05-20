@@ -263,7 +263,8 @@ public class Mir9Utils {
 
 	public static String getSearchWithdrawalListStr(List<MemberEntity> searchWithdrawalList, String url) {
 		StringBuilder sb = new StringBuilder();
-
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
 		for(MemberEntity withdrawalList : searchWithdrawalList) {
 			sb.append(
 					  "<tr>\n"
@@ -274,7 +275,7 @@ public class Mir9Utils {
 					+ 	"<td style=\"width: 110px;\">" + withdrawalList.getLastName() + withdrawalList.getFirstName() + "</td>\n"
 					+ 	"<td style=\"width: 110px;\">" + withdrawalList.getPhone() + "</td>\n"
 					+ 	"<td>" + withdrawalList.getAddressMain() + "&nbsp;" + withdrawalList.getAddressSub() + "</td>\n"
-					+ 	"<td style=\"width: 120px;\">" + withdrawalList.getRegDate() + "</td>\n"
+					+ 	"<td style=\"width: 120px;\">" + sdf.format(withdrawalList.getRegDate()) + "</td>\n"
 					+ 	"<td style=\"width: 50px;\">" 
 					+ 		"<span class=\"label label-default\" style=\"font-size:12px;\">탈퇴</span>\n" 
 					+ 	"</td>\n" 
