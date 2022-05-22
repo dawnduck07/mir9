@@ -121,10 +121,6 @@ public interface MemberService {
 	// 주소 번호 조회
 	List<Address> findAddressNo(int[] memberNo);
 
-<<<<<<< HEAD
-	// 
-=======
->>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 	int selectTodayRegMemberCnt();
 
 	// 탈퇴회원 조회
