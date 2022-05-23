@@ -41,9 +41,9 @@
 						<div class="box-tools pull-right" style="margin-bottom: 5px;">
 							<div class="has-feedback">
 								<select name="field" id="field" class="form-control input-sm">
-									<option value="id" ${param.field == 'b.id' ? 'selected' : ''}>아이디</option>
+									<option value="id" ${param.field == 'id' ? 'selected' : ''}>아이디</option>
 									<option value="CONCAT(last_name, first_name)" ${param.field == 'member_name' ? 'selected' : ''}>이름</option>
-									<option value="point_title" ${param.field == 'a.point_title' ? 'selected' : ''}>사용내역</option>
+									<option value="point_title" ${param.field == 'point_title' ? 'selected' : ''}>사용내역</option>
 								</select>
 							</div>
 						</div>
@@ -62,14 +62,19 @@
 									<td>적립금 사용내역</td>
 									<td style="width: 100px;">사용 적립금</td>
 									<td style="width: 140px;">일시</td>
-									<!-- <td style="width:60px;">명령</td>                 -->
+									<!-- <td style="width:60px;">명령</td> -->
 								</tr>
 							</thead>
 							<tbody>
 								<c:choose>
-									<c:when test="${empty mPointList}">
+									<c:when test="${empty mPointList and empty param.keyword}">
 										<tr>
 											<td colspan="8">조회 결과가 없습니다.</td> 
+										</tr>
+									</c:when>
+									<c:when test="${empty mPointList and !empty param.keyword}">
+										<tr>
+											<td colspan="8">검색된 적립금 내역이 없습니다.</td> 
 										</tr>
 									</c:when>
 									<c:otherwise>

@@ -74,7 +74,8 @@ public class CommunityController {
 		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalEmailCount, emailUri);
 
 		model.addAttribute("emailList", emailList);
-		model.addAttribute("total", totalEmailCount);		
+		model.addAttribute("total", totalEmailCount);	
+		model.addAttribute("param", param);
 		model.addAttribute("pagebar", pagebar);
 		
 		return "admin/community/emailList";
@@ -147,6 +148,7 @@ public class CommunityController {
 		
 		model.addAttribute("smsList", smsList);
 		model.addAttribute("total", totalSmsCount);
+		model.addAttribute("param", param);
 		model.addAttribute("pagebar", pagebar);
 
 		return "admin/community/smsList";
@@ -184,6 +186,7 @@ public class CommunityController {
 		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalReviewCount, reviewUri);
 		
 		model.addAttribute("reviewList", reviewList);
+		model.addAttribute("param", param);
 		model.addAttribute("pagebar", pagebar);
 		
 		return "admin/community/review";
