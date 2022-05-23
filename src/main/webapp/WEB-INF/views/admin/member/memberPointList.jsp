@@ -42,7 +42,7 @@
 							<div class="has-feedback">
 								<select name="field" id="field" class="form-control input-sm">
 									<option value="id" ${param.field == 'id' ? 'selected' : ''}>아이디</option>
-									<option value="CONCAT(last_name, first_name)" ${param.field == 'member_name' ? 'selected' : ''}>이름</option>
+									<option value="CONCAT(last_name, first_name)" ${param.field == 'CONCAT(last_name, first_name)' ? 'selected' : ''}>이름</option>
 									<option value="point_title" ${param.field == 'point_title' ? 'selected' : ''}>사용내역</option>
 								</select>
 							</div>
