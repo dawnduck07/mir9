@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public class UserDaoImpl implements UserDao {
 
 	@Autowired SqlSession session;
+	
 }
