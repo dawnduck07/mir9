@@ -20,6 +20,7 @@ public class UserController {
 	// 회원가입
 	@GetMapping("/userEnroll.do")
 	public String userEnroll() {
+		log.debug("{}, userEnroll.do");
 		return "user/user/userEnroll";
 	}
 	
