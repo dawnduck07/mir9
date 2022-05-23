@@ -35,7 +35,7 @@ public class CommunityController {
 	@GetMapping("/email")
 	public String commEmail(Model model) {
 		
-		// sms 설정 정보 조회
+		// mail 설정 정보 조회
 		List<EmailSetting> emailSetting = communityService.selectEmailSetting();
 		model.addAttribute("emailSetting", emailSetting);
 		
