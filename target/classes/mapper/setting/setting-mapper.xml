@@ -182,7 +182,7 @@
   	</update>
   	
   	<update id="updateSeoSetting">
-  		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}
+  		update seo_setting set robots = #{robots}, rich_snippet = #{richSnippet}, naver_file_name = #{naverFileName}, google_file_name = #{googleFileName}, bing_file_name = #{bingFileName}
   	</update>
   	
   	<update id="updateKgIniSetting">
@@ -231,26 +231,6 @@
   		</set>
   		WHERE SNS_SETTING_NO = 1
   	</update>
-
-  	<insert id="insertStaffEnroll">
-  		INSERT INTO
-  			staff(staff_no,
-  				  staff_name,
-  				  staff_position,
-  				  staff_career,
-  				  staff_profile)
-  		VALUES(NEXTVAL(seq_staff_no),
-  			   #{staffName},
-  			   #{staffPosition},
-  			   #{staffCareer},
-  			   #{staffProfile})   
-  		<selectKey keyProperty="staffNo" resultType="_int" order="AFTER">
-  			SELECT
-				LASTVAL(seq_staff_no)
-			FROM
-				DUAL
-  		</selectKey>
-  	</insert>
   	
   	<insert id="insertAttachmentEnroll">
   		INSERT INTO
@@ -266,27 +246,71 @@
   			   NOW())
   	</insert>
 
- 
  	<insert id="insertStaff">
- 		INSERT INTO
- 			staff(staff_no,
- 				  staff_name,
- 				  staff_position,
- 				  staff_career,
- 				  staff_profile,
- 				  img_url,
- 				  reg_Date)	
- 		VALUES(NEXTVAL(seq_staff_no),
- 			   #{staffName},
- 			   #{staffPosition},
- 			   #{staffCareer},
- 			   #{staffProfile},
- 			   #{imgUrl},
- 			   sysdate())
+ 		 <selectKey keyProperty="rowOrder" resultType="_int" order="BEFORE">
+ 		 	SELECT
+				IFNULL(MAX(row_order), 0) + 1
+			FROM 
+				staff
+ 		 </selectKey>
+ 		 
+ 		INSERT INTO 
+			staff(
+				staff_no, 
+				staff_name, 
+				staff_position, 
+				staff_career, 
+				staff_profile, 
+				img_url, 
+				reg_date, 
+				row_order
+				)
+		VALUES(
+				NEXTVAL(seq_staff_no), 
+				#{staffName}, 
+				#{staffPosition}, 
+				#{staffCareer}, 
+				#{staffProfile}, 
+				#{imgUrl}, 
+				SYSDATE(),
+				#{rowOrder}
+				)
  	</insert>
  	
  	<select id="selectStaffList" resultType="staff">
  		SELECT
+			ROW_NUMBER() OVER(ORDER BY s.row_order DESC) AS `rowNum`,
+			staff_no,
+			img_url,
+			staff_name,
+			staff_position,
+			reg_date,
+			row_order
+		FROM
+			staff s
+		ORDER BY
+			s.row_order DESC
+ 	</select>
+ 	
+ 	<select id="totalStaffListCount" resultType="_int">
+ 		SELECT
+ 			COUNT(*)
+ 		FROM
+ 			staff
+ 	</select>
+ 	
+ 	<delete id="deleteStaff">
+ 		DELETE FROM
+ 			staff
+ 		<where>
+			<foreach collection="array" item="item" open="(" close=")" separator="or">
+		 		staff_no = #{item}
+		 	</foreach>
+		</where>
+	</delete>
+	
+	<select id="searchStaffList" resultType="staff">
+		SELECT
 			ROW_NUMBER() OVER(ORDER BY s.reg_date DESC) AS `rowNum`,
 			staff_no,
 			img_url,
@@ -295,8 +319,155 @@
 			reg_date
 		FROM
 			staff s
-		ORDER BY
-			s.reg_date DESC
- 	</select>
+		<where>	
+			<if test="keyword != null and keyword != ''" >
+				${type} LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectsearchStaffListCount" resultType="_int">
+		SELECT
+			COUNT(*)
+		FROM
+			staff
+		<where>	
+			<if test="keyword != null and keyword != ''" >
+				${type} LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
 
+	<select id="selectOneStaffByStaffNo" resultType="staff">
+		SELECT
+			staff_no,
+			staff_name,
+			staff_position,
+			staff_career,
+			staff_profile,
+			img_url,
+			reg_date
+		FROM
+			staff
+		WHERE
+			staff_no = #{staffNo}
+	</select>
+	
+	<select id="selectOneimgUrlBystaffNo" resultType="staff">
+		SELECT
+			img_url
+		FROM
+			staff
+		WHERE
+			staff_no = #{staffNo}
+	</select>
+	
+	<update id="deleteStaffImg">
+		UPDATE
+			staff
+		SET
+			img_url = NULL 
+		WHERE
+			staff_no = #{staffNo} 
+	</update>
+	
+	<update id="updateStaff">
+		UPDATE
+			staff
+		SET
+			staff_name = #{staffName},
+			staff_position = #{staffPosition},
+			staff_career = #{staffCareer},
+			staff_profile = #{staffProfile},
+			img_url = #{imgUrl}
+		WHERE
+			staff_no = #{staffNo}
+	</update>
+	
+	<update id="updateChangeOrderUp" parameterType="staff">
+		<selectKey keyProperty="rowOrder" resultType="_int" order="BEFORE">
+			SELECT
+				row_order
+			FROM
+				staff
+			WHERE
+				staff_no = #{staffNo}
+		</selectKey>
+		UPDATE
+			staff
+		SET
+			row_order =
+				CASE
+					WHEN row_order = (SELECT MAX(row_order) FROM staff AS row_order)
+					THEN row_order
+					ELSE (SELECT MIN(row_order) FROM staff WHERE row_order > (SELECT row_order FROM staff WHERE staff_no = #{staffNo}))
+				END
+		WHERE
+			staff_no = #{staffNo}
+	</update>
+	<update id="updateChangeOrderUpNext">
+		UPDATE
+			staff
+		SET
+			row_order = #{rowOrder}
+		WHERE
+			row_order = (SELECT MIN(row_order) FROM staff WHERE row_order > #{rowOrder})
+			AND
+			NOT staff_no IN (#{staffNo})
+	</update>
+	
+	<update id="updateChangeOrderDown" parameterType="staff">
+		<selectKey keyProperty="rowOrder" resultType="_int" order="BEFORE">
+			SELECT
+				row_order
+			FROM
+				staff
+			WHERE
+				staff_no = #{staffNo}
+		</selectKey>
+		UPDATE
+			staff
+		SET
+			row_order =
+				CASE
+					WHEN row_order = (SELECT MIN(row_order) FROM staff AS row_order)
+					THEN row_order
+					ELSE (SELECT MAX(row_order) FROM staff WHERE (SELECT row_order FROM staff WHERE staff_no = #{staffNo}) > row_order) 
+				END
+		WHERE
+			staff_no = #{staffNo}
+	</update>
+	<update id="updateChangeOrderDownNext">
+		UPDATE
+			staff
+		SET
+			row_order = #{rowOrder}
+		WHERE
+			row_order = (SELECT MAX(row_order) FROM staff WHERE #{rowOrder} > row_order)
+			AND
+			NOT staff_no IN (#{staffNo})
+	</update>
+	
+	<select id="selectMaxOrder" resultType="staff">
+		SELECT 
+			MAX(row_order) AS `row_order`
+		FROM	
+			staff
+	</select>
+	<select id="selectMinOrder" resultType="staff">
+		SELECT 
+			MIN(row_order) AS `row_order`
+		FROM	
+			staff
+	</select>
+	
+	<select id="selectInputRowOrder" resultType="staff">
+		SELECT
+			row_order
+		FROM
+			staff
+		WHERE
+			staff_no = #{staffNo}
+	</select>
+	
 </mapper>

@@ -28,4 +28,10 @@
   	delete from coupon where coupon_no = #{couponNo}
   </delete>
   
+  <select id="getCoupon" resultType="coupon">
+  	select *
+  	  from coupon 
+  	 where coupon_no = #{code}
+  </select>
+  
 </mapper>
