@@ -1,9 +1,7 @@
 package com.naedam.admin.member.model.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.naedam.admin.member.model.vo.Address;
 import com.naedam.admin.member.model.vo.AddressBook;
@@ -75,9 +73,12 @@ public interface MemberService {
 	// 회원등급 조회
 	Authorities selectOneAuthorities(int memberNo);
 	
-	// 회원 적립금 관리
+	// 회원 적립금 목록
 	List<MemberPoint> selectMemberPointListByParam(Map<String, Object> param);
 
+	// 회원 적립금 목록 수
+	int totalPointCount(Map<String, Object> param);
+	
 	// 회원정보 수정(상세보기)
 	int memberUpdate(Member paramMember);
 

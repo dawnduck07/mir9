@@ -1,6 +1,5 @@
 package com.naedam.admin.member.model.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -145,11 +144,16 @@ public class MemberDaoImpl implements MemberDao {
 		return session.update("member.memberUpdate", paramMember);
 	}
 	
-	// 회원 적립금 관리
+	// 회원 적립금 목록
 	@Override
 	public List<MemberPoint> selectMemberPointListByParam(Map<String, Object> param) {
-		// TODO Auto-generated method stub
 		return session.selectList("member.selectMemberPointListByParam", param);
+	}
+	
+	// 회원 적립금 목록 수
+	@Override
+	public int totalPointCount(Map<String, Object> param) {
+		return session.selectOne("member.totalPointCount", param);
 	}
 
 	// 회원주소 수정(상세보기)
@@ -208,7 +212,6 @@ public class MemberDaoImpl implements MemberDao {
 	
 	@Override
 	public int selectMemberTotalPoint(int memberNo) {
-		// TODO Auto-generated method stub
 		return session.selectOne("member.selectMemberTotalPoint", memberNo);
 	}
 
@@ -220,7 +223,6 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	public int selectTodayRegMemberCnt() {
-		// TODO Auto-generated method stub
 		return session.selectOne("member.selectTodayRegMemberCnt");
 	}
 
@@ -335,8 +337,5 @@ public class MemberDaoImpl implements MemberDao {
 	public int selectSearchWithdrawalListCount(Map<String, Object> param) {
 		return session.selectOne("member.selectSearchWithdrawalListCount", param);
 	}
-
-
-
 	
 }

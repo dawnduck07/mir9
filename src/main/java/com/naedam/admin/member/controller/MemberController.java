@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -739,69 +740,85 @@ public class MemberController {
 	}
 	
 	// 선택 회원 적립금 내역보기
-	// @RequestMapping(value="/memberPointList/{memberNo}", method= {RequestMethod.GET, RequestMethod.POST})
-	@GetMapping("/memberPointList/{memberNo}")
-	public String memberPointList(
-			@PathVariable int memberNo, 
+	@RequestMapping(value="/memberPointList/{memberNo}", method= {RequestMethod.GET, RequestMethod.POST})
+	public String selectedMemberPointList(
+			@PathVariable int memberNo,
 			@RequestParam(defaultValue="1") int cPage,
+			@RequestParam(required=false) String field,
+			@RequestParam(required=false) String keyword,
 			HttpServletRequest request,
 			Model model) {
 		
-		log.debug("memberNo = {}", memberNo);
+		int limit = 15;
+		int startRow = (cPage - 1) * limit + 1;
+		int endRow = startRow + limit -1;
 		
-		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> param = new HashMap<>();
 		param.put("memberNo", memberNo);
+		param.put("field", field);
+		param.put("keyword", keyword);
+		param.put("startRow", startRow);
+		param.put("endRow", endRow);
+		
+		// 전체 회원 포인트 목록 조회
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
-		
-		model.addAttribute("mPointList",mPointList);
-		
-		return "admin/member/memberPointList";
-	}
-	
-	@PostMapping("/memberPointList/{memberNo}")
-	@SuppressWarnings("rawtypes")
-	public String memberPointList(@PathVariable int memberNo, HttpServletRequest request, Model model) {
-		Map<String, Object> param = new HashMap<String, Object>();
-		Enumeration params = request.getParameterNames();
-		while (params.hasMoreElements()){
-		    String name = (String)params.nextElement();
-		    param.put(name, request.getParameter(name));
+		int totalPointCount = memberService.totalPointCount(param);
+		String pointAllUri = "";
+		if((field == null || field == "") 
+				&& (keyword == null || keyword == "")) {
+			pointAllUri = request.getRequestURI();
 		}
-		param.put("memberNo", memberNo);
-		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
-		
-		model.addAttribute("mPointList",mPointList);
+		else {
+			pointAllUri = request.getRequestURI() + "?field=" + field + "&keyword=" + keyword;
+		}
+		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalPointCount, pointAllUri);
+
+		model.addAttribute("mPointList", mPointList);
+		model.addAttribute("total", totalPointCount);
 		model.addAttribute("param",param);
+		model.addAttribute("pagebar", pagebar);
 		
 		return "admin/member/memberPointList";
 	}
-	
+
 	// 전체 회원 적립금 관리
-	@GetMapping("/point")
-	public String memberPointList(Model model, @RequestParam(defaultValue = "0") int mNo) {
-		Map<String, Object> param = new HashMap<String, Object>();
+	@RequestMapping(value="/point", method= {RequestMethod.GET, RequestMethod.POST})
+	public String memberPointList(
+			@RequestParam(defaultValue="0") int mNo,
+			@RequestParam(defaultValue="1") int cPage,
+			@RequestParam(required=false) String field,
+			@RequestParam(required=false) String keyword,
+			HttpServletRequest request,
+			Model model) {
+		
+		int limit = 15;
+		int startRow = (cPage - 1) * limit + 1;
+		int endRow = startRow + limit -1;
+		
+		Map<String, Object> param = new HashMap<>();
 		param.put("memberNo", mNo);
+		param.put("field", field);
+		param.put("keyword", keyword);
+		param.put("startRow", startRow);
+		param.put("endRow", endRow);
+		
+		// 전체 회원 포인트 목록 조회
 		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
-		
-		model.addAttribute("mPointList",mPointList);
-		
-		return "admin/member/memberPointList";
-	}
-	
-	@PostMapping("/point")
-	@SuppressWarnings("rawtypes")
-	public String memberPointList(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int mNo) {
-		Map<String, Object> param = new HashMap<String, Object>();
-		Enumeration params = request.getParameterNames();
-		while (params.hasMoreElements()){
-		    String name = (String)params.nextElement();
-		    param.put(name, request.getParameter(name));
+		int totalPointCount = memberService.totalPointCount(param);
+		String pointAllUri = "";
+		if((field == null || field == "") 
+				&& (keyword == null || keyword == "")) {
+			pointAllUri = request.getRequestURI();
 		}
-		param.put("memberNo", mNo);
-		List<MemberPoint> mPointList = memberService.selectMemberPointListByParam(param);
-		
-		model.addAttribute("mPointList",mPointList);
+		else {
+			pointAllUri = request.getRequestURI() + "?field=" + field + "&keyword=" + keyword;
+		}
+		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalPointCount, pointAllUri);
+
+		model.addAttribute("mPointList", mPointList);
+		model.addAttribute("total", totalPointCount);
 		model.addAttribute("param",param);
+		model.addAttribute("pagebar", pagebar);
 		
 		return "admin/member/memberPointList";
 	}
