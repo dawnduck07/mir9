@@ -25,7 +25,7 @@
 	        <div class="col-xs-12">
 	            <div class="box">
 	                <div class="box-body">
-	                    <label style="margin-top:5px;">총 4 건</label>
+	                    <label style="margin-top:5px;">총 5 건</label>
 	
 	                    <table class="table table-bordered table-hover">
 		                    <form name="form_list" method="post" action="?tpf=admin/form/process"></form>
@@ -449,7 +449,7 @@
         $("[id^='displayFile']").css("display","none");
     }	
     // 수정 버튼
-    function onclickInsert() {
+    function onclickInsert2() {
         $("#modalContent2").modal({backdrop:"static", show:true});
         formRegister2.reset();
         formRegister2.mode.value = "insertReply";
