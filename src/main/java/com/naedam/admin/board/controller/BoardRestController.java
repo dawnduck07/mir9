@@ -183,8 +183,6 @@ public class BoardRestController {
 		return adminMenu;
 	}
 	
-	
-	
 	@GetMapping(value="json/downloadImg/{fileNo}")
 	public void download(HttpServletResponse response, @PathVariable("fileNo") int fileNo) throws Exception {
 		System.out.println("json/downloadImg 시작");
