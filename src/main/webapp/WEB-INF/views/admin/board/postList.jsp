@@ -96,15 +96,6 @@
 			}
 		})
 		
-		$("i[name='up']").on("click", function(){
-			var a = $("input:radio[name='order_code']:checked").val();
-			alert(a)
-			var b = $("input:radio[name='order_code']");
-			alert(b)
-			for(var i = 0; i < b.length; i++){
-				alert(b[i])
-			}
-		})
 		
 	})
 	
@@ -135,7 +126,68 @@
 		$("input[name='cPage']").val(cPage)
 		$("form[name='searchForm']").attr("method" , "POST").attr("action" , "/admin/board/postList?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
+	
+	function fncDown(){
+		var boardAsc = $("input:radio[name='order_code']:checked").val();
+		var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+		var boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
+		var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
+		var boardNo = $("input[name='boardNo']").val();
+		if(boardAsc == boardDownAsc){
+			boardIndex++;
+			boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
+			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
+		}else{
+			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
+		}
+  		$.ajax({
+		 	 url : "/admin/board/updateDownAsc?${_csrf.parameterName}=${_csrf.token}",
+ 		  	 type : "POST",
+	  	 	 data : { 
+	  	 		boardAsc,
+	  	 		boardDownAsc,
+	  	 		postNo,
+	  	 		downPostNo
+	  	 	 },
+		 	 success : function(result){
+		 		
+		  	 }
+ 		});		
+  		alert("완료")
+  		location.href = "/admin/board/postList?boardNo="+boardNo;
+	}
+	
+	function fncUp(){
+		var boardAsc = $("input:radio[name='order_code']:checked").val();
+		var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+		var boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
+		var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
+		var boardNo = $("input[name='boardNo']").val();
+		if(boardAsc == boardUpAsc){
+			boardIndex--;
+			boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
+			var upPostNo = $("tr").eq(boardIndex-1).children().find("input[name='originNo']").val();
+		}else{
+			var upPostNo = $("tr").eq(boardIndex-1).children().find("input[name='originNo']").val();
+		}
 
+  		$.ajax({
+		 	 url : "/admin/board/updateUpAsc?${_csrf.parameterName}=${_csrf.token}",
+ 		  	 type : "POST",
+	  	 	 data : { 
+	  	 		boardAsc,
+	  	 		boardUpAsc,
+	  	 		postNo,
+	  	 		upPostNo
+	  	 	 },
+		 	 success : function(result){
+		 		
+		  	 }
+ 		});		
+  		
+  		alert("완료")
+  		location.href = "/admin/board/postList?boardNo="+boardNo;
+	}	
 	
 </script>
 
@@ -212,8 +264,8 @@
                         <td style="width:80px;">조회수</td>
                         <c:if test="${board2.option.optionOrder eq 'y'}">
                         <td style="width:60px;">
-                            <i onclick="fncUp();" name="up" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
-                            <i onclick="changeOrder('up','board_data','?tpf=admin/board/list_order&amp;board_code=1',1,'','',);" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
+                            <i onclick="fncDown();" name="up" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
+                            <i onclick="fncUp();" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
                         </td>
                         </c:if>
                         <td style="width:100px;">다운로드수</td>
@@ -244,7 +296,8 @@
                         <td>${post.postViewCount}</td>
                			<c:if test="${board2.option.optionOrder eq 'y'}">
                				<td>
-               					<input type="radio" name="order_code" value="${post.postOriginNo}" chack="">
+               					<input type="radio" name="order_code" value="${post.postAsc}" chack="">
+               					<input type="hidden" name="originNo" value="${post.postOriginNo}">
                				</td>
                			</c:if>                        
                         <td>${post.postDownloadCount}</td>
@@ -298,7 +351,8 @@
                    			<td>${post.postViewCount}</td>
                    			<c:if test="${board2.option.optionOrder eq 'y'}">
                    			<td>
-                   				<input type="radio" name="order_code" value="${post.postOriginNo}" chack="">
+                   				<input type="radio" name="order_code" value="${post.postAsc}" chack="">
+                   				<input type="hidden" name="originNo" value="${post.postOriginNo}">
                    			</td>
                    			</c:if>
                    			<td>${post.postDownloadCount}</td>
