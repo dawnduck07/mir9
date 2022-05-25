@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.naedam.admin.member.model.vo.Member;
+import com.naedam.admin.member.model.vo.Address;
+import com.naedam.admin.member.model.vo.AddressBook;
+import com.naedam.admin.member.model.vo.Authorities;
 import com.naedam.user.user.model.service.UserService;
 import com.naedam.user.user.model.vo.User;
 
@@ -51,16 +53,52 @@ public class UserController {
 	
 	// 회원가입
 	@PostMapping("/userEnroll.do")
-	public String userEnroll(User user, RedirectAttributes redirectAttribute) {
+	public String userEnroll(User user, RedirectAttributes redirectAttribute,
+							 @RequestParam String mobile1, 
+							 @RequestParam String mobile2,
+							 @RequestParam String mobile3,
+							 Address address,
+							 AddressBook addressBook) {
+		log.debug("{}", "userEnroll.do 실행!");
+		log.debug("user = {}", user);
 		
 		try {
+			String phone = mobile1 + mobile2 + mobile3;
+			
 			// 0. 비밀번호 암호화 처리
 			String rawPassword = user.getPassword();
+			log.debug("rawPassword = {}", rawPassword);
 			String encryptedPassword = passwordEncoder.encode(rawPassword);
+			log.debug("encryptedPassword = {}", encryptedPassword);
 			user.setPassword(encryptedPassword);
 			
-			// 1.업무로직
-			int result = userService.insertUser(user);
+			// 1. 회원 등록
+			User paramUser = new User();
+			paramUser.setFirstName(user.getFirstName());
+			paramUser.setLastName(user.getLastName());
+			paramUser.setEmail(user.getEmail());
+			paramUser.setPhone(phone);
+			paramUser.setId(user.getId());
+			paramUser.setPassword(user.getPassword());
+			int resultUserEnroll = userService.UserEnroll(paramUser);
+			log.debug("resultUserEnroll = {}", resultUserEnroll);
+			
+			// 2. 주소 등록
+			int resultUserAddressEnroll = userService.userAddressEnroll(address);
+			log.debug("resultUserAddressEnroll = {}", resultUserAddressEnroll);
+			
+			// 3. 주소록 등록
+			AddressBook paramAddressBook = new AddressBook();
+			paramAddressBook.setAddressNo(address.getAddressNo());
+			paramAddressBook.setMemberNo(user.getMemberNo());
+			int resultUserAddressBookEnroll = userService.userAddressBookEnroll(paramAddressBook);
+			log.debug("resultUserAddressBookEnroll = {}", resultUserAddressBookEnroll);
+			
+			// 4. 권한 등록
+			Authorities paramAuthorities = new Authorities();
+			paramAuthorities.setMemberNo(paramUser.getMemberNo());
+			int resultUserAuthorities = userService.userAuthoritiesEnroll(paramAuthorities);
+			log.debug("resultUserAuthorities = {}", resultUserAuthorities);
 			
 			// 2.리다이렉트 & 사용자피드백 전달
 			redirectAttribute.addFlashAttribute("msg", "회원가입 성공!");

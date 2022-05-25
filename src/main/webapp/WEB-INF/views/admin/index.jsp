@@ -123,7 +123,7 @@
 					</form:form>
 				</div>
 
-				<p class="text-muted text-center" style="padding: 10px;"> ©NAEDAM </p>
+				<p class="text-muted text-center" style="padding: 10px;">&copy; NAEDAM </p>
 			</div>
 		</div>
 	</div>
