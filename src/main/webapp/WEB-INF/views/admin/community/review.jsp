@@ -41,6 +41,7 @@
 	                    <div class="box-tools pull-right" style="margin-bottom:5px;">
 	                        <div class="has-feedback">
 	                            <select name="field" class="form-control input-sm" style="float:left; width:130px;">
+	                            	<option value="total" ${param.field == 'total' ? 'selected' : ''}>전체</option>  
 	      							<option value="a.writer" ${param.field == 'a.writer' ? 'selected' : ''}>작성자</option>      
 	      							<option value="productName" ${param.field == 'productName' ? 'selected' : ''}>제품명</option>                            
 	      						</select>
