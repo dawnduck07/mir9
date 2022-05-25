@@ -28,4 +28,22 @@
 		#{password},
 		NULL)
 </insert>
+
+<select id="selectOneMemberByEmail" resultType="user">
+	SELECT
+		*
+	FROM
+		member
+	WHERE
+		email = #{email}
+</select>
+
+<select id="selectOneUserById" resultType="user">
+	SELECT
+		*
+	FROM
+		member
+	WHERE
+		id = #{id}
+</select>
 </mapper>

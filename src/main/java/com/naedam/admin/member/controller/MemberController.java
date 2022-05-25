@@ -153,6 +153,7 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("/checkIdDuplicate.do")
 	public Map<String, Object> checkIdDuplicate(@RequestParam Map<String, Object> param) {
+		log.debug("{}", "checkIdDuplicate.do 실행");
 		Map<String, Object> map = new HashMap<>();
 		Member member = memberService.selectOneMemberByMap(param);
 		map.put("available", member == null);

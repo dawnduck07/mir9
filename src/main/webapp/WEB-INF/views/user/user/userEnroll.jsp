@@ -6,47 +6,46 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>회원가입</title>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-	  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	  crossorigin="anonymous">
-
-<style>
-body {
-	min-height: 100vh;
-	background: -webkit-gradient(linear, left bottom, right top, from(#92b5db),
-		to(#1d466c));
-	background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-	background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-	background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
-	background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
-}
-
-.input-form {
-	max-width: 680px;
-	margin-top: 80px;
-	padding: 32px;
-	background: #fff;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	-webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-	box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
-}
-
-label {
-	font-weight: bold;
-}
-</style>
+	<meta charset="utf-8">
+	<title>회원가입</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	
+	<style>
+	body {
+		min-height: 100vh;
+		background: -webkit-gradient(linear, left bottom, right top, from(#92b5db),
+			to(#1d466c));
+		background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+		background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+		background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+		background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
+	}
+	
+	.input-form {
+		max-width: 680px;
+		margin-top: 80px;
+		padding: 32px;
+		background: #fff;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
+		-webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+		-moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+		box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+	}
+	
+	label {
+		font-weight: bold;
+	}
+	</style>
 </head>
 
 <body>
@@ -94,14 +93,14 @@ label {
 					<div class="mb-3">
 						<label for="id">주소</label> 
 						<div class="row col mb-2">
-							<input type="text" class="form-control col-3" id="addressZipcode" placeholder="" readonly>&nbsp;&nbsp;
-							<button type="button" class="btn btn-outline-secondary">주소입력</button>	
+							<input type="text" class="form-control col-3" id="address_zipcode" name="addressZipcode" placeholder="" readonly>&nbsp;&nbsp;
+							<button type="button" onclick="callAddress()" class="btn btn-outline-secondary">주소입력</button>	
 						</div>
 						<div class="mb-2">
-							<input type="text" class="form-control" id="addressMain" placeholder="" readonly>
+							<input type="text" class="form-control" id="address_main" name="addressMain" placeholder="" readonly>
 						</div>
 						<div class="mb-2">
-							<input type="text" class="form-control" id="addressSub" placeholder="상세주소">
+							<input type="text" class="form-control" id="address_sub" name="addressSub" placeholder="상세주소">
 						</div>
 						<div class="invalid-feedback">주소를 입력해주세요.</div>
 					</div>
@@ -110,7 +109,7 @@ label {
 						<label for="email">이메일</label> 
 						<div class="row col">
 							<input type="email" class="form-control col-6" id="email" placeholder="" required>&nbsp;&nbsp;
-							<button type="button" class="btn btn-outline-secondary">중복확인</button>						
+							<button type="button" onclick="onclickCheckEmail()" class="btn btn-outline-secondary">중복확인</button>						
 						</div>
 						<div class="invalid-feedback">이메일을 입력해주세요.</div>
 					</div>
@@ -122,7 +121,7 @@ label {
 					<hr class="mb-4">
 					<div class="text-center">
 						<button type="button" onclick="cancel()" class="btn btn-secondary btn-lg">취소</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button type="button" onclick="submit()" class="btn btn-primary btn-lg">가입</button>
+						<button type="button" onclick="userEnrollSubmit()" class="btn btn-primary btn-lg">가입</button>
 					</div>
 				</form:form>
 			</div>
@@ -131,27 +130,14 @@ label {
 			<p class="mb-1">&copy; NAEDAM</p>
 		</footer>
 	</div>
-	<script>
-    window.addEventListener('load', () => {
-      const forms = document.getElementsByClassName('validation-form');
-
-      Array.prototype.filter.call(forms, (form) => {
-        form.addEventListener('submit', function (event) {
-          if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-
-          form.classList.add('was-validated');
-        }, false);
-      });
-    }, false);
-  </script>
 </body>
+
 <script>
 //아이디 중복 확인
 function onclickCheckId(){
+	console.log("onclickCheckId() 작동");
 	var id = $("#id").val();
+	console.log("id = " + id);
 	
 	// id 값을 입력하지 않았을 때
 	if(id == ""){
@@ -172,10 +158,11 @@ function onclickCheckId(){
 			id : id
 	};
 	const jsonData = JSON.stringify(data);
+	console.log("jsonData : " + jsonData);
 	
 	// 비동기 중복 검사
 	$.ajax({
-		url : `${pageContext.request.contextPath}/admin/member/checkIdDuplicate.do`,
+		url : `${pageContext.request.contextPath}/user/user/checkIdDuplicate.do`,
 		data : data,
 		contentType : "application/json ; charset=utf-8",
 		method : "GET",
@@ -195,13 +182,15 @@ function onclickCheckId(){
 }; 
 
 // 가입
-function submit(){
+function userEnrollSubmit(){
 	var id = $("#id").val();
 	var password = $("#password").val();
 	var passwordCheck = $("#passwordCheck").val();
 	var firstName = $("#firstName").val();
 	var lastName = $("#lastName").val();
-	var authority = $("#memberGradeChk option:selected").val();
+	var addressMain = $("#address_main").val();
+	var addressSub = $("#address_sub").val();
+	var addressZipcode = $("#address_zipcode").val();
 	
 	// 아이디 공란 확인
 	if(id == ''){
@@ -251,7 +240,7 @@ function submit(){
 		$("#lastName").focus();
 		return false;
 	}
-
+	
 	// 이메일 유효성 검사
 	var email = $("#email").val();
 	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -261,9 +250,96 @@ function submit(){
 		$("#email").focus();
 		return false;
 	}
+}
+
+//주소 입력
+function callAddress() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+            
+            } 
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('address_zipcode').value = data.zonecode;
+            document.getElementById("address_main").value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("address_sub").focus();
+        }
+    }).open();
+}
+
+// 이메일 중복검사 
+function onclickCheckEmail() {
+	console.log("onclickCheckEmail() 시작");
+	var email = $("#email").val();
+	console.log("email = " + email);
 	
-	$(document.memberInsertModalFrm).submit();
+	if(email == ""){
+		alert("email을 정확히 입력해주세요");
+		$("#email").focus();
+		return false;
+	}
+	
+	// 이메일 유효성 검사
+	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+	
+	if(!regEmail.test(email)){
+		alert("이메일을 정확하게 입력해주세요.");
+		$("#email").focus();
+		return false;
+	}
+	
+	const data = {
+		email : email	
+	};
+	const jsonData = JSON.stringify(data);
+	console.log("jsonData : " + jsonData);
+	
+	$.ajax({
+		url : `${pageContext.request.contextPath}/user/user/checkEmailDuplicate.do`,
+		data : data,
+		contentType : "application/json; charset=utf-8",
+		method : "GET",
+		success(data) {
+			const {available} = data;
+			if(available){
+				alert("사용 가능한 이메일 입니다.");
+			} else {
+				alert("[" + email + "]은 이미 사용중인 이메일 입니다. \n\n 다른 이메일을 사용하시기 바랍니다.");
+				$("#email").focus();
+			}
+		},
+		error : console.log
+	});
 }
 </script>
-
 </html>
