@@ -153,6 +153,7 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("/checkIdDuplicate.do")
 	public Map<String, Object> checkIdDuplicate(@RequestParam Map<String, Object> param) {
+		log.debug("{}", "checkIdDuplicate.do 실행");
 		Map<String, Object> map = new HashMap<>();
 		Member member = memberService.selectOneMemberByMap(param);
 		map.put("available", member == null);
@@ -821,33 +822,6 @@ public class MemberController {
 		model.addAttribute("pagebar", pagebar);
 		
 		return "admin/member/memberPointList";
-	}
-
-	
-	// 회원가입
-	@PostMapping("/memberEnroll.do")
-	public String memberEnroll(Member member, RedirectAttributes redirectAttr) {
-		log.debug("member = {}", member);
-		
-		try {
-			// 0. 비밀번호 암호화 처리
-			log.info("{}", passwordEncoder);
-			String rawPassword = member.getPassword();
-			String encryptedPassword = passwordEncoder.encode(rawPassword);
-			member.setPassword(encryptedPassword);
-			log.info("{} -> {}", rawPassword, encryptedPassword);
-			
-			// 1.업무로직
-			int result = memberService.insertMember(member);
-			
-			// 2.리다이렉트 & 사용자피드백 전달
-			redirectAttr.addFlashAttribute("msg", "회원가입 성공!");
-		} catch (Exception e) {
-			log.error("회원가입 실패", e);
-			throw e;
-		}
-		
-		return "redirect:/";
 	}
 	
 	// 로그인 화면 요청

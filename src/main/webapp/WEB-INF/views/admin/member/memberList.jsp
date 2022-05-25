@@ -594,6 +594,7 @@ function onclickCheckId(){
 function register(){
 	var id = $("#id").val();
 	var password = $("#password").val();
+	console.log("password = " + password);
 	var passwordCheck = $("#passwordCheck").val();
 	var firstName = $("#firstName").val();
 	var lastName = $("#lastName").val();

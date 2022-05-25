@@ -49,6 +49,84 @@ pageContext.setAttribute("BR", "<br/>");
 			}			
 	}
 	
+	function fncUp(){
+		var itemAsc = $("input:radio[name='order_code']:checked").val();
+		var itemIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+		var itemUpAsc = $("tr").eq(itemIndex-1).children().find("input:radio").val();
+		var itemNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='itemNo']").val();
+		if(itemIndex == 0){
+			alert("1개의 항목을 선택하여야 합니다.");
+			return;
+		}
+		if(itemAsc == itemUpAsc){
+			itemIndex--;
+			itemUpAsc = $("tr").eq(itemIndex-1).children().find("input:radio").val();
+			var upItemNo = $("tr").eq(itemIndex-1).children().find("input[name='itemNo']").val();
+		}else{
+			var upItemNo = $("tr").eq(itemIndex-1).children().find("input[name='itemNo']").val();
+		}
+		if(itemIndex == 1){
+			alert("더이상 상위로의 위치 변경은 불가능합니다.");
+			return;
+		}else{
+	  		$.ajax({
+			 	 url : "/admin/form/json/updateUpAsc?${_csrf.parameterName}=${_csrf.token}",
+	 		  	 type : "POST",
+		  	 	 data : { 
+		  	 		itemAsc,
+		  	 		itemUpAsc,
+		  	 		itemNo,
+		  	 		upItemNo
+		  	 	 },
+			 	 success : function(result){
+			 		if(result == true){
+			 			location.reload();
+			 		}
+			  	 }
+	 		});
+		}
+	}
+	
+	function fncDown(){
+		var lastIndex = $("input:radio[name='order_code']:checked").parent().parent().parent().find("tr").last().index()+1;
+		var itemAsc = $("input:radio[name='order_code']:checked").val();
+		var itemIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+		var itemDownAsc = $("tr").eq(itemIndex+1).children().find("input:radio").val();
+		var itemNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='itemNo']").val();
+
+		if(itemIndex == 0){
+			alert("1개의 항목을 선택하여야 합니다.")
+			return;
+		}
+		if(itemAsc == itemDownAsc){
+			itemIndex++;
+			itemDownAsc = $("tr").eq(itemIndex+1).children().find("input:radio").val();
+			var downItemNo = $("tr").eq(itemIndex+1).children().find("input[name='itemNo']").val();
+		}else{
+			var downItemNo = $("tr").eq(itemIndex+1).children().find("input[name='itemNo']").val();
+		}
+		if(itemIndex == lastIndex){
+			alert("더이상 하위로의 위치 변경은 불가능합니다.")
+			return;
+		}else{
+	  		$.ajax({
+			 	 url : "/admin/form/json/updateDownAsc?${_csrf.parameterName}=${_csrf.token}",
+	 		  	 type : "POST",
+		  	 	 data : { 
+		  	 		itemAsc,
+		  	 		itemDownAsc,
+		  	 		itemNo,
+		  	 		downItemNo
+		  	 	 },
+			 	 success : function(result){
+			 		if(result == true){
+			 			location.reload();
+			 		}
+			  	 }
+	 		});				
+		}
+	}	
+	
 	
 
 </script>
@@ -99,8 +177,8 @@ pageContext.setAttribute("BR", "<br/>");
 			                        <td style="width:140px;">입력값 체크</td>
 			                        <td style="width:100px;">리스트 표출</td>
 			                        <td style="width:60px;">
-			                        	<i onclick="changeOrder('down','form_item','?tpf=admin/form/item&amp;form_code=1',1);" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
-			                        	<i onclick="changeOrder('up','form_item','?tpf=admin/form/item&amp;form_code=1',1);" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
+			                        	<i onclick="fncDown();" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
+			                        	<i onclick="fncUp();" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
 			                        </td>
 			                        <td style="width:80px;">명령</td>
 			                    </tr>
@@ -138,7 +216,7 @@ pageContext.setAttribute("BR", "<br/>");
 			                        	<i class="fa fa-check"></i>
 			                          </c:if>
 			                        </td>
-			                        <td><input type="radio" name="order_code" value="1"></td>
+			                        <td><input type="radio" name="order_code" value="${item.itemAsc}"></td>
 			                        <td><button type="button" onclick="onclickUpdate(${item.itemNo});" class="btn btn-primary btn-xs">상세보기</button></td>
 			                    </tr> 
 			                  </c:forEach>

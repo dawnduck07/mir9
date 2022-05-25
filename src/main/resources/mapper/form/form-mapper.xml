@@ -17,7 +17,7 @@
 	
 	<resultMap type="item" id="itemSelectMap">
 		<result property="itemNo"			column="ITEM_NO"		jdbcType="NUMERIC"></result>
-		<result property="form.formNo"		column="FORM_NO"	jdbcType="NUMERIC"></result>
+		<result property="form.formNo"		column="FORM_NO"		jdbcType="NUMERIC"></result>
 		<result property="label"			column="LABEL"			jdbcType="VARCHAR"></result>
 		<result property="input_type"		column="INPUT_TYPE"		jdbcType="VARCHAR"></result>
 		<result property="placeholder"		column="PLACEHOLDER"	jdbcType="VARCHAR"></result>
@@ -26,6 +26,7 @@
 		<result property="input_example"	column="INPUT_EXAMPLE"	jdbcType="VARCHAR"></result>
 		<result property="check_type"		column="CHECK_TYPE"		jdbcType="VARCHAR"></result>
 		<result property="is_show"			column="IS_SHOW"		jdbcType="VARCHAR"></result>
+		<result property="itemAsc"			column="ITEM_ASC"		jdbcType="NUMERIC"></result>
 	</resultMap>
 	
 	<resultMap type="itemChoice" id="itemChoiceSelectMap">
@@ -136,7 +137,7 @@
 	</select>
 	
 	<select id="itemList" parameterType="int" resultMap="itemSelectMap">
-		SELECT * FROM ITEM WHERE FORM_NO = #{form.formNo} ORDER BY ITEM_NO ASC
+		SELECT * FROM ITEM WHERE FORM_NO = #{form.formNo} ORDER BY ITEM_ASC ASC
 	</select>
 	
 	<select id="formPostList" parameterType="int" resultMap="formPostSelectMap">
@@ -144,6 +145,7 @@
 		WHERE fp.form_no = f.form_no 
 		AND i.item_no = fp.item_no 
 		AND fp.form_no = #{value}
+		ORDER BY fp.form_post_asc ASC
 	</select>
 	
 	<select id="formPostListCount" parameterType="int" resultType="int">
@@ -233,6 +235,38 @@
 		</set>
 		WHERE CODE = #{code}
 	</update>
+	
+	<update id="updateUpAsc" parameterType="map">
+		UPDATE ITEM
+		<set>
+			ITEM_ASC = #{itemUpAsc}
+		</set>
+		WHERE ITEM_NO = #{upItemNo}
+	</update>	
+	
+	<update id="updateDownAsc" parameterType="map">
+		UPDATE ITEM
+		<set>
+			ITEM_ASC = #{itemDownAsc}
+		</set>
+		WHERE ITEM_NO = #{downItemNo}
+	</update>
+	
+	<update id="updateUpAsc2" parameterType="map">
+		UPDATE FORM_POST
+		<set>
+			FORM_POST_ASC = #{formPostUpAsc}
+		</set>
+		WHERE CODE = #{upFormPostNo}
+	</update>	
+	
+	<update id="updateDownAsc2" parameterType="map">
+		UPDATE FORM_POST
+		<set>
+			FORM_POST_ASC = #{formPostDownAsc}
+		</set>
+		WHERE CODE = #{downFormPostNo}
+	</update>	
 	
 	<delete id="deleteChoiceForm" parameterType="int">
 		DELETE

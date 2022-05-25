@@ -381,6 +381,7 @@ public class BoardController {
 		result = 1;
 		
 	}
+
 	
 	@PostMapping("deleteChoicePost")
 	public void deleteChoicePost(@RequestParam(value = "postArr[]") List<String> postArr, 

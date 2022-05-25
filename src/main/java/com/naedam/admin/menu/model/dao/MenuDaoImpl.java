@@ -171,33 +171,17 @@ public class MenuDaoImpl implements MenuDao {
 	}
 
 
+	//down순서변경
+	public void updateDownAsc(Map<String, Object> map) throws Exception {
+		sqlSession.update("menu.updateDownAsc", map);
+	}
+
+	//up순서변경
+	public void updateUpAsc(Map<String, Object> map) throws Exception {
+		sqlSession.update("menu.updateUpAsc", map);
+	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 }
 
 

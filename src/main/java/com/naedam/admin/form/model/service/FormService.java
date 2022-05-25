@@ -1,6 +1,7 @@
 package com.naedam.admin.form.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.naedam.admin.form.model.vo.Form;
 import com.naedam.admin.form.model.vo.FormPost;
@@ -77,4 +78,16 @@ public interface FormService {
 	
 	//폼 게시글 수정
 	public int updateFormPost(FormPost formPost) throws Exception;
+	
+	//item down순서변경
+	public void updateDownAsc(Map<String, Object> map)throws Exception;
+	
+	//item up순서변경
+	public void updateUpAsc(Map<String, Object> map)throws Exception;
+	
+	//item down순서변경
+	public void updateDownAsc2(Map<String, Object> map)throws Exception;
+	
+	//item up순서변경
+	public void updateUpAsc2(Map<String, Object> map)throws Exception;	
 }

@@ -75,6 +75,12 @@ public interface MenuService {
 	//선택삭제
 	public void updateChoiceMenu(int code) throws Exception;
 	
+	//down순서변경
+	public void updateDownAsc(Map<String, Object> map)throws Exception;
+	
+	//up순서변경
+	public void updateUpAsc(Map<String, Object> map)throws Exception;
+	
 	//헤더관리 선택삭제
 	public void deleteChoiceHead(int headNo) throws Exception;
 	

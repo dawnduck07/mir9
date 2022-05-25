@@ -180,5 +180,28 @@ public class FormServiceImpl implements FormService {
 		return formDao.updateFormPost(formPost);
 	}
 
+	//item down순서변경
+	@Override
+	public void updateDownAsc(Map<String, Object> map) throws Exception {
+		formDao.updateDownAsc(map);
+	}
+
+	//item up순서변경
+	@Override
+	public void updateUpAsc(Map<String, Object> map) throws Exception {
+		formDao.updateUpAsc(map);
+	}
+	
+	//formPost down순서변경
+	@Override
+	public void updateDownAsc2(Map<String, Object> map) throws Exception {
+		formDao.updateDownAsc2(map);
+	}
+
+	//formPost up순서변경
+	@Override
+	public void updateUpAsc2(Map<String, Object> map) throws Exception {
+		formDao.updateUpAsc2(map);
+	}	
 
 }
