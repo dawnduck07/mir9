@@ -278,11 +278,12 @@
 							</td>
 						</tr>
 					</table>
+				</div>
+					<div class="modal-footer">
+						<button type="button" onclick="registerPoint();" class="btn btn-primary">지급하기</button>
+					</div>
 			</form>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<button type="button" onclick="registerPoint();" class="btn btn-primary">지급하기</button>
 	</div>
 </div>
 
@@ -322,12 +323,12 @@
 							</td>
 						</tr>
 					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" onclick="registerCoupon();" class="btn btn-primary">지급하기</button>
+				</div>
 			</form>
 		</div>
-
-	</div>
-	<div class="modal-footer">
-		<button type="button" onclick="registerCoupon();" class="btn btn-primary">지급하기</button>
 	</div>
 </div>
 
@@ -830,7 +831,7 @@ function onclickCoupon() {
         return false;
 	}
 	
-    $('#modalCoupon').modal({backdrop:'static', show:true});
+    $("#modalCoupon").modal({backdrop:"static", show:true});
 	
 }
 
