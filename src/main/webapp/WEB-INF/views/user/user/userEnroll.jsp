@@ -56,45 +56,62 @@
 				<img src="${pageContext.request.contextPath}/resources/imgs/imageBoard/neadam_logo.png" style="height: 50px; margin: 20px;">
 			</div>
 				<h4 class="mb-3" style="font-weight: bold">회원가입</h4>
-				<form:form class="memberJoinFrm" method="POST" action="${pageContextrequest.contextPath}/user/user/userEnroll.do" >
+				<form:form name="userJoinFrm" method="POST" action="${pageContextrequest.contextPath}/user/user/userEnroll.do" >
+					<input type="hidden" name="checked_id" value=""/>
+					<input type="hidden" name="checked_email" value=""/>
 					<div class="mb-3">
 						<label for="id">아이디</label> 
 						<div class="row col">
 							<input type="text" class="form-control col-6" id="id" name="id" placeholder="영문과 숫자 4~15자로 입력하세요." value="" required>&nbsp;&nbsp;
-							<button type="button" class="btn btn-outline-secondary" onclick="onclickCheckId()">중복확인</button>						
+							<button type="button" id="btnCheckId" class="btn btn-outline-secondary" onclick="onclickCheckId()">중복확인</button>						
 						</div>
-						<div class="invalid-feedback">이메일을 입력해주세요.</div>
 					</div>
-					
 					<div class="mb-3">
 						<label for="password">비밀번호</label> 
 						<input type="password" class="form-control" id="password" placeholder="영문소문자와 숫자 포함 8~15자로 입력하세요." required>
-						<div class="invalid-feedback">비밀번호를 입력해주세요.</div>
 					</div>
 					<div class="mb-3">
 						<label for="passwordCheck">비밀번호</label> 
 						<input type="password" class="form-control" id="passwordCheck" placeholder="비밀번호 확인을 위해 더 입력하세요." required>
-						<div class="invalid-feedback">비밀번호를 입력해주세요.</div>
 					</div>
-					
 					<div class="row">
 						<div class="col-md-6 mb-3">
 							<label for="firstName">이름</label> 
-							<input type="text" class="form-control" id="firstName" placeholder="이름" value="" required>
-							<div class="invalid-feedback">이름을 입력해주세요.</div>
+							<input type="text" class="form-control" id="firstName" name="firstName" placeholder="이름" value="" required>
 						</div>
 						<div class="col-md-6 mb-3">
 							<label for="lastName">성</label> 
-							<input type="text" class="form-control" id="lastName" placeholder="성" value="" required>
-							<div class="invalid-feedback">성을 입력해주세요.</div>
+							<input type="text" class="form-control" id="lastName" name="lastName" placeholder="성" value="" required>
 						</div>
 					</div>
-
+					<div class="mb-3">
+						<label for="phone">휴대폰</label>
+						<div class="row">
+							<div class="col-md-3 mb-2">
+								<select id="mobile1" name="mobile1" class="form-control">
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+								</select>
+							</div>
+							<span>-</span>
+							<div class="col-md-3 mb-2">
+								<input type="text" id="mobile2" name="mobile2" class="form-control">
+							</div>
+							<span>-</span>
+							<div class="col-md-3 mb-2">
+								<input type="text" id="mobile3" name="mobile3" class="form-control">
+							</div>
+						</div>  
+					</div>
 					<div class="mb-3">
 						<label for="id">주소</label> 
 						<div class="row col mb-2">
 							<input type="text" class="form-control col-3" id="address_zipcode" name="addressZipcode" placeholder="" readonly>&nbsp;&nbsp;
-							<button type="button" onclick="callAddress()" class="btn btn-outline-secondary">주소입력</button>	
+							<button type="button" id="btnAddressInput" onclick="callAddress()" class="btn btn-outline-secondary">주소입력</button>	
 						</div>
 						<div class="mb-2">
 							<input type="text" class="form-control" id="address_main" name="addressMain" placeholder="" readonly>
@@ -108,8 +125,8 @@
 					<div class="mb-3">
 						<label for="email">이메일</label> 
 						<div class="row col">
-							<input type="email" class="form-control col-6" id="email" placeholder="" required>&nbsp;&nbsp;
-							<button type="button" onclick="onclickCheckEmail()" class="btn btn-outline-secondary">중복확인</button>						
+							<input type="email" class="form-control col-6" id="email" name="email" placeholder="" required>&nbsp;&nbsp;
+							<button type="button" id="btnCheckedEmail" onclick="onclickCheckEmail()" class="btn btn-outline-secondary">중복확인</button>						
 						</div>
 						<div class="invalid-feedback">이메일을 입력해주세요.</div>
 					</div>
@@ -170,6 +187,7 @@ function onclickCheckId(){
 			const {available} = data;
 			if(available){
 				alert("사용 가능한 아이디 입니다.");
+				$("input[name=checked_id]").val('Y');
 				$("#password").focus();
 			}
 			else{
@@ -220,6 +238,12 @@ function userEnrollSubmit(){
 		return false;
 	}
 	
+	if($("input[name=checked_id]").val() == '') {
+		alert("아이디 중복확인을 해주세요.");
+		$("#btnCheckId").focus();
+		return false;
+	}
+	
 	// 비밀번호 일치 확인
 	if(password != passwordCheck){
 		alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
@@ -241,6 +265,13 @@ function userEnrollSubmit(){
 		return false;
 	}
 	
+	// 주소 공란 확인
+	if(addressMain == ''){
+		alert("주소가 입력되지 않았습니다.");
+		$("#btnAddressInput").focus();
+		return false;
+	}
+	
 	// 이메일 유효성 검사
 	var email = $("#email").val();
 	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -250,6 +281,15 @@ function userEnrollSubmit(){
 		$("#email").focus();
 		return false;
 	}
+	
+	// 이메일 중복검사 확인
+	if($("input[name=checked_email]").val() == '') {
+		alert("이메일 중복확인을 해주세요.");
+		$("#btnCheckEmail").focus();
+		return false;
+	}
+	
+	$(document.userJoinFrm).submit();
 }
 
 //주소 입력
@@ -333,6 +373,7 @@ function onclickCheckEmail() {
 			const {available} = data;
 			if(available){
 				alert("사용 가능한 이메일 입니다.");
+				$("input[name=checked_email]").val('Y');
 			} else {
 				alert("[" + email + "]은 이미 사용중인 이메일 입니다. \n\n 다른 이메일을 사용하시기 바랍니다.");
 				$("#email").focus();
