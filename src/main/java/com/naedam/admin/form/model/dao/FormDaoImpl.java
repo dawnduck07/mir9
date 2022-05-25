@@ -1,6 +1,7 @@
 package com.naedam.admin.form.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -178,6 +179,26 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.update("form.updateFormPost", formPost);
 	}
+	
+	//item down순서변경
+	public void updateDownAsc(Map<String, Object> map) throws Exception {
+		session.update("form.updateDownAsc", map);
+	}
+
+	//item up순서변경
+	public void updateUpAsc(Map<String, Object> map) throws Exception {
+		session.update("form.updateUpAsc", map);
+	}
+	
+	//formPost down순서변경
+	public void updateDownAsc2(Map<String, Object> map) throws Exception {
+		session.update("form.updateDownAsc2", map);
+	}
+
+	//formPost up순서변경
+	public void updateUpAsc2(Map<String, Object> map) throws Exception {
+		session.update("form.updateUpAsc2", map);
+	}	
 
 
 

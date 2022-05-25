@@ -181,7 +181,7 @@
 		FROM menu
 		WHERE revision_code = 0
 		AND	  ORD = 1
-		ORDER BY code ASC
+		ORDER BY MENU_ASC ASC
 	</select>
 	
 	<select id="getMenuList2" resultType="hashmap" resultMap="MenuSelectMap">
@@ -191,7 +191,7 @@
 		AND   origin_no = #{menu.originNo}
 		AND   code != 1
 		AND   ORD = #{menu.ord}
-		ORDER BY code ASC
+		ORDER BY MENU_ASC ASC
 	</select>	
 	
 	
@@ -202,7 +202,7 @@
 		AND   origin_no = #{menu.originNo}
 		AND   code != 1
 		AND   ORD = 3
-		ORDER BY code ASC
+		ORDER BY MENU_ASC ASC
 	</select>
 	
 	<select id="getRevisionList" resultType="hashmap" resultMap="MenuSelectMap">
@@ -264,7 +264,7 @@
 		FROM menu
 		WHERE ord = 1
 		AND revision_code = 0
-		ORDER BY code ASC
+		ORDER BY menu_asc ASC
 	</select>
 	
 	<select id="getMenuCategoryList2" resultType="hashmap" resultMap="MenuSelectMap">
@@ -272,7 +272,7 @@
 		FROM menu
 		WHERE ord = 2
 		AND revision_code = 0
-		ORDER BY code ASC
+		ORDER BY menu_asc ASC
 	</select>
 	 
 	<update id="updateMenu" parameterType="menu">
@@ -336,6 +336,22 @@
 		</set>
 		WHERE code = #{value}
 	</update>
+	
+	<update id="updateUpAsc" parameterType="map">
+		UPDATE MENU
+		<set>
+			MENU_ASC = #{menuUpAsc}
+		</set>
+		WHERE ORIGIN_NO = #{upMenuNo}
+	</update>	
+	
+	<update id="updateDownAsc" parameterType="map">
+		UPDATE MENU
+		<set>
+			MENU_ASC = #{menuDownAsc}
+		</set>
+		WHERE ORIGIN_NO = #{downMenuNo}
+	</update>	
 	
 	<delete id="deleteChoiceHead" parameterType="int">
 		DELETE
