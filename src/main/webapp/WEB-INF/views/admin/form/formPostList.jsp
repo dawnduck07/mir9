@@ -642,9 +642,9 @@
 		}else{
   		$.ajax({
 		 	 url : "/admin/form/deleteChoiceFormPost?${_csrf.parameterName}=${_csrf.token}",
- 		  		 type : "POST",
+ 		  	 type : "POST",
 	  	 	 data : { 
-	  	 		formPostArr : formPostArr 
+	  	 	 formPostArr : formPostArr 
 	  	 	 },
 	 		 success : function(result){
 	 		
@@ -677,9 +677,9 @@
 		}else{
   		$.ajax({
 		 	 url : "/admin/form/deleteChoiceFormPost?${_csrf.parameterName}=${_csrf.token}",
- 		  		 type : "POST",
+ 		  	 type : "POST",
 	  	 	 data : { 
-	  	 		formPostArr : formPostArr 
+	  	 	 formPostArr : formPostArr 
 	  	 	 },
 	 		 success : function(result){
 	 		

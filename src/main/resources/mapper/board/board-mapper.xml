@@ -152,7 +152,7 @@
 				  MEMBER_NO,
 				  MEMBER_NAME)
 		VALUES(NEXTVAL(post_seq),
-			   0,
+			   NEXTVAL(allAsc_seq),
 			   #{postBoard.boardNo},
 			   #{postTitle : VARCHAR},
 			   #{postContents : VARCHAR},
