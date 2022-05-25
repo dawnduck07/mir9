@@ -54,8 +54,8 @@
 		      				  </c:forEach>
 		      				  	<td style="width:200px;">등록일</td>                           
 		                        <td style="width:80px;">
-		                            <i onclick="changeOrder('down','form_reply','?tpf=admin/form/list&amp;form_code=1',1,'ko','',);" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
-		                            <i onclick="changeOrder('up','form_reply','?tpf=admin/form/list&amp;form_code=1',1,'ko','',);" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
+		                            <i onclick="fncDown();" class="fa fa-fw fa-arrow-circle-down cp" style="cursor:pointer;"></i>
+		                            <i onclick="fncUp();" class="fa fa-fw fa-arrow-circle-up cp" style="cursor:pointer;"></i>
 		                        </td>
 		                        <td style="width:60px;">명령</td>
 		                    </tr>
@@ -88,7 +88,7 @@
 			                          	<c:set var="j" value="${ j+1 }" />			                        		
 			                          </c:forEach>
 			                        <td>${formPost.date}</td>
-			                        <td><input type="radio" name="order_code" value="-5"></td>
+			                        <td><input type="radio" name="order_code" value="${formPost.formPostAsc}"></td>
 			                        <td><button type="button" onclick="onclickUpdate(${formPost.code});" class="btn btn-primary btn-xs">수정하기</button></td>
 			                    </tr> 
 			                  </c:forEach>   
@@ -695,6 +695,85 @@
 	const paging = (cPage) => {
 		location.href = '/admin/form/formPostList?cPage='+cPage+'&formNo='+${formNo};
 	}
+	
+	function fncUp(){
+		var formPostAsc = $("input:radio[name='order_code']:checked").val();
+		var formPostIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+		var formPostUpAsc = $("tr").eq(formPostIndex-1).children().find("input:radio").val();
+		var formPostNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='formPostNo']").val();
+		if(formPostIndex == 0){
+			alert("1개의 항목을 선택하여야 합니다.");
+			return;
+		}
+		if(formPostAsc == formPostUpAsc){
+			formPostIndex--;
+			formPostUpAsc = $("tr").eq(formPostIndex-1).children().find("input:radio").val();
+			var upFormPostNo = $("tr").eq(formPostIndex-1).children().find("input[name='formPostNo']").val();
+		}else{
+			var upFormPostNo = $("tr").eq(formPostIndex-1).children().find("input[name='formPostNo']").val();
+		}
+		if(formPostIndex == 1){
+			alert("더이상 상위로의 위치 변경은 불가능합니다.");
+			return;
+		}else{
+	  		$.ajax({
+			 	 url : "/admin/form/json/updateUpAsc2?${_csrf.parameterName}=${_csrf.token}",
+	 		  	 type : "POST",
+		  	 	 data : { 
+		  	 		formPostAsc,
+		  	 		formPostUpAsc,
+		  	 		formPostNo,
+		  	 		upFormPostNo
+		  	 	 },
+			 	 success : function(result){
+			 		if(result == true){
+			 			location.reload();
+			 		}
+			  	 }
+	 		});
+		}
+	}
+	
+	function fncDown(){
+		var lastIndex = $("input:radio[name='order_code']:checked").parent().parent().parent().find("tr").last().index()+1;
+		var formPostAsc = $("input:radio[name='order_code']:checked").val();
+		var formPostIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+		var formPostDownAsc = $("tr").eq(formPostIndex+1).children().find("input:radio").val();
+		var formPostNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='formPostNo']").val();
+
+		if(formPostIndex == 0){
+			alert("1개의 항목을 선택하여야 합니다.")
+			return;
+		}
+		if(formPostAsc == formPostDownAsc){
+			formPostIndex++;
+			formPostDownAsc = $("tr").eq(formPostIndex+1).children().find("input:radio").val();
+			var downFormPostNo = $("tr").eq(formPostIndex+1).children().find("input[name='formPostNo']").val();
+		}else{
+			var downFormPostNo = $("tr").eq(formPostIndex+1).children().find("input[name='formPostNo']").val();
+		}
+		if(formPostIndex == lastIndex){
+			alert("더이상 하위로의 위치 변경은 불가능합니다.")
+			return;
+		}else{
+	  		$.ajax({
+			 	 url : "/admin/form/json/updateDownAsc2?${_csrf.parameterName}=${_csrf.token}",
+	 		  	 type : "POST",
+		  	 	 data : { 
+		  	 		formPostAsc,
+		  	 		formPostDownAsc,
+		  	 		formPostNo,
+		  	 		downFormPostNo
+		  	 	 },
+			 	 success : function(result){
+			 		if(result == true){
+			 			location.reload();
+			 		}
+			  	 }
+	 		});				
+		}
+	}	
+	
       
     /* 
     datepicker 
