@@ -187,9 +187,6 @@ public class BoardController {
 		post.setPostOriginNo(post.getPostOriginNo()); // 이건 해결
 		post.setPostOrd(post2.getPostAsc());
 		post.setPostLayer(post2.getPostLayer());
-		post.setPostAsc(post2.getPostAsc());
-		
-		boardService.updatePostReply(post2);
 		
 		boardService.addAnswerPost(post);
 		

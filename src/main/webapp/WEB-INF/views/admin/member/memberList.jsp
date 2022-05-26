@@ -5,7 +5,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/admin/common/header.jsp">
 	<jsp:param value="회원 관리" name="title" />
 </jsp:include>
@@ -131,7 +130,7 @@
 			<div class="modal-content">
 				<input type="hidden" id="addressNo" name="addressNo" value="" />
 				<input type="hidden" id="memberNo" name="memberNo" value="" />
-				<form:form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/admin/member/memberInsertModalFrm.do">
+				<form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/admin/member/memberInsertModalFrm.do">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">회원 등록</h4>
@@ -226,15 +225,16 @@
 								<td align="left"><span id="reg_date"></span></td>
 							</tr>
 						</table>
-				</form:form>
+					  </div>
+					<div class="modal-footer">
+						<button type="button" id="btnRegister" onclick="register()" class="btn btn-primary">저장</button>
+						<button type="button" id="btnUpdate" onclick="update()" class="btn btn-primary">저장</button>
+					</div>						
+				</form>
 			</div>
 		</div>
-		<div class="modal-footer">
-			<button type="button" id="btnRegister" onclick="register()" class="btn btn-primary">저장</button>
-			<button type="button" id="btnUpdate" onclick="update()" class="btn btn-primary">저장</button>
-		</div>
 	</div>
-</div>
+
 
 <!-- // 적립금 지급 폼 -->
 <div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
@@ -331,7 +331,7 @@
 		</div>
 	</div>
 </div>
-
+</div>
 <!-- /.content-wrapper -->
 
 <!-- 다음 주소 API -->
