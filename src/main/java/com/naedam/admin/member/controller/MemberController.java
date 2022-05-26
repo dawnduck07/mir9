@@ -276,7 +276,7 @@ public class MemberController {
 	public Map<String, Object> memberDetail(@PathVariable int memberNo, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> map = new HashMap<>();
 		
-		// 1. 상세보기 -> 회원조회
+		// 회원조회
 		Member member = memberService.selectOneMemberByMemberNo(memberNo);
 		model.addAttribute("member", member);
 		
@@ -311,12 +311,11 @@ public class MemberController {
 
 		if(memberMemo.getMemberMemoContent() == null) 
 			 memberMemo.setMemberMemoContent("");
-	
-		model.addAttribute("memberMemo = {}", memberMemo);
+		model.addAttribute("memberMemo", memberMemo);
 		
 		// 4. 회원 권한 조회
 		Authorities authorities = memberService.selectOneAuthorities(memberNo);
-		model.addAttribute("authorities = {}", authorities);
+		model.addAttribute("authorities", authorities);
 		
 		// 5. 회원 포인트 총계 조회
 		int totalPoint = 0;
@@ -849,6 +848,14 @@ public class MemberController {
 		// 형식객체, 빈값허용여부("" -> null)
 		PropertyEditor editor = new CustomDateEditor(sdf, true);
 		binder.registerCustomEditor(Date.class, editor);
+	}
+	
+	@GetMapping("/test")
+	public Map<String, Object> test(int number, String str) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put(str, number);
+		
+		return result;
 	}
 
 }
