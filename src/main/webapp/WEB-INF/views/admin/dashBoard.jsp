@@ -24,24 +24,21 @@
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/main.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/locales/ko.js'></script>
 <script src='${pageContext.request.contextPath}/resources/js/moment.js'></script>
-<!-- content-wrapper test-->
-<div class="content-wrapper">
-	<style>
-ul {
-	list-style: none;
-}
 
-.nav-tabs-custom .list li:not(:last-child) {
-	margin: 0 0 13px;
-}
-
-.cs-m-right20 {
-	margin-right: 20px;
-	font-size: 14px;
-	color: #97989b;
-}
-</style>
 <style>
+	ul {
+		list-style: none;
+	}
+	
+	.nav-tabs-custom .list li:not(:last-child) {
+		margin: 0 0 13px;
+	}
+	
+	.cs-m-right20 {
+		margin-right: 20px;
+		font-size: 14px;
+		color: #97989b;
+	}
 	a { 
 		color: #333;
 		
@@ -87,6 +84,10 @@ ul {
 		font-weight : bolder;
 	}
 </style>
+
+<!-- content-wrapper test-->
+<div class="content-wrapper">
+
 <script>
 
 
@@ -145,6 +146,9 @@ ul {
 					if(JSONData.list.length != 0){
 						for(var i = 0; i <= JSONData.list.length; i++){
 							var post = JSONData.list;
+							console.log(post[i].postBoard);
+							console.log(post[i].postBoard.boardNo);
+							console.log(post[i].postBoard.get(i));
 							display = '<li name="postData">'
 									+ '<a href="/admin/board/postList?boardNo='+post[i].postBoard.boardNo+'">'+post[i].postTitle+''
 									+ '<span class="pull-right cs-m-right20">'+post[i].postDate+'</span>'

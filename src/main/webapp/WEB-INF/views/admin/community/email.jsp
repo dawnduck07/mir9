@@ -47,11 +47,13 @@ textarea {
 			
 							<h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 메일 발송 문구 설정 </p></h4>
 			                <div style="text-align:right;">
-			                	<!-- 언어 설정 : 적용 안 됨 -->
+			                	<!-- 
+			                	언어 설정 (대기)
 								<button type="button" id="locale_ko" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=ko'" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>
 								<button type="button" id="locale_en" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=en'" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>
 								<button type="button" id="locale_zh" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=zh'" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>
 								<button type="button" id="locale_vn" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=vn'" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                
+								-->
 							</div></br>
 			
 							<table class="table table-bordered table-hover">
@@ -511,7 +513,7 @@ textarea {
 		var templateId = $("#action").val();
 		var title = $("#title").val();
 		var content = objEditor.getData();
-
+		
 		if(title == "") { // 제목 입력 필수
 	    	alert("제목이 입력되지 않았습니다."); 
 	    	$("#title").focus(); 
