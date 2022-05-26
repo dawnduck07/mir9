@@ -146,9 +146,6 @@
 					if(JSONData.list.length != 0){
 						for(var i = 0; i <= JSONData.list.length; i++){
 							var post = JSONData.list;
-							console.log(post[i].postBoard);
-							console.log(post[i].postBoard.boardNo);
-							console.log(post[i].postBoard.get(i));
 							display = '<li name="postData">'
 									+ '<a href="/admin/board/postList?boardNo='+post[i].postBoard.boardNo+'">'+post[i].postTitle+''
 									+ '<span class="pull-right cs-m-right20">'+post[i].postDate+'</span>'
