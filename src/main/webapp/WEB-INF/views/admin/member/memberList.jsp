@@ -239,9 +239,15 @@
 	<div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 		<div class="modal-dialog" style="width: 500px;">
 			<div class="modal-content">
+<<<<<<< HEAD
 				<form name="formPoint" method="post" onsubmit="return false;">
 					<input type="hidden" name="mode" value="point"> 
 					<input type="hidden" name="member_code">
+=======
+				<input type="hidden" id="addressNo" name="addressNo" value="" />
+				<input type="hidden" id="memberNo" name="memberNo" value="" />
+				<form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/admin/member/memberInsertModalFrm.do">
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabelPortfolio">적립금 지급</h4>
@@ -277,7 +283,64 @@
 								</td>
 							</tr>
 						</table>
+<<<<<<< HEAD
 					</div>
+=======
+					  </div>
+					<div class="modal-footer">
+						<button type="button" id="btnRegister" onclick="register()" class="btn btn-primary">저장</button>
+						<button type="button" id="btnUpdate" onclick="update()" class="btn btn-primary">저장</button>
+					</div>						
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+<!-- // 적립금 지급 폼 -->
+<div class="modal fade" id="modalPoint" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
+	<div class="modal-dialog" style="width: 500px;">
+		<div class="modal-content">
+			<form name="formPoint" method="post" onsubmit="return false;">
+				<input type="hidden" name="mode" value="point"> 
+				<input type="hidden" name="member_code">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabelPortfolio">적립금 지급</h4>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered">
+						<tr>
+							<td class="menu">대상 회원</td>
+							<td align="left"><span id="sendCount"></span> 명</td>
+						</tr>
+						<tr>
+							<td class="menu">지급 형태</td>
+							<td align="left">
+								<select name="plus_minus_type" class="form-control input-sm" style="width: 120px;">
+									<option value="+">지급</option>
+									<option value="-">차감</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="menu">적립금</td>
+							<td align="left"><input type="text" name="point" onkeyup="this.value=displayComma(checkNum(this.value))" class="form-control input-sm" style="width: 120px;" /></td>
+						</tr>
+						<tr>
+							<td class="menu">메모</td>
+							<td align="left"><input type="text" name="content" class="form-control input-sm" /></td>
+						</tr>
+						<tr>
+							<td class="menu">알림 설정</td>
+							<td align="left">
+								<input type="checkbox" name="pointSms" value="y" /> SMS 알림 (설정된 SMS 발송)<br> 
+								<input type="checkbox" name="pointEmail" value="y" /> 메일 알림 (설정된 메일 발송)<br>
+							</td>
+						</tr>
+					</table>
+				</div>
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 					<div class="modal-footer">
 						<button type="button" onclick="registerPoint();" class="btn btn-primary">지급하기</button>
 					</div>
@@ -331,6 +394,10 @@
 		</div>
 	</div>	
 </div>
+<<<<<<< HEAD
+=======
+</div>
+>>>>>>> branch 'master' of https://github.com/dawnduck07/mir9.git
 <!-- /.content-wrapper -->
 
 
