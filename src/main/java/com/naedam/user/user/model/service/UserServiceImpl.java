@@ -54,4 +54,10 @@ public class UserServiceImpl implements UserService {
 	public int userAuthoritiesEnroll(Authorities paramAuthorities) {
 		return userDao.userAuthoritiesEnroll(paramAuthorities);
 	}
+
+	// 메모 공란 등록
+	@Override
+	public int userMemoEnroll(int memberNo) {
+		return userDao.userMemoEnroll(memberNo);
+	}
 }
