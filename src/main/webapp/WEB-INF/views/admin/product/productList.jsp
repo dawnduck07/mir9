@@ -17,17 +17,17 @@
 		</ol>
 	</section>
 
-	<section class="content" style="padding: 15px 15px 0 15px">
+	<section class="content">
 		<div class="row">
-			<div class="col-xs-12" style="height:">
+			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-body">
 						<div class="col-xs-3" style="padding: 0 5px 0 0;">
-							<iframe name="tree" id="iframe_tree" src="${pageContext.request.contextPath }/admin/product/tree_model?stp=pl" width="100%" height="100%"></iframe>
+							<iframe name="tree" id="iframe_tree" src="${pageContext.request.contextPath }/admin/product/tree_model?stp=pl" width="100%" height="794"></iframe>
 						</div>
 
 						<div class="col-xs-9" style="padding: 0 5px 0 0;">
-							<iframe name="list" id="iframe_list" src="${pageContext.request.contextPath }/admin/product/list_sub" width="100%" height="100%"></iframe>
+							<iframe name="list" id="iframe_list" src="${pageContext.request.contextPath }/admin/product/list_sub" width="100%" height="794"></iframe>
 						</div>
 					</div>
 					<!-- /.box-body -->
