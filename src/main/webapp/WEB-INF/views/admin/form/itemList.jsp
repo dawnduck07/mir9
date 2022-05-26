@@ -723,8 +723,7 @@ pageContext.setAttribute("BR", "<br/>");
 	    }
 	    form_register.target = "iframe_process";
 	    form_register.submit();
-	    alert("등록 되었습니다.");
-	    location.href = "/admin/form/itemList?formNo="+formNo;
+	    alert("항목이 등록 되었습니다.");
 	}
 	
 	function register2(formNo) {
@@ -735,8 +734,7 @@ pageContext.setAttribute("BR", "<br/>");
 	    }
 	    form_register2.target = "iframe_process";
 	    form_register2.submit();
-	    alert("수정 되었습니다.");
-	    location.href = "/admin/form/itemList?formNo="+formNo;
+	    alert("항목이 수정 되었습니다.");
 	}	
 	      	
 	// 폼 HTML 디자인 리스트 및 쓰기 버튼

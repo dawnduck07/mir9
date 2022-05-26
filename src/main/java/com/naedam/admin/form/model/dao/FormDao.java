@@ -28,6 +28,9 @@ public interface FormDao {
 	//폼메일 리스트
 	public List<Form> formList() throws Exception;
 	
+	//폼메일 리스트 카운트
+	public int formListCount() throws Exception;
+	
 	//폼게시물 리스트
 	public List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception;
 	
@@ -42,6 +45,9 @@ public interface FormDao {
 	
 	//문항관리 리스트
 	public List<Item> itemList(int formNo) throws Exception;
+
+	//문항관리 리스트 카운트
+	public int itemListCount(int formNo) throws Exception;
 	
 	//폼메일 정보
 	public Form getForm(int formNo) throws Exception;

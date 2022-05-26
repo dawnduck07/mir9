@@ -95,7 +95,7 @@
 	        <div class="col-xs-12">
 	            <div class="box">
 	                <div class="box-body">
-	                    <label style="margin-top:5px;">총 2 건</label>
+	                    <label style="margin-top:5px;">총 ${formCount} 건</label>
 	
 						<table class="table table-bordered table-hover">
 						<!-- 
@@ -157,7 +157,7 @@
 			                          </c:if>
 			                        </td>
 			                        <td align="left">http://localhost:8080/admin/form/formPostList?formNo=${form.formNo}</td>
-			                        <td>0</td>
+			                        <td>${formPostCount[i-1]}</td>
 			                        <td>${form.formDate}</td>
 			                        <td>
 			                        	<button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/form/formPostList?formNo=${form.formNo}'" class="btn btn-success btn-xs">바로가기</button>

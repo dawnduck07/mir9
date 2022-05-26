@@ -28,8 +28,14 @@ public interface FormService {
 	//폼메일 리스트
 	List<Form> formList() throws Exception;
 	
+	//폼메일 리스트 카운트
+	int formListCount() throws Exception;
+	
 	//문항관리 리스트
 	List<Item> itemList(int formNo) throws Exception;
+	
+	//문항관리 리스트 카운트
+	int itemListCount(int formNo) throws Exception;
 	
 	//폼게시물 리스트
 	List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception;

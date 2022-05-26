@@ -59,6 +59,12 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.selectList("form.formList");
 	}
+
+	//폼메일 리스트 카운트
+	@Override
+	public int formListCount() throws Exception {
+		return session.selectOne("form.formListCount");
+	}
 	
 	//문항관리 리스트
 	@Override
@@ -66,6 +72,12 @@ public class FormDaoImpl implements FormDao {
 		// TODO Auto-generated method stub
 		return session.selectList("form.itemList", formNo);
 	}
+
+	//문항관리 리스트 카운트
+	@Override
+	public int itemListCount(int formNo) throws Exception {
+		return session.selectOne("form.itemListCount", formNo);
+	}	
 	
 	//폼게시물 리스트
 	@Override
@@ -198,8 +210,7 @@ public class FormDaoImpl implements FormDao {
 	//formPost up순서변경
 	public void updateUpAsc2(Map<String, Object> map) throws Exception {
 		session.update("form.updateUpAsc2", map);
-	}	
-
+	}
 
 
 }

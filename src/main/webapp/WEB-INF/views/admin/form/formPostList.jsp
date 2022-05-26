@@ -24,7 +24,7 @@
 	        <div class="col-xs-12">
 	            <div class="box">
 	                <div class="box-body">
-	                    <label style="margin-top:5px;">총 5 건</label>
+	                    <label style="margin-top:5px;">총 ${formPostListCount} 건</label>
 	
 	                    <table class="table table-bordered table-hover">
 		                    <form name="form_list" method="post" action="?tpf=admin/form/process"></form>

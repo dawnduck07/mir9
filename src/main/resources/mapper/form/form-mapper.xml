@@ -41,7 +41,8 @@
 		<result property="itemNo"			column="item_no"		jdbcType="VARCHAR"></result>
 		<result property="itemData"			column="ITEM_DATA"		jdbcType="VARCHAR"></result>
 		<result property="itemInput"		column="ITEM_INPUT"		jdbcType="VARCHAR"></result>
-		<result property="date"				column="date"			jdbcType="VARCHAR"></result>		
+		<result property="date"				column="date"			jdbcType="VARCHAR"></result>
+		<result property="formPostAsc"		column="FORM_POST_ASC"	jdbcType="NUMERIC"></result>		
 	</resultMap>
 	
 	<insert id="addForm" parameterType="form">
@@ -74,7 +75,8 @@
 				  HTML_CLASS,
 				  INPUT_EXAMPLE,
 				  CHECK_TYPE,
-				  IS_SHOW)
+				  IS_SHOW,
+				  ITEM_ASC)
 		VALUES(NEXTVAL(item_seq),
 			   #{form.formNo},
 			   #{label},
@@ -84,7 +86,8 @@
 			   #{html_class},
 			   #{input_example},
 			   #{check_type},
-			   #{is_show})
+			   #{is_show},
+			   NEXTVAL(allAsc_seq))
 		<selectKey keyProperty="itemNo" resultType="int" order="AFTER">
 			SELECT LASTVAL(item_seq) from dual
 		</selectKey>			   
@@ -107,13 +110,15 @@
 					   item_no,
 					   item_data,
 					   item_input,
-					   date)
+					   date,
+					   form_post_asc)
 		VALUES(NEXTVAL(form_post_seq),
 			   #{form.formNo},
 			   #{itemNo},
 			   #{itemData},
 			   #{itemInput},
-			   sysdate())
+			   sysdate(),
+			   NEXTVAL(allAsc_seq))
 	</insert>
 	
 	<insert id="addFormPostCopy" parameterType="formPost">
@@ -123,21 +128,33 @@
 					   item_no,
 					   item_data,
 					   item_input,
-					   date)
+					   date,
+					   form_post_asc)
 		VALUES(NEXTVAL(form_post_seq),
 			   #{form.formNo},
 			   #{itemNo},
 			   #{itemData},
 			   #{itemInput},
-			   #{date})
+			   #{date},
+			   NEXTVAL(allAsc_seq))
 	</insert>	
 	
 	<select id="formList" resultMap="formSelectMap">
 		SELECT * FROM form ORDER BY form_no ASC
 	</select>
 	
+	<select id="formListCount" resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(SELECT * FROM form ORDER BY form_no ASC) countTable		
+	</select>
+	
 	<select id="itemList" parameterType="int" resultMap="itemSelectMap">
 		SELECT * FROM ITEM WHERE FORM_NO = #{form.formNo} ORDER BY ITEM_ASC ASC
+	</select>
+	
+	<select id="itemListCount" parameterType="int" resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(SELECT * FROM ITEM WHERE FORM_NO = #{form.formNo} ORDER BY ITEM_ASC ASC) countTable	
 	</select>
 	
 	<select id="formPostList" parameterType="int" resultMap="formPostSelectMap">
