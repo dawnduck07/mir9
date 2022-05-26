@@ -87,6 +87,7 @@
 	}
 	
 	function funReply2(){	
+		alert("답변 등록이 완료되었습니다.")
 		$("form[name='getPostForm']").attr("method", "POST").attr("action", "/admin/board/addAnswerPost?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
 	
