@@ -52,13 +52,15 @@
 <!-- plupload -->
 <script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
-<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plupload/js/i18n/ko.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css">
-<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-<link  href="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+<!-- 
+	<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+	<link  href="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+	<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
+ -->
 
 <script type="text/javascript">
 	
@@ -127,42 +129,16 @@
 		$("form[name='searchForm']").attr("method" , "POST").attr("action" , "/admin/board/postList?${_csrf.parameterName}=${_csrf.token}").submit();
 	}
 	
-	function fncDown(){
-		var boardAsc = $("input:radio[name='order_code']:checked").val();
-		var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
-		var boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
-		var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
-		var boardNo = $("input[name='boardNo']").val();
-		if(boardAsc == boardDownAsc){
-			boardIndex++;
-			boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
-			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
-		}else{
-			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
-		}
-  		$.ajax({
-		 	 url : "/admin/board/updateDownAsc?${_csrf.parameterName}=${_csrf.token}",
- 		  	 type : "POST",
-	  	 	 data : { 
-	  	 		boardAsc,
-	  	 		boardDownAsc,
-	  	 		postNo,
-	  	 		downPostNo
-	  	 	 },
-		 	 success : function(result){
-		 		
-		  	 }
- 		});		
-  		alert("완료")
-  		location.href = "/admin/board/postList?boardNo="+boardNo;
-	}
-	
 	function fncUp(){
 		var boardAsc = $("input:radio[name='order_code']:checked").val();
 		var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
 		var boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
 		var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
 		var boardNo = $("input[name='boardNo']").val();
+		if(boardIndex == 0){
+			alert("1개의 항목을 선택하여야 합니다.")
+			return;
+		}
 		if(boardAsc == boardUpAsc){
 			boardIndex--;
 			boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
@@ -170,24 +146,68 @@
 		}else{
 			var upPostNo = $("tr").eq(boardIndex-1).children().find("input[name='originNo']").val();
 		}
+		if(boardIndex == 1){
+			alert("더이상 상위로의 위치 변경은 불가능합니다.");
+			return;
+		}else{
+	  		$.ajax({
+			 	 url : "/admin/board/json/updateUpAsc?${_csrf.parameterName}=${_csrf.token}",
+	 		  	 type : "POST",
+		  	 	 data : { 
+		  	 		boardAsc,
+		  	 		boardUpAsc,
+		  	 		postNo,
+		  	 		upPostNo
+		  	 	 },
+			 	 success : function(result){
+			 		if(result == true){
+			 			location.reload();
+			 		}
+			  	 }
+	 		});	
+		}
+	}		
+	
+	function fncDown(){
+		var boardAsc = $("input:radio[name='order_code']:checked").val();
+		var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+		var boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
+		var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
+		var boardNo = $("input[name='boardNo']").val();
+		if(boardIndex == 0){
+			alert("1개의 항목을 선택하여야 합니다.")
+			return;
+		}
+		if(boardAsc == boardDownAsc){
+			boardIndex++;
+			boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
+			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
+		}else{
+			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
+		}
+		if(boardIndex == 5){
+			alert("더이상 하위로의 위치 변경은 불가능합니다.")
+			return;
+		}else{
+	  		$.ajax({
+			 	 url : "/admin/board/json/updateDownAsc?${_csrf.parameterName}=${_csrf.token}",
+	 		  	 type : "POST",
+		  	 	 data : { 
+		  	 		boardAsc,
+		  	 		boardDownAsc,
+		  	 		postNo,
+		  	 		downPostNo
+		  	 	 },
+			 	 success : function(result){
+			 		if(result == true){
+			 			location.reload();
+			 		}
+			  	 }
+	 		});				
+		}
+	}
+	
 
-  		$.ajax({
-		 	 url : "/admin/board/updateUpAsc?${_csrf.parameterName}=${_csrf.token}",
- 		  	 type : "POST",
-	  	 	 data : { 
-	  	 		boardAsc,
-	  	 		boardUpAsc,
-	  	 		postNo,
-	  	 		upPostNo
-	  	 	 },
-		 	 success : function(result){
-		 		
-		  	 }
- 		});		
-  		
-  		alert("완료")
-  		location.href = "/admin/board/postList?boardNo="+boardNo;
-	}	
 	
 </script>
 
