@@ -41,6 +41,7 @@
 						<div class="box-tools pull-right" style="margin-bottom: 5px;">
 							<div class="has-feedback">
 								<select name="field" id="field" class="form-control input-sm">
+									<option value="total" ${param.field == 'total' ? 'selected' : ''}>전체</option>
 									<option value="id" ${param.field == 'id' ? 'selected' : ''}>아이디</option>
 									<option value="CONCAT(last_name, first_name)" ${param.field == 'CONCAT(last_name, first_name)' ? 'selected' : ''}>이름</option>
 									<option value="point_title" ${param.field == 'point_title' ? 'selected' : ''}>사용내역</option>
