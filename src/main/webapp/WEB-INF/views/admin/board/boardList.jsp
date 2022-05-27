@@ -158,6 +158,11 @@
 		prompt("이 게시판의 URL 입니다. Ctrl+C를 눌러 복사하세요", "http://localhost:8080/admin/board/postList?boardNo="+boardNo)
 	}
 	
+	function iframeReload(){
+		location.reload();
+	}
+	
+	
 
 
 </script>

@@ -107,11 +107,6 @@ public class BoardController {
 			boardService.addFile(boardFile);
 		}
 		
-		
-		
-		System.out.println("post 데이터 확인 ::: "+post);
-		System.out.println("board 데이터 확인 ::: "+board);
-		
 		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
 	}
 	
@@ -336,13 +331,9 @@ public class BoardController {
 						   @ModelAttribute("search") Search search) throws Exception {
 		
 		System.out.println("/listPost 시작");
-		System.out.println("Search 확인 === "+search);
 		
 		int limit = 5;
 		int offset = (cPage - 1) * limit;
-		
-		System.out.println("이이거 확인 === "+limit);
-		System.out.println("이이거 확인 === "+offset);
 		
 		Board board2 = boardService.getBoardAllData(boardNo);
 		Map<String, Object> map = new HashMap<String, Object>();
