@@ -26,4 +26,7 @@ public interface UserDao {
 
 	// 회원 등록
 	int userAuthoritiesEnroll(Authorities paramAuthorities);
+
+	// 메모 공란 등록
+	int userMemoEnroll(int memberNo);
 }

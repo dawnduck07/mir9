@@ -68,11 +68,11 @@
 					</div>
 					<div class="mb-3">
 						<label for="password">비밀번호</label> 
-						<input type="password" class="form-control" id="password" placeholder="영문소문자와 숫자 포함 8~15자로 입력하세요." required>
+						<input type="password" class="form-control" id="password" name="password" placeholder="영문소문자와 숫자 포함 8~15자로 입력하세요." required>
 					</div>
 					<div class="mb-3">
 						<label for="passwordCheck">비밀번호</label> 
-						<input type="password" class="form-control" id="passwordCheck" placeholder="비밀번호 확인을 위해 더 입력하세요." required>
+						<input type="password" class="form-control" id="passwordCheck" name="passwordCheck" placeholder="비밀번호 확인을 위해 더 입력하세요." required>
 					</div>
 					<div class="row">
 						<div class="col-md-6 mb-3">
@@ -99,11 +99,11 @@
 							</div>
 							<span>-</span>
 							<div class="col-md-3 mb-2">
-								<input type="text" id="mobile2" name="mobile2" class="form-control">
+								<input type="text" id="mobile2" name="mobile2" class="form-control" maxlength="4">
 							</div>
 							<span>-</span>
 							<div class="col-md-3 mb-2">
-								<input type="text" id="mobile3" name="mobile3" class="form-control">
+								<input type="text" id="mobile3" name="mobile3" class="form-control" maxlength="4">
 							</div>
 						</div>  
 					</div>

@@ -52,4 +52,10 @@ public class UserDaoImpl implements UserDao {
 	public int userAuthoritiesEnroll(Authorities paramAuthorities) {
 		return session.insert("user.userAuthoritiesEnroll", paramAuthorities);
 	}
+
+	// 메모 공란 등록
+	@Override
+	public int userMemoEnroll(int memberNo) {
+		return session.insert("user.userMemoEnroll", memberNo);
+	}
 }
