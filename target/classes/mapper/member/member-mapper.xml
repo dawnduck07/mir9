@@ -377,28 +377,40 @@
 
 <!-- 회원 포인트 목록 조회 + 검색 -->
 <select id="selectMemberPointListByParam" resultType="memberPoint">
-		select d.*
-		  from (select @ROWNUM:=@ROWNUM+1 as rowNum, c.* 
-				  from (select @ROWNUM:=0, 
-				  			   a.MEMBER_POINT_NO, 
-				  			   b.id, 
-				  			   CONCAT(b.LAST_NAME, b.FIRST_NAME) AS member_name, 
-				  			   b.EMAIL, 
-				  			   a.point_title, 
-				  			   a.point_amount, 
-				  			   a.reg_date
-						FROM member_point a 
-						JOIN member b ON(a.MEMBER_NO = b.MEMBER_NO)
-						<where>
-							<if test="keyword != null">
-								${field} LIKE CONCAT('%',#{keyword},'%')
-							</if>
-							<if test="memberNo != 0">
-								and a.member_no = #{memberNo}
-							</if>
-						</where>
-						order by a.reg_date DESC) as c) as d
-		 where d.rowNum BETWEEN #{startRow} AND #{endRow}
+	select d.*
+	  from (select @ROWNUM:=@ROWNUM+1 as rowNum, c.* 
+			  from (select @ROWNUM:=0, 
+			  			   a.MEMBER_NO,
+			  			   a.MEMBER_POINT_NO, 
+			  			   b.id, 
+			  			   CONCAT(b.LAST_NAME, b.FIRST_NAME) AS member_name, 
+			  			   b.EMAIL, 
+			  			   a.point_title, 
+			  			   a.point_amount, 
+			  			   a.reg_date
+					 from member_point a 
+					 join member b ON(a.MEMBER_NO = b.MEMBER_NO)
+					<where>
+						<if test="keyword != null and keyword != ''">
+							<choose>
+								<when test="field eq 'total'">
+									(
+										id LIKE CONCAT('%',#{keyword},'%') ||
+										CONCAT(last_name, first_name) LIKE CONCAT('%',#{keyword},'%') ||
+										point_title LIKE CONCAT('%',#{keyword},'%')
+									)
+								</when>
+								<otherwise>
+									${field} LIKE CONCAT('%',#{keyword},'%')
+								</otherwise>
+							</choose>
+						</if>
+						<if test="memberNo > 0">
+							and a.MEMBER_NO = #{memberNo}
+						</if>
+					</where>
+					 order by a.reg_date DESC) as c) as d
+	 where d.rowNum BETWEEN #{startRow} AND #{endRow}
 </select>
 
 <!-- 회원 포인트 목록 수 -->
@@ -408,10 +420,21 @@
 	  join member b ON(a.MEMBER_NO = b.MEMBER_NO)
 	<where>
 		<if test="keyword != null and keyword != ''">
-			${field} LIKE CONCAT('%',#{keyword},'%')
+			<choose>
+				<when test="field eq 'total'">
+					(
+						id LIKE CONCAT('%',#{keyword},'%') ||
+						CONCAT(last_name, first_name) LIKE CONCAT('%',#{keyword},'%') ||
+						point_title LIKE CONCAT('%',#{keyword},'%')
+					)
+				</when>
+				<otherwise>
+					${field} LIKE CONCAT('%',#{keyword},'%')
+				</otherwise>
+			</choose>
 		</if>
-		<if test="memberNo != 0">
-			and a.member_no = #{memberNo}
+		<if test="memberNo > 0">
+			and a.MEMBER_NO = #{memberNo}
 		</if>
 	</where>
 </select>
