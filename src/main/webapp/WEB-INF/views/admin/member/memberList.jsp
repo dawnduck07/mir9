@@ -135,7 +135,7 @@
 			<div class="modal-content">
             	<input type="hidden" id="addressNo" name="addressNo" value="" />
             	<input type="hidden" id="memberNo" name="memberNo" value="" />
-            	<form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/admin/member/memberInsertModalFrm.do">
+            	<form name="memberInsertModalFrm" id="memberInsertModalFrm" method="POST" action="${pageContext.request.contextPath}/admin/member/memberInsertModalFrm.do?${_csrf.parameterName}=${_csrf.token}">
 	               <div class="modal-header">
 	                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 	                  <h4 class="modal-title" id="myModalLabel">회원 등록</h4>
