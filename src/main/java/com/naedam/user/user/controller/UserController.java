@@ -90,7 +90,7 @@ public class UserController {
 			// 3. 주소록 등록
 			AddressBook paramAddressBook = new AddressBook();
 			paramAddressBook.setAddressNo(address.getAddressNo());
-			paramAddressBook.setMemberNo(user.getMemberNo());
+			paramAddressBook.setMemberNo(paramUser.getMemberNo());
 			int resultUserAddressBookEnroll = userService.userAddressBookEnroll(paramAddressBook);
 			log.debug("resultUserAddressBookEnroll = {}", resultUserAddressBookEnroll);
 			
@@ -99,6 +99,10 @@ public class UserController {
 			paramAuthorities.setMemberNo(paramUser.getMemberNo());
 			int resultUserAuthorities = userService.userAuthoritiesEnroll(paramAuthorities);
 			log.debug("resultUserAuthorities = {}", resultUserAuthorities);
+			
+			// 4. 메모 공란 등록
+			int resultUserMemoEnroll = userService.userMemoEnroll(paramUser.getMemberNo());
+			log.debug("resultUserMemoEnroll = {}", resultUserMemoEnroll);
 			
 			// 2.리다이렉트 & 사용자피드백 전달
 			redirectAttribute.addFlashAttribute("msg", "회원가입 성공!");
