@@ -36,7 +36,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.naedam.admin.common.Mir9Utils;
+import com.naedam.admin.community.model.service.CommunityService;
+import com.naedam.admin.community.model.vo.EmailSetting;
+import com.naedam.admin.community.model.vo.SmsSetting;
 import com.naedam.admin.coupon.model.service.CouponService;
 import com.naedam.admin.coupon.model.vo.Coupon;
 import com.naedam.admin.coupon.model.vo.MemberCoupon;
@@ -225,11 +230,11 @@ public class MemberController {
 			if(resultRegisterMember > 0 && resultRegisterAddress > 0 
 			   && resultRegisterAddressBook > 0 && resultRegisterMemberMemo > 0
 			   && resultInsertAuthorities > 0) {
-				msg = "해당 회원이 등록 되었습니다.";
+				msg = "해당 회원이 등록 되었습니다.";				
 			} else {
 				msg = "회원 등록이 실패했습니다.";
 			}
-
+			
 			redirectAttributes.addFlashAttribute("msg", msg);
 		} catch (Exception e) {
 			e.printStackTrace();
