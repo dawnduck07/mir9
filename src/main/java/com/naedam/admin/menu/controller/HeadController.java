@@ -23,15 +23,6 @@ public class HeadController {
 	@Autowired	
 	private MenuService menuService;
 	
-	@PostMapping("addHead")
-	public String addHead(@ModelAttribute("head") Head head) throws Exception{
-		
-		System.out.println("head/addHead 시작");
-		menuService.addHead(head);
-		
-		return "redirect:/admin/head/headList";
-	}
-	
 	@RequestMapping(value="headList")
 	public String headList(Head head, Model model) throws Exception{
 		System.out.println("head/headList 시작");
@@ -43,14 +34,6 @@ public class HeadController {
 		model.addAttribute("list", resultMap.get("list"));
 		
 		return "admin/menu/head";
-	}
-	
-	@PostMapping("updateHead")
-	public String updateHead(@ModelAttribute("head") Head head)throws Exception{
-		System.out.println("head/updateHead 시작");
-		menuService.updateHead(head);
-		
-		return "redirect:/admin/head/headList";
 	}
 	
 	@PostMapping("deleteChoiceHead")

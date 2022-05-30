@@ -60,8 +60,9 @@ body.modal-open {
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
     <div class="modal-dialog" style="width:90%;">
         <div class="modal-content">
-            <form name="form_register" method="post" onsubmit="return false;" action="/admin/menu/addMenu?${_csrf.parameterName}=${_csrf.token}">
-            <input type="hidden" name="mode" value="insertMenu">
+            <form name="form_register" method="post" onsubmit="return false;" action="/admin/menu/menuProcess?${_csrf.parameterName}=${_csrf.token}">
+            <input type="hidden" name="mode" value="insert">
+            <input type="hidden" name="part" value="menu">
             <input type="hidden" name="originNo" id="originCode">
             <input type="hidden" name="ord" id="ordCode">
             
@@ -142,8 +143,9 @@ body.modal-open {
 	<div class="modal fade" id="modalContent2" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" style="width:90%;">
         <div class="modal-content">
-            <form name="form_register2" method="post" onsubmit="return false;" action="/admin/menu/updateMenu?${_csrf.parameterName}=${_csrf.token}">
-            <input type="hidden" name="mode" value="insertMenu">
+            <form name="form_register2" method="post" onsubmit="return false;" action="/admin/menu/menuProcess?${_csrf.parameterName}=${_csrf.token}">
+            <input type="hidden" name="mode" value="update">
+            <input type="hidden" name="part" value="menu">
             <input type="hidden" name="code" id="getCode">
             
             <input type="hidden" name="locale" value="ko">

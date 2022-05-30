@@ -101,8 +101,9 @@
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:90%">
 	        <div class="modal-content">
-	            <form name="form_register" method="post" onsubmit="return false;" action="/admin/head/addHead?${_csrf.parameterName}=${_csrf.token}">
-		            <input type="hidden" name="mode" value="insertHead">
+	            <form name="form_register" method="post" onsubmit="return false;" action="/admin/menu/menuProcess?${_csrf.parameterName}=${_csrf.token}">
+		            <input type="hidden" name="mode" value="insert">
+		            <input type="hidden" name="part" value="head">
 		            <input type="hidden" name="locale" value="ko">
 		            <div class="modal-header">
 		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -161,10 +162,10 @@
 	<div class="modal fade" id="modalContent2" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:90%">
 	        <div class="modal-content">
-	            <form name="form_register2" method="post" onsubmit="return false;" action="/admin/head/updateHead?${_csrf.parameterName}=${_csrf.token}">
-	            <input type="hidden" name="mode" value="insertHead">
+	            <form name="form_register2" method="post" onsubmit="return false;" action="/admin/menu/menuProcess?${_csrf.parameterName}=${_csrf.token}">
+	            <input type="hidden" name="mode" value="update">
+	            <input type="hidden" name="part" value="head">
 	            <input type="hidden" name="headNo">
-	            <input type="hidden" name="locale" value="ko">
 	            <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	                <h4 class="modal-title">헤더 수정</h4>
@@ -351,7 +352,7 @@
                 success:function(data, textStatus, jqXHR){
                     var json_data = data;
                     console.log(json_data);
-                    $('[name=mode]').val('updateHead');
+                    $('[name=mode]').val('update');
                     $('[name=headNo]').val(code);
                     $('[name=title]').val(json_data.title);
                     $('[name=status]').val(json_data.status);
@@ -373,7 +374,7 @@
         function onclickInsert() {
             $('#modalContent').modal('show');
             form_register.reset();
-            form_register.mode.value = 'insertHead';
+            form_register.mode.value = 'insert';
             $('input:radio[name=icon_code]').attr('checked', false);
             objEditor.setData('');
 
@@ -400,12 +401,14 @@
         
         function deleteChoiceHead(code){
         	
-        	var headArr = new Array();
+        	var menuArr = new Array();
+        	var mode = "delete";
+        	var part = "head";
         	
 			$("input[class='headNo']:checked").each(function(){
-				headArr.push($(this).val());
+				menuArr.push($(this).val());
  			});
-			if(headArr.length == 0){
+			if(menuArr.length == 0){
 				alert("항목을 선택하셔야 합니다.");
 				return;
 			}
@@ -415,10 +418,12 @@
 				
 			}else{
 	  		$.ajax({
-  			 	 url : "/admin/head/deleteChoiceHead?${_csrf.parameterName}=${_csrf.token}",
+  			 	 url : "/admin/menu/json/menuProcess?${_csrf.parameterName}=${_csrf.token}",
 	  		  	 type : "POST",
   		  	 	 data : { 
-  		  	 		headArr : headArr 
+  		  	 		menuArr : menuArr,
+  		  	 		mode,
+  		  	 		part
   		  	 	 },
     		 	 success : function(result){
     		 		

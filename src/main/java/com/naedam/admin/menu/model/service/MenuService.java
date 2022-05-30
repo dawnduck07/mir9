@@ -9,6 +9,10 @@ import com.naedam.admin.menu.model.vo.Meta;
 
 public interface MenuService {
 	
+	
+	//메뉴 프로세서
+	public void menuProcess(Map<String, Object> map) throws Exception;
+	
 	//메뉴관리 등록
 	public int addMenu(Menu menu) throws Exception;
 	

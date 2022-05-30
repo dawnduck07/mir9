@@ -1,6 +1,7 @@
 package com.naedam.admin.menu.model.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,38 @@ public class MenuServiceImpl implements MenuService {
 	
 	@Autowired
 	private MenuDao menuDao;
+	//메뉴관리 프로세서
+	public void menuProcess(Map<String, Object> map) throws Exception{
+		if("menu".equals(map.get("part"))) {
+			Menu menu = (Menu) map.get("menu");
+			if("insert".equals(map.get("mode"))) {
+				menuDao.addMenu(menu);
+			}else if("update".equals(map.get("mode"))) {
+				Menu revisionMenu = new Menu();
+				revisionMenu = menuDao.getRevision(menu);
+				revisionMenu.setOriginNo(menu.getCode());
+				menuDao.addRevision(revisionMenu);
+				menuDao.updateMenu(menu);
+			}else if("delete".equals(map.get("mode"))) {
+				List<String> menuArr = (List<String>) map.get("menuArr");
+				for(String i : menuArr) {
+					menuDao.updateChoiceMenu(Integer.parseInt(i));
+				}
+			}
+		}else if("head".equals(map.get("part"))) {
+			Head head = (Head) map.get("head");
+			if("insert".equals(map.get("mode"))) {
+				menuDao.addHead(head);
+			}else if("update".equals(map.get("mode"))) {
+				menuDao.updateHead(head);
+			}else if("delete".equals(map.get("mode"))) {
+				List<String> menuArr = (List<String>) map.get("menuArr");
+				for(String i : menuArr) {
+					menuDao.deleteChoiceHead(Integer.parseInt(i));
+				}
+			}
+		}
+	}
 	
 	//메뉴 등록
 	@Override
