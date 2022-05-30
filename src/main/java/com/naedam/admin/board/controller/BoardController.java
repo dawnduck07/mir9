@@ -75,16 +75,18 @@ public class BoardController {
 	public String postProcess(@ModelAttribute("board") Board board,
 							  @ModelAttribute("post") Post post,
 							  @RequestParam(value="postName", required = false) MultipartFile[] postName,
+							  @RequestParam(value="postName", required = false) String[] postName2,
 						      @RequestParam(value="ThombnailName", required = false) MultipartFile ThombnailName,
 						      @RequestParam("secNo") String secNo,
 						      @RequestParam("mode") String mode,
 						      HttpServletRequest request) throws Exception {
-		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
+		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");	
 		Map<String, Object> postMap	 = new HashMap<>();
 		postMap.put("board", board);
 		postMap.put("post", post);	
 		postMap.put("mode", mode);
 		postMap.put("postName", postName);
+		postMap.put("postName2", postName2);
 		postMap.put("ThombnailName", ThombnailName);
 		postMap.put("filePath", filePath);
 		postMap.put("secNo", secNo);
@@ -93,132 +95,6 @@ public class BoardController {
 		
 		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
 	}
-	
-	@PostMapping("addPost2")
-	public String addPost2(@ModelAttribute("post") Post post,
-						  @ModelAttribute("board") Board board,
-					      @RequestParam(value="postName") String[] postName,
-					      @RequestParam("ThombnailName") MultipartFile ThombnailName,
-					      HttpServletRequest request) throws Exception {
-		
-		System.out.println("addPost2 시작");
-		
-		BoardFile boardFile = new BoardFile();
-		
-		//1번 회원이 로그인을 했다고 가정
-		Member member2 = boardService.getMemberData(1);
-		post.setPostMember(member2);
-		post.setPostMemberName(member2.getLastName()+member2.getFirstName());
-		System.out.println("이거 확인 ::: === "+ postName.length);
-		
-		//파일 업로드
-		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
-		File file = new File(filePath+ThombnailName.getOriginalFilename());
-		post.setPostBoard(board);
-		post.setPostThombnail(ThombnailName.getOriginalFilename());
-		ThombnailName.transferTo(file);
-		boardService.addPost(post);
-		
-		for(int i = 0; i < postName.length; i++) {
-			if(i >= 1) {
-				boardFile.setFilePost(post);
-				boardFile.setFileName(postName[i]);
-				boardService.addFile(boardFile);
-			}
-		}
-		
-		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
-	}
-	
-	@PostMapping("addAnswerPost")
-	public String addAnswerPost(@ModelAttribute("post") Post post,
-								@ModelAttribute("board") Board board,
-								@RequestParam(value="postName") MultipartFile[] postName,
-								@RequestParam("ThombnailName") MultipartFile ThombnailName, HttpServletRequest request) throws Exception {
-		
-		System.out.println("addAnswerPost 시작");
-		System.out.println("post 데이터 확인 ::: "+post);
-		BoardFile boardFile = new BoardFile();
-		//1번 회원이 로그인을 했다고 가정
-		Member member2 = boardService.getMemberData(1);
-		post.setPostMember(member2);
-		post.setPostMemberName(member2.getLastName()+member2.getFirstName());
-		System.out.println("memeberData ==== "+member2);
-		
-		//파일 업로드
-		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
-		File file = new File(filePath+ThombnailName.getOriginalFilename());
-		post.setPostBoard(board);
-		post.setPostThombnail(ThombnailName.getOriginalFilename());
-		ThombnailName.transferTo(file);
-		
-		for(int i = 0; i < postName.length; i++) {
-			File file2 = new File(filePath+postName[i].getOriginalFilename());
-			boardFile.setFilePost(post);;
-			boardFile.setFileName(postName[i].getOriginalFilename());
-			postName[i].transferTo(file2);
-			boardService.addFile(boardFile);
-		}
-		//파일 업로드 끝	
-		
-		
-		Post post2 = boardService.getPostData(post.getPostNo());
-		post.setPostOriginNo(post.getPostOriginNo()); // 이건 해결
-		post.setPostOrd(post2.getPostAsc());
-		post.setPostLayer(post2.getPostLayer());
-		
-		boardService.addAnswerPost(post);
-		
-		
-		
-		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
-	}
-	
-	@PostMapping("addComment")
-	public void updateComment(@ModelAttribute("boardComment") BoardComment boardComment,
-							  @RequestParam("postNo") int postNo,
-							  @RequestParam("memberNo") int memberNo)throws Exception{
-		System.out.println("addComment 시작"); 
-	}
-	
-	@PostMapping("updatePost2")
-	public String updataPost2(@ModelAttribute("post") Post post,
-							 @RequestParam("boardNo") int boardNo,
-							 @RequestParam(value="postName") String[] postName,
-						     @RequestParam("ThombnailName") MultipartFile ThombnailName, HttpServletRequest request) throws Exception{
-		System.out.println("updatePost2 시작");
-		
-		Board board = new Board();
-		BoardFile boardFile = new BoardFile();
-		board.setBoardNo(boardNo);
-		
-		//파일 업로드
-		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
-		File file = new File(filePath+ThombnailName.getOriginalFilename());
-		post.setPostBoard(board);
-		if(ThombnailName.isEmpty() == false) {
-			post.setPostThombnail(ThombnailName.getOriginalFilename());
-			ThombnailName.transferTo(file);
-		}else if(ThombnailName.isEmpty() == true) {
-			Post postData = boardService.getPostData(post.getPostNo());
-			post.setPostThombnail(postData.getPostThombnail());
-			ThombnailName.transferTo(file);
-		}
-		for(int i = 0; i < postName.length; i++) {
-			if(i >= 1) {
-				boardFile.setFilePost(post);;
-				boardFile.setFileName(postName[i]);
-				boardService.addFile(boardFile);
-			}
-		}
-		//파일 업로드 끝
-		
-		boardService.updatePost(post);
-		
-		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
-	}
-	
-	
 	
 	@GetMapping("listBoard")
 	public String listBoard(@ModelAttribute("search") Search search, Board board, Model model) throws Exception {
@@ -274,25 +150,6 @@ public class BoardController {
 		model.addAttribute("pageCount",totalPostListCount);
 		return "admin/board/postList";
 	}
-
-	
-	@PostMapping("deleteChoicePost")
-	public void deleteChoicePost(@RequestParam(value = "postArr[]") List<String> postArr, 
-								  Post post) throws Exception{
-		
-		System.out.println("deleteChoicePost 시작");
-		
-		int result = 0;
-		int postNo = 0;
-	
-		for(String i : postArr) {
-			postNo = Integer.parseInt(i);
-			post.setPostNo(postNo);
-			boardService.deleteChoicePost(post.getPostNo());
-		}
-		result = 1;
-		
-	}
 	
 	@PostMapping("deleteThombnail")
 	public String deleteThombnail(@ModelAttribute("post") Post post,
@@ -302,48 +159,6 @@ public class BoardController {
 		boardService.updateThombnail(post);
 		
 		return "redirect:/admin/board/postList?boardNo="+boardNo;
-	}
-	
-	@PostMapping("addPostCopy")
-	public void addPostCopy(@RequestParam(value = "postArr[]") List<String> postArr,
-							@RequestParam("boardNo")int boardNo) throws Exception{
-		
-		System.out.println("addPostCopy 시작");
-		Board board = new Board();
-		int result = 0;
-		int postNo = 0;
-		System.out.println("boardNo 확인 ::: "+boardNo);
-		for(String i : postArr) {
-			postNo = Integer.parseInt(i);
-			Post post = boardService.getPostData(postNo);
-			post.getPostBoard().setBoardNo(boardNo);
-			boardService.addPost(post);
-		}
-		result = 1;
-		
-	}
-	
-	@PostMapping("addPostChange")
-	public void addPostChange(@RequestParam(value = "postArr[]") List<String> postArr,
-							@RequestParam("boardNo")int boardNo) throws Exception{
-		
-		System.out.println("addPostChange 시작");
-		
-		Board board = new Board();
-		
-		
-		int result = 0;
-		int postNo = 0;
-		
-		for(String i : postArr) {
-			postNo = Integer.parseInt(i);
-			Post post = boardService.getPostData(postNo);
-			post.getPostBoard().setBoardNo(boardNo);
-			boardService.addPost(post);
-			boardService.deleteChoicePost(postNo);
-		}
-		result = 1;
-		
 	}	
 	
 	@PostMapping("imageUpload")
@@ -445,38 +260,6 @@ public class BoardController {
 		} 
 	}
 	
-	@RequestMapping("test")
-	public String test() throws Exception{
-		
-		return "admin/board/test";
-	}
-	
-
-		
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
