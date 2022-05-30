@@ -1,11 +1,16 @@
 package com.naedam.admin.board.model.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.naedam.admin.board.model.dao.BoardDao;
 import com.naedam.admin.board.model.vo.Board;
@@ -15,7 +20,6 @@ import com.naedam.admin.board.model.vo.BoardFile;
 import com.naedam.admin.board.model.vo.BoardOption;
 import com.naedam.admin.board.model.vo.BoardTranslate;
 import com.naedam.admin.board.model.vo.Post;
-import com.naedam.admin.board.model.vo.Search;
 import com.naedam.admin.member.model.vo.Member;
 
 @Service
@@ -44,6 +48,57 @@ public class BoardServiceImpl implements BoardService {
 			List<String> boardArr = (List<String>) map.get("boardArr");
 			for(String i : boardArr) {
 				boardDao.deleteChoiceBoard(Integer.parseInt(i));
+			}
+		}
+	}
+	
+	public void postProcess(Map<String, Object> map) throws Exception{
+		Post post = (Post) map.get("post");
+		post.setPostBoard((Board) map.get("board"));
+		BoardFile boardFile = new BoardFile();
+		Member member = boardDao.getMemberData(Integer.parseInt(map.get("secNo").toString()));
+		post.setPostMember(member);
+		post.setPostMemberName(member.getLastName()+member.getFirstName());
+		if("insert".equals(map.get("mode")) || "update".equals(map.get("mode")) || "answer".equals(map.get("mode"))) {
+			MultipartFile[] postName = (MultipartFile[]) map.get("postName");
+			MultipartFile ThombnailName = (MultipartFile) map.get("ThombnailName");
+			File file = new File(map.get("filePath")+ThombnailName.getOriginalFilename());
+			for(int i = 0; i < postName.length; i++) {
+				File file2 = new File(map.get("filePath")+postName[i].getOriginalFilename());
+				boardFile.setFilePost(post);
+				boardFile.setFileName(postName[i].getOriginalFilename());
+				postName[i].transferTo(file2);
+				boardDao.addFile(boardFile);				
+			}
+			if("insert".equals(map.get("mode"))) {
+				post.setPostThombnail(ThombnailName.getOriginalFilename());
+				ThombnailName.transferTo(file);
+				boardDao.addPost(post);
+			}else if("update".equals(map.get("mode"))) {
+				if(ThombnailName.isEmpty() == false) {
+					post.setPostThombnail(ThombnailName.getOriginalFilename());
+					ThombnailName.transferTo(file);
+				}else if(ThombnailName.isEmpty() == true) {
+					Post postData = boardDao.getPostData(post.getPostNo());
+					post.setPostThombnail(postData.getPostThombnail());
+					ThombnailName.transferTo(file);
+				}
+				boardDao.updatePost(post);
+			}else if("answer".equals(map.get("mode"))) {
+				if(ThombnailName.isEmpty() == false) {
+					System.out.println("접근1");
+					post.setPostThombnail(ThombnailName.getOriginalFilename());
+					ThombnailName.transferTo(file);
+				}else if(ThombnailName.isEmpty() == true) {
+					System.out.println("접근2");
+					Post postData = boardDao.getPostData(post.getPostNo());
+					post.setPostThombnail(postData.getPostThombnail());
+					ThombnailName.transferTo(file);
+				}
+				Post post2 = boardDao.getPostData(post.getPostNo());
+				post.setPostOrd(post2.getPostAsc());
+				post.setPostLayer(post2.getPostLayer());
+				boardDao.addAnswerPost(post);
 			}
 		}
 	}

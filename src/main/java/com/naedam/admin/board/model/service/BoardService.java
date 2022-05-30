@@ -17,6 +17,9 @@ public interface BoardService {
 	//게시판 프로세서
 	public void boardProcess(Map<String, Object> map) throws Exception;
 	
+	//게시글 프로세서
+	public void postProcess(Map<String, Object> map) throws Exception;
+	
 	//게시글 등록
 	public int addPost(Post post) throws Exception;
 	
