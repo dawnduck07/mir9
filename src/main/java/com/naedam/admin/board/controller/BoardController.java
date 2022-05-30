@@ -71,38 +71,25 @@ public class BoardController {
 		return "redirect:/admin/board/listBoard";
 	}
 	
-	@PostMapping("addPost")
-	public String addPost(@ModelAttribute("post") Post post,
-						  @ModelAttribute("board") Board board,
-						  HttpSession session,
-					      @RequestParam(value="postName") MultipartFile[] postName,
-					      @RequestParam("ThombnailName") MultipartFile ThombnailName,HttpServletRequest request) throws Exception {
-		
-		System.out.println("addPost 시작");
-		
-		BoardFile boardFile = new BoardFile();
-		
-		//1번 회원이 로그인을 했다고 가정
-		Member member2 = boardService.getMemberData(1);
-		post.setPostMember(member2);
-		post.setPostMemberName(member2.getLastName()+member2.getFirstName());
-		
-		//파일 업로드
+	@PostMapping("postProcess")
+	public String postProcess(@ModelAttribute("board") Board board,
+							  @ModelAttribute("post") Post post,
+							  @RequestParam(value="postName", required = false) MultipartFile[] postName,
+						      @RequestParam(value="ThombnailName", required = false) MultipartFile ThombnailName,
+						      @RequestParam("secNo") String secNo,
+						      @RequestParam("mode") String mode,
+						      HttpServletRequest request) throws Exception {
 		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
-		File file = new File(filePath+ThombnailName.getOriginalFilename());
-		post.setPostBoard(board);
-		post.setPostThombnail(ThombnailName.getOriginalFilename());
-		ThombnailName.transferTo(file);
-		boardService.addPost(post);
+		Map<String, Object> postMap	 = new HashMap<>();
+		postMap.put("board", board);
+		postMap.put("post", post);	
+		postMap.put("mode", mode);
+		postMap.put("postName", postName);
+		postMap.put("ThombnailName", ThombnailName);
+		postMap.put("filePath", filePath);
+		postMap.put("secNo", secNo);
+		boardService.postProcess(postMap);
 		
-		
-		for(int i = 0; i < postName.length; i++) {
-			File file2 = new File(filePath+postName[i].getOriginalFilename());
-			boardFile.setFilePost(post);
-			boardFile.setFileName(postName[i].getOriginalFilename());
-			postName[i].transferTo(file2);
-			boardService.addFile(boardFile);
-		}
 		
 		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
 	}
@@ -192,43 +179,6 @@ public class BoardController {
 							  @RequestParam("postNo") int postNo,
 							  @RequestParam("memberNo") int memberNo)throws Exception{
 		System.out.println("addComment 시작"); 
-	}
-	
-	
-	@PostMapping("updatePost")
-	public String updataPost(@ModelAttribute("post") Post post,
-							 @RequestParam("boardNo") int boardNo,
-							 @RequestParam(value="postName") MultipartFile[] postName,
-						     @RequestParam("ThombnailName") MultipartFile ThombnailName, HttpServletRequest request) throws Exception{
-		System.out.println("updatePost 시작");
-		Board board = new Board();
-		BoardFile boardFile = new BoardFile();
-		board.setBoardNo(boardNo);
-		
-		//파일 업로드
-		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");
-		File file = new File(filePath+ThombnailName.getOriginalFilename());
-		post.setPostBoard(board);
-		if(ThombnailName.isEmpty() == false) {
-			post.setPostThombnail(ThombnailName.getOriginalFilename());
-			ThombnailName.transferTo(file);
-		}else if(ThombnailName.isEmpty() == true) {
-			Post postData = boardService.getPostData(post.getPostNo());
-			post.setPostThombnail(postData.getPostThombnail());
-			ThombnailName.transferTo(file);
-		}
-		for(int i = 0; i < postName.length; i++) {
-			File file2 = new File(filePath+postName[i].getOriginalFilename());
-			boardFile.setFilePost(post);;
-			boardFile.setFileName(postName[i].getOriginalFilename());
-			postName[i].transferTo(file2);
-			boardService.addFile(boardFile);
-		}
-		//파일 업로드 끝
-		
-		boardService.updatePost(post);
-		
-		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
 	}
 	
 	@PostMapping("updatePost2")
