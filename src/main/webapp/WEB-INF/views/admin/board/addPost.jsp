@@ -127,7 +127,7 @@
 			}	
 			
 			alert("게시글이 등록 되었습니다.")
-			$("form[name='addPostForm']").attr("method", "POST").attr("action", "/admin/board/addPost2?${_csrf.parameterName}=${_csrf.token}").submit();	
+			$("form[name='addPostForm']").attr("method", "POST").attr("action", "/admin/board/postProcess?${_csrf.parameterName}=${_csrf.token}").submit();	
 		}
 	}
 	
@@ -218,13 +218,13 @@
                     <button type="button" class="btn btn-primary btn-xs" onclick="fucAddFile();"><span class="glyphicon glyphicon-plus"></span> 파일추가</button><br>
                 </p>
                     <div id="list_file" name="listFile">
-                    	<input type="file" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;" >
+                    	
                     </div>
                 </c:if>
                 <c:if test="${board2.option.optionMass eq 'y'}">
                 <p id="diplay-plupload">
                     <span id="file_list">
-                    	<input type="hidden" name="postName" id="postName" class="form-control input-sm" style="width:100%; display:inline; margin-bottom:10px;" >
+                    	
                     </span>            
                 </p>  
 					<div id="uploader"></div>                              

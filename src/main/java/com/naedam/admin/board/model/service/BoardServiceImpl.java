@@ -56,20 +56,14 @@ public class BoardServiceImpl implements BoardService {
 		Post post = (Post) map.get("post");
 		post.setPostBoard((Board) map.get("board"));
 		BoardFile boardFile = new BoardFile();
-		Member member = boardDao.getMemberData(Integer.parseInt(map.get("secNo").toString()));
-		post.setPostMember(member);
-		post.setPostMemberName(member.getLastName()+member.getFirstName());
 		if("insert".equals(map.get("mode")) || "update".equals(map.get("mode")) || "answer".equals(map.get("mode"))) {
+			Member member = boardDao.getMemberData(Integer.parseInt(map.get("secNo").toString()));
+			post.setPostMember(member);
+			post.setPostMemberName(member.getLastName()+member.getFirstName());			
 			MultipartFile[] postName = (MultipartFile[]) map.get("postName");
+			String[] postName2 = (String[]) map.get("postName2");
 			MultipartFile ThombnailName = (MultipartFile) map.get("ThombnailName");
 			File file = new File(map.get("filePath")+ThombnailName.getOriginalFilename());
-			for(int i = 0; i < postName.length; i++) {
-				File file2 = new File(map.get("filePath")+postName[i].getOriginalFilename());
-				boardFile.setFilePost(post);
-				boardFile.setFileName(postName[i].getOriginalFilename());
-				postName[i].transferTo(file2);
-				boardDao.addFile(boardFile);				
-			}
 			if("insert".equals(map.get("mode"))) {
 				post.setPostThombnail(ThombnailName.getOriginalFilename());
 				ThombnailName.transferTo(file);
@@ -86,11 +80,9 @@ public class BoardServiceImpl implements BoardService {
 				boardDao.updatePost(post);
 			}else if("answer".equals(map.get("mode"))) {
 				if(ThombnailName.isEmpty() == false) {
-					System.out.println("접근1");
 					post.setPostThombnail(ThombnailName.getOriginalFilename());
 					ThombnailName.transferTo(file);
 				}else if(ThombnailName.isEmpty() == true) {
-					System.out.println("접근2");
 					Post postData = boardDao.getPostData(post.getPostNo());
 					post.setPostThombnail(postData.getPostThombnail());
 					ThombnailName.transferTo(file);
@@ -100,17 +92,42 @@ public class BoardServiceImpl implements BoardService {
 				post.setPostLayer(post2.getPostLayer());
 				boardDao.addAnswerPost(post);
 			}
+			if(postName.length != 0) {
+				for(int i = 0; i < postName.length; i++) {
+					File file2 = new File(map.get("filePath")+postName[i].getOriginalFilename());
+					boardFile.setFilePost(post);
+					boardFile.setFileName(postName[i].getOriginalFilename());
+					postName[i].transferTo(file2);
+					boardDao.addFile(boardFile);				
+				}
+			}else if(postName2.length != 0) {
+				for(int i = 0; i < postName2.length; i++) {
+					boardFile.setFilePost(post);
+					boardFile.setFileName(postName2[i]);
+					boardDao.addFile(boardFile);
+				}
+			}			
+		}else if("delete".equals(map.get("mode"))) {
+			List<String> postArr = (List<String>) map.get("postArr");
+			for(String i : postArr) {
+				boardDao.deleteChoicePost(Integer.parseInt(i));
+			}
+		}else if("copy".equals(map.get("mode"))) {
+			List<String> postArr = (List<String>) map.get("postArr");
+			for(String i : postArr) {
+				Post postCopy = boardDao.getPostData(Integer.parseInt(i));
+				postCopy.getPostBoard().setBoardNo((int)map.get("boardNo"));
+				boardDao.addPost(postCopy);
+			}
+		}else if("change".equals(map.get("mode"))) {
+			List<String> postArr = (List<String>) map.get("postArr");
+			for(String i : postArr) {
+				Post postCopy = boardDao.getPostData(Integer.parseInt(i));
+				postCopy.getPostBoard().setBoardNo((int)map.get("boardNo"));
+				boardDao.addPost(postCopy);
+				boardDao.deleteChoicePost(Integer.parseInt(i));
+			}
 		}
-	}
-	
-	@Override
-	public int addPost(Post post) throws Exception {
-		return boardDao.addPost(post);
-	}
-	
-	@Override
-	public int addAnswerPost(Post post) throws Exception {
-		return boardDao.addAnswerPost(post);
 	}
 	
 	@Override
@@ -195,17 +212,6 @@ public class BoardServiceImpl implements BoardService {
 	public BoardFile getFileData(int fileNo) throws Exception {
 		return boardDao.getFileData(fileNo);
 	}
-
-
-	@Override
-	public void deleteChoiceBoard(int boardNo) throws Exception {
-		boardDao.deleteChoiceBoard(boardNo);
-	}
-	
-	@Override
-	public void deleteChoicePost(int postNo) throws Exception {
-		boardDao.deleteChoicePost(postNo);
-	}
 	
 	@Override
 	public void deleteFile(int fileNo) throws Exception {
@@ -215,11 +221,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void deleteComment(int commentNo) throws Exception {
 		boardDao.deleteComment(commentNo);
-	}
-	
-	@Override
-	public int updatePost(Post post) throws Exception {
-		return boardDao.updatePost(post);
 	}
 	
 	@Override
@@ -240,12 +241,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int updateThombnail(Post post) throws Exception {
 		return boardDao.updateThombnail(post);
-	}
-
-	@Override
-	public int getTotalCount2(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 	@Override

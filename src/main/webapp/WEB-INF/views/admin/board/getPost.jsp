@@ -122,7 +122,7 @@
 				alert(postName[i])
 			}
 			alert("수정 되었습니다.");
-			$("form[name='getPostForm']").attr("method", "POST").attr("action", "/admin/board/updatePost2?${_csrf.parameterName}=${_csrf.token}").submit();
+			$("form[name='getPostForm']").attr("method", "POST").attr("action", "/admin/board/postProcess?${_csrf.parameterName}=${_csrf.token}").submit();
 		}
 	}
 	
@@ -173,10 +173,11 @@
 	}
 	
 	function fncAddComment(){
-			
+		
+		var secNo = $("input[name='secNo']").val();
+
 		$.ajax({
-			
-			url : "/admin/board/json/getMemberData",
+			url : "/admin/board/json/getMemberData/"+secNo,
 			method : "GET",
 			dataType : "JSON",
 			headers : {
