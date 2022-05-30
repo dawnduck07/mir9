@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.naedam.admin.board.model.vo.Board;
 import com.naedam.admin.menu.model.service.MenuService;
+import com.naedam.admin.menu.model.vo.Head;
 import com.naedam.admin.menu.model.vo.Menu;
 import com.naedam.admin.menu.model.vo.MenuCategory;
 
@@ -29,28 +30,21 @@ public class MenuController {
 	@Autowired	
 	private MenuService menuService;
 	
-	@PostMapping("addMenu")
-	public String addMenu(@ModelAttribute("menu") Menu menu)throws Exception{
-		
-		System.out.println("menu/addMenu 시작");
-		menuService.addMenu(menu);
-		
+	@PostMapping("menuProcess")
+	public String menuProcess(@ModelAttribute("menu") Menu menu,
+							  @ModelAttribute("head") Head head,
+							  @RequestParam("mode") String mode,
+							  @RequestParam("part") String part) throws Exception{
+		Map<String, Object> menuMap = new HashMap<>();
+		System.out.println("mode 확인 === "+mode);
+		System.out.println("part 확인 === "+part);
+		menuMap.put("menu", menu);
+		menuMap.put("head", head);
+		menuMap.put("mode", mode);
+		menuMap.put("part", part);
+		menuService.menuProcess(menuMap);
 		return "admin/menu/menu";
 	}
-	
-	@PostMapping("updateMenu")
-	public String updateMenu(@ModelAttribute("menu") Menu menu)throws Exception{
-		
-		System.out.println("menu/updateMenu 시작");
-		Menu menu2 = new Menu();
-		menu2 = menuService.getRevision(menu);
-		menu2.setOriginNo(menu.getCode());
-		menuService.addRevision(menu2);
-		menuService.updateMenu(menu);
-		
-		
-		return "admin/menu/menu";
-	}	
 	
 	@RequestMapping(value="menu")
 	public String listMenu(Menu menu, Model model) throws Exception{
@@ -70,7 +64,6 @@ public class MenuController {
 	@RequestMapping(value="menu2")
 	public String listMenu2(@ModelAttribute("menu") Menu menu, Model model) throws Exception{
 		System.out.println("menu2 시작");
-		System.out.println("확인 ::: === "+menu);
 		menu.setOrd(menu.getOrd()+1);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("menu", menu);
@@ -104,27 +97,7 @@ public class MenuController {
 		model.addAttribute("list", resultMap.get("list"));
 		model.addAttribute("list2", resultMap2.get("list"));
 		
-		System.out.println("확인 ::: "+resultMap2);
-		
 		return "admin/menu/menuList";
-	}
-	
-	@PostMapping("updateChoiceMenu")
-	public void updateChoiceMenu(@RequestParam(value = "menuArr[]") List<String> menuArr, 
-								  Menu menu) throws Exception{
-		
-		System.out.println("updateChoiceMenu 시작");
-		
-		int result = 0;
-		int code = 0;
-		
-		for(String i : menuArr) {
-			code = Integer.parseInt(i);
-			menu.setCode(code);
-			menuService.updateChoiceMenu(menu.getCode());
-		}
-		result = 1;
-		
 	}
 	
 	@GetMapping("tree")
@@ -140,39 +113,5 @@ public class MenuController {
 		
 		return "admin/menu/tree";
 	}
-	
-	@RequestMapping(value="head")
-	public String header(HttpServletRequest request,Model model) throws Exception{
-		
-		return "admin/menu/head";
-	}
-	
-	@RequestMapping(value="bottom")
-	public String bottom(HttpServletRequest request,Model model) throws Exception{
-		
-		return "admin/menu/bottom";
-	}
-	
-	@RequestMapping(value="meta")
-	public String meta(HttpServletRequest request,Model model) throws Exception{
-		
-		return "admin/menu/meta";
-	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

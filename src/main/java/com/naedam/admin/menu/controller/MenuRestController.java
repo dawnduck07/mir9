@@ -1,6 +1,7 @@
 package com.naedam.admin.menu.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,19 @@ public class MenuRestController {
 	@Autowired
 	private MenuService menuService;
 	
+	@PostMapping("json/menuProcess")
+	public Boolean menuProcess(@RequestParam(value = "menuArr[]") List<String> menuArr,
+							   @RequestParam("mode") String mode,
+							   @RequestParam("part") String part) throws Exception{
+		Boolean result = false;
+		Map<String, Object> menuMap = new HashMap<>();
+		menuMap.put("menuArr", menuArr);
+		menuMap.put("mode", mode);
+		menuMap.put("part", part);
+		menuService.menuProcess(menuMap);
+		result = true;
+		return result;
+	}
 	
 	@PostMapping(value="json/getMenu")
 	public Menu getMenu(@RequestParam("code") int code) throws Exception{
