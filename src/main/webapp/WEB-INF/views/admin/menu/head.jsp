@@ -101,7 +101,7 @@
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:90%">
 	        <div class="modal-content">
-	            <form name="form_register" method="post" onsubmit="return false;" action="/admin/menu/menuProcess?${_csrf.parameterName}=${_csrf.token}">
+	            <form name="form_register" method="post" action="/admin/menu/menuProcess?${_csrf.parameterName}=${_csrf.token}">
 		            <input type="hidden" name="mode" value="insert">
 		            <input type="hidden" name="part" value="head">
 		            <input type="hidden" name="locale" value="ko">
@@ -326,17 +326,13 @@
         }
         function register() {
             if(form_register.title.value == '') { alert('헤더명이 입력되지 않았습니다.'); form_register.title.focus(); return false;}
-            form_register.target = 'iframe_process';
-            form_register.submit();
-            alert("헤드가 등록 되었습니다.");
-            location.href = "/admin/head/headList";
+            alert("헤더가 등록 되었습니다.");
+            $("form[name='form_register']").submit();
         }
         function register2() {
             if(form_register2.title.value == '') { alert('헤더명이 입력되지 않았습니다.'); form_register2.title.focus(); return false;}
-            form_register2.target = 'iframe_process';
-            form_register2.submit();
             alert("헤더가 수정 되었습니다.");
-            location.href = "/admin/head/headList";
+            $("form[name='form_register2']").submit();
         }        
         function setData(code) {
             // 정보
@@ -426,12 +422,11 @@
   		  	 		part
   		  	 	 },
     		 	 success : function(result){
-    		 		
+    		 		alert("해당 자료가 삭제 되었습니다.")
+    				location.reload();
   		  	 	 }
   		  	 	 
 	  		});		
-				alert("해당 자료가 삭제 되었습니다.")
-				location.reload();
 			}
         }      
         

@@ -19,7 +19,7 @@ public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private MenuDao menuDao;
 	//메뉴관리 프로세서
-	public void menuProcess(Map<String, Object> map) throws Exception{
+	public String menuProcess(Map<String, Object> map) throws Exception{
 		if("menu".equals(map.get("part"))) {
 			Menu menu = (Menu) map.get("menu");
 			if("insert".equals(map.get("mode"))) {
@@ -36,6 +36,7 @@ public class MenuServiceImpl implements MenuService {
 					menuDao.updateChoiceMenu(Integer.parseInt(i));
 				}
 			}
+			return "redirect:/admin/menu/menu";
 		}else if("head".equals(map.get("part"))) {
 			Head head = (Head) map.get("head");
 			if("insert".equals(map.get("mode"))) {
@@ -48,19 +49,31 @@ public class MenuServiceImpl implements MenuService {
 					menuDao.deleteChoiceHead(Integer.parseInt(i));
 				}
 			}
+			return "redirect:/admin/menu/headList";
+		}else if("bottom".equals(map.get("part"))) {
+			Bottom bottom = (Bottom) map.get("bottom");
+			if("update".equals(map.get("mode"))) {
+				menuDao.updateBottom(bottom);
+			}
+			return "redirect:/admin/menu/bottomList";
+		}else if("meta".equals(map.get("part"))) {
+			Meta meta = (Meta) map.get("meta");
+			if("update".equals(map.get("mode"))) {
+				menuDao.updateMeta(meta);
+			}
+		}else if("revision".equals(map.get("part"))) {
+			List<String> menuArr = (List<String>) map.get("menuArr");
+			if("delete".equals(map.get("mode"))) {
+				for(String i : menuArr) {
+					menuDao.deleteMenu(Integer.parseInt(i));
+				}				
+			}else if("update".equals(map.get("mode"))) {
+				for(String i : menuArr) {
+					menuDao.updateRevision(Integer.parseInt(i));
+				}
+			}
 		}
-	}
-	
-	//메뉴 등록
-	@Override
-	public int addMenu(Menu menu) throws Exception {
-		return menuDao.addMenu(menu);
-	}
-	
-	//헤더 등록
-	@Override
-	public int addHead(Head head) throws Exception {
-		return menuDao.addHead(head);
+		return "";
 	}
 	
 	//헤더관리 등록
@@ -145,30 +158,6 @@ public class MenuServiceImpl implements MenuService {
 		return resultMap;
 	}	
 	
-	//메뉴 수정
-	@Override
-	public int updateMenu(Menu menu) throws Exception {
-		return menuDao.updateMenu(menu);
-	}
-	
-	//헤더 수정
-	@Override
-	public int updateHead(Head head) throws Exception {
-		return menuDao.updateHead(head);
-	}
-	
-	//하단 수정
-	@Override
-	public int updateBottom(Bottom bottom) throws Exception {
-		return menuDao.updateBottom(bottom);
-	}
-	
-	//메타 수정
-	@Override
-	public int updateMeta(Meta meta) throws Exception {
-		return menuDao.updateMeta(meta);
-	}
-	
 	//메뉴 정보
 	@Override
 	public Menu getMenu(int code) throws Exception {
@@ -199,22 +188,10 @@ public class MenuServiceImpl implements MenuService {
 		return menuDao.getRevision(menu);
 	}
 	
-	//선택삭제
-	@Override
-	public void updateChoiceMenu(int code) throws Exception {
-		menuDao.updateChoiceMenu(code);
-	}
-	
 	//삭제 리비전 복구
 	@Override
 	public void updateRevision(int code) throws Exception {
 		menuDao.updateRevision(code);
-	}
-	
-	//헤더관리 선택삭제
-	@Override
-	public void deleteChoiceHead(int headNo) throws Exception {
-		menuDao.deleteChoiceHead(headNo);
 	}
 
 	//리비젼의 메뉴 삭제

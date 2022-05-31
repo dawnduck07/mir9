@@ -1,7 +1,6 @@
 package com.naedam.admin.menu.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.naedam.admin.board.model.vo.Board;
 import com.naedam.admin.menu.model.service.MenuService;
+import com.naedam.admin.menu.model.vo.Bottom;
 import com.naedam.admin.menu.model.vo.Head;
 import com.naedam.admin.menu.model.vo.Menu;
 import com.naedam.admin.menu.model.vo.MenuCategory;
+import com.naedam.admin.menu.model.vo.Meta;
 
 
 
@@ -33,6 +33,8 @@ public class MenuController {
 	@PostMapping("menuProcess")
 	public String menuProcess(@ModelAttribute("menu") Menu menu,
 							  @ModelAttribute("head") Head head,
+							  @ModelAttribute("bottom") Bottom bottom,
+							  @ModelAttribute("meta") Meta meta,
 							  @RequestParam("mode") String mode,
 							  @RequestParam("part") String part) throws Exception{
 		Map<String, Object> menuMap = new HashMap<>();
@@ -40,10 +42,12 @@ public class MenuController {
 		System.out.println("part 확인 === "+part);
 		menuMap.put("menu", menu);
 		menuMap.put("head", head);
+		menuMap.put("bottom", bottom);
+		menuMap.put("meta", meta);
 		menuMap.put("mode", mode);
 		menuMap.put("part", part);
-		menuService.menuProcess(menuMap);
-		return "admin/menu/menu";
+
+		return menuService.menuProcess(menuMap);
 	}
 	
 	@RequestMapping(value="menu")
@@ -113,5 +117,34 @@ public class MenuController {
 		
 		return "admin/menu/tree";
 	}
+	
+	@RequestMapping(value="headList")
+	public String headList(Head head, Model model) throws Exception{
+		System.out.println("head/headList 시작");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Map<String, Object> resultMap = menuService.getHeadList(map);
+		
+		model.addAttribute("list", resultMap.get("list"));
+		System.out.println("접근 완료");
+		return "admin/menu/head";
+	}	
+	
+	@RequestMapping(value="bottomList")
+	public String bottomList(Model model, Bottom bottom) throws Exception{
+		System.out.println("bottom/bottomList 시작");
+		bottom = menuService.getBottom();
+		model.addAttribute("bottom", bottom);
+
+		return "admin/menu/bottom";
+	}
+	
+	@RequestMapping(value="meta")
+	public String meta(HttpServletRequest request,Model model) throws Exception{
+		
+		return "admin/menu/meta";
+	}	
 
 }
+
