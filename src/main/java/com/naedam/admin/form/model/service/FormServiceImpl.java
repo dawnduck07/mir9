@@ -18,18 +18,111 @@ public class FormServiceImpl implements FormService {
 	@Autowired
 	private FormDao formDao;
 	
-	//폼메일 등록
-	@Override
-	public int addForm(Form form) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.addForm(form);
-	}
-
-	//문항 등록
-	@Override
-	public int addItem(Item item) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.addItem(item);
+	//폼메일관리 프로세서
+	public String formProcess(Map<String, Object> map) throws Exception{
+		Form form = (Form) map.get("form");
+		if("form".equals(map.get("part"))) {
+			if("insert".equals(map.get("mode"))) {
+				formDao.addForm(form);
+			}else if("update".equals(map.get("mode"))) {
+				formDao.updateForm(form);
+			}else if("delete".equals(map.get("mode"))) {
+				List<String> formArr = (List<String>) map.get("formArr");
+				for(String i : formArr) {
+					formDao.deleteChoiceForm(Integer.parseInt(i));
+				}
+			}else if("copy".equals(map.get("mode"))) {
+				List<String> formArr = (List<String>) map.get("formArr");
+				for(String i : formArr) {
+					Form copyForm = formDao.getForm(Integer.parseInt(i));
+					formDao.addForm(copyForm);
+				}
+			}
+			return "redirect:/admin/form/list";
+		}else if("item".equals(map.get("part"))) {
+			Item item = (Item) map.get("item");
+			if("insert".equals(map.get("mode"))) {
+				item.setForm(form);
+				formDao.addItem(item);
+				if(item.getInput_example() != null) {
+					ItemChoice ic = new ItemChoice();
+					ic.setItem(item);
+					String[] exampleArr = item.getInput_example().split("\r\n"); 
+					for(int i = 0; i < exampleArr.length; i++) {
+						ic.setName(exampleArr[i]);
+						formDao.addItemChoice(ic);
+					}
+				}
+				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
+			}else if("update".equals(map.get("mode"))) {
+				if(!"select".equals(item.getInput_type()) && !"checkbox".equals(item.getInput_type()) && !"radio".equals(item.getInput_type())) {
+					item.setInput_example("");
+				}
+				formDao.updateItem(item);
+				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
+			}else if("delete".equals(map.get("mode"))) {
+				List<String> formArr = (List<String>) map.get("formArr");
+				for(String i : formArr) {
+					formDao.deleteChoiceItem(Integer.parseInt(i));
+				}
+			}else if("updateDesignList".equals(map.get("mode"))) {
+				formDao.updateFormDesignList(form);
+				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
+			}else if("updateDesignWrite".equals(map.get("mode"))) {
+				formDao.updateFormDesignWrite(form);
+				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
+			}
+			
+		}else if("formPost".equals(map.get("part"))) {
+			FormPost formPost = (FormPost) map.get("formPost");
+			if("insert".equals(map.get("mode")) || "update".equals(map.get("mode"))) {
+				FormPost sbFormPost = new FormPost();
+				StringBuffer sb = new StringBuffer();
+				StringBuffer sb2 = new StringBuffer();
+				StringBuffer sb3 = new StringBuffer();
+				List<String> formArr = (List<String>) map.get("formArr");
+				List<Item> trList = formDao.formTr(form.getFormNo());
+				for(int i = 0; i < trList.size(); i++) {
+					String data = formArr.get(i);
+					String data2 = Integer.toString(trList.get(i).getItemNo());
+					String data3 = trList.get(i).getInput_type();
+					if(i == 0) {
+						sb2.append(data2);
+						sb3.append(data3);
+						if("".equals(data)) {
+							sb.append(" ");
+						}else {
+							sb.append(data);
+						}
+					}else if(i != 0) {
+						sb2.append("&"+data2);
+						sb3.append("&"+data3);
+						if("".equals(data)) {
+							sb.append("& ");
+						}else {
+							sb.append("&"+data);
+						}
+					}
+					sbFormPost.setItemData(sb.toString());
+					sbFormPost.setItemNo(sb2.toString());
+					sbFormPost.setItemInput(sb3.toString());
+					sbFormPost.setForm(form);	
+				}
+				if("insert".equals(map.get("mode"))) {
+					formDao.addFormPost(sbFormPost);
+				}else if("update".equals(map.get("mode"))) {
+					formDao.updateFormPost(sbFormPost);
+				}
+				return "redirect:/admin/form/formPostList?formNo="+form.getFormNo();
+			}else if("delete".equals(map.get("mode"))) {
+				List<String> formArr = (List<String>) map.get("formArr");
+				for(String i : formArr) {
+					formDao.deleteChoiceFormPost(Integer.parseInt(i));
+				}
+			}
+		}
+		
+		return "";
 	}
 	
 	//문항 예시 등록
@@ -38,21 +131,6 @@ public class FormServiceImpl implements FormService {
 		// TODO Auto-generated method stub
 		return formDao.addItemChoice(itemChoice);
 	}
-
-	//폼 게시글 등록
-	@Override
-	public int addFormPost(FormPost formPost) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.addFormPost(formPost);
-	}
-	
-
-	//폼 게시글 등록
-	@Override
-	public int addFormPostCopy(FormPost formPost) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.addFormPostCopy(formPost);
-	}	
 	
 	//폼메일 리스트
 	@Override
@@ -143,55 +221,6 @@ public class FormServiceImpl implements FormService {
 	public List<Item> formTr(int formNo) throws Exception {
 		// TODO Auto-generated method stub
 		return formDao.formTr(formNo);
-	}
-	
-	//폼메일 선택삭제
-	@Override
-	public void deleteChoiceForm(int formNo) throws Exception {
-		// TODO Auto-generated method stub
-		formDao.deleteChoiceForm(formNo);
-	}
-	
-	//문항 선택삭제
-	@Override
-	public void deleteChoiceItem(int itemNo) throws Exception {
-		// TODO Auto-generated method stub
-		formDao.deleteChoiceItem(itemNo);
-	}
-	
-	//문항 게시글 선택삭제
-	@Override
-	public void deleteChoiceFormPost(int code) throws Exception {
-		// TODO Auto-generated method stub
-		formDao.deleteChoiceFormPost(code);
-	}
-	
-	//폼메일 업데이트
-	@Override
-	public int updateForm(Form form) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.updateForm(form);
-	}
-	
-	//문항 수정
-	@Override
-	public int updateItem(Item item) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.updateItem(item);
-	}
-	
-	//폼 디자인 수정
-	@Override
-	public int updateFormDesign(Form form) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.updateFormDesign(form);
-	}
-
-	//폼 게시글 수정
-	@Override
-	public int updateFormPost(FormPost formPost) throws Exception {
-		// TODO Auto-generated method stub
-		return formDao.updateFormPost(formPost);
 	}
 
 	//item down순서변경

@@ -234,14 +234,21 @@
 		WHERE ITEM_NO = #{itemNo}
 	</update>
 	
-	<update id="updateFormDesign" parameterType="form">
+	<update id="updateFormDesignList" parameterType="form">
 		UPDATE FORM
 		<set>
-			HTML_DESIGN_LIST = #{html_design_list},
-			HTML_DESIGN_WRITE = #{html_design_write}
+			HTML_DESIGN_LIST = #{html_design_list}
 		</set>
 		WHERE form_no = #{formNo}
 	</update>
+	
+	<update id="updateFormDesignWrite" parameterType="form">
+		UPDATE FORM
+		<set>
+			HTML_DESIGN_WRITE = #{html_design_write}
+		</set>
+		WHERE form_no = #{formNo}
+	</update>	
 	
 	<update id="updateFormPost" parameterType="formPost">
 		UPDATE FORM_POST

@@ -23,6 +23,24 @@ public class FormRestController {
 	@Autowired
 	private FormService formService;
 	
+	@PostMapping("json/formProcess")
+	public Boolean formProcess(@RequestParam(value = "formArr[]") List<String> formArr,
+							   @RequestParam("mode") String mode,
+							   @RequestParam("part") String part,
+							   @RequestParam(value="formNo", required = false) int formNo) throws Exception{
+		Boolean result = false;
+		Form form = new Form();
+		form.setFormNo(formNo);
+		Map<String, Object> formMap = new HashMap<>();
+		formMap.put("formArr", formArr);
+		formMap.put("mode", mode);
+		formMap.put("part", part);
+		formMap.put("form", form);
+		formService.formProcess(formMap);
+		result = true;
+		return result;
+	}
+	
 	@GetMapping(value="json/formList")
 	public List<Form> formList() throws Exception{
 		return formService.formList();
@@ -45,17 +63,6 @@ public class FormRestController {
 	public Item getItem(@RequestParam("itemNo") int itemNo) throws Exception{
 		System.out.println("/json/getItem 시작");
 		return formService.getItem(itemNo);
-	}
-	
-	@PostMapping("json/formCopy")
-	public void formCopy(@RequestParam(value="formArr[]") List<String> formArr) throws Exception{
-		System.out.println("form/formCopy 시작");
-		int formNo = 0;
-		for(String i : formArr) {
-			formNo = Integer.parseInt(i);
-			Form form = formService.getForm(formNo);
-			formService.addForm(form);
-		}
 	}
 	
 	@PostMapping("json/updateUpAsc")

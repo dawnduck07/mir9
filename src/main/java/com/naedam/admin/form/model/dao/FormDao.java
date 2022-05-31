@@ -79,8 +79,11 @@ public interface FormDao {
 	//문항 수정
 	public int updateItem(Item item) throws Exception;
 	
-	//폼 디자인 수정
-	public int updateFormDesign(Form form) throws Exception;
+	//폼 디자인 리스트 수정
+	public int updateFormDesignList(Form form) throws Exception;
+	
+	//폼 디자인 쓰기 수정
+	public int updateFormDesignWrite(Form form) throws Exception;
 	
 	//폼 게시글 수정
 	public int updateFormPost(FormPost formPost) throws Exception;
