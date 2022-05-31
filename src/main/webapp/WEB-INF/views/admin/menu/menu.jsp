@@ -660,40 +660,46 @@ body.modal-open {
             });
         }
         function deleteRevision(code) {
+        	
+        	var menuArr = new Array();
+        	var mode = "delete";
+        	var part = "revision";
+        	menuArr.push(code);
+        	
     		if(!confirm("해당 리비젼 정보를 정말 삭제하시겠습니까?")){
     			alert("취소 되었습니다.");
     			return;
     		}else{
         		$.ajax({
-        			url : "/admin/menu/json/deleteMenu/"+code,
-        			method : "GET",
-        			dataType : "JSON",	
-        			headers : {
-        				"Accept" : "application/json",
-        				"Content-Type" : "application/json"	 						
-        			} ,
-        			success : function(result){
+     			 	 url : "/admin/menu/json/menuProcess?${_csrf.parameterName}=${_csrf.token}",
+    	  		  	 type : "POST",
+      		  	 	 data : { 
+      		  	 		menuArr : menuArr,
+      		  	 		mode,
+      		  	 		part
+      		  	 	 },
+        			 success : function(result){
         				alert("해당 메뉴가 삭제 되었습니다.")
-        				$('#iframe_tree').attr('src', '${pageContext.request.contextPath}/admin/menu/tree');
-    					$('#iframe_list').attr('src', '${pageContext.request.contextPath}/admin/menu/menuList');
-        				$(obj).parents('tr').remove();
-        			}
+        				$("tr[id='revisionDelete"+code+"']").remove();
+        			 }
         			
         		})
-        		
-          		//$("span[id='"+fileNo+"']").remove();
         		}
             
         }
         function fncRestore(code){
-        	$.ajax({
-    			url : "/admin/menu/json/updateRevision/"+code,
-    			method : "GET",
-    			dataType : "JSON",	
-    			headers : {
-    				"Accept" : "application/json",
-    				"Content-Type" : "application/json"	 						
-    			} ,
+        	var menuArr = new Array();
+        	var mode = "update";
+        	var part = "revision";
+        	menuArr.push(code);
+    		$.ajax({
+			 	 url : "/admin/menu/json/menuProcess?${_csrf.parameterName}=${_csrf.token}",
+	  		  	 type : "POST",
+ 		  	 	 data : { 
+ 		  	 		menuArr : menuArr,
+ 		  	 		mode,
+ 		  	 		part
+ 		  	 	 },
     			success : function(result){
     				alert("메뉴가 복구 되었습니다.")
     				$('#modalContent2').modal('hide');

@@ -70,30 +70,6 @@ public class MenuRestController {
 		return resultMap;
 	}	
 	
-	@GetMapping(value="json/deleteMenu/{code}")
-	public Boolean deleteMenu(@PathVariable("code") int code) throws Exception{
-		System.out.println("json/deleteMenu 시작");
-		Boolean result = false;
-		if(code != 0) {
-			menuService.deleteMenu(code);
-			result = true;
-		}
-		
-		return result;
-	}
-	
-	@GetMapping(value="json/updateRevision/{code}")
-	public Boolean updateRevision(@PathVariable("code") int code) throws Exception{
-		System.out.println("json/updateRevision 시작");
-		Boolean result = false;
-		if(code != 0) {
-			menuService.updateRevision(code);
-			result = true;
-		}
-		
-		return result;
-	}
-	
 	@PostMapping("json/updateUpAsc")
 	public Boolean updateUpAsc(@RequestParam("menuAsc") int menuAsc,
 							@RequestParam("menuUpAsc") int menuUpAsc,
