@@ -31,10 +31,8 @@ public class MenuServiceImpl implements MenuService {
 				menuDao.addRevision(revisionMenu);
 				menuDao.updateMenu(menu);
 			}else if("delete".equals(map.get("mode"))) {
-				List<String> menuArr = (List<String>) map.get("menuArr");
-				for(String i : menuArr) {
-					menuDao.updateChoiceMenu(Integer.parseInt(i));
-				}
+				List<Integer> menuArr = (List<Integer>) map.get("menuArr");
+				menuDao.updateChoiceMenu(menuArr);
 			}
 			return "redirect:/admin/menu/menu";
 		}else if("head".equals(map.get("part"))) {
@@ -44,10 +42,8 @@ public class MenuServiceImpl implements MenuService {
 			}else if("update".equals(map.get("mode"))) {
 				menuDao.updateHead(head);
 			}else if("delete".equals(map.get("mode"))) {
-				List<String> menuArr = (List<String>) map.get("menuArr");
-				for(String i : menuArr) {
-					menuDao.deleteChoiceHead(Integer.parseInt(i));
-				}
+				List<Integer> headArr = (List<Integer>) map.get("menuArr");
+				menuDao.deleteChoiceHead(headArr);
 			}
 			return "redirect:/admin/menu/headList";
 		}else if("bottom".equals(map.get("part"))) {
@@ -73,9 +69,8 @@ public class MenuServiceImpl implements MenuService {
 				}
 			}
 		}
-		return "";
+		return null;
 	}
-	
 	//헤더관리 등록
 	@Override
 	public int addRevision(Menu menu) throws Exception {
