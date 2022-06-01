@@ -35,7 +35,6 @@ public interface BoardService {
 	//댓글 목록
 	public List<BoardComment> getCommentList(int postNo) throws Exception;
 	
-	
 	//게시판 등록 글 수
 	public int getTotalCount3(int boardNo) throws Exception;
 	

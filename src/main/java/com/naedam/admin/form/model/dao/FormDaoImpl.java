@@ -145,21 +145,21 @@ public class FormDaoImpl implements FormDao {
 	
 	//폼메일 선택삭제
 	@Override
-	public void deleteChoiceForm(int formNo) throws Exception {
+	public void deleteChoiceForm(List<Integer> formNo) throws Exception {
 		// TODO Auto-generated method stub
 		session.delete("form.deleteChoiceForm", formNo);
 	}
 	
 	//문항 선택삭제
 	@Override
-	public void deleteChoiceItem(int itemNo) throws Exception {
+	public void deleteChoiceItem(List<Integer> itemNo) throws Exception {
 		// TODO Auto-generated method stub
 		session.delete("form.deleteChoiceItem", itemNo);
 	}
 	
 	//문항 게시글 선택삭제
 	@Override
-	public void deleteChoiceFormPost(int code) throws Exception {
+	public void deleteChoiceFormPost(List<Integer> code) throws Exception {
 		// TODO Auto-generated method stub
 		session.delete("form.deleteChoiceFormPost", code);
 	}	

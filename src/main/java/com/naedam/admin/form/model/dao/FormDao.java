@@ -65,13 +65,13 @@ public interface FormDao {
 	public List<ItemChoice> getItemChoice(int itemNo) throws Exception;
 	
 	//폼메일 선택삭제
-	public void deleteChoiceForm(int code) throws Exception;
+	public void deleteChoiceForm(List<Integer> code) throws Exception;
 	
 	//문항 선택삭제
-	public void deleteChoiceItem(int itemNo) throws Exception;
+	public void deleteChoiceItem(List<Integer> itemNo) throws Exception;
 	
 	//문항 게시글 선택삭제
-	public void deleteChoiceFormPost(int code) throws Exception;
+	public void deleteChoiceFormPost(List<Integer> code) throws Exception;
 	
 	//폼메일 수정
 	public int updateForm(Form form) throws Exception;

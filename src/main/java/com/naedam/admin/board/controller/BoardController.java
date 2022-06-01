@@ -57,6 +57,10 @@ public class BoardController {
 	int pageUnit = 5;
 	int pageSize = 5;
 	
+	// 게시판 프로세스
+	// 게시판 등록, 수정, 선택삭제
+	// 권한 등록, 수정
+	// 옵션 등록, 수정
 	@PostMapping("boardProcess")
 	public String boardProcess(@ModelAttribute("board") Board board,
 							   @ModelAttribute("boardAuthority") BoardAuthority boardAuthority,
@@ -71,6 +75,8 @@ public class BoardController {
 		return "redirect:/admin/board/listBoard";
 	}
 	
+	// 게시글 프로세스
+	// 게시글 등록, 수정, 삭제, 복사, 이전, 파일등록, 계층형쿼리 등록
 	@PostMapping("postProcess")
 	public String postProcess(@ModelAttribute("board") Board board,
 							  @ModelAttribute("post") Post post,
@@ -96,57 +102,59 @@ public class BoardController {
 		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
 	}
 	
+	//게시판 목록
 	@GetMapping("listBoard")
 	public String listBoard(@ModelAttribute("search") Search search, Board board, Model model) throws Exception {
 		
-		System.out.println("listBoard 시작");
-
+		//게시글 수
+		//각 게시판마다 게시글 수가 필요하여 List로 게시글 수를 뽑아와 List에 add하는 방식
 		List postCount = new ArrayList();
 		List<Board> board2 = boardService.getBoardTitle();
-		
 		for(int i = 0 ; i < board2.size(); i++) {
 			int a = boardService.getTotalCount3(board2.get(i).getBoardNo());
 			postCount.add(a);
 		}
+		model.addAttribute("postCount", postCount);
+		
+		//게시판 리스트
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
-		
 		Map<String, Object> resultMap = boardService.getBoardList(map);
-		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
-
 		model.addAttribute("list", resultMap.get("list"));
-		model.addAttribute("postCount", postCount);
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 		
 		return "admin/board/boardList";
 	}
 	
+	//게시글 목록
 	@RequestMapping( value="postList")
 	public String listPost(Model model, HttpServletRequest request ,
 						   @RequestParam("boardNo") int boardNo, 
 						   @RequestParam(defaultValue = "1") int cPage,
 						   @ModelAttribute("search") Search search) throws Exception {
-		
-		System.out.println("/listPost 시작");
-		
+		//게시글 리스트 수 limit 10으로
 		int limit = 10;
 		int offset = (cPage - 1) * limit;
 		
+		//게시글 리스트 옵션과 권한의 조건에 따라 태그를 생성해야 함
 		Board board2 = boardService.getBoardAllData(boardNo);
+		model.addAttribute("board2", board2);
+		
+		//게시글 리스트
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("boardNo", boardNo);
 		Map<String, Object> resultMap = boardService.getPostList(map, offset, limit);
 		int totalPostListCount = Integer.parseInt(resultMap.get("totalCount").toString());
+		
 		// pagebar
 		String url = request.getRequestURI();
 		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalPostListCount, url);
 		model.addAttribute("pagebar", pagebar);		
 		model.addAttribute("list", resultMap.get("list")); 
 		model.addAttribute("boardNo", boardNo);
-		model.addAttribute("board2", board2);
 		model.addAttribute("pageCount",totalPostListCount);
 		return "admin/board/postList";
 	}
@@ -161,6 +169,7 @@ public class BoardController {
 		return "redirect:/admin/board/postList?boardNo="+boardNo;
 	}	
 	
+	//ckEditor 이미지 업로드
 	@PostMapping("imageUpload")
 	public void imageUpload(HttpServletRequest request, HttpServletResponse response,
 							MultipartHttpServletRequest multiFile,
@@ -216,6 +225,7 @@ public class BoardController {
 					
 	}
 	
+	//ckEditor 이미지 업로드 실행
 	@RequestMapping(value="ckImgSubmit") 
 	public void ckSubmit(@RequestParam(value="uid") String uid , 
 						 @RequestParam(value="fileName") String fileName , 

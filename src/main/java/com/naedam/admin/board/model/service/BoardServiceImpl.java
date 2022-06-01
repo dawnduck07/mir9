@@ -27,47 +27,60 @@ public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	private BoardDao boardDao;
-
+	
+	//게시판 프로세스
 	public void boardProcess(Map<String, Object> map) throws Exception {
+		//기본 게시판 등록 실행 시 권한과 옵션도 같이 insert
 			Board board = (Board) map.get("board");
 			BoardAuthority boardAuthority = (BoardAuthority) map.get("boardAuthority");
-			BoardOption boardOption = (BoardOption) map.get("boardOption");			
+			BoardOption boardOption = (BoardOption) map.get("boardOption");
+		//게시판 등록, 권한 등록, 옵션 등록
 		if("insert".equals(map.get("mode"))) {
 			boardDao.addBoard(board);
 			boardAuthority.setAuthorityBoard(board);
 			boardOption.setOptionBoard(board);
 			boardDao.addAuthority(boardAuthority);
 			boardDao.addOption(boardOption);
+		//게시판 수정, 권한 수정, 옵션 수정
 		}else if("update".equals(map.get("mode"))) {
 			boardDao.updateBoard(board);
 			boardAuthority.setAuthorityBoard(board);
 			boardOption.setOptionBoard(board);
 			boardDao.updateAuthority(boardAuthority);
 			boardDao.updateOption(boardOption);
+		//게시판 삭제
 		}else if("delete".equals(map.get("mode"))) {
-			List<String> boardArr = (List<String>) map.get("boardArr");
-			for(String i : boardArr) {
-				boardDao.deleteChoiceBoard(Integer.parseInt(i));
-			}
+			List<Integer> boardArr = (List<Integer>) map.get("boardArr");
+			boardDao.deleteChoiceBoard(boardArr);
 		}
 	}
 	
+	//게시글 프로세스
 	public void postProcess(Map<String, Object> map) throws Exception{
 		Post post = (Post) map.get("post");
 		post.setPostBoard((Board) map.get("board"));
 		BoardFile boardFile = new BoardFile();
+		//게시글 등록, 수정, 답변등록 같은 데이터를 사용하는 것이 많아 조건으로 묶었습니다.
 		if("insert".equals(map.get("mode")) || "update".equals(map.get("mode")) || "answer".equals(map.get("mode"))) {
+			
+			//게시글 등록시 현재 시큐리티에 접속해있는 아이디(primary key)가 필요합니다.
 			Member member = boardDao.getMemberData(Integer.parseInt(map.get("secNo").toString()));
 			post.setPostMember(member);
-			post.setPostMemberName(member.getLastName()+member.getFirstName());			
+			post.setPostMemberName(member.getLastName()+member.getFirstName());
+			
+			//파일 업로드 한개 이상 업로드가 가능하여 배열로 가져와서 업로드 로직 실행
 			MultipartFile[] postName = (MultipartFile[]) map.get("postName");
 			String[] postName2 = (String[]) map.get("postName2");
 			MultipartFile ThombnailName = (MultipartFile) map.get("ThombnailName");
 			File file = new File(map.get("filePath")+ThombnailName.getOriginalFilename());
+			
+			//게시글 등록
 			if("insert".equals(map.get("mode"))) {
 				post.setPostThombnail(ThombnailName.getOriginalFilename());
 				ThombnailName.transferTo(file);
 				boardDao.addPost(post);
+				
+			//게시글 수정
 			}else if("update".equals(map.get("mode"))) {
 				if(ThombnailName.isEmpty() == false) {
 					post.setPostThombnail(ThombnailName.getOriginalFilename());
@@ -78,10 +91,16 @@ public class BoardServiceImpl implements BoardService {
 					ThombnailName.transferTo(file);
 				}
 				boardDao.updatePost(post);
+			
+			//게시글 답변 등록
 			}else if("answer".equals(map.get("mode"))) {
+				
+				//기존의 썸네일 파일이 있는지 체크 후 업로드 실행
+				//썸네일이 없을경우 파일업로드 실행				
 				if(ThombnailName.isEmpty() == false) {
 					post.setPostThombnail(ThombnailName.getOriginalFilename());
 					ThombnailName.transferTo(file);
+				//썸네일이 있을경우 기존의 데이터를 가져와 다시 값을 넣습니다.					
 				}else if(ThombnailName.isEmpty() == true) {
 					Post postData = boardDao.getPostData(post.getPostNo());
 					post.setPostThombnail(postData.getPostThombnail());
@@ -106,12 +125,13 @@ public class BoardServiceImpl implements BoardService {
 					boardFile.setFileName(postName2[i]);
 					boardDao.addFile(boardFile);
 				}
-			}			
-		}else if("delete".equals(map.get("mode"))) {
-			List<String> postArr = (List<String>) map.get("postArr");
-			for(String i : postArr) {
-				boardDao.deleteChoicePost(Integer.parseInt(i));
 			}
+		//게시글 선택삭제
+		}else if("delete".equals(map.get("mode"))) {
+			List<Integer> postArr = (List<Integer>) map.get("postArr");
+			boardDao.deleteChoicePost(postArr);
+		//게시글 복사
+		//카피VO를 만들어 그대로 복사해 insert하는 로직
 		}else if("copy".equals(map.get("mode"))) {
 			List<String> postArr = (List<String>) map.get("postArr");
 			for(String i : postArr) {
@@ -119,14 +139,16 @@ public class BoardServiceImpl implements BoardService {
 				postCopy.getPostBoard().setBoardNo((int)map.get("boardNo"));
 				boardDao.addPost(postCopy);
 			}
+		//게시글 이전
+		//기존의 있던 데이터를 복사하여 insert 함, 기존에 있던 데이터는 delete
 		}else if("change".equals(map.get("mode"))) {
-			List<String> postArr = (List<String>) map.get("postArr");
-			for(String i : postArr) {
-				Post postCopy = boardDao.getPostData(Integer.parseInt(i));
+			List<Integer> postArr = (List<Integer>) map.get("postArr");
+			for(Integer i : postArr) {
+				Post postCopy = boardDao.getPostData(i);
 				postCopy.getPostBoard().setBoardNo((int)map.get("boardNo"));
 				boardDao.addPost(postCopy);
-				boardDao.deleteChoicePost(Integer.parseInt(i));
 			}
+			boardDao.deleteChoicePost(postArr);
 		}
 	}
 	

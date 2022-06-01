@@ -29,6 +29,7 @@ public class FormController {
 	@Autowired
 	private FormService formService;
 	
+	//폼메일 관리 프로세스
 	@PostMapping("formProcess")
 	public String formProcess(@ModelAttribute("form") Form form,
 							  @ModelAttribute("item") Item item,
@@ -44,6 +45,7 @@ public class FormController {
 		return formService.formProcess(formMap);
 	}	
 	
+	//폼메일 리스트
 	@GetMapping("list")
 	public String formList(Model model) throws Exception {
 		System.out.println("formList 시작");
@@ -59,7 +61,8 @@ public class FormController {
 		model.addAttribute("formPostCount", formPostCount);
 		return "admin/form/formList";
 	}
-		
+	
+	//폼메일 게시글 리스트
 	@GetMapping("formPostList")
 	public String formPostList(@RequestParam("formNo") int formNo, Model model, HttpServletRequest request,
 							   @RequestParam(defaultValue = "1") int cPage) throws Exception {
@@ -92,6 +95,7 @@ public class FormController {
 		return "admin/form/formPostList";
 	}
 	
+	//문항관리 리스트
 	@GetMapping("itemList")
 	public String itemList(@RequestParam("formNo") int formNo, Model model) throws Exception {
 		List<Item> itemList = formService.itemList(formNo);

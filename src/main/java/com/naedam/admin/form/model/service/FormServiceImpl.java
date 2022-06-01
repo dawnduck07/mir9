@@ -19,18 +19,23 @@ public class FormServiceImpl implements FormService {
 	private FormDao formDao;
 	
 	//폼메일관리 프로세서
+	//폼메일관리 4가지로 분류 폼메일, 문항관리, 폼메일게시글
 	public String formProcess(Map<String, Object> map) throws Exception{
 		Form form = (Form) map.get("form");
+		
+		//폼메일
 		if("form".equals(map.get("part"))) {
+			//폼메일 등록
 			if("insert".equals(map.get("mode"))) {
 				formDao.addForm(form);
+			//폼메일 수정
 			}else if("update".equals(map.get("mode"))) {
 				formDao.updateForm(form);
+			//폼메일 선택삭제
 			}else if("delete".equals(map.get("mode"))) {
-				List<String> formArr = (List<String>) map.get("formArr");
-				for(String i : formArr) {
-					formDao.deleteChoiceForm(Integer.parseInt(i));
-				}
+				List<Integer> formArr = (List<Integer>) map.get("formArr");
+				formDao.deleteChoiceForm(formArr);
+			//폼메일 복제
 			}else if("copy".equals(map.get("mode"))) {
 				List<String> formArr = (List<String>) map.get("formArr");
 				for(String i : formArr) {
@@ -39,8 +44,12 @@ public class FormServiceImpl implements FormService {
 				}
 			}
 			return "redirect:/admin/form/list";
+		
+		//문항관리
 		}else if("item".equals(map.get("part"))) {
 			Item item = (Item) map.get("item");
+			
+			//문항 등록
 			if("insert".equals(map.get("mode"))) {
 				item.setForm(form);
 				formDao.addItem(item);
@@ -54,27 +63,35 @@ public class FormServiceImpl implements FormService {
 					}
 				}
 				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
+			//문항 수정
 			}else if("update".equals(map.get("mode"))) {
 				if(!"select".equals(item.getInput_type()) && !"checkbox".equals(item.getInput_type()) && !"radio".equals(item.getInput_type())) {
 					item.setInput_example("");
 				}
 				formDao.updateItem(item);
 				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
+			//문항 삭제
 			}else if("delete".equals(map.get("mode"))) {
-				List<String> formArr = (List<String>) map.get("formArr");
-				for(String i : formArr) {
-					formDao.deleteChoiceItem(Integer.parseInt(i));
-				}
+				List<Integer> formArr = (List<Integer>) map.get("formArr");
+				formDao.deleteChoiceItem(formArr);
+			//htmlDsignList 수정
 			}else if("updateDesignList".equals(map.get("mode"))) {
 				formDao.updateFormDesignList(form);
 				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
+			//htmlDsignWrite 수정				
 			}else if("updateDesignWrite".equals(map.get("mode"))) {
 				formDao.updateFormDesignWrite(form);
 				return "redirect:/admin/form/itemList?formNo="+form.getFormNo();
 			}
 			
+		//폼메일 게시글
 		}else if("formPost".equals(map.get("part"))) {
 			FormPost formPost = (FormPost) map.get("formPost");
+			
+			//폼메일 게시글 등록, 수정
+			//view에 있는 각 데이터를 배열로 받아온 뒤 StringBuffer를 이용하여 for문으로 하나씩 받아와 append 해주는 방식이다.
+			//그렇게 append 되어진 데이터는 A&B&C&D.. 형식으로 데이터를 저장하게 된다.
+			//해당 데이터를 리스트로 뽑아오기 위해서는 &을 기준으로 split을 이용하여 배열에 담은 뒤 출력한다.
 			if("insert".equals(map.get("mode")) || "update".equals(map.get("mode"))) {
 				FormPost sbFormPost = new FormPost();
 				StringBuffer sb = new StringBuffer();
@@ -114,15 +131,15 @@ public class FormServiceImpl implements FormService {
 					formDao.updateFormPost(sbFormPost);
 				}
 				return "redirect:/admin/form/formPostList?formNo="+form.getFormNo();
+				
+			//폼메일 게시글 선택삭제
 			}else if("delete".equals(map.get("mode"))) {
-				List<String> formArr = (List<String>) map.get("formArr");
-				for(String i : formArr) {
-					formDao.deleteChoiceFormPost(Integer.parseInt(i));
-				}
+				List<Integer> formArr = (List<Integer>) map.get("formArr");
+				formDao.deleteChoiceFormPost(formArr);
 			}
 		}
 		
-		return "";
+		return null;
 	}
 	
 	//문항 예시 등록
