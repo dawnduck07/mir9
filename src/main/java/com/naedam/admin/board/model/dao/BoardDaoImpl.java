@@ -164,13 +164,13 @@ public class BoardDaoImpl implements BoardDao {
 	
 	//게시판 선택 산제
 	@Override
-	public void deleteChoiceBoard(int boardNo) throws Exception {
+	public void deleteChoiceBoard(List<Integer> boardNo) throws Exception {
 		sqlSession.delete("board.deleteChoiceBoard", boardNo);
 	}
 	
 	//게시글 선택 삭제
 	@Override
-	public void deleteChoicePost(int postNo) throws Exception {
+	public void deleteChoicePost(List<Integer> postNo) throws Exception {
 		sqlSession.delete("board.deleteChoicePost", postNo);
 	}
 	
@@ -242,6 +242,7 @@ public class BoardDaoImpl implements BoardDao {
 	public void updateUpAsc(Map<String, Object> map) throws Exception {
 		sqlSession.update("board.updateUpAsc", map);
 	}
+
 
 	
 }

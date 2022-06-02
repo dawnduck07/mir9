@@ -276,12 +276,12 @@ function logoutSubmit(){
 								</a>
 							</li>
 							<li>
-								<a href="${pageContext.request.contextPath}/admin/head/headList">
+								<a href="${pageContext.request.contextPath}/admin/menu/headList">
 									<i class="fa fa-circle-o"></i> 헤더 관리
 								</a>
 							</li>
 							<li>
-								<a href="${pageContext.request.contextPath}/admin/bottom/bottomList">
+								<a href="${pageContext.request.contextPath}/admin/menu/bottomList">
 									<i class="fa fa-circle-o"></i> 하단 관리
 								</a>
 							</li>
