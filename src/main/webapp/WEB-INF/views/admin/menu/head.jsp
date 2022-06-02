@@ -337,7 +337,7 @@
         function setData(code) {
             // 정보
             $.ajax({
-            	url:'/admin/head/json/getHead?${_csrf.parameterName}=${_csrf.token}',
+            	url:'/admin/menu/json/getHead?${_csrf.parameterName}=${_csrf.token}',
                 type:'post',
                 dataType:'json',
                 data:{
@@ -452,7 +452,7 @@
     			return;
     		}else{
     	  		$.ajax({
-    			 	 url : "/admin/head/json/updateHeadUpAsc?${_csrf.parameterName}=${_csrf.token}",
+    			 	 url : "/admin/menu/json/updateHeadUpAsc?${_csrf.parameterName}=${_csrf.token}",
     	 		  	 type : "POST",
     		  	 	 data : { 
     		  	 		headAsc,
@@ -492,7 +492,7 @@
     			return;
     		}else{
     	  		$.ajax({
-    			 	 url : "/admin/head/json/updateHeadDownAsc?${_csrf.parameterName}=${_csrf.token}",
+    			 	 url : "/admin/menu/json/updateHeadDownAsc?${_csrf.parameterName}=${_csrf.token}",
     	 		  	 type : "POST",
     		  	 	 data : { 
     		  	 		headAsc,

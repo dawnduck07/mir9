@@ -146,7 +146,7 @@
         function setData() {
             // 정보
             $.ajax({
-            	url:'/admin/bottom/json/getBottom?${_csrf.parameterName}=${_csrf.token}',
+            	url:'/admin/menu/json/getBottom?${_csrf.parameterName}=${_csrf.token}',
                 type:'post',
                 dataType:'json',
                 data:{

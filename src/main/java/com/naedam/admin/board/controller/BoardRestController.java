@@ -132,8 +132,7 @@ public class BoardRestController {
 	}
 	
 	@PostMapping("json/boardProcess")
-	public Boolean boardProcess(@RequestParam(value = "boardArr[]") List<String> boardArr, 
-								@RequestParam("mode") String mode) throws Exception{
+	public Boolean boardProcess(@RequestParam(value = "boardArr[]") List<String> boardArr,  @RequestParam("mode") String mode) throws Exception{
 		Boolean result = false;
 		Map<String, Object> boardMap = new HashMap<>();
 		boardMap.put("boardArr", boardArr);
@@ -220,17 +219,15 @@ public class BoardRestController {
 							@RequestParam("upPostNo") int upPostNo) throws Exception{
 		System.out.println("updateUpAsc 시작");
 		Boolean result = false;
-		if(postNo != 0) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Map<String, Object> map2 = new HashMap<String, Object>();
-			map.put("boardUpAsc", boardUpAsc);
-			map.put("upPostNo", postNo);
-			map2.put("boardUpAsc", boardAsc);
-			map2.put("upPostNo", upPostNo);
-			boardService.updateUpAsc(map);
-			boardService.updateUpAsc(map2);
-			result = true;
-		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map.put("boardUpAsc", boardUpAsc);
+		map.put("upPostNo", postNo);
+		map2.put("boardUpAsc", boardAsc);
+		map2.put("upPostNo", upPostNo);
+		boardService.updateUpAsc(map);
+		boardService.updateUpAsc(map2);
+		result = true;
 		return result;
 	}
 	
@@ -241,18 +238,15 @@ public class BoardRestController {
 							@RequestParam("downPostNo") int downPostNo) throws Exception{
 		System.out.println("json/updateDownAsc 시작");
 		Boolean result = false;
-		if(postNo != 0) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Map<String, Object> map2 = new HashMap<String, Object>();
-			map.put("boardDownAsc", boardDownAsc);
-			map.put("downPostNo", postNo);
-			map2.put("boardDownAsc", boardAsc);
-			map2.put("downPostNo", downPostNo);
-			boardService.updateDownAsc(map);
-			boardService.updateDownAsc(map2);
-			result = true;
-		}
-
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map.put("boardDownAsc", boardDownAsc);
+		map.put("downPostNo", postNo);
+		map2.put("boardDownAsc", boardAsc);
+		map2.put("downPostNo", downPostNo);
+		boardService.updateDownAsc(map);
+		boardService.updateDownAsc(map2);
+		result = true;
 		return result;
 	}
 	

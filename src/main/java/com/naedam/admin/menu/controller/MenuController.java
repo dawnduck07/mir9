@@ -31,37 +31,25 @@ public class MenuController {
 	private MenuService menuService;
 	
 	@PostMapping("menuProcess")
-	public String menuProcess(@ModelAttribute("menu") Menu menu,
-							  @ModelAttribute("head") Head head,
-							  @ModelAttribute("bottom") Bottom bottom,
-							  @ModelAttribute("meta") Meta meta,
-							  @RequestParam("mode") String mode,
-							  @RequestParam("part") String part) throws Exception{
+	public String menuProcess(@ModelAttribute("menu") Menu menu, @ModelAttribute("head") Head head, @ModelAttribute("bottom") Bottom bottom,
+							  @ModelAttribute("meta") Meta meta, @RequestParam("mode") String mode, @RequestParam("part") String part) throws Exception{
 		Map<String, Object> menuMap = new HashMap<>();
-		System.out.println("mode 확인 === "+mode);
-		System.out.println("part 확인 === "+part);
 		menuMap.put("menu", menu);
 		menuMap.put("head", head);
 		menuMap.put("bottom", bottom);
 		menuMap.put("meta", meta);
 		menuMap.put("mode", mode);
 		menuMap.put("part", part);
-
 		return menuService.menuProcess(menuMap);
 	}
 	
 	@RequestMapping(value="menu")
 	public String listMenu(Menu menu, Model model) throws Exception{
 		System.out.println("menu 시작");
-		
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		Map<String, Object> resultMap = menuService.getMenuList(map);
-		Map<String, Object> resultMap2 = menuService.getHeadList(map);
-		
 		model.addAttribute("list", resultMap.get("list"));
-		model.addAttribute("list2", resultMap2.get("list"));
-		
+		model.addAttribute("list2", resultMap.get("list2"));
 		return "admin/menu/menu";
 	}
 	
@@ -71,63 +59,39 @@ public class MenuController {
 		menu.setOrd(menu.getOrd()+1);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("menu", menu);
-		
-		if(menu.getOrd() == 2) {
-			Map<String, Object> resultMap = menuService.getMenuList2(map);
-			Map<String, Object> resultMap2 = menuService.getHeadList(map);
-			model.addAttribute("menu", menu);
-			model.addAttribute("list", resultMap.get("list"));
-			model.addAttribute("list2", resultMap2.get("list"));
-		}else if(menu.getOrd() == 3) {
-			menu.setOriginNo(menu.getCode());
-			Map<String, Object> resultMap = menuService.getMenuList3(map);
-			Map<String, Object> resultMap2 = menuService.getHeadList(map);
-			model.addAttribute("menu", menu);
-			model.addAttribute("list", resultMap.get("list"));
-			model.addAttribute("list2", resultMap2.get("list"));
-		}
-	
+		Map<String, Object> resultMap = menuService.getMenuList2(map);
+		model.addAttribute("menu", menu);
+		model.addAttribute("list", resultMap.get("list"));
+		model.addAttribute("list2", resultMap.get("list2"));			
 		return "admin/menu/menuList";
 	}	
 	
 	@RequestMapping(value="menuList")
 	public String menuList(Menu menu, Model model, HttpServletRequest request) throws Exception{
 		System.out.println("menuList 시작");
-		
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		Map<String, Object> resultMap = menuService.getMenuList(map);
-		Map<String, Object> resultMap2 = menuService.getHeadList(map);
 		model.addAttribute("list", resultMap.get("list"));
-		model.addAttribute("list2", resultMap2.get("list"));
-		
+		model.addAttribute("list2", resultMap.get("list2"));
 		return "admin/menu/menuList";
 	}
 	
 	@GetMapping("tree")
 	public String tree(Model model, MenuCategory menuCategory) throws Exception{
 		System.out.println("menuCategory/tree 시작");
-		
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		Map<String, Object> resultMap = menuService.getMenuCategoryList(map);
-		Map<String, Object> resultMap2 = menuService.getMenuCategoryList2(map);
 		model.addAttribute("list", resultMap.get("list"));
-		model.addAttribute("list2", resultMap2.get("list"));
-		
+		model.addAttribute("list2", resultMap.get("list2"));
 		return "admin/menu/tree";
 	}
 	
 	@RequestMapping(value="headList")
 	public String headList(Head head, Model model) throws Exception{
 		System.out.println("head/headList 시작");
-		
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		Map<String, Object> resultMap = menuService.getHeadList(map);
-		
 		model.addAttribute("list", resultMap.get("list"));
-		System.out.println("접근 완료");
 		return "admin/menu/head";
 	}	
 	
@@ -136,13 +100,11 @@ public class MenuController {
 		System.out.println("bottom/bottomList 시작");
 		bottom = menuService.getBottom();
 		model.addAttribute("bottom", bottom);
-
 		return "admin/menu/bottom";
 	}
 	
 	@RequestMapping(value="meta")
-	public String meta(HttpServletRequest request,Model model) throws Exception{
-		
+	public String meta(HttpServletRequest request,Model model) throws Exception{		
 		return "admin/menu/meta";
 	}	
 
