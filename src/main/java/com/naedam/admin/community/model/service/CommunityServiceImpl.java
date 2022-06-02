@@ -194,7 +194,6 @@ public class CommunityServiceImpl implements CommunityService {
 				setMod.put("sendAdmin", sendAdminList.get(i));
 				res += communityDao.smsAutoSend(setMod);
 			}
-
 			if(res > 0) {
 				result.put("modify", "success");
 			}
@@ -203,16 +202,17 @@ public class CommunityServiceImpl implements CommunityService {
 			
 		}
 		else if(mode.equals("emailAutoSendCheck")) { // Email 자동발송
-			
+			List<Object> emailSetting = communityDao.selectEmailSetting();
+			result.put("emailSetting", emailSetting);
 		}
 		else if(mode.equals("originEmail")) { // Email 기본문구
 			int category = 48300; // 기본 카테고리
-			String templateId = (String) param.get("templateId");
+			String templateId = ((List<String>) param.get("templateId")).get(0);
 			result.put("originEmail", loadEmail(templateId, category));
 		}
 		else if(mode.equals("savedEmail")) { // Email 저장문구
 			int category = 49064; // 저장 카테고리
-			String templateId = (String) param.get("templateId");
+			String templateId = ((List<String>) param.get("templateId")).get(0);
 			result.put("savedEmail", loadEmail(templateId, category));
 		}
 		else if(mode.equals("emailModalModify")) { // Email 발송문구 수정

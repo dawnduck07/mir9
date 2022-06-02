@@ -64,7 +64,6 @@ textarea {
 				                <tbody>
 				      				<tr>
 					                    <input type="hidden" class="join" name="code" value="join" />
-					                    <input type="hidden" class="join" name="code" value="join_admin" />
 										<td class="content">회원가입</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="join" name="is_send" />
@@ -86,7 +85,6 @@ textarea {
 				               		</tr>      
 				               		<tr>
 					                    <input type="hidden" class="findid" name="code" value="findid" />
-					                    <input type="hidden" class="findid" name="code" value="findid_admin" />
 										<td class="content">아이디 찾기<br>[아이디 찾기시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="findid" name="is_send" />
@@ -108,7 +106,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="findpw" name="code" value="findpw" />
-					                    <input type="hidden" class="findpw" name="code" value="findpw_admin" />
 										<td class="content">임시비밀번호 발급알림<br>[비밀번호 찾기시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="findpw" name="is_send" />
@@ -130,7 +127,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="order" name="code" value="order" />
-					                    <input type="hidden" class="order" name="code" value="order_admin" />
 										<td class="content">주문접수<br>[무통장/카드 결제시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="order" name="is_send" />
@@ -157,7 +153,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="pay_done" name="code" value="pay_done" />
-					                    <input type="hidden" class="pay_done" name="code" value="pay_done_admin" />
 										<td class="content">입금확인<br>[무통장 입금 완료시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="pay_done" name="is_send" />
@@ -184,7 +179,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="delivery_ready" name="code" value="delivery_ready" />
-					                    <input type="hidden" class="delivery_ready" name="code" value="delivery_ready_admin" />
 										<td class="content">상품 배송 준비중<br>[주문상태 배송준비중으로 변경시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_ready" name="is_send" />
@@ -211,7 +205,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="delivery_ing" name="code" value="delivery_ing" />
-					                    <input type="hidden" class="delivery_ing" name="code" value="delivery_ing_admin" />
 										<td class="content">상품 배송중<br>[주문상태 배송중으로 변경시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_ing" name="is_send" />
@@ -238,7 +231,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="delivery_done" name="code" value="delivery_done" />
-					                    <input type="hidden" class="delivery_done" name="code" value="delivery_done_admin" />
 										<td class="content">상품 배송 완료<br>[주문상태 배송완료로 변경시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="delivery_done" name="is_send" />
@@ -265,7 +257,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="order_cancel" name="code" value="order_cancel" />
-					                    <input type="hidden" class="order_cancel" name="code" value="order_cancel_admin" />
 										<td class="content">주문취소<br>[주문 취소시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="order_cancel" name="is_send" />
@@ -292,7 +283,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="refund" name="code" value="refund" />
-					                    <input type="hidden" class="refund" name="code" value="refund_admin" />
 										<td class="content">환불완료<br>[주문상태 환불완료로 변경시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="refund" name="is_send" />
@@ -319,7 +309,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="point" name="code" value="point" />
-					                    <input type="hidden" class="point" name="code" value="point_admin" />
 										<td class="content">적립금 적립<br>[개별 적립금 적립시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="point" name="is_send" />
@@ -341,7 +330,6 @@ textarea {
 					                </tr>      
 					                <tr>
 					                    <input type="hidden" class="coupon" name="code" value="coupon" />
-					                    <input type="hidden" class="coupon" name="code" value="coupon_admin" />
 										<td class="content">쿠폰 지급<br>[개별 쿠폰 지급시]</td>
 					                    <td class="content">
 					                    	<input type="checkbox" class="coupon" name="is_send"/>
@@ -442,55 +430,81 @@ textarea {
 	});
 	
 	CKEDITOR.config.allowedContent = true;
-			
-	// 체크박스 값 확인
+
+	// cheditor 값 넣기
+	function setData(content){}
+	
+	// 템플릿 정보
+	var code = []; // 코드
+	var originTemplate = []; // 기본템플릿
+	var modifyTemplate = []; // 수정템플릿
+	$.each($("input[name='code']"), function() { 
+		code.push($(this).val()); 
+		originTemplate.push($(this).val()); 
+		originTemplate.push($(this).val() + "_admin"); // 템플릿명에 따른 가공 => 수정 필요 
+		modifyTemplate.push($(this).val() + "_mod"); 
+		modifyTemplate.push($(this).val() + "_admin_mod"); 
+	});
+		
+	// 체크박스 조회
 	$(function() {
-		var setTemplateId = [];
-		var setIsSend = [];
-		var setIsSendAdmin = [];		
-		
-		$("input[name='setTemplateId']").each(function() { 
-			setTemplateId.push($(this).val());
-		});
-		$("input[name='setIsSend']").each(function() { 
-			setIsSend.push($(this).val());
-		});
-		$("input[name='setIsSendAdmin']").each(function() { 
-			setIsSendAdmin.push($(this).val());
-		});
-		
-		// is_send, is_send_admin 값이 y일 때 checked 속성 부여
-		for(var i = 0; i < setTemplateId.length; i++) {
-			if(setIsSend[i] == "y") {
-				$("input[class='" + setTemplateId[i] + "'][name='is_send']").attr("checked", true);
+		$.ajax({
+			url : "${pageContext.request.contextPath }/admin/comm/load/emailAutoSendCheck",
+			method : "GET",
+			success : function(result) {
+				var set = result.emailSetting;
+				for(var i = 0; i < set.length; i++) {
+					if(set[i].isSend == "y") {
+						$("input[class='" + set[i].templateId + "'][name='is_send']").attr("checked", true);
+					}
+					if(set[i].isSendAdmin == "y") {
+						$("input[class='" + set[i].templateId + "'][name='is_send_admin']").attr("checked", true);
+					}
+				}
 			}
-			else if(setIsSendAdmin[i] == "y") {
-				$("input[class='" + setTemplateId[i] + "'][name='is_send_admin']").attr("checked", true);
-			}
-		}
+		});
 	});
 	
-	// 문구 편집 버튼 -> 저장 양식 불러오기
+	// 문구 편집 버튼
 	function onclickUpdate(action) {
-		// 모달 히든에 각각의 값 전달
-	    $('#action').val(action); 
-	    $('#modalContent').modal({backdrop:'static', show:true});
+		// 모달 열기
+		$("#action").val(action); 
+		$("#modalContent").modal({backdrop:"static", show:true});
 		
-	    // 조회
-	    $.ajax({
-			url:"${pageContext.request.contextPath}/admin/comm/load/emailModal",
-			type:"GET",
-			data: { templateId : action },
-			success: function(result){	
-				$("#title").val(result.title); 
-				objEditor.setData(result.content); 
-			},
-			error:function(textStatus, errorThrown){
-				console.log("발송 문구를 조회 할 수 없습니다.")
+		// 저장문구 조회
+		$.ajax({
+			url : "${pageContext.request.contextPath }/admin/comm/load/savedEmail",
+			method : "GET",
+			data : { templateId : action },
+			success : function(result) {
+				var set = result.savedEmail;
+				$("#title").val(set.title); 
+				objEditor.setData(set.content); 
 			}
 		});
 	}
 	
+	// 기존 양식 불러오기
+	function getDefaultTemplate() {
+		// 기본문구 조회
+		$.ajax({
+			url : "${pageContext.request.contextPath}/admin/comm/load/originEmail", 
+			type : "GET",
+			data : { templateId : $("#action").val() },
+			success : function(result){
+				var set = result.originEmail;
+				if(set.title.length > 0 && set.content.length > 0) { 
+					if(confirm("기본 문구로 적용하시겠습니까?")) {
+						$("#title").val(set.title); 
+						objEditor.setData(set.content);
+					}
+				}
+			}
+		});
+	}
+	
+	
+	/*
 	// 변경 문구 저장 버튼 
 	function registerContent() { 
 		var templateId = $("#action").val();
@@ -536,29 +550,9 @@ textarea {
 	    });
 
 	}	
+	*/
 
-	// 기존 양식 불러오기
-	function getDefaultTemplate() {
-		var templateId = $("#action").val();
-		
-		$.ajax({
-			url:"${pageContext.request.contextPath}/admin/comm/load/emailOrigin", 
-			type:"GET",
-			data:{ templateId : templateId },
-			success:function(result){
-				if(result.title.length > 0 && result.content.length > 0) { 
-					if(confirm("기본 문구로 적용하시겠습니까?")) {
-						$("#title").val(result.title); 
-						objEditor.setData(result.content);
-					}
-				}
-			},
-			error:function(textStatus, errorThrown){
-				console.log("기본 문구를 불러올 수 없습니다.");
-			}
-		});
-	}	
-	
+	/*
 	// 전체 변경 확인 버튼
 	function register() { 
 		// 체크박스 값 설정
@@ -616,9 +610,9 @@ textarea {
 		});
 		
 	}	
+	*/
 	
-	// cheditor 값 넣기
-	function setData(content){}
+
 		
 	// alert code 값 치환
 	function category_txt(t_name){
