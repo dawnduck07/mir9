@@ -31,17 +31,13 @@ public class FormController {
 	
 	//폼메일 관리 프로세스
 	@PostMapping("formProcess")
-	public String formProcess(@ModelAttribute("form") Form form,
-							  @ModelAttribute("item") Item item,
-							  @ModelAttribute("formPost") FormPost formPost,
-							  @RequestParam("mode") String mode,
-							  @RequestParam("part") String part) throws Exception{
+	public String formProcess(@ModelAttribute("form") Form form, @ModelAttribute("item") Item item, @ModelAttribute("formPost") FormPost formPost,
+							  @RequestParam("mode") String mode, @RequestParam("part") String part) throws Exception{
 		Map<String, Object> formMap = new HashMap<>();
 		formMap.put("form", form);
 		formMap.put("item", item);
 		formMap.put("mode", mode);
 		formMap.put("part", part);
-		
 		return formService.formProcess(formMap);
 	}	
 	
@@ -49,16 +45,10 @@ public class FormController {
 	@GetMapping("list")
 	public String formList(Model model) throws Exception {
 		System.out.println("formList 시작");
-		List<Form> formList = formService.formList();
-		int formCount = formService.formListCount();
-		List formPostCount = new ArrayList();
-		for(int i = 0; i < formList.size(); i++) {
-			int num = formService.formPostListCount(formList.get(i).getFormNo());
-			formPostCount.add(num);
-		}
-		model.addAttribute("list", formList);
-		model.addAttribute("formCount", formCount);
-		model.addAttribute("formPostCount", formPostCount);
+		Map<String, Object> resultMap = formService.formList();
+		model.addAttribute("list", resultMap.get("formList"));
+		model.addAttribute("formCount", resultMap.get("formCount"));
+		model.addAttribute("formPostCount", resultMap.get("formPostCount"));
 		return "admin/form/formList";
 	}
 	
@@ -74,23 +64,13 @@ public class FormController {
 		String pagebar = Mir9Utils.getPagebar(cPage, limit, totalFormPostListCount, url);
 		List<Item> td = formService.formTd(formNo);
 		List<Item> tr = formService.formTr(formNo);
-		List<FormPost> fp = formService.formPostList(formNo,offset, limit);
-		List<Integer> number = new ArrayList<>();
-		int num = 0;
-		for(int i = 0; i < tr.size(); i++) {
-			tr.get(i).setInput_example(tr.get(i).getInput_example().replace("\r\n", "&"));
-			
-			if("y".equals(tr.get(i).getIs_show())) {
-				number.add(num, i);
-				num = num+1;
-			}else if(!"y".equals(tr.get(i).getIs_show())){}
-		}
+		Map<String, Object> resultMap = formService.formPostList(formNo,offset, limit);
 		model.addAttribute("pagebar", pagebar);
-		model.addAttribute("fp",fp);
-		model.addAttribute("td",td);
-		model.addAttribute("tr",tr);
+		model.addAttribute("fp",resultMap.get("fp"));
+		model.addAttribute("td",resultMap.get("td"));
+		model.addAttribute("tr",resultMap.get("tr"));
 		model.addAttribute("formNo", formNo);
-		model.addAttribute("number",number);
+		model.addAttribute("number",resultMap.get("number"));
 		model.addAttribute("formPostListCount", totalFormPostListCount);
 		return "admin/form/formPostList";
 	}
@@ -98,16 +78,11 @@ public class FormController {
 	//문항관리 리스트
 	@GetMapping("itemList")
 	public String itemList(@RequestParam("formNo") int formNo, Model model) throws Exception {
-		List<Item> itemList = formService.itemList(formNo);
-		int itemCount = formService.itemListCount(formNo);
-		Form form = formService.getForm(formNo);
-		for(int i = 0; i < itemList.size(); i++) {
-			itemList.get(i).setInput_example(itemList.get(i).getInput_example().replace("\r\n", "/"));
-		}
-		model.addAttribute("list",itemList);
+		Map<String, Object> resultMap = formService.itemList(formNo);
+		model.addAttribute("list",resultMap.get("itemList"));
 		model.addAttribute("formNo", formNo);
-		model.addAttribute("form", form);
-		model.addAttribute("itemCount", itemCount);
+		model.addAttribute("form", resultMap.get("form"));
+		model.addAttribute("itemCount", resultMap.get("itemCount"));
 		return "admin/form/itemList";
 	}
 

@@ -80,20 +80,24 @@ public class MenuServiceImpl implements MenuService {
 	//메뉴 리스트 출력
 	@Override
 	public Map<String, Object> getMenuList(Map<String,Object> map) throws Exception{
-		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", menuDao.getMenuList(map));
-		
+		resultMap.put("list2", menuDao.getHeadList(map));
 		return resultMap;
 	}
 	
 	//조건식 메뉴 리스트 출력
 	@Override
 	public Map<String, Object> getMenuList2(Map<String,Object> map) throws Exception{
-		
+		Menu menu = (Menu) map.get("menu");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", menuDao.getMenuList2(map));
-		
+		if(menu.getOrd() == 2) {
+			resultMap.put("list", menuDao.getMenuList2(map));
+			resultMap.put("list2", menuDao.getHeadList(map));
+		}else if(menu.getOrd() == 3) {
+			resultMap.put("list", menuDao.getMenuList3(map));
+			resultMap.put("list2", menuDao.getHeadList(map));
+		}
 		return resultMap;
 	}	
 	
@@ -140,7 +144,7 @@ public class MenuServiceImpl implements MenuService {
 	public Map<String, Object> getMenuCategoryList(Map<String, Object> map) throws Exception {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", menuDao.getMenuCategoryList(map));
-		
+		resultMap.put("list2", menuDao.getMenuCategoryList2(map));
 		return resultMap;
 	}
 	

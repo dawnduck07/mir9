@@ -25,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -169,7 +170,8 @@ public class MemberController {
 	// 회원리스트 - 등록
 	@PostMapping("/memberInsertModalFrm.do")
 	public String memberInsertModalFrm(Member member, Address address, AddressBook addressBook, MemberMemo memberMemo, MemberGrade memberGradeNo,
-									   @RequestParam String mobile1, @RequestParam String mobile2, @RequestParam String mobile3, @RequestParam String authority, RedirectAttributes redirectAttributes) {
+									   @RequestParam String mobile1, @RequestParam String mobile2, @RequestParam String mobile3, @RequestParam String authority, RedirectAttributes redirectAttributes,
+									   @ModelAttribute Member paramMember) {
 		
 		try {
 			String phone = mobile1 + mobile2 + mobile3;
@@ -180,17 +182,7 @@ public class MemberController {
 			member.setPassword(encryptedPassword);
 			
 			// 1. 회원(Member) 등록
-			Member paramMember = new Member();
-			
-			paramMember.setFirstName(member.getFirstName());
-			paramMember.setLastName(member.getLastName());
-			paramMember.setEmail(member.getEmail());
 			paramMember.setPhone(phone);
-			paramMember.setStatus(member.getStatus());
-			paramMember.setId(member.getId());
-			paramMember.setPassword(member.getPassword());
-			paramMember.setProfileImg(member.getProfileImg());
-					
 			int resultRegisterMember = memberService.insertRegisterMember(paramMember);
 			
 			// 2. 주소 입력

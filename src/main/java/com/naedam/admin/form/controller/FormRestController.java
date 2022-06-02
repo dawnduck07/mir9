@@ -43,7 +43,9 @@ public class FormRestController {
 	
 	@GetMapping(value="json/formList")
 	public List<Form> formList() throws Exception{
-		return formService.formList();
+		Map<String, Object> resultMap = formService.formList();
+		List<Form> formList = (List<Form>) resultMap.get("formList");
+		return formList;
 	}
 	
 	@PostMapping(value="json/getForm")
@@ -72,17 +74,15 @@ public class FormRestController {
 							@RequestParam("upItemNo") int upItemNo) throws Exception{
 		System.out.println("updateUpAsc 시작");
 		Boolean result = false;
-		if(itemNo != 0) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Map<String, Object> map2 = new HashMap<String, Object>();
-			map.put("itemUpAsc", itemUpAsc);
-			map.put("upItemNo", itemNo);
-			map2.put("itemUpAsc", itemAsc);
-			map2.put("upItemNo", upItemNo);
-			formService.updateUpAsc(map);
-			formService.updateUpAsc(map2);
-			result = true;
-		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map.put("itemUpAsc", itemUpAsc);
+		map.put("upItemNo", itemNo);
+		map2.put("itemUpAsc", itemAsc);
+		map2.put("upItemNo", upItemNo);
+		formService.updateUpAsc(map);
+		formService.updateUpAsc(map2);
+		result = true;
 		return result;
 	}
 	
@@ -93,18 +93,15 @@ public class FormRestController {
 							@RequestParam("downItemNo") int downItemNo) throws Exception{
 		System.out.println("json/updateDownAsc 시작");
 		Boolean result = false;
-		if(itemNo != 0) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Map<String, Object> map2 = new HashMap<String, Object>();
-			map.put("itemDownAsc", itemDownAsc);
-			map.put("downItemNo", itemNo);
-			map2.put("itemDownAsc", itemAsc);
-			map2.put("downItemNo", downItemNo);
-			formService.updateDownAsc(map);
-			formService.updateDownAsc(map2);
-			result = true;
-		}
-
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map.put("itemDownAsc", itemDownAsc);
+		map.put("downItemNo", itemNo);
+		map2.put("itemDownAsc", itemAsc);
+		map2.put("downItemNo", downItemNo);
+		formService.updateDownAsc(map);
+		formService.updateDownAsc(map2);
+		result = true;
 		return result;
 	}	
 
@@ -115,17 +112,15 @@ public class FormRestController {
 							@RequestParam("upFormPostNo") int upFormPostNo) throws Exception{
 		System.out.println("updateUpAsc2 시작");
 		Boolean result = false;
-		if(formPostNo != 0) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Map<String, Object> map2 = new HashMap<String, Object>();
-			map.put("formPostUpAsc", formPostUpAsc);
-			map.put("upFormPostNo", formPostNo);
-			map2.put("formPostUpAsc", formPostAsc);
-			map2.put("upFormPostNo", upFormPostNo);
-			formService.updateUpAsc2(map);
-			formService.updateUpAsc2(map2);
-			result = true;
-		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map.put("formPostUpAsc", formPostUpAsc);
+		map.put("upFormPostNo", formPostNo);
+		map2.put("formPostUpAsc", formPostAsc);
+		map2.put("upFormPostNo", upFormPostNo);
+		formService.updateUpAsc2(map);
+		formService.updateUpAsc2(map2);
+		result = true;
 		return result;
 	}
 	
@@ -136,18 +131,15 @@ public class FormRestController {
 							@RequestParam("downFormPostNo") int downFormPostNo) throws Exception{
 		System.out.println("json/updateDownAsc2 시작");
 		Boolean result = false;
-		if(formPostNo != 0) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Map<String, Object> map2 = new HashMap<String, Object>();
-			map.put("formPostDownAsc", formPostDownAsc);
-			map.put("downFormPostNo", formPostNo);
-			map2.put("formPostDownAsc", formPostAsc);
-			map2.put("downFormPostNo", downFormPostNo);
-			formService.updateDownAsc2(map);
-			formService.updateDownAsc2(map2);
-			result = true;
-		}
-
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map.put("formPostDownAsc", formPostDownAsc);
+		map.put("downFormPostNo", formPostNo);
+		map2.put("formPostDownAsc", formPostAsc);
+		map2.put("downFormPostNo", downFormPostNo);
+		formService.updateDownAsc2(map);
+		formService.updateDownAsc2(map2);
+		result = true;
 		return result;
 	}
 	

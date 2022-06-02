@@ -62,9 +62,7 @@ public class BoardController {
 	// 권한 등록, 수정
 	// 옵션 등록, 수정
 	@PostMapping("boardProcess")
-	public String boardProcess(@ModelAttribute("board") Board board,
-							   @ModelAttribute("boardAuthority") BoardAuthority boardAuthority,
-							   @ModelAttribute("boardOption") BoardOption boardOption,
+	public String boardProcess(@ModelAttribute("board") Board board, @ModelAttribute("boardAuthority") BoardAuthority boardAuthority, @ModelAttribute("boardOption") BoardOption boardOption,
 							   @RequestParam("mode") String mode) throws Exception {
 		Map<String, Object> boardMap = new HashMap<>();
 		boardMap.put("board", board);
@@ -78,13 +76,9 @@ public class BoardController {
 	// 게시글 프로세스
 	// 게시글 등록, 수정, 삭제, 복사, 이전, 파일등록, 계층형쿼리 등록
 	@PostMapping("postProcess")
-	public String postProcess(@ModelAttribute("board") Board board,
-							  @ModelAttribute("post") Post post,
-							  @RequestParam(value="postName", required = false) MultipartFile[] postName,
-							  @RequestParam(value="postName", required = false) String[] postName2,
-						      @RequestParam(value="ThombnailName", required = false) MultipartFile ThombnailName,
-						      @RequestParam("secNo") String secNo,
-						      @RequestParam("mode") String mode,
+	public String postProcess(@ModelAttribute("board") Board board, @ModelAttribute("post") Post post,
+							  @RequestParam(value="postName", required = false) MultipartFile[] postName, @RequestParam(value="postName", required = false) String[] postName2, 
+							  @RequestParam(value="ThombnailName", required = false) MultipartFile ThombnailName, @RequestParam("secNo") String secNo, @RequestParam("mode") String mode,
 						      HttpServletRequest request) throws Exception {
 		String filePath = request.getServletContext().getRealPath("resources/imgs/imageBoard/board");	
 		Map<String, Object> postMap	 = new HashMap<>();
@@ -97,33 +91,27 @@ public class BoardController {
 		postMap.put("filePath", filePath);
 		postMap.put("secNo", secNo);
 		boardService.postProcess(postMap);
-		
-		
 		return "redirect:/admin/board/postList?boardNo="+board.getBoardNo();
 	}
 	
 	//게시판 목록
 	@GetMapping("listBoard")
-	public String listBoard(@ModelAttribute("search") Search search, Board board, Model model) throws Exception {
+	public String listBoard(@ModelAttribute("search") Search search, Model model) throws Exception {
 		
 		//게시글 수
 		//각 게시판마다 게시글 수가 필요하여 List로 게시글 수를 뽑아와 List에 add하는 방식
 		List postCount = new ArrayList();
-		List<Board> board2 = boardService.getBoardTitle();
-		for(int i = 0 ; i < board2.size(); i++) {
-			int a = boardService.getTotalCount3(board2.get(i).getBoardNo());
-			postCount.add(a);
-		}
-		model.addAttribute("postCount", postCount);
-		
+		List<Board> board = boardService.getBoardTitle();
 		//게시판 리스트
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
+		map.put("board", board);
 		Map<String, Object> resultMap = boardService.getBoardList(map);
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
 		model.addAttribute("list", resultMap.get("list"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
+		model.addAttribute("postCount", resultMap.get("postCount"));
 		
 		return "admin/board/boardList";
 	}
@@ -163,9 +151,7 @@ public class BoardController {
 	public String deleteThombnail(@ModelAttribute("post") Post post,
 								  @RequestParam("boardNo") int boardNo) throws Exception {
 		System.out.println("deleteThombnail 시작");
-		
 		boardService.updateThombnail(post);
-		
 		return "redirect:/admin/board/postList?boardNo="+boardNo;
 	}	
 	
@@ -174,15 +160,9 @@ public class BoardController {
 	public void imageUpload(HttpServletRequest request, HttpServletResponse response,
 							MultipartHttpServletRequest multiFile,
 							@RequestParam MultipartFile upload) throws Exception{
-		
-		System.out.println("진입 확인");
 		UUID uid = UUID.randomUUID();
-		
 		OutputStream out = null;
 		PrintWriter printWriter = null;
-		
-		
-		
 		try{ 
 			//파일 이름 가져오기 
 			String fileName = upload.getOriginalFilename(); 
@@ -224,7 +204,6 @@ public class BoardController {
 			} return;
 					
 	}
-	
 	//ckEditor 이미지 업로드 실행
 	@RequestMapping(value="ckImgSubmit") 
 	public void ckSubmit(@RequestParam(value="uid") String uid , 
@@ -232,12 +211,9 @@ public class BoardController {
 						 HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{ 
 		//서버에 저장된 이미지 경로 
 		String path = request.getServletContext().getRealPath("resources/imgs/imageBoard/ckeditorImg/");
-		
 		String sDirPath = path + uid + "_" + fileName; 
-		
 		File imgFile = new File(sDirPath); 
 		//사진 이미지 찾지 못하는 경우 예외처리로 빈 이미지 파일을 설정한다. 
-		
 		if(imgFile.isFile()){ 
 			byte[] buf = new byte[1024]; 
 			int readByte = 0; 
@@ -246,22 +222,18 @@ public class BoardController {
 			FileInputStream fileInputStream = null; 
 			ByteArrayOutputStream outputStream = null; 
 			ServletOutputStream out = null; 
-			
 			try{ 
 				fileInputStream = new FileInputStream(imgFile); 
 				outputStream = new ByteArrayOutputStream(); 
 				out = response.getOutputStream(); 
-				
 				while((readByte = fileInputStream.read(buf)) != -1){ 
 					outputStream.write(buf, 0, readByte); 
 				} 
-				
 				imgBuf = outputStream.toByteArray(); 
 				length = imgBuf.length; 
 				out.write(imgBuf, 0, length); 
 				out.flush(); 
-			}catch(IOException e){ 
-				 
+			}catch(IOException e){ 	 
 			}finally { 
 				outputStream.close(); 
 				fileInputStream.close(); 

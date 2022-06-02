@@ -1,6 +1,7 @@
 package com.naedam.admin.board.model.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,7 +174,13 @@ public class BoardServiceImpl implements BoardService {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", boardDao.getBoardList(map));
 		resultMap.put("totalCount", boardDao.getTotalCount(map));
-		
+		List<Board> boardList = (List<Board>)map.get("board");
+		List postCount = new ArrayList<>();
+		for(int i = 0; i < boardList.size(); i++) {
+			int count = boardDao.getTotalCount3(boardList.get(i).getBoardNo());
+			postCount.add(count);
+		}
+		resultMap.put("postCount", postCount);
 		return resultMap;
 	}
 

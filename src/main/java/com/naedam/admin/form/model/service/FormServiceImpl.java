@@ -1,5 +1,6 @@
 package com.naedam.admin.form.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,9 +152,19 @@ public class FormServiceImpl implements FormService {
 	
 	//폼메일 리스트
 	@Override
-	public List<Form> formList() throws Exception {
+	public Map<String, Object> formList() throws Exception {
 		// TODO Auto-generated method stub
-		return formDao.formList();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("formList", formDao.formList());
+		resultMap.put("formCount", formDao.formListCount());
+		List<Form> formList = (List<Form>) resultMap.get("formList");
+		List formPostCount = new ArrayList();
+		for(int i = 0; i < formList.size(); i++) {
+			int count = formDao.formPostListCount(formList.get(i).getFormNo());
+			formPostCount.add(count);
+		}
+		resultMap.put("formPostCount", formPostCount);
+		return resultMap;
 	}
 
 	//폼메일 리스트 카운트
@@ -165,9 +176,18 @@ public class FormServiceImpl implements FormService {
 	
 	//문항관리 리스트
 	@Override
-	public List<Item> itemList(int formNo) throws Exception {
+	public Map<String, Object> itemList(int formNo) throws Exception {
 		// TODO Auto-generated method stub
-		return formDao.itemList(formNo);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("itemList", formDao.itemList(formNo));
+		resultMap.put("itemCount", formDao.itemListCount(formNo));
+		resultMap.put("form", formDao.getForm(formNo));
+		List<Item> itemList = (List<Item>) resultMap.get("itemList");
+		for(int i = 0; i < itemList.size(); i++) {
+			itemList.get(i).setInput_example(itemList.get(i).getInput_example().replace("\r\n", "/"));
+		}
+		resultMap.put("itemList", itemList);
+		return resultMap;
 	}
 
 	//문항관리 리스트 카운트
@@ -179,9 +199,26 @@ public class FormServiceImpl implements FormService {
 	
 	//폼게시물 리스트
 	@Override
-	public List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception {
+	public Map<String, Object> formPostList(int formNo, int offset, int limit) throws Exception {
 		// TODO Auto-generated method stub
-		return formDao.formPostList(formNo,offset,limit);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		//폼게시물 리스트
+		resultMap.put("fp", formDao.formPostList(formNo,offset,limit));
+		resultMap.put("td", formDao.formTd(formNo));
+		List<Integer> number = new ArrayList<>();
+		int num = 0;
+		List<Item> tr = formDao.formTr(formNo);
+		for(int i = 0; i < tr.size(); i++) {
+			tr.get(i).setInput_example(tr.get(i).getInput_example().replace("\r\n", "&"));
+			
+			if("y".equals(tr.get(i).getIs_show())) {
+				number.add(num, i);
+				num = num+1;
+			}else if(!"y".equals(tr.get(i).getIs_show())){}			
+		}
+		resultMap.put("tr", tr);	
+		resultMap.put("number", number);
+		return resultMap;
 	}
 	
 	//폼게시물 리스트

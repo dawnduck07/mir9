@@ -17,19 +17,19 @@ public interface FormService {
 	public int addItemChoice(ItemChoice itemChoice) throws Exception;
 	
 	//폼메일 리스트
-	List<Form> formList() throws Exception;
+	Map<String, Object> formList() throws Exception;
 	
 	//폼메일 리스트 카운트
 	int formListCount() throws Exception;
 	
 	//문항관리 리스트
-	List<Item> itemList(int formNo) throws Exception;
+	Map<String, Object> itemList(int formNo) throws Exception;
 	
 	//문항관리 리스트 카운트
 	int itemListCount(int formNo) throws Exception;
 	
 	//폼게시물 리스트
-	List<FormPost> formPostList(int formNo, int offset, int limit) throws Exception;
+	Map<String, Object> formPostList(int formNo, int offset, int limit) throws Exception;
 	
 	//폼게시물 리스트
 	List<FormPost> formPostList2(int formNo) throws Exception;

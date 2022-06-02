@@ -77,7 +77,7 @@
         function setData() {
             // 정보
             $.ajax({
-            	url:'/admin/bottom/json/getMeta?${_csrf.parameterName}=${_csrf.token}',
+            	url:'/admin/menu/json/getMeta?${_csrf.parameterName}=${_csrf.token}',
                 type:'post',
                 dataType:'json',
                 data:{

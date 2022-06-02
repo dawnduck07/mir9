@@ -39,9 +39,7 @@ public class ScheduleRestController {
 	@GetMapping(value="json/getScheduleList")
 	public List getScheduleList() throws Exception{
 		System.out.println("/json/getScheduleList 시작");
-		
 		List<Schedule> list = scheduleService.getScheduleList();
-		
 		return list;
 	}
 	
