@@ -34,28 +34,15 @@ textarea {
 		    <div class="col-xs-12">
 		        <div class="box">
 		            <div class="box-body">
-	
-		                <form name="form_register" method="post" action="${pageContext.request.contextPath}/admin/comm/email?${_csrf.parameterName}=${_csrf.token}">
-			                <input type="hidden" name="mode" value="updateEmail">
+		                <form name="form_register">
 			                <input type="hidden" name="locale" value="ko">
-			                
-			                <c:forEach var="setting" items="${ emailSetting }">
-			                	<input type="hidden" name="setTemplateId" value="${ setting.templateId }" >
-			                	<input type="hidden" name="setIsSend" value="${ setting.isSend }" >
-			                	<input type="hidden" name="setIsSendAdmin" value="${ setting.isSendAdmin }" >
-			                </c:forEach>
-			
 							<h4><p class="text-light-blue"><i class="fa fa-fw fa-info-circle"></i> 메일 발송 문구 설정 </p></h4>
 			                <div style="text-align:right;">
-			                	<!-- 
-			                	언어 설정 (대기)
 								<button type="button" id="locale_ko" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=ko'" class="btn btn-primary"><i class="fa fa-globe" aria-hidden="true"></i> 한국어</button>
 								<button type="button" id="locale_en" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=en'" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> ENG</button>
 								<button type="button" id="locale_zh" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=zh'" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> 中国</button>
 								<button type="button" id="locale_vn" onclick="parent.location.href='${pageContext.request.contextPath}/admin/comm/email?locale=vn'" class="btn btn-default"><i class="fa fa-globe" aria-hidden="true"></i> Tiếng việt</button>                
-								-->
 							</div></br>
-			
 							<table class="table table-bordered table-hover">
 								<thead>
 				                    <tr>
@@ -76,7 +63,6 @@ textarea {
 				                </thead>
 				                <tbody>
 				      				<tr>
-				      					<!-- action에 해당하는 이름값 class로 분리하기 -->
 					                    <input type="hidden" class="join" name="code" value="join" />
 					                    <input type="hidden" class="join" name="code" value="join_admin" />
 										<td class="content">회원가입</td>
@@ -84,7 +70,6 @@ textarea {
 					                    	<input type="checkbox" class="join" name="is_send" />
 					                    </td>
 					                    <td class="content">
-					                    	<!-- onclickUpdate(code, action, is_admin) -->
 					                    	<button type="button" onclick="onclickUpdate('join');" class="btn btn-primary btn-xs">편집</button>
 					                    </td>
 					                    <td class="content">
@@ -391,8 +376,7 @@ textarea {
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:1000px;">
 	        <div class="modal-content">
-	            <form name="formContent" id="formContent" method="post" action="${pageContext.request.contextPath}/admin/comm/email_modal" enctype="multipart/form-data">
-		            <input type="hidden" name="mode" id="mode" value="updateEmail">
+	            <form name="formContent" id="formContent" method="post" action="${pageContext.request.contextPath}/admin/comm/load/emailModal" enctype="multipart/form-data">
 		            <input type="hidden" name="action" id="action">
 		            <input type="hidden" name="locale" id="locale" value="ko">
 		            
@@ -491,13 +475,12 @@ textarea {
 		// 모달 히든에 각각의 값 전달
 	    $('#action').val(action); 
 	    $('#modalContent').modal({backdrop:'static', show:true});
- 
+		
 	    // 조회
 	    $.ajax({
-			url:"${pageContext.request.contextPath}/admin/comm/email_modal",
+			url:"${pageContext.request.contextPath}/admin/comm/load/emailModal",
 			type:"GET",
-			contentType: "application/json; charset=utf-8",
-			data:{ templateId : action },
+			data: { templateId : action },
 			success: function(result){	
 				$("#title").val(result.title); 
 				objEditor.setData(result.content); 
@@ -531,11 +514,10 @@ textarea {
 			title : title,
 			content : content
 	    };
-	    
 	    var jsonStr = JSON.stringify(data);
 
 	    $.ajax({
-			url: "${pageContext.request.contextPath}/admin/comm/email_modal",
+			url: "${pageContext.request.contextPath}/admin/comm/load/emailModal",
 			method: "POST",
 			contentType: "application/json; charset=utf-8",
 			headers: {
@@ -560,10 +542,9 @@ textarea {
 		var templateId = $("#action").val();
 		
 		$.ajax({
-			url:"${pageContext.request.contextPath}/admin/comm/email_origin", 
+			url:"${pageContext.request.contextPath}/admin/comm/load/emailOrigin", 
 			type:"GET",
 			data:{ templateId : templateId },
-			contentType: "application/json; charset=utf-8",
 			success:function(result){
 				if(result.title.length > 0 && result.content.length > 0) { 
 					if(confirm("기본 문구로 적용하시겠습니까?")) {
@@ -616,7 +597,7 @@ textarea {
 
 		// 자동발송 여부 저장하기
 		$.ajax({
-			url: "${pageContext.request.contextPath}/admin/comm/email",
+			url: "${pageContext.request.contextPath}/admin/comm/load/emailModify",
 			method: "POST",
 			headers: {
 				"${_csrf.headerName}" : "${_csrf.token}"
