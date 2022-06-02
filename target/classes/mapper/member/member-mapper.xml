@@ -304,7 +304,7 @@
 <!-- 회원메모 조회 -->
 <select id="selectOneMemo" resultType="memberMemo">
 	SELECT
-		member_memo_content
+		*
 	FROM 
 		member_memo
 	WHERE

@@ -1,9 +1,13 @@
 package com.naedam.admin.member.model.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.naedam.admin.member.model.dao.MemberDao;
@@ -19,6 +23,7 @@ import com.naedam.admin.member.model.vo.MemberListExcelForm;
 import com.naedam.admin.member.model.vo.MemberMemo;
 import com.naedam.admin.member.model.vo.WithdrawalMember;
 import com.naedam.admin.member.model.vo.WithdrawalMemberEntity;
+import com.naedam.admin.point.model.dao.PointDao;
 import com.naedam.admin.point.model.vo.MemberPoint;
 
 @Service
@@ -26,7 +31,217 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Autowired
 	private MemberDao memberDao;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	private PointDao pointDao;
+	
+	// 회원관리 프로세스
+	public Map<String, Object> memberProcess(Map<String, Object> map) throws Exception{
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+		Member member = (Member) map.get("member");
+		if("insert".equals(map.get("mode"))) {
+			// 1. 회원(Member) 등록
+			String rawPassword = member.getPassword();
+			String encryptedPassword = passwordEncoder.encode(rawPassword);
+			member.setPassword(encryptedPassword);
+			int resultRegisterMember = memberDao.insertRegisterMember(member);
+			resultMap.put("resultRegisterMember", resultRegisterMember);
+			
+			// 2. 주소 입력
+			// 2.1. 주소 입력
+			Address address = (Address) map.get("address");
+			int resultRegisterAddress = memberDao.insertAddress(address);
+			resultMap.put("resultRegisterMember", resultRegisterAddress);
+			// 2.2. 주소록 입력
+			AddressBook addressBook = (AddressBook) map.get("addressBook");
+			addressBook.setAddressNo(address.getAddressNo());
+			addressBook.setMemberNo(member.getMemberNo());
+			int resultRegisterAddressBook = memberDao.insertAddressBook(addressBook);
+			resultMap.put("resultRegisterAddressBook", resultRegisterAddressBook);
+			
+			// 3. 메모 입력
+			// 3.1. 회원 입력 시 생성된 회원번호(MemberNo) 설정
+			MemberMemo memberMemo = (MemberMemo) map.get("memberMemo");
+			memberMemo.setMemberNo(member.getMemberNo());
+			// 3.2. 메모 입력
+			int resultRegisterMemberMemo = memberDao.insertMemberMemo(memberMemo);
+			resultMap.put("resultRegisterMemberMemo", resultRegisterMemberMemo);
+			
+			// 4. 등급 입력(update)
+			// 4.1. 권한 입력 
+			Authorities authorities = (Authorities) map.get("authorities");
+			authorities.setMemberNo(member.getMemberNo());
+			int resultInsertAuthorities = memberDao.insertAuthorities(authorities);
+			resultMap.put("resultInsertAuthorities", resultInsertAuthorities);
+			
+			String msg = "";
+			if(resultRegisterMember > 0 && resultRegisterAddress > 0 
+			   && resultRegisterAddressBook > 0 && resultRegisterMemberMemo > 0
+			   && resultInsertAuthorities > 0) {
+				msg = "해당 회원이 등록 되었습니다.";				
+			} else {
+				msg = "회원 등록이 실패했습니다.";
+			}
+			resultMap.put("msg", msg);
+			resultMap.put("return", "redirect:/admin/member/list.do");
+			return resultMap;
+		}else if("update".equals(map.get("mode"))) {
+			String rawPassword = member.getPassword();
+			String encryptedPassword = passwordEncoder.encode(rawPassword);
+			member.setPassword(encryptedPassword);
+			// 1. 회원(Member) 수정
+			int resultRegisterMember = memberDao.memberUpdate(member);
+			resultMap.put("resultRegisterMember", resultRegisterMember);
+			
+			// 2. 주소 입력
+			// 2.1. 주소 입력
+			Address address = (Address) map.get("address");
+			int resultRegisterAddress = memberDao.addressUpdate(address);
+			resultMap.put("resultRegisterMember", resultRegisterAddress);
+			
+			// 3. 메모 입력
+			// 3.1. 회원 입력 시 생성된 회원번호(MemberNo) 설정
+			MemberMemo memberMemo = (MemberMemo) map.get("memberMemo");
+			memberMemo.setMemberNo(member.getMemberNo());
+			// 3.2. 메모 입력
+			int resultRegisterMemberMemo = memberDao.memberMemoUpdate(memberMemo);
+			resultMap.put("resultRegisterMemberMemo", resultRegisterMemberMemo);
+			
+			// 4. 등급 입력(update)
+			// 4.1. 권한 입력 
+			Authorities authorities = (Authorities) map.get("authorities");
+			authorities.setMemberNo(member.getMemberNo());
+			int resultInsertAuthorities = memberDao.authoritiesUpdate(authorities);
+			resultMap.put("resultInsertAuthorities", resultInsertAuthorities);
+			
+			String msg = "";
+			if(resultRegisterMember > 0 && resultRegisterAddress > 0 
+			   && resultRegisterMemberMemo > 0 && resultInsertAuthorities > 0) {
+				msg = "해당 회원이 수정 되었습니다.";				
+			} else {
+				msg = "회원 수정이 실패했습니다.";
+			}
+			resultMap.put("msg", msg);
+			resultMap.put("return", "redirect:/admin/member/list.do");
+			return resultMap;
+		}else if("delete".equals(map.get("mode"))) {
+			int[] memberNo = (int[]) map.get("memberNo");
+			// 주소 번호 조회
+			List<Address> addressList = memberDao.findAddressNo(memberNo);
+			for(int i = 0; i < addressList.size(); i++) {
+				int addressNo = addressList.get(i).getAddressNo();				
+				// 주소 삭제
+				memberDao.deleteAddress(addressNo);
+			}
+			// 주소록 삭제
+			memberDao.deleteAddressBook(memberNo);		
+			// 권한 삭제
+			memberDao.deleteAuthorities(memberNo);
+			// 메모 삭제
+			memberDao.deleteMemberMemo(memberNo);
+			// 회원 삭제
+			memberDao.deleteMember(memberNo);
+			
+			resultMap.put("msg", "해당 회원이 삭제되었습니다.");
+			resultMap.put("return", "redirect:/admin/member/list.do");
+			return resultMap;
+		}else if("withdrawalUpdate".equals(map.get("mode"))) {
+			WithdrawalMemberEntity withdrawalMemberEntity = (WithdrawalMemberEntity) map.get("withdrawalMemberEntity");
+			String rawPassword = member.getPassword();
+			String encryptedPassword = passwordEncoder.encode(rawPassword);
+			member.setPassword(encryptedPassword);
+			// 1. 회원(Member) 수정
+			int resultRegisterMember = memberDao.memberUpdate(withdrawalMemberEntity);
+			resultMap.put("resultRegisterMember", resultRegisterMember);
+			
+			// 2. 주소 입력
+			// 2.1. 주소 입력
+			Address address = (Address) map.get("address");
+			int resultRegisterAddress = memberDao.addressUpdate(address);
+			resultMap.put("resultRegisterMember", resultRegisterAddress);
+			
+			// 3. 메모 입력
+			// 3.1. 회원 입력 시 생성된 회원번호(MemberNo) 설정
+			MemberMemo memberMemo = (MemberMemo) map.get("memberMemo");
+			memberMemo.setMemberNo(member.getMemberNo());
+			// 3.2. 메모 입력
+			int resultRegisterMemberMemo = memberDao.memberMemoUpdate(memberMemo);
+			resultMap.put("resultRegisterMemberMemo", resultRegisterMemberMemo);
+			
+			// 4. 등급 입력(update)
+			// 4.1. 권한 입력 
+			Authorities authorities = (Authorities) map.get("authorities");
+			authorities.setMemberNo(member.getMemberNo());
+			int resultInsertAuthorities = memberDao.authoritiesUpdate(authorities);
+			resultMap.put("resultInsertAuthorities", resultInsertAuthorities);
+			
+			String msg = "";
+			if(resultRegisterMember > 0 && resultRegisterAddress > 0 
+			   && resultRegisterMemberMemo > 0 && resultInsertAuthorities > 0) {
+				msg = "해당 회원이 수정 되었습니다.";				
+			} else {
+				msg = "회원 수정이 실패했습니다.";
+			}
+			resultMap.put("msg", msg);
+			resultMap.put("return", "redirect:/admin/member/withdrawalList.do");
+			return resultMap;
+		}
+		
+		return resultMap;
+	}
+	
+	public Map<String, Object> memberDetail(Map<String, Object> map) throws Exception{
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+		int memberNo = (int) map.get("memberNo");
+		// 회원조회
+		Member member = memberDao.selectOneMemberByMemberNo(memberNo);
+		resultMap.put("member", member);
 
+		// 휴대폰 번호 분기
+		resultMap.put("mobile2", member.getPhone().substring(3, 7));
+		resultMap.put("mobile3", member.getPhone().substring(7, 11));
+		
+		// 시간 양식 변경
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		resultMap.put("regDate", dateFormat.format(member.getRegDate()));
+		String loginDate = "";
+		if(member.getLoginDate() == null){
+			loginDate = "";
+		} else {
+			loginDate = dateFormat.format(member.getLoginDate());
+		}
+		resultMap.put("loginDate", loginDate);
+		String updateDate = "";
+		if(member.getUpdateDate() == null) {
+			updateDate = "";
+		} else {
+			updateDate = dateFormat.format(member.getUpdateDate());
+		}
+		resultMap.put("updateDate", updateDate);
+		// 2. 주소(Address) 조회
+		resultMap.put("address", memberDao.selectOneAddress(memberNo));
+		
+		// 3. 메모(MemberMemoContent) 조회
+		MemberMemo memberMemo = memberDao.selectOneMemo(memberNo);
+		if(memberMemo.getMemberMemoContent() == null) 
+			 memberMemo.setMemberMemoContent("");
+		resultMap.put("memberMemo", memberMemo);
+		
+		// 4. 회원 권한 조회
+		resultMap.put("authorities",memberDao.selectOneAuthorities(memberNo)); 
+		
+		// 5. 회원 포인트 총계 조회
+		int totalPoint = 0;
+		try {
+			totalPoint = memberDao.selectMemberTotalPoint(memberNo);
+		} catch (Exception e) {}
+		resultMap.put("totalPoint", totalPoint);
+		resultMap.put("pointName",pointDao.selectPointName());
+		
+		return resultMap;
+	}
+	
 	// 로그인 - 해당 id정보 가져오기
 	@Override
 	public Member selectOneMember(String id) {
@@ -316,8 +531,12 @@ public class MemberServiceImpl implements MemberService {
 
 	// 탈퇴 회원 리스트
 	@Override
-	public List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit) {
-		return memberDao.selectWithdrawalMemberListMemberList(offset, limit);
+	public Map<String,Object> selectWithdrawalMemberListMemberList(int offset, int limit) {
+		Map<String, Object> resultMap = new HashMap<String,Object>();
+		resultMap.put("withdrawalMemberList", memberDao.selectWithdrawalMemberListMemberList(offset, limit));
+		resultMap.put("totalwithdrawalCount", memberDao.selectWithdrawalCount());
+		resultMap.put("memberGradeList", memberDao.selectMemberGradeList());
+		return resultMap;
 	}
 
 	// 탈퇴 회원 전체 게시물 수
