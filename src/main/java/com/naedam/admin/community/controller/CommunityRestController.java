@@ -9,9 +9,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonArray;
@@ -50,84 +53,9 @@ public class CommunityRestController {
 	
 	// JsonParser
 	private JsonParser parser = new JsonParser();
-	
-	// 리뷰 모달창 조회
-	@GetMapping("/review_modal")
-	public Map<Object, Object> commReviewModal(int reviewCode) {
-		List<Review> review = communityService.reviewModal(reviewCode);
-		List<ReviewImg> reviewImg  = communityService.reviewImgModal(reviewCode);
 
-		Map<Object, Object> result = new HashMap<>();
-		result.put("review", review);
-		result.put("reviewImg", reviewImg);
-		
-		return result;
-	}
-	
-	// sms 사용 요금
-	@PostMapping("/charge")
-	public int charge(String id) {
-		int result = 0;
 
-		// 해당  아이디 값의 핸드폰 번호를 조회
-		String memPhone = memberService.getPhoneById(id);
-
-		// 해당 핸드폰 번호와 일치하는 sms 발신 count
-		String phone = memPhone.substring(0, 3) + "-" + memPhone.substring(3, 7) + "-" + memPhone.substring(7);
-		result = communityService.countBySendPhone(phone);
-
-		return result;
-	}	
-	
-	// sms 문구 수정
-	@PostMapping("/sms")
-	public int modifySms(@RequestBody String jsonStr) {
-		// 필요 변수 선언
-		List<String> code = new ArrayList<>();
-		List<String> templateId = new ArrayList<>();
-		List<String> is_send = new ArrayList<>();
-		List<String> is_send_admin = new ArrayList<>();
-		List<String> content = new ArrayList<>();
-		int result1 = 0;
-		int result2 = 0;
-		
-		// JsonParser
-		JsonElement element = parser.parse(jsonStr);
-		JsonArray codeArr = element.getAsJsonObject().get("code").getAsJsonArray();
-		
-		// 값 담기
-		for(int i = 0; i < codeArr.size(); i++) {
-			code.add((element.getAsJsonObject().get("code").getAsJsonArray()).get(i).getAsString());
-			content.add((element.getAsJsonObject().get("content").getAsJsonArray()).get(i).getAsString());
-			
-			if(i == 0 || i%2 == 0) {
-				templateId.add((element.getAsJsonObject().get("code").getAsJsonArray()).get(i).getAsString());
-				is_send.add((element.getAsJsonObject().get("is_send").getAsJsonArray()).get(i).getAsString());
-			}
-			else {
-				is_send_admin.add((element.getAsJsonObject().get("is_send").getAsJsonArray()).get(i).getAsString());
-			}
-		}
-		
-		// sms 정보 업데이트
-		for(int i = 0; i < code.size(); i++) {
-			result1 += communityService.modifySms(code.get(i), content.get(i));
-		}
-
-		// sms 자동 발송 여부
-		HashMap<String, String> param = new HashMap<>();
-		
-		for (int i = 0; i < is_send_admin.size(); i++) {
-			param.put("templateId", templateId.get(i));
-			param.put("send", is_send.get(i));
-			param.put("sendAdmin", is_send_admin.get(i));
-
-			result2 += communityService.smsAutoSend(param);
-		}
-
-		return (result1 * result2);
-	}
-	
+	/*
 	// mail 모달창 기본 문구 조회
 	@GetMapping("/email_origin")
 	public HashMap<String, Object> commEmailOrigin(String templateId) {
@@ -147,7 +75,9 @@ public class CommunityRestController {
 
 		return savedMail;
 	}
+	*/
 	
+	/*
 	// mail 모달창 문구 수정
 	@PostMapping("/email_modal")
 	public int commEmailModify(@RequestBody String jsonStr) {
@@ -201,7 +131,9 @@ public class CommunityRestController {
 
 		return result;
 	}	
+	*/
 	
+	/*
 	// 주문 관련 msg 발송
 	@PostMapping("/sendMsg")
 	public int sendMsg(String orderNo, int statusNo) {
@@ -324,6 +256,7 @@ public class CommunityRestController {
 	}
 	*/
 	
+	/*
 	// 적립금 관련 msg 발송 
 	@PostMapping("/sendPointMsg")
 	public int sendPointMsg(@RequestBody String jsonStr) {
@@ -450,7 +383,8 @@ public class CommunityRestController {
 		}
 		return result;
 	}
-
+	*/
+	/*
 	// 쿠폰 관련 msg 발송
 	@PostMapping("/sendCouponMsg")
 	public int sendCouponMsg(@RequestBody String jsonStr) {
@@ -563,5 +497,5 @@ public class CommunityRestController {
 		}
 		return result;
 	}
-	
+	*/
 }

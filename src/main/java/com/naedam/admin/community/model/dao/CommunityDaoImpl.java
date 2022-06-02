@@ -23,7 +23,7 @@ public class CommunityDaoImpl implements CommunityDao {
 
 	// 리뷰 조회 + 검색
 	@Override
-	public List<Review> reviewList(Map<Object, Object> param) {
+	public List<Object> reviewList(Map<String, Object> param) {
 		return session.selectList("review.reviewList", param);
 	}
 	
@@ -77,8 +77,8 @@ public class CommunityDaoImpl implements CommunityDao {
 
 	// sms 자동 발송 여부 수정
 	@Override
-	public int smsAutoSend(HashMap<String, String> param) {
-		return session.update("sms.autoSend", param);
+	public int smsAutoSend(Map<String, Object> setMod) {
+		return session.update("sms.autoSend", setMod);
 	}
 	
 	// mail 자동 발송 여부 수정
@@ -95,13 +95,13 @@ public class CommunityDaoImpl implements CommunityDao {
 
 	// sms setting 조회
 	@Override
-	public List<SmsSetting> selectSmsSetting() {
+	public List<Object> selectSmsSetting() {
 		return session.selectList("sms.selectSmsSetting");
 	}
 	
 	// sms list 조회
 	@Override
-	public List<Sms> selectSmsList(HashMap<String, Object> param) {
+	public List<Object> selectSmsList(Map<String, Object> param) {
 		return session.selectList("sms.selectSmsList", param);
 	}
 	
@@ -113,13 +113,13 @@ public class CommunityDaoImpl implements CommunityDao {
 	
 	// email setting 조회
 	@Override
-	public List<EmailSetting> selectEmailSetting() {
+	public List<Object> selectEmailSetting() {
 		return session.selectList("email.selectEmailSetting");
 	}
 
 	// email list 조회
 	@Override
-	public List<Email> selectEmailList(HashMap<String, Object> param) {
+	public List<Object> selectEmailList(Map<String, Object> param) {
 		return session.selectList("email.selectEmailList", param);
 	}
 
@@ -131,19 +131,19 @@ public class CommunityDaoImpl implements CommunityDao {
 	
 	// review 전체 목록 개수
 	@Override
-	public int totalReviewCount(Map<Object, Object> param) {
+	public int totalReviewCount(Map<String, Object> param) {
 		return session.selectOne("review.totalReviewCount", param);
 	}
 
 	// sms 전체 목록 개수
 	@Override
-	public int totalSmsCount(HashMap<String, Object> param) {
+	public int totalSmsCount(Map<String, Object> param) {
 		return session.selectOne("sms.totalSmsCount", param);
 	}
 
 	// email 전체 목록 개수
 	@Override
-	public int totalEmailCount(HashMap<String, Object> param) {
+	public int totalEmailCount(Map<String, Object> param) {
 		return session.selectOne("email.totalEmailCount", param);
 	}
 	
