@@ -18,7 +18,13 @@ import com.naedam.admin.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.admin.point.model.vo.MemberPoint;
 
 public interface MemberService {
-
+	
+	// 회원관리 프로세스
+	Map<String, Object> memberProcess(Map<String, Object> map) throws Exception;
+	
+	// 회원 상세보기
+	Map<String, Object> memberDetail(Map<String, Object> map) throws Exception;
+	
 	// 로그인 - 해당 id정보 가져오기
 	Member selectOneMember(String id);
 
@@ -160,7 +166,7 @@ public interface MemberService {
 	String selectMemberIdByNo(int memberNo);
 
 	// 탈퇴 회원 리스트
-	List<MemberEntity> selectWithdrawalMemberListMemberList(int offset, int limit);
+	Map<String,Object> selectWithdrawalMemberListMemberList(int offset, int limit);
 
 	// 탈퇴 회원 전체 게시물 수
 	int selectSearchWithdrawalListCount(Map<String, Object> param);
