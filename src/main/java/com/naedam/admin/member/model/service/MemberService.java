@@ -29,7 +29,7 @@ public interface MemberService {
 	Member selectOneMember(String id);
 
 	// 회원 리스트 전체 게시물 목록
-	List<MemberEntity> selectMemberList(int offset, int limit);
+	Map<String, Object> selectMemberList(int cPage, int limit, String url);
 
 	// 회원 리스트 전체 게시물 수 
 	int selectMemberListCount();
@@ -38,7 +38,7 @@ public interface MemberService {
 	Member selectOneMemberByMap(Map<String, Object> param);
 
 	// 타입별 검색 게시물
-	List<MemberEntity> selectSearchMemberList(Map<String, Object> param, int offset, int limit);
+	Map<String, Object> selectSearchMemberList(Map<String, Object> map, int cPage, int limit, String url);
 
 	// 검색 게시물 수
 	int selectSearchListCount(Map<String, Object> param);
@@ -50,7 +50,7 @@ public interface MemberService {
 	List<MemberGrade> selectMemberGradeList();
 
 	// 회원 등급 수정
-	int memberGradeUpdate(MemberGrade paramGrade);
+	void memberGradeUpdate(String data);
 
 	// 주소 입력
 	int insertAddress(Address address);
@@ -80,7 +80,7 @@ public interface MemberService {
 	Authorities selectOneAuthorities(int memberNo);
 	
 	// 회원 적립금 목록
-	List<MemberPoint> selectMemberPointListByParam(Map<String, Object> param);
+	Map<String, Object> selectMemberPointListByParam(Map<String, Object> param);
 
 	// 회원 적립금 목록 수
 	int totalPointCount(Map<String, Object> param);
@@ -135,19 +135,19 @@ public interface MemberService {
 	int deleteMemberMemo(int[] memberNo);
 
 	// 탈퇴회원 상세조회
-	WithdrawalMemberEntity selectOneWithdrawalMemberEntity(int memberNo);
+	Map<String, Object> selectOneWithdrawalMemberEntity(int memberNo);
 
 	// 회원 탈퇴로 변경
-	int updateMemberToWithdrawal(Map<String, Object> param);
+	Map<String, Object> updateMemberToWithdrawal(Map<String, Object> param);
 
 	// 회원 접속 이력 관리
-	List<MemberAccessHistory> seletHistoryList(int offset, int limit);
+	Map<String, Object> seletHistoryList(int cPage, int limit, String url);
 	
 	// 접속 이력 게시글 수
 	int selectAccessHistoryCount();
 
 	// 접속 이력 검색 게시물
-	List<MemberAccessHistory> seletSearchAccessHistory(Map<String, Object> param, int offset, int limit);
+	Map<String, Object> seletSearchAccessHistory(Map<String, Object> param, int cPage, int limit, String url);
 
 	// 접속 이력 검색 게시물 수
 	int selectSearchHistoryListCount(Map<String, Object> param);
@@ -172,6 +172,6 @@ public interface MemberService {
 	int selectSearchWithdrawalListCount(Map<String, Object> param);
 
 	// 탈퇴회원 검색 게시물
-	List<MemberEntity> selectSearchWithdrawalList(Map<String, Object> param, int offset, int limit);
+	Map<String, Object> selectSearchWithdrawalList(Map<String, Object> param, int cPage, int limit, String url);
 
 }

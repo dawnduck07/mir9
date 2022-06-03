@@ -336,7 +336,7 @@
 				password = #{password},
 		 	</if>
 		 	<if test="reason != null and reason != ''">
-				password = #{reason},
+				reason = #{reason},
 		 	</if>
 		update_date = NOW()
 	WHERE
@@ -693,7 +693,7 @@ SELECT COUNT(*) FROM member WHERE DATE(reg_date) = DATE(SYSDATE())
 <!-- 회원 접속 이력 관리-->
 <select id="seletHistoryList" resultType="memberAccessHistory">
 	SELECT 
-		ROW_NUMBER() OVER(ORDER BY mah.login_date DESC) AS `access_history_no`,
+		ROW_NUMBER() OVER(ORDER BY mah.login_date DESC) AS `access_history_no_desc`,
 		mah.access_history_no, 
 		mah.access_history_id,
 		mah.access_history_name,
