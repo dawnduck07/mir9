@@ -96,8 +96,8 @@ public class CommunityController {
 	@RequestMapping(value="/send/{mode}", method= {RequestMethod.GET, RequestMethod.POST})
 	public Map<String, Object> sendMsg(
 			@PathVariable String mode,
-			@RequestBody String jsonStr) {
-		Map<String, Object> result = new HashMap<>();
+			@RequestBody(required=false) String jsonStr) {
+		Map<String, Object> result = communityService.send(mode, jsonStr);
 		return result;
 	}
 	

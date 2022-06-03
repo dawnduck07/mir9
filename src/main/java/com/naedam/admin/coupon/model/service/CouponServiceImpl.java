@@ -44,15 +44,4 @@ public class CouponServiceImpl implements CouponService {
 		return couponDao.selectCouponList();
 	}
 
-	@Override
-	public int insertMemberCoupon(MemberCoupon memberCoupon) {
-		// TODO Auto-generated method stub
-		return couponDao.insertMemberCoupon(memberCoupon);
-	}
-	
-	@Override
-	public List<Coupon> getCoupon(String code) {
-		return couponDao.getCoupon(code);
-	}	
-	
 }

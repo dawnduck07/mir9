@@ -50,7 +50,7 @@ public interface CommunityDao {
 	// emailSettingModify	: Email 설정 저장 
 	int emailAutoSend(Map<String, Object> setMod);
 
-	
+
 
 	// 확인 중
 	
@@ -58,8 +58,8 @@ public interface CommunityDao {
 	MsgInfo selectMsgInfo(long orderNo);
 	
 	// 특정 설정값 조회
-	List<SmsSetting> smsCheck(String templateId);
-	List<EmailSetting> emailCheck(String templateId);
+	List<SmsSetting> smsAutoChecked(String templateId);
+	List<EmailSetting> emailAutoChecked(String templateId);
 	
 	// 추가
 	int insertSms(HashMap<String, Object> param2);
