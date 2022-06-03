@@ -1,8 +1,8 @@
 package com.naedam.admin.point.model.service;
 
 import java.util.List;
+import java.util.Map;
 
-import com.naedam.admin.member.model.vo.MemberListExcelForm;
 import com.naedam.admin.point.model.vo.MemberPoint;
 import com.naedam.admin.point.model.vo.MemberPointExcelForm;
 import com.naedam.admin.point.model.vo.Point;
@@ -11,7 +11,7 @@ import com.naedam.admin.point.model.vo.PointUse;
 
 public interface PointService {
 
-	int updatePoint(Point point);
+	Map<String, Object> updatePoint(Map<String, Object> map);
 
 	int updatePointSave(PointSave pointSave);
 
