@@ -14,47 +14,54 @@ import com.naedam.admin.community.model.vo.SmsSetting;
 
 public interface CommunityDao {
 
-	// review
+	// review				: 후기 목록 조회
+	int totalReviewCount(Map<String, Object> param);
 	List<Object> reviewList(Map<String, Object> param);
-
+	
+	// reviewModal			: 후기 상세보기
 	List<Review> reviewModal(int reviewCode);
-
 	List<ReviewImg> reviewImgModal(int reviewCode);
 
+	// delete				: 후기 삭제
 	int selectCategory(String reviewCode);	
-	
 	int imgDelete(String reviewCode);	
-	
 	int selectDelete(String reviewCode);
-	
-	int totalReviewCount(Map<String, Object> param);
 
-	// sms
-	MsgInfo selectMsgInfo(long orderNo);
-	
-	List<SmsSetting> smsCheck(String templateId);	
-	
-	int smsAutoSend(Map<String, Object> setMod);
-	
-	int insertSms(HashMap<String, Object> param2);
-	
-	List<Object> selectSmsSetting();
+	// smsList				: SMS 목록 조회
+	int totalSmsCount(Map<String, Object> param);
 	List<Object> selectSmsList(Map<String, Object> param);
 	
+	// charge				: SMS 이용 요금 조회
 	int countBySendPhone(String phone);
 	
-	int totalSmsCount(Map<String, Object> param);
+	// smsAutoSendCheck		: SMS 자동발송 여부 조회
+	List<Object> selectSmsSetting();
 	
-	// email
+	// smsSettingModify		: SMS 설정 저장
+	int smsAutoSend(Map<String, Object> setMod);
+	
+	// emailList			: Email 목록 조회
+	int totalEmailCount(Map<String, Object> param);
+	List<Object> selectEmailList(Map<String, Object> param);
+	
+	// emailAutoSendCheck	: Email 자동발송 여부 조회
+	List<Object> selectEmailSetting();
+	
+	// emailSettingModify	: Email 설정 저장 
+	int emailAutoSend(Map<String, Object> setMod);
+
+	
+
+	// 확인 중
+	
+	// 뷰 조회
+	MsgInfo selectMsgInfo(long orderNo);
+	
+	// 특정 설정값 조회
+	List<SmsSetting> smsCheck(String templateId);
 	List<EmailSetting> emailCheck(String templateId);
 	
-	int mailAutoSend(HashMap<String, String> param);
-
+	// 추가
+	int insertSms(HashMap<String, Object> param2);
 	int insertEmail(HashMap<String, Object> param2);
-
-	List<Object> selectEmailSetting();
-	List<Object> selectEmailList(Map<String, Object> param);
-
-	int totalEmailCount(Map<String, Object> param);
-
 }

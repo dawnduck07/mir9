@@ -12,7 +12,7 @@
 	</select>
 
 	<!-- 자동 발송 여부 수정 -->
-	<update id="autoSend" parameterType="hashmap">
+	<update id="autoSend" parameterType="map">
 		update email_setting
 		   set is_send = #{send}
 			 , is_send_admin = #{sendAdmin}

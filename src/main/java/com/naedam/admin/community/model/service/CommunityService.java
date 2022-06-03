@@ -21,28 +21,28 @@ public interface CommunityService {
 
 	// sms
 	MsgInfo selectMsgInfo(long orderNo); // 주문 정보 조회
-	
 	List<SmsSetting> smsCheck(String templateId); // 특정 설정값 조회
 
-	//int sendSms(JsonObject json); // sms 발송
-	
-	int countBySendPhone(String phone); // sms 이용 내역 조회
-	
 	// email
 	List<EmailSetting> emailCheck(String templateId); // 특정 설정값 조회
-	
-	int mailAutoSend(HashMap<String, String> param); // 자동 발송 여부 수정
 
-	//int modifyMail(String templateId, String title, String content); // 템플릿 수정
-	
+	//int sendSms(JsonObject json); // sms 발송
 	//int sendEmail(JsonObject json); // email 발송 
-
-
 	
-	// Service 단에서 비즈니스 로직 구현 중
+	
+	// 공통 : 목록 + 검색 + 페이징
 	Map<String, Object> selectCommunityList(
-			String mode, int cPage, String field, String keyword, HttpServletRequest request); // 공통 : 설정 + 목록 + 검색 + 페이징
-	Map<String, Object> load(String mode, Map<String, Object> param); // ajax 요청
-	String selectDelete(HttpServletRequest request); // 후기 삭제
+			String mode, int cPage, String field, String keyword, HttpServletRequest request); 
+	
+	// ajax 요청
+	Map<String, Object> load(String mode, Map<String, Object> param); 
+	// Map<String, Object> send(String mode, Map<String, Object> param); 
+	
+	// 후기 삭제
+	String selectDelete(HttpServletRequest request); 
+	
+	
+	
+
 
 }

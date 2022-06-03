@@ -72,28 +72,18 @@ public class CommunityServiceImpl implements CommunityService {
 		return communityDao.emailCheck(templateId);
 	}	
 	
-	// email 자동 발송 여부 수정
-	@Override
-	public int mailAutoSend(HashMap<String, String> param) {
-		return communityDao.mailAutoSend(param);
-	}
-
-	// sms 이용 내역 조회
-	@Override
-	public int countBySendPhone(String phone) {
-		return communityDao.countBySendPhone(phone);
-	}
-	
 	/**
 	 * 공통 : 목록 + 검색 + 페이징
 	 */
 	@Override
 	public Map<String, Object> selectCommunityList(
 			String mode, int cPage, String field, String keyword, HttpServletRequest request){
-		int total = 0; // 목록 개수		
-		Map<String, Object> param = makePageParam(cPage, field, keyword); // 공통 조회 param
+		// 선언
+		int total = 0; // 목록 개수	
 		List<Object> commList = new ArrayList<>(); // 목록 조회
+		Map<String, Object> param = makePageParam(cPage, field, keyword); // 공통 조회 param
 
+		// 맵핑에 따른 결과값
 		if(mode.equals("smsList")) { // SMS 목록
 			total = communityDao.totalSmsCount(param);
 			commList = communityDao.selectSmsList(param);
@@ -107,6 +97,7 @@ public class CommunityServiceImpl implements CommunityService {
 			commList = communityDao.reviewList(param);
 		}
 		
+		// 페이징
 		String uri = request.getRequestURI();
 		if((field != null && field != "") && (keyword != null && keyword != "")) {
 			uri += "?field=" + field + "&keyword=" + keyword; // 검색 조건 쿼리스트링 처리
@@ -128,6 +119,7 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public Map<String, Object> load(
 			String mode, Map<String, Object> param) {
+		// 선언
 		int res = 0;
 		Map<String, Object> setMod = new HashMap<>();
 		List<String> codeList = new ArrayList<>();
@@ -156,11 +148,11 @@ public class CommunityServiceImpl implements CommunityService {
 			result.put("smsSetting", smsSetting);
 		}
 		else if(mode.equals("originSms")) { // SMS 기본문구
-			int category = 81149; // 기본 카테고리
+			int category = 81149; // 기본 카테고리 => 수정 필요
 			result.put("originSms", loadSms(category));
 		}
 		else if(mode.equals("savedSms")) { // SMS 저장문구
-			int category = 81150; // 저장 카테고리
+			int category = 81150; // 저장 카테고리 => 수정 필요 
 			result.put("savedSms", loadSms(category));
 		}
 		else if(mode.equals("smsSettingModify")) { // SMS 설정 저장
@@ -181,7 +173,6 @@ public class CommunityServiceImpl implements CommunityService {
 				else {
 					sendAdminList.add(isSend.get(i).getAsString());
 				}
-				
 				temList.add(templateId.get(i).getAsString());
 				contentList.add(content.get(i).getAsString());
 				res += modifySms(temList.get(i), contentList.get(i));
@@ -198,28 +189,56 @@ public class CommunityServiceImpl implements CommunityService {
 				result.put("modify", "success");
 			}
 		}
-		else if(mode.equals("emailModal")) { // Email 상세보기
-			
-		}
 		else if(mode.equals("emailAutoSendCheck")) { // Email 자동발송
 			List<Object> emailSetting = communityDao.selectEmailSetting();
 			result.put("emailSetting", emailSetting);
 		}
 		else if(mode.equals("originEmail")) { // Email 기본문구
-			int category = 48300; // 기본 카테고리
+			int category = 48300; // 기본 카테고리 => 수정 필요
 			String templateId = ((List<String>) param.get("templateId")).get(0);
 			result.put("originEmail", loadEmail(templateId, category));
 		}
 		else if(mode.equals("savedEmail")) { // Email 저장문구
-			int category = 49064; // 저장 카테고리
+			int category = 49064; // 저장 카테고리 => 수정 필요
 			String templateId = ((List<String>) param.get("templateId")).get(0);
 			result.put("savedEmail", loadEmail(templateId, category));
 		}
 		else if(mode.equals("emailModalModify")) { // Email 발송문구 수정
-			// 템플릿 수정
+			JsonElement element = parser.parse(param.get("jsonStr").toString());
+			String tempateId = element.getAsJsonObject().get("templateId").getAsString();
+			String title = element.getAsJsonObject().get("title").getAsString();
+			String content = element.getAsJsonObject().get("content").getAsString();
+			result.put("emailModalModify", modifyMail(tempateId, title, content));
 		}
 		else if(mode.equals("emailSettingModify")) { // Email 설정 저장
 			// email_setting 수정
+			JsonElement element = parser.parse(param.get("jsonStr").toString());
+			JsonArray code = element.getAsJsonObject().get("code").getAsJsonArray();
+			JsonArray isSend = element.getAsJsonObject().get("isSend").getAsJsonArray();
+			
+			// list로 가공
+			for(int i = 0; i < code.size(); i ++) {
+				codeList.add(code.get(i).getAsString());
+			}
+			for(int i = 0; i < isSend.size(); i++) {
+				if(i == 0 || i%2 == 0) {
+					sendList.add(isSend.get(i).getAsString());
+				}
+				else {
+					sendAdminList.add(isSend.get(i).getAsString());
+				}
+			}
+
+			// 자동발송 여부 수정
+			for(int i = 0; i < codeList.size(); i++) {
+				setMod.put("templateId", codeList.get(i));
+				setMod.put("send", sendList.get(i));
+				setMod.put("sendAdmin", sendAdminList.get(i));
+				res += communityDao.emailAutoSend(setMod);
+			}
+			if(res > 0) {
+				result.put("modify", "success");
+			}
 		}
 		else if(mode.equals("reviewModal")) { // 후기 상세보기
 			int reviewCode = (int) param.get("reviewCode");
@@ -258,10 +277,10 @@ public class CommunityServiceImpl implements CommunityService {
 	}	
 	
 	/**
-	 * 공통 : 조회 => param
-	 * @param cPage
-	 * @param field
-	 * @param keyword
+	 * 공통 : param
+	 * @param cPage			: 현재 페이지
+	 * @param field			: 검색 필드명
+	 * @param keyword		: 검색 키워드
 	 * @return
 	 */
 	public Map<String, Object> makePageParam(int cPage, String field, String keyword) {
@@ -281,7 +300,7 @@ public class CommunityServiceImpl implements CommunityService {
 	
 	/**
 	 * SMS 템플릿 문구 조회
-	 * @param category
+	 * @param category		: 카테고리 번호
 	 * @return
 	 */
 	public Map<String, Object> loadSms(int category) {
@@ -310,8 +329,8 @@ public class CommunityServiceImpl implements CommunityService {
 	
 	/**
 	 * Email 템플릿 문구 조회
-	 * @param templateId
-	 * @param category
+	 * @param templateId	: 템플릿명
+	 * @param category		: 카테고리 번호
 	 * @return
 	 */
 	public Map<String, Object> loadEmail(String templateId, int category) {
@@ -335,8 +354,8 @@ public class CommunityServiceImpl implements CommunityService {
 	
 	/**
 	 * SMS 템플릿 문구 수정
-	 * @param templateId
-	 * @param content
+	 * @param templateId	: 템플릿명
+	 * @param content		: 수정 문구
 	 * @return
 	 */
 	public int modifySms(String templateId, String content) {
@@ -362,26 +381,26 @@ public class CommunityServiceImpl implements CommunityService {
 		return result;
 	}
 
-	/*
-	// mail 문구 수정
-	@Override
+	/**
+	 * Email 템플릿 문구 수정
+	 * @param templateId	: 템플릿명
+	 * @param title			: 수정 제목
+	 * @param content		: 수정 문구
+	 * @return
+	 */
 	public int modifyMail(String templateId, String title, String content) {
 		int result = 0;
-		String template = templateId.concat("_mod");
-		String putUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + template;
+		String putUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/templates/" + templateId;
 
 		// data
 		JsonObject json = new JsonObject();
-		json.addProperty("templateName", template); // 템플릿ID
+		json.addProperty("templateName", templateId); // 템플릿ID
 		json.addProperty("useYn", "Y"); // 사용 유무
 		json.addProperty("title", title); // 발송 제목
 		json.addProperty("body", content); // 문구 내용
 
-		// put 요청
-		String result2 = putRequest(putUrl, mailSecret, json);
-
-		// JSON>header>resultMessage
-		JsonElement element = parser.parse(result2);
+		// put 요청 : JSON>header>resultMessage
+		JsonElement element = parser.parse(putRequest(putUrl, mailSecret, json));
 		JsonObject header = element.getAsJsonObject().get("header").getAsJsonObject();
 		String str = header.getAsJsonObject().get("resultMessage").getAsString();
 
@@ -390,31 +409,36 @@ public class CommunityServiceImpl implements CommunityService {
 		}	
 		return result;
 	}
-	*/
 	
-	/*
-	// sms 발송
-	@Override
+	
+	
+	
+	// 메시지 발송
+	
+	
+	
+	
+	
+
+	/**
+	 * 공통 : SMS 발송
+	 * @param json
+	 * @return
+	 */
 	public int sendSms(JsonObject json) {
 		int result = 0;
 		int insert = 0;
 
-		// post 요청
+		// post 요청 : JSON>body>data>requestId
 		String postUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey +  "/sender/sms";
-		String response = postRequest(postUrl, smsSecret, json);
-
-		// JSON>body>data>requestId
-		JsonElement element = parser.parse(response);
+		JsonElement element = parser.parse(postRequest(postUrl, smsSecret, json));
 		JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
 		JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();	
 		String requestId = data.getAsJsonObject().get("requestId").getAsString();
 		
-		// get 요청
+		// get 요청 : JSON>body>data>messageType, recipientNo, templateId, body, requestDate
 		String getUrl = "https://api-sms.cloud.toast.com/sms/v3.0/appKeys/" + smsKey + "/sender/sms?pageSize=1000&requestId=" + requestId;
-		String response2 = getRequest(getUrl, smsSecret);
-
-		// JSON>body>data>messageType, recipientNo, templateId, body, requestDate
-		JsonElement element2 = parser.parse(response2);
+		JsonElement element2 = parser.parse(getRequest(getUrl, smsSecret));
 		JsonObject bodyElement2 = element2.getAsJsonObject().get("body").getAsJsonObject();
 		int total = bodyElement2.getAsJsonObject().get("totalCount").getAsInt(); // 총 개수
 		JsonArray data2 = bodyElement2.getAsJsonObject().get("data").getAsJsonArray();
@@ -464,22 +488,21 @@ public class CommunityServiceImpl implements CommunityService {
 		}
 		return result;
 	}
-	*/
-	
-	/*
-	// mail 발송
-	@Override
+
+	/**
+	 * 공통 : Email 발송
+	 * @param json
+	 * @return
+	 */
 	public int sendEmail(JsonObject json) {
 		int result = 0;
 		int insert = 0;
+		int mailSeq = 0;
 		String template = json.getAsJsonObject().get("templateId").getAsString();
 		
-		// post 요청
+		// post 요청 : Json>element>body>data>requestId
 		String postUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey +  "/sender/mail";
-		String response = postRequest(postUrl, mailSecret, json);
-
-		// Json>element>body>data>requestId
-		JsonElement element = parser.parse(response);
+		JsonElement element = parser.parse(postRequest(postUrl, mailSecret, json));
 		JsonObject bodyElement = element.getAsJsonObject().get("body").getAsJsonObject();
 		JsonObject data = bodyElement.getAsJsonObject().get("data").getAsJsonObject();
 		String requestId = data.getAsJsonObject().get("requestId").getAsString();
@@ -487,16 +510,10 @@ public class CommunityServiceImpl implements CommunityService {
 		
 		// 발송 메시지 상세 조회
 		for(int j = 0; j < arr.size(); j++) {
-			int mailSeq = j;
-			// get 요청
+			// get 요청 : JSON>body>data>mailStatusCode, title, body, requestDate
+			mailSeq = j;
 			String getUrl = "https://api-mail.cloud.toast.com/email/v2.0/appKeys/" + mailKey + "/sender/mail/" + requestId + "/" + mailSeq + "?pageSize=1000";
-			String response2 = getRequest(getUrl, mailSecret);
-
-			System.out.println("=====Service mail : get 결과=====");
-			System.out.println(response2);
-			
-			// JSON>body>data>mailStatusCode, title, body, requestDate
-			JsonElement element2 = parser.parse(response2);
+			JsonElement element2 = parser.parse(getRequest(getUrl, mailSecret));
 			JsonObject bodyElement2 = element2.getAsJsonObject().get("body").getAsJsonObject();
 			JsonObject data2 = bodyElement2.getAsJsonObject().get("data").getAsJsonObject();
 			String sendEmail = data2.getAsJsonObject().get("senderAddress").getAsString();
@@ -574,12 +591,10 @@ public class CommunityServiceImpl implements CommunityService {
 		}
 		return result;
 	}
-	*/
-
 	
 	/**
 	 * 공통 : GET 요청
-	 * @param url
+	 * @param url			
 	 * @param secret
 	 * @return
 	 */
@@ -606,7 +621,8 @@ public class CommunityServiceImpl implements CommunityService {
 			}
 			br.close();
 
-			int ResponseCode = getConn.getResponseCode();
+			int responseCode = getConn.getResponseCode();
+			System.out.println(responseCode);
 			
 			getConn.disconnect();
 		} catch (IOException e) {
@@ -649,7 +665,8 @@ public class CommunityServiceImpl implements CommunityService {
 			os.flush();
 			os.close();
 			
-			int ResponseCode = postConn.getResponseCode();
+			int responseCode = postConn.getResponseCode();
+			System.out.println(responseCode);
 			
 			// 응답 데이터 반환
 			BufferedReader br = new BufferedReader(new InputStreamReader(postConn.getInputStream(), "UTF-8"));
@@ -697,8 +714,10 @@ public class CommunityServiceImpl implements CommunityService {
 			os.flush();
 			os.close();
 			
+			int responseCode = putConn.getResponseCode();
+			System.out.println(responseCode);
+			
 			// 응답 데이터 반환
-			int ResponseCode = putConn.getResponseCode();
 			result = getRequest(url, secret);
 			
 			putConn.disconnect();
