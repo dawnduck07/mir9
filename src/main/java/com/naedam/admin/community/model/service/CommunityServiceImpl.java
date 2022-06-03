@@ -67,12 +67,6 @@ public class CommunityServiceImpl implements CommunityService {
 	// JsonParser
 	private JsonParser parser = new JsonParser();
 
-	// v_msg_info 조회
-	@Override
-	public MsgInfo selectMsgInfo(long orderNo) {
-		return communityDao.selectMsgInfo(orderNo);
-	}
-	
 	/**
 	 * 공통 : 목록 + 검색 + 페이징
 	 */
@@ -315,14 +309,6 @@ public class CommunityServiceImpl implements CommunityService {
 		String templateId = getTemplateId(mode, element);
 		List<SmsSetting> smsAutoChecked = communityDao.smsAutoChecked(templateId);
 		List<EmailSetting> emailAutoChecked = communityDao.emailAutoChecked(templateId);
-		
-		
-		System.out.println("=====Service 조회 결과들=====");
-		System.out.println(codeList);
-		System.out.println(templateId);
-		System.out.println(smsAutoChecked);
-		System.out.println(emailAutoChecked);
-		
 		
 		// 맵핑에 따른 결과값
 		Map<String, Object> result = new HashMap<>();

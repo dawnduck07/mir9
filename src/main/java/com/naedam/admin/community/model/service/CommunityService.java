@@ -32,11 +32,4 @@ public interface CommunityService {
 	// 후기 삭제
 	String selectDelete(HttpServletRequest request);
 	
-	
-	// 확인 중
-	
-	// sms
-	MsgInfo selectMsgInfo(long orderNo); // 주문 정보 조회
-	
-	
 }

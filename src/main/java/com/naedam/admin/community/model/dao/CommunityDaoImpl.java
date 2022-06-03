@@ -105,10 +105,20 @@ public class CommunityDaoImpl implements CommunityDao {
 		return session.update("email.autoSend", setMod);
 	}
 
+	// 회원 정보 v_msg_info 조회
+	@Override
+	public MsgInfo selectMsgInfo(long orderNo) {
+		return session.selectOne("sms.msgInfo", orderNo);
+	}
+	
 	// SMS 발송
 	@Override
 	public List<SmsSetting> smsAutoChecked(String templateId) {
 		return session.selectList("sms.smsCheck", templateId);
+	}
+	@Override
+	public int insertSms(HashMap<String, Object> param2) {
+		return session.insert("sms.insertSms", param2);
 	}
 	
 	// Email 발송
@@ -116,27 +126,9 @@ public class CommunityDaoImpl implements CommunityDao {
 	public List<EmailSetting> emailAutoChecked(String templateId) {
 		return session.selectList("email.emailCheck", templateId);
 	}
-	
-	
-	
-	
-	// 확인 중
-
-	// v_msg_info 조회
-	@Override
-	public MsgInfo selectMsgInfo(long orderNo) {
-		return session.selectOne("sms.msgInfo", orderNo);
-	}
-	
-	// sms 등록
-	@Override
-	public int insertSms(HashMap<String, Object> param2) {
-		return session.insert("sms.insertSms", param2);
-	}
-
-	// email 등록
 	@Override
 	public int insertEmail(HashMap<String, Object> param2) {
 		return session.insert("email.insertEmail", param2);
-	}	
+	}
+
 }
