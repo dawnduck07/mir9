@@ -557,8 +557,6 @@ textarea {
 			content.push($(this).val()); // 발송 문구
 		});
 		
-		console.log(content);
-		
 		// 자동발송 시 문구 조건
 		for(var i = 0; i < isSend.length; i++) {
 			if(isSend[i] == "y" && content[i].length < 10) {
@@ -579,19 +577,15 @@ textarea {
 		$.ajax({
 			url : "${pageContext.request.contextPath}/admin/comm/load/smsSettingModify",
 			method : "POST",
-			headers : {
-				"${_csrf.headerName}" : "${_csrf.token}"
-			},
-			data : jsonStr,
+			headers : {"${_csrf.headerName}" : "${_csrf.token}"},
 			contentType : "application/json; charset=utf-8",
+			data : jsonStr,
 			success : function(result) {
-				if(result.modify == "success") {
+				var set = result.modify;
+				if(set == "success") {
 					alert("SMS 설정이 수정되었습니다.");
 					location.reload();
 				}
-			},
-			error : function(textStatus, errorThrown) {
-				console.log("SMS 설정 수정에 실패했습니다.");
 			}
 		});
 	}	

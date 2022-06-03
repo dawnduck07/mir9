@@ -353,13 +353,12 @@ textarea {
 							</table>
 				            <br>
 						</form>
-
 		            	<div style="text-align:center;"><button type="button" onclick="register()" class="btn btn-primary">확인</button></div>
 	                </div><!-- /.box-body -->
 	            </div><!-- /.box -->
 	        </div><!-- /.col-xs-12 -->
 	    </div><!-- /.row -->
-	</section>
+	</section><!-- /.content -->
 
 	<div class="modal fade" id="modalContent" tabindex="-2" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 	    <div class="modal-dialog" style="width:1000px;">
@@ -433,19 +432,7 @@ textarea {
 
 	// cheditor 값 넣기
 	function setData(content){}
-	
-	// 템플릿 정보
-	var code = []; // 코드
-	var originTemplate = []; // 기본템플릿
-	var modifyTemplate = []; // 수정템플릿
-	$.each($("input[name='code']"), function() { 
-		code.push($(this).val()); 
-		originTemplate.push($(this).val()); 
-		originTemplate.push($(this).val() + "_admin"); // 템플릿명에 따른 가공 => 수정 필요 
-		modifyTemplate.push($(this).val() + "_mod"); 
-		modifyTemplate.push($(this).val() + "_admin_mod"); 
-	});
-		
+			
 	// 체크박스 조회
 	$(function() {
 		$.ajax({
@@ -468,14 +455,14 @@ textarea {
 	// 문구 편집 버튼
 	function onclickUpdate(action) {
 		// 모달 열기
-		$("#action").val(action); 
+		$("#action").val(action.concat("_mod")); 
 		$("#modalContent").modal({backdrop:"static", show:true});
-		
+
 		// 저장문구 조회
 		$.ajax({
 			url : "${pageContext.request.contextPath }/admin/comm/load/savedEmail",
 			method : "GET",
-			data : { templateId : action },
+			data : { templateId : $("#action").val() },
 			success : function(result) {
 				var set = result.savedEmail;
 				$("#title").val(set.title); 
@@ -503,10 +490,8 @@ textarea {
 		});
 	}
 	
-	
-	/*
-	// 변경 문구 저장 버튼 
-	function registerContent() { 
+	// 문구 저장 버튼
+	function registerContent() {
 		var templateId = $("#action").val();
 		var title = $("#title").val();
 		var content = objEditor.getData();
@@ -522,50 +507,35 @@ textarea {
 	    	return false;
 	    }
 	    
-	    // 전송할 data 
-	    var data = {
-	    	templateId : templateId,
+		var data = {
+			templateId : templateId,
 			title : title,
 			content : content
-	    };
-	    var jsonStr = JSON.stringify(data);
-
-	    $.ajax({
-			url: "${pageContext.request.contextPath}/admin/comm/load/emailModal",
-			method: "POST",
-			contentType: "application/json; charset=utf-8",
-			headers: {
-				"${_csrf.headerName}" : "${_csrf.token}"
-			},
-			data: jsonStr,
-			success: function(result) {
-				if(result > 0) {
+		};
+		var jsonStr = JSON.stringify(data);
+		
+		// 변경 저장
+		$.ajax({
+			url : "${pageContext.request.contextPath}/admin/comm/load/emailModalModify", 
+			method : "POST",
+			headers : {"${_csrf.headerName}" : "${_csrf.token}"},
+			contentType : "application/json;charset=utf-8",
+			data : jsonStr,
+			success : function(result){
+				var set = result.emailModalModify;
+				if(set > 0) {
 					alert("'" + category_txt(templateId) + "' 발송 문구를 수정했습니다.");
 					location.reload();
 				}
-			}, 
-			error:function(textStatus, errorThrown){
-				console.log("발송 문구를 수정할 수 없습니다.");
 			}
-	    });
+		});
+	}
 
-	}	
-	*/
-
-	/*
 	// 전체 변경 확인 버튼
 	function register() { 
 		// 체크박스 값 설정
-		$("input:checkbox[name='is_send']").each(function() {
-        	if($(this).is(":checked")) { // 회원 자동 발송이 체크
-        		$(this).attr("value", "y");
-        	}
-        	else {
-        		$(this).attr("value", "n");
-        	}
-        });
-		$("input:checkbox[name='is_send_admin']").each(function() { 
-        	if($(this).is(":checked")) { // 관리자 자동 발송이 체크
+		$("input:checkbox[name='is_send'], input:checkbox[name='is_send_admin']").each(function() {
+        	if($(this).is(":checked")) { // 자동 발송이 체크
         		$(this).attr("value", "y");
         	}
         	else {
@@ -573,47 +543,41 @@ textarea {
         	}
         });
 		
-		// code, is_send 선언
+		// 수정 정보 담기
 		var code = []; 
-		var is_send = [];
+		var isSend = [];
 		
 		// 값 담기
-		$.each($("input[name='code']"), function(index, value) { 
-			code.push($(value).val());
+		$.each($("input[name='code']"), function() { 
+			code.push($(this).val());
 		});
-		$.each($("input[name='is_send'], input[name='is_send_admin']"), function(index, value) {
-			is_send.push($(value).val());
+		$.each($("input[name='is_send'], input[name='is_send_admin']"), function() {
+			isSend.push($(this).val()); 
 		});
 		
-		// 전송 data
-		var data = { code : code, is_send : is_send }
+		// 설정 저장
+		var data = { 
+			code : code, 
+			isSend : isSend 
+		};
 		var jsonStr = JSON.stringify(data);
-
-		// 자동발송 여부 저장하기
+		
 		$.ajax({
-			url: "${pageContext.request.contextPath}/admin/comm/load/emailModify",
-			method: "POST",
-			headers: {
-				"${_csrf.headerName}" : "${_csrf.token}"
-			},
-			contentType: "application/json; charset=utf-8",
-			data: jsonStr,
-			success: function(result) {
-				if(result > 0) {
+			url : "${pageContext.request.contextPath}/admin/comm/load/emailSettingModify",
+			method : "POST",
+			headers : {"${_csrf.headerName}" : "${_csrf.token}"},
+			contentType : "application/json;charset=utf-8",
+			data : jsonStr,
+			success : function(result) {
+				var set = result.modify;
+				if(set == "success") {
 					alert("메일 설정이 수정되었습니다.");
 					location.reload();
 				}
-			},
-			error:function(textStatus, errorThrown){
-				console.log("메일 설정 수정에 실패했습니다.");
 			}
 		});
-		
-	}	
-	*/
+	}
 	
-
-		
 	// alert code 값 치환
 	function category_txt(t_name){
 		var return_txt = "";
