@@ -765,17 +765,18 @@ $(document).on("click", "#memberListDeleteBtn", function(){
 	if(confirm("선택된 회원을 삭제하시겠습니까?"))
 		$(document.memberDeleteFrm).submit();
 });
+
 //쿠폰 모달
 function onclickCoupon() {
-	
+	// 선택된 회원 번호 담기
 	var check = [];
-	
 	$("input[name='list[]']").each(function(){
-		if($(this).prop("checked")) { // 체크된 memberNo
+		if($(this).prop("checked")) { 
 			check.push($(this).val()); 
 		}
 	});
 	
+	// 모달창에 정보 담기
 	if(check.length > 0) {
 		for(var i = 0; i < check.length; i++) {
 			$("input[name='member_code']").val(check);
@@ -783,80 +784,67 @@ function onclickCoupon() {
 		}	
 	}
 	else {
-		alert('항목이 없습니다.');
+		alert("쿠폰을 지급할 회원을 선택해주세요.");
         return false;
 	}
 	
+	// 모달창 띄우기
     $("#modalCoupon").modal({backdrop:"static", show:true});
-	
 }
+
 // 쿠폰 지급
 function registerCoupon() {
-    if(formCoupon.coupon_code.value == '') { 
-    	alert('쿠폰이 선택되지 않았습니다.'); 
+    if(formCoupon.coupon_code.value == "") { 
+    	alert("쿠폰이 선택되지 않았습니다."); 
     	formCoupon.coupon_code.focus(); 
     	return false;
     }
     
     // 발송 체크 여부
-    var smsCheck = "";
-    var emailCheck = "";
-    
-    if($("input[name='couponSms']").prop("checked")) {
-    	smsCheck = "y";
-    }
-    else {
-    	smsCheck = "n";
-    }
-    
-    if($("input[name='couponEmail']").prop("checked")) {
-    	emailCheck = "y";
-    }
-    else {
-    	emailCheck = "n";
-    }
-    
-    // data = 회원 번호 + 쿠폰 + 체크 
-    var data = {
-    	mode : "coupon",
-    	memberCode : $("input[name='member_code']").val(),
-    	couponCode : $("select[name='coupon_code']").val(),
-    	smsCheck : smsCheck,
-    	emailCheck : emailCheck
-    };
-    
-    var jsonStr = JSON.stringify(data);
-    
-    $.ajax({
-    	url: "${pageContext.request.contextPath}/admin/comm/sendCouponMsg",
-    	method: "POST",
-		contentType : "application/json; charset=utf-8",
-		headers: {
-			"${_csrf.headerName}" : "${_csrf.token}"
-		},
-		data: jsonStr,
-    	success: function(result) {
-    		if(result > 0) {
+    $("input[name='couponSms'], input[name='couponEmail']").each(function() {
+    	if($(this).is(":checked")) { // 자동 발송이 체크
+    		$(this).attr("value", "y");
+    	}
+    	else {
+    		$(this).attr("value", "n");
+    	}
+    });
+
+	// 쿠폰 지급
+	var data = {
+		memberCode : $("input[name='member_code']").val(),
+		couponCode : $("select[name='coupon_code']").val(),
+		smsCheck : $("input[name='couponSms']").val(),
+		emailCheck : $("input[name='couponEmail']").val()
+	};
+	var jsonStr = JSON.stringify(data);
+	
+	$.ajax({
+		url : "${pageContext.request.contextPath}/admin/comm/send/coupon",
+		method : "POST",
+		headers : {"${_csrf.headerName}" : "${_csrf.token}"},
+		contentType : "application/json;charset=utf-8",
+		data : jsonStr,
+		success : function(result) {
+			var set = result.sendCoupon;
+			if(set == "success") {
     			alert("쿠폰이 정상 지급되었습니다.");
     			location.reload();
     		}
-    	},
-    	error: function(textStatus, errorThrown) {
-    		alert("쿠폰을 지급할 수 없습니다. 관리자에게 문의해주세요.");
-    	}
-    });
+		}
+	});
 }
 // 적립금 모달
 function onclickPoint() {
-	
+	// 선택된 회원 번호 담기
 	var check = [];
-	
 	$("input[name='list[]']").each(function(){
-		if($(this).prop("checked")) { // 체크된 memberNo
+		if($(this).prop("checked")) { 
 			check.push($(this).val()); 
 		}
-	});
+	});	
 	
+	// 모달창에 정보 담기
 	if(check.length > 0) {
 		for(var i = 0; i < check.length; i++) {
 			$("input[name='member_code']").val(check);
@@ -864,71 +852,59 @@ function onclickPoint() {
 		}	
 	}
 	else {
-		alert('항목이 없습니다.');
+		alert("적립금을 지급할 회원을 선택해주세요.");
         return false;
 	}
 	
-    $('#modalPoint').modal({backdrop:'static', show:true});
+	// 모달 띄우기
+    $("#modalPoint").modal({backdrop:"static", show:true});
 }
 // 적립금 지급
 function registerPoint() {
-    if(formPoint.point.value == '') { 
-    	alert('적립금이 입력되지 않았습니다.'); 
+    if(formPoint.point.value == "") { 
+    	alert("적립금이 입력되지 않았습니다."); 
     	formPoint.point.focus(); 
     	return false;
     }
-    if(formPoint.content.value == '') { 
-    	alert('메모가 입력되지 않았습니다.'); 
+    if(formPoint.content.value == "") { 
+    	alert("메모가 입력되지 않았습니다."); 
     	formPoint.content.focus(); 
     	return false;
     }
-   
+    
     // 발송 체크 여부
-    var smsCheck = "";
-    var emailCheck = "";
-    
-    if($("input[name='pointSms']").prop("checked")) {
-    	smsCheck = "y";
-    }
-    else {
-    	smsCheck = "n";
-    }
-    
-    if($("input[name='pointEmail']").prop("checked")) {
-    	emailCheck = "y";
-    }
-    else {
-    	emailCheck = "n";
-    }
-    // data = 회원 번호 + 지급 형태 + 적립금 + 메모 + 체크 
+    $("input[name='pointSms'], input[name='pointEmail']").each(function() {
+    	if($(this).is(":checked")) { // 자동 발송이 체크
+    		$(this).attr("value", "y");
+    	}
+    	else {
+    		$(this).attr("value", "n");
+    	}
+    });
+
+    // 적립금 지급
     var data = {
-    	mode : "point",
     	memberCode : $("input[name='member_code']").val(),
     	type : $("select[name='plus_minus_type']").val(),
     	point : $("input[name='point']").val(),
     	content : $("input[name='content']").val(),
-    	smsCheck : smsCheck,
-    	emailCheck : emailCheck
+    	smsCheck : $("input[name='pointSms']").val(),
+    	emailCheck : $("input[name='pointEmail']").val()
     };
-    
     var jsonStr = JSON.stringify(data);
     
     $.ajax({
-    	url: "${pageContext.request.contextPath}/admin/comm/sendPointMsg",
-    	method: "POST",
-		contentType : "application/json; charset=utf-8",
-		headers: {
-			"${_csrf.headerName}" : "${_csrf.token}"
-		},
-		data: jsonStr,
+    	url: "${pageContext.request.contextPath}/admin/comm/send/point",
+    	method : "POST",
+		headers : {"${_csrf.headerName}" : "${_csrf.token}"},
+		contentType : "application/json;charset=utf-8",
+		data : jsonStr,
     	success: function(result) {
-    		if(result > 0) {
+    		var set = result.sendPoint;
+    		if(set == "success") {
     			alert("적립금이 정상 지급/차감되었습니다.");
     			location.reload();
     		}
-    	},
-    	error: function(textStatus, errorThrown) {
-    		alert("적립금을 지급할 수 없습니다. 관리자에게 문의해주세요.");
     	}
     });
 }

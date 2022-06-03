@@ -19,8 +19,6 @@ public interface PointService {
 
 	List<MemberPointExcelForm> selectMemberPointExcelForm(String memberId);
 
-	int insertMemberPoint(MemberPoint memberPoint);
-
 	String selectPointName();
 
 

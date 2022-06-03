@@ -77,42 +77,27 @@ public class CommunityController {
 			@RequestParam(required=false) List<Object> templateId,
 			@RequestParam(required=false) Integer reviewCode,
 			@RequestBody(required=false) String jsonStr) {
-		
 		Map<String, Object> param = new HashMap<>();
 		param.put("id", id);
 		param.put("templateId", templateId);
 		param.put("reviewCode", reviewCode);
 		param.put("jsonStr", jsonStr);
-		
 		Map<String, Object> result = communityService.load(mode, param);
-		
-		System.out.println("=====Controller=====");
-		System.out.println(mode);
-		System.out.println(param);
-		System.out.println(result);
-		
 		return result;
 	}
 
-	/*
-	발송 
-	/send/{mode}
-	jsonStr 타입으로 일치시키기
-	서비스 단에서 조건별로 메시지 발송 메소드 호출
-	발송 내용 저장 메소드 호출 
-	*/
 	/**
 	 * 메시지 발송
-	 * @param mode		: 맵핑
-	 * @param jsonStr	: 데이터
+	 * @param mode			: 맵핑
+	 * @param jsonStr		
 	 * @return result
 	 */
 	@ResponseBody
 	@RequestMapping(value="/send/{mode}", method= {RequestMethod.GET, RequestMethod.POST})
 	public Map<String, Object> sendMsg(
 			@PathVariable String mode,
-			@RequestBody String jsonStr) {
-		Map<String, Object> result = new HashMap<>();
+			@RequestBody(required=false) String jsonStr) {
+		Map<String, Object> result = communityService.send(mode, jsonStr);
 		return result;
 	}
 	
@@ -130,16 +115,6 @@ public class CommunityController {
 		model.addAttribute("msg", msg);
 		return "redirect:/admin/comm/review";
 	}
-	
-	/*
-	// Email 설정
-	@GetMapping("/email")
-	public String commEmail(Model model) {
-		List<EmailSetting> emailSetting = communityService.selectEmailSetting();
-		model.addAttribute("emailSetting", emailSetting);
-		return "admin/community/email";
-	}
-	*/	
 		
 	/*
 	// imgbb 테스트

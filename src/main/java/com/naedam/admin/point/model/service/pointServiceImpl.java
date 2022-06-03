@@ -49,12 +49,6 @@ public class pointServiceImpl implements PointService {
 	}
 
 	@Override
-	public int insertMemberPoint(MemberPoint memberPoint) {
-		// TODO Auto-generated method stub
-		return pointDao.insertMemberPoint(memberPoint);
-	}
-
-	@Override
 	public String selectPointName() {
 		// TODO Auto-generated method stub
 		return pointDao.selectPointName();
