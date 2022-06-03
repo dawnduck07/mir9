@@ -15,7 +15,7 @@ import com.naedam.admin.community.model.vo.SmsSetting;
 public interface CommunityDao {
 
 	// review
-	List<Review> reviewList(Map<Object, Object> param);
+	List<Object> reviewList(Map<String, Object> param);
 
 	List<Review> reviewModal(int reviewCode);
 
@@ -27,23 +27,23 @@ public interface CommunityDao {
 	
 	int selectDelete(String reviewCode);
 	
-	int totalReviewCount(Map<Object, Object> param);
+	int totalReviewCount(Map<String, Object> param);
 
 	// sms
 	MsgInfo selectMsgInfo(long orderNo);
 	
 	List<SmsSetting> smsCheck(String templateId);	
 	
-	int smsAutoSend(HashMap<String, String> param);
+	int smsAutoSend(Map<String, Object> setMod);
 	
 	int insertSms(HashMap<String, Object> param2);
 	
-	List<SmsSetting> selectSmsSetting();
-	List<Sms> selectSmsList(HashMap<String, Object> param);
+	List<Object> selectSmsSetting();
+	List<Object> selectSmsList(Map<String, Object> param);
 	
 	int countBySendPhone(String phone);
 	
-	int totalSmsCount(HashMap<String, Object> param);
+	int totalSmsCount(Map<String, Object> param);
 	
 	// email
 	List<EmailSetting> emailCheck(String templateId);
@@ -52,9 +52,9 @@ public interface CommunityDao {
 
 	int insertEmail(HashMap<String, Object> param2);
 
-	List<EmailSetting> selectEmailSetting();
-	List<Email> selectEmailList(HashMap<String, Object> param);
+	List<Object> selectEmailSetting();
+	List<Object> selectEmailList(Map<String, Object> param);
 
-	int totalEmailCount(HashMap<String, Object> param);
+	int totalEmailCount(Map<String, Object> param);
 
 }
