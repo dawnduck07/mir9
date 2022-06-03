@@ -49,12 +49,6 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
-	public DeliverySetting selectOneDeliverySetting() {
-		// TODO Auto-generated method stub
-		return settingDao.selectOneDeliverySetting();
-	}
-
-	@Override
 	public List<Doseosangan> selectDoseosanganList() {
 		// TODO Auto-generated method stub
 		return settingDao.selectDoseosanganList();

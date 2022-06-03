@@ -17,12 +17,6 @@ public class DeliveryServiceImpl implements DeliveryService {
 	private DeliveryDao deliveryDao;
 
 	@Override
-	public int selectDoseosanganFeeByZipcode(int zipcode) {
-		// TODO Auto-generated method stub
-		return deliveryDao.selectDoseosanganFeeByZipcode(zipcode);
-	}
-
-	@Override
 	public int insertDeliveryCompanyByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return deliveryDao.insertDeliveryCompanyByParam(param);

@@ -36,8 +36,6 @@ public interface SettingService {
 
 	List<DeliveryCompany> selectDeliveryCompanyList();
 
-	DeliverySetting selectOneDeliverySetting();
-
 	List<Doseosangan> selectDoseosanganList();
 
 	List<Maps> selectMapList();
