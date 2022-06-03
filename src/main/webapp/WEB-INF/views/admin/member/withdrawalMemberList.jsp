@@ -63,8 +63,9 @@
 							</select>
 						</div>
 					</div>
-					<form:form id="withdrawalDeleteFrm" name="withdrawalDeleteFrm" action="${pageContext.request.contextPath}/admin/member/memberDelete.do" method="POST">
+					<form:form id="withdrawalDeleteFrm" name="withdrawalDeleteFrm" action="${pageContext.request.contextPath}/admin/member/memberProcess" method="POST">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						<input type="hidden" name="mode" value="withdrawalDelete"/>
 						<table class="table table-bordered table-hover checkbox-group">
 							<thead>
 								<tr>
@@ -371,10 +372,10 @@ $(document).on("click", ".detailWithdrawalBtn", function(e){
 			var loginDate = res.loginDate;
 			var updateDate = res.updateDate;
 			var withdrawalDate = res.withdrawalDate;
-			var display = '<input type="hidden" id="memberNo" name="memberNo" value="'+withdrawalMemberEntity.memberNo+'" />'
+ 			var display = '<input type="hidden" id="memberNo" name="memberNo" value="'+withdrawalMemberEntity.memberNo+'" />'
 						+ '<input type="hidden" id="addressNo" name="addressNo" value="'+address.addressNo+'" />'
 						+ '<input type="hidden" id="memberMemoNo" name="memberMemoNo" value="'+memberMemo.memberMemoNo+'" />';
-			$("div[name='modalBody']").append(display);			
+			$("div[name='modalBody']").append(display);	
 			$("[name=memberNo]").val(withdrawalMemberEntity.memberNo);
 			$("[name=id]").val(withdrawalMemberEntity.id);
 			$("[name=lastName]").val(withdrawalMemberEntity.lastName);
