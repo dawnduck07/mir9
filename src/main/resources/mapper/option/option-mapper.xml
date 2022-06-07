@@ -5,11 +5,11 @@
 <mapper namespace="option">
 
   <insert id="insertOption">
-  	insert into product_option values(nextval(seq_product_option_no), #{option_name})
+  	insert into product_option values(NEXTVAL(seq_product_option_no), #{option_name}, default)
   </insert>
   
   <insert id="insertOptionValue">
-  	insert into option_value values(nextval(seq_option_value_no), #{optionValue}, #{optionValueCost},(select	option_no from (select * from product_option order by 1 desc) where rownum = 1))
+  	insert into option_value values(NEXTVAL(seq_option_value_no), #{optionValue}, #{optionValueCost},(select	option_no from (select * from product_option order by 1 desc) where rownum = 1))
   </insert>
   
   
