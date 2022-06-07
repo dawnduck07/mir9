@@ -36,6 +36,12 @@ import com.naedam.admin.setting.model.vo.PGs.XpaySetting;
 
 public interface SettingService {
 
+	Object paymentPGSelectProcess(Map<String, Object> map) throws Exception;
+	
+	void paymentPGProcess(Map<String, Object> map) throws Exception;
+	
+	void seoProcess(Map<String, Object> map) throws Exception;
+	
 	Map<String, Object> staffProcess(Map<String, Object> map);
 	
 	int infoProcess(Map<String, Object> map);
@@ -130,7 +136,7 @@ public interface SettingService {
 
 	Staff selectOneStaffByStaffNo(int staffNo);
 
-	Staff selectOneimgUrlBystaffNo(int staffNo);
+	Map<String, Object> selectOneimgUrlBystaffNo(int staffNo) throws Exception;
 
 	Staff selectMaxOrder();
 

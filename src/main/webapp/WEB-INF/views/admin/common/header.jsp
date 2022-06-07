@@ -393,7 +393,7 @@ function logoutSubmit(){
 						</a>
 						<ul class="treeview-menu">
 							<li>
-								<a href="${pageContext.request.contextPath}/admin/statistics/period_day">
+								<a href="${pageContext.request.contextPath}/admin/statistics/periodProcess?type=D">
 									<i class="fa fa-circle-o"></i> 기간별 매출 통계 
 								</a>
 							</li>

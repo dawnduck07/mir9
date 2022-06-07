@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -215,35 +216,18 @@ public class SettingController {
 	}
 
 	@PostMapping("/seo_process")
-	public String seo_process(HttpServletRequest request, SeoSetting seo,
+	public String seo_process(HttpServletRequest request, 
+			@ModelAttribute SeoSetting seo,
 			@RequestParam("webmaster_naver") MultipartFile naverFileName,
 			@RequestParam("webmaster_google") MultipartFile googleFileName,
 			@RequestParam("webmaster_bing") MultipartFile bingFileName) throws Exception {
-		SeoSetting seoSetting = settingService.selectSeoSetting();
-
-		String filePath = request.getServletContext().getRealPath("webapp/");
-		if (seoSetting.getNaverFileName() == null && naverFileName.getOriginalFilename() != "") {
-			File naver = new File(filePath + naverFileName.getOriginalFilename());
-			naverFileName.transferTo(naver);
-			seo.setNaverFileName(naverFileName.getOriginalFilename());
-		}
-		if (seoSetting.getGoogleFileName() == null && googleFileName.getOriginalFilename() != "") {
-			File google = new File(filePath + googleFileName.getOriginalFilename());
-			googleFileName.transferTo(google);
-			seo.setGoogleFileName(googleFileName.getOriginalFilename());
-		}
-		if (seoSetting.getBingFileName() == null && bingFileName.getOriginalFilename() != "") {
-			File bing = new File(filePath + bingFileName.getOriginalFilename());
-			bingFileName.transferTo(bing);
-			seo.setBingFileName(bingFileName.getOriginalFilename());
-		}
-
-		int result = settingService.updateSeoSetting(seo);
-		System.out.println("여기 확인 ::: " + seo);
-		String imagePath = request.getServletContext().getRealPath("robots.txt");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(imagePath));
-		bw.write(seo.getRobots());
-		bw.close();
+		Map<String, Object> map = new HashMap<>();
+		map.put("seo", seo);
+		map.put("naverFileName", naverFileName);
+		map.put("googleFileName", googleFileName);
+		map.put("bingFileName", bingFileName);
+		map.put("request", request);
+		settingService.seoProcess(map);
 		return "redirect:/admin/setting/seo";
 	}
 
@@ -251,144 +235,44 @@ public class SettingController {
 	public void paymentpg(Model model) {
 		BillingPgSetting pg = settingService.selectPgSetting();
 		NaverShoppingSetting naverShopping = settingService.selectNaverShoppingSetting();
-
 		model.addAttribute("pg", pg);
 		model.addAttribute("naverShopping", naverShopping);
 	}
 
 	@PostMapping("/pg_process")
 	@ResponseBody
-	public Object pg_process(String method, HttpServletRequest request) {
-		Map<String, String> result = new HashMap<String, String>();
-		log.debug("method = {}", method);
-
-		if (method.equals("billing_pg_info")) {
-			BillingPgSetting pgSetting = settingService.selectPgSetting();
-
-			return pgSetting;
-		} else if (method.equals("getCardPgInfo")) {
-			String type = request.getParameter("type");
-			log.debug("type = {}", type);
-			if (type.equals("ini")) {
-				KgIniSetting kg = settingService.selectKgIniSetting();
-				return kg;
-			} else if (type.equals("xpay")) {
-				XpaySetting xpay = settingService.selectXpaySetting();
-				return xpay;
-			} else if (type.equals("kcp")) {
-				KcpSetting kcp = settingService.selectKcpSetting();
-				return kcp;
-			} else if (type.equals("naverpay")) {
-				NaverpaySetting naverpay = settingService.selectNaverpaySetting();
-				return naverpay;
-			} else if (type.equals("eximbay")) {
-				EximbaySetting eximbay = settingService.selectEximbaySetting();
-				return eximbay;
-			}
-		}
-		return result;
+	public Object pg_process(String method, HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("request", request);
+		map.put("method", method);
+		map.put("type", request.getParameter("type"));
+		return settingService.paymentPGSelectProcess(map);
 	}
 
 	@PostMapping("/updatePaymentPG")
 	public String updatePaymentPG(HttpServletRequest request, BillingPgSetting pg, KgIniSetting kg, XpaySetting xpay,
-			KcpSetting kcp, NaverpaySetting naverpay, EximbaySetting eximbay, NaverShoppingSetting naverShopping) {
-		int result = 0;
-		if (pg.getIsDomestic() == null) {
-			pg.setIsDomestic("N");
-		}
-		if (pg.getIsForeigne() == null) {
-			pg.setIsForeigne("N");
-		}
-		if (pg.getNaverpayUse() == null) {
-			pg.setNaverpayUse("N");
-		}
-
-		if (kg.getUseIni() == null) {
-			kg.setUseIni("N");
-		}
-		if (kg.getUseCreditIni() == null) {
-			kg.setUseCreditIni("N");
-		}
-		if (kg.getUseBankIni() == null) {
-			kg.setUseBankIni("N");
-		}
-		if (kg.getUseVBankIni() == null) {
-			kg.setUseVBankIni("N");
-		}
-
-		if (xpay.getUseXpay() == null) {
-			xpay.setUseXpay("N");
-		}
-		if (xpay.getUseCreditXpay() == null) {
-			xpay.setUseCreditXpay("N");
-		}
-		if (xpay.getUseBankXpay() == null) {
-			xpay.setUseBankXpay("N");
-		}
-		if (xpay.getUseVBankXpay() == null) {
-			xpay.setUseVBankXpay("N");
-		}
-
-		if (kcp.getUseKcp() == null) {
-			kcp.setUseKcp("N");
-		}
-		if (kcp.getUseCredit() == null) {
-			kcp.setUseCredit("N");
-		}
-		if (kcp.getUseBank() == null) {
-			kcp.setUseBank("N");
-		}
-		if (kcp.getUseVBank() == null) {
-			kcp.setUseVBank("N");
-		}
-
-		if (eximbay.getUseEximbay() == null) {
-			eximbay.setUseEximbay("N");
-		}
-		if (eximbay.getUseCreditEximbay() == null) {
-			eximbay.setUseCreditEximbay("N");
-		}
-		if (eximbay.getUsePaypal() == null) {
-			eximbay.setUsePaypal("N");
-		}
-		if (eximbay.getUseUnion() == null) {
-			eximbay.setUseUnion("N");
-		}
-		if (eximbay.getUseAli() == null) {
-			eximbay.setUseAli("N");
-		}
-
-		if (!(kg.getUseCreditIni().equals("N") && kg.getUseBankIni().equals("N") && kg.getUseVBankIni().equals("N"))) {
-			result = settingService.updateKgIniSetting(kg);
-		}
-		if (!(xpay.getUseCreditXpay().equals("N") && xpay.getUseBankXpay().equals("N")
-				&& xpay.getUseVBankXpay().equals("N"))) {
-			result = settingService.updateXpaySetting(xpay);
-		}
-		if (!(kcp.getUseCredit().equals("N") && kcp.getUseBank().equals("N") && kcp.getUseVBank().equals("N"))) {
-			result = settingService.updateKcpSetting(kcp);
-		}
-
-		result = settingService.updateBillingPgSetting(pg);
-		result = settingService.updateNaverpaySetting(naverpay);
-		result = settingService.updateNaverShoppingSetting(naverShopping);
-
+			KcpSetting kcp, NaverpaySetting naverpay, EximbaySetting eximbay, NaverShoppingSetting naverShopping) throws Exception {
+		Map<String,Object> map = new HashMap<>();
+		map.put("pg", pg);
+		map.put("kg", kg);
+		map.put("xpay", xpay);
+		map.put("kcp", kcp);
+		map.put("naverpay", naverpay);
+		map.put("naverShopping", naverShopping);
+		map.put("eximbay", eximbay);
+		settingService.paymentPGProcess(map);
 		return "admin/setting/paymentpg";
 	}
 
 	@GetMapping("/snslogin")
 	public String snsLogin(Model model, SnsSetting snsSetting) {
-		System.out.println("settingController/snsSetting 시작");
-
 		snsSetting = settingService.selectSnsSetting();
 		model.addAttribute("snsSetting", snsSetting);
-
 		return "admin/setting/sns";
 	}
 
 	@PostMapping("/updateSnsSetting")
 	public String updateSnsSetting(SnsSetting snsSetting) {
-		System.out.println("settingController/updateSnsSetting 시작");
 		settingService.updateSnsSetting(snsSetting);
 		return "redirect:/admin/setting/snslogin";
 	}
@@ -432,17 +316,9 @@ public class SettingController {
 		Map<String, Object> param = new HashMap<>();
 		param.put("type", type);
 		param.put("keyword", keyword);
-
-		// 임원 검색 게시물 리스트
-		List<Staff> searchStaffList = settingService.selectSearchStaffList(param);
-
-		// 임원 검색 게시물 수
-		int searchStaffCount = settingService.selectsearchStaffListCount(param);
-
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("searchStaffList", searchStaffList);
-		resultMap.put("searchStaffCount", searchStaffCount);
-
+		resultMap.put("searchStaffList", settingService.selectSearchStaffList(param));
+		resultMap.put("searchStaffCount", settingService.selectsearchStaffListCount(param));
 		return resultMap;
 	}
 
@@ -458,34 +334,16 @@ public class SettingController {
 
 	// 임원 관리 - 팝업 이미지
 	@GetMapping("/imgView")
-	public String imgView(@RequestParam(defaultValue = "0") int staffNo, Model model) {
-
-		String url = "";
-
-		try {
-			if (staffNo == 0) {
-				url = "http://fs.joycity.com/web/images/common/fs1_er.png";
-			} else {
-				url = settingService.selectOneimgUrlBystaffNo(staffNo).getImgUrl();
-			}
-			model.addAttribute("url", url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public String imgView(@RequestParam(defaultValue = "0") int staffNo, Model model) throws Exception {
+		Map<String, Object> resultMap = settingService.selectOneimgUrlBystaffNo(staffNo);
+		model.addAttribute("url", resultMap.get("url"));
 		return "/admin/setting/imgView";
 	}
 
 	// 임원 관리 - 이미지 삭제
 	@PostMapping("/deleteImg.do/{staffNo}")
-	public String deleteImg(@PathVariable int staffNo, RedirectAttributes redirectAttribute, HttpServletRequest request) {
-
-		try {
-			int resultDeleteImg = settingService.deleteStaffImg(staffNo);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public String deleteImg(@PathVariable int staffNo, RedirectAttributes redirectAttribute, HttpServletRequest request) throws Exception {
+		settingService.deleteStaffImg(staffNo);
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}

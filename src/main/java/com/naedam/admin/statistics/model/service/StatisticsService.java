@@ -14,11 +14,11 @@ public interface StatisticsService {
 
 	Map<String, Object> statisticsAddress(Map<String, Object> map) throws Exception;
 	
-	PeriodStatisticVo selectPeriodStatistics(Map<String, Object> param);
+	Map<String, Object> selectPeriodStatistics(Map<String, Object> map);
 	
 	Map<String, Object> selectProductStatistics(Map<String, Object> map) throws Exception;
 
-	List<MemberStatisticVo> selectMemberStatisticsList(Map<String, Object> param);
-
-	BeforeYearStatisticVo selectBeforeStatisticsList(Map<String, Object> param);
+	Map<String, Object> selectMemberStatisticsList(Map<String, Object> param);
+	
+	Map<String, Object> homeControllerStatistics(Map<String, Object> map);
 }
