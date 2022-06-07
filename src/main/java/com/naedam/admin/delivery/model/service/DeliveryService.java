@@ -9,8 +9,6 @@ import com.naedam.admin.delivery.model.vo.Doseosangan;
 
 public interface DeliveryService {
 
-	int selectDoseosanganFeeByZipcode(int zipcode);
-
 	int insertDeliveryCompanyByParam(Map<String, Object> param);
 
 	int deleteDeliveryCompanyByComNo(String comNo);
