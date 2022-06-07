@@ -12,7 +12,7 @@
 		parent_no,
 		1 AS level
 	FROM category
-	WHERE parent_no IS NULL AND category_type = #{type}
+	WHERE parent_no IS NULL AND category_type = #{type} AND status = 'Y'
 	
 	UNION ALL
 	
@@ -39,7 +39,7 @@
 		STATUS,
 		1 AS level
 	FROM category
-	WHERE parent_no IS NULL AND category_type = 'product'
+	WHERE parent_no IS NULL AND category_type = 'product' AND status = 'Y'
 	
 	UNION ALL
 	
@@ -132,7 +132,7 @@
 		STATUS,
 		1 AS level
 	FROM category
-	WHERE parent_no IS NULL AND category_type = 'product'
+	WHERE parent_no IS NULL AND category_type = 'product' AND status = 'Y'
 	
 	UNION ALL
 	
@@ -163,7 +163,7 @@
 		STATUS,
 		1 AS level
 	FROM category
-	WHERE parent_no IS NULL AND category_type = 'product'
+	WHERE parent_no IS NULL AND category_type = 'product' AND status = 'Y'
 	
 	UNION ALL
 	
@@ -186,14 +186,13 @@
   <insert id="insertProductCategoryByParam">
 	  <choose>
 		  <when test="parent_no == 0 ">
-		  	insert into category values(nextval(seq_category_no), #{title}, null, 'product', #{status})
+		  	insert into category values(NEXTVAL(seq_category_no), #{title}, null, 'product', #{status})
 		  </when>
 		  <otherwise>
-		    insert into category values(nextval(seq_category_no), #{title}, #{parent_no}, 'product', #{status})
+		    insert into category values(NEXTVAL(seq_category_no), #{title}, #{parent_no}, 'product', #{status})
 		  </otherwise>
 	  </choose>
   </insert>
-  
   
   <update id="updateProductCategoryByParam">
   	update category set category_name = #{title}, status = #{status} where category_no = #{code}
