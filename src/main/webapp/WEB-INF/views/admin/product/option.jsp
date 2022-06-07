@@ -128,12 +128,13 @@
 <!--옵션 등록 modal 제어 -->
 function onclickInsert(){
 	$("#modalContent").modal('show');
+	$("#list_option").empty(); // 하위 요소 리셋
 	$("#list_option").append(`
 			<li class="first_item">
 				<input type="text" name="option_value" class="form-control input-sm" placeholder="옵션값" style="width:40%; display:inline; margin-bottom:10px;">
-				<input type="text" name="option_value_cost" class="form-control input-sm" placeholder="추가 가격(숫자만 입력)" onkeyup="this.value=displayComma(checkAmountNum(this.value))"  style="width:30%; display:inline; margin-bottom:10px;">
+				<input type="text" name="option_value_cost" class="form-control input-sm" placeholder="추가 가격(숫자만 입력)" onkeyup="this.value=displayComma(checkAmountNum(this.value))" style="width:30%; display:inline; margin-bottom:10px;">
 				<button type="button" class="btn btn-primary btn-xs" onclick="addOption();"><span class="glyphicon glyphicon-plus"></span> 옵션값 추가</button>
-		</li>`);
+			</li>`);
 }
 <!-- 옵션 입력란 추가 -->
 function addOption(){
@@ -142,8 +143,7 @@ function addOption(){
 				<input type="text" name="option_value" class="form-control input-sm" placeholder="옵션값" style="width:40%; display:inline; margin-bottom:10px;">
 				<input type="text" name="option_value_cost" class="form-control input-sm" placeholder="추가 가격(숫자만 입력)" onkeyup="this.value=displayComma(checkAmountNum(this.value))"  style="width:30%; display:inline; margin-bottom:10px;">
 				<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);" />
-			</li>
-			`);
+			</li>`);
 }
 <!--추가된 옵션 입력란 제거 -->
 function removeOption(target){
@@ -152,7 +152,6 @@ function removeOption(target){
 
 <!--옵션 insert -->
 function register(){
-	
 	const formData = new FormData(document["form_register"])
 	var obj = {};
 	for(const [k, v] of formData){
@@ -168,7 +167,7 @@ function register(){
 	});
 
 	const jsonStr = JSON.stringify(obj);
-	
+
 	$.ajax({
 		url:"${pageContext.request.contextPath}/admin/option/insert",
 		method:"POST",
@@ -181,15 +180,12 @@ function register(){
 			console.log(data)
 			if(data > 0){
 				alert("옵션이 추가되었습니다.");
-				$(document["form_register"]).clear();
-				$("#modalContent").modal('hide');
-				
+				location.reload();
 			}
 		},
 		error:console.log
 	});
 
-	
 }
 
 <!-- 옵션 수정 -->
@@ -206,8 +202,9 @@ function onclickUpdate(optionNo){
 		method:"POST",
 		success(data){
 				$("#option_name").val(data.pOption.optionName);
+				$("#list_option").empty(); // 하위 요소 리셋
+
 				$.each(data.optionValueList, (i,k)=>{
-					console.log(i,k);
 					if(i == 0){
 						$("#list_option").append(`
 							<li class="first_item">
@@ -216,7 +213,6 @@ function onclickUpdate(optionNo){
 								<input type="hidden" name="option_value_no" value="\${k.optionValueNo}" />
 								<button type="button" class="btn btn-primary btn-xs" onclick="addOption();"><span class="glyphicon glyphicon-plus"></span> 옵션값 추가</button>
 						</li>`);
-						
 					}else{
 						$("#list_option").append(`
 								<li class="first_item">
@@ -226,6 +222,8 @@ function onclickUpdate(optionNo){
 									<button type="button" class="btn btn-danger btn-xs" onclick="removeOption(this);"><span class="fa fa-minus-square"></span> 옵션값 제거</button>
 							</li>`);
 					}
+					
+					var test = $("input[name='option_value_no']").val();
 				});
 				$("#register_btn").attr('onclick',`option_update(\${data.pOption.optionNo});`);
 		},
@@ -252,15 +250,12 @@ function option_update(optionNo){
 	$.each($("input[name=option_value_cost]"), (index, value)=>{
 		 obj.option_value_cost.push($(value).val());
 	});
-	
-		
 	$.each($("input[name=option_value_no]"), (index, value)=>{
 		obj.option_value_no.push($(value).val());
 	});
 	obj.optionNo = optionNo;
 	const jsonStr = JSON.stringify(obj);
-	console.log(jsonStr);
-	
+
 	$.ajax({
 		url:"${pageContext.request.contextPath}/admin/option/update",
 		method:"POST",
@@ -272,13 +267,11 @@ function option_update(optionNo){
 		success(data){
 			if(data > 0){
 				alert("옵션 정보가 수정되었습니다.");
+				location.reload();
 			}
-
 		},
 		error:console.log
 	});	
-	
-	
 	
 }
 
@@ -286,9 +279,6 @@ function option_update(optionNo){
 function optionCheck(){
 	
 }
-
-
-
 </script>
 
 <jsp:include page="/WEB-INF/views/admin/common/footer.jsp"></jsp:include>

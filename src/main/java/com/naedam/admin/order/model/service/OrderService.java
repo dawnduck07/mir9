@@ -1,30 +1,21 @@
 package com.naedam.admin.order.model.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.naedam.admin.option.model.vo.OrderOption;
-import com.naedam.admin.order.model.vo.Order;
+import javax.servlet.http.HttpServletRequest;
 import com.naedam.admin.order.model.vo.OrderDetail;
 import com.naedam.admin.order.model.vo.OrderExcelForm;
 import com.naedam.admin.order.model.vo.OrderStatus;
 
 public interface OrderService {
 
-	List<Order> selectOrderList(Map<String, String> param);
-
-	int selectOrderCnt(Map<String, String> param);
-
-	List<OrderStatus> selectOrderStatusList();
+	Map<String, Object> orderListSetting(Map<String, String> param);
 
 	int updateOrderStaus(Map<String, Object> param);
 
 	int updateAdminMemo(Map<String, Object> param);
 
-	OrderDetail selectOneOrderDetailByOrderNo(long orderNo);
-
-	List<OrderOption> selectOrderOptionListByOrderNo(long orderNo);
+	Map<String, Object> orderDetail(String orderNo);
 
 	int getZipcodeByOrderNo(long orderNo);
 
@@ -34,7 +25,7 @@ public interface OrderService {
 
 	List<OrderExcelForm> selectOrderExcelForm();
 
-	int deleteOrderByOrderNo(String orderNo);
+	int orderDelete(HttpServletRequest request);
 
 	int selectTodayOrderCnt();
 
@@ -43,7 +34,5 @@ public interface OrderService {
 	List<OrderDetail> selectOrderDetailList();
 
 	OrderStatus selectDashBoardOrderList(Map<String, Object> map);
-
-	
 
 }

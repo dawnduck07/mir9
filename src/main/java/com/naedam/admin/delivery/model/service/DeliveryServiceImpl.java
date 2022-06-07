@@ -45,8 +45,6 @@ public class DeliveryServiceImpl implements DeliveryService {
 		return deliveryDao.insertDeliveryCompanyByParam(param);
 	}
 
-
-
 	@Override
 	public DeliveryCompany selectOneDeliveryCompanyByComNo(String comNo) {
 		// TODO Auto-generated method stub
