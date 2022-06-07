@@ -5,28 +5,51 @@
 <mapper namespace="option">
 
   <insert id="insertOption">
-  	insert into product_option values(NEXTVAL(seq_product_option_no), #{option_name}, default)
+  	insert into product_option 
+  	values(NEXTVAL(seq_product_option_no), #{option_name}, default)
   </insert>
   
   <insert id="insertOptionValue">
-  	insert into option_value values(NEXTVAL(seq_option_value_no), #{optionValue}, #{optionValueCost},(select	option_no from (select * from product_option order by 1 desc) where rownum = 1))
+  	insert into option_value 
+  	values(NEXTVAL(seq_option_value_no), 
+  		  #{optionValue}, 
+  		  #{optionValueCost},
+  		  (SELECT b.option_no
+		     FROM (
+				   SELECT @ROWNUM:=@ROWNUM+1 AS rowNum, a.option_no
+				     FROM (
+				  		   SELECT @ROWNUM:=0, option_no
+						     FROM product_option
+						    ORDER BY option_no DESC) AS a ) AS b
+		    WHERE  
+		    	<if test="optionNo > 0">
+		    		b.option_no = #{optionNo}
+		    	</if>
+		    	<if test="optionNo == null || optionNo == 0">
+		    		b.rowNum = 1
+		    	</if>))
   </insert>
   
-  
   <select id="selectOptionList" resultType="option">
-	select a.option_no, a.option_name, GROUP_CONCAT(b.option_value ORDER BY b.option_value SEPARATOR ',') as option_values
+	select a.option_no, 
+		   a.option_name, 
+		   GROUP_CONCAT(b.option_value ORDER BY b.option_value SEPARATOR ',') as option_values
 	from product_option a, option_value b
 	where a.option_no = b.option_no
 	group by a.option_no, a.option_name
-	order by a.option_no desc
+	order by a.option_no DESC
   </select>
   
   <select id="selectOneProductOptionByoptionNo" resultType="productOption">
-  	select * from product_option where option_no = #{optionNo}
+  	select * 
+  	  from product_option 
+  	 where option_no = #{optionNo}
   </select>
   
   <select id="selectOptionValueListByOptionNo" resultType="optionValue">
-  	select * from option_value where option_no = #{optionNo}
+  	select * 
+  	  from option_value 
+  	 where option_no = #{optionNo}
   </select>
   
   <select id="selectProductDetailList" resultType="productDetail">
@@ -38,7 +61,10 @@
   </select>
   
   <update id="updateOptionValue">
-  	update option_value set option_value = #{optionValue}, option_value_cost = #{optionValueCost} where option_value_no = #{optionValueNo}
+  	update option_value 
+  	   set option_value = #{optionValue}, 
+  	   	   option_value_cost = #{optionValueCost} 
+  	 where option_value_no = #{optionValueNo}
   </update>
   <update id="updateProductOption">
   	update product_option set option_name = #{optionName} where option_no = #{optionNo}
