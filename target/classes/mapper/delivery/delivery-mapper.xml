@@ -9,7 +9,17 @@
   	
   	
   	<insert id="insertDeliveryCompanyByParam">
-  		insert into delivery_company values(seq_deli_com_no.nextval, #{company_name}, #{url}, #{is_show}, sysdate)
+  		insert 
+  		into delivery_company(DELI_COM_NO,
+  							  DELI_COM_NAME,
+  							  TRACE_URL,
+  							  SHOW_YN,
+  							  REG_DATE) 
+  			values(NEXTVAL(seq_deli_com_no), 
+  				  #{deliveryCompany.deliComName}, 
+  				  #{deliveryCompany.traceUrl}, 
+  				  #{deliveryCompany.showYn}, 
+  				  sysdate())
   	</insert>
   	
   	
@@ -23,8 +33,8 @@
   	</select>
   	
   	<update id="updateDeliveryCompanyByParam">
-  		update delivery_company set deli_com_name = #{company_name}, trace_url = #{url}, show_yn = #{is_show}, reg_date = sysdate()
-  			where deli_com_no = #{comNo} 
+  		update delivery_company set deli_com_name = #{deliveryCompany.deliComName}, trace_url = #{deliveryCompany.traceUrl}, show_yn = #{deliveryCompany.showYn}
+  			where deli_com_no = #{deliveryCompany.deliComNo} 
   	</update>
   	
   	<update id="updateDeliverySettingByVo">
@@ -36,6 +46,8 @@
   	</update>
   	
   	<delete id="deleteDeliveryCompanyByComNo">
-  		delete delivery_company where deli_com_no = #{comNo}
+  		delete from delivery_company where <foreach collection="list" item="comNo" open="(" close=")" separator="or">
+											deli_com_no = #{comNo}
+										  </foreach>
   	</delete>
 </mapper>

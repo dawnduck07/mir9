@@ -24,5 +24,6 @@ public class DeliveryCompany implements Serializable {
 	private String traceUrl;
 	private String showYn;
 	private Date regDate;
+	private String mode;
 
 }

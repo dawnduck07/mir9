@@ -1,25 +1,22 @@
 package com.naedam.admin.delivery.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naedam.admin.common.Mir9Utils;
 import com.naedam.admin.delivery.model.service.DeliveryService;
 import com.naedam.admin.delivery.model.vo.DeliveryCompany;
-import com.naedam.admin.delivery.model.vo.DeliverySetting;
-import com.naedam.admin.delivery.model.vo.Doseosangan;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,30 +34,15 @@ public class DeliveryController {
 		
 		return result;
 	}
-	
 	@ResponseBody
-	@PostMapping("/insertCompany")
-	public int insertCompany(String jsonStr){
-		Map<String,Object> param = Mir9Utils.parseJsonStr(jsonStr);
-		
-		int result = deliveryService.insertDeliveryCompanyByParam(param);
-		
-		
+	@PostMapping("/deliveryCompanyProcess")
+	public int deliveryCompanyProcess(@ModelAttribute DeliveryCompany deliveryCompany,
+									  @RequestParam(value="checkedNo[]", required = false) List<Integer> deliComNoArr){
+		Map<String, Object> map = new HashMap<>();
+		map.put("deliveryCompany", deliveryCompany);
+		map.put("deliComNoArr", deliComNoArr);
+		int result = deliveryService.deliveryCompanyProcess(map);
 		return result;
-	}
-	
-	@PostMapping("/deleteCompany")
-	public String deleteCompany(HttpServletRequest request, RedirectAttributes redirectAttr) {
-		ArrayList<String> ComNoList = new ArrayList<String>(Arrays.asList(request.getParameterValues("checkedNo")));
-		
-		for(String comNo : ComNoList) {
-			int result = deliveryService.deleteDeliveryCompanyByComNo(comNo);
-		}
-		
-		
-		redirectAttr.addFlashAttribute("msg", "삭제되었습니다.");
-		
-		return "redirect:/admin/setting/delivery_company";
 	}
 	
 	@PostMapping("/companyDetail")
@@ -69,18 +51,6 @@ public class DeliveryController {
 		log.debug("comNo = {}",comNo);
 		DeliveryCompany deliCom = deliveryService.selectOneDeliveryCompanyByComNo(comNo);
 		return deliCom;
-	}
-	
-	@ResponseBody
-	@GetMapping("/updateCompany")
-	public int updateCompany(String jsonStr){
-		Map<String,Object> param = Mir9Utils.parseJsonStr(jsonStr);
-		
-		
-		int result = deliveryService.updateDeliveryCompanyByParam(param);
-		
-		
-		return result;
 	}
 	
 	@ResponseBody
