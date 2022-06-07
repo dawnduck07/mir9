@@ -19,7 +19,7 @@ public interface DeliveryService {
 
 	List<DeliveryCompany> selectDeliveryCompanyListByParam(Map<String, Object> param);
 
-	int updateDeliverySettingByVo(DeliverySetting deliSet);
+	int updateDeliverySettingByVo(Map<String, Object> map) throws Exception;
 
 	int updateDoseosanganByVo(Doseosangan doseo);
 

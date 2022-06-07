@@ -3,6 +3,8 @@ package com.naedam.admin.setting.model.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.naedam.admin.banner.model.vo.Banner;
 import com.naedam.admin.category.model.vo.Category;
 import com.naedam.admin.coupon.model.vo.Coupon;
@@ -34,6 +36,16 @@ import com.naedam.admin.setting.model.vo.PGs.XpaySetting;
 
 public interface SettingService {
 
+	Object paymentPGSelectProcess(Map<String, Object> map) throws Exception;
+	
+	void paymentPGProcess(Map<String, Object> map) throws Exception;
+	
+	void seoProcess(Map<String, Object> map) throws Exception;
+	
+	Map<String, Object> staffProcess(Map<String, Object> map);
+	
+	int infoProcess(Map<String, Object> map);
+	
 	List<DeliveryCompany> selectDeliveryCompanyList();
 
 	List<Doseosangan> selectDoseosanganList();
@@ -48,9 +60,9 @@ public interface SettingService {
 
 	List<Popup> selectPopupListByParam(Map<String, Object> param);
 
-	List<Coupon> selectCouponListByParam(Map<String, Object> param);
+	Map<String, Object> selectCouponListByParam(Map<String, Object> param, HttpServletRequest request);
 
-	Point selectPoint();
+	Map<String, Object> selectPoint();
 
 	PointUse selectPointUse();
 
@@ -100,18 +112,13 @@ public interface SettingService {
 	
 	int updateSnsSetting(SnsSetting snsSetting);
 
-	int insertStaff(Staff staff);
-
-	List<Staff> selectStaffList();
+	Map<String, Object> selectStaffList();
 
 	int selectStaffListCount();
-
-	int deleteStaff(int[] staffNo);
 
 	List<Staff> selectSearchStaffList(Map<String, Object> param);
 
 	int selectsearchStaffListCount(Map<String, Object> param);
-
 
 	int updateKgIniSetting(KgIniSetting kg);
 
@@ -127,11 +134,7 @@ public interface SettingService {
 
 	Staff selectOneStaffByStaffNo(int staffNo);
 
-	Staff selectOneimgUrlBystaffNo(int staffNo);
-
-	int deleteStaffImg(int staffNo);
-
-	int updateStaff(Staff staff);
+	Map<String, Object> selectOneimgUrlBystaffNo(int staffNo) throws Exception;
 
 	Staff selectMaxOrder();
 
@@ -148,6 +151,8 @@ public interface SettingService {
 	int updateChangeOrderDownNext(Staff paramStaff);
 
 	int updateChangeOrderUpNext(int input_row_order);
+	
+	int deleteStaffImg(int staffNo);
 
 	
 }

@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.naedam.admin.board.model.vo.Search;
 import com.naedam.admin.category.model.dao.CategoryDao;
+import com.naedam.admin.order.model.dao.OrderDao;
+import com.naedam.admin.order.model.vo.OrderStatus;
 import com.naedam.admin.statistics.model.dao.StatisticsDao;
 import com.naedam.admin.statistics.model.vo.AddressStatisticVo;
 import com.naedam.admin.statistics.model.vo.AreaVo;
@@ -28,7 +33,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private StatisticsDao statisticsDao;
 	@Autowired
 	private CategoryDao categoryDao;
-	
+	@Autowired
+	private OrderDao orderDao;
 	public Map<String, Object> statisticsAddress(Map<String, Object> map) throws Exception{
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Search search = (Search) map.get("search");
@@ -137,17 +143,194 @@ public class StatisticsServiceImpl implements StatisticsService {
 			resultMap.put("resultList", resultList);
 			resultMap.put("area", area);
 			resultMap.put("return", "admin/statistics/address_year");
-			return resultMap;
 		}
 		return resultMap;
 	}
 	
 	@Override
-	public PeriodStatisticVo selectPeriodStatistics(Map<String, Object> param) {
+	public Map<String, Object> selectPeriodStatistics(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		return statisticsDao.selectPeriodStatistics(param);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("type", (String)map.get("type"));
+		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		if("get".equals(map.get("mapping"))) {
+			if("D".equals(map.get("type"))) {
+				for(int i = 0; i < 7; i++) {
+					Calendar cal = new GregorianCalendar();
+					cal.add(GregorianCalendar.DATE, -i);
+					resultMap.put("date", cal.getTime());
+					System.out.println("resultMap 확인 === "+resultMap);
+					PeriodStatisticVo statistic = new PeriodStatisticVo();
+					try {
+						statistic = statisticsDao.selectPeriodStatistics(resultMap);
+					
+					} catch (Exception e) {}
+					if(statistic == null) {
+						statistic = new PeriodStatisticVo();
+						statistic.setPaidAt(cal.getTime());
+					}
+					result.add(statistic);
+				}
+				Collections.reverse(result);
+				resultMap.put("result", result);
+				resultMap.put("return", "admin/statistics/period_day");
+			}else if("M".equals(map.get("type"))) {
+				for(int i = 0; i < 3; i++) {
+					Calendar cal = new GregorianCalendar();
+					cal.add(GregorianCalendar.MONTH, -i);
+					resultMap.put("date", cal.getTime());
+					PeriodStatisticVo statistic = new PeriodStatisticVo();
+					statistic = statisticsDao.selectPeriodStatistics(resultMap);
+					if(statistic == null) {
+						statistic = new PeriodStatisticVo();
+						statistic.setPaidAt(cal.getTime());
+					}
+					result.add(statistic);
+				}
+				Collections.reverse(result);
+				resultMap.put("result", result);
+				resultMap.put("return", "admin/statistics/period_month");
+			}else if("Y".equals(map.get("type"))) {
+				for(int i = 0; i < 5; i++) {
+					Calendar cal = new GregorianCalendar();
+					cal.add(GregorianCalendar.YEAR, -i);
+					resultMap.put("date", cal.getTime());
+					PeriodStatisticVo statistic = new PeriodStatisticVo();
+					statistic = statisticsDao.selectPeriodStatistics(resultMap);
+					if(statistic == null) {
+						statistic = new PeriodStatisticVo();
+						statistic.setPaidAt(cal.getTime());
+					}
+					result.add(statistic);
+				}
+				Collections.reverse(result);
+				resultMap.put("result", result);
+				resultMap.put("return", "admin/statistics/period_year");
+			}
+		}else if("post".equals(map.get("mapping"))) {
+			String type = (String) map.get("type");
+			GregorianCalendar startDate = strToIntDate((String)map.get("startDateStr"), type);
+			GregorianCalendar endDate = strToIntDate((String)map.get("endDateStr"), type);
+			int length = 0;
+			
+			if(type.equals("date")) {
+				length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60) + 1);
+				resultMap.put("type", "D");
+			}else if(type.equals("month")) {
+				length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/30);
+				resultMap.put("type", "M");
+			}else if(type.equals("year")) {
+				length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60)/365 + 1);
+				resultMap.put("type", "Y");
+			}
+			
+			for(int i = 0; i < length; i++) {
+				Calendar cal = endDate;
+				
+				if(type.equals("date")) {
+					cal.add(GregorianCalendar.DATE, -1);				
+				}else if(type.equals("month")) {
+					cal.add(GregorianCalendar.MONTH, -1);				
+				}else if(type.equals("year")) {
+					cal.add(GregorianCalendar.YEAR, -1);
+				}
+				
+				resultMap.put("date", cal.getTime());
+				PeriodStatisticVo statistic = new PeriodStatisticVo();
+				
+				try {
+					statistic = statisticsDao.selectPeriodStatistics(resultMap);
+				
+				} catch (Exception e) {}
+				
+				if(statistic == null) {
+					statistic = new PeriodStatisticVo();
+					statistic.setPaidAt(cal.getTime());
+				}
+				
+				result.add(statistic);
+			}
+			Collections.reverse(result);
+			resultMap.put("result", result);
+			resultMap.put("startDateStr", (String)map.get("startDateStr"));
+			resultMap.put("endDateStr", (String)map.get("endDateStr"));
+			if(type.equals("date")) {
+				resultMap.put("return", "admin/statistics/period_day");
+			}else if(type.endsWith("month")) {
+				resultMap.put("return", "admin/statistics/period_month");
+			}
+		}
+		return resultMap;
 	}
 
+	@Override
+	public Map<String, Object> homeControllerStatistics(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<OrderStatus> orderStatusList = new ArrayList<OrderStatus>();
+		List<PeriodStatisticVo> periodMonthList = new ArrayList<PeriodStatisticVo>();
+		List<BeforeYearStatisticVo> byList = new ArrayList<BeforeYearStatisticVo>();
+		Calendar cal = Calendar.getInstance();
+		for(int i = 1; i <= 7; i++) {
+			map.put("code", i);
+			OrderStatus orderStatus = orderDao.selectDashBoardOrderList(map);
+			orderStatusList.add(orderStatus);
+		}
+		resultMap.put("orderStatusList", orderStatusList);
+		GregorianCalendar endDate = strToIntDate((String) map.get("endDateStr"), "year");
+		GregorianCalendar endDate2 = strToIntDate((String) map.get("endDateStr2"), "month");
+		GregorianCalendar endDate3 = strToIntDate((String) map.get("endDateStr3"), "date");
+		for(int i = 0; i < 12; i++) {
+			endDate.add(GregorianCalendar.MONTH, -1);
+			endDate2.add(GregorianCalendar.MONTH, -1);
+			endDate3.add(GregorianCalendar.MONTH, -1);
+			map.put("date",endDate.getTime());
+			map.put("date2",endDate2.getTime());
+			map.put("date3",endDate3.getTime());
+			map.put("mapping", "get");
+			PeriodStatisticVo statistic = new PeriodStatisticVo();
+			BeforeYearStatisticVo statistic2 = new BeforeYearStatisticVo();
+			statistic2 = statisticsDao.selectBeforeStatisticsList(map);	
+			statistic = statisticsDao.selectPeriodStatistics(map);
+			if(statistic == null) {
+				statistic = new PeriodStatisticVo();
+				statistic.setPaidAt(cal.getTime());
+			}
+			if(statistic2 == null) {
+				statistic2 = new BeforeYearStatisticVo();
+				statistic2.setYear("0");
+				statistic2.setYearsAgo("0");
+				statistic2.setTwoYearsAgo("0");
+			}
+			periodMonthList.add(statistic);
+			byList.add(statistic2);
+		}
+		Collections.reverse(periodMonthList);
+		resultMap.put("periodMonthList", periodMonthList);
+		resultMap.put("byList", byList);
+		return resultMap;
+	}
+	
+	private GregorianCalendar strToIntDate(String dateStr, String type){
+		int year=0; int month=0; int day = 0;
+		if(type.equals("year")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			return new GregorianCalendar(year+2, 0, 0);
+			
+		}else if(type.equals("month")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+			
+			return new GregorianCalendar(year, month +2, 0);
+		}else if(type.equals("date")) {
+			year = Integer.parseInt((dateStr.substring(0, 4)));
+			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
+			day = Integer.parseInt((dateStr.substring(8, 10)));
+			return new GregorianCalendar(year, month, day+1);			
+		}
+		return null;
+	}
+	
 	@Override
 	public Map<String, Object> selectProductStatistics(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
@@ -157,16 +340,24 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return resultMap;
 	}
 	
-	public List<MemberStatisticVo> selectMemberStatisticsList(Map<String, Object> param) {
+	public Map<String, Object> selectMemberStatisticsList(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		return statisticsDao.selectMemberStatisticsList(param);
+		Map<String, Object> resultMap = new HashMap<>();
+		if("get".equals(map.get("mapping"))) {
+			List<MemberStatisticVo> memberStatisticsList = statisticsDao.selectMemberStatisticsList(map);
+			resultMap.put("memberStatisticsList", memberStatisticsList);
+		}else if("post".equals(map.get("mapping"))) {
+			GregorianCalendar startDate = strToIntDate((String)map.get("startDateStr"),(String)map.get("type"));
+			GregorianCalendar endDate = strToIntDate((String)map.get("endDateStr"), (String)map.get("type"));
+			map.put("startDate", startDate.getTime());
+			map.put("endDate", endDate.getTime());
+			List<MemberStatisticVo> memberStatisticsList = statisticsDao.selectMemberStatisticsList(map);
+			resultMap.put("memberStatisticsList", memberStatisticsList);
+		}
+		return resultMap;
 	}
 
-	@Override
-	public BeforeYearStatisticVo selectBeforeStatisticsList(Map<String, Object> param) {
-		// TODO Auto-generated method stub
-		return statisticsDao.selectBeforeStatisticsList(param);
-	}
+
 
 
 	

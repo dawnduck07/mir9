@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,38 +75,28 @@ public class SettingController {
 
 	@GetMapping("/point")
 	public void point(Model model) {
-		Point point = settingService.selectPoint();
-		PointUse pointUse = settingService.selectPointUse();
-		PointSave pointSave = settingService.selectPointSave();
-
-		model.addAttribute("point", point);
-		model.addAttribute("pointUse", pointUse);
-		model.addAttribute("pointSave", pointSave);
+		Map<String, Object> resultMap = settingService.selectPoint();
+		model.addAttribute("point", resultMap.get("point"));
+		model.addAttribute("pointUse", resultMap.get("pointUse"));
+		model.addAttribute("pointSave", resultMap.get("pointSave"));
 	}
 
 	@GetMapping("/coupon")
-	public void coupon(Model model) {
+	public void coupon(Model model, HttpServletRequest request) throws Exception {
 		Map<String, Object> param = new HashMap<String, Object>();
-		List<Coupon> couponList = settingService.selectCouponListByParam(param);
-
-		model.addAttribute("couponList", couponList);
+		param.put("mode", "1");
+		Map<String, Object> resultMap = settingService.selectCouponListByParam(param, request);
+		model.addAttribute("couponList", resultMap.get("couponList"));
 	}
 
 	@PostMapping("/coupon")
 	@SuppressWarnings("rawtypes")
 	public void coupon(HttpServletRequest request, Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
-
-		Enumeration params = request.getParameterNames();
-		while (params.hasMoreElements()) {
-			String name = (String) params.nextElement();
-			param.put(name, request.getParameter(name));
-		}
-
-		List<Coupon> couponList = settingService.selectCouponListByParam(param);
-
-		model.addAttribute("couponList", couponList);
-		model.addAttribute("param", param);
+		param.put("mode", "2");
+		Map<String, Object> resultMap = settingService.selectCouponListByParam(param, request);
+		model.addAttribute("couponList", resultMap.get("couponList"));
+		model.addAttribute("param",resultMap.get("param"));
 	}
 
 	@GetMapping("/popup")
@@ -123,14 +114,9 @@ public class SettingController {
 		param.put("end_date", request.getParameter("end_date"));
 		param.put("field", request.getParameter("field"));
 		param.put("keyword", request.getParameter("keyword"));
-
-		log.debug("param = {}", param);
-
 		List<Popup> popupList = settingService.selectPopupListByParam(param);
-
 		model.addAttribute("param", param);
 		model.addAttribute("popupList", popupList);
-
 		return "/admin/setting/popup";
 	}
 
@@ -148,7 +134,6 @@ public class SettingController {
 	@GetMapping("/history")
 	public void history(Model model) {
 		List<History> historyList = settingService.selectHistoryList();
-
 		model.addAttribute("historyList", historyList);
 	}
 
@@ -168,20 +153,16 @@ public class SettingController {
 	public String deliverySertting(Model model) {
 		DeliverySetting deliverySetting = settingService.selectOneDeliverySetting();
 		List<Doseosangan> doseosanganList = settingService.selectDoseosanganList();
-
 		model.addAttribute("deliverySetting", deliverySetting);
 		model.addAttribute("doseosanganList", doseosanganList);
-
 		return "admin/setting/deliverySetting";
 	}
 
 	@GetMapping("/delivery_company")
 	public String deliveryCompany(Model model) {
-
 		List<DeliveryCompany> deliveryCompanyList = settingService.selectDeliveryCompanyList();
 		model.addAttribute("deliveryCompanyList", deliveryCompanyList);
 		model.addAttribute("companyListCnt", deliveryCompanyList.size());
-
 		return "admin/setting/deliveryCompany";
 	}
 
@@ -190,11 +171,9 @@ public class SettingController {
 		List<AdminMenu> adminMenuList = settingService.selectAdminMenuList();
 		List<Locale> localeList = settingService.selectLocaleList();
 		AdminSetting adminSetting = settingService.selectAdminSetting();
-
 		model.addAttribute("adminSetting", adminSetting);
 		model.addAttribute("adminMenuList", adminMenuList);
 		model.addAttribute("localeList", localeList);
-
 	}
 
 	@GetMapping("/img_view")
@@ -221,36 +200,12 @@ public class SettingController {
 	@PostMapping("/process.do")
 	public String process(HttpServletRequest request, AdminSetting adminSetting, DeliveryNotice deliveryNotice,
 			AdminMenu adminMenu) {
-		int result = 0;
-		String mode = request.getParameter("mode");
-		if (mode.equals("info")) {
-			String phone = request.getParameter("mobile1") + request.getParameter("mobile2")
-					+ request.getParameter("mobile3");
-			String callerId = request.getParameter("tel1") + request.getParameter("tel2")
-					+ request.getParameter("tel3");
-			adminSetting.setPhone(phone);
-			adminSetting.setCallerId(callerId);
-			if (adminSetting.getIsDiscount() == null)
-				adminSetting.setIsDiscount("N");
-
-			List<String> menuList = Arrays.asList(request.getParameterValues("admin_menu_list[]"));
-			result = settingService.updateAdminMenuAllN();
-			for (String menuNo : menuList) {
-				result = settingService.updateAdminMenu(menuNo);
-			}
-			List<String> localeList = Arrays.asList(request.getParameterValues("locale_list[]"));
-			result = settingService.updateLocaleAllN();
-			for (String localeCode : localeList) {
-				result = settingService.updateLocaleChoosen(localeCode);
-			}
-
-			result = settingService.updateLocaleDefault(request.getParameter("default_locale"));
-			result = settingService.updateAdminSetting(adminSetting);
-
-		} else if (mode.equals("updateGuide")) {
-			result = settingService.updateDeliveryNotice(deliveryNotice);
-		}
-
+		Map<String, Object> map = new HashMap<>();
+		map.put("mode", request.getParameter("mode"));
+		map.put("request", request);
+		map.put("adminSetting", adminSetting);
+		map.put("deliveryNotice", deliveryNotice);
+		int result = settingService.infoProcess(map);
 		return "redirect:/admin/setting/info";
 	}
 
@@ -261,35 +216,18 @@ public class SettingController {
 	}
 
 	@PostMapping("/seo_process")
-	public String seo_process(HttpServletRequest request, SeoSetting seo,
+	public String seo_process(HttpServletRequest request, 
+			@ModelAttribute SeoSetting seo,
 			@RequestParam("webmaster_naver") MultipartFile naverFileName,
 			@RequestParam("webmaster_google") MultipartFile googleFileName,
 			@RequestParam("webmaster_bing") MultipartFile bingFileName) throws Exception {
-		SeoSetting seoSetting = settingService.selectSeoSetting();
-
-		String filePath = request.getServletContext().getRealPath("webapp/");
-		if (seoSetting.getNaverFileName() == null && naverFileName.getOriginalFilename() != "") {
-			File naver = new File(filePath + naverFileName.getOriginalFilename());
-			naverFileName.transferTo(naver);
-			seo.setNaverFileName(naverFileName.getOriginalFilename());
-		}
-		if (seoSetting.getGoogleFileName() == null && googleFileName.getOriginalFilename() != "") {
-			File google = new File(filePath + googleFileName.getOriginalFilename());
-			googleFileName.transferTo(google);
-			seo.setGoogleFileName(googleFileName.getOriginalFilename());
-		}
-		if (seoSetting.getBingFileName() == null && bingFileName.getOriginalFilename() != "") {
-			File bing = new File(filePath + bingFileName.getOriginalFilename());
-			bingFileName.transferTo(bing);
-			seo.setBingFileName(bingFileName.getOriginalFilename());
-		}
-
-		int result = settingService.updateSeoSetting(seo);
-		System.out.println("여기 확인 ::: " + seo);
-		String imagePath = request.getServletContext().getRealPath("robots.txt");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(imagePath));
-		bw.write(seo.getRobots());
-		bw.close();
+		Map<String, Object> map = new HashMap<>();
+		map.put("seo", seo);
+		map.put("naverFileName", naverFileName);
+		map.put("googleFileName", googleFileName);
+		map.put("bingFileName", bingFileName);
+		map.put("request", request);
+		settingService.seoProcess(map);
 		return "redirect:/admin/setting/seo";
 	}
 
@@ -297,144 +235,44 @@ public class SettingController {
 	public void paymentpg(Model model) {
 		BillingPgSetting pg = settingService.selectPgSetting();
 		NaverShoppingSetting naverShopping = settingService.selectNaverShoppingSetting();
-
 		model.addAttribute("pg", pg);
 		model.addAttribute("naverShopping", naverShopping);
 	}
 
 	@PostMapping("/pg_process")
 	@ResponseBody
-	public Object pg_process(String method, HttpServletRequest request) {
-		Map<String, String> result = new HashMap<String, String>();
-		log.debug("method = {}", method);
-
-		if (method.equals("billing_pg_info")) {
-			BillingPgSetting pgSetting = settingService.selectPgSetting();
-
-			return pgSetting;
-		} else if (method.equals("getCardPgInfo")) {
-			String type = request.getParameter("type");
-			log.debug("type = {}", type);
-			if (type.equals("ini")) {
-				KgIniSetting kg = settingService.selectKgIniSetting();
-				return kg;
-			} else if (type.equals("xpay")) {
-				XpaySetting xpay = settingService.selectXpaySetting();
-				return xpay;
-			} else if (type.equals("kcp")) {
-				KcpSetting kcp = settingService.selectKcpSetting();
-				return kcp;
-			} else if (type.equals("naverpay")) {
-				NaverpaySetting naverpay = settingService.selectNaverpaySetting();
-				return naverpay;
-			} else if (type.equals("eximbay")) {
-				EximbaySetting eximbay = settingService.selectEximbaySetting();
-				return eximbay;
-			}
-		}
-		return result;
+	public Object pg_process(String method, HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("request", request);
+		map.put("method", method);
+		map.put("type", request.getParameter("type"));
+		return settingService.paymentPGSelectProcess(map);
 	}
 
 	@PostMapping("/updatePaymentPG")
 	public String updatePaymentPG(HttpServletRequest request, BillingPgSetting pg, KgIniSetting kg, XpaySetting xpay,
-			KcpSetting kcp, NaverpaySetting naverpay, EximbaySetting eximbay, NaverShoppingSetting naverShopping) {
-		int result = 0;
-		if (pg.getIsDomestic() == null) {
-			pg.setIsDomestic("N");
-		}
-		if (pg.getIsForeigne() == null) {
-			pg.setIsForeigne("N");
-		}
-		if (pg.getNaverpayUse() == null) {
-			pg.setNaverpayUse("N");
-		}
-
-		if (kg.getUseIni() == null) {
-			kg.setUseIni("N");
-		}
-		if (kg.getUseCreditIni() == null) {
-			kg.setUseCreditIni("N");
-		}
-		if (kg.getUseBankIni() == null) {
-			kg.setUseBankIni("N");
-		}
-		if (kg.getUseVBankIni() == null) {
-			kg.setUseVBankIni("N");
-		}
-
-		if (xpay.getUseXpay() == null) {
-			xpay.setUseXpay("N");
-		}
-		if (xpay.getUseCreditXpay() == null) {
-			xpay.setUseCreditXpay("N");
-		}
-		if (xpay.getUseBankXpay() == null) {
-			xpay.setUseBankXpay("N");
-		}
-		if (xpay.getUseVBankXpay() == null) {
-			xpay.setUseVBankXpay("N");
-		}
-
-		if (kcp.getUseKcp() == null) {
-			kcp.setUseKcp("N");
-		}
-		if (kcp.getUseCredit() == null) {
-			kcp.setUseCredit("N");
-		}
-		if (kcp.getUseBank() == null) {
-			kcp.setUseBank("N");
-		}
-		if (kcp.getUseVBank() == null) {
-			kcp.setUseVBank("N");
-		}
-
-		if (eximbay.getUseEximbay() == null) {
-			eximbay.setUseEximbay("N");
-		}
-		if (eximbay.getUseCreditEximbay() == null) {
-			eximbay.setUseCreditEximbay("N");
-		}
-		if (eximbay.getUsePaypal() == null) {
-			eximbay.setUsePaypal("N");
-		}
-		if (eximbay.getUseUnion() == null) {
-			eximbay.setUseUnion("N");
-		}
-		if (eximbay.getUseAli() == null) {
-			eximbay.setUseAli("N");
-		}
-
-		if (!(kg.getUseCreditIni().equals("N") && kg.getUseBankIni().equals("N") && kg.getUseVBankIni().equals("N"))) {
-			result = settingService.updateKgIniSetting(kg);
-		}
-		if (!(xpay.getUseCreditXpay().equals("N") && xpay.getUseBankXpay().equals("N")
-				&& xpay.getUseVBankXpay().equals("N"))) {
-			result = settingService.updateXpaySetting(xpay);
-		}
-		if (!(kcp.getUseCredit().equals("N") && kcp.getUseBank().equals("N") && kcp.getUseVBank().equals("N"))) {
-			result = settingService.updateKcpSetting(kcp);
-		}
-
-		result = settingService.updateBillingPgSetting(pg);
-		result = settingService.updateNaverpaySetting(naverpay);
-		result = settingService.updateNaverShoppingSetting(naverShopping);
-
+			KcpSetting kcp, NaverpaySetting naverpay, EximbaySetting eximbay, NaverShoppingSetting naverShopping) throws Exception {
+		Map<String,Object> map = new HashMap<>();
+		map.put("pg", pg);
+		map.put("kg", kg);
+		map.put("xpay", xpay);
+		map.put("kcp", kcp);
+		map.put("naverpay", naverpay);
+		map.put("naverShopping", naverShopping);
+		map.put("eximbay", eximbay);
+		settingService.paymentPGProcess(map);
 		return "admin/setting/paymentpg";
 	}
 
 	@GetMapping("/snslogin")
 	public String snsLogin(Model model, SnsSetting snsSetting) {
-		System.out.println("settingController/snsSetting 시작");
-
 		snsSetting = settingService.selectSnsSetting();
 		model.addAttribute("snsSetting", snsSetting);
-
 		return "admin/setting/sns";
 	}
 
 	@PostMapping("/updateSnsSetting")
 	public String updateSnsSetting(SnsSetting snsSetting) {
-		System.out.println("settingController/updateSnsSetting 시작");
 		settingService.updateSnsSetting(snsSetting);
 		return "redirect:/admin/setting/snslogin";
 	}
@@ -454,58 +292,20 @@ public class SettingController {
 	// 임원 리스트 
 	@GetMapping("/staff.do")
 	public void staffList(@RequestParam(defaultValue = "1") int cPage, Model model) {
-		try {
-			// 임원 리스트 게시물
-			List<Staff> resultStaffList = settingService.selectStaffList();
-			model.addAttribute("resultStaffList", resultStaffList);
-			
-			// 전체 게시물 수
-			int totalStaffListCount = settingService.selectStaffListCount();
-			model.addAttribute("totalStaffListCount", totalStaffListCount);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Map<String, Object> resultMap = settingService.selectStaffList();
+		model.addAttribute("resultStaffList",resultMap.get("resultStaffList"));
+		model.addAttribute("totalStaffListCount",resultMap.get("totalStaffListCount"));
 	}
 	
 	// 임원 등록/수정
 	@PostMapping("/staff_process.do")
-	public String staffProcess(Staff staff, RedirectAttributes redirectAttribute, HttpServletRequest request) {
-		int result = 0;
-		String msg = null;
-		String mode = request.getParameter("mode");
-
-		try {
-			if (mode.equals("insert")) {
-				int resultInsertStaff = settingService.insertStaff(staff);
-			} else if (mode.equals("update")) {
-				int resultUpdateStaff = settingService.updateStaff(staff);
-				if (resultUpdateStaff > 0) {
-					msg = "수정 되었습니다.";
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "redirect:/admin/setting/staff.do";
-	}
-
-	// 임원 삭제
-	@PostMapping("/staff_delete.do")
-	public String staffDelete(@RequestParam int[] staffNo, RedirectAttributes redirectAttribute, HttpServletRequest request) {
-		int result = 0;
-		String msg = null;
-		String mode = request.getParameter("mode");
-
-		try {
-			if (mode.equals("delete")) {
-				int resultDeleteStaff = settingService.deleteStaff(staffNo);
-				if (resultDeleteStaff > 0) {
-					msg = "삭제 되었습니다.";
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String staffProcess(@RequestParam(value="staffNo", required = false) int[] staffNo, Staff staff, RedirectAttributes redirectAttribute, HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("staff", staff);
+		map.put("mode", request.getParameter("mode"));
+		map.put("staffNo", staffNo);
+		Map<String, Object> resultMap = settingService.staffProcess(map);
+		redirectAttribute.addFlashAttribute("msg", (String)resultMap.get("msg"));
 		return "redirect:/admin/setting/staff.do";
 	}
 
@@ -516,17 +316,9 @@ public class SettingController {
 		Map<String, Object> param = new HashMap<>();
 		param.put("type", type);
 		param.put("keyword", keyword);
-
-		// 임원 검색 게시물 리스트
-		List<Staff> searchStaffList = settingService.selectSearchStaffList(param);
-
-		// 임원 검색 게시물 수
-		int searchStaffCount = settingService.selectsearchStaffListCount(param);
-
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("searchStaffList", searchStaffList);
-		resultMap.put("searchStaffCount", searchStaffCount);
-
+		resultMap.put("searchStaffList", settingService.selectSearchStaffList(param));
+		resultMap.put("searchStaffCount", settingService.selectsearchStaffListCount(param));
 		return resultMap;
 	}
 
@@ -542,34 +334,16 @@ public class SettingController {
 
 	// 임원 관리 - 팝업 이미지
 	@GetMapping("/imgView")
-	public String imgView(@RequestParam(defaultValue = "0") int staffNo, Model model) {
-
-		String url = "";
-
-		try {
-			if (staffNo == 0) {
-				url = "http://fs.joycity.com/web/images/common/fs1_er.png";
-			} else {
-				url = settingService.selectOneimgUrlBystaffNo(staffNo).getImgUrl();
-			}
-			model.addAttribute("url", url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public String imgView(@RequestParam(defaultValue = "0") int staffNo, Model model) throws Exception {
+		Map<String, Object> resultMap = settingService.selectOneimgUrlBystaffNo(staffNo);
+		model.addAttribute("url", resultMap.get("url"));
 		return "/admin/setting/imgView";
 	}
 
 	// 임원 관리 - 이미지 삭제
 	@PostMapping("/deleteImg.do/{staffNo}")
-	public String deleteImg(@PathVariable int staffNo, RedirectAttributes redirectAttribute, HttpServletRequest request) {
-
-		try {
-			int resultDeleteImg = settingService.deleteStaffImg(staffNo);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public String deleteImg(@PathVariable int staffNo, RedirectAttributes redirectAttribute, HttpServletRequest request) throws Exception {
+		settingService.deleteStaffImg(staffNo);
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
@@ -640,8 +414,8 @@ public class SettingController {
 		}
 
 		// 임원 리스트 게시물
-		List<Staff> staffList = settingService.selectStaffList();
-		resultMap.put("staffList", staffList);
+		Map<String, Object> map = settingService.selectStaffList();
+		resultMap.put("staffList", map.get("resultStaffList"));
 
 		return resultMap;
 	}
