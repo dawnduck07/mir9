@@ -69,7 +69,16 @@
 	      				<tr>
 	                        <td><input type="checkbox" name="list[]" value="${cte.categoryNo}" /></td>
 	                        <td>${cte.categoryName }</td>
-	                        <td><button type="button" class="btn btn-success btn-xs">보임</button></td>
+	                        <td>
+	                        	<c:choose>
+	                        		<c:when test="${ cte.status eq 'Y' }">
+	                        			<button type="button" class="btn btn-success btn-xs">보임</button>
+	                        		</c:when>
+	                        		<c:otherwise>
+	                        			<button type="button" class="btn btn-secondary btn-xs">숨김</button>
+	                        		</c:otherwise>
+	                        	</c:choose>
+	                        </td>
 	                        <td><input type="radio" name="order_code" value="1" /></td>
 	                        <td><button type="button" onclick="onclickUpdate(${cte.categoryNo});" class="btn btn-primary btn-xs">수정하기</button></td>
 	                    </tr>                   
