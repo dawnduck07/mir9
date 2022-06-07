@@ -87,49 +87,11 @@ public class HomeController {
 		map.put("startDate", year+"-"+month+"-0"+cal.getActualMinimum(Calendar.DAY_OF_MONTH));
 		map.put("endDate", year+"-"+month+"-"+cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 		map.put("by", by);
-		List<OrderStatus> orderStatusList = new ArrayList<OrderStatus>();
-		for(int i = 1; i <= 7; i++) {
-			map.put("code", i);
-			OrderStatus orderStatus = orderService.selectDashBoardOrderList(map);
-			orderStatusList.add(orderStatus);
-		}
-		String endDateStr = LocalDate.now().toString().substring(0, 4)+"-12-31";
-		String endDateStr2 = LocalDate.now().minusYears(1).toString().substring(0, 4)+"-12-31";
-		String endDateStr3 = LocalDate.now().minusYears(2).toString().substring(0, 4)+"-12-31";
-		String type = "month";
-		GregorianCalendar endDate = strToIntDate(endDateStr, "1");
-		GregorianCalendar endDate2 = strToIntDate(endDateStr2, "2");
-		GregorianCalendar endDate3 = strToIntDate(endDateStr3, "3");
-		param.put("type", "M");
-		param.put("by", by);
-		for(int i = 0; i < 12; i++) {
-			endDate.add(GregorianCalendar.MONTH, -1);
-			endDate2.add(GregorianCalendar.MONTH, -1);
-			endDate3.add(GregorianCalendar.MONTH, -1);
-			param.put("date", endDate.getTime());
-			map.put("date",endDate.getTime());
-			map.put("date2",endDate2.getTime());
-			map.put("date3",endDate3.getTime());
-			PeriodStatisticVo statistic = new PeriodStatisticVo();
-			BeforeYearStatisticVo statistic2 = new BeforeYearStatisticVo();
-			statistic2 = statisticsService.selectBeforeStatisticsList(map);			
-			try {
-				statistic = statisticsService.selectPeriodStatistics(param);
-			} catch (Exception e) {}
-			if(statistic == null) {
-				statistic = new PeriodStatisticVo();
-				statistic.setPaidAt(cal.getTime());
-			}
-			if(statistic2 == null) {
-				statistic2 = new BeforeYearStatisticVo();
-				statistic2.setYear("0");
-				statistic2.setYearsAgo("0");
-				statistic2.setTwoYearsAgo("0");
-			}
-			periodMonthList.add(statistic);
-			byList.add(statistic2);
-		}
-		Collections.reverse(periodMonthList);
+		map.put("type", "M");
+		map.put("endDateStr", LocalDate.now().toString().substring(0, 4)+"-12-31");
+		map.put("endDateStr2", LocalDate.now().minusYears(1).toString().substring(0, 4)+"-12-31");
+		map.put("endDateStr3", LocalDate.now().minusYears(2).toString().substring(0, 4)+"-12-31");
+		Map<String, Object> resultMap = statisticsService.homeControllerStatistics(map);
 		List<Board> boardList = boardService.getBoardTitle();		
 		List<OrderDetail> orderList = orderService.selectOrderDetailList();
 		List<ProductDetail> productList = productService.selectAllProductList();
@@ -137,31 +99,12 @@ public class HomeController {
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("orderList",orderList);
 		model.addAttribute("productList",productList);
-		model.addAttribute("periodMonthList", periodMonthList);
-		model.addAttribute("orderStatusList", orderStatusList);
-		model.addAttribute("byList", byList);
+		model.addAttribute("periodMonthList",resultMap.get("periodMonthList"));
+		model.addAttribute("orderStatusList",resultMap.get("orderStatusList"));
+		model.addAttribute("byList",resultMap.get("byList"));
 		System.out.println("===================dash끝===============");
 		
 		return "admin/dashBoard";
 	}
-	
-	private GregorianCalendar strToIntDate(String dateStr, String type){
-		int year=0; int month=0; int day = 0;
-		if(type.equals("1")) {
-			year = Integer.parseInt((dateStr.substring(0, 4)));
-			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
-			return new GregorianCalendar(year, month +2, 0);
-		}else if(type.equals("2")) {
-			year = Integer.parseInt((dateStr.substring(0, 4)));
-			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
-			return new GregorianCalendar(year, month +2, 0);
-		}else if(type.equals("3")) {
-			year = Integer.parseInt((dateStr.substring(0, 4)));
-			month = Integer.parseInt((dateStr.substring(5, 7))) - 1;
-			return new GregorianCalendar(year, month +2, 0);			
-		}
-		
-		return null;
-		
-	}
+
 }
