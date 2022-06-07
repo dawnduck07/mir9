@@ -197,7 +197,6 @@
 		
         var calendarEl = document.getElementById('calendar');
         var calendar;
-        
 		calendar = new FullCalendar.Calendar(calendarEl, {
 	          locale: 'ko',	//한국어 설정
 			  //헤더에 표시할 툴바
@@ -217,6 +216,13 @@
 	              month: '월간',
 	              week: '주간',
 	              day: '일간'
+	          },
+	          googleCalendarApiKey: 'AIzaSyASBmDMiz6BkF4sQyRk9bmGrI0lzwp9Y5Y',
+			  eventSources: {
+	              googleCalendarId: 'esvapcmtd888b358srsgd12dt0@group.calendar.google.com',
+	              className: 'gcal-event', // an option!
+	              color: 'yellow', // an option!
+	              textColor : 'black'
 	          },
               fixedWeekCount: false,
               selectable: true,

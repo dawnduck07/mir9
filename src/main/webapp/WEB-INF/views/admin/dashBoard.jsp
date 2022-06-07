@@ -178,6 +178,11 @@
 					center: 'title', 
 					right: 'dayGridMonth' 
 			  },
+	          googleCalendarApiKey: 'AIzaSyASBmDMiz6BkF4sQyRk9bmGrI0lzwp9Y5Y',
+			  eventSources: {
+	              googleCalendarId: 'esvapcmtd888b358srsgd12dt0@group.calendar.google.com',
+	              className: 'gcal-event' // an option!
+	          },
 	          events: 
 		      		$.ajax({
 		    			url : "/admin/schedule/json/getScheduleList/",

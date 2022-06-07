@@ -242,6 +242,10 @@ public class BoardController {
 		} 
 	}
 	
-	
+	@GetMapping("test")
+	public String test() {
+		
+		return "admin/board/test";
+	}
 }
 
