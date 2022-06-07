@@ -13,7 +13,7 @@ public interface DeliveryDao {
 
 	int insertDeliveryCompanyByParam(Map<String, Object> param);
 
-	int deleteDeliveryCompanyByComNo(String comNo);
+	int deleteDeliveryCompanyByComNo(List<Integer> comNo);
 
 	DeliveryCompany selectOneDeliveryCompanyByComNo(String comNo);
 

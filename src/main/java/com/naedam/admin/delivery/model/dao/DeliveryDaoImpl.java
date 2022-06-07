@@ -30,11 +30,12 @@ public class DeliveryDaoImpl implements DeliveryDao {
 	@Override
 	public int insertDeliveryCompanyByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
+		System.out.println("daoImpl 확인 === "+param);
 		return session.insert("delivery.insertDeliveryCompanyByParam", param);
 	}
 
 	@Override
-	public int deleteDeliveryCompanyByComNo(String comNo) {
+	public int deleteDeliveryCompanyByComNo(List<Integer> comNo) {
 		// TODO Auto-generated method stub
 		return session.delete("delivery.deleteDeliveryCompanyByComNo", comNo);
 	}

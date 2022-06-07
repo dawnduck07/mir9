@@ -18,15 +18,31 @@ public class DeliveryServiceImpl implements DeliveryService {
 	private DeliveryDao deliveryDao;
 
 	@Override
-	public int insertDeliveryCompanyByParam(Map<String, Object> param) {
+	public int deliveryCompanyProcess(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		return deliveryDao.insertDeliveryCompanyByParam(param);
+		int result = 0;
+		DeliveryCompany deliveryCompany = (DeliveryCompany) map.get("deliveryCompany");
+		if("insert".equals(deliveryCompany.getMode())) {
+			result = deliveryDao.insertDeliveryCompanyByParam(map);
+		}else if("update".equals(deliveryCompany.getMode())) {
+			result = deliveryDao.updateDeliveryCompanyByParam(map);
+		}else if("delete".equals(deliveryCompany.getMode())) {
+			List<Integer> deliComNoArr = (List<Integer>) map.get("deliComNoArr");
+			result = deliveryDao.deleteDeliveryCompanyByComNo(deliComNoArr);
+		}
+		return result;
+	}
+	
+	@Override
+	public int selectDoseosanganFeeByZipcode(int zipcode) {
+		// TODO Auto-generated method stub
+		return deliveryDao.selectDoseosanganFeeByZipcode(zipcode);
 	}
 
 	@Override
-	public int deleteDeliveryCompanyByComNo(String comNo) {
+	public int insertDeliveryCompanyByParam(Map<String, Object> param) {
 		// TODO Auto-generated method stub
-		return deliveryDao.deleteDeliveryCompanyByComNo(comNo);
+		return deliveryDao.insertDeliveryCompanyByParam(param);
 	}
 
 	@Override
@@ -80,6 +96,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 		// TODO Auto-generated method stub
 		return deliveryDao.updateDoseosanganByVo(doseo);
 	}
+
+
 	
 	
 	
