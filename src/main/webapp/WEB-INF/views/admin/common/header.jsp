@@ -160,6 +160,11 @@
 				}
 			}
 		})
+		
+		$("#chattingManage").on("click", function(){
+			popWin = window.open("${pageContext.request.contextPath}/admin/chat/chat","popWin",
+			"left=600, top=700, width=770, height=600, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
+		})
 	})
 </script>
 
@@ -528,6 +533,11 @@ function logoutSubmit(){
 									<i class="fa fa-circle-o"></i> 다국어 번역
 								</a>
 							</li>
+							<li id="chattingManage">
+								<a href="#">
+									<i class="fa fa-circle-o"></i> 채팅
+								</a>
+							</li>							
 						</ul>
 					</li>
 					<li>

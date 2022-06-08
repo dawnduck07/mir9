@@ -3,6 +3,7 @@ package com.naedam.admin.chat.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -10,10 +11,11 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import lombok.extern.log4j.Log4j;
 
+@Component
 @Log4j
 public class ChattingHandler extends TextWebSocketHandler {
-	
-	private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
+
+private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
 	
 	
 	// 채팅을 위해 해당 페이지에 들어오면 클라이언트가 연결된 후 해당 클라이언트의 세션을 sessionList에 add 한다.
@@ -24,6 +26,7 @@ public class ChattingHandler extends TextWebSocketHandler {
 		sessionList.add(session);
 		
 		log.info(session.getPrincipal().getName() + "님이 입장하셨습니다.");
+		
 	}
 	
 	
@@ -49,6 +52,4 @@ public class ChattingHandler extends TextWebSocketHandler {
 		
 		log.info(session.getPrincipal().getName() + "님이 퇴장하셨습니다.");
 	}
-	
-	
 }

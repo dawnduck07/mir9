@@ -8,7 +8,9 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import com.naedam.admin.chat.handler.ChattingHandler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSocket
@@ -18,8 +20,11 @@ public class ChatConfig implements WebSocketConfigurer {
 	
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    
-        registry.addHandler(chatHandler, "ws/chat").setAllowedOrigins("*");
+    	
+    	log.info("config 진입");
+        registry.addHandler(chatHandler, "ws/admin/chat/chat")
+        .setAllowedOrigins("http://*:8080", "http://*.*.*.*:8080")
+        .withSockJS();
     }
 	
 }
