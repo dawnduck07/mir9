@@ -238,7 +238,6 @@
                     <label style="margin-top:5px;">총 ${pageCount} 건</label>
                     <form name="searchForm" method="post" action="/admin/board/postList?${_csrf.parameterName}=${_csrf.token}">
                     <div class="box-tools pull-right" style="margin-bottom:5px;">
-                    	
 	                    	<input type="hidden" name="boardNo" value="${boardNo}">
 	                    	<input type="hidden" name="cPage">
 	                        <div class="has-feedback">
@@ -249,7 +248,6 @@
 	                        </div>
                         
                     </div>
-					
                     <div class="box-tools pull-right" style="margin-bottom:5px;">
                         <div class="has-feedback">
                         <select name="searchType" class="form-control input-sm" style="float:left; width:130px;">
