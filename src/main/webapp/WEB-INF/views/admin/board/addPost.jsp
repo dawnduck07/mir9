@@ -23,7 +23,6 @@
 	            max_file_size : '1000mb',
 	            // Specify what files to browse for
 	        },
-	        
             init : {
             	FileUploaded: function(up, file, result) {
                    console.log(file.name)
@@ -171,20 +170,20 @@
 									</script>
 				                 </td>
 				            </tr>
-				            <c:if test="${board2.option.optionSecret eq 'y'}">
-					            <td class="menu">비밀글</td>
-					            <td align="left">
-					                <span>&nbsp;&nbsp;
-					                	<input type="checkbox" name="is_secret" value="y"></span>
-					                </td>
-					            <tr>
-				            </c:if>
+					            <c:if test="${board2.option.optionSecret eq 'y'}">
+						            <td class="menu">비밀글</td>
+						            <td align="left">
+						                <span>&nbsp;&nbsp;
+						                	<input type="checkbox" name="is_secret" value="y"></span>
+						                </td>
+						            <tr>
+					            </c:if>
 				                <td class="menu">썸네일 파일</td>
 				                <td align="left">
 					                <input type="file" name="ThombnailName" id="ThombnailName" class="form-control input-sm" style="width:80%; display:inline;">
 					                <span id="display_thumbnail" style="display:none;">
-					                <button type="button" onclick="winOpen('?tpf=common/image_view&amp;file_name=product/'+$('#code').val()+'_1');" class="btn btn-success btn-xs">보기</button>
-					                <button type="button" onclick="confirmIframeDelete('?tpf=common/image_delete&amp;file_name=product/'+$('#code').val()+'_1&amp;table=product&amp;code='+$('#code').val());" class="btn btn-danger btn-xs">삭제</button>
+					                	<button type="button" onclick="winOpen('?tpf=common/image_view&amp;file_name=product/'+$('#code').val()+'_1');" class="btn btn-success btn-xs">보기</button>
+					                	<button type="button" onclick="confirmIframeDelete('?tpf=common/image_delete&amp;file_name=product/'+$('#code').val()+'_1&amp;table=product&amp;code='+$('#code').val());" class="btn btn-danger btn-xs">삭제</button>
 					                </span>
 				                </td>
 				            </tr>
@@ -202,9 +201,9 @@
 					                    <div id="list_file" name="listFile"></div>
 					                </c:if>
 					                <c:if test="${board2.option.optionMass eq 'y'}">
-					                <p id="diplay-plupload">
-					                    <span id="file_list"></span>            
-					                </p>  
+						                <p id="diplay-plupload">
+						                    <span id="file_list"></span>            
+						                </p>  
 										<div id="uploader"></div>                              
 					                </c:if> 
 				                </td>
