@@ -53,16 +53,16 @@
 <link rel="stylesheet"
 	  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/jquery-ui.css" />
+
 <style>
 .modal-body {
     background-color: #fff;
 }	  
 </style>
+
 <script type="text/javascript">
 	$(function(){
-		
 		$("a[name='board']").one("click", function(){
-			
 			$.ajax({
 				url : "/admin/board/json/listBoard",
 				method : "GET" ,
@@ -161,12 +161,10 @@
 			}
 		})
 	})
-</script>
 
-<script>
-function logoutSubmit(){
-	$(document.memberLogoutFrm).submit();
-}
+	function logoutSubmit(){
+		$(document.memberLogoutFrm).submit();
+	}
 </script>
 
 <!-- redirect Msg 처리 : deliveryController 참조 -->
@@ -176,8 +174,8 @@ function logoutSubmit(){
 		location.reload();
 	</script>
 </c:if>
-	
 </head>
+
 <body class="hold-transition skin-red sidebar-mini">
 	<iframe name="iframe_process" width="0" height="0" frameborder="0" style="display: none;"></iframe>
 
