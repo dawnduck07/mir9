@@ -161,30 +161,17 @@
 				}
 			})
 		})
-
 		
-		$("#chattingManage").on("click", function(){
+		function chattingPop(){
 			popWin = window.open("${pageContext.request.contextPath}/admin/chat/chat","popWin",
 			"left=600, top=700, width=770, height=600, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
-		})
-	})
-</script>
-
-<script>
-function logoutSubmit(){
-	$(document.memberLogoutFrm).submit();
-}
-</script>
-
-<!-- redirect Msg 처리 : deliveryController 참조 -->
-<c:if test="${not empty msg}">
-	<script>
-		alert("${msg}");
-		location.reload();
+		}
+	
+		function logoutSubmit(){
+			$(document.memberLogoutFrm).submit();
+		}
+		
 	</script>
-</c:if>
-
-
 	
 	<!-- redirect Msg 처리 : deliveryController 참조 -->
 	<c:if test="${not empty msg}">
@@ -545,7 +532,7 @@ function logoutSubmit(){
 									<i class="fa fa-circle-o"></i> 다국어 번역
 								</a>
 							</li>
-							<li id="chattingManage">
+							<li id="chattingManage" onclick="chattingPop()">
 								<a href="#">
 									<i class="fa fa-circle-o"></i> 채팅
 								</a>

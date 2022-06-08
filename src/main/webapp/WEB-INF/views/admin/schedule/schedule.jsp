@@ -110,128 +110,7 @@
 	}	
 	</style>
 
-<script type="text/javascript">
-	$(function(){
-		
-		$('button[name="updateSchedule"]').on("click", function(arg){
-  		  
-  		    var scheduleNo = $('input[name="getSchedulNo"]').val();
-      	    var scheduleStartDate = $('input[name="getScheduleStartDate"]').val();
-      		var scheduleEndDate = $('input[name="getScheduleEndDate"]').val();
-      		var scheduleStartTime = $('select[name="getScheduleStartTime"]').val();
-      		var scheduleEndTime = $('select[name="getScheduleEndTime"]').val();
-      		var scheduleColor = $("select[name='getScheduleColor']").val();
-      		var scheduleTitle = $("input[name='getScheduleTitle']").val();
-      		var scheduleContents = $("textarea[name='getScheduleContents']").val();
-			var scheduleMode = "update";
-      		var startDate = scheduleStartDate+" "+scheduleStartTime;
-      		var endDate = scheduleEndDate+" "+scheduleEndTime;
-				
-      		
-      		
-      		
-      		$.ajax({
-      			method : "POST",
-      			data: JSON.stringify({
-      				'scheduleStartDate':startDate,
-      				'scheduleEndDate':endDate,
-      				'scheduleColor':scheduleColor,
-      				'scheduleTitle':scheduleTitle,
-      				'scheduleContents':scheduleContents,
-      				'scheduleNo':scheduleNo,
-      				'scheduleMode':scheduleMode
-      			}),
-      			dataType : 'JSON',
-      			headers : {
-      				"Accept" : "application/json",
-      				"Content-Type" : "application/json"	 						
-      			} ,
-      			async: false,
-      			url : "/admin/schedule/json/scheduleProcess?${_csrf.parameterName}=${_csrf.token}",
-      			success : function(result){
-      				alert("일정이 수정 되었습니다.");
-      				location.reload();
-      			},
-      			error:function(request, status, error){
-      				
-      			}
-      				
-      		})
-      	
-			  
-		  });
-		
-		$('button[name="deleteSchedule"]').on("click", function(){
-			  
-			  var scheduleNo = $('input[name="getSchedulNo"]').val();
-			  var scheduleMode = "delete";
-			  if(!confirm("해당 일정을 정말 삭제하시겠습니까?")){
-					return;
-					
-			  }else{
-	       		  $.ajax({
-	       			  url : "/admin/schedule/json/scheduleProcess?${_csrf.parameterName}=${_csrf.token}",
-	       			  method : "POST",
-	       			  data: JSON.stringify({
-	       				  'scheduleNo':scheduleNo,
-	       				  'scheduleMode':scheduleMode
-	       		  	  }),
-	       			  dataType : 'JSON',
-	       			  headers : {
-	       				  "Accept" : "application/json",
-	       				  "Content-Type" : "application/json"	 						
-	       			  } ,
-	    			  success : function(JSONData, status){
-	    				  alert("일정이 삭제 되었습니다.")
-	    				  location.reload();
-	    			  }
-		    			
-		      })
-		      
-			  }
-			  
-		  })
-	})
-
-	document.addEventListener('DOMContentLoaded', function() {
-		
-        var calendarEl = document.getElementById('calendar');
-        var calendar;
-		calendar = new FullCalendar.Calendar(calendarEl, {
-	          locale: 'ko',	//한국어 설정
-			  //헤더에 표시할 툴바
-			  headerToolbar: { 
-					left: 'prev,next today', 
-					center: 'title', 
-					right: 'dayGridMonth,timeGridWeek,timeGridDay' 
-			  },
-	          allDayText: '시간',
-	          axisFormat: 'HH:mm',
-	          timeFormat: 'HH:mm',
-	          monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-	          dayNames: ['일','월','화','수','목','금','토'],
-	          dayNamesShort: ['일','월','화','수','목','금','토'],
-	          buttonText: {
-	              today: '오늘',
-	              month: '월간',
-	              week: '주간',
-	              day: '일간'
-	          },
-	          googleCalendarApiKey: 'AIzaSyASBmDMiz6BkF4sQyRk9bmGrI0lzwp9Y5Y',
-			  eventSources: {
-	              googleCalendarId: 'esvapcmtd888b358srsgd12dt0@group.calendar.google.com',
-	              className: 'gcal-event', // an option!
-	              color: 'yellow', // an option!
-	              textColor : 'black'
-	          },
-              fixedWeekCount: false,
-              selectable: true,
-              selectHelper: true,
-              editable: true,     // 드래그 수정 가능 여부
-              droppable: true,    // drop 가능하게
-	          events: 
-
-
+	<script>
 		$(function(){
 			$('button[name="updateSchedule"]').on("click", function(arg){
 	  		    var scheduleNo = $('input[name="getSchedulNo"]').val();
@@ -242,7 +121,7 @@
 	      		var scheduleColor = $("select[name='getScheduleColor']").val();
 	      		var scheduleTitle = $("input[name='getScheduleTitle']").val();
 	      		var scheduleContents = $("textarea[name='getScheduleContents']").val();
-	
+				var scheduleMode = "update";
 	      		var startDate = scheduleStartDate+" "+scheduleStartTime;
 	      		var endDate = scheduleEndDate+" "+scheduleEndTime;
 	
@@ -254,7 +133,8 @@
 	      				'scheduleColor':scheduleColor,
 	      				'scheduleTitle':scheduleTitle,
 	      				'scheduleContents':scheduleContents,
-	      				'scheduleNo':scheduleNo
+	      				'scheduleNo':scheduleNo,
+	      				'scheduleMode':scheduleMode
 	      			}),
 	      			dataType : 'JSON',
 	      			headers : {
@@ -262,7 +142,7 @@
 	      				"Content-Type" : "application/json"	 						
 	      			} ,
 	      			async: false,
-	      			url : "/admin/schedule/json/updateSchedule?${_csrf.parameterName}=${_csrf.token}",
+	      			url : "/admin/schedule/json/scheduleProcess?${_csrf.parameterName}=${_csrf.token}",
 	      			success : function(result){
 	      				alert("일정이 수정 되었습니다.");
 	      				location.reload();
