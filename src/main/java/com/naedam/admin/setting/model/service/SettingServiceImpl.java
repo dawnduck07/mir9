@@ -596,5 +596,10 @@ public class SettingServiceImpl implements SettingService {
 	public int updateChangeOrderUpNext(int input_row_order) {
 		return settingDao.updateChangeOrderUpNext(input_row_order);
 	}
+
+	@Override
+	public DeliverySetting selectOneDeliverySetting() {
+		return settingDao.selectOneDeliverySetting();
+	}
 	
 }
