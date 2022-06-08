@@ -154,5 +154,7 @@ public interface SettingService {
 	
 	int deleteStaffImg(int staffNo);
 
+	DeliverySetting selectOneDeliverySetting();
+
 	
 }

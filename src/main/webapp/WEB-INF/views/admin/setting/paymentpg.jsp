@@ -56,7 +56,9 @@
 					                    <td class="menu">국내 간편결제</td>
 					                    <td align="left">
 					                    	<input type="checkbox" name="naverpayUse" id="naverpay_use" value='Y' onchange="checkEasyPGNaver(this.checked);" ${pg.naverpayUse == 'Y' ? 'checked' : '' }> <label for="naverpay_use">네이버페이</label> &nbsp;&nbsp;
-										<	!-- <input type="checkbox" name="kakaopay_use" id="kakaopay_use" value='y' onchange="checkEasyPGKakao(this.checked);"> <label for="kakaopay_use">카카오페이</label> &nbsp;&nbsp; -->
+											<!-- 
+												<input type="checkbox" name="kakaopay_use" id="kakaopay_use" value='y' onchange="checkEasyPGKakao(this.checked);"> <label for="kakaopay_use">카카오페이</label> &nbsp;&nbsp; 
+											-->
 					                    </td>
 					                </tr>
 				                </tbody>
