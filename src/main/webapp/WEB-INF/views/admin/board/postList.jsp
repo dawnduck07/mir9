@@ -10,196 +10,196 @@
 <fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="nowDate"/>  
 
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<!-- Tell the browser to be responsive to screen width -->
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<!-- Bootstrap 3.3.7 -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-<!-- Ionicons -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ionicons.min.css">
-<!-- jvectormap -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-jvectormap.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
-<!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
-<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
-
-<!-- jQuery 3 -->
-<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-<!-- FastClick -->
-<script src="${pageContext.request.contextPath}/resources/js/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="${pageContext.request.contextPath}/resources/js/adminlte.min.js"></script>
-<!-- Sparkline -->
-<script src="${pageContext.request.contextPath}/resources/js/jquery.sparkline.min.js"></script>
-<!-- jvectormap  -->
-<script src="${pageContext.request.contextPath}/resources/js/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/jquery-jvectormap-world-mill-en.js"></script>
-<!-- SlimScroll -->
-<script src="${pageContext.request.contextPath}/resources/js/jquery.slimscroll.min.js"></script>
-<!-- ChartJS -->
-<script src="${pageContext.request.contextPath}/resources/js/Chart.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="${pageContext.request.contextPath}/resources/js/jquery-ui.min.js"></script>
-<script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- plupload -->
-<script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
-<!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
-<script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="${pageContext.request.contextPath}/resources/plupload/js/i18n/ko.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css">
-<!-- 
-	<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-	<link  href="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
-	<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
- -->
-
-<script type="text/javascript">
-	$(function(){
-		//post 선택삭제 시작
-		$("#deleteChoicePost").on("click", function(){
-			
-			var postArr = new Array();
-			var mode = "delete";
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<!-- Bootstrap 3.3.7 -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ionicons.min.css">
+	<!-- jvectormap -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-jvectormap.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
+	<!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
+	<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css">
+	<link href="${pageContext.request.contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
+	
+	<!-- jQuery 3 -->
+	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+	<!-- Bootstrap 3.3.7 -->
+	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<!-- FastClick -->
+	<script src="${pageContext.request.contextPath}/resources/js/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="${pageContext.request.contextPath}/resources/js/adminlte.min.js"></script>
+	<!-- Sparkline -->
+	<script src="${pageContext.request.contextPath}/resources/js/jquery.sparkline.min.js"></script>
+	<!-- jvectormap  -->
+	<script src="${pageContext.request.contextPath}/resources/js/jquery-jvectormap-1.2.2.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/jquery-jvectormap-world-mill-en.js"></script>
+	<!-- SlimScroll -->
+	<script src="${pageContext.request.contextPath}/resources/js/jquery.slimscroll.min.js"></script>
+	<!-- ChartJS -->
+	<script src="${pageContext.request.contextPath}/resources/js/Chart.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="${pageContext.request.contextPath}/resources/js/jquery-ui.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+	
+	<!-- plupload -->
+	<script src="${pageContext.request.contextPath}/resources/plupload/js/plupload.full.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+	<script src="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/plupload/js/i18n/ko.js"></script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css">
+	<!-- 
+		<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+		<link  href="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+		<script src="${pageContext.request.contextPath}/resources/plupload/jquery-ui-1.12.1/jquery-ui.js"></script>
+	 -->
+	
+	<script type="text/javascript">
+		$(function(){
+			//post 선택삭제 시작
+			$("#deleteChoicePost").on("click", function(){
+				
+				var postArr = new Array();
+				var mode = "delete";
+				var boardNo = $("input[name='boardNo']").val();
+							
+				$("input[class='postNo']:checked").each(function(){
+					postArr.push($(this).val());
+				});
+				if(postArr.length == 0){
+					alert("항목을 선택하셔야 합니다.");
+					return;
+				}
+				if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
+					alert("취소 되었습니다.");
+					return;
+				}else{
+			  		$.ajax({
+		  			 	 url : "/admin/board/json/postProcess?${_csrf.parameterName}=${_csrf.token}",
+			  		  	 type : "POST",
+		  		  	 	 data : { postArr : postArr,
+		  		  	 		 	  mode
+		  		  	 		  	},
+		    		 	 success : function(result){
+		   			  		alert("게시글이 삭제 되었습니다.")
+		   			  		location.href = "/admin/board/postList?boardNo="+boardNo;
+		  		  	 	 }
+			  		});		
+				}
+			})	
+		})
+		
+		function fncPost(){
+			var secNo = $("input[name='secNo']").val();
+			$.ajax({
+				url : "/admin/board/json/getMemberData/"+secNo,
+				method : "GET",
+				dataType : "JSON",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"	 						
+				} ,
+				success : function(JSONData, status){
+					$("#name").val(JSONData.lastName+JSONData.firstName);
+					$("#phone").val(JSONData.phone);
+					$("#email").val(JSONData.email);
+					$("#name").val(JSONData.lastName+JSONData.firstName);
+				}
+			})
+		}
+		
+		const paging = (cPage) => {
+			$("input[name='cPage']").val(cPage)
+			$("form[name='searchForm']").attr("method" , "POST").attr("action" , "/admin/board/postList?${_csrf.parameterName}=${_csrf.token}").submit();
+		}
+		
+		function fncUp(){
+			var boardAsc = $("input:radio[name='order_code']:checked").val();
+			var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+			var boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
+			var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
 			var boardNo = $("input[name='boardNo']").val();
-						
-			$("input[class='postNo']:checked").each(function(){
-				postArr.push($(this).val());
-			});
-			if(postArr.length == 0){
-				alert("항목을 선택하셔야 합니다.");
+			if(boardIndex == 0){
+				alert("1개의 항목을 선택하여야 합니다.")
 				return;
 			}
-			if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
-				alert("취소 되었습니다.");
+			if(boardAsc == boardUpAsc){
+				boardIndex--;
+				boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
+				var upPostNo = $("tr").eq(boardIndex-1).children().find("input[name='originNo']").val();
+			}else{
+				var upPostNo = $("tr").eq(boardIndex-1).children().find("input[name='originNo']").val();
+			}
+			if(boardIndex == 1){
+				alert("더이상 상위로의 위치 변경은 불가능합니다.");
 				return;
 			}else{
 		  		$.ajax({
-	  			 	 url : "/admin/board/json/postProcess?${_csrf.parameterName}=${_csrf.token}",
-		  		  	 type : "POST",
-	  		  	 	 data : { postArr : postArr,
-	  		  	 		 	  mode
-	  		  	 		  	},
-	    		 	 success : function(result){
-	   			  		alert("게시글이 삭제 되었습니다.")
-	   			  		location.href = "/admin/board/postList?boardNo="+boardNo;
-	  		  	 	 }
-		  		});		
+				 	 url : "/admin/board/json/updateUpAsc?${_csrf.parameterName}=${_csrf.token}",
+		 		  	 type : "POST",
+			  	 	 data : { 
+			  	 		boardAsc,
+			  	 		boardUpAsc,
+			  	 		postNo,
+			  	 		upPostNo
+			  	 	 },
+				 	 success : function(result){
+				 		if(result == true){
+				 			location.reload();
+				 		}
+				  	 }
+		 		});	
 			}
-		})	
-	})
-	
-	function fncPost(){
-		var secNo = $("input[name='secNo']").val();
-		$.ajax({
-			url : "/admin/board/json/getMemberData/"+secNo,
-			method : "GET",
-			dataType : "JSON",
-			headers : {
-				"Accept" : "application/json",
-				"Content-Type" : "application/json"	 						
-			} ,
-			success : function(JSONData, status){
-				$("#name").val(JSONData.lastName+JSONData.firstName);
-				$("#phone").val(JSONData.phone);
-				$("#email").val(JSONData.email);
-				$("#name").val(JSONData.lastName+JSONData.firstName);
+		}		
+		
+		function fncDown(){
+			var boardAsc = $("input:radio[name='order_code']:checked").val();
+			var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
+			var boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
+			var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
+			var boardNo = $("input[name='boardNo']").val();
+			if(boardIndex == 0){
+				alert("1개의 항목을 선택하여야 합니다.")
+				return;
 			}
-		})
-	}
+			if(boardAsc == boardDownAsc){
+				boardIndex++;
+				boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
+				var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
+			}else{
+				var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
+			}
+			if(boardIndex == 5){
+				alert("더이상 하위로의 위치 변경은 불가능합니다.")
+				return;
+			}else{
+		  		$.ajax({
+				 	 url : "/admin/board/json/updateDownAsc?${_csrf.parameterName}=${_csrf.token}",
+		 		  	 type : "POST",
+			  	 	 data : { 
+			  	 		boardAsc,
+			  	 		boardDownAsc,
+			  	 		postNo,
+			  	 		downPostNo
+			  	 	 },
+				 	 success : function(result){
+				 		if(result == true){
+				 			location.reload();
+				 		}
+				  	 }
+		 		});				
+			}
+		}
+	</script>
 	
-	const paging = (cPage) => {
-		$("input[name='cPage']").val(cPage)
-		$("form[name='searchForm']").attr("method" , "POST").attr("action" , "/admin/board/postList?${_csrf.parameterName}=${_csrf.token}").submit();
-	}
-	
-	function fncUp(){
-		var boardAsc = $("input:radio[name='order_code']:checked").val();
-		var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
-		var boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
-		var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
-		var boardNo = $("input[name='boardNo']").val();
-		if(boardIndex == 0){
-			alert("1개의 항목을 선택하여야 합니다.")
-			return;
-		}
-		if(boardAsc == boardUpAsc){
-			boardIndex--;
-			boardUpAsc = $("tr").eq(boardIndex-1).children().find("input:radio").val();
-			var upPostNo = $("tr").eq(boardIndex-1).children().find("input[name='originNo']").val();
-		}else{
-			var upPostNo = $("tr").eq(boardIndex-1).children().find("input[name='originNo']").val();
-		}
-		if(boardIndex == 1){
-			alert("더이상 상위로의 위치 변경은 불가능합니다.");
-			return;
-		}else{
-	  		$.ajax({
-			 	 url : "/admin/board/json/updateUpAsc?${_csrf.parameterName}=${_csrf.token}",
-	 		  	 type : "POST",
-		  	 	 data : { 
-		  	 		boardAsc,
-		  	 		boardUpAsc,
-		  	 		postNo,
-		  	 		upPostNo
-		  	 	 },
-			 	 success : function(result){
-			 		if(result == true){
-			 			location.reload();
-			 		}
-			  	 }
-	 		});	
-		}
-	}		
-	
-	function fncDown(){
-		var boardAsc = $("input:radio[name='order_code']:checked").val();
-		var boardIndex = $("input:radio[name='order_code']:checked").parent().parent().index()+1;
-		var boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
-		var postNo = $("input:radio[name='order_code']:checked").parent().parent().find("input[name='originNo']").val();
-		var boardNo = $("input[name='boardNo']").val();
-		if(boardIndex == 0){
-			alert("1개의 항목을 선택하여야 합니다.")
-			return;
-		}
-		if(boardAsc == boardDownAsc){
-			boardIndex++;
-			boardDownAsc = $("tr").eq(boardIndex+1).children().find("input:radio").val();
-			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
-		}else{
-			var downPostNo = $("tr").eq(boardIndex+1).children().find("input[name='originNo']").val();
-		}
-		if(boardIndex == 5){
-			alert("더이상 하위로의 위치 변경은 불가능합니다.")
-			return;
-		}else{
-	  		$.ajax({
-			 	 url : "/admin/board/json/updateDownAsc?${_csrf.parameterName}=${_csrf.token}",
-	 		  	 type : "POST",
-		  	 	 data : { 
-		  	 		boardAsc,
-		  	 		boardDownAsc,
-		  	 		postNo,
-		  	 		downPostNo
-		  	 	 },
-			 	 success : function(result){
-			 		if(result == true){
-			 			location.reload();
-			 		}
-			  	 }
-	 		});				
-		}
-	}
-</script>
-
-<script src="${pageContext.request.contextPath}/resources/ckeditor_4.18.0_0efc8d0dbe1a/ckeditor/ckeditor.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/ckeditor_4.18.0_0efc8d0dbe1a/ckeditor/ckeditor.js"></script>
 </head>
 
 <div class="content-wrapper">

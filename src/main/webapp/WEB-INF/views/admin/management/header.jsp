@@ -136,10 +136,10 @@
 				            </tr>
 			            </table>
 			    	</div>
+			    	<div class="modal-footer">
+	            		<button type="button" onclick="register();" class="btn btn-primary">저장하기</button>
+	            	</div>
 	            </form>
-	            <div class="modal-footer">
-	            	<button type="button" onclick="register();" class="btn btn-primary">저장하기</button>
-	            </div>
 	        </div><!-- /.modal-content -->
 	    </div><!-- /.modal-dialog -->
 	</div><!-- /.modal fade -->

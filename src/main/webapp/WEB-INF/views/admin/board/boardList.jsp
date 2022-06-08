@@ -7,154 +7,154 @@
 </jsp:include>
 <html>
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<!-- Tell the browser to be responsive to screen width -->
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<!-- Ionicons -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ionicons.min.css">
-<!-- jvectormap -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-jvectormap.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
-<!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
-<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
-<!-- Google Font -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-
-<style>
-	.option_tab { display:inline-block; width:130px;}
-</style>
-
-<script type="text/javascript">
-	$(function(){
-		//board 선택삭제 시작
-		$("#deleteChoiceBoard").on("click", function(){
-			
-			var boardArr = new Array();
-			var mode = "delete";
-			$("input[class='boardNo']:checked").each(function(){
-				boardArr.push($(this).val());
- 			});
-			if(boardArr.length == 0){
-				alert("항목을 선택하셔야 합니다.");
-				return;
-			}
-			if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
-				alert("취소 되었습니다.");
-				return;
-				
-			}else{
-		  		$.ajax({
-	  			 	 url : "/admin/board/json/boardProcess?${_csrf.parameterName}=${_csrf.token}",
-		  		  	 type : "POST",
-	  		  	 	 data : { 
-	  		  	 		boardArr : boardArr,
-	  		  	 		mode
-	  		  	 	 },
-	    		 	 success : function(result){
-	   					alert("해당 자료가 삭제 되었습니다.")
-	   					location.href = "/admin/board/listBoard";    		 		
-	  		  	 	 }
-		  		});		
-			}
-	  		//location.href = "mir9/board/listBoard";
-		})	
-		//board 선택삭제 종료
-		
-		// board 상세보기 시작
-		$("button[name='updateBoard']").on("click", function(){
-			
-			var boardNo = $(this).find('input').val();
-
-			$.ajax({
-				url : "/admin/board/json/getBoardAllData/"+boardNo,
-				method : "GET",
-				dataType : "JSON",
-				headers : {
-					"Accept" : "application/json",
-					"Content-Type" : "application/json"	 						
-				} ,
-				success : function(JSONData, status){
-					var a = JSONData.boardNo * 1
-					
-					$("#boardNo2").val(a);
-					$("#boardTitle2").val(JSONData.boardTitle);
-					$("#boardType2").val(JSONData.boardType);
-					$("#boardCategory2").val(JSONData.boardCategory);
-					$("#boardEmail2").val(JSONData.boardEmail);
-					$("#authorityList2").val(JSONData.authority.authorityList)
-					$("#authorityView2").val(JSONData.authority.authorityView)
-					$("#authorityWrite2").val(JSONData.authority.authorityWrite)
-					$("#authorityUpdate2").val(JSONData.authority.authorityUpdate)
-					$("#authorityDelete2").val(JSONData.authority.authorityDelete)
-					$("#authorityAnswer2").val(JSONData.authority.authorityAnswer)
-					$("#authorityNotice2").val(JSONData.authority.authorityNotice)
-					$("#authorityComment2").val(JSONData.authority.authorityComment)
-					if(JSONData.option.optionNotice == "y"){
-						$("#optionNotice2").prop("checked", true)
-					}
-					if(JSONData.option.optionComment == "y"){
-						$("#optionComment2").prop("checked", true)
-					}
-					if(JSONData.option.optionSecret == "y"){
-						$("#optionSecret2").prop("checked", true)
-					}
-					if(JSONData.option.optionAnswer == "y"){
-						$("#optionAnswer2").prop("checked", true)
-					}
-					if(JSONData.option.optionCaptcha == "y"){
-						$("#optionCaptcha2").prop("checked", true)
-					}
-					if(JSONData.option.optionMass == "y"){
-						$("#optionMass2").prop("checked", true)
-					}
-					if(JSONData.option.optionOrder == "y"){
-						$("#optionOrder2").prop("checked", true)
-					}
-					if(JSONData.option.optionAddinfo == "y"){
-						$("#optionAddinfo2").prop("checked", true)
-					}
-					if(JSONData.option.optionPopup == "y"){
-						$("#optionPopup2").prop("checked", true)
-					}
-				}
-			});			
-		}); 
-		// board 상세보기 종료		
-	})
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ionicons.min.css">
+	<!-- jvectormap -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-jvectormap.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/AdminLTE.min.css">
+	<!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/_all-skins.min.css">
+	<link href="${pageContext.request.contextPath}/resources/css/admin.css" rel="stylesheet" type="text/css">
+	<link href="${pageContext.request.contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
+	<!-- Google Font -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	
-	function fncUpdateBoard(){
+	<style>
+		.option_tab { display:inline-block; width:130px;}
+	</style>
+	
+	<script type="text/javascript">
+		$(function(){
+			//board 선택삭제 시작
+			$("#deleteChoiceBoard").on("click", function(){
+				
+				var boardArr = new Array();
+				var mode = "delete";
+				$("input[class='boardNo']:checked").each(function(){
+					boardArr.push($(this).val());
+	 			});
+				if(boardArr.length == 0){
+					alert("항목을 선택하셔야 합니다.");
+					return;
+				}
+				if(!confirm("해당 자료를 정말 삭제 하시겠습니까?")){
+					alert("취소 되었습니다.");
+					return;
+					
+				}else{
+			  		$.ajax({
+		  			 	 url : "/admin/board/json/boardProcess?${_csrf.parameterName}=${_csrf.token}",
+			  		  	 type : "POST",
+		  		  	 	 data : { 
+		  		  	 		boardArr : boardArr,
+		  		  	 		mode
+		  		  	 	 },
+		    		 	 success : function(result){
+		   					alert("해당 자료가 삭제 되었습니다.")
+		   					location.href = "/admin/board/listBoard";    		 		
+		  		  	 	 }
+			  		});		
+				}
+		  		//location.href = "mir9/board/listBoard";
+			})	
+			//board 선택삭제 종료
+			
+			// board 상세보기 시작
+			$("button[name='updateBoard']").on("click", function(){
+				
+				var boardNo = $(this).find('input').val();
+	
+				$.ajax({
+					url : "/admin/board/json/getBoardAllData/"+boardNo,
+					method : "GET",
+					dataType : "JSON",
+					headers : {
+						"Accept" : "application/json",
+						"Content-Type" : "application/json"	 						
+					} ,
+					success : function(JSONData, status){
+						var a = JSONData.boardNo * 1
+						
+						$("#boardNo2").val(a);
+						$("#boardTitle2").val(JSONData.boardTitle);
+						$("#boardType2").val(JSONData.boardType);
+						$("#boardCategory2").val(JSONData.boardCategory);
+						$("#boardEmail2").val(JSONData.boardEmail);
+						$("#authorityList2").val(JSONData.authority.authorityList)
+						$("#authorityView2").val(JSONData.authority.authorityView)
+						$("#authorityWrite2").val(JSONData.authority.authorityWrite)
+						$("#authorityUpdate2").val(JSONData.authority.authorityUpdate)
+						$("#authorityDelete2").val(JSONData.authority.authorityDelete)
+						$("#authorityAnswer2").val(JSONData.authority.authorityAnswer)
+						$("#authorityNotice2").val(JSONData.authority.authorityNotice)
+						$("#authorityComment2").val(JSONData.authority.authorityComment)
+						if(JSONData.option.optionNotice == "y"){
+							$("#optionNotice2").prop("checked", true)
+						}
+						if(JSONData.option.optionComment == "y"){
+							$("#optionComment2").prop("checked", true)
+						}
+						if(JSONData.option.optionSecret == "y"){
+							$("#optionSecret2").prop("checked", true)
+						}
+						if(JSONData.option.optionAnswer == "y"){
+							$("#optionAnswer2").prop("checked", true)
+						}
+						if(JSONData.option.optionCaptcha == "y"){
+							$("#optionCaptcha2").prop("checked", true)
+						}
+						if(JSONData.option.optionMass == "y"){
+							$("#optionMass2").prop("checked", true)
+						}
+						if(JSONData.option.optionOrder == "y"){
+							$("#optionOrder2").prop("checked", true)
+						}
+						if(JSONData.option.optionAddinfo == "y"){
+							$("#optionAddinfo2").prop("checked", true)
+						}
+						if(JSONData.option.optionPopup == "y"){
+							$("#optionPopup2").prop("checked", true)
+						}
+					}
+				});			
+			}); 
+			// board 상세보기 종료		
+		})
 		
-		var boardNo2 = $("#boardNo2").val()
-		var boardTitle = $("input[id='boardTitle2']").val();
-		var boardCategory = $("input[id='boardCategory2']").val();
-		if(boardTitle == null || boardTitle == ''){
-			alert("제목이 입력되지 않았습니다.");
-			return;
-		}else if(boardCategory == null || boardCategory == ''){
-			alert("카테고리가 입력되지 않았습니다.");
-			return;
+		function fncUpdateBoard(){
+			
+			var boardNo2 = $("#boardNo2").val()
+			var boardTitle = $("input[id='boardTitle2']").val();
+			var boardCategory = $("input[id='boardCategory2']").val();
+			if(boardTitle == null || boardTitle == ''){
+				alert("제목이 입력되지 않았습니다.");
+				return;
+			}else if(boardCategory == null || boardCategory == ''){
+				alert("카테고리가 입력되지 않았습니다.");
+				return;
+			}
+			
+			alert("게시판이 수정 되었습니다.")
+			$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/admin/board/boardProcess?${_csrf.parameterName}=${_csrf.token}").submit();
 		}
 		
-		alert("게시판이 수정 되었습니다.")
-		$("form[name='updateBoardForm']").attr("method", "POST").attr("action", "/admin/board/boardProcess?${_csrf.parameterName}=${_csrf.token}").submit();
-	}
-	
-	function onclickView(boardNo){
-		location.href ="/admin/board/postList?boardNo="+boardNo
-	}
-	
-	window.copyURL = function(boardNo){
-		prompt("이 게시판의 URL 입니다. Ctrl+C를 눌러 복사하세요", "http://localhost:8080/admin/board/postList?boardNo="+boardNo)
-	}
-	
-	function iframeReload(){
-		location.reload();
-	}
-</script>
+		function onclickView(boardNo){
+			location.href ="/admin/board/postList?boardNo="+boardNo
+		}
+		
+		window.copyURL = function(boardNo){
+			prompt("이 게시판의 URL 입니다. Ctrl+C를 눌러 복사하세요", "http://localhost:8080/admin/board/postList?boardNo="+boardNo)
+		}
+		
+		function iframeReload(){
+			location.reload();
+		}
+	</script>
 </head>
  
 <div class="content-wrapper">

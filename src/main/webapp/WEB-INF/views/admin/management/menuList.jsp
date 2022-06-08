@@ -122,11 +122,11 @@
 				            </tr>
 			            </table>
 			        </div>
+			        <div class="modal-footer">
+	            		<button type="button" id="displayButton" onclick="register();" class="btn btn-primary">저장하기</button>
+	            		<a href="#none" id="previewLink" target="_new"><button type="button" class="btn btn-success">미리보기</button></a>
+	            	</div>
 		    	</form>
-	            <div class="modal-footer">
-	            	<button type="button" id="displayButton" onclick="register();" class="btn btn-primary">저장하기</button>
-	            	<a href="#none" id="previewLink" target="_new"><button type="button" class="btn btn-success">미리보기</button></a>
-	            </div>
 	        </div><!-- /.modal-content -->
 	    </div><!-- /.modal-dialog -->
 	</div><!-- /.modal fade -->
