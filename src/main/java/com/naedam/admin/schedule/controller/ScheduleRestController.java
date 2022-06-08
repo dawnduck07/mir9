@@ -28,6 +28,8 @@ public class ScheduleRestController {
 	@RequestMapping(value="json/scheduleProcess", method = RequestMethod.POST, produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Boolean scheduleProcess(@RequestBody Schedule schedule) throws Exception {
+		System.out.println("schedule === "+schedule);
+
 		Boolean result = false;
 		Map<String, Object> scheduleMap = new HashMap<>();
 		scheduleMap.put("schedule", schedule);

@@ -28,7 +28,7 @@ public class ChatController {
 		log.info("@ChatController, GET Chat / Username : " + member.getLastName()+member.getFirstName());
 		
 		model.addAttribute("userid", member.getLastName()+member.getFirstName());
-		
+		model.addAttribute("member", member);
 		return "admin/chat/chat";
 	}
 	

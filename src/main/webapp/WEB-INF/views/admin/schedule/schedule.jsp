@@ -121,7 +121,7 @@
 	      		var scheduleColor = $("select[name='getScheduleColor']").val();
 	      		var scheduleTitle = $("input[name='getScheduleTitle']").val();
 	      		var scheduleContents = $("textarea[name='getScheduleContents']").val();
-	
+				var scheduleMode = "update";
 	      		var startDate = scheduleStartDate+" "+scheduleStartTime;
 	      		var endDate = scheduleEndDate+" "+scheduleEndTime;
 	
@@ -133,7 +133,8 @@
 	      				'scheduleColor':scheduleColor,
 	      				'scheduleTitle':scheduleTitle,
 	      				'scheduleContents':scheduleContents,
-	      				'scheduleNo':scheduleNo
+	      				'scheduleNo':scheduleNo,
+	      				'scheduleMode':scheduleMode
 	      			}),
 	      			dataType : 'JSON',
 	      			headers : {
@@ -141,7 +142,7 @@
 	      				"Content-Type" : "application/json"	 						
 	      			} ,
 	      			async: false,
-	      			url : "/admin/schedule/json/updateSchedule?${_csrf.parameterName}=${_csrf.token}",
+	      			url : "/admin/schedule/json/scheduleProcess?${_csrf.parameterName}=${_csrf.token}",
 	      			success : function(result){
 	      				alert("일정이 수정 되었습니다.");
 	      				location.reload();
