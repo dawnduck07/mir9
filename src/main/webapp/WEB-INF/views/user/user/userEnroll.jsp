@@ -150,237 +150,236 @@
 </body>
 
 <script>
-//아이디 중복 확인
-function onclickCheckId(){
-	console.log("onclickCheckId() 작동");
-	var id = $("#id").val();
-	console.log("id = " + id);
+	//아이디 중복 확인
+	function onclickCheckId(){
+		console.log("onclickCheckId() 작동");
+		var id = $("#id").val();
+		console.log("id = " + id);
+		
+		// id 값을 입력하지 않았을 때
+		if(id == ""){
+			alert("id를 정확히 입력해주세요");
+			// 해당 위치로 입력 커서 이동
+			$("#id").focus();
+			return false;
+		}
+		
+		// 아이디 개수 유효성 검사
+		if(!/^[a-zA-Z0-9]{4,12}$/.test(id)){
+			alert("id를 정확히 입력해주세요");
+			$("#id").focus();
+			return false;
+		}
+		
+		const data = {
+				id : id
+		};
+		const jsonData = JSON.stringify(data);
+		console.log("jsonData : " + jsonData);
+		
+		// 비동기 중복 검사
+		$.ajax({
+			url : `${pageContext.request.contextPath}/user/user/checkIdDuplicate.do`,
+			data : data,
+			contentType : "application/json ; charset=utf-8",
+			method : "GET",
+			success(data) {
+				const {available} = data;
+				if(available){
+					alert("사용 가능한 아이디 입니다.");
+					$("input[name=checked_id]").val('Y');
+					$("#password").focus();
+				}
+				else{
+					alert("[" + id + "]은 이미 사용중인 아이디 입니다. \n\n 다른 아이디를 사용하시기 바랍니다.");
+					$("#id").focus();
+				}
+			},
+			error : console.log
+		});
+	}; 
 	
-	// id 값을 입력하지 않았을 때
-	if(id == ""){
-		alert("id를 정확히 입력해주세요");
-		// 해당 위치로 입력 커서 이동
-		$("#id").focus();
-		return false;
+	// 가입
+	function userEnrollSubmit(){
+		var id = $("#id").val();
+		var password = $("#password").val();
+		var passwordCheck = $("#passwordCheck").val();
+		var firstName = $("#firstName").val();
+		var lastName = $("#lastName").val();
+		var addressMain = $("#address_main").val();
+		var addressSub = $("#address_sub").val();
+		var addressZipcode = $("#address_zipcode").val();
+		
+		// 아이디 공란 확인
+		if(id == ''){
+			alert("아이디가 입력되지 않았습니다.");
+			$("#id").focus();
+			return false;
+		}
+		
+		// 비밀번호 공란 확인
+		if(password == ''){
+			alert("비밀번호가 입력되지 않았습니다.");
+			$("#password").focus();
+			return false;
+		}
+		
+		// 비밀번호 유효성 검사
+		if(!/^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{8,15}$/.test(password)){
+			alert("비밀번호는 8 ~ 15 글자 이내로 공백 없이 영문자, 숫자, 특수문자를 혼합하여 입력해주세요.");
+			$("#password").focus();
+			return false;
+		}
+		
+		// 비밀번호 확인 공란 확인
+		if(passwordCheck == ''){
+			alert("비밀번호가 확인이 입력되지 않았습니다.");
+			$("#passwordCheck").focus();
+			return false;
+		}
+		
+		if($("input[name=checked_id]").val() == '') {
+			alert("아이디 중복확인을 해주세요.");
+			$("#btnCheckId").focus();
+			return false;
+		}
+		
+		// 비밀번호 일치 확인
+		if(password != passwordCheck){
+			alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+			$("#passwordCheck").focus();
+			return false;
+		}
+		
+		// 이름 공란 확인
+		if(firstName == ''){
+			alert("이름이 입력되지 않았습니다.");
+			$("#firstName").focus();
+			return false;
+		}
+	
+		// 성 공란 확인
+		if(lastName == ''){
+			alert("성이 입력되지 않았습니다.");
+			$("#lastName").focus();
+			return false;
+		}
+		
+		// 주소 공란 확인
+		if(addressMain == ''){
+			alert("주소가 입력되지 않았습니다.");
+			$("#btnAddressInput").focus();
+			return false;
+		}
+		
+		// 이메일 유효성 검사
+		var email = $("#email").val();
+		var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+		
+		if(!regEmail.test(email)){
+			alert("이메일을 정확하게 입력해주세요.");
+			$("#email").focus();
+			return false;
+		}
+		
+		// 이메일 중복검사 확인
+		if($("input[name=checked_email]").val() == '') {
+			alert("이메일 중복확인을 해주세요.");
+			$("#btnCheckEmail").focus();
+			return false;
+		}
+		
+		$(document.userJoinFrm).submit();
 	}
 	
-	// 아이디 개수 유효성 검사
-	if(!/^[a-zA-Z0-9]{4,12}$/.test(id)){
-		alert("id를 정확히 입력해주세요");
-		$("#id").focus();
-		return false;
+	//주소 입력
+	function callAddress() {
+	    new daum.Postcode({
+	        oncomplete: function(data) {
+	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	
+	            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	            var addr = ''; // 주소 변수
+	            var extraAddr = ''; // 참고항목 변수
+	
+	            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                addr = data.roadAddress;
+	            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                addr = data.jibunAddress;
+	            }
+	
+	            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+	            if(data.userSelectedType === 'R'){
+	                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+	                    extraAddr += data.bname;
+	                }
+	                // 건물명이 있고, 공동주택일 경우 추가한다.
+	                if(data.buildingName !== '' && data.apartment === 'Y'){
+	                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                }
+	                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	                if(extraAddr !== ''){
+	                    extraAddr = ' (' + extraAddr + ')';
+	                }
+	            } 
+	
+	            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	            document.getElementById('address_zipcode').value = data.zonecode;
+	            document.getElementById("address_main").value = addr;
+	            // 커서를 상세주소 필드로 이동한다.
+	            document.getElementById("address_sub").focus();
+	        }
+	    }).open();
 	}
 	
-	const data = {
-			id : id
-	};
-	const jsonData = JSON.stringify(data);
-	console.log("jsonData : " + jsonData);
-	
-	// 비동기 중복 검사
-	$.ajax({
-		url : `${pageContext.request.contextPath}/user/user/checkIdDuplicate.do`,
-		data : data,
-		contentType : "application/json ; charset=utf-8",
-		method : "GET",
-		success(data) {
-			const {available} = data;
-			if(available){
-				alert("사용 가능한 아이디 입니다.");
-				$("input[name=checked_id]").val('Y');
-				$("#password").focus();
-			}
-			else{
-				alert("[" + id + "]은 이미 사용중인 아이디 입니다. \n\n 다른 아이디를 사용하시기 바랍니다.");
-				$("#id").focus();
-			}
-		},
-		error : console.log
-	});
-}; 
-
-// 가입
-function userEnrollSubmit(){
-	var id = $("#id").val();
-	var password = $("#password").val();
-	var passwordCheck = $("#passwordCheck").val();
-	var firstName = $("#firstName").val();
-	var lastName = $("#lastName").val();
-	var addressMain = $("#address_main").val();
-	var addressSub = $("#address_sub").val();
-	var addressZipcode = $("#address_zipcode").val();
-	
-	// 아이디 공란 확인
-	if(id == ''){
-		alert("아이디가 입력되지 않았습니다.");
-		$("#id").focus();
-		return false;
+	// 이메일 중복검사 
+	function onclickCheckEmail() {
+		console.log("onclickCheckEmail() 시작");
+		var email = $("#email").val();
+		console.log("email = " + email);
+		
+		if(email == ""){
+			alert("email을 정확히 입력해주세요");
+			$("#email").focus();
+			return false;
+		}
+		
+		// 이메일 유효성 검사
+		var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+		
+		if(!regEmail.test(email)){
+			alert("이메일을 정확하게 입력해주세요.");
+			$("#email").focus();
+			return false;
+		}
+		
+		const data = {
+			email : email	
+		};
+		const jsonData = JSON.stringify(data);
+		console.log("jsonData : " + jsonData);
+		
+		$.ajax({
+			url : `${pageContext.request.contextPath}/user/user/checkEmailDuplicate.do`,
+			data : data,
+			contentType : "application/json; charset=utf-8",
+			method : "GET",
+			success(data) {
+				const {available} = data;
+				if(available){
+					alert("사용 가능한 이메일 입니다.");
+					$("input[name=checked_email]").val('Y');
+				} else {
+					alert("[" + email + "]은 이미 사용중인 이메일 입니다. \n\n 다른 이메일을 사용하시기 바랍니다.");
+					$("#email").focus();
+				}
+			},
+			error : console.log
+		});
 	}
-	
-	// 비밀번호 공란 확인
-	if(password == ''){
-		alert("비밀번호가 입력되지 않았습니다.");
-		$("#password").focus();
-		return false;
-	}
-	
-	// 비밀번호 유효성 검사
-	if(!/^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{8,15}$/.test(password)){
-		alert("비밀번호는 8 ~ 15 글자 이내로 공백 없이 영문자, 숫자, 특수문자를 혼합하여 입력해주세요.");
-		$("#password").focus();
-		return false;
-	}
-	
-	// 비밀번호 확인 공란 확인
-	if(passwordCheck == ''){
-		alert("비밀번호가 확인이 입력되지 않았습니다.");
-		$("#passwordCheck").focus();
-		return false;
-	}
-	
-	if($("input[name=checked_id]").val() == '') {
-		alert("아이디 중복확인을 해주세요.");
-		$("#btnCheckId").focus();
-		return false;
-	}
-	
-	// 비밀번호 일치 확인
-	if(password != passwordCheck){
-		alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-		$("#passwordCheck").focus();
-		return false;
-	}
-	
-	// 이름 공란 확인
-	if(firstName == ''){
-		alert("이름이 입력되지 않았습니다.");
-		$("#firstName").focus();
-		return false;
-	}
-
-	// 성 공란 확인
-	if(lastName == ''){
-		alert("성이 입력되지 않았습니다.");
-		$("#lastName").focus();
-		return false;
-	}
-	
-	// 주소 공란 확인
-	if(addressMain == ''){
-		alert("주소가 입력되지 않았습니다.");
-		$("#btnAddressInput").focus();
-		return false;
-	}
-	
-	// 이메일 유효성 검사
-	var email = $("#email").val();
-	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-	
-	if(!regEmail.test(email)){
-		alert("이메일을 정확하게 입력해주세요.");
-		$("#email").focus();
-		return false;
-	}
-	
-	// 이메일 중복검사 확인
-	if($("input[name=checked_email]").val() == '') {
-		alert("이메일 중복확인을 해주세요.");
-		$("#btnCheckEmail").focus();
-		return false;
-	}
-	
-	$(document.userJoinFrm).submit();
-}
-
-//주소 입력
-function callAddress() {
-    new daum.Postcode({
-        oncomplete: function(data) {
-            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-            var addr = ''; // 주소 변수
-            var extraAddr = ''; // 참고항목 변수
-
-            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                addr = data.roadAddress;
-            } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                addr = data.jibunAddress;
-            }
-
-            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-            if(data.userSelectedType === 'R'){
-                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                    extraAddr += data.bname;
-                }
-                // 건물명이 있고, 공동주택일 경우 추가한다.
-                if(data.buildingName !== '' && data.apartment === 'Y'){
-                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                }
-                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                if(extraAddr !== ''){
-                    extraAddr = ' (' + extraAddr + ')';
-                }
-            
-            } 
-
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            document.getElementById('address_zipcode').value = data.zonecode;
-            document.getElementById("address_main").value = addr;
-            // 커서를 상세주소 필드로 이동한다.
-            document.getElementById("address_sub").focus();
-        }
-    }).open();
-}
-
-// 이메일 중복검사 
-function onclickCheckEmail() {
-	console.log("onclickCheckEmail() 시작");
-	var email = $("#email").val();
-	console.log("email = " + email);
-	
-	if(email == ""){
-		alert("email을 정확히 입력해주세요");
-		$("#email").focus();
-		return false;
-	}
-	
-	// 이메일 유효성 검사
-	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-	
-	if(!regEmail.test(email)){
-		alert("이메일을 정확하게 입력해주세요.");
-		$("#email").focus();
-		return false;
-	}
-	
-	const data = {
-		email : email	
-	};
-	const jsonData = JSON.stringify(data);
-	console.log("jsonData : " + jsonData);
-	
-	$.ajax({
-		url : `${pageContext.request.contextPath}/user/user/checkEmailDuplicate.do`,
-		data : data,
-		contentType : "application/json; charset=utf-8",
-		method : "GET",
-		success(data) {
-			const {available} = data;
-			if(available){
-				alert("사용 가능한 이메일 입니다.");
-				$("input[name=checked_email]").val('Y');
-			} else {
-				alert("[" + email + "]은 이미 사용중인 이메일 입니다. \n\n 다른 이메일을 사용하시기 바랍니다.");
-				$("#email").focus();
-			}
-		},
-		error : console.log
-	});
-}
 </script>
 </html>
