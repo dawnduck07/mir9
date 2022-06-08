@@ -6,7 +6,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 	
-
 <html>
 <head>
 <meta charset="UTF-8">
@@ -23,6 +22,7 @@
 
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css" />
+
 <script>
 <!-- redirect Msg 처리 -->
 <c:if test="${not empty msg}">
@@ -36,17 +36,13 @@ $(() => {
 		.on("hide.bs.modal", (e) => {
 			location.href = '${empty header.referer ? pageContext.request.contextPath : header.referer}';
 		});
-		
 });
-
 </script>
 </head>
-<body>
 
-	<!-- Modal시작 -->
+<body>
 	<!-- https://getbootstrap.com/docs/4.1/components/modal/#live-demo -->
-	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
-		aria-labelledby="loginModalLabel" aria-hidden="true">
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -57,9 +53,7 @@ $(() => {
 				</div>
 				<!-- 탈퇴 -->
 				<!-- https://getbootstrap.com/docs/4.1/components/forms/#overview -->
-				<form:form
-					action="${pageContext.request.contextPath}/admin/member/memberWithdrawal.do"
-					method="POST">
+				<form:form action="${pageContext.request.contextPath}/admin/member/memberWithdrawal.do" method="POST">
 					<div class="modal-body">
 						<!-- error가 존재한다면 -->
 						<!-- jstl param 받기 -->
@@ -67,27 +61,22 @@ $(() => {
 							<span class="text-danger">아이디 또는 비밀번호가 일치하지 않습니다.</span>
 						</c:if>
 						<span>아이디</span>
-						<input type="text" class="form-control" name="id" id="id" value="<sec:authentication property="principal.username" />"
-							 required> 
-							<br />
+						<input type="text" class="form-control" name="id" id="id" value="<sec:authentication property="principal.username" />" required><br />
 						<span>비밀번호</span>	 
-						<input type="password" class="form-control" name="password" id="password" value=""
-							 required>
-							 <br />
+						<input type="password" class="form-control" name="password" id="password" value="" required><br />
 						<span>탈퇴 사유</span>
 						<textarea class="form-control" name="reason" id="reason" rows="5"></textarea>
 						<span class="info-text">회원탈퇴 하시면 기존 회원관련 정보가 모두 삭제됩니다.</span>
 					</div>
 					<div class="modal-footer jstify-content-centers">
 						<div>
-						<button type="submit" class="btn btn-outline-success">확인</button>
-						<button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
+							<button type="submit" class="btn btn-outline-success">확인</button>
+							<button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
 						</div>
 					</div>
 				</form:form>
-			</div>
-		</div>
-	</div>
-	<!-- Modal 끝-->
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal-dialog -->
+	</div><!-- /.modal fade -->
 </body>
 </html>
