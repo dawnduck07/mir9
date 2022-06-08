@@ -58,7 +58,7 @@
 	<resources mapping="/sitemap.xml" location="/sitemap.xml" order="0"/>
 
 	<beans:bean id="chattingHandler" class="com.naedam.admin.chat.handler.ChattingHandler"/>
-	<websocket:handlers>
+	<websocket:handlers allowed-origins="http://localhost:8080/">
 		<websocket:mapping handler="chattingHandler" path="/admin/chat/chat"/>
 		<websocket:sockjs></websocket:sockjs>
 	</websocket:handlers>
