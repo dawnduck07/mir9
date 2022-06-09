@@ -116,6 +116,11 @@
 		$("#msgArea").append(str);
 	}
 	
+	function enterkey() {
+		if (window.event.keyCode == 13) {
+			chatStart();
+	    }
+	}
 
 	
 </script>
@@ -129,7 +134,7 @@
 		<div class="chat__main">
 				<ol id="msgArea" class="chat__messages" style="font-weight:bold"></ol>
 	      <div class="chat__footer">
-	          <input type="text" id="msg" name="message" placeholder="Message"/>
+	          <input type="text" id="msg" name="message" onkeyup="enterkey()"  placeholder="Message"/>
 	          <button id="submit-btn" onclick="chatStart()">전송</button>
 	      </div>			
 		</div>
