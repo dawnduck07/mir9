@@ -14,6 +14,9 @@ public class ScheduleController {
 	@Autowired
 	private ScheduleService scheduleService;
 	
+	/*
+	 * 일정관리 화면을 출력하기 위한 메소드
+	 */
 	@GetMapping("schedule")
 	public String schedule() {
 		return "admin/schedule/schedule";

@@ -32,6 +32,7 @@ import com.naedam.admin.member.model.vo.Member;
 import com.naedam.admin.setting.model.service.SettingService;
 import com.naedam.admin.setting.model.vo.AdminMenu;
 
+//게시판 관리의 Rest Controller
 @RestController
 @RequestMapping("/admin/board/*")
 public class BoardRestController {
@@ -42,14 +43,15 @@ public class BoardRestController {
 	@Autowired
 	private SettingService settingService;
 	
+	//댓글 달기
 	@PostMapping(value="json/addComment")
 	public void addComment(@RequestBody BoardComment boardComment)throws Exception{
-		System.out.println("/json/addComment 시작");
 		Member member = boardService.getMemberData(boardComment.getCommentMemberNo());
 		boardComment.setCommentWriter(member.getLastName()+member.getFirstName());
 		boardService.addComment(boardComment);
 	}
 	
+	//대용량 파일 업로드
 	@PostMapping(value="json/plupload")
 	public String plupload(@RequestParam("file") MultipartFile file, HttpServletRequest request)throws Exception{
 		System.out.println("/json/plupload 시작");
@@ -60,11 +62,13 @@ public class BoardRestController {
 		return a;
 	}	
 	
+	//사이드 바, 게시물 복사, 이전의 제목을 위한 데이터
 	@GetMapping(value="json/listBoard")
 	public List<Board> listBoard() throws Exception{		
 		return boardService.getBoardTitle();
 	}
 	
+	//해당 게시판의 게시글을 불러오는 리스트
 	@GetMapping(value="json/getPostList/{boardNo}")
 	public Map<String, Object> getPostList(@PathVariable("boardNo") int boardNo) throws Exception{
 		Board board = new Board();
@@ -74,24 +78,24 @@ public class BoardRestController {
 		map.put("boardNo", boardNo);
 		map.put("search", search);
 		Map<String, Object> resultMap = boardService.getPostList2(map);
-		
 		return resultMap;
 	}	
 	
+	//게시판의 모든 데이터 확인을 위한 메소드
 	@GetMapping(value="json/getBoardAllData/{boardNo}")
 	public Board getBoardAllData(@PathVariable("boardNo") int boardNo, Model model) throws Exception{
-		System.out.println("getBoardAllData 시작");		
 		return boardService.getBoardAllData(boardNo);
 	}
 	
+	//게시글 작성 때 필요한 Session값의 User 데이터
 	@GetMapping(value="json/getMemberData/{secNo}")
 	public Member getMemberData(@PathVariable("secNo") int secNo) throws Exception{
 		return boardService.getMemberData(secNo);
 	}
 	
+	//게시글 정보
 	@GetMapping(value="json/getPostData/{postNo}")
 	public Post getPostData(@PathVariable("postNo") int postNo)throws Exception{
-		System.out.println("getPostData 시작");
 		return boardService.getPostData(postNo);
 	}
 	
@@ -101,6 +105,7 @@ public class BoardRestController {
 		return boardService.getMemberData(memberNo);
 	}
 	
+	//댓글 리스트
 	@GetMapping(value="json/getCommentList/{postNo}")
 	public List<BoardComment> getCommentList(@PathVariable("postNo") int postNo) throws Exception{
 		System.out.println("json/getCommentList 시작");
@@ -108,17 +113,17 @@ public class BoardRestController {
 		return boardComment;
 	}
 	
+	//게시판 리스트에서 게시긇을 조회한 수를 확인하기 위한 메소드
 	@GetMapping(value="json/postViewCount/{postNo}")
 	public void postViewCount(@PathVariable("postNo") int postNo) throws Exception{
-		System.out.println("json/postViewCount 시작");
 		Post post = boardService.getPostData(postNo);
 		post.setPostViewCount(post.getPostViewCount()+1);
 		boardService.postViewCount(post);
 	}
 	
+	//게시판 리스트에서 다운로드받은 수를 확인하기 위한 메소드
 	@GetMapping(value="json/postFileCount/{postNo}")
 	public void postFileCount(@PathVariable("postNo") int postNo) throws Exception{
-		System.out.println("json/postFileCount 시작");
 		Post post = boardService.getPostData(postNo);
 		post.setPostDownloadCount(post.getPostDownloadCount()+1);
 		boardService.postFileCount(post);
@@ -126,11 +131,11 @@ public class BoardRestController {
 	
 	@GetMapping(value="json/getPostFile/{postNo}")
 	public List<BoardFile> getPostFile(@PathVariable("postNo") int postNo) throws Exception{
-		System.out.println("json/getPostFile 시작");
 		List<BoardFile> boardFile =  boardService.getPostFile(postNo);
 		return boardFile;
 	}
 	
+	//비동기처리의 C,U,D를 위한 게시판 프로세스
 	@PostMapping("json/boardProcess")
 	public Boolean boardProcess(@RequestParam(value = "boardArr[]") List<String> boardArr,  @RequestParam("mode") String mode) throws Exception{
 		Boolean result = false;
@@ -142,6 +147,7 @@ public class BoardRestController {
 		return result;
 	}	
 	
+	//비동기처리의 C,U,D를 위한 게시글 프로세스
 	@PostMapping("json/postProcess")
 	public Boolean postProcess(@RequestParam(value = "postArr[]") List<String> postArr,
 							   @RequestParam(value = "boardNo", required = false, defaultValue= "0") int boardNo,
@@ -158,15 +164,15 @@ public class BoardRestController {
 		return result;
 	}	
 	
+	//게시글에 등록되어있는 파일을 삭제할 수 있는 메소드
 	@GetMapping(value="json/deleteFile/{fileNo}")
 	public void deleteFile(@PathVariable("fileNo") int fileNo) throws Exception{
-		System.out.println("json/deleteFile 시작");
 		boardService.deleteFile(fileNo);
 	}
 	
+	//댓글 삭제
 	@GetMapping(value="json/deleteComment/{commentNo}")
 	public void deleteComment(@PathVariable("commentNo") int commentNo) throws Exception{
-		System.out.println("json/deleteComment 시작");
 		boardService.deleteComment(commentNo);
 	}
 	
@@ -212,6 +218,7 @@ public class BoardRestController {
         }
 	}
 	
+	//게시글 순서 변경 (위)	
 	@PostMapping("json/updateUpAsc")
 	public Boolean updateUpAsc(@RequestParam("boardAsc") int boardAsc,
 							@RequestParam("boardUpAsc") int boardUpAsc,
@@ -231,6 +238,7 @@ public class BoardRestController {
 		return result;
 	}
 	
+	//게시글 순서 변경 (아래)
 	@PostMapping("json/updateDownAsc")
 	public Boolean updateDownAsc(@RequestParam("boardAsc") int boardAsc,
 							@RequestParam("boardDownAsc") int boardDownAsc,

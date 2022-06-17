@@ -50,6 +50,10 @@ public class SettingServiceImpl implements SettingService {
 	@Autowired
 	public SettingDao settingDao;
 
+	/*
+	 * 결제PG 설정 관리를 위한 데이터로직처리
+	 * 해당 프로세서도 map으로 데이터를 받아와 조건을 정하여 원하는 데이터를 가져온다.
+	 */
 	@Override
 	public Object paymentPGSelectProcess(Map<String, Object> map) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
@@ -173,6 +177,9 @@ public class SettingServiceImpl implements SettingService {
 		result = settingDao.updateNaverShoppingSetting(naverShopping);
 	}
 
+	/*
+	 * seo설정의 데이터를 위한 프로세스
+	 */
 	@Override
 	public void seoProcess(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
@@ -182,10 +189,10 @@ public class SettingServiceImpl implements SettingService {
 		MultipartFile googleFileName = (MultipartFile) map.get("googleFileName");
 		MultipartFile bingFileName = (MultipartFile) map.get("bingFileName");
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
-		System.out.println("seo 확인 === "+seo);
 		SeoSetting seoSetting = settingDao.selectSeoSetting();
-
 		String filePath = request.getServletContext().getRealPath("webapp/");
+		
+		// 파일의 유무에 따라 그대로 유지할 것인지 아니면 새로 넣을 것인지 조건을 설정
 		if (seoSetting.getNaverFileName() == null && naverFileName.getOriginalFilename() != "") {
 			File naver = new File(filePath + naverFileName.getOriginalFilename());
 			naverFileName.transferTo(naver);
@@ -208,6 +215,10 @@ public class SettingServiceImpl implements SettingService {
 		bw.close();
 	}
 	
+	/*
+	 * 임원관리의 프로세스
+	 * map에 담긴 mode에 따라 C,U,D를 실행한다.
+	 */
 	@Override
 	public Map<String, Object> staffProcess(Map<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -227,6 +238,10 @@ public class SettingServiceImpl implements SettingService {
 		return resultMap;
 	}
 	
+	/*
+	 * 기본설정의 프로세스
+	 * map의 담긴 mode의 값의 조건에 따라 데이터 출력
+	 */
 	@Override
 	public int infoProcess(Map<String, Object> map) {
 		// TODO Auto-generated method stub
