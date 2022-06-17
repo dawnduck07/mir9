@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naedam.admin.common.Mir9Utils;
 import com.naedam.admin.coupon.model.dao.CouponDao;
@@ -22,16 +20,13 @@ import com.naedam.admin.member.model.vo.Address;
 import com.naedam.admin.member.model.vo.AddressBook;
 import com.naedam.admin.member.model.vo.Authorities;
 import com.naedam.admin.member.model.vo.Member;
-import com.naedam.admin.member.model.vo.MemberAccessHistory;
 import com.naedam.admin.member.model.vo.MemberAccessHistoryListExcelForm;
-import com.naedam.admin.member.model.vo.MemberEntity;
 import com.naedam.admin.member.model.vo.MemberGrade;
 import com.naedam.admin.member.model.vo.MemberListExcelForm;
 import com.naedam.admin.member.model.vo.MemberMemo;
 import com.naedam.admin.member.model.vo.WithdrawalMember;
 import com.naedam.admin.member.model.vo.WithdrawalMemberEntity;
 import com.naedam.admin.point.model.dao.PointDao;
-import com.naedam.admin.point.model.vo.MemberPoint;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -45,7 +40,9 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private CouponDao couponDao;
 	
-	// 회원관리 프로세스
+	/**
+	 * 회원관리 프로세스
+	 */
 	public Map<String, Object> memberProcess(Map<String, Object> map) throws Exception{
 		Map<String, Object> resultMap = new HashMap<String,Object>();
 		Member member = (Member) map.get("member");
@@ -209,6 +206,9 @@ public class MemberServiceImpl implements MemberService {
 		return resultMap;
 	}
 	
+	/**
+	 * 회원 상세보기
+	 */
 	public Map<String, Object> memberDetail(Map<String, Object> map) throws Exception{
 		Map<String, Object> resultMap = new HashMap<String,Object>();
 		int memberNo = (int) map.get("memberNo");
@@ -260,13 +260,17 @@ public class MemberServiceImpl implements MemberService {
 		return resultMap;
 	}
 	
-	// 로그인 - 해당 id정보 가져오기
+	/**
+	 * 로그인 - 해당 id정보 가져오기
+	 */
 	@Override
 	public Member selectOneMember(String id) {
 		return memberDao.selectOneMember(id);
 	}
 
-	// 회원 리스트 전체 게시물 목록
+	/**
+	 * 회원 리스트 전체 게시물 목록
+	 */
 	@Override
 	public Map<String, Object> selectMemberList(int cPage, int limit, String url) {
 		Map<String, Object> resultMap = new HashMap<>();
@@ -282,7 +286,6 @@ public class MemberServiceImpl implements MemberService {
 		// pagebar
 		resultMap.put("pagebar", Mir9Utils.getPagebar(cPage, limit, memberDao.selectMemberListCount(), url));
 		return resultMap;
-		//return memberDao.selectMemberList(offset, limit);
 	}
 
 	// 회원 리스트 전체 게시물 수

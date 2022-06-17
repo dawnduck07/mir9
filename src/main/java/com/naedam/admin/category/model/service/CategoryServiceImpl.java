@@ -19,36 +19,33 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private CategoryDao categoryDao;
 
-	@Override
-	public List<Category> selectProductCategory(String type) {
-		return categoryDao.selectProductCategory(type);
-	}
-
-	@Override
-	public List<Category> selectProductCategoryChildByParentNo(int cteNo) {
-		return categoryDao.selectProductCategoryChildByParentNo(cteNo);
-	}
-
-	@Override
-	public List<Category> selectProductCategoryByLevel(int level) {
-		return categoryDao.selectProductCategoryByLevel(level);
-	}
-
+	/**
+	 * 제품 카테고리 조회
+	 */
 	@Override
 	public Category selectOneProductCategoryByCteNo(String cteNo) {
 		return categoryDao.selectOneProductCategoryByCteNo(cteNo);
 	}
 
+	/**
+	 * 카테고리 등록
+	 */
+	@Override
+	public int insertProductCategoryByParam(Map<String, Object> param) {
+		return categoryDao.insertProductCategoryByParam(param);
+	}	
+	
+	/**
+	 * 카테고리 수정 
+	 */
 	@Override
 	public int updateProductCategoryByParam(Map<String, Object> param) {
 		return categoryDao.updateProductCategoryByParam(param);
 	}
 
-	@Override
-	public int insertProductCategoryByParam(Map<String, Object> param) {
-		return categoryDao.insertProductCategoryByParam(param);
-	}
-
+	/**
+	 * 카테고리 삭제
+	 */
 	@Override
 	public int deleteCategoryByCteNo(HttpServletRequest request) {
 		int result = 0;
@@ -59,6 +56,9 @@ public class CategoryServiceImpl implements CategoryService {
 		return result;
 	}
 	
+	/**
+	 * 계층형 카테고리 조회
+	 */
 	@Override
 	public Map<String, Object> getCategory(String cteNo) {
 		int depth = 0;
@@ -90,11 +90,41 @@ public class CategoryServiceImpl implements CategoryService {
 		return map;
 	}
 	
+	/**
+	 * 
+	 */
+	@Override
+	public List<Category> selectProductCategory(String type) {
+		return categoryDao.selectProductCategory(type);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public List<Category> selectProductCategoryChildByParentNo(int cteNo) {
+		return categoryDao.selectProductCategoryChildByParentNo(cteNo);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public List<Category> selectProductCategoryByLevel(int level) {
+		return categoryDao.selectProductCategoryByLevel(level);
+	}
+	
+	/**
+	 * 
+	 */
 	@Override
 	public List<Category> selectCategoryNamesByCteLv(int level) {
 		return categoryDao.selectCategoryNamesByCteLv(level);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public List<Category> selectRelatedCtegoryByCteNo(String cteNo) {
 		return categoryDao.selectRelatedCtegoryByCteNo(cteNo);

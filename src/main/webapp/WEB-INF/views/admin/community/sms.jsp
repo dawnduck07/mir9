@@ -410,36 +410,36 @@
 
 <script>
 	/*
-		[NHN CLOUD API]
-		# 사용자 가이드
-		SMS : https://docs.toast.com/ko/Notification/SMS/ko/api-guide/
-		EMAIL : https://docs.toast.com/ko/Notification/Email/ko/api-guide/
-		
-		# 이용 방법
-		1. 회원가입 후 결제 정보를 등록합니다.
-		2. 콘솔에서 조직과 프로젝트를 차례로 생성 후 서비스(SMS와 EMAIL)를 신청합니다. 
-		4. 신청한 SMS와 EMAIL의 AppKey와 SecretKey 정보를 각각 저장합니다. 
-		5. CommunityServiceImpl 상단에 위치한 Appkey와 SecretKey 값을 복사한 값으로 수정합니다. => 수정 필요
-		6. SMS와 EMAIL의 템플릿을 등록합니다. 
-			=> SMS의 경우 발신번호를 미리 등록해야합니다. 
-			=> 치환문구는 ##key값## 으로 처리합니다.
-			=> 기본 템플릿과 수정 템플릿으로 나눠서 작업을 했습니다. (기본 : join, join_admin / 수정 : join_mod, join_admin_mod)
-				=> 현 방법은 추후에 문제가 발생할 것 같아 수정이 필요합니다.
-				=> 추가로 'templateId + 발신번호(발신이메일)' 방식으로 이용자간 구분이 필요할 듯 합니다.
-		7. 사용자 가이드를 참고하여 API를 요청하고 결과값을 받아옵니다.
-		
-		# 구현 내용
-		1. 기본 템플릿 불러오기
-		2. 템플릿 수정하기
-		3. SMS, EMAIL 발송하기
-		4. SMS, EMAIL 조회하기
-		
-		# 추가 구현 필요
-		1. 이용자간의 구분을 위해 설정 저장시 1회성으로 해당 이용자만의 수정 템플릿 생성 필요
-			=> 'templateId + 발신번호(발신이메일)' 템플릿이 존재하는지 확인
-			=> 없다면 'templateId + 발신번호(발신이메일)'로 템플릿 생성
-			=> 생성된 템플릿명으로 메시지 발송
-		2. 이용자 요청시 SMS 발신번호 등록 필요 
+	[NHN CLOUD API]
+	# 사용자 가이드
+	SMS : https://docs.toast.com/ko/Notification/SMS/ko/api-guide/
+	EMAIL : https://docs.toast.com/ko/Notification/Email/ko/api-guide/
+	
+	# 이용 방법
+	1. 회원가입 후 결제 정보를 등록합니다.
+	2. 콘솔에서 조직과 프로젝트를 차례로 생성 후 서비스(SMS와 EMAIL)를 신청합니다. 
+	4. 신청한 SMS와 EMAIL의 AppKey와 SecretKey 정보를 각각 저장합니다. 
+	5. CommunityServiceImpl 상단에 선언된 Appkey와 SecretKey를 수정합니다. => 따로 보관할 필요가 있음... 
+	6. SMS와 EMAIL의 템플릿을 등록합니다. 
+		=> SMS의 경우 발신번호를 미리 등록해야합니다. 
+		=> 치환문구는 ##key값## 으로 처리합니다.
+		=> 기본 템플릿과 수정 템플릿으로 나눠서 작업을 했습니다. (기본 : join, join_admin / 수정 : join_mod, join_admin_mod)
+			=> 현 방법은 추후에 문제가 발생할 것 같아 수정이 필요합니다.
+			=> 추가로 'templateId + 발신번호(발신이메일)' 방식으로 이용자간 구분이 필요할 듯 합니다.
+	7. 사용자 가이드를 참고하여 API를 요청하고 결과값을 받아옵니다.
+	
+	# 구현 내용
+	1. 기본 템플릿 불러오기
+	2. 템플릿 수정하기
+	3. SMS, EMAIL 발송하기
+	4. SMS, EMAIL 조회하기
+	
+	# 추가 구현 필요
+	1. 이용자간의 구분을 위해 설정 저장시 1회성으로 해당 이용자만의 수정 템플릿 생성 필요
+		=> 'templateId + 발신번호(발신이메일)' 템플릿이 존재하는지 확인
+		=> 없다면 'templateId + 발신번호(발신이메일)'로 템플릿 생성
+		=> 생성된 템플릿명으로 메시지 발송
+	2. 이용자 요청시 SMS 발신번호 등록 필요 
 	*/
 		
 	// 템플릿 정보

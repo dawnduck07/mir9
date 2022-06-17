@@ -17,9 +17,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Autowired
 	private DeliveryDao deliveryDao;
 
+	/**
+	 * 공통 : 배송업체 등록, 수정, 삭제
+	 */
 	@Override
 	public int deliveryCompanyProcess(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		int result = 0;
 		DeliveryCompany deliveryCompany = (DeliveryCompany) map.get("deliveryCompany");
 		if("insert".equals(deliveryCompany.getMode())) {
@@ -33,39 +35,51 @@ public class DeliveryServiceImpl implements DeliveryService {
 		return result;
 	}
 	
+	/**
+	 *
+	 */
 	@Override
 	public int selectDoseosanganFeeByZipcode(int zipcode) {
-		// TODO Auto-generated method stub
 		return deliveryDao.selectDoseosanganFeeByZipcode(zipcode);
 	}
 
+	/**
+	 * 배송업체 등록
+	 */
 	@Override
 	public int insertDeliveryCompanyByParam(Map<String, Object> param) {
-		// TODO Auto-generated method stub
 		return deliveryDao.insertDeliveryCompanyByParam(param);
 	}
 
+	/**
+	 * 배송업체 검색
+	 */
+	@Override
+	public List<DeliveryCompany> selectDeliveryCompanyListByParam(Map<String, Object> param) {
+		return deliveryDao.selectDeliveryCompanyListByParam(param);
+	}	
+	
+	/**
+	 * 배송업체 상세 조회
+	 */
 	@Override
 	public DeliveryCompany selectOneDeliveryCompanyByComNo(String comNo) {
-		// TODO Auto-generated method stub
 		return deliveryDao.selectOneDeliveryCompanyByComNo(comNo);
 	}
 
+	/**
+	 * 배송업체 수정
+	 */
 	@Override
 	public int updateDeliveryCompanyByParam(Map<String, Object> param) {
-		// TODO Auto-generated method stub
 		return deliveryDao.updateDeliveryCompanyByParam(param);
 	}
 
-	@Override
-	public List<DeliveryCompany> selectDeliveryCompanyListByParam(Map<String, Object> param) {
-		// TODO Auto-generated method stub
-		return deliveryDao.selectDeliveryCompanyListByParam(param);
-	}
-
+	/**
+	 * 배송 설정 수정
+	 */
 	@Override
 	public int updateDeliverySettingByVo(Map<String, Object> param) {
-		// TODO Auto-generated method stub
 		String basicFee = (String)param.get("delivery_price");
 		String FreeShippingSettings = (String)param.get("delivery_limit");
 		int result = 0;
@@ -76,7 +90,6 @@ public class DeliveryServiceImpl implements DeliveryService {
 		deliSet.setFreeShippingSettings(Integer.parseInt(FreeShippingSettings.replace(",", "")));
 		
 		result = deliveryDao.updateDeliverySettingByVo(deliSet);
-		
 		
 		ArrayList<String> doseoNoList = (ArrayList<String>) param.get("doseo_no");
 		ArrayList<String> extraFeeList = (ArrayList<String>) param.get("extra_fee");
@@ -91,17 +104,12 @@ public class DeliveryServiceImpl implements DeliveryService {
 		return result;
 	}
 
+	/**
+	 * 도서산간 배송비 수정
+	 */
 	@Override
 	public int updateDoseosanganByVo(Doseosangan doseo) {
-		// TODO Auto-generated method stub
 		return deliveryDao.updateDoseosanganByVo(doseo);
 	}
 
-
-	
-	
-	
-	
-	
-	
 }

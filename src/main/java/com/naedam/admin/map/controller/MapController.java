@@ -1,8 +1,6 @@
 package com.naedam.admin.map.controller;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,14 +25,25 @@ public class MapController {
 	@Autowired
 	private MapService mapService;
 
+	/**
+	 * 모달창 약도 조회
+	 * @param mapNo
+	 * @return map.jsp
+	 */
 	@PostMapping("/getMap")
 	@ResponseBody
 	public Maps getMap(int mapNo) {
 		Maps map = mapService.selectOneMapByMapNo(mapNo);
-
 		return map;
 	}
 
+	/**
+	 * 공통 : 약도 등록, 수정, 삭제
+	 * @param request
+	 * @param map
+	 * @param redirectAttr
+	 * @return map.jsp
+	 */
 	@PostMapping("/map_process")
 	public String map_process(HttpServletRequest request, Maps map, RedirectAttributes redirectAttr) {
 		Map<String, Object> param = new HashMap<>();
@@ -46,5 +55,4 @@ public class MapController {
 		return "redirect:/admin/setting/map";
 	}
 	
-
 }

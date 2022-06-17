@@ -22,9 +22,11 @@ public class MapServiceImpl implements MapService {
 	@Autowired
 	private MapDao mapDao;
 
+	/**
+	 * 공통 : 약도 등록, 수정, 삭제
+	 */
 	@Override
 	public Map<String, Object> mapProcess(Map<String, Object> param) {
-		// TODO Auto-generated method stub
 		Map<String, Object> resultMap = new HashMap<>();
 		Maps map = (Maps) param.get("map");
 		HttpServletRequest request = (HttpServletRequest) param.get("request");
@@ -44,38 +46,44 @@ public class MapServiceImpl implements MapService {
 		return resultMap;
 	}
 	
+	/**
+	 * 약도 조회
+	 */
+	@Override
+	public List<MapApi> selectAllMapApiList() {
+		return mapDao.selectAllMapApiList();
+	}
+	
+	/**
+	 * 모달창 약도 조회
+	 */
 	@Override
 	public Maps selectOneMapByMapNo(int mapNo) {
-		// TODO Auto-generated method stub
 		return mapDao.selectOneMapByMapNo(mapNo);
 	}
 
+	/**
+	 * 약도 등록
+	 */
 	@Override
-	public List<MapApi> selectAllMapApiList() {
-		// TODO Auto-generated method stub
-		return mapDao.selectAllMapApiList();
+	public int insertMap(Maps map) {
+		return mapDao.insertMap(map);
 	}
-
+	
+	/**
+	 * 약도 수정
+	 */
 	@Override
 	public int updateMapByMap(Maps map) {
-		// TODO Auto-generated method stub
 		return mapDao.updateMapMyMap(map);
 	}
 
-	@Override
-	public int insertMap(Maps map) {
-		// TODO Auto-generated method stub
-		return mapDao.insertMap(map);
-	}
-
+	/**
+	 * 약도 삭제
+	 */
 	@Override
 	public int deleteMap(int mapNo) {
-		// TODO Auto-generated method stub
 		return mapDao.deleteMap(mapNo);
 	}
 
-
-	
-	
-	
 }

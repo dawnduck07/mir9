@@ -21,10 +21,11 @@ public class CouponServiceImpl implements CouponService {
 	@Autowired
 	private CouponDao couponDao;
 	
-
+	/**
+	 * 공통 : 쿠폰 등록, 수정, 삭제
+	 */
 	@Override
 	public Map<String, Object> couponProcess(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
 		Map<String, Object> resultMap = new HashMap<>();
 		Coupon coupon = (Coupon) map.get("coupon");
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
@@ -55,35 +56,44 @@ public class CouponServiceImpl implements CouponService {
 		return resultMap;
 	}	
 	
+	/**
+	 * 쿠폰 조회
+	 */
+	@Override
+	public List<Coupon> selectCouponList() {
+		return couponDao.selectCouponList();
+	}	
+	
+	/**
+	 * 모달 쿠폰 조회
+	 */
 	@Override
 	public Coupon selectOneCouponByCouponNo(int couponNo) {
-		// TODO Auto-generated method stub
 		return couponDao.selectOneCouponByCouponNo(couponNo);
 	}
 
+	/**
+	 * 쿠폰 등록
+	 */
 	@Override
 	public int insertCoupon(Coupon coupon) {
-		// TODO Auto-generated method stub
 		return couponDao.insertCoupon(coupon);
 	}
 
+	/**
+	 * 쿠폰 수정
+	 */
 	@Override
 	public int updateCoupon(Coupon coupon) {
-		// TODO Auto-generated method stub
 		return couponDao.updateCoupon(coupon);
 	}
 
+	/**
+	 * 쿠폰 삭제
+	 */
 	@Override
 	public int deleteCoupon(int couponNo) {
-		// TODO Auto-generated method stub
 		return couponDao.deleteCoupon(couponNo);
 	}
-
-	@Override
-	public List<Coupon> selectCouponList() {
-		// TODO Auto-generated method stub
-		return couponDao.selectCouponList();
-	}
-
-
+	
 }

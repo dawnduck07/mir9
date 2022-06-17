@@ -1,8 +1,6 @@
 package com.naedam.admin.banner.model.service;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +18,12 @@ public class BannerServiceImpl implements BannerService {
 	@Autowired
 	private BannerDao bannerDao;
 
+	/**
+	 * 공통 : 배너 메시지
+	 */
 	@Override
-	public Map<String, Object> bannerProcess(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+	public Map<String, Object> bannerProcess(
+			Map<String, Object> map) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		Banner banner = (Banner) map.get("banner");
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
@@ -42,9 +43,11 @@ public class BannerServiceImpl implements BannerService {
 		return resultMap;
 	}
 	
+	/**
+	 * 배너 이미지 조회
+	 */
 	@Override
 	public Map<String, Object> selectOneBannerByBannerNo(int bannerNo) {
-		// TODO Auto-generated method stub
 		Map<String, Object> resultMap = new HashMap<>();
 		if(bannerNo == 0) {
 			resultMap.put("url", "http://fs.joycity.com/web/images/common/fs1_er.png");
@@ -54,22 +57,28 @@ public class BannerServiceImpl implements BannerService {
 		resultMap.put("banner", bannerDao.selectOneBannerByBannerNo(bannerNo));
 		return resultMap;
 	}
-
-	@Override
-	public int updateBanner(Banner banner) {
-		// TODO Auto-generated method stub
-		return bannerDao.updateBanner(banner);
-	}
-
+	
+	/**
+	 * 배너 등록
+	 */
 	@Override
 	public int insertBanner(Banner banner) {
-		// TODO Auto-generated method stub
 		return bannerDao.insertBanner(banner);
 	}
 
+	/**
+	 * 배너 수정
+	 */
+	@Override
+	public int updateBanner(Banner banner) {
+		return bannerDao.updateBanner(banner);
+	}
+
+	/**
+	 * 배너 삭제 
+	 */
 	@Override
 	public int deleteBanner(int bannerNo) {
-		// TODO Auto-generated method stub
 		return bannerDao.deleteBanner(bannerNo);
 	}
 
