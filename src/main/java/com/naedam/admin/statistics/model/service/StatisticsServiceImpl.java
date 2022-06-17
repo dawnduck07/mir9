@@ -35,11 +35,17 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private CategoryDao categoryDao;
 	@Autowired
 	private OrderDao orderDao;
+	
+	/*
+	 * 지역별 매출통계의 프로세스
+	 * mode의 차이마다 조건을 주어 일별, 월별, 연별을 구분하였음
+	 */
 	public Map<String, Object> statisticsAddress(Map<String, Object> map) throws Exception{
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Search search = (Search) map.get("search");
 		AddressStatisticVo addressVo = new AddressStatisticVo();
 		
+		//지역별 매출통계의 일별통계
 		if("address_day".equals(map.get("mode"))) {
 			addressVo.setAddressCategory(1);
 			map.put("addressVo", addressVo);
@@ -72,6 +78,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 			resultMap.put("area", area);
 			resultMap.put("return", "admin/statistics/address_day");
 			return resultMap;
+		
+		//지역별 매출 통계의 월별통계
 		}else if("address_month".equals(map.get("mode"))) {
 			addressVo.setAddressCategory(2);
 			map.put("addressVo", addressVo);
@@ -108,6 +116,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 			resultMap.put("area", area);
 			resultMap.put("return", "admin/statistics/address_month");
 			return resultMap;
+		
+		//지역별 매출 통계의 연별통계
 		}else if("address_year".equals(map.get("mode"))) {
 			addressVo.setAddressCategory(3);
 			map.put("addressVo", addressVo);
@@ -147,19 +157,25 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return resultMap;
 	}
 	
+	/*
+	 * 기간별 매출통계의 프로세스
+	 * map으로 가져와 mapping과 type마다 일별, 월별, 연별 조건을 줌
+	 */
 	@Override
 	public Map<String, Object> selectPeriodStatistics(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("type", (String)map.get("type"));
 		List<PeriodStatisticVo> result = new ArrayList<PeriodStatisticVo>();
+		
+		//Get방식의 Mapping
 		if("get".equals(map.get("mapping"))) {
+			//기간별 매출 통계의 일별통계
 			if("D".equals(map.get("type"))) {
 				for(int i = 0; i < 7; i++) {
 					Calendar cal = new GregorianCalendar();
 					cal.add(GregorianCalendar.DATE, -i);
 					resultMap.put("date", cal.getTime());
-					System.out.println("resultMap 확인 === "+resultMap);
 					PeriodStatisticVo statistic = new PeriodStatisticVo();
 					try {
 						statistic = statisticsDao.selectPeriodStatistics(resultMap);
@@ -174,6 +190,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 				Collections.reverse(result);
 				resultMap.put("result", result);
 				resultMap.put("return", "admin/statistics/period_day");
+			//기간별 매출 통계의 월별통계
 			}else if("M".equals(map.get("type"))) {
 				for(int i = 0; i < 3; i++) {
 					Calendar cal = new GregorianCalendar();
@@ -190,6 +207,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 				Collections.reverse(result);
 				resultMap.put("result", result);
 				resultMap.put("return", "admin/statistics/period_month");
+			
+			//기간별 매출 통계의 연별통계
 			}else if("Y".equals(map.get("type"))) {
 				for(int i = 0; i < 5; i++) {
 					Calendar cal = new GregorianCalendar();
@@ -207,12 +226,15 @@ public class StatisticsServiceImpl implements StatisticsService {
 				resultMap.put("result", result);
 				resultMap.put("return", "admin/statistics/period_year");
 			}
+			
+		//Post방식의 mapping
 		}else if("post".equals(map.get("mapping"))) {
 			String type = (String) map.get("type");
 			GregorianCalendar startDate = strToIntDate((String)map.get("startDateStr"), type);
 			GregorianCalendar endDate = strToIntDate((String)map.get("endDateStr"), type);
 			int length = 0;
 			
+			//type의 조건에 따라 일별, 월별, 연별을 구별
 			if(type.equals("date")) {
 				length = (int) ((endDate.getTimeInMillis() - startDate.getTimeInMillis())/1000/(24*60*60) + 1);
 				resultMap.put("type", "D");
@@ -263,6 +285,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return resultMap;
 	}
 
+	/*
+	 * 대쉬보드에 나타나는 매출통계 데이터 출력을 위한 로직
+	 */
 	@Override
 	public Map<String, Object> homeControllerStatistics(Map<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -311,6 +336,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return resultMap;
 	}
 	
+	/*
+	 * 기간별 매출 통계의 데이터 처리를 위한 매소드
+	 */
 	private GregorianCalendar strToIntDate(String dateStr, String type){
 		int year=0; int month=0; int day = 0;
 		if(type.equals("year")) {
@@ -331,6 +359,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return null;
 	}
 	
+	/*
+	 * 상품별 매출통계
+	 */
 	@Override
 	public Map<String, Object> selectProductStatistics(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
@@ -340,9 +371,15 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return resultMap;
 	}
 	
+	/*
+	 * 회원별 매출 통계
+	 */
 	public Map<String, Object> selectMemberStatisticsList(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		Map<String, Object> resultMap = new HashMap<>();
+		/*
+		 * map에 mapping을 넣어 Get방식 Post방식에 따라 조건을 걸었음
+		 */
 		if("get".equals(map.get("mapping"))) {
 			List<MemberStatisticVo> memberStatisticsList = statisticsDao.selectMemberStatisticsList(map);
 			resultMap.put("memberStatisticsList", memberStatisticsList);

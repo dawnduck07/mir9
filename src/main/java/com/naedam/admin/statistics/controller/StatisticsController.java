@@ -37,7 +37,9 @@ public class StatisticsController {
 	private StatisticsService statisticsService;
 	@Autowired
 	private CategoryService categoryService;
-	
+	/*
+	 * Get방식의 기본 기간별 매출 통계
+	 */
 	@GetMapping("/periodProcess")
 	public String periodProcess(Model model, @RequestParam("type") String type) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -48,6 +50,9 @@ public class StatisticsController {
 		return (String)resultMap.get("return");
 	}
 	
+	/*
+	 * 기간별 매출 통계의 검색을 통한 로직
+	 */
 	@PostMapping("/period_process")
 	public String statisticsPeriod_day(Model model, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
@@ -62,9 +67,11 @@ public class StatisticsController {
 		return (String)resultMap.get("return");
 	}
 	
+	/*
+	 * 제품별 매출 통계
+	 */
 	@RequestMapping(value="/product")
 	public String statisticsProduct(Model model, @ModelAttribute("search") Search search) throws Exception {
-		System.out.println("statistics/product 시작");
 		ProductStatisticVo product = new ProductStatisticVo();
 		product.setRegStartdate(search.getStart_date());
 		product.setRegEnddate(search.getEnd_date());
@@ -77,6 +84,9 @@ public class StatisticsController {
 		return "admin/statistics/product";
 	}
 	
+	/*
+	 * 회원별 매출통계
+	 */
 	@GetMapping("/member")
 	public String statisticsMember(Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -90,6 +100,9 @@ public class StatisticsController {
 		return "admin/statistics/member";
 	}
 	
+	/*
+	 * 회원별 매출통계 검색을 통한 로직
+	 */
 	@PostMapping("/member")
 	public String statisticsMember(Model model, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
@@ -104,6 +117,9 @@ public class StatisticsController {
 		return "admin/statistics/member";
 	}
 	
+	/*
+	 * Get 방식의 지역별 매출통계의 일별통계
+	 */
 	@GetMapping("/address_day")
 	public String statisticsAddress_day(Model model, Search search) throws Exception {
 		System.out.println("get/statistics/address_day 시작");
@@ -120,6 +136,9 @@ public class StatisticsController {
 		return (String)resultMap.get("return");
 	}
 	
+	/*
+	 * Post 방식의 검색을 통한 지역별 매출통계의 일별통계
+	 */
 	@PostMapping("/address_day")
 	public String statisticsAddress_day(Model model, HttpServletRequest request, Search search) throws Exception {
 		System.out.println("post/statistics/statisticsAddress_day 시작");
@@ -135,7 +154,10 @@ public class StatisticsController {
 		model.addAttribute("list2", resultMap.get("area"));
 		return (String)resultMap.get("return");
 	}	
-
+	
+	/*
+	 * Get 방식의 지역별 매출통계의 월별통계 
+	 */
 	@GetMapping("/address_month")
 	public String statisticsAddress_month(Model model, Search search) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -152,6 +174,9 @@ public class StatisticsController {
 		return (String)resultMap.get("return");
 	}
 	
+	/*
+	 * Post 방식의 검색을 통한 지역별 매출통계의 월별통계
+	 */
 	@PostMapping("/address_month")
 	public String statisticsAddress_month(Model model, HttpServletRequest request, Search search) throws Exception {
 		System.out.println("post/statistics/statisticsAddress_month 시작");
@@ -172,6 +197,9 @@ public class StatisticsController {
 		return (String)resultMap.get("return");
 	}
 	
+	/*
+	 * Get 방식의 지역별 매출통계의 연별통계
+	 */
 	@GetMapping("/address_year")
 	public String statisticsAddress_year(Model model, Search search) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();		
@@ -188,9 +216,11 @@ public class StatisticsController {
 		return (String)resultMap.get("return");
 	}
 	
+	/*
+	 * Post 방식의 검색을 통한 지역별 매출통계의 연별통계
+	 */
 	@PostMapping("/address_year")
 	public String statisticsAddress_year(Model model, HttpServletRequest request, Search search) throws Exception {
-		System.out.println("post/statistics/statisticsAddress_year 시작");
 		Map<String, Object> map = new HashMap<String, Object>();		
 		LocalDate now = LocalDate.now();
 		String startDate = request.getParameter("start_date");

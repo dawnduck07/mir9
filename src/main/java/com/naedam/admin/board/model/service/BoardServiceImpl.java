@@ -107,6 +107,7 @@ public class BoardServiceImpl implements BoardService {
 					post.setPostThombnail(postData.getPostThombnail());
 					ThombnailName.transferTo(file);
 				}
+				//기존에 있던 게시글의 데이터를 가지고 와서 답변의 계층형 쿼리작업을 위해 데이터를 넣어 답변을 등록합니다.
 				Post post2 = boardDao.getPostData(post.getPostNo());
 				post.setPostOrd(post2.getPostAsc());
 				post.setPostLayer(post2.getPostLayer());
