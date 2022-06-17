@@ -44,7 +44,6 @@ public class FormController {
 	//폼메일 리스트
 	@GetMapping("list")
 	public String formList(Model model) throws Exception {
-		System.out.println("formList 시작");
 		Map<String, Object> resultMap = formService.formList();
 		model.addAttribute("list", resultMap.get("formList"));
 		model.addAttribute("formCount", resultMap.get("formCount"));

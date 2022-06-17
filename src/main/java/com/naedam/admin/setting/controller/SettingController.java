@@ -73,6 +73,9 @@ public class SettingController {
 	@Autowired
 	ServletContext application;
 
+	/*
+	 * 적립을 설정의 데이터를 위한 매소드
+	 */
 	@GetMapping("/point")
 	public void point(Model model) {
 		Map<String, Object> resultMap = settingService.selectPoint();
@@ -81,6 +84,9 @@ public class SettingController {
 		model.addAttribute("pointSave", resultMap.get("pointSave"));
 	}
 
+	/*
+	 * 쿠폰관리의 데이터를 위한 메소드
+	 */
 	@GetMapping("/coupon")
 	public void coupon(Model model, HttpServletRequest request) throws Exception {
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -89,6 +95,9 @@ public class SettingController {
 		model.addAttribute("couponList", resultMap.get("couponList"));
 	}
 
+	/*
+	 * 쿠폰관리의 검색을 위한 Post방식의 메소드
+	 */
 	@PostMapping("/coupon")
 	@SuppressWarnings("rawtypes")
 	public void coupon(HttpServletRequest request, Model model) {
@@ -99,14 +108,19 @@ public class SettingController {
 		model.addAttribute("param",resultMap.get("param"));
 	}
 
+	/*
+	 * 팝업관리의 데이터를 위한 메소드
+	 */
 	@GetMapping("/popup")
 	public void popup(Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<Popup> popupList = settingService.selectPopupListByParam(param);
-
 		model.addAttribute("popupList", popupList);
 	}
 
+	/*
+	 * 팝업관리의 검색을 위한 Post방식의 메소드
+	 */
 	@PostMapping("/popup")
 	public String popup(HttpServletRequest request, Model model) {
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -120,6 +134,10 @@ public class SettingController {
 		return "/admin/setting/popup";
 	}
 
+	/*
+	 * 약도관리 데이터를 위한 메소드
+	 * api키값을 이용하여 주소확인을 위한 apikey
+	 */	
 	@GetMapping("/map")
 	public void map(Model model) {
 		List<Maps> mapList = settingService.selectMapList();
@@ -130,13 +148,18 @@ public class SettingController {
 	}
 
 	
-
+	/*
+	 * 연혁관리 데이터를 위한 메소드 
+	 */
 	@GetMapping("/history")
 	public void history(Model model) {
 		List<History> historyList = settingService.selectHistoryList();
 		model.addAttribute("historyList", historyList);
 	}
 
+	/*
+	 * 배너관리 데이터를 위한 메소드
+	 */
 	@GetMapping("/banner")
 	public void banner(Model model) {
 		List<Banner> bannerList = settingService.selectBannerList();
@@ -149,6 +172,9 @@ public class SettingController {
 	public void contract() {
 	}
 
+	/*
+	 * 배송설정 데이터를 위한 메소드
+	 */
 	@GetMapping("/delivery_setting")
 	public String deliverySertting(Model model) {
 		DeliverySetting deliverySetting = settingService.selectOneDeliverySetting();
@@ -158,6 +184,9 @@ public class SettingController {
 		return "admin/setting/deliverySetting";
 	}
 
+	/*
+	 * 택배사관리 데이터를 위한 메소드
+	 */
 	@GetMapping("/delivery_company")
 	public String deliveryCompany(Model model) {
 		List<DeliveryCompany> deliveryCompanyList = settingService.selectDeliveryCompanyList();
@@ -166,6 +195,9 @@ public class SettingController {
 		return "admin/setting/deliveryCompany";
 	}
 
+	/*
+	 * 기본설정과, 언어설정, 관리자 메뉴 설정을 위한 메소드
+	 */
 	@GetMapping("/info")
 	public void info(Model model) {
 		List<AdminMenu> adminMenuList = settingService.selectAdminMenuList();
@@ -185,7 +217,6 @@ public class SettingController {
 		} else if (type.equals("favicon")) {
 			url = adminSetting.getFaviconImg();
 		}
-
 		model.addAttribute("url", url);
 	}
 
@@ -215,6 +246,9 @@ public class SettingController {
 		model.addAttribute("seo", seo);
 	}
 
+	/*
+	 * seo설정 데이터를 위한 메소드
+	 */
 	@PostMapping("/seo_process")
 	public String seo_process(HttpServletRequest request, 
 			@ModelAttribute SeoSetting seo,
@@ -231,6 +265,9 @@ public class SettingController {
 		return "redirect:/admin/setting/seo";
 	}
 
+	/*
+	 * 결제PG설정의 네이버페이 설정을 위한 메소드
+	 */
 	@GetMapping("/paymentpg")
 	public void paymentpg(Model model) {
 		BillingPgSetting pg = settingService.selectPgSetting();
@@ -239,6 +276,9 @@ public class SettingController {
 		model.addAttribute("naverShopping", naverShopping);
 	}
 
+	/*
+	 * 결제PG설정의 데이터를 위한 메소드
+	 */
 	@PostMapping("/pg_process")
 	@ResponseBody
 	public Object pg_process(String method, HttpServletRequest request) throws Exception {
@@ -249,6 +289,9 @@ public class SettingController {
 		return settingService.paymentPGSelectProcess(map);
 	}
 
+	/*
+	 * 결제PG설정의 모든 데이터의 업테이틑 위한 것
+	 */
 	@PostMapping("/updatePaymentPG")
 	public String updatePaymentPG(HttpServletRequest request, BillingPgSetting pg, KgIniSetting kg, XpaySetting xpay,
 			KcpSetting kcp, NaverpaySetting naverpay, EximbaySetting eximbay, NaverShoppingSetting naverShopping) throws Exception {
@@ -264,6 +307,9 @@ public class SettingController {
 		return "admin/setting/paymentpg";
 	}
 
+	/*
+	 * SNS연동설정의 데이터를 위한 메소드
+	 */
 	@GetMapping("/snslogin")
 	public String snsLogin(Model model, SnsSetting snsSetting) {
 		snsSetting = settingService.selectSnsSetting();
@@ -271,6 +317,9 @@ public class SettingController {
 		return "admin/setting/sns";
 	}
 
+	/*
+	 * SNS연동설정의 데이터를 수정하기 위한 메소드
+	 */
 	@PostMapping("/updateSnsSetting")
 	public String updateSnsSetting(SnsSetting snsSetting) {
 		settingService.updateSnsSetting(snsSetting);
