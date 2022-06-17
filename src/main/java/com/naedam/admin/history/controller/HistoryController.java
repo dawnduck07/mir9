@@ -1,11 +1,6 @@
 package com.naedam.admin.history.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +24,11 @@ public class HistoryController {
 	@Autowired
 	private HistoryService historyService;
 	
+	/**
+	 * 모달창 연혁 조회
+	 * @param historyNo
+	 * @return history.jsp
+	 */
 	@PostMapping("/getHistory")
 	@ResponseBody
 	public History getHistory(int historyNo) {
@@ -36,8 +36,19 @@ public class HistoryController {
 		return history;
 	}
 	
+	/**
+	 * 공통 : 연혁 등록, 수정, 삭제
+	 * @param request
+	 * @param history
+	 * @param redirectAttr
+	 * @return history.jsp
+	 * @throws Exception
+	 */
 	@PostMapping("history_process")
-	public String history_process(HttpServletRequest request, History history, RedirectAttributes redirectAttr) throws Exception {
+	public String history_process(
+			HttpServletRequest request, 
+			History history, 
+			RedirectAttributes redirectAttr) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("history", history);
 		map.put("mode", request.getParameter("mode"));

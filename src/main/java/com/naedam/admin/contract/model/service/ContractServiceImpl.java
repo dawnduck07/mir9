@@ -11,15 +11,19 @@ public class ContractServiceImpl implements ContractService {
 	@Autowired
 	private ContractDao contractDao;
 
+	/**
+	 * 약관 조회
+	 */
 	@Override
 	public Contract selectOneContractByLocale(String locale) {
-		// TODO Auto-generated method stub
 		return contractDao.selectOneContractByLocale(locale);
 	}
 
+	/**
+	 * 약관 수정
+	 */
 	@Override
 	public int updateContract(Contract contract) {
-		// TODO Auto-generated method stub
 		return contractDao.updateContract(contract);
 	}
 	

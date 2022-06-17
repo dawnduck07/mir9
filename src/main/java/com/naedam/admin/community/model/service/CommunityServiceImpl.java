@@ -15,10 +15,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -26,12 +24,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.naedam.admin.common.Mir9Utils;
 import com.naedam.admin.community.model.dao.CommunityDao;
-import com.naedam.admin.community.model.vo.Email;
 import com.naedam.admin.community.model.vo.EmailSetting;
 import com.naedam.admin.community.model.vo.MsgInfo;
 import com.naedam.admin.community.model.vo.Review;
 import com.naedam.admin.community.model.vo.ReviewImg;
-import com.naedam.admin.community.model.vo.Sms;
 import com.naedam.admin.community.model.vo.SmsSetting;
 import com.naedam.admin.coupon.model.dao.CouponDao;
 import com.naedam.admin.coupon.model.vo.Coupon;
@@ -56,10 +52,10 @@ public class CommunityServiceImpl implements CommunityService {
 	@Autowired
 	private CouponDao couponDao;
 	
+	// 인증 키 위치 수정 필요!
 	// SMS 인증키
 	private static String smsKey = "cuyb2ATgfZrgb0LF";
-	private static String smsSecret = "3VxajYQb";	
-	
+	private static String smsSecret = "3VxajYQb";
 	// MAIL 인증키
 	private static String mailKey = "s3b1XpsH6BR8yT4S";
 	private static String mailSecret = "phiu4e0M";

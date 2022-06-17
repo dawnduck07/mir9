@@ -1,21 +1,7 @@
 package com.naedam.admin.community.model.service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.ui.Model;
-
-import com.google.gson.JsonObject;
-import com.naedam.admin.community.model.vo.Email;
-import com.naedam.admin.community.model.vo.EmailSetting;
-import com.naedam.admin.community.model.vo.MsgInfo;
-import com.naedam.admin.community.model.vo.Review;
-import com.naedam.admin.community.model.vo.ReviewImg;
-import com.naedam.admin.community.model.vo.Sms;
-import com.naedam.admin.community.model.vo.SmsSetting;
 
 public interface CommunityService {
 

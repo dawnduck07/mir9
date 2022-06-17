@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,13 +26,23 @@ public class DeliveryController {
 	@Autowired
 	private DeliveryService deliveryService;
 	
+	/**
+	 * @param zipcode
+	 * @return
+	 */
 	@GetMapping("/doseosangan")
 	@ResponseBody
 	public int doseosangan(int zipcode) {
 		int result = deliveryService.selectDoseosanganFeeByZipcode(zipcode);
-		
 		return result;
 	}
+	
+	/**
+	 * 공통 : 배송업체 등록, 수정, 삭제
+	 * @param deliveryCompany
+	 * @param deliComNoArr
+	 * @return deliveryCompany.jsp
+	 */
 	@ResponseBody
 	@PostMapping("/deliveryCompanyProcess")
 	public int deliveryCompanyProcess(@ModelAttribute DeliveryCompany deliveryCompany,
@@ -45,6 +54,11 @@ public class DeliveryController {
 		return result;
 	}
 	
+	/**
+	 * 배송업체 상세 조회
+	 * @param comNo
+	 * @return deliveryCompany.jsp
+	 */
 	@PostMapping("/companyDetail")
 	@ResponseBody
 	public DeliveryCompany companyDetail(String comNo) {
@@ -53,24 +67,32 @@ public class DeliveryController {
 		return deliCom;
 	}
 	
+	/**
+	 * 배송업체 검색
+	 * @param jsonStr
+	 * @return deliveryCompany.jsp
+	 */
 	@ResponseBody
 	@GetMapping("/companySearch")
 	public List<DeliveryCompany> companySearch(String jsonStr) {
 		Map<String, Object> param = Mir9Utils.parseJsonStr(jsonStr);
-		
 		List<DeliveryCompany> companyList = deliveryService.selectDeliveryCompanyListByParam(param);
-		
 		return companyList;
 	}
 	
+	/**
+	 * 도서산간 배송비 수정
+	 * @param jsonStr
+	 * @return deliverySetting.jsp
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
-	@ResponseBody
+	@ResponseBody 
 	@GetMapping("/updateDeliSet_Doseo")
 	public int updateDeliSetDoseo(String jsonStr) throws Exception {
 		Map<String, Object> param = Mir9Utils.parseJsonStr(jsonStr);
 		int result = deliveryService.updateDeliverySettingByVo(param);
 		return result;
 	}
-	
 	
 }

@@ -20,9 +20,11 @@ public class HistoryServiceImpl implements HistoryService {
 	@Autowired
 	private HistoryDao historyDao;
 
+	/**
+	 * 공통 : 연혁 등록, 수정, 삭제
+	 */
 	@Override
 	public Map<String, Object> historyProcess(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
 		Map<String, Object> resultMap = new HashMap<>();
 		History history = (History) map.get("history");
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
@@ -62,30 +64,36 @@ public class HistoryServiceImpl implements HistoryService {
 		return resultMap;
 	}
 	
+	/**
+	 * 모달창 연혁 조회
+	 */
 	@Override
 	public History selectOneHistoryByHisNo(int historyNo) {
-		// TODO Auto-generated method stub
 		return historyDao.selectOneHistoryByHisNo(historyNo);
 	}
 
+	/**
+	 * 연혁 등록
+	 */
 	@Override
 	public int insertHistory(History history) {
-		// TODO Auto-generated method stub
 		return historyDao.insertHistory(history);
 	}
 
+	/**
+	 * 연혁 수정
+	 */
 	@Override
 	public int updateHistory(History history) {
-		// TODO Auto-generated method stub
 		return historyDao.updateHistory(history);
 	}
 
+	/**
+	 * 연혁 삭제
+	 */
 	@Override
 	public int deleteHistory(int historyNo) {
-		// TODO Auto-generated method stub
 		return historyDao.deleteHistory(historyNo);
 	}
 
-	
-	
 }

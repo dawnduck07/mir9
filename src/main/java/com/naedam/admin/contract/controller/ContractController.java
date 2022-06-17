@@ -26,6 +26,11 @@ public class ContractController {
 	@Autowired
 	private ContractService contractService;
 	
+	/**
+	 * 약관 조회
+	 * @param locale
+	 * @return contract.jsp
+	 */
 	@PostMapping("/getContract")
 	@ResponseBody
 	public Contract getContract(String locale) {
@@ -33,6 +38,12 @@ public class ContractController {
 		return contract;
 	}
 	
+	/**
+	 * 약관 수정 
+	 * @param contract
+	 * @param redirectAttr
+	 * @return contract.jsp
+	 */
 	@PostMapping("/updateContract")
 	public String updateContract(Contract contract, RedirectAttributes redirectAttr) {
 		contractService.updateContract(contract);

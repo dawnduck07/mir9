@@ -1,11 +1,6 @@
 package com.naedam.admin.coupon.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,14 +24,26 @@ public class CouponController {
 	@Autowired
 	private CouponService couponService;
 	
+	/**
+	 * 모달 쿠폰 조회
+	 * @param couponNo
+	 * @return coupon.jsp
+	 */
 	@PostMapping("/getCoupon")
 	@ResponseBody
 	public Coupon getCoupon(int couponNo) {
 		Coupon coupon = couponService.selectOneCouponByCouponNo(couponNo);
-		
 		return coupon;
 	}
 	
+	/**
+	 * 공통 : 쿠폰 등록, 수정, 삭제
+	 * @param request
+	 * @param coupon
+	 * @param redirectAttr
+	 * @return coupon.jsp
+	 * @throws Exception
+	 */
 	@PostMapping("/coupon_process")
 	public String coupon_process(HttpServletRequest request, Coupon coupon, RedirectAttributes redirectAttr) throws Exception {
 		Map<String, Object> map = new HashMap<>();
